@@ -139,7 +139,15 @@ def test_extraer_un_frame(frame_sintetico):
     assert f["urbano_anillo"] == pytest.approx(0.60) and f["cultivo_anillo"] == pytest.approx(0.10) and f["agua_anillo"] == 0.0
     assert abs(f["tendencia"]) < 1e-3 and 0.3 < f["compacidad"] <= 1.0 and f["area_ha"] == candidatas["ha"].iloc[0]
 
+    # las mediciones de la parte más activa: el relleno, con coherencia 0,25 contra 0,70 del anillo y eco constante
+    assert f["contraste_p10"] == pytest.approx(0.25 / 0.70, abs=0.03) and f["eco_var_p90"] == pytest.approx(0.0, abs=0.01)
+    assert f["ha_insomnio_90"] == pytest.approx(f["area_ha"], rel=0.15) and 0 <= f["indice_actividad"] <= 1
+    assert em.indice_actividad(0.25, 4.0) > em.UMBRAL_ACTIVIDAD > em.indice_actividad(0.65, 2.5)  # frente que se mueve contra cobertura pareja
+    assert np.isnan(em.indice_actividad(np.nan, 3.0))
+
     c = contratos.leer(str(destino / "SINTE"), "insomnio_catalogo").set_index("id_catalogo")
+    assert {"contraste_p10", "eco_var_p90", "ha_insomnio_90", "hv_hh", "indice_actividad"} <= set(c.columns)
+    assert c.loc["BAS-000001", "contraste_p10"] < c.loc["NEG-000001", "contraste_p10"]
     assert c.loc["BAS-000001", "radar"] == "despierto" and c.loc["BAS-000001", "insomnio"] == 1.0  # figura cerrado y está despierto
     assert c.loc["NEG-000001", "radar"] == "quieto" and c.loc["NEG-000001", "insomnio"] == 0.0  # no formó mancha y se mide igual
     assert c.loc["NEG-000002", "radar"] == "no_alcanza" and "menos de 10 ha" in c.loc["NEG-000002", "motivo"]
