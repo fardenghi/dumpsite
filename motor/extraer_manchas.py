@@ -43,6 +43,26 @@ import pipeline_insomnio as pl  # noqa: E402
 IDEA = os.path.dirname(AQUI)
 PARTES = ("manchas.geojson", "tabla_radar.parquet", "insomnio_catalogo.parquet")
 
+# Índice de actividad (experimental, sin validar): combina dos mediciones de la parte más activa del predio.
+#   contraste_p10  coherencia del 10 % menos coherente del predio / coherencia del anillo (mediana entre pares)
+#   eco_var_p90    variación del eco en el tiempo, por píxel (percentil 90 del predio, dB)
+# Es una regresión logística ajustada con 53 predios de 9 frames (19 con actividad visible en Sentinel-2 y 34 sin),
+# con etiquetas ópticas asignadas por IA (`salidas/etiquetas_optico_ia.json`). Dejando un frame afuera por vez da
+# AUC 0,75 (IC 95 %: 0,59 a 0,89), contra 0,60 de la mediana del predio. El AMBA no se usó. Ver idea/indice-actividad.md.
+ACTIVIDAD = {"intercepto": -0.75, "contraste_p10": (-1.17, 0.483, 0.136), "eco_var_p90": (0.65, 3.046, 0.790)}  # (coeficiente, media, desvío)
+UMBRAL_ACTIVIDAD = 0.45  # el que maximiza la exactitud balanceada sobre los 53 predios
+
+
+def indice_actividad(contraste_p10, eco_var_p90):
+    """Índice de actividad entre 0 y 1 (NaN si falta alguna de las dos mediciones). No es una probabilidad calibrada."""
+    if not (np.isfinite(contraste_p10) and np.isfinite(eco_var_p90)):
+        return np.nan
+    z = ACTIVIDAD["intercepto"]
+    for nombre, valor in (("contraste_p10", contraste_p10), ("eco_var_p90", eco_var_p90)):
+        coef, media, desvio = ACTIVIDAD[nombre]
+        z += coef * (valor - media) / desvio
+    return float(1 / (1 + np.exp(-z)))
+
 
 # ------------------------------------------------------------------ de píxeles a polígonos
 def contornos(mascara):
@@ -170,7 +190,8 @@ def medir(mascara, d, p):
         m_aro = np.nanmedian(coh[:, aro], axis=1) if aro.any() else np.full(len(coh), np.nan)
     valido = np.isfinite(m_sitio) & np.isfinite(m_aro) & (m_aro > 0)
     fila = {k: np.nan for k in ("insomnio", "persistencia", "contraste_mediana", "contraste_desvio", "tendencia",
-                                "eco_contraste", "eco_variacion", "hv_hh", "urbano_anillo", "cultivo_anillo")}
+                                "eco_contraste", "eco_variacion", "hv_hh", "urbano_anillo", "cultivo_anillo",
+                                "contraste_p10", "eco_var_p90", "ha_insomnio_90")}
     fila["n_pares"], fila["n_orbitas"] = int(np.isfinite(m_sitio).sum()), 0
     if valido.any():
         cociente = m_sitio[valido] / m_aro[valido]
@@ -180,6 +201,18 @@ def medir(mascara, d, p):
         fila.update(insomnio=float(i[0]), persistencia=float(ins.persistencia(despierto[:, None], valido[:, None], d["fechas"])[0]),
                     contraste_mediana=float(np.median(cociente)), contraste_desvio=float(np.std(cociente)),
                     n_pares=int(valido.sum()), n_orbitas=int(sum(np.isfinite(x[0]) for x in partes.values())))
+    # La parte más activa del predio: el decil menos coherente contra el anillo, par a par.
+    if adentro.sum() >= 4 and aro.any():
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            p10 = np.nanpercentile(coh[:, adentro], 10, axis=1)
+        ok = np.isfinite(p10) & np.isfinite(m_aro) & (m_aro > 0)
+        if ok.any():
+            fila["contraste_p10"] = float(np.median(p10[ok] / m_aro[ok]))
+    # La mayor zona conexa del predio con insomnio por píxel >= 0,9 (ha).
+    alto = adentro & (np.nan_to_num(d["insomnio_px"][v]) >= 0.9)
+    etq, _ = ndimage.label(alto)
+    fila["ha_insomnio_90"] = float(max(np.bincount(etq.ravel())[1:], default=0) * paso * paso / 1e4)
     con_dato = np.isfinite(m_sitio)
     if con_dato.sum() >= 3:  # pendiente de la coherencia de la mancha, llevada a pares de 12 días, en el tiempo
         dias = d["dia"][con_dato]
@@ -197,6 +230,15 @@ def medir(mascara, d, p):
         desvios = [np.nanstd(serie[d["orbitas_eco"] == o]) for o in np.unique(d["orbitas_eco"]) if np.isfinite(serie[d["orbitas_eco"] == o]).sum() >= 2]
         if desvios:  # entre fechas de una misma órbita (cada órbita mira con otra geometría)
             fila["eco_variacion"] = float(np.mean(desvios))
+        # Lo mismo por píxel: un frente que se mueve cambia el eco de sus píxeles aunque la media del predio no cambie.
+        if adentro.any():
+            por_px = [np.nanstd(eco[d["orbitas_eco"] == o][:, adentro], axis=0) for o in np.unique(d["orbitas_eco"]) if (d["orbitas_eco"] == o).sum() >= 3]
+            if por_px:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", RuntimeWarning)
+                    var_px = np.nanmean(np.stack(por_px), axis=0)
+                if np.isfinite(var_px).any():
+                    fila["eco_var_p90"] = float(np.nanpercentile(var_px, 90))
     if d["eco_hv_db"] is not None and np.isfinite(fila["eco_db"]):
         fila["hv_hh"] = _media(d["eco_hv_db"][v], adentro) - fila["eco_db"]
     fila["agua_anillo"] = float(d["agua"][v][aro_bruto].mean()) if aro_bruto.any() else np.nan
@@ -206,6 +248,7 @@ def medir(mascara, d, p):
             valores = valores[valores <= 100]
             if len(valores):
                 fila[clave] = float(valores.mean() / 100)
+    fila["indice_actividad"] = indice_actividad(fila["contraste_p10"], fila["eco_var_p90"])
     fila["px"], fila["px_anillo"] = int(adentro.sum()), int(aro.sum())
     return fila
 
@@ -232,6 +275,7 @@ def preparar(a, p):
     d = {"fr": fr, "paso": ctx["paso"], "xs": ctx["xs"], "ys": ctx["ys"], "coh": ctx["coh"], "orbitas": ctx["orbitas"],
          "fechas": ctx["fechas"], "dia": dia, "factor": capas["factor_separacion"], "agua": capas["agua"], "tierra": ~capas["agua"],
          "catalogo_px": ctx["catalogo_px"], "catalogo": ctx["catalogo"], "coherencia_media": capas["coherencia_media"],
+         "insomnio_px": capas["insomnio"],
          "eco_db": capas["eco_db"], "eco": ctx["eco"], "orbitas_eco": ctx["orbitas_eco"],
          "eco_hv_db": ins.eco_medio(ctx.get("eco_hv"), ctx.get("orbitas_eco_hv")), "urbano": urbano, "cultivo": cultivo,
          "pares": ctx["pares"], "capas": capas}
@@ -268,6 +312,7 @@ def manchas_y_tabla(d, lista, etiquetas, p):
             "area_ha": float(m["ha"]), "elongacion": float(m["elongacion"]), "compacidad": float(min(1.0, 4 * np.pi * area_m2 / perimetro**2)),
             "agua_anillo": r["agua_anillo"], "urbano_anillo": r["urbano_anillo"], "cultivo_anillo": r["cultivo_anillo"],
             "px_anillo": r["px_anillo"], "insomnio_px": float(m["insomnio"]), "persistencia_px": float(m["persistencia"]),
+            "contraste_p10": r["contraste_p10"], "eco_var_p90": r["eco_var_p90"], "ha_insomnio_90": r["ha_insomnio_90"], "indice_actividad": r["indice_actividad"],
             "clase_osm": m.get("clase"), "que": m.get("que")})
     return features, filas
 
@@ -294,6 +339,7 @@ def catalogo_del_frame(d, p, min_ha=contratos.MIN_HA):
         else:
             f = {"insomnio": None, "persistencia": None, "eco_db": None, "pares": [], "radar": "no_alcanza",
                  "motivo": "el predio queda fuera de la grilla o es más chico que un píxel", "px": 0, "px_anillo": 0}
+        extra = medir(mascara, d, p) if mascara.any() else {}
         radar, motivo = f["radar"], f["motivo"]
         if ha < min_ha:
             radar, motivo = "no_alcanza", f"el polígono mide {ha:.1f} ha: menos de {min_ha:g} ha"
@@ -301,10 +347,12 @@ def catalogo_del_frame(d, p, min_ha=contratos.MIN_HA):
                       "insomnio": f["insomnio"], "persistencia": f["persistencia"], "eco_db": f["eco_db"], "n_pares": len(f["pares"]),
                       "radar": radar, "motivo": motivo, "area_ha": float(ha), "estado": s.get("estado"), "clase": s.get("clase"),
                       "nombre": s.get("nombre") or None, "estado_complejo": s.get("estado_complejo"), "px": f["px"],
-                      "px_anillo": f["px_anillo"], "modo": "exacto"})
+                      "px_anillo": f["px_anillo"], "modo": "exacto",
+                      **{k: extra.get(k, np.nan) for k in ("contraste_p10", "eco_var_p90", "ha_insomnio_90", "hv_hh", "indice_actividad")}})
     df = pd.DataFrame(filas, columns=["id_catalogo", "catalogo", "complejo", "frame", "insomnio", "persistencia", "eco_db", "n_pares",
-                                      "radar", "motivo", "area_ha", "estado", "clase", "nombre", "estado_complejo", "px", "px_anillo", "modo"])
-    for c in ("insomnio", "persistencia", "eco_db", "area_ha"):
+                                      "radar", "motivo", "area_ha", "estado", "clase", "nombre", "estado_complejo", "px", "px_anillo", "modo",
+                                      "contraste_p10", "eco_var_p90", "ha_insomnio_90", "hv_hh", "indice_actividad"])
+    for c in ("insomnio", "persistencia", "eco_db", "area_ha", "contraste_p10", "eco_var_p90", "ha_insomnio_90", "hv_hh", "indice_actividad"):
         df[c] = pd.to_numeric(df[c], errors="coerce").astype("float64")
     for c in ("n_pares", "px", "px_anillo"):
         df[c] = df[c].astype("int64")
