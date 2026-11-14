@@ -120,6 +120,61 @@ def test_sitio_chico_no_alcanza(escena):
     assert _ficha(escena, "basurita")["radar"] == "no_alcanza"
 
 
+# ------------------------------------------------------------------ variante por percentil del entorno
+P_PCT = ins.Parametros(comparacion="percentil", percentil=10)
+
+
+@pytest.fixture(scope="module")
+def escena_pct(escena):
+    capas = ins.calcular(escena["coh"], ORBITAS, DIAS, FECHAS, escena["agua"], PASO, P_PCT,
+                         eco_db=escena["capas"]["eco_db"])
+    lista, etiquetas = ins.manchas(capas["candidato"], capas, PASO, P_PCT)
+    return {**escena, "capas": capas, "manchas": lista, "etiquetas": etiquetas}
+
+
+def _ficha_pct(escena, nombre):
+    return ins.ficha(_zona(nombre), escena["coh"], ORBITAS, FECHAS, ~escena["agua"], PASO, P_PCT, eco_db=escena["capas"]["eco_db"])
+
+
+def test_percentil_valida_parametros():
+    with pytest.raises(ValueError):
+        ins.Parametros(comparacion="percentil", percentil=7)
+    with pytest.raises(ValueError):
+        ins.Parametros(comparacion="z")
+
+
+def test_cuantiles_entorno_uniforme():
+    rng = np.random.default_rng(1)
+    c = rng.uniform(0, 1, (120, 120)).astype(np.float32)
+    cu = ins.cuantiles_entorno(c, np.ones(c.shape, dtype=bool), PASO, P)
+    centro = cu[:, 60, 60]
+    assert np.all(np.diff(centro) >= 0)  # crecientes en q
+    assert centro == pytest.approx(np.array(ins.CUANTILES), abs=0.04)  # uniforme: el percentil q vale q
+
+
+def test_percentil_ciudad_campo_y_ficha(escena_pct):
+    c = escena_pct["capas"]
+    # Por construcción, en una zona homogénea el percentil P marca ~P % de los píxeles en cada par (ruido),
+    # pero ninguno llega a despierto en el 70 % de los pares.
+    assert np.nanmean(c["insomnio"][ZONAS["ciudad"]]) < 0.15
+    assert not c["candidato"][ZONAS["ciudad"]].any()
+    assert not c["candidato"][ZONAS["campo"]].any()
+    assert _ficha_pct(escena_pct, "ciudad")["radar"] == "quieto"
+    assert _ficha_pct(escena_pct, "basural")["radar"] == "despierto"  # el anillo no incluye al sitio
+    assert _ficha_pct(escena_pct, "campo")["radar"] != "despierto"
+
+
+def test_percentil_sitio_grande_se_esconde(escena, escena_pct):
+    """Límite conocido de la variante: el basural (144 ha) ocupa ~11 % del disco de 2 km de su entorno, más que P = 10 %.
+
+    Su propia coherencia baja el percentil del entorno y parte de sus píxeles deja de verse despierta. La mediana
+    (la razón) aguanta hasta que el sitio ocupa la mitad del disco. Por eso la referencia sigue siendo `razon`.
+    """
+    con_razon = np.nanmean(escena["capas"]["insomnio"][ZONAS["basural"]])
+    con_percentil = np.nanmean(escena_pct["capas"]["insomnio"][ZONAS["basural"]])
+    assert con_razon > 0.9 and con_percentil < con_razon
+
+
 def test_geo_ida_y_vuelta():
     x, y = geo.utm(-34.6037, -58.3816)
     assert (x, y) == pytest.approx((373317.5, 6170036.2), abs=0.1)
