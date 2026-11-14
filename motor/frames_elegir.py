@@ -530,6 +530,10 @@ Fuente: {meta['fuente']}. Catálogos: `data/basurales/complejos.json` y `data/ne
 ## Supuestos
 """ + "\n".join(f"- {s}" for s in meta["supuestos"]) + """
 
+## Costo de procesamiento
+- Cada GUNW pesa unos 2,2 GB. Los frames con un año de datos (Los Ángeles, Ciudad de México, Delhi, Staten Island) tienen 50 o más pares: más de 100 GB si se bajan enteros. Usar `procesar --remoto` (sólo la coherencia de 80 m) o, si no da el tiempo, **los últimos 15 pares de cada frame** (de junio a octubre de 2026, como el AMBA), así los frames quedan comparables.
+- Antes de procesar un frame, la etapa 1 tiene que generalizar `geo.py` (zona UTM y hemisferio por frame): todos menos el AMBA y Yakarta son del hemisferio norte.
+
 ## Limitaciones
 - El estado conocido es casi todo de la EPA (EE. UU.): de los complejos de 10 ha o más con estado abierto o cerrado del catálogo, la gran mayoría está en EE. UU. La matriz de actividad (etapa 8) se reporta por país por eso.
 - Los negativos se muestrearon cerca de basurales con estado conocido (`idea/negativos-dataset.md`): fuera de EE. UU. hay pocos, salvo en el AMBA.
