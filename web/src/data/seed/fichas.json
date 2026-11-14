@@ -14,91 +14,91 @@
     "fecha": "2026-07-08",
     "orbita": 10,
     "sitio": 0.29,
-    "anillo": 0.61,
+    "anillo": 0.65,
     "despierto": true
    },
    {
     "fecha": "2026-07-20",
     "orbita": 10,
     "sitio": 0.29,
-    "anillo": 0.46,
+    "anillo": 0.49,
     "despierto": true
    },
    {
     "fecha": "2026-08-13",
     "orbita": 10,
     "sitio": 0.2,
-    "anillo": 0.35,
+    "anillo": 0.39,
     "despierto": true
    },
    {
     "fecha": "2026-08-25",
     "orbita": 10,
     "sitio": 0.24,
-    "anillo": 0.5,
+    "anillo": 0.55,
     "despierto": true
    },
    {
     "fecha": "2026-09-06",
     "orbita": 10,
     "sitio": 0.25,
-    "anillo": 0.53,
+    "anillo": 0.57,
     "despierto": true
    },
    {
     "fecha": "2026-09-18",
     "orbita": 10,
     "sitio": 0.27,
-    "anillo": 0.54,
+    "anillo": 0.58,
     "despierto": true
    },
    {
     "fecha": "2026-09-30",
     "orbita": 10,
     "sitio": 0.24,
-    "anillo": 0.41,
+    "anillo": 0.43,
     "despierto": true
    },
    {
     "fecha": "2026-10-12",
     "orbita": 10,
     "sitio": 0.27,
-    "anillo": 0.37,
+    "anillo": 0.38,
     "despierto": true
    },
    {
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.4,
-    "anillo": 0.62,
+    "anillo": 0.66,
     "despierto": true
    },
    {
     "fecha": "2026-07-19",
     "orbita": 161,
     "sitio": 0.37,
-    "anillo": 0.54,
+    "anillo": 0.57,
     "despierto": true
    },
    {
     "fecha": "2026-08-24",
     "orbita": 161,
     "sitio": 0.26,
-    "anillo": 0.39,
+    "anillo": 0.43,
     "despierto": true
    },
    {
     "fecha": "2026-09-05",
     "orbita": 161,
     "sitio": 0.35,
-    "anillo": 0.58,
+    "anillo": 0.62,
     "despierto": true
    },
    {
     "fecha": "2026-09-17",
     "orbita": 161,
     "sitio": 0.36,
-    "anillo": 0.55,
+    "anillo": 0.6,
     "despierto": true
    },
    {
@@ -112,7 +112,7 @@
     "fecha": "2026-10-11",
     "orbita": 161,
     "sitio": 0.39,
-    "anillo": 0.4,
+    "anillo": 0.41,
     "despierto": false
    }
   ],
@@ -161,7 +161,7 @@
     "fecha": "2026-08-25",
     "orbita": 10,
     "sitio": 0.31,
-    "anillo": 0.58,
+    "anillo": 0.59,
     "despierto": true
    },
    {
@@ -224,7 +224,7 @@
     "fecha": "2026-09-17",
     "orbita": 161,
     "sitio": 0.43,
-    "anillo": 0.61,
+    "anillo": 0.62,
     "despierto": true
    },
    {
@@ -398,7 +398,7 @@
     "fecha": "2026-07-20",
     "orbita": 10,
     "sitio": 0.56,
-    "anillo": 0.63,
+    "anillo": 0.62,
     "despierto": false
    },
    {
@@ -419,7 +419,7 @@
     "fecha": "2026-09-06",
     "orbita": 10,
     "sitio": 0.71,
-    "anillo": 0.69,
+    "anillo": 0.68,
     "despierto": false
    },
    {
@@ -440,7 +440,7 @@
     "fecha": "2026-10-12",
     "orbita": 10,
     "sitio": 0.52,
-    "anillo": 0.64,
+    "anillo": 0.63,
     "despierto": false
    },
    {
@@ -454,7 +454,7 @@
     "fecha": "2026-07-19",
     "orbita": 161,
     "sitio": 0.34,
-    "anillo": 0.5,
+    "anillo": 0.49,
     "despierto": true
    },
    {
@@ -512,105 +512,105 @@
     "fecha": "2026-07-08",
     "orbita": 10,
     "sitio": 0.34,
-    "anillo": 0.67,
+    "anillo": 0.69,
     "despierto": true
    },
    {
     "fecha": "2026-07-20",
     "orbita": 10,
     "sitio": 0.27,
-    "anillo": 0.57,
+    "anillo": 0.6,
     "despierto": true
    },
    {
     "fecha": "2026-08-13",
     "orbita": 10,
     "sitio": 0.19,
-    "anillo": 0.47,
+    "anillo": 0.5,
     "despierto": true
    },
    {
     "fecha": "2026-08-25",
     "orbita": 10,
     "sitio": 0.24,
-    "anillo": 0.57,
+    "anillo": 0.6,
     "despierto": true
    },
    {
     "fecha": "2026-09-06",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.6,
+    "anillo": 0.63,
     "despierto": true
    },
    {
     "fecha": "2026-09-18",
     "orbita": 10,
     "sitio": 0.27,
-    "anillo": 0.6,
+    "anillo": 0.63,
     "despierto": true
    },
    {
     "fecha": "2026-09-30",
     "orbita": 10,
     "sitio": 0.23,
-    "anillo": 0.51,
+    "anillo": 0.54,
     "despierto": true
    },
    {
     "fecha": "2026-10-12",
     "orbita": 10,
     "sitio": 0.29,
-    "anillo": 0.51,
+    "anillo": 0.56,
     "despierto": true
    },
    {
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.35,
-    "anillo": 0.65,
+    "anillo": 0.67,
     "despierto": true
    },
    {
     "fecha": "2026-07-19",
     "orbita": 161,
     "sitio": 0.28,
-    "anillo": 0.6,
+    "anillo": 0.62,
     "despierto": true
    },
    {
     "fecha": "2026-08-24",
     "orbita": 161,
     "sitio": 0.24,
-    "anillo": 0.51,
+    "anillo": 0.54,
     "despierto": true
    },
    {
     "fecha": "2026-09-05",
     "orbita": 161,
     "sitio": 0.33,
-    "anillo": 0.62,
+    "anillo": 0.65,
     "despierto": true
    },
    {
     "fecha": "2026-09-17",
     "orbita": 161,
     "sitio": 0.38,
-    "anillo": 0.61,
+    "anillo": 0.64,
     "despierto": true
    },
    {
     "fecha": "2026-09-29",
     "orbita": 161,
     "sitio": 0.23,
-    "anillo": 0.43,
+    "anillo": 0.46,
     "despierto": true
    },
    {
     "fecha": "2026-10-11",
     "orbita": 161,
     "sitio": 0.33,
-    "anillo": 0.5,
+    "anillo": 0.52,
     "despierto": true
    }
   ],
@@ -624,10 +624,10 @@
  },
  "ceamse-norte-oeste": {
   "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
-  "persistencia": 0.6,
+  "persistencia": 0.8,
   "insomnio_orbita": {
    "10": 1.0,
-   "161": 0.71
+   "161": 0.86
   },
   "eco_db": -9.6,
   "px": 231,
@@ -637,91 +637,91 @@
     "fecha": "2026-07-08",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.66,
+    "anillo": 0.7,
     "despierto": true
    },
    {
     "fecha": "2026-07-20",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.48,
+    "anillo": 0.5,
     "despierto": true
    },
    {
     "fecha": "2026-08-13",
     "orbita": 10,
     "sitio": 0.17,
-    "anillo": 0.37,
+    "anillo": 0.4,
     "despierto": true
    },
    {
     "fecha": "2026-08-25",
     "orbita": 10,
     "sitio": 0.28,
-    "anillo": 0.55,
+    "anillo": 0.6,
     "despierto": true
    },
    {
     "fecha": "2026-09-06",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.58,
+    "anillo": 0.62,
     "despierto": true
    },
    {
     "fecha": "2026-09-18",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.58,
+    "anillo": 0.63,
     "despierto": true
    },
    {
     "fecha": "2026-09-30",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.41,
+    "anillo": 0.43,
     "despierto": true
    },
    {
     "fecha": "2026-10-12",
     "orbita": 10,
     "sitio": 0.25,
-    "anillo": 0.37,
+    "anillo": 0.39,
     "despierto": true
    },
    {
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.34,
-    "anillo": 0.65,
+    "anillo": 0.7,
     "despierto": true
    },
    {
     "fecha": "2026-07-19",
     "orbita": 161,
     "sitio": 0.35,
-    "anillo": 0.55,
+    "anillo": 0.59,
     "despierto": true
    },
    {
     "fecha": "2026-08-24",
     "orbita": 161,
     "sitio": 0.16,
-    "anillo": 0.41,
+    "anillo": 0.44,
     "despierto": true
    },
    {
     "fecha": "2026-09-05",
     "orbita": 161,
     "sitio": 0.32,
-    "anillo": 0.62,
+    "anillo": 0.68,
     "despierto": true
    },
    {
     "fecha": "2026-09-17",
     "orbita": 161,
     "sitio": 0.33,
-    "anillo": 0.58,
+    "anillo": 0.63,
     "despierto": true
    },
    {
@@ -735,8 +735,8 @@
     "fecha": "2026-10-11",
     "orbita": 161,
     "sitio": 0.32,
-    "anillo": 0.4,
-    "despierto": false
+    "anillo": 0.41,
+    "despierto": true
    }
   ],
   "osm": [
@@ -762,105 +762,105 @@
     "fecha": "2026-07-08",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.63,
+    "anillo": 0.65,
     "despierto": true
    },
    {
     "fecha": "2026-07-20",
     "orbita": 10,
     "sitio": 0.19,
-    "anillo": 0.52,
+    "anillo": 0.54,
     "despierto": true
    },
    {
     "fecha": "2026-08-13",
     "orbita": 10,
     "sitio": 0.18,
-    "anillo": 0.42,
+    "anillo": 0.45,
     "despierto": true
    },
    {
     "fecha": "2026-08-25",
     "orbita": 10,
     "sitio": 0.24,
-    "anillo": 0.56,
+    "anillo": 0.57,
     "despierto": true
    },
    {
     "fecha": "2026-09-06",
     "orbita": 10,
     "sitio": 0.24,
-    "anillo": 0.57,
+    "anillo": 0.59,
     "despierto": true
    },
    {
     "fecha": "2026-09-18",
     "orbita": 10,
     "sitio": 0.24,
-    "anillo": 0.57,
+    "anillo": 0.59,
     "despierto": true
    },
    {
     "fecha": "2026-09-30",
     "orbita": 10,
     "sitio": 0.21,
-    "anillo": 0.49,
+    "anillo": 0.51,
     "despierto": true
    },
    {
     "fecha": "2026-10-12",
     "orbita": 10,
     "sitio": 0.26,
-    "anillo": 0.48,
+    "anillo": 0.51,
     "despierto": true
    },
    {
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.28,
-    "anillo": 0.61,
+    "anillo": 0.63,
     "despierto": true
    },
    {
     "fecha": "2026-07-19",
     "orbita": 161,
     "sitio": 0.23,
-    "anillo": 0.56,
+    "anillo": 0.58,
     "despierto": true
    },
    {
     "fecha": "2026-08-24",
     "orbita": 161,
     "sitio": 0.15,
-    "anillo": 0.44,
+    "anillo": 0.47,
     "despierto": true
    },
    {
     "fecha": "2026-09-05",
     "orbita": 161,
     "sitio": 0.3,
-    "anillo": 0.59,
+    "anillo": 0.61,
     "despierto": true
    },
    {
     "fecha": "2026-09-17",
     "orbita": 161,
     "sitio": 0.39,
-    "anillo": 0.59,
+    "anillo": 0.6,
     "despierto": true
    },
    {
     "fecha": "2026-09-29",
     "orbita": 161,
     "sitio": 0.17,
-    "anillo": 0.41,
+    "anillo": 0.43,
     "despierto": true
    },
    {
     "fecha": "2026-10-11",
     "orbita": 161,
     "sitio": 0.32,
-    "anillo": 0.48,
+    "anillo": 0.5,
     "despierto": true
    }
   ],
@@ -887,105 +887,105 @@
     "fecha": "2026-07-08",
     "orbita": 10,
     "sitio": 0.38,
-    "anillo": 0.66,
+    "anillo": 0.69,
     "despierto": true
    },
    {
     "fecha": "2026-07-20",
     "orbita": 10,
     "sitio": 0.29,
-    "anillo": 0.58,
+    "anillo": 0.62,
     "despierto": true
    },
    {
     "fecha": "2026-08-13",
     "orbita": 10,
     "sitio": 0.21,
-    "anillo": 0.52,
+    "anillo": 0.55,
     "despierto": true
    },
    {
     "fecha": "2026-08-25",
     "orbita": 10,
     "sitio": 0.3,
-    "anillo": 0.61,
+    "anillo": 0.64,
     "despierto": true
    },
    {
     "fecha": "2026-09-06",
     "orbita": 10,
     "sitio": 0.27,
-    "anillo": 0.62,
+    "anillo": 0.65,
     "despierto": true
    },
    {
     "fecha": "2026-09-18",
     "orbita": 10,
     "sitio": 0.28,
-    "anillo": 0.62,
+    "anillo": 0.65,
     "despierto": true
    },
    {
     "fecha": "2026-09-30",
     "orbita": 10,
     "sitio": 0.28,
-    "anillo": 0.56,
+    "anillo": 0.59,
     "despierto": true
    },
    {
     "fecha": "2026-10-12",
     "orbita": 10,
     "sitio": 0.36,
-    "anillo": 0.55,
+    "anillo": 0.58,
     "despierto": true
    },
    {
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.32,
-    "anillo": 0.67,
+    "anillo": 0.69,
     "despierto": true
    },
    {
     "fecha": "2026-07-19",
     "orbita": 161,
     "sitio": 0.3,
-    "anillo": 0.62,
+    "anillo": 0.64,
     "despierto": true
    },
    {
     "fecha": "2026-08-24",
     "orbita": 161,
     "sitio": 0.14,
-    "anillo": 0.55,
+    "anillo": 0.58,
     "despierto": true
    },
    {
     "fecha": "2026-09-05",
     "orbita": 161,
     "sitio": 0.24,
-    "anillo": 0.65,
+    "anillo": 0.68,
     "despierto": true
    },
    {
     "fecha": "2026-09-17",
     "orbita": 161,
     "sitio": 0.47,
-    "anillo": 0.66,
+    "anillo": 0.67,
     "despierto": true
    },
    {
     "fecha": "2026-09-29",
     "orbita": 161,
     "sitio": 0.2,
-    "anillo": 0.5,
+    "anillo": 0.52,
     "despierto": true
    },
    {
     "fecha": "2026-10-11",
     "orbita": 161,
     "sitio": 0.3,
-    "anillo": 0.56,
+    "anillo": 0.58,
     "despierto": true
    }
   ],
@@ -1068,7 +1068,7 @@
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.66,
-    "anillo": 0.73,
+    "anillo": 0.72,
     "despierto": false
    },
    {
@@ -1137,7 +1137,7 @@
     "fecha": "2026-07-08",
     "orbita": 10,
     "sitio": 0.74,
-    "anillo": 0.72,
+    "anillo": 0.73,
     "despierto": false
    },
    {
@@ -1193,7 +1193,7 @@
     "fecha": "2026-07-07",
     "orbita": 161,
     "sitio": 0.71,
-    "anillo": 0.71,
+    "anillo": 0.72,
     "despierto": false
    },
    {
@@ -1248,11 +1248,11 @@
   ]
  },
  "cuartel-v": {
-  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "motivo": "señal intermedia: ni quieto ni despierto",
   "persistencia": 0.0,
   "insomnio_orbita": {
    "10": 0.25,
-   "161": 0.14
+   "161": 0.29
   },
   "eco_db": -7.8,
   "px": 14,
@@ -1297,14 +1297,14 @@
     "fecha": "2026-09-18",
     "orbita": 10,
     "sitio": 0.54,
-    "anillo": 0.63,
+    "anillo": 0.64,
     "despierto": false
    },
    {
     "fecha": "2026-09-30",
     "orbita": 10,
     "sitio": 0.41,
-    "anillo": 0.53,
+    "anillo": 0.54,
     "despierto": true
    },
    {
@@ -1333,7 +1333,7 @@
     "orbita": 161,
     "sitio": 0.4,
     "anillo": 0.51,
-    "despierto": false
+    "despierto": true
    },
    {
     "fecha": "2026-09-05",
@@ -1486,7 +1486,7 @@
     "fecha": "2026-10-11",
     "orbita": 161,
     "sitio": 0.41,
-    "anillo": 0.49,
+    "anillo": 0.48,
     "despierto": false
    }
   ],
