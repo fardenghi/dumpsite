@@ -43,12 +43,16 @@ def main(dir_in, dir_data):
     resumen = {}
     for catalogo, (ruta_cat, base_out) in SALIDAS.items():
         sitios = json.load(open(os.path.join(dir_data, ruta_cat)))["sitios"]
-        geoms = {}
-        for id_cat, gj in c.sql(
-            f"select id_catalogo, ST_AsGeoJSON(ST_GeomFromWKB(wkb)) from g where catalogo = '{catalogo}'"
-        ).fetchall():
-            # un sitio de basurales puede tener un solo objeto OSM; si se repite, gana el primero
-            geoms.setdefault(id_cat, gj)
+        # Un sitio de basurales puede estar formado por varios objetos OSM (o un objeto partido en
+        # varias features de Overture): se unen todos en una sola geometría. Antes se quedaba con el
+        # primero y el resto del predio caía en el anillo de control.
+        geoms = dict(
+            c.sql(
+                f"""select id_catalogo,
+                           ST_AsGeoJSON(ST_MakeValid(ST_Union_Agg(ST_MakeValid(ST_GeomFromWKB(wkb)))))
+                    from g where catalogo = '{catalogo}' group by id_catalogo"""
+            ).fetchall()
+        )
         feats = []
         for s in sitios:
             props = propiedades(catalogo, s)
