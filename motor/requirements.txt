@@ -8,6 +8,8 @@ earthaccess
 tifffile
 imagecodecs
 pytest
+# sólo para `fuentes_fijas.py usos` (polígonos de OSM desde Overture Maps)
+duckdb
 # para los contratos de datos del modelo (`contratos.py`) y las tablas en parquet
 pandas
 pyarrow
