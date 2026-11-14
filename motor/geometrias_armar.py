@@ -73,13 +73,17 @@ def main(dir_in, dir_data):
             open(dest, "w").write(texto)
         else:
             dest = os.path.join(dir_data, base_out + ".parquet")
-            tmp = os.path.join(dir_in, f"_{catalogo}.geojson")
-            open(tmp, "w").write(texto)
+            # una feature por línea, con la geometría como texto GeoJSON
+            tmp = os.path.join(dir_in, f"_{catalogo}.ndjson")
+            with open(tmp, "w") as fh:
+                for f in feats:
+                    fh.write(json.dumps({**f["properties"], "geom": json.dumps(f["geometry"])}, ensure_ascii=False) + "\n")
             c.sql(
                 f"""COPY (
-                      SELECT f.id AS id, f.properties AS properties,
-                             ST_GeomFromGeoJSON(to_json(f.geometry)) AS geometry
-                      FROM (SELECT unnest(features) AS f FROM read_json('{tmp}', maximum_object_size=1000000000))
+                      SELECT * EXCLUDE (geom), ST_GeomFromGeoJSON(geom) AS geometry
+                      FROM read_json('{tmp}', format='newline_delimited', columns={{
+                        'id':'VARCHAR','nombre':'VARCHAR','clase':'VARCHAR','prioridad':'VARCHAR','rol':'VARCHAR',
+                        'area_ha':'DOUBLE','confianza':'VARCHAR','geometria':'VARCHAR','geom':'VARCHAR'}})
                     ) TO '{dest}' (FORMAT parquet)"""
             )
             os.remove(tmp)
