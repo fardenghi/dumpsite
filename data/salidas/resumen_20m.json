@@ -1,0 +1,442 @@
+{
+ "capa": "20m",
+ "pares": 15,
+ "gcov": 20,
+ "umbral_coherencia": 0.3,
+ "min_insomnio": 0.6,
+ "eco_min_db": -15.0,
+ "sitios": {
+  "luján_poligono_osm": {
+   "insomnio": 0.11,
+   "coherencia_media": 0.59,
+   "pares": 15,
+   "eco_db": -9.2
+  },
+  "luján_mancha_oeste": {
+   "insomnio": 0.4,
+   "coherencia_media": 0.4,
+   "pares": 15,
+   "eco_db": -17.5
+  },
+  "norte_iii_aprox": {
+   "insomnio": 0.25,
+   "coherencia_media": 0.43,
+   "pares": 15,
+   "eco_db": -7.5
+  },
+  "gonzalez_catan_osm": {
+   "insomnio": 0.19,
+   "coherencia_media": 0.46,
+   "pares": 15,
+   "eco_db": -10.3
+  },
+  "control_caba_palermo": {
+   "insomnio": 0.02,
+   "coherencia_media": 0.68,
+   "pares": 15,
+   "eco_db": -3.1
+  }
+ },
+ "manchas": [
+  {
+   "ha": 14369.5,
+   "lat": -34.51798,
+   "lon": -58.40706,
+   "insomnio_medio": 0.78,
+   "elongacion": 3.3,
+   "forma": "alargada"
+  },
+  {
+   "ha": 159.3,
+   "lat": -34.39695,
+   "lon": -58.46987,
+   "insomnio_medio": 0.75,
+   "elongacion": 1.5,
+   "forma": "compacta"
+  },
+  {
+   "ha": 108.3,
+   "lat": -34.27716,
+   "lon": -58.4882,
+   "insomnio_medio": 0.72,
+   "elongacion": 1.3,
+   "forma": "compacta"
+  },
+  {
+   "ha": 104.5,
+   "lat": -34.31702,
+   "lon": -58.47304,
+   "insomnio_medio": 0.72,
+   "elongacion": 1.9,
+   "forma": "compacta"
+  },
+  {
+   "ha": 86.0,
+   "lat": -34.64803,
+   "lon": -58.30822,
+   "insomnio_medio": 0.78,
+   "elongacion": 2.3,
+   "forma": "compacta"
+  },
+  {
+   "ha": 59.8,
+   "lat": -34.29156,
+   "lon": -58.47542,
+   "insomnio_medio": 0.71,
+   "elongacion": 2.5,
+   "forma": "compacta"
+  },
+  {
+   "ha": 50.8,
+   "lat": -34.29959,
+   "lon": -58.46795,
+   "insomnio_medio": 0.72,
+   "elongacion": 2.2,
+   "forma": "compacta"
+  },
+  {
+   "ha": 50.7,
+   "lat": -34.30928,
+   "lon": -58.47203,
+   "insomnio_medio": 0.72,
+   "elongacion": 2.5,
+   "forma": "alargada"
+  },
+  {
+   "ha": 50.4,
+   "lat": -34.27263,
+   "lon": -58.29999,
+   "insomnio_medio": 0.72,
+   "elongacion": 3.2,
+   "forma": "alargada"
+  },
+  {
+   "ha": 49.4,
+   "lat": -34.28113,
+   "lon": -58.4735,
+   "insomnio_medio": 0.74,
+   "elongacion": 2.6,
+   "forma": "alargada"
+  },
+  {
+   "ha": 48.7,
+   "lat": -34.40635,
+   "lon": -58.48309,
+   "insomnio_medio": 0.72,
+   "elongacion": 2.9,
+   "forma": "alargada"
+  },
+  {
+   "ha": 47.5,
+   "lat": -34.27294,
+   "lon": -58.27066,
+   "insomnio_medio": 0.71,
+   "elongacion": 1.1,
+   "forma": "compacta"
+  },
+  {
+   "ha": 39.7,
+   "lat": -34.38691,
+   "lon": -58.46534,
+   "insomnio_medio": 0.71,
+   "elongacion": 2.1,
+   "forma": "compacta"
+  },
+  {
+   "ha": 35.6,
+   "lat": -34.28905,
+   "lon": -58.28221,
+   "insomnio_medio": 0.7,
+   "elongacion": 2.8,
+   "forma": "alargada"
+  },
+  {
+   "ha": 33.0,
+   "lat": -34.34422,
+   "lon": -58.44547,
+   "insomnio_medio": 0.71,
+   "elongacion": 1.5,
+   "forma": "compacta"
+  },
+  {
+   "ha": 32.2,
+   "lat": -34.69429,
+   "lon": -58.45873,
+   "insomnio_medio": 0.74,
+   "elongacion": 1.7,
+   "forma": "compacta"
+  },
+  {
+   "ha": 29.6,
+   "lat": -34.53254,
+   "lon": -58.62849,
+   "insomnio_medio": 0.73,
+   "elongacion": 1.4,
+   "forma": "compacta"
+  },
+  {
+   "ha": 29.6,
+   "lat": -34.55847,
+   "lon": -58.41472,
+   "insomnio_medio": 0.72,
+   "elongacion": 4.0,
+   "forma": "alargada"
+  },
+  {
+   "ha": 27.7,
+   "lat": -34.6886,
+   "lon": -58.4523,
+   "insomnio_medio": 0.8,
+   "elongacion": 4.8,
+   "forma": "alargada"
+  },
+  {
+   "ha": 25.2,
+   "lat": -34.33652,
+   "lon": -58.4412,
+   "insomnio_medio": 0.71,
+   "elongacion": 3.1,
+   "forma": "alargada"
+  },
+  {
+   "ha": 24.6,
+   "lat": -34.40583,
+   "lon": -58.52573,
+   "insomnio_medio": 0.8,
+   "elongacion": 3.6,
+   "forma": "alargada"
+  },
+  {
+   "ha": 24.4,
+   "lat": -34.41205,
+   "lon": -58.45904,
+   "insomnio_medio": 0.78,
+   "elongacion": 1.8,
+   "forma": "compacta"
+  },
+  {
+   "ha": 23.7,
+   "lat": -34.26722,
+   "lon": -58.44502,
+   "insomnio_medio": 0.74,
+   "elongacion": 5.0,
+   "forma": "lineal"
+  },
+  {
+   "ha": 23.6,
+   "lat": -34.28512,
+   "lon": -58.48617,
+   "insomnio_medio": 0.69,
+   "elongacion": 2.2,
+   "forma": "compacta"
+  },
+  {
+   "ha": 22.1,
+   "lat": -34.39372,
+   "lon": -58.7052,
+   "insomnio_medio": 0.75,
+   "elongacion": 1.3,
+   "forma": "compacta"
+  },
+  {
+   "ha": 22.0,
+   "lat": -34.4186,
+   "lon": -58.46916,
+   "insomnio_medio": 0.77,
+   "elongacion": 2.8,
+   "forma": "alargada"
+  },
+  {
+   "ha": 21.1,
+   "lat": -34.46552,
+   "lon": -58.37396,
+   "insomnio_medio": 0.75,
+   "elongacion": 1.9,
+   "forma": "compacta"
+  },
+  {
+   "ha": 20.8,
+   "lat": -34.38727,
+   "lon": -58.43446,
+   "insomnio_medio": 0.74,
+   "elongacion": 1.7,
+   "forma": "compacta"
+  },
+  {
+   "ha": 20.8,
+   "lat": -34.42046,
+   "lon": -58.5384,
+   "insomnio_medio": 0.81,
+   "elongacion": 6.4,
+   "forma": "lineal"
+  },
+  {
+   "ha": 20.8,
+   "lat": -34.42066,
+   "lon": -58.50772,
+   "insomnio_medio": 0.8,
+   "elongacion": 6.0,
+   "forma": "lineal"
+  },
+  {
+   "ha": 20.0,
+   "lat": -34.27399,
+   "lon": -58.34107,
+   "insomnio_medio": 0.71,
+   "elongacion": 1.1,
+   "forma": "compacta"
+  },
+  {
+   "ha": 19.4,
+   "lat": -34.32926,
+   "lon": -58.46021,
+   "insomnio_medio": 0.75,
+   "elongacion": 3.8,
+   "forma": "alargada"
+  },
+  {
+   "ha": 18.8,
+   "lat": -34.29126,
+   "lon": -58.48541,
+   "insomnio_medio": 0.68,
+   "elongacion": 1.5,
+   "forma": "compacta"
+  },
+  {
+   "ha": 18.8,
+   "lat": -34.44527,
+   "lon": -58.61374,
+   "insomnio_medio": 0.76,
+   "elongacion": 1.9,
+   "forma": "compacta"
+  },
+  {
+   "ha": 17.5,
+   "lat": -34.35899,
+   "lon": -58.44702,
+   "insomnio_medio": 0.73,
+   "elongacion": 4.9,
+   "forma": "alargada"
+  },
+  {
+   "ha": 17.5,
+   "lat": -34.74201,
+   "lon": -58.33941,
+   "insomnio_medio": 0.77,
+   "elongacion": 1.6,
+   "forma": "compacta"
+  },
+  {
+   "ha": 16.8,
+   "lat": -34.29536,
+   "lon": -58.51895,
+   "insomnio_medio": 0.75,
+   "elongacion": 12.5,
+   "forma": "lineal"
+  },
+  {
+   "ha": 16.2,
+   "lat": -34.41512,
+   "lon": -58.57551,
+   "insomnio_medio": 0.78,
+   "elongacion": 7.3,
+   "forma": "lineal"
+  },
+  {
+   "ha": 15.8,
+   "lat": -34.68074,
+   "lon": -58.44561,
+   "insomnio_medio": 0.79,
+   "elongacion": 1.2,
+   "forma": "compacta"
+  },
+  {
+   "ha": 15.3,
+   "lat": -34.77971,
+   "lon": -58.67377,
+   "insomnio_medio": 0.77,
+   "elongacion": 1.9,
+   "forma": "compacta"
+  },
+  {
+   "ha": 15.2,
+   "lat": -34.33662,
+   "lon": -58.43229,
+   "insomnio_medio": 0.74,
+   "elongacion": 2.0,
+   "forma": "compacta"
+  },
+  {
+   "ha": 15.1,
+   "lat": -34.48397,
+   "lon": -58.52105,
+   "insomnio_medio": 0.79,
+   "elongacion": 1.5,
+   "forma": "compacta"
+  },
+  {
+   "ha": 14.1,
+   "lat": -34.52798,
+   "lon": -58.63276,
+   "insomnio_medio": 0.74,
+   "elongacion": 1.7,
+   "forma": "compacta"
+  },
+  {
+   "ha": 14.1,
+   "lat": -34.66129,
+   "lon": -58.45859,
+   "insomnio_medio": 0.8,
+   "elongacion": 2.0,
+   "forma": "compacta"
+  },
+  {
+   "ha": 13.2,
+   "lat": -34.29286,
+   "lon": -58.45719,
+   "insomnio_medio": 0.73,
+   "elongacion": 2.2,
+   "forma": "compacta"
+  },
+  {
+   "ha": 13.0,
+   "lat": -34.28744,
+   "lon": -58.47339,
+   "insomnio_medio": 0.71,
+   "elongacion": 5.6,
+   "forma": "lineal"
+  },
+  {
+   "ha": 12.6,
+   "lat": -34.30613,
+   "lon": -58.46394,
+   "insomnio_medio": 0.71,
+   "elongacion": 1.3,
+   "forma": "compacta"
+  },
+  {
+   "ha": 12.6,
+   "lat": -34.41435,
+   "lon": -58.47779,
+   "insomnio_medio": 0.78,
+   "elongacion": 2.0,
+   "forma": "compacta"
+  },
+  {
+   "ha": 12.6,
+   "lat": -34.43215,
+   "lon": -58.42151,
+   "insomnio_medio": 0.76,
+   "elongacion": 1.6,
+   "forma": "compacta"
+  },
+  {
+   "ha": 12.5,
+   "lat": -34.33189,
+   "lon": -58.43591,
+   "insomnio_medio": 0.7,
+   "elongacion": 2.6,
+   "forma": "alargada"
+  }
+ ]
+}
