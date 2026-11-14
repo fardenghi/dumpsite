@@ -1,0 +1,2229 @@
+{
+ "generado_por": "herramientas/modelo_por_frame.py variantes",
+ "validacion": "una partición por frame (se deja un frame afuera por vez)",
+ "prueba_final": "reservada: ninguna variante miró ni predijo la prueba final (Argentina)",
+ "avisos": [],
+ "etiquetas_optico": "salidas/etiquetas_optico_ia.json: las puso una IA en dos pasadas a ciegas y NO las revisó una persona",
+ "negativos_osm": "manchas con clase_osm = uso_conocido (OSM vía Overture, etapa 4) que no tocan ningún basural del catálogo",
+ "variantes": {
+  "catalogo": {
+   "que": "La de la corrida 1: positivos y negativos de los catálogos.",
+   "filas": {
+    "basural_activo": 39,
+    "otro_movil": 25
+   },
+   "filas_por_frame": {
+    "CDMX": {
+     "basural_activo": 5
+    },
+    "DELHI": {
+     "basural_activo": 3,
+     "otro_movil": 2
+    },
+    "LOS_ANGELES": {
+     "otro_movil": 12,
+     "basural_activo": 10
+    },
+    "PRI_PONCE": {
+     "otro_movil": 10,
+     "basural_activo": 1
+    },
+    "USA_MD_HOWARD": {
+     "basural_activo": 4
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "basural_activo": 1
+    },
+    "USA_NY_RICHMOND": {
+     "basural_activo": 5,
+     "otro_movil": 1
+    },
+    "USA_OH_LAKE": {
+     "basural_activo": 6
+    },
+    "YAKARTA": {
+     "basural_activo": 4
+    }
+   },
+   "positivos_sacados_por_el_optico": {},
+   "validado": false,
+   "por_que_no_esta_validado": [
+    "sólo 1 frame(s) con 5 filas o más de cada clase (LOS_ANGELES); hacen falta 3",
+    "el AUC fuera de partición es 0.473 con IC 95 % [0.32, 0.632]: no se distingue del azar (0,5)"
+   ],
+   "global": {
+    "n": 64,
+    "n_basural": 39,
+    "n_otro": 25,
+    "auc": 0.473,
+    "auc_ic95": [
+     0.32,
+     0.632
+    ],
+    "precision": 0.627,
+    "precision_ic95": [
+     0.49,
+     0.747
+    ],
+    "recall": 0.821,
+    "recall_ic95": [
+     0.673,
+     0.91
+    ]
+   },
+   "por_frame": {
+    "CDMX": {
+     "n": 5,
+     "n_basural": 5,
+     "n_otro": 0,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 1.0,
+     "precision_ic95": [
+      0.438,
+      1.0
+     ],
+     "recall": 0.6,
+     "recall_ic95": [
+      0.231,
+      0.882
+     ]
+    },
+    "DELHI": {
+     "n": 5,
+     "n_basural": 3,
+     "n_otro": 2,
+     "auc": 1.0,
+     "auc_ic95": [
+      1.0,
+      1.0
+     ],
+     "precision": 1.0,
+     "precision_ic95": [
+      0.342,
+      1.0
+     ],
+     "recall": 0.667,
+     "recall_ic95": [
+      0.208,
+      0.939
+     ]
+    },
+    "LOS_ANGELES": {
+     "n": 22,
+     "n_basural": 10,
+     "n_otro": 12,
+     "auc": 0.575,
+     "auc_ic95": [
+      0.321,
+      0.817
+     ],
+     "precision": 0.476,
+     "precision_ic95": [
+      0.283,
+      0.676
+     ],
+     "recall": 1.0,
+     "recall_ic95": [
+      0.722,
+      1.0
+     ]
+    },
+    "PRI_PONCE": {
+     "n": 11,
+     "n_basural": 1,
+     "n_otro": 10,
+     "auc": 1.0,
+     "auc_ic95": [
+      1.0,
+      1.0
+     ],
+     "precision": 0.111,
+     "precision_ic95": [
+      0.02,
+      0.435
+     ],
+     "recall": 1.0,
+     "recall_ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "USA_MD_HOWARD": {
+     "n": 4,
+     "n_basural": 4,
+     "n_otro": 0,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 1.0,
+     "precision_ic95": [
+      0.51,
+      1.0
+     ],
+     "recall": 1.0,
+     "recall_ic95": [
+      0.51,
+      1.0
+     ]
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "n": 1,
+     "n_basural": 1,
+     "n_otro": 0,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 1.0,
+     "precision_ic95": [
+      0.207,
+      1.0
+     ],
+     "recall": 1.0,
+     "recall_ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "USA_NY_RICHMOND": {
+     "n": 6,
+     "n_basural": 5,
+     "n_otro": 1,
+     "auc": 1.0,
+     "auc_ic95": [
+      1.0,
+      1.0
+     ],
+     "precision": 1.0,
+     "precision_ic95": [
+      0.51,
+      1.0
+     ],
+     "recall": 0.8,
+     "recall_ic95": [
+      0.376,
+      0.964
+     ]
+    },
+    "USA_OH_LAKE": {
+     "n": 6,
+     "n_basural": 6,
+     "n_otro": 0,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 1.0,
+     "precision_ic95": [
+      0.566,
+      1.0
+     ],
+     "recall": 0.833,
+     "recall_ic95": [
+      0.436,
+      0.97
+     ]
+    },
+    "YAKARTA": {
+     "n": 4,
+     "n_basural": 4,
+     "n_otro": 0,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 1.0,
+     "precision_ic95": [
+      0.342,
+      1.0
+     ],
+     "recall": 0.5,
+     "recall_ic95": [
+      0.15,
+      0.85
+     ]
+    }
+   },
+   "auc_de_las_variantes_de_columnas": {
+    "completo": {
+     "auc": 0.473,
+     "auc_ic95": [
+      0.32,
+      0.632
+     ]
+    },
+    "sin_forma": {
+     "auc": 0.475,
+     "auc_ic95": [
+      0.322,
+      0.637
+     ]
+    },
+    "solo_radar": {
+     "auc": 0.519,
+     "auc_ic95": [
+      0.374,
+      0.673
+     ]
+    },
+    "solo_optico": {
+     "auc": 0.426,
+     "auc_ic95": [
+      0.274,
+      0.592
+     ]
+    },
+    "con_cantidad_de_datos": {
+     "auc": 0.418,
+     "auc_ic95": [
+      0.274,
+      0.575
+     ]
+    }
+   },
+   "auc_de_area_ha_sola": 0.506,
+   "diagnostico_mezclando_frames_no_reportar": 0.818,
+   "errores_por_clase_negativo": {
+    "aeropuerto": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "agua_permanente": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "cantera": {
+     "n": 2,
+     "dados_como_basural": 2,
+     "fraccion": 1.0,
+     "ic95": [
+      0.342,
+      1.0
+     ]
+    },
+    "feedlot": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "obra": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "vegetacion_densa": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "cultivo": {
+     "n": 7,
+     "dados_como_basural": 6,
+     "fraccion": 0.857,
+     "ic95": [
+      0.487,
+      0.974
+     ]
+    },
+    "humedal": {
+     "n": 4,
+     "dados_como_basural": 3,
+     "fraccion": 0.75,
+     "ic95": [
+      0.301,
+      0.954
+     ]
+    },
+    "estacionamiento_playa": {
+     "n": 2,
+     "dados_como_basural": 1,
+     "fraccion": 0.5,
+     "ic95": [
+      0.095,
+      0.905
+     ]
+    },
+    "laguna_chica": {
+     "n": 2,
+     "dados_como_basural": 1,
+     "fraccion": 0.5,
+     "ic95": [
+      0.095,
+      0.905
+     ]
+    },
+    "puerto_playa_contenedores": {
+     "n": 2,
+     "dados_como_basural": 1,
+     "fraccion": 0.5,
+     "ic95": [
+      0.095,
+      0.905
+     ]
+    },
+    "pileta_efluentes": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    }
+   },
+   "mayores_errores": [
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0100",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "estacionamiento_playa",
+     "id_catalogo": "NEG-056000",
+     "p_basural": 0.997,
+     "area_ha": 35.2,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0317",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "cantera",
+     "id_catalogo": "NEG-009744",
+     "p_basural": 0.996,
+     "area_ha": 12.8,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0283",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "obra",
+     "id_catalogo": "NEG-043642",
+     "p_basural": 0.996,
+     "area_ha": 14.1,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0248",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "cantera",
+     "id_catalogo": "NEG-009753",
+     "p_basural": 0.994,
+     "area_ha": 16.0,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0001",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "aeropuerto",
+     "id_catalogo": "NEG-051122",
+     "p_basural": 0.993,
+     "area_ha": 814.1,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-PRI_PONCE-0030",
+     "frame": "PRI_PONCE",
+     "clase": "otro_movil",
+     "clase_negativo": "cultivo",
+     "id_catalogo": "NEG-015004",
+     "p_basural": 0.992,
+     "area_ha": 94.1,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0063",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "cultivo",
+     "id_catalogo": "NEG-016651",
+     "p_basural": 0.992,
+     "area_ha": 51.2,
+     "insomnio": 0.88
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0113",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "laguna_chica",
+     "id_catalogo": "NEG-037276",
+     "p_basural": 0.991,
+     "area_ha": 32.0,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0371",
+     "frame": "LOS_ANGELES",
+     "clase": "otro_movil",
+     "clase_negativo": "feedlot",
+     "id_catalogo": "NEG-023512",
+     "p_basural": 0.989,
+     "area_ha": 10.2,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-PRI_PONCE-0062",
+     "frame": "PRI_PONCE",
+     "clase": "otro_movil",
+     "clase_negativo": "humedal",
+     "id_catalogo": "NEG-028520",
+     "p_basural": 0.985,
+     "area_ha": 69.8,
+     "insomnio": 1.0
+    }
+   ],
+   "importancia": {
+    "swir_b11_contraste": 152.7,
+    "urbano_anillo": 112.6,
+    "insomnio": 86.33,
+    "ndwi_media": 82.25,
+    "eco_contraste": 70.37,
+    "hv_hh": 47.8,
+    "cultivo_anillo": 42.61,
+    "ndvi_variacion": 40.07,
+    "ndvi_contraste": 24.2,
+    "compacidad": 20.36
+   },
+   "manchas_sin_etiqueta_dadas_como_basural": {
+    "n": 2295,
+    "p_basural_0_5_o_mas": 1260
+   }
+  },
+  "catalogo_y_osm": {
+   "que": "Suma como otro_movil las manchas `uso_conocido` de OSM que no tocan ningún basural.",
+   "filas": {
+    "otro_movil": 553,
+    "basural_activo": 39
+   },
+   "filas_por_frame": {
+    "CDMX": {
+     "otro_movil": 36,
+     "basural_activo": 5
+    },
+    "DELHI": {
+     "otro_movil": 43,
+     "basural_activo": 3
+    },
+    "LOS_ANGELES": {
+     "otro_movil": 87,
+     "basural_activo": 10
+    },
+    "PRI_PONCE": {
+     "otro_movil": 93,
+     "basural_activo": 1
+    },
+    "USA_MD_HOWARD": {
+     "otro_movil": 16,
+     "basural_activo": 4
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "otro_movil": 43,
+     "basural_activo": 1
+    },
+    "USA_NY_RICHMOND": {
+     "otro_movil": 133,
+     "basural_activo": 5
+    },
+    "USA_OH_LAKE": {
+     "otro_movil": 27,
+     "basural_activo": 6
+    },
+    "YAKARTA": {
+     "otro_movil": 75,
+     "basural_activo": 4
+    }
+   },
+   "positivos_sacados_por_el_optico": {},
+   "validado": true,
+   "por_que_no_esta_validado": [],
+   "global": {
+    "n": 592,
+    "n_basural": 39,
+    "n_otro": 553,
+    "auc": 0.788,
+    "auc_ic95": [
+     0.712,
+     0.86
+    ],
+    "precision": 0.29,
+    "precision_ic95": [
+     0.161,
+     0.466
+    ],
+    "recall": 0.231,
+    "recall_ic95": [
+     0.126,
+     0.383
+    ]
+   },
+   "por_frame": {
+    "CDMX": {
+     "n": 41,
+     "n_basural": 5,
+     "n_otro": 36,
+     "auc": 0.817,
+     "auc_ic95": [
+      0.667,
+      0.947
+     ],
+     "precision": 0.25,
+     "precision_ic95": [
+      0.046,
+      0.699
+     ],
+     "recall": 0.2,
+     "recall_ic95": [
+      0.036,
+      0.624
+     ]
+    },
+    "DELHI": {
+     "n": 46,
+     "n_basural": 3,
+     "n_otro": 43,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.844,
+      1.0
+     ],
+     "precision": 0.4,
+     "precision_ic95": [
+      0.118,
+      0.769
+     ],
+     "recall": 0.667,
+     "recall_ic95": [
+      0.208,
+      0.939
+     ]
+    },
+    "LOS_ANGELES": {
+     "n": 97,
+     "n_basural": 10,
+     "n_otro": 87,
+     "auc": 0.867,
+     "auc_ic95": [
+      0.758,
+      0.955
+     ],
+     "precision": 0.5,
+     "precision_ic95": [
+      0.237,
+      0.763
+     ],
+     "recall": 0.5,
+     "recall_ic95": [
+      0.237,
+      0.763
+     ]
+    },
+    "PRI_PONCE": {
+     "n": 94,
+     "n_basural": 1,
+     "n_otro": 93,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.9,
+      0.989
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "USA_MD_HOWARD": {
+     "n": 20,
+     "n_basural": 4,
+     "n_otro": 16,
+     "auc": 0.734,
+     "auc_ic95": [
+      0.333,
+      1.0
+     ],
+     "precision": 1.0,
+     "precision_ic95": [
+      0.207,
+      1.0
+     ],
+     "recall": 0.25,
+     "recall_ic95": [
+      0.046,
+      0.699
+     ]
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "n": 44,
+     "n_basural": 1,
+     "n_otro": 43,
+     "auc": 0.535,
+     "auc_ic95": [
+      0.374,
+      0.69
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.49
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "USA_NY_RICHMOND": {
+     "n": 138,
+     "n_basural": 5,
+     "n_otro": 133,
+     "auc": 0.722,
+     "auc_ic95": [
+      0.414,
+      0.951
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.39
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.434
+     ]
+    },
+    "USA_OH_LAKE": {
+     "n": 33,
+     "n_basural": 6,
+     "n_otro": 27,
+     "auc": 0.71,
+     "auc_ic95": [
+      0.468,
+      0.957
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.39
+     ]
+    },
+    "YAKARTA": {
+     "n": 79,
+     "n_basural": 4,
+     "n_otro": 75,
+     "auc": 0.847,
+     "auc_ic95": [
+      0.462,
+      1.0
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.49
+     ]
+    }
+   },
+   "auc_de_las_variantes_de_columnas": {
+    "completo": {
+     "auc": 0.788,
+     "auc_ic95": [
+      0.712,
+      0.86
+     ]
+    },
+    "sin_forma": {
+     "auc": 0.775,
+     "auc_ic95": [
+      0.701,
+      0.846
+     ]
+    },
+    "solo_radar": {
+     "auc": 0.72,
+     "auc_ic95": [
+      0.627,
+      0.819
+     ]
+    },
+    "solo_optico": {
+     "auc": 0.764,
+     "auc_ic95": [
+      0.688,
+      0.836
+     ]
+    },
+    "con_cantidad_de_datos": {
+     "auc": 0.784,
+     "auc_ic95": [
+      0.707,
+      0.859
+     ]
+    }
+   },
+   "auc_de_area_ha_sola": 0.615,
+   "diagnostico_mezclando_frames_no_reportar": 0.852,
+   "errores_por_clase_negativo": {
+    "aeropuerto": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "obra": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "osm_cantera": {
+     "n": 6,
+     "dados_como_basural": 3,
+     "fraccion": 0.5,
+     "ic95": [
+      0.188,
+      0.812
+     ]
+    },
+    "osm_aeródromo": {
+     "n": 21,
+     "dados_como_basural": 5,
+     "fraccion": 0.238,
+     "ic95": [
+      0.106,
+      0.451
+     ]
+    },
+    "osm_militar": {
+     "n": 20,
+     "dados_como_basural": 2,
+     "fraccion": 0.1,
+     "ic95": [
+      0.028,
+      0.301
+     ]
+    },
+    "osm_reserva": {
+     "n": 75,
+     "dados_como_basural": 4,
+     "fraccion": 0.053,
+     "ic95": [
+      0.021,
+      0.129
+     ]
+    },
+    "osm_parque": {
+     "n": 109,
+     "dados_como_basural": 3,
+     "fraccion": 0.028,
+     "ic95": [
+      0.009,
+      0.078
+     ]
+    },
+    "osm_golf": {
+     "n": 135,
+     "dados_como_basural": 2,
+     "fraccion": 0.015,
+     "ic95": [
+      0.004,
+      0.052
+     ]
+    },
+    "osm_forestación": {
+     "n": 137,
+     "dados_como_basural": 1,
+     "fraccion": 0.007,
+     "ic95": [
+      0.001,
+      0.04
+     ]
+    },
+    "agua_permanente": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "cantera": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "cultivo": {
+     "n": 7,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.354
+     ]
+    },
+    "estacionamiento_playa": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "feedlot": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "humedal": {
+     "n": 4,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.49
+     ]
+    },
+    "laguna_chica": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "osm_cementerio": {
+     "n": 25,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.133
+     ]
+    },
+    "pileta_efluentes": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "puerto_playa_contenedores": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "vegetacion_densa": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    }
+   },
+   "mayores_errores": [
+    {
+     "id_mancha": "MAN-USA_OH_LAKE-0075",
+     "frame": "USA_OH_LAKE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-042627",
+     "p_basural": 0.001,
+     "area_ha": 11.5,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-YAKARTA-0167",
+     "frame": "YAKARTA",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-059332",
+     "p_basural": 0.001,
+     "area_ha": 30.7,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_MD_HOWARD-0036",
+     "frame": "USA_MD_HOWARD",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-042292",
+     "p_basural": 0.001,
+     "area_ha": 18.6,
+     "insomnio": 0.91
+    },
+    {
+     "id_mancha": "MAN-USA_OH_LAKE-0078",
+     "frame": "USA_OH_LAKE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-050275",
+     "p_basural": 0.003,
+     "area_ha": 11.5,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_OH_LAKE-0008",
+     "frame": "USA_OH_LAKE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-045875",
+     "p_basural": 0.006,
+     "area_ha": 42.9,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_NY_RICHMOND-0142",
+     "frame": "USA_NY_RICHMOND",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-065325",
+     "p_basural": 0.017,
+     "area_ha": 30.1,
+     "insomnio": 0.91
+    },
+    {
+     "id_mancha": "MAN-USA_MD_HOWARD-0020",
+     "frame": "USA_MD_HOWARD",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-065416",
+     "p_basural": 0.022,
+     "area_ha": 26.9,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_NY_RICHMOND-0098",
+     "frame": "USA_NY_RICHMOND",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-047298",
+     "p_basural": 0.033,
+     "area_ha": 37.8,
+     "insomnio": 0.98
+    },
+    {
+     "id_mancha": "MAN-PRI_PONCE-0097",
+     "frame": "PRI_PONCE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-062922",
+     "p_basural": 0.033,
+     "area_ha": 54.4,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0069",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-066131",
+     "p_basural": 0.035,
+     "area_ha": 44.2,
+     "insomnio": 0.96
+    }
+   ],
+   "importancia": {
+    "bsi_contraste": 1013.79,
+    "eco_db": 567.73,
+    "swir_b11": 470.07,
+    "ndwi_media": 459.25,
+    "cultivo_anillo": 423.07,
+    "ndvi_contraste": 422.1,
+    "hv_hh": 389.74,
+    "ndvi_media": 340.4,
+    "eco_variacion": 297.42,
+    "urbano_anillo": 283.9
+   },
+   "manchas_sin_etiqueta_dadas_como_basural": {
+    "n": 1767,
+    "p_basural_0_5_o_mas": 145
+   }
+  },
+  "osm_sin_los_sin": {
+   "que": "Ídem, y saca de basural_activo los basurales donde la IA no ve actividad en Sentinel-2 (`sin`).",
+   "filas": {
+    "otro_movil": 553,
+    "basural_activo": 26
+   },
+   "filas_por_frame": {
+    "CDMX": {
+     "otro_movil": 36,
+     "basural_activo": 4
+    },
+    "DELHI": {
+     "otro_movil": 43,
+     "basural_activo": 3
+    },
+    "LOS_ANGELES": {
+     "otro_movil": 87,
+     "basural_activo": 7
+    },
+    "PRI_PONCE": {
+     "otro_movil": 93,
+     "basural_activo": 1
+    },
+    "USA_MD_HOWARD": {
+     "otro_movil": 16,
+     "basural_activo": 2
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "otro_movil": 43
+    },
+    "USA_NY_RICHMOND": {
+     "otro_movil": 133,
+     "basural_activo": 3
+    },
+    "USA_OH_LAKE": {
+     "otro_movil": 27,
+     "basural_activo": 2
+    },
+    "YAKARTA": {
+     "otro_movil": 75,
+     "basural_activo": 4
+    }
+   },
+   "positivos_sacados_por_el_optico": {
+    "sin": 13
+   },
+   "validado": false,
+   "por_que_no_esta_validado": [
+    "sólo 1 frame(s) con 5 filas o más de cada clase (LOS_ANGELES); hacen falta 3"
+   ],
+   "global": {
+    "n": 579,
+    "n_basural": 26,
+    "n_otro": 553,
+    "auc": 0.849,
+    "auc_ic95": [
+     0.74,
+     0.938
+    ],
+    "precision": 0.294,
+    "precision_ic95": [
+     0.133,
+     0.531
+    ],
+    "recall": 0.192,
+    "recall_ic95": [
+     0.085,
+     0.379
+    ]
+   },
+   "por_frame": {
+    "CDMX": {
+     "n": 40,
+     "n_basural": 4,
+     "n_otro": 36,
+     "auc": 0.778,
+     "auc_ic95": [
+      0.594,
+      0.931
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.562
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.49
+     ]
+    },
+    "DELHI": {
+     "n": 46,
+     "n_basural": 3,
+     "n_otro": 43,
+     "auc": 0.977,
+     "auc_ic95": [
+      0.907,
+      1.0
+     ],
+     "precision": 0.667,
+     "precision_ic95": [
+      0.208,
+      0.939
+     ],
+     "recall": 0.667,
+     "recall_ic95": [
+      0.208,
+      0.939
+     ]
+    },
+    "LOS_ANGELES": {
+     "n": 94,
+     "n_basural": 7,
+     "n_otro": 87,
+     "auc": 0.913,
+     "auc_ic95": [
+      0.82,
+      0.988
+     ],
+     "precision": 0.429,
+     "precision_ic95": [
+      0.158,
+      0.75
+     ],
+     "recall": 0.429,
+     "recall_ic95": [
+      0.158,
+      0.75
+     ]
+    },
+    "PRI_PONCE": {
+     "n": 94,
+     "n_basural": 1,
+     "n_otro": 93,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.9,
+      0.989
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "USA_MD_HOWARD": {
+     "n": 18,
+     "n_basural": 2,
+     "n_otro": 16,
+     "auc": 0.531,
+     "auc_ic95": [
+      0.0,
+      1.0
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "n": 43,
+     "n_basural": 0,
+     "n_otro": 43,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.658
+     ],
+     "recall": null,
+     "recall_ic95": null
+    },
+    "USA_NY_RICHMOND": {
+     "n": 136,
+     "n_basural": 3,
+     "n_otro": 133,
+     "auc": 0.96,
+     "auc_ic95": [
+      0.872,
+      1.0
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.562
+     ]
+    },
+    "USA_OH_LAKE": {
+     "n": 29,
+     "n_basural": 2,
+     "n_otro": 27,
+     "auc": 0.574,
+     "auc_ic95": [
+      0.071,
+      1.0
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "YAKARTA": {
+     "n": 79,
+     "n_basural": 4,
+     "n_otro": 75,
+     "auc": 0.937,
+     "auc_ic95": [
+      0.8,
+      1.0
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.49
+     ]
+    }
+   },
+   "auc_de_las_variantes_de_columnas": {
+    "completo": {
+     "auc": 0.849,
+     "auc_ic95": [
+      0.74,
+      0.938
+     ]
+    },
+    "sin_forma": {
+     "auc": 0.837,
+     "auc_ic95": [
+      0.73,
+      0.927
+     ]
+    },
+    "solo_radar": {
+     "auc": 0.699,
+     "auc_ic95": [
+      0.581,
+      0.819
+     ]
+    },
+    "solo_optico": {
+     "auc": 0.869,
+     "auc_ic95": [
+      0.782,
+      0.94
+     ]
+    },
+    "con_cantidad_de_datos": {
+     "auc": 0.841,
+     "auc_ic95": [
+      0.729,
+      0.929
+     ]
+    }
+   },
+   "auc_de_area_ha_sola": 0.676,
+   "diagnostico_mezclando_frames_no_reportar": 0.865,
+   "errores_por_clase_negativo": {
+    "aeropuerto": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "obra": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "laguna_chica": {
+     "n": 2,
+     "dados_como_basural": 1,
+     "fraccion": 0.5,
+     "ic95": [
+      0.095,
+      0.905
+     ]
+    },
+    "osm_aeródromo": {
+     "n": 21,
+     "dados_como_basural": 4,
+     "fraccion": 0.19,
+     "ic95": [
+      0.077,
+      0.4
+     ]
+    },
+    "osm_cantera": {
+     "n": 6,
+     "dados_como_basural": 1,
+     "fraccion": 0.167,
+     "ic95": [
+      0.03,
+      0.564
+     ]
+    },
+    "osm_reserva": {
+     "n": 75,
+     "dados_como_basural": 2,
+     "fraccion": 0.027,
+     "ic95": [
+      0.007,
+      0.092
+     ]
+    },
+    "osm_parque": {
+     "n": 109,
+     "dados_como_basural": 2,
+     "fraccion": 0.018,
+     "ic95": [
+      0.005,
+      0.064
+     ]
+    },
+    "agua_permanente": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "cantera": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "cultivo": {
+     "n": 7,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.354
+     ]
+    },
+    "estacionamiento_playa": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "feedlot": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "humedal": {
+     "n": 4,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.49
+     ]
+    },
+    "osm_cementerio": {
+     "n": 25,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.133
+     ]
+    },
+    "osm_forestación": {
+     "n": 137,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.027
+     ]
+    },
+    "osm_golf": {
+     "n": 135,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.028
+     ]
+    },
+    "osm_militar": {
+     "n": 20,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.161
+     ]
+    },
+    "pileta_efluentes": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "puerto_playa_contenedores": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "vegetacion_densa": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    }
+   },
+   "mayores_errores": [
+    {
+     "id_mancha": "MAN-USA_OH_LAKE-0078",
+     "frame": "USA_OH_LAKE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-050275",
+     "p_basural": 0.0,
+     "area_ha": 11.5,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_MD_HOWARD-0036",
+     "frame": "USA_MD_HOWARD",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-042292",
+     "p_basural": 0.0,
+     "area_ha": 18.6,
+     "insomnio": 0.91
+    },
+    {
+     "id_mancha": "MAN-YAKARTA-0167",
+     "frame": "YAKARTA",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-059332",
+     "p_basural": 0.005,
+     "area_ha": 30.7,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-PRI_PONCE-0097",
+     "frame": "PRI_PONCE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-062922",
+     "p_basural": 0.012,
+     "area_ha": 54.4,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-CDMX-0190",
+     "frame": "CDMX",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-062412",
+     "p_basural": 0.014,
+     "area_ha": 16.0,
+     "insomnio": 0.95
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0021",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-043018",
+     "p_basural": 0.015,
+     "area_ha": 112.6,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-CDMX-0056",
+     "frame": "CDMX",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-015333",
+     "p_basural": 0.053,
+     "area_ha": 52.5,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_NY_RICHMOND-0317",
+     "frame": "USA_NY_RICHMOND",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-045318",
+     "p_basural": 0.064,
+     "area_ha": 14.1,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-USA_NH_HILLSBOROUGH-0045",
+     "frame": "USA_NH_HILLSBOROUGH",
+     "clase": "otro_movil",
+     "clase_negativo": "osm_aeródromo",
+     "id_catalogo": "NEG-OSM-MAN-USA_NH_HILLSBOROUGH-0045",
+     "p_basural": 0.934,
+     "area_ha": 16.6,
+     "insomnio": 0.95
+    },
+    {
+     "id_mancha": "MAN-USA_OH_LAKE-0011",
+     "frame": "USA_OH_LAKE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-065187",
+     "p_basural": 0.068,
+     "area_ha": 35.8,
+     "insomnio": 1.0
+    }
+   ],
+   "importancia": {
+    "ndvi_media": 1656.18,
+    "ndvi_contraste": 969.42,
+    "ndwi_media": 587.75,
+    "bsi_contraste": 534.34,
+    "eco_db": 449.81,
+    "urbano_anillo": 323.96,
+    "bsi_media": 267.46,
+    "swir_b12": 246.66,
+    "area_ha": 226.53,
+    "contraste_mediana": 199.69
+   },
+   "manchas_sin_etiqueta_dadas_como_basural": {
+    "n": 1780,
+    "p_basural_0_5_o_mas": 107
+   }
+  },
+  "osm_solo_act": {
+   "que": "Ídem, y deja como basural_activo sólo los basurales donde la IA ve actividad (`act`).",
+   "filas": {
+    "otro_movil": 553,
+    "basural_activo": 11
+   },
+   "filas_por_frame": {
+    "CDMX": {
+     "otro_movil": 36
+    },
+    "DELHI": {
+     "otro_movil": 43,
+     "basural_activo": 2
+    },
+    "LOS_ANGELES": {
+     "otro_movil": 87,
+     "basural_activo": 5
+    },
+    "PRI_PONCE": {
+     "otro_movil": 93
+    },
+    "USA_MD_HOWARD": {
+     "otro_movil": 16,
+     "basural_activo": 1
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "otro_movil": 43
+    },
+    "USA_NY_RICHMOND": {
+     "otro_movil": 133,
+     "basural_activo": 1
+    },
+    "USA_OH_LAKE": {
+     "otro_movil": 27,
+     "basural_activo": 1
+    },
+    "YAKARTA": {
+     "otro_movil": 75,
+     "basural_activo": 1
+    }
+   },
+   "positivos_sacados_por_el_optico": {
+    "sin": 13,
+    "nose": 12,
+    "sin_etiqueta": 3
+   },
+   "validado": false,
+   "por_que_no_esta_validado": [
+    "sólo 1 frame(s) con 5 filas o más de cada clase (LOS_ANGELES); hacen falta 3"
+   ],
+   "global": {
+    "n": 564,
+    "n_basural": 11,
+    "n_otro": 553,
+    "auc": 0.815,
+    "auc_ic95": [
+     0.61,
+     0.964
+    ],
+    "precision": 0.2,
+    "precision_ic95": [
+     0.036,
+     0.624
+    ],
+    "recall": 0.091,
+    "recall_ic95": [
+     0.016,
+     0.377
+    ]
+   },
+   "por_frame": {
+    "CDMX": {
+     "n": 36,
+     "n_basural": 0,
+     "n_otro": 36,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.658
+     ],
+     "recall": null,
+     "recall_ic95": null
+    },
+    "DELHI": {
+     "n": 45,
+     "n_basural": 2,
+     "n_otro": 43,
+     "auc": 1.0,
+     "auc_ic95": [
+      1.0,
+      1.0
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "LOS_ANGELES": {
+     "n": 92,
+     "n_basural": 5,
+     "n_otro": 87,
+     "auc": 0.874,
+     "auc_ic95": [
+      0.785,
+      0.948
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.434
+     ]
+    },
+    "PRI_PONCE": {
+     "n": 93,
+     "n_basural": 0,
+     "n_otro": 93,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": null,
+     "precision_ic95": null,
+     "recall": null,
+     "recall_ic95": null
+    },
+    "USA_MD_HOWARD": {
+     "n": 17,
+     "n_basural": 1,
+     "n_otro": 16,
+     "auc": 0.062,
+     "auc_ic95": [
+      0.0,
+      0.188
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "n": 43,
+     "n_basural": 0,
+     "n_otro": 43,
+     "auc": null,
+     "auc_ic95": null,
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": null,
+     "recall_ic95": null
+    },
+    "USA_NY_RICHMOND": {
+     "n": 134,
+     "n_basural": 1,
+     "n_otro": 133,
+     "auc": 1.0,
+     "auc_ic95": [
+      1.0,
+      1.0
+     ],
+     "precision": 1.0,
+     "precision_ic95": [
+      0.207,
+      1.0
+     ],
+     "recall": 1.0,
+     "recall_ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "USA_OH_LAKE": {
+     "n": 28,
+     "n_basural": 1,
+     "n_otro": 27,
+     "auc": 1.0,
+     "auc_ic95": [
+      1.0,
+      1.0
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "YAKARTA": {
+     "n": 76,
+     "n_basural": 1,
+     "n_otro": 75,
+     "auc": 0.813,
+     "auc_ic95": [
+      0.718,
+      0.893
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    }
+   },
+   "auc_de_las_variantes_de_columnas": {
+    "completo": {
+     "auc": 0.815,
+     "auc_ic95": [
+      0.61,
+      0.964
+     ]
+    },
+    "sin_forma": {
+     "auc": 0.825,
+     "auc_ic95": [
+      0.61,
+      0.974
+     ]
+    },
+    "solo_radar": {
+     "auc": 0.773,
+     "auc_ic95": [
+      0.587,
+      0.925
+     ]
+    },
+    "solo_optico": {
+     "auc": 0.841,
+     "auc_ic95": [
+      0.634,
+      0.981
+     ]
+    },
+    "con_cantidad_de_datos": {
+     "auc": 0.813,
+     "auc_ic95": [
+      0.611,
+      0.961
+     ]
+    }
+   },
+   "auc_de_area_ha_sola": 0.681,
+   "diagnostico_mezclando_frames_no_reportar": 0.83,
+   "errores_por_clase_negativo": {
+    "obra": {
+     "n": 1,
+     "dados_como_basural": 1,
+     "fraccion": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "osm_cantera": {
+     "n": 6,
+     "dados_como_basural": 1,
+     "fraccion": 0.167,
+     "ic95": [
+      0.03,
+      0.564
+     ]
+    },
+    "osm_aeródromo": {
+     "n": 21,
+     "dados_como_basural": 1,
+     "fraccion": 0.048,
+     "ic95": [
+      0.008,
+      0.227
+     ]
+    },
+    "osm_reserva": {
+     "n": 75,
+     "dados_como_basural": 1,
+     "fraccion": 0.013,
+     "ic95": [
+      0.002,
+      0.072
+     ]
+    },
+    "aeropuerto": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "agua_permanente": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "cantera": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "cultivo": {
+     "n": 7,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.354
+     ]
+    },
+    "estacionamiento_playa": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "feedlot": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "humedal": {
+     "n": 4,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.49
+     ]
+    },
+    "laguna_chica": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "osm_cementerio": {
+     "n": 25,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.133
+     ]
+    },
+    "osm_forestación": {
+     "n": 137,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.027
+     ]
+    },
+    "osm_golf": {
+     "n": 135,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.028
+     ]
+    },
+    "osm_militar": {
+     "n": 20,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.161
+     ]
+    },
+    "osm_parque": {
+     "n": 109,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.034
+     ]
+    },
+    "pileta_efluentes": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "puerto_playa_contenedores": {
+     "n": 2,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "vegetacion_densa": {
+     "n": 1,
+     "dados_como_basural": 0,
+     "fraccion": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    }
+   },
+   "mayores_errores": [
+    {
+     "id_mancha": "MAN-USA_MD_HOWARD-0036",
+     "frame": "USA_MD_HOWARD",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-042292",
+     "p_basural": 0.0,
+     "area_ha": 18.6,
+     "insomnio": 0.91
+    },
+    {
+     "id_mancha": "MAN-YAKARTA-0167",
+     "frame": "YAKARTA",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-059332",
+     "p_basural": 0.001,
+     "area_ha": 30.7,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0022",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-064805",
+     "p_basural": 0.008,
+     "area_ha": 112.6,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0020",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-049336",
+     "p_basural": 0.041,
+     "area_ha": 113.3,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0179",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-066387",
+     "p_basural": 0.055,
+     "area_ha": 22.4,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-USA_OH_LAKE-0011",
+     "frame": "USA_OH_LAKE",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-065187",
+     "p_basural": 0.059,
+     "area_ha": 35.8,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0015",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-065376",
+     "p_basural": 0.069,
+     "area_ha": 138.2,
+     "insomnio": 0.92
+    },
+    {
+     "id_mancha": "MAN-CDMX-0008",
+     "frame": "CDMX",
+     "clase": "otro_movil",
+     "clase_negativo": "osm_reserva",
+     "id_catalogo": "NEG-OSM-MAN-CDMX-0008",
+     "p_basural": 0.926,
+     "area_ha": 193.9,
+     "insomnio": 1.0
+    },
+    {
+     "id_mancha": "MAN-LOS_ANGELES-0083",
+     "frame": "LOS_ANGELES",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-066391",
+     "p_basural": 0.097,
+     "area_ha": 39.0,
+     "insomnio": 0.96
+    },
+    {
+     "id_mancha": "MAN-DELHI-0070",
+     "frame": "DELHI",
+     "clase": "basural_activo",
+     "clase_negativo": null,
+     "id_catalogo": "BAS-059706",
+     "p_basural": 0.19,
+     "area_ha": 42.9,
+     "insomnio": 1.0
+    }
+   ],
+   "importancia": {
+    "ndvi_contraste": 1426.24,
+    "ndwi_contraste": 1065.95,
+    "ndwi_media": 1056.99,
+    "bsi_contraste": 831.96,
+    "swir_b12_contraste": 507.32,
+    "bsi_media": 339.52,
+    "eco_db": 312.18,
+    "contraste_mediana": 307.89,
+    "area_ha": 229.42,
+    "eco_contraste": 182.34
+   },
+   "manchas_sin_etiqueta_dadas_como_basural": {
+    "n": 1795,
+    "p_basural_0_5_o_mas": 38
+   }
+  }
+ }
+}

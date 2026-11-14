@@ -4,71 +4,81 @@
   "umbral_insomnio": 0.7,
   "criterio_cruce": 0.3,
   "min_inter_ha": 5.12,
+  "negativos_osm": true,
+  "negativos_osm_antes_de_agrupar": 593,
+  "positivos": "todos",
+  "positivos_sacados_por_el_optico": {},
+  "etiquetas_optico": "etiquetas de una IA sobre Sentinel-2, sin revisar por una persona",
   "filas_por_clase": {
    "AMBA": {
     "otro_movil": 21,
     "basural_activo": 3
    },
    "CDMX": {
+    "otro_movil": 36,
     "basural_activo": 5
    },
    "DELHI": {
-    "basural_activo": 3,
-    "otro_movil": 2
+    "otro_movil": 43,
+    "basural_activo": 3
    },
    "LOS_ANGELES": {
-    "otro_movil": 12,
+    "otro_movil": 87,
     "basural_activo": 10
    },
    "PRI_PONCE": {
-    "otro_movil": 10,
+    "otro_movil": 93,
     "basural_activo": 1
    },
    "USA_MD_HOWARD": {
+    "otro_movil": 16,
     "basural_activo": 4
    },
    "USA_NH_HILLSBOROUGH": {
+    "otro_movil": 43,
     "basural_activo": 1
    },
    "USA_NY_RICHMOND": {
-    "basural_activo": 5,
-    "otro_movil": 1
+    "otro_movil": 133,
+    "basural_activo": 5
    },
    "USA_OH_LAKE": {
+    "otro_movil": 27,
     "basural_activo": 6
    },
    "YAKARTA": {
+    "otro_movil": 75,
     "basural_activo": 4
    }
   }
  },
  "particiones": {
   "0": [
-   "LOS_ANGELES"
-  ],
-  "1": [
-   "PRI_PONCE"
-  ],
-  "2": [
    "USA_NY_RICHMOND"
   ],
+  "1": [
+   "LOS_ANGELES"
+  ],
+  "2": [
+   "PRI_PONCE"
+  ],
   "3": [
-   "USA_OH_LAKE"
-  ],
-  "4": [
-   "CDMX"
-  ],
-  "5": [
-   "DELHI"
-  ],
-  "6": [
-   "USA_MD_HOWARD"
-  ],
-  "7": [
    "YAKARTA"
   ],
-  "8": [
+  "4": [
+   "DELHI"
+  ],
+  "5": [
    "USA_NH_HILLSBOROUGH"
+  ],
+  "6": [
+   "CDMX"
+  ],
+  "7": [
+   "USA_OH_LAKE"
+  ],
+  "8": [
+   "USA_MD_HOWARD"
   ]
  },
  "prueba_final": [

@@ -1,7 +1,7 @@
 {
  "generado_por": "herramientas/entrenar.py",
  "validacion": "por_frame",
- "advertencia": "MODELO SIN VALIDAR: p_basural no va a la web ni al pitch. sólo 1 frame(s) con 5 filas o más de cada clase (LOS_ANGELES); hacen falta 3; el AUC fuera de partición es 0.473 con IC 95 % [0.32, 0.632]: no se distingue del azar (0,5).",
+ "advertencia": null,
  "umbral": 0.5,
  "columnas": [
   "insomnio",
@@ -38,7 +38,7 @@
   "learning_rate": 0.05,
   "num_leaves": 7,
   "max_depth": 3,
-  "min_child_samples": 6,
+  "min_child_samples": 20,
   "subsample": 0.8,
   "subsample_freq": 1,
   "colsample_bytree": 0.8,
@@ -48,42 +48,47 @@
   "verbose": -1
  },
  "filas": {
-  "entrenamiento": 64,
+  "entrenamiento": 592,
   "prueba_final": 0,
   "por_clase": {
-   "basural_activo": 39,
-   "otro_movil": 25
+   "otro_movil": 553,
+   "basural_activo": 39
   },
   "por_frame": {
    "CDMX": {
+    "otro_movil": 36,
     "basural_activo": 5
    },
    "DELHI": {
-    "basural_activo": 3,
-    "otro_movil": 2
+    "otro_movil": 43,
+    "basural_activo": 3
    },
    "LOS_ANGELES": {
-    "otro_movil": 12,
+    "otro_movil": 87,
     "basural_activo": 10
    },
    "PRI_PONCE": {
-    "otro_movil": 10,
+    "otro_movil": 93,
     "basural_activo": 1
    },
    "USA_MD_HOWARD": {
+    "otro_movil": 16,
     "basural_activo": 4
    },
    "USA_NH_HILLSBOROUGH": {
+    "otro_movil": 43,
     "basural_activo": 1
    },
    "USA_NY_RICHMOND": {
-    "basural_activo": 5,
-    "otro_movil": 1
+    "otro_movil": 133,
+    "basural_activo": 5
    },
    "USA_OH_LAKE": {
+    "otro_movil": 27,
     "basural_activo": 6
    },
    "YAKARTA": {
+    "otro_movil": 75,
     "basural_activo": 4
    }
   }
@@ -100,140 +105,128 @@
   "YAKARTA"
  ],
  "frames_con_las_dos_clases": [
+  "CDMX",
   "DELHI",
   "LOS_ANGELES",
   "PRI_PONCE",
-  "USA_NY_RICHMOND"
+  "USA_MD_HOWARD",
+  "USA_NH_HILLSBOROUGH",
+  "USA_NY_RICHMOND",
+  "USA_OH_LAKE",
+  "YAKARTA"
  ],
  "fuera_de_particion": {
   "global": {
-   "n": 64,
+   "n": 592,
    "n_basural": 39,
-   "n_otro": 25,
-   "auc": 0.473,
+   "n_otro": 553,
+   "auc": 0.788,
    "auc_ic95": [
-    0.32,
-    0.632
+    0.712,
+    0.86
    ],
-   "precision": 0.627,
+   "precision": 0.29,
    "precision_ic95": [
-    0.49,
-    0.747
+    0.161,
+    0.466
    ],
-   "recall": 0.821,
+   "recall": 0.231,
    "recall_ic95": [
-    0.673,
-    0.91
+    0.126,
+    0.383
    ]
   },
   "por_particion": {
    "0": {
-    "n": 22,
-    "n_basural": 10,
-    "n_otro": 12,
-    "auc": 0.575,
+    "n": 138,
+    "n_basural": 5,
+    "n_otro": 133,
+    "auc": 0.722,
     "auc_ic95": [
-     0.321,
-     0.817
+     0.414,
+     0.951
     ],
-    "precision": 0.476,
+    "precision": 0.0,
     "precision_ic95": [
-     0.283,
-     0.676
+     0.0,
+     0.39
     ],
-    "recall": 1.0,
+    "recall": 0.0,
     "recall_ic95": [
-     0.722,
-     1.0
+     0.0,
+     0.434
     ]
    },
    "1": {
-    "n": 11,
-    "n_basural": 1,
-    "n_otro": 10,
-    "auc": 1.0,
+    "n": 97,
+    "n_basural": 10,
+    "n_otro": 87,
+    "auc": 0.867,
     "auc_ic95": [
-     1.0,
-     1.0
+     0.758,
+     0.955
     ],
-    "precision": 0.111,
+    "precision": 0.5,
     "precision_ic95": [
-     0.02,
-     0.435
+     0.237,
+     0.763
     ],
-    "recall": 1.0,
+    "recall": 0.5,
     "recall_ic95": [
-     0.207,
-     1.0
+     0.237,
+     0.763
     ]
    },
    "2": {
-    "n": 6,
-    "n_basural": 5,
-    "n_otro": 1,
-    "auc": 1.0,
+    "n": 94,
+    "n_basural": 1,
+    "n_otro": 93,
+    "auc": 0.946,
     "auc_ic95": [
-     1.0,
-     1.0
+     0.9,
+     0.989
     ],
-    "precision": 1.0,
+    "precision": 0.0,
     "precision_ic95": [
-     0.51,
-     1.0
+     0.0,
+     0.793
     ],
-    "recall": 0.8,
+    "recall": 0.0,
     "recall_ic95": [
-     0.376,
-     0.964
+     0.0,
+     0.793
     ]
    },
    "3": {
-    "n": 6,
-    "n_basural": 6,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.566,
+    "n": 79,
+    "n_basural": 4,
+    "n_otro": 75,
+    "auc": 0.847,
+    "auc_ic95": [
+     0.462,
      1.0
     ],
-    "recall": 0.833,
+    "precision": null,
+    "precision_ic95": null,
+    "recall": 0.0,
     "recall_ic95": [
-     0.436,
-     0.97
+     0.0,
+     0.49
     ]
    },
    "4": {
-    "n": 5,
-    "n_basural": 5,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.438,
-     1.0
-    ],
-    "recall": 0.6,
-    "recall_ic95": [
-     0.231,
-     0.882
-    ]
-   },
-   "5": {
-    "n": 5,
+    "n": 46,
     "n_basural": 3,
-    "n_otro": 2,
-    "auc": 1.0,
+    "n_otro": 43,
+    "auc": 0.946,
     "auc_ic95": [
-     1.0,
+     0.844,
      1.0
     ],
-    "precision": 1.0,
+    "precision": 0.4,
     "precision_ic95": [
-     0.342,
-     1.0
+     0.118,
+     0.769
     ],
     "recall": 0.667,
     "recall_ic95": [
@@ -241,89 +234,118 @@
      0.939
     ]
    },
-   "6": {
-    "n": 4,
-    "n_basural": 4,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.51,
-     1.0
+   "5": {
+    "n": 44,
+    "n_basural": 1,
+    "n_otro": 43,
+    "auc": 0.535,
+    "auc_ic95": [
+     0.374,
+     0.69
     ],
-    "recall": 1.0,
+    "precision": 0.0,
+    "precision_ic95": [
+     0.0,
+     0.49
+    ],
+    "recall": 0.0,
     "recall_ic95": [
-     0.51,
-     1.0
+     0.0,
+     0.793
+    ]
+   },
+   "6": {
+    "n": 41,
+    "n_basural": 5,
+    "n_otro": 36,
+    "auc": 0.817,
+    "auc_ic95": [
+     0.667,
+     0.947
+    ],
+    "precision": 0.25,
+    "precision_ic95": [
+     0.046,
+     0.699
+    ],
+    "recall": 0.2,
+    "recall_ic95": [
+     0.036,
+     0.624
     ]
    },
    "7": {
-    "n": 4,
-    "n_basural": 4,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.342,
-     1.0
+    "n": 33,
+    "n_basural": 6,
+    "n_otro": 27,
+    "auc": 0.71,
+    "auc_ic95": [
+     0.468,
+     0.957
     ],
-    "recall": 0.5,
+    "precision": null,
+    "precision_ic95": null,
+    "recall": 0.0,
     "recall_ic95": [
-     0.15,
-     0.85
+     0.0,
+     0.39
     ]
    },
    "8": {
-    "n": 1,
-    "n_basural": 1,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
+    "n": 20,
+    "n_basural": 4,
+    "n_otro": 16,
+    "auc": 0.734,
+    "auc_ic95": [
+     0.333,
+     1.0
+    ],
     "precision": 1.0,
     "precision_ic95": [
      0.207,
      1.0
     ],
-    "recall": 1.0,
+    "recall": 0.25,
     "recall_ic95": [
-     0.207,
-     1.0
+     0.046,
+     0.699
     ]
    }
   },
   "por_frame": {
    "CDMX": {
-    "n": 5,
+    "n": 41,
     "n_basural": 5,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.438,
-     1.0
+    "n_otro": 36,
+    "auc": 0.817,
+    "auc_ic95": [
+     0.667,
+     0.947
     ],
-    "recall": 0.6,
+    "precision": 0.25,
+    "precision_ic95": [
+     0.046,
+     0.699
+    ],
+    "recall": 0.2,
     "recall_ic95": [
-     0.231,
-     0.882
+     0.036,
+     0.624
     ]
    },
    "DELHI": {
-    "n": 5,
+    "n": 46,
     "n_basural": 3,
-    "n_otro": 2,
-    "auc": 1.0,
+    "n_otro": 43,
+    "auc": 0.946,
     "auc_ic95": [
-     1.0,
+     0.844,
      1.0
     ],
-    "precision": 1.0,
+    "precision": 0.4,
     "precision_ic95": [
-     0.342,
-     1.0
+     0.118,
+     0.769
     ],
     "recall": 0.667,
     "recall_ic95": [
@@ -332,131 +354,137 @@
     ]
    },
    "LOS_ANGELES": {
-    "n": 22,
+    "n": 97,
     "n_basural": 10,
-    "n_otro": 12,
-    "auc": 0.575,
+    "n_otro": 87,
+    "auc": 0.867,
     "auc_ic95": [
-     0.321,
-     0.817
+     0.758,
+     0.955
     ],
-    "precision": 0.476,
+    "precision": 0.5,
     "precision_ic95": [
-     0.283,
-     0.676
-    ],
-    "recall": 1.0,
-    "recall_ic95": [
-     0.722,
-     1.0
-    ]
-   },
-   "PRI_PONCE": {
-    "n": 11,
-    "n_basural": 1,
-    "n_otro": 10,
-    "auc": 1.0,
-    "auc_ic95": [
-     1.0,
-     1.0
-    ],
-    "precision": 0.111,
-    "precision_ic95": [
-     0.02,
-     0.435
-    ],
-    "recall": 1.0,
-    "recall_ic95": [
-     0.207,
-     1.0
-    ]
-   },
-   "USA_MD_HOWARD": {
-    "n": 4,
-    "n_basural": 4,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.51,
-     1.0
-    ],
-    "recall": 1.0,
-    "recall_ic95": [
-     0.51,
-     1.0
-    ]
-   },
-   "USA_NH_HILLSBOROUGH": {
-    "n": 1,
-    "n_basural": 1,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.207,
-     1.0
-    ],
-    "recall": 1.0,
-    "recall_ic95": [
-     0.207,
-     1.0
-    ]
-   },
-   "USA_NY_RICHMOND": {
-    "n": 6,
-    "n_basural": 5,
-    "n_otro": 1,
-    "auc": 1.0,
-    "auc_ic95": [
-     1.0,
-     1.0
-    ],
-    "precision": 1.0,
-    "precision_ic95": [
-     0.51,
-     1.0
-    ],
-    "recall": 0.8,
-    "recall_ic95": [
-     0.376,
-     0.964
-    ]
-   },
-   "USA_OH_LAKE": {
-    "n": 6,
-    "n_basural": 6,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.566,
-     1.0
-    ],
-    "recall": 0.833,
-    "recall_ic95": [
-     0.436,
-     0.97
-    ]
-   },
-   "YAKARTA": {
-    "n": 4,
-    "n_basural": 4,
-    "n_otro": 0,
-    "auc": null,
-    "auc_ic95": null,
-    "precision": 1.0,
-    "precision_ic95": [
-     0.342,
-     1.0
+     0.237,
+     0.763
     ],
     "recall": 0.5,
     "recall_ic95": [
-     0.15,
-     0.85
+     0.237,
+     0.763
+    ]
+   },
+   "PRI_PONCE": {
+    "n": 94,
+    "n_basural": 1,
+    "n_otro": 93,
+    "auc": 0.946,
+    "auc_ic95": [
+     0.9,
+     0.989
+    ],
+    "precision": 0.0,
+    "precision_ic95": [
+     0.0,
+     0.793
+    ],
+    "recall": 0.0,
+    "recall_ic95": [
+     0.0,
+     0.793
+    ]
+   },
+   "USA_MD_HOWARD": {
+    "n": 20,
+    "n_basural": 4,
+    "n_otro": 16,
+    "auc": 0.734,
+    "auc_ic95": [
+     0.333,
+     1.0
+    ],
+    "precision": 1.0,
+    "precision_ic95": [
+     0.207,
+     1.0
+    ],
+    "recall": 0.25,
+    "recall_ic95": [
+     0.046,
+     0.699
+    ]
+   },
+   "USA_NH_HILLSBOROUGH": {
+    "n": 44,
+    "n_basural": 1,
+    "n_otro": 43,
+    "auc": 0.535,
+    "auc_ic95": [
+     0.374,
+     0.69
+    ],
+    "precision": 0.0,
+    "precision_ic95": [
+     0.0,
+     0.49
+    ],
+    "recall": 0.0,
+    "recall_ic95": [
+     0.0,
+     0.793
+    ]
+   },
+   "USA_NY_RICHMOND": {
+    "n": 138,
+    "n_basural": 5,
+    "n_otro": 133,
+    "auc": 0.722,
+    "auc_ic95": [
+     0.414,
+     0.951
+    ],
+    "precision": 0.0,
+    "precision_ic95": [
+     0.0,
+     0.39
+    ],
+    "recall": 0.0,
+    "recall_ic95": [
+     0.0,
+     0.434
+    ]
+   },
+   "USA_OH_LAKE": {
+    "n": 33,
+    "n_basural": 6,
+    "n_otro": 27,
+    "auc": 0.71,
+    "auc_ic95": [
+     0.468,
+     0.957
+    ],
+    "precision": null,
+    "precision_ic95": null,
+    "recall": 0.0,
+    "recall_ic95": [
+     0.0,
+     0.39
+    ]
+   },
+   "YAKARTA": {
+    "n": 79,
+    "n_basural": 4,
+    "n_otro": 75,
+    "auc": 0.847,
+    "auc_ic95": [
+     0.462,
+     1.0
+    ],
+    "precision": null,
+    "precision_ic95": null,
+    "recall": 0.0,
+    "recall_ic95": [
+     0.0,
+     0.49
     ]
    }
   }
@@ -464,33 +492,6 @@
  "prueba_final": "reservada: no se mira hasta el final (se predice una sola vez, con el modelo final)",
  "errores_por_clase_negativo": {
   "aeropuerto": {
-   "n": 1,
-   "dados_como_basural": 1,
-   "fraccion": 1.0,
-   "ic95": [
-    0.207,
-    1.0
-   ]
-  },
-  "agua_permanente": {
-   "n": 1,
-   "dados_como_basural": 1,
-   "fraccion": 1.0,
-   "ic95": [
-    0.207,
-    1.0
-   ]
-  },
-  "cantera": {
-   "n": 2,
-   "dados_como_basural": 2,
-   "fraccion": 1.0,
-   "ic95": [
-    0.342,
-    1.0
-   ]
-  },
-  "feedlot": {
    "n": 1,
    "dados_como_basural": 1,
    "fraccion": 1.0,
@@ -508,58 +509,139 @@
     1.0
    ]
   },
-  "vegetacion_densa": {
-   "n": 1,
-   "dados_como_basural": 1,
-   "fraccion": 1.0,
+  "osm_cantera": {
+   "n": 6,
+   "dados_como_basural": 3,
+   "fraccion": 0.5,
    "ic95": [
-    0.207,
-    1.0
+    0.188,
+    0.812
+   ]
+  },
+  "osm_aeródromo": {
+   "n": 21,
+   "dados_como_basural": 5,
+   "fraccion": 0.238,
+   "ic95": [
+    0.106,
+    0.451
+   ]
+  },
+  "osm_militar": {
+   "n": 20,
+   "dados_como_basural": 2,
+   "fraccion": 0.1,
+   "ic95": [
+    0.028,
+    0.301
+   ]
+  },
+  "osm_reserva": {
+   "n": 75,
+   "dados_como_basural": 4,
+   "fraccion": 0.053,
+   "ic95": [
+    0.021,
+    0.129
+   ]
+  },
+  "osm_parque": {
+   "n": 109,
+   "dados_como_basural": 3,
+   "fraccion": 0.028,
+   "ic95": [
+    0.009,
+    0.078
+   ]
+  },
+  "osm_golf": {
+   "n": 135,
+   "dados_como_basural": 2,
+   "fraccion": 0.015,
+   "ic95": [
+    0.004,
+    0.052
+   ]
+  },
+  "osm_forestación": {
+   "n": 137,
+   "dados_como_basural": 1,
+   "fraccion": 0.007,
+   "ic95": [
+    0.001,
+    0.04
+   ]
+  },
+  "agua_permanente": {
+   "n": 1,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
+   "ic95": [
+    0.0,
+    0.793
+   ]
+  },
+  "cantera": {
+   "n": 2,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
+   "ic95": [
+    0.0,
+    0.658
    ]
   },
   "cultivo": {
    "n": 7,
-   "dados_como_basural": 6,
-   "fraccion": 0.857,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
    "ic95": [
-    0.487,
-    0.974
-   ]
-  },
-  "humedal": {
-   "n": 4,
-   "dados_como_basural": 3,
-   "fraccion": 0.75,
-   "ic95": [
-    0.301,
-    0.954
+    0.0,
+    0.354
    ]
   },
   "estacionamiento_playa": {
    "n": 2,
-   "dados_como_basural": 1,
-   "fraccion": 0.5,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
    "ic95": [
-    0.095,
-    0.905
+    0.0,
+    0.658
+   ]
+  },
+  "feedlot": {
+   "n": 1,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
+   "ic95": [
+    0.0,
+    0.793
+   ]
+  },
+  "humedal": {
+   "n": 4,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
+   "ic95": [
+    0.0,
+    0.49
    ]
   },
   "laguna_chica": {
    "n": 2,
-   "dados_como_basural": 1,
-   "fraccion": 0.5,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
    "ic95": [
-    0.095,
-    0.905
+    0.0,
+    0.658
    ]
   },
-  "puerto_playa_contenedores": {
-   "n": 2,
-   "dados_como_basural": 1,
-   "fraccion": 0.5,
+  "osm_cementerio": {
+   "n": 25,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
    "ic95": [
-    0.095,
-    0.905
+    0.0,
+    0.133
    ]
   },
   "pileta_efluentes": {
@@ -570,194 +652,239 @@
     0.0,
     0.793
    ]
+  },
+  "puerto_playa_contenedores": {
+   "n": 2,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
+   "ic95": [
+    0.0,
+    0.658
+   ]
+  },
+  "vegetacion_densa": {
+   "n": 1,
+   "dados_como_basural": 0,
+   "fraccion": 0.0,
+   "ic95": [
+    0.0,
+    0.793
+   ]
   }
  },
  "importancia": {
-  "swir_b11_contraste": 152.7,
-  "urbano_anillo": 112.6,
-  "insomnio": 86.33,
-  "ndwi_media": 82.25,
-  "eco_contraste": 70.37,
-  "hv_hh": 47.8,
-  "cultivo_anillo": 42.61,
-  "ndvi_variacion": 40.07,
-  "ndvi_contraste": 24.2,
-  "compacidad": 20.36,
-  "ndvi_media": 19.91,
-  "contraste_mediana": 17.96,
-  "tendencia": 17.63,
-  "area_ha": 12.71,
-  "persistencia": 12.43,
-  "ndwi_contraste": 11.48,
-  "swir_b11": 11.22,
-  "elongacion": 10.88,
-  "eco_variacion": 9.53,
-  "bsi_contraste": 9.26,
-  "bsi_media": 8.97,
-  "coherencia_media": 8.83,
-  "eco_db": 8.41,
-  "contraste_desvio": 7.13,
-  "swir_b12_contraste": 6.06,
-  "agua_anillo": 4.71,
-  "swir_b12": 2.32
+  "bsi_contraste": 1013.79,
+  "eco_db": 567.73,
+  "swir_b11": 470.07,
+  "ndwi_media": 459.25,
+  "cultivo_anillo": 423.07,
+  "ndvi_contraste": 422.1,
+  "hv_hh": 389.74,
+  "ndvi_media": 340.4,
+  "eco_variacion": 297.42,
+  "urbano_anillo": 283.9,
+  "ndvi_variacion": 264.87,
+  "swir_b12_contraste": 260.18,
+  "area_ha": 260.01,
+  "contraste_mediana": 254.6,
+  "eco_contraste": 249.26,
+  "agua_anillo": 243.9,
+  "swir_b11_contraste": 227.4,
+  "bsi_media": 222.94,
+  "compacidad": 217.6,
+  "swir_b12": 189.89,
+  "elongacion": 186.43,
+  "tendencia": 182.88,
+  "ndwi_contraste": 151.7,
+  "contraste_desvio": 107.28,
+  "insomnio": 104.99,
+  "coherencia_media": 98.08,
+  "persistencia": 27.18
  },
- "validado": false,
+ "validado": true,
  "criterio_validacion": "validación por frame, al menos 3 frames con 5 filas o más de cada clase, y límite inferior del IC 95 % del AUC fuera de partición mayor que 0,5",
- "por_que_no_esta_validado": [
-  "sólo 1 frame(s) con 5 filas o más de cada clase (LOS_ANGELES); hacen falta 3",
-  "el AUC fuera de partición es 0.473 con IC 95 % [0.32, 0.632]: no se distingue del azar (0,5)"
- ],
+ "por_que_no_esta_validado": [],
  "controles": {
   "variantes": {
    "completo": {
     "columnas": 27,
     "global": {
-     "n": 64,
+     "n": 592,
      "n_basural": 39,
-     "n_otro": 25,
-     "auc": 0.473,
+     "n_otro": 553,
+     "auc": 0.788,
      "auc_ic95": [
-      0.32,
-      0.632
+      0.712,
+      0.86
      ],
-     "precision": 0.627,
+     "precision": 0.29,
      "precision_ic95": [
-      0.49,
-      0.747
+      0.161,
+      0.466
      ],
-     "recall": 0.821,
+     "recall": 0.231,
      "recall_ic95": [
-      0.673,
-      0.91
+      0.126,
+      0.383
      ]
     },
     "frames_con_las_dos_clases": [
+     "CDMX",
      "DELHI",
      "LOS_ANGELES",
      "PRI_PONCE",
-     "USA_NY_RICHMOND"
+     "USA_MD_HOWARD",
+     "USA_NH_HILLSBOROUGH",
+     "USA_NY_RICHMOND",
+     "USA_OH_LAKE",
+     "YAKARTA"
     ],
     "auc_por_frame": {
-     "DELHI": 1.0,
-     "LOS_ANGELES": 0.575,
-     "PRI_PONCE": 1.0,
-     "USA_NY_RICHMOND": 1.0
+     "CDMX": 0.817,
+     "DELHI": 0.946,
+     "LOS_ANGELES": 0.867,
+     "PRI_PONCE": 0.946,
+     "USA_MD_HOWARD": 0.734,
+     "USA_NH_HILLSBOROUGH": 0.535,
+     "USA_NY_RICHMOND": 0.722,
+     "USA_OH_LAKE": 0.71,
+     "YAKARTA": 0.847
     }
    },
    "sin_forma": {
     "columnas": 24,
     "global": {
-     "n": 64,
+     "n": 592,
      "n_basural": 39,
-     "n_otro": 25,
-     "auc": 0.475,
+     "n_otro": 553,
+     "auc": 0.775,
      "auc_ic95": [
-      0.322,
-      0.637
+      0.701,
+      0.846
      ],
-     "precision": 0.62,
+     "precision": 0.185,
      "precision_ic95": [
-      0.482,
-      0.741
+      0.082,
+      0.367
      ],
-     "recall": 0.795,
+     "recall": 0.128,
      "recall_ic95": [
-      0.645,
-      0.892
+      0.056,
+      0.267
      ]
     },
     "auc_por_frame": {
-     "DELHI": 1.0,
-     "LOS_ANGELES": 0.6,
-     "PRI_PONCE": 1.0,
-     "USA_NY_RICHMOND": 1.0
+     "CDMX": 0.778,
+     "DELHI": 0.961,
+     "LOS_ANGELES": 0.802,
+     "PRI_PONCE": 0.925,
+     "USA_MD_HOWARD": 0.781,
+     "USA_NH_HILLSBOROUGH": 0.419,
+     "USA_NY_RICHMOND": 0.731,
+     "USA_OH_LAKE": 0.716,
+     "YAKARTA": 0.883
     }
    },
    "solo_radar": {
     "columnas": 16,
     "global": {
-     "n": 64,
+     "n": 592,
      "n_basural": 39,
-     "n_otro": 25,
-     "auc": 0.519,
+     "n_otro": 553,
+     "auc": 0.72,
      "auc_ic95": [
-      0.374,
-      0.673
+      0.627,
+      0.819
      ],
-     "precision": 0.6,
+     "precision": 0.276,
      "precision_ic95": [
-      0.462,
-      0.724
+      0.147,
+      0.457
      ],
-     "recall": 0.769,
+     "recall": 0.205,
      "recall_ic95": [
-      0.617,
-      0.874
+      0.108,
+      0.355
      ]
     },
     "auc_por_frame": {
-     "DELHI": 1.0,
-     "LOS_ANGELES": 0.85,
-     "PRI_PONCE": 0.9,
-     "USA_NY_RICHMOND": 1.0
+     "CDMX": 0.644,
+     "DELHI": 0.806,
+     "LOS_ANGELES": 0.84,
+     "PRI_PONCE": 0.559,
+     "USA_MD_HOWARD": 0.656,
+     "USA_NH_HILLSBOROUGH": 0.791,
+     "USA_NY_RICHMOND": 0.785,
+     "USA_OH_LAKE": 0.747,
+     "YAKARTA": 0.32
     }
    },
    "solo_optico": {
     "columnas": 11,
     "global": {
-     "n": 64,
+     "n": 592,
      "n_basural": 39,
-     "n_otro": 25,
-     "auc": 0.426,
+     "n_otro": 553,
+     "auc": 0.764,
      "auc_ic95": [
-      0.274,
-      0.592
+      0.688,
+      0.836
      ],
-     "precision": 0.64,
+     "precision": 0.244,
      "precision_ic95": [
-      0.501,
-      0.759
+      0.142,
+      0.387
      ],
-     "recall": 0.821,
+     "recall": 0.282,
      "recall_ic95": [
-      0.673,
-      0.91
+      0.165,
+      0.438
      ]
     },
     "auc_por_frame": {
-     "DELHI": 0.667,
-     "LOS_ANGELES": 0.417,
-     "PRI_PONCE": 0.5,
-     "USA_NY_RICHMOND": 1.0
+     "CDMX": 0.794,
+     "DELHI": 0.953,
+     "LOS_ANGELES": 0.897,
+     "PRI_PONCE": 0.935,
+     "USA_MD_HOWARD": 0.844,
+     "USA_NH_HILLSBOROUGH": 0.186,
+     "USA_NY_RICHMOND": 0.472,
+     "USA_OH_LAKE": 0.574,
+     "YAKARTA": 0.897
     }
    },
    "con_cantidad_de_datos": {
     "columnas": 29,
     "global": {
-     "n": 64,
+     "n": 592,
      "n_basural": 39,
-     "n_otro": 25,
-     "auc": 0.418,
+     "n_otro": 553,
+     "auc": 0.784,
      "auc_ic95": [
-      0.274,
-      0.575
+      0.707,
+      0.859
      ],
-     "precision": 0.6,
+     "precision": 0.296,
      "precision_ic95": [
-      0.462,
-      0.724
+      0.159,
+      0.485
      ],
-     "recall": 0.769,
+     "recall": 0.205,
      "recall_ic95": [
-      0.617,
-      0.874
+      0.108,
+      0.355
      ]
     },
     "auc_por_frame": {
-     "DELHI": 0.833,
-     "LOS_ANGELES": 0.558,
-     "PRI_PONCE": 1.0,
-     "USA_NY_RICHMOND": 1.0
+     "CDMX": 0.817,
+     "DELHI": 0.953,
+     "LOS_ANGELES": 0.841,
+     "PRI_PONCE": 0.946,
+     "USA_MD_HOWARD": 0.719,
+     "USA_NH_HILLSBOROUGH": 0.605,
+     "USA_NY_RICHMOND": 0.791,
+     "USA_OH_LAKE": 0.704,
+     "YAKARTA": 0.81
     }
    }
   },
@@ -772,15 +899,15 @@
      "max": 224.0
     },
     "otro_movil": {
-     "count": 25.0,
+     "count": 553.0,
      "min": 10.2,
      "25%": 14.1,
-     "50%": 32.0,
-     "75%": 69.8,
+     "50%": 21.8,
+     "75%": 41.0,
      "max": 814.1
     }
    },
-   "auc_de_area_ha_sola": 0.506,
+   "auc_de_area_ha_sola": 0.615,
    "nota": "auc_de_area_ha_sola es lo que separa el tamaño sin modelo: 0,5 quiere decir que no separa. Si es alto y `sin_forma` rinde menos que `completo`, el modelo está aprendiendo el tamaño."
   },
   "fuga": {
@@ -790,145 +917,145 @@
    "nota": "sólo entran columnas de contratos.COLUMNAS_MODELO (radar, óptico, forma y contexto); ni EMIT, ni el estado del catálogo, ni nada que salga de la etiqueta"
   },
   "auc_de_cada_variable_sola": {
+   "bsi_contraste": 0.83,
+   "ndvi_contraste": 0.18,
+   "bsi_media": 0.81,
+   "swir_b12": 0.81,
+   "ndwi_contraste": 0.8,
+   "ndvi_media": 0.21,
+   "swir_b12_contraste": 0.79,
+   "ndwi_media": 0.78,
+   "eco_variacion": 0.75,
+   "swir_b11": 0.73,
    "swir_b11_contraste": 0.71,
-   "ndvi_variacion": 0.7,
-   "swir_b12_contraste": 0.67,
-   "eco_contraste": 0.33,
-   "bsi_contraste": 0.66,
+   "eco_db": 0.31,
+   "contraste_mediana": 0.32,
+   "cultivo_anillo": 0.65,
    "hv_hh": 0.36,
-   "ndvi_contraste": 0.37,
-   "ndwi_contraste": 0.63,
-   "eco_db": 0.38,
-   "eco_variacion": 0.62,
-   "urbano_anillo": 0.38,
-   "insomnio": 0.61,
-   "persistencia": 0.61,
-   "tendencia": 0.61,
-   "bsi_media": 0.61,
-   "swir_b11": 0.57,
-   "swir_b12": 0.57,
-   "agua_anillo": 0.45,
-   "cultivo_anillo": 0.45,
-   "elongacion": 0.46,
-   "coherencia_media": 0.53,
-   "ndvi_media": 0.47,
-   "contraste_desvio": 0.51,
-   "ndwi_media": 0.51,
-   "area_ha": 0.51,
-   "contraste_mediana": 0.5,
+   "coherencia_media": 0.37,
+   "eco_contraste": 0.37,
+   "area_ha": 0.61,
+   "tendencia": 0.59,
+   "insomnio": 0.58,
+   "urbano_anillo": 0.43,
+   "persistencia": 0.57,
+   "elongacion": 0.45,
+   "ndvi_variacion": 0.54,
+   "agua_anillo": 0.48,
+   "contraste_desvio": 0.5,
    "compacidad": 0.5
   },
   "diagnostico_mezclando_frames": {
-   "auc_media": 0.818,
+   "auc_media": 0.852,
    "auc_por_semilla": [
-    0.835,
-    0.808,
-    0.789,
-    0.838,
-    0.823
+    0.842,
+    0.871,
+    0.843,
+    0.855,
+    0.849
    ],
    "nota": "DIAGNÓSTICO, NO REPORTAR: validación mezclando frames, agrupando por complejo. Es optimista: el modelo ve el paisaje de cada frame al entrenar, y en varios frames hay una sola clase."
   },
   "mayores_errores": [
    {
-    "id_mancha": "MAN-LOS_ANGELES-0100",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "estacionamiento_playa",
-    "id_catalogo": "NEG-056000",
-    "p_basural": 0.997,
-    "area_ha": 35.2,
+    "id_mancha": "MAN-USA_OH_LAKE-0075",
+    "frame": "USA_OH_LAKE",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-042627",
+    "p_basural": 0.001,
+    "area_ha": 11.5,
     "insomnio": 0.96
    },
    {
-    "id_mancha": "MAN-LOS_ANGELES-0317",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "cantera",
-    "id_catalogo": "NEG-009744",
-    "p_basural": 0.996,
-    "area_ha": 12.8,
-    "insomnio": 0.96
-   },
-   {
-    "id_mancha": "MAN-LOS_ANGELES-0283",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "obra",
-    "id_catalogo": "NEG-043642",
-    "p_basural": 0.996,
-    "area_ha": 14.1,
-    "insomnio": 0.96
-   },
-   {
-    "id_mancha": "MAN-LOS_ANGELES-0248",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "cantera",
-    "id_catalogo": "NEG-009753",
-    "p_basural": 0.994,
-    "area_ha": 16.0,
-    "insomnio": 0.96
-   },
-   {
-    "id_mancha": "MAN-LOS_ANGELES-0001",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "aeropuerto",
-    "id_catalogo": "NEG-051122",
-    "p_basural": 0.993,
-    "area_ha": 814.1,
-    "insomnio": 0.96
-   },
-   {
-    "id_mancha": "MAN-PRI_PONCE-0030",
-    "frame": "PRI_PONCE",
-    "clase": "otro_movil",
-    "clase_negativo": "cultivo",
-    "id_catalogo": "NEG-015004",
-    "p_basural": 0.992,
-    "area_ha": 94.1,
+    "id_mancha": "MAN-YAKARTA-0167",
+    "frame": "YAKARTA",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-059332",
+    "p_basural": 0.001,
+    "area_ha": 30.7,
     "insomnio": 1.0
    },
    {
-    "id_mancha": "MAN-LOS_ANGELES-0063",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "cultivo",
-    "id_catalogo": "NEG-016651",
-    "p_basural": 0.992,
-    "area_ha": 51.2,
-    "insomnio": 0.88
+    "id_mancha": "MAN-USA_MD_HOWARD-0036",
+    "frame": "USA_MD_HOWARD",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-042292",
+    "p_basural": 0.001,
+    "area_ha": 18.6,
+    "insomnio": 0.91
    },
    {
-    "id_mancha": "MAN-LOS_ANGELES-0113",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "laguna_chica",
-    "id_catalogo": "NEG-037276",
-    "p_basural": 0.991,
-    "area_ha": 32.0,
-    "insomnio": 0.96
-   },
-   {
-    "id_mancha": "MAN-LOS_ANGELES-0371",
-    "frame": "LOS_ANGELES",
-    "clase": "otro_movil",
-    "clase_negativo": "feedlot",
-    "id_catalogo": "NEG-023512",
-    "p_basural": 0.989,
-    "area_ha": 10.2,
-    "insomnio": 0.96
-   },
-   {
-    "id_mancha": "MAN-PRI_PONCE-0062",
-    "frame": "PRI_PONCE",
-    "clase": "otro_movil",
-    "clase_negativo": "humedal",
-    "id_catalogo": "NEG-028520",
-    "p_basural": 0.985,
-    "area_ha": 69.8,
+    "id_mancha": "MAN-USA_OH_LAKE-0078",
+    "frame": "USA_OH_LAKE",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-050275",
+    "p_basural": 0.003,
+    "area_ha": 11.5,
     "insomnio": 1.0
+   },
+   {
+    "id_mancha": "MAN-USA_OH_LAKE-0008",
+    "frame": "USA_OH_LAKE",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-045875",
+    "p_basural": 0.006,
+    "area_ha": 42.9,
+    "insomnio": 1.0
+   },
+   {
+    "id_mancha": "MAN-USA_NY_RICHMOND-0142",
+    "frame": "USA_NY_RICHMOND",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-065325",
+    "p_basural": 0.017,
+    "area_ha": 30.1,
+    "insomnio": 0.91
+   },
+   {
+    "id_mancha": "MAN-USA_MD_HOWARD-0020",
+    "frame": "USA_MD_HOWARD",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-065416",
+    "p_basural": 0.022,
+    "area_ha": 26.9,
+    "insomnio": 1.0
+   },
+   {
+    "id_mancha": "MAN-USA_NY_RICHMOND-0098",
+    "frame": "USA_NY_RICHMOND",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-047298",
+    "p_basural": 0.033,
+    "area_ha": 37.8,
+    "insomnio": 0.98
+   },
+   {
+    "id_mancha": "MAN-PRI_PONCE-0097",
+    "frame": "PRI_PONCE",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-062922",
+    "p_basural": 0.033,
+    "area_ha": 54.4,
+    "insomnio": 1.0
+   },
+   {
+    "id_mancha": "MAN-LOS_ANGELES-0069",
+    "frame": "LOS_ANGELES",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-066131",
+    "p_basural": 0.035,
+    "area_ha": 44.2,
+    "insomnio": 0.96
    }
   ]
  },
