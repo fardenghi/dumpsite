@@ -43,3 +43,34 @@ Bajar las fuentes a un directorio (Overture con DuckDB, Climate TRACE por su API
 cd idea-basurales-nisar/herramientas
 python curar_basurales.py <dir_descargas> ../../data/basurales
 ```
+
+## negativos/
+Catálogo de **confusores**: lo que el radar puede confundir con un basural. Sirve para entrenar el modelo con casos negativos. Sigue la lista y las reglas de `idea-basurales-nisar/idea/negativos-dataset.md` y lo arman `negativos_extraer.py` y `negativos_curar.py` (en `idea-basurales-nisar/herramientas/`).
+
+| Archivo | Qué tiene |
+|---|---|
+| `negativos_mundo.json` (46 MB) | 64.986 polígonos de 24 clases, en zonas cercanas a basurales con estado conocido. La muestra se balancea por clase y por celda de 1° |
+| `negativos_amba.json` | 1.259 polígonos del AMBA, hasta 150 por clase |
+
+### Cómo se armó
+- **Fuente:** Overture Maps release 2026-10-21.0, con las capas `land_use`, `land`, `water` e `infrastructure`. Son datos de OSM con licencia ODbL. De ahí salieron 4,26 millones de polígonos candidatos.
+- **Tamaño:** entre 2 y 500 ha. Lo más grande va como máscara.
+- **Zona:** celdas de 0,25° vecinas a un basural con estado conocido o curado. Es una aproximación a "los mismos frames de NISAR que los positivos".
+- **Distancia:** a más de 500 m, de borde a borde, de cualquier sitio del catálogo de basurales.
+- **Cupo:** por clase y por celda de 1°, A = 6, B = 3 y C = 2. El orden es reproducible porque usa el hash del id.
+
+### Estructura de cada registro
+- Identificación: `id`, `clase`, `grupo`, `prioridad` (A, B o C) y `rol` (`negativo` o `mascara`).
+- Ubicación y tamaño: `nombre`, `pais` (inferido del basural más cercano), `lat`, `lon`, `area_ha` y `bbox`.
+- Polígono: `poligono`, con el id de Overture y el de OSM.
+- `frame_nisar`: queda vacío hasta que se bajen los frames.
+- Origen: `fuente`, `id_fuente`, `url` (el objeto en OSM), `licencia` y `confianza` (alta, media o baja).
+- Contexto: `basural_mas_cercano`, `etiquetas_osm` y `notas`.
+
+En `meta` están los conteos por clase y las **clases pendientes**, las que no salen de OSM: rutas (son líneas y van como máscara), agua grande, quema y tala (FIRMS de la NASA), asentamientos (GHSL), cauces que se mueven (JRC) y zonas que el radar no ve bien por la geometría (máscara del GUNW más un DEM).
+
+### Advertencias
+- **Sesgo por país:** el 53 % es de EE. UU., porque ahí están la mayoría de los positivos con estado conocido (la EPA). Para entrenar hay que rebalancear por país o por frame.
+- **Confianza baja:** los `feedlot` salen de `landuse=farmyard`, que no siempre es un corral de engorde. Igual con los acopios de granos. Hay que revisarlos antes de usarlos.
+- OSM puede estar desactualizado: una obra que ya terminó puede seguir marcada como obra.
+- Hay que validar separando por ciudad o por frame, no por sitio.
