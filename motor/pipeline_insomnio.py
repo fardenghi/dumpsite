@@ -28,6 +28,8 @@ Credenciales: EARTHDATA_TOKEN, o EARTHDATA_USERNAME y EARTHDATA_PASSWORD. Nunca 
 """
 import argparse
 import concurrent.futures as cf
+import concurrent.futures.process  # noqa: F401  (BrokenProcessPool)
+import contextlib
 import dataclasses
 import glob
 import json
@@ -119,6 +121,7 @@ def buscar(args):
     with urllib.request.urlopen(url, timeout=120) as r:
         resultados = json.load(r)["results"]
     desde, hasta = (fr.desde or "").replace("-", ""), (fr.hasta or "").replace("-", "")
+    solo = {(int(x.split("_")[0]), int(x.split("_")[-1])) for x in fr.frames_nisar}  # (órbita, frame de NISAR) de frames.json
     elegidos = {}
     for g in resultados:
         nombre = g["granuleName"]
@@ -127,6 +130,8 @@ def buscar(args):
             continue
         tipo = g["productType"]
         _, _, frame_nisar = _partes(nombre)
+        if solo and (g["path"], frame_nisar) not in solo:
+            continue
         if tipo == "GUNW":
             fechas = re.findall(r"_(\d{8})T\d{6}", nombre)
             dias = (fechas[0], fechas[2] if len(fechas) > 2 else fechas[-1])
@@ -202,7 +207,8 @@ def _buscar_capa(f, grupo):
 
 
 def _buscar_eco(f):
-    """Busca la capa de backscatter de un GCOV (HHHH o VVVV) y sus coordenadas."""
+    """Busca el backscatter de un GCOV. Devuelve (co, cruzada, xs, ys, epsg): los datasets de la polarización
+    directa (HHHH o VVVV) y de la cruzada del mismo grupo (HVHV o VHVH, o None si el producto no la trae)."""
     encontrado = []
 
     import h5py
@@ -216,21 +222,26 @@ def _buscar_eco(f):
         raise KeyError("No hay HHHH ni VVVV en el GCOV")
     ruta = sorted(encontrado)[0]
     grupo = ruta.rsplit("/", 1)[0]
-    return f[ruta], f[grupo + "/xCoordinates"][()], f[grupo + "/yCoordinates"][()], _epsg(f, grupo)
+    cruzada = next((f[f"{grupo}/{c}"] for c in ("HVHV", "VHVH") if f"{grupo}/{c}" in f), None)
+    return f[ruta], cruzada, f[grupo + "/xCoordinates"][()], f[grupo + "/yCoordinates"][()], _epsg(f, grupo)
 
 
 _SESION_REMOTA = None
 
 
+@contextlib.contextmanager
 def _abrir(ruta, remoto, intentos=4):
     """Abre un .h5 local, o remoto por URL con earthaccess (lee sólo los bloques que se piden).
 
-    El login y la apertura remota se reintentan: Earthdata corta conexiones cada tanto.
+    El login y la apertura remota se reintentan: Earthdata corta conexiones cada tanto. Al salir cierra también
+    el archivo remoto, para soltar su caché de bloques (si no, cada proceso junta cientos de MB).
     """
     import h5py
 
     if not remoto:
-        return h5py.File(ruta, "r")
+        with h5py.File(ruta, "r") as f:
+            yield f
+        return
     global _SESION_REMOTA
     import time
 
@@ -240,51 +251,81 @@ def _abrir(ruta, remoto, intentos=4):
         try:
             if _SESION_REMOTA is None:  # una vez por proceso
                 _SESION_REMOTA = earthaccess.login(strategy="environment")
-            return h5py.File(earthaccess.open([ruta])[0], "r")
+            archivo = earthaccess.open([ruta])[0]
+            f = h5py.File(archivo, "r")
+            break
         except Exception:
             if i == intentos - 1:
                 raise
             _SESION_REMOTA = None
             time.sleep(5 * (i + 1))
+    try:
+        yield f
+    finally:
+        f.close()
+        archivo.close()
 
 
 def _procesar_uno(tarea):
+    """Recorta un producto a la grilla del frame. Un GUNW da un recorte de coherencia; un GCOV da dos: el eco
+    de la polarización directa (`gcov_*`) y el de la cruzada (`gcovhv_*`), que sirve para el cociente HV/HH."""
     ruta, capa, carpeta, remoto, caja, epsg = tarea
     nombre = os.path.basename(ruta).replace(".h5", "")
     fechas = re.findall(r"_(\d{8})T\d{6}", nombre)
     tipo, orbita, frame_nisar = _partes(nombre)
     fecha_sec = fechas[2] if len(fechas) > 2 else fechas[0]
-    prefijo = tipo.lower()
-    # Nombre corto: los nombres de NISAR superan el límite de rutas de Windows.
-    destino = os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{frame_nisar:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")
-    viejo = os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")  # recortes de antes de los frames
-    if os.path.exists(destino) or os.path.exists(viejo):
-        return destino, "ya estaba"
+
+    def destino(prefijo):
+        # Nombre corto: los nombres de NISAR superan el límite de rutas de Windows.
+        return os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{frame_nisar:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")
+
+    def hecho(prefijo):  # también vale el nombre de los recortes de antes de los frames, sin el frame de NISAR
+        return os.path.exists(destino(prefijo)) or os.path.exists(os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz"))
+
+    principal = destino(tipo.lower())
+    salidas = {"gunw": "coherencia"} if tipo == "GUNW" else {"gcov": "eco_db", "gcovhv": "eco_hv_db"}
+    faltan = [p for p in salidas if not hecho(p)]
+    if not faltan:
+        return principal, "ya estaba"
     xs_dst, ys_dst = geo.grilla(CAPAS[capa][1], caja, epsg)
+
+    def en_db(ds, xs, ys, epsg_src):
+        lin = recortar(ds, xs, ys, xs_dst, ys_dst, epsg_src, epsg)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            valor = (10 * np.log10(lin)).astype(np.float32)
+        valor[~np.isfinite(valor)] = np.nan
+        return valor
+
     intentos = 3 if remoto else 1  # la lectura por URL se corta cada tanto: se reintenta el archivo entero
     for i in range(intentos):
         try:
+            valores = {}
             with _abrir(ruta, remoto) as f:
                 if tipo == "GUNW":
                     ds, xs, ys, epsg_src = _buscar_capa(f, CAPAS[capa][0])
                     valor = recortar(ds, xs, ys, xs_dst, ys_dst, epsg_src, epsg)
                     valor[(valor <= 0) | (valor > 1)] = np.nan
-                    tipo_valor = "coherencia"
+                    valores["gunw"] = valor
                 else:
-                    ds, xs, ys, epsg_src = _buscar_eco(f)
-                    lin = recortar(ds, xs, ys, xs_dst, ys_dst, epsg_src, epsg)
-                    with np.errstate(divide="ignore", invalid="ignore"):
-                        valor = (10 * np.log10(lin)).astype(np.float32)
-                    valor[~np.isfinite(valor)] = np.nan
-                    tipo_valor = "eco_db"
+                    co, cruzada, xs, ys, epsg_src = _buscar_eco(f)
+                    if "gcov" in faltan:
+                        valores["gcov"] = en_db(co, xs, ys, epsg_src)
+                    if "gcovhv" in faltan and cruzada is not None:
+                        valores["gcovhv"] = en_db(cruzada, xs, ys, epsg_src)
             break
         except Exception as e:  # un archivo roto no frena a los demás
             if i == intentos - 1:
-                return destino, f"ERROR {type(e).__name__}: {e}"
-    np.savez_compressed(destino, valor=valor.astype(np.float16), tipo=tipo_valor, orbita=orbita, frame_nisar=frame_nisar,
-                        fecha_ref=fechas[0], fecha_sec=fecha_sec, producto=nombre, epsg=epsg, epsg_producto=epsg_src)
+                return principal, f"ERROR {type(e).__name__}: {e}"
+    for prefijo, valor in valores.items():
+        parcial = destino(prefijo) + ".parcial.npz"  # se escribe aparte y se renombra: un corte no deja un recorte roto
+        np.savez_compressed(parcial, valor=valor.astype(np.float16), tipo=salidas[prefijo], orbita=orbita, frame_nisar=frame_nisar,
+                            fecha_ref=fechas[0], fecha_sec=fecha_sec, producto=nombre, epsg=epsg, epsg_producto=epsg_src)
+        os.replace(parcial, destino(prefijo))
+    if not valores:
+        return principal, "ya estaba (el producto no trae polarización cruzada)"
     otra = "" if epsg_src == epsg else f", reproyectado de EPSG {epsg_src}"
-    return destino, f"ok {tipo_valor} cobertura {np.isfinite(valor).mean():.0%}{otra}"
+    que = " y ".join(salidas[p] for p in valores)
+    return principal, f"ok {que} cobertura {np.isfinite(next(iter(valores.values()))).mean():.0%}{otra}"
 
 
 def _fijar_epsg(args, archivos):
@@ -324,14 +365,26 @@ def procesar(args):
     modo = "remoto, sin bajar" if args.remoto else "local"
     print(f"{fr.nombre} (EPSG {fr.epsg}): {len(archivos)} archivos a procesar (capa {args.capa}, {args.procesos} procesos, {modo})")
     errores = 0
-    # Procesos nuevos (spawn) y no copias (fork): la sesión remota y h5py no sobreviven bien a un fork.
-    with cf.ProcessPoolExecutor(max_workers=args.procesos, mp_context=multiprocessing.get_context("spawn")) as ex:
-        tareas = [(a, args.capa, carpeta, args.remoto, fr.caja, fr.epsg) for a in archivos]
-        for archivo, (destino, estado) in zip(archivos, ex.map(_procesar_uno, tareas)):
-            print(f"  {os.path.basename(destino)}: {estado}", flush=True)
-            errores += estado.startswith("ERROR")
-            if args.borrar and not args.remoto and not estado.startswith("ERROR"):
-                os.remove(archivo)  # frame por frame: el disco nunca junta los .h5 de más de un frame
+    tareas = {a: (a, args.capa, carpeta, args.remoto, fr.caja, fr.epsg) for a in archivos}
+    # Procesos nuevos (spawn) y no copias (fork): la sesión remota y h5py no sobreviven bien a un fork. Cada proceso
+    # se recicla cada pocos archivos, para que no junte memoria. Si el sistema mata un proceso, se sigue con lo que falta.
+    reciclar = {"max_tasks_per_child": 6} if sys.version_info >= (3, 11) else {}
+    for vuelta in range(4):
+        hechos = set()
+        try:
+            with cf.ProcessPoolExecutor(max_workers=args.procesos, mp_context=multiprocessing.get_context("spawn"), **reciclar) as ex:
+                for archivo, (destino, estado) in zip(tareas, ex.map(_procesar_uno, tareas.values())):
+                    hechos.add(archivo)
+                    print(f"  {os.path.basename(destino)}: {estado}", flush=True)
+                    errores += estado.startswith("ERROR")
+                    if args.borrar and not args.remoto and not estado.startswith("ERROR"):
+                        os.remove(archivo)  # frame por frame: el disco nunca junta los .h5 de más de un frame
+            break
+        except cf.process.BrokenProcessPool:
+            tareas = {a: t for a, t in tareas.items() if a not in hechos}
+            if vuelta == 3:
+                raise
+            print(f"  El sistema mató un proceso (¿memoria?): sigo con los {len(tareas)} archivos que faltan", flush=True)
     if errores:
         print(f"  {errores} archivo(s) con error: se pueden reintentar corriendo `procesar` de nuevo")
 
@@ -373,8 +426,13 @@ def _fijo(args, archivo, armar):
 
 
 def cargar(args):
-    """Lee una sola vez los recortes, la máscara de agua, los sitios, los usos conocidos y los polígonos de los catálogos."""
-    fr = args.fr
+    """Lee una sola vez los recortes, la máscara de agua, los sitios, los usos conocidos y los polígonos de los catálogos.
+
+    `args` alcanza con `salida`, `capa` y `orbitas`: sin `fr` se asume el AMBA (así lo llama `insomnio_catalogo.py`).
+    """
+    fr = getattr(args, "fr", geo.AMBA)
+    if not hasattr(args, "fijos"):
+        args.fijos = ff.carpeta(fr)
     paso = CAPAS[args.capa][1]
     xs, ys = fr.grilla(paso)
     grupos = {}
@@ -384,7 +442,7 @@ def cargar(args):
                 continue
             clave = (str(d["tipo"]), int(d["orbita"]), str(d["fecha_ref"]), str(d["fecha_sec"]))
             grupos.setdefault(clave, []).append((d["valor"].astype(np.float32), str(d["producto"])))
-    coh, pares, eco, orb_eco = [], [], [], []
+    coh, pares, eco, orb_eco, eco_hv, orb_eco_hv = [], [], [], [], [], []
     for (tipo, orbita, f_ref, f_sec), piezas in sorted(grupos.items(), key=lambda kv: (kv[0][0] != "coherencia", kv[0][1:])):
         if any(v.shape != (len(ys), len(xs)) for v, _ in piezas):
             sys.exit(f"Los recortes miden {piezas[0][0].shape} y la grilla de {fr.nombre} {(len(ys), len(xs))}: "
@@ -395,8 +453,8 @@ def cargar(args):
             coh.append(valor)
             pares.append({"orbita": orbita, "desde": ref, "hasta": sec, "dias": _dias(ref, sec), "producto": piezas[0][1]})
         elif np.isfinite(valor).mean() >= 0.5:  # hay GCOV que no cubren la caja
-            eco.append(valor)
-            orb_eco.append(orbita)
+            (eco if tipo == "eco_db" else eco_hv).append(valor)
+            (orb_eco if tipo == "eco_db" else orb_eco_hv).append(orbita)
     if not coh:
         sys.exit("No hay recortes de coherencia: corré `procesar` primero (o bajá los recortes, ver README).")
     coh = np.stack(coh)
@@ -455,8 +513,9 @@ def cargar(args):
             "orbitas": np.array([x["orbita"] for x in pares]), "dias": np.array([x["dias"] for x in pares]),
             "fechas": np.array([x["hasta"] for x in pares]),
             "eco": np.stack(eco) if eco else None, "orbitas_eco": np.array(orb_eco), "ocurrencia": ocurrencia,
+            "eco_hv": np.stack(eco_hv) if eco_hv else None, "orbitas_eco_hv": np.array(orb_eco_hv),
             "sitios": sitios, "usos": usos, "uso_px": uso_px, "sitio_px": sitio_px, "rellenos": rellenos,
-            "catalogo": catalogo, "catalogo_px": catalogo_px, "sin_catalogos": args.sin_catalogos}
+            "catalogo": catalogo, "catalogo_px": catalogo_px, "sin_catalogos": getattr(args, "sin_catalogos", False)}
 
 
 def evaluar(ctx, p, cociente=None, eco_db=None):
