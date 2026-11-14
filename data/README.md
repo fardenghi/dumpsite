@@ -74,3 +74,17 @@ En `meta` están los conteos por clase y las **clases pendientes**, las que no s
 - **Confianza baja:** los `feedlot` salen de `landuse=farmyard`, que no siempre es un corral de engorde. Igual con los acopios de granos. Hay que revisarlos antes de usarlos.
 - OSM puede estar desactualizado: una obra que ya terminó puede seguir marcada como obra.
 - Hay que validar separando por ciudad o por frame, no por sitio.
+
+## Geometrías
+Los polígonos van en archivos aparte. Cada feature se enlaza con su catálogo por `id`. Los arman `geometrias_extraer.py` y `geometrias_armar.py`.
+
+| Archivo | Sitios | Con polígono | Formato |
+|---|---|---|---|
+| `basurales/geometrias.geojson` (30 MB) | 66.981 | 57.068 | GeoJSON |
+| `negativos/geometrias_mundo.parquet` (34 MB) | 64.986 | 64.986 | GeoParquet (más de 50 MB en GeoJSON) |
+| `negativos/geometrias_amba.geojson` (1 MB) | 1.259 | 1.259 | GeoJSON |
+
+- **Fuente:** Overture Maps 2026-10-21.0 (OSM, ODbL 1.0, © colaboradores de OpenStreetMap). Está en WGS84 (lon/lat), sin reproyectar.
+- **Simplificación:** `ST_SimplifyPreserveTopology` con 0,0001° (unos 10 m), menos que un píxel de NISAR. El área cambia un 0,8 % en la mediana respecto del `area_ha` del catálogo, que se calculó con el polígono original.
+- **Puntos:** los 9.913 basurales sin polígono van como punto con `geometria = "punto"`. Son los que vienen solo de la EPA o de Climate TRACE y los cerrados de OSM que Overture no trae. Entre los cerrados hay 1.925 con polígono y 1.654 con punto.
+- **Lectura:** el GeoParquet se abre con GeoPandas (`geopandas.read_parquet`), DuckDB o QGIS. Los GeoJSON se abren con cualquier herramienta.
