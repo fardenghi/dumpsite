@@ -14,7 +14,7 @@ from pathlib import Path
 
 SEED = Path(__file__).resolve().parent.parent / "src" / "data" / "seed"
 SERVIDOR = "https://overpass-api.de/api/interpreter"
-RADIO = 2500  # metros alrededor del punto del sitio
+RADIO = 5000  # metros alrededor del punto del sitio
 
 
 def overpass(consulta):
@@ -22,7 +22,7 @@ def overpass(consulta):
     for intento in range(10):
         try:
             pedido = urllib.request.Request(SERVIDOR, urllib.parse.urlencode({"data": consulta}).encode(), {"User-Agent": "insomnes-contornos/0.1"})
-            return json.load(urllib.request.urlopen(pedido, timeout=240))["elements"]
+            return json.load(urllib.request.urlopen(pedido, timeout=90))["elements"]
         except Exception as e:
             print(f"   reintento {intento + 1}: {e}", flush=True)
             time.sleep(8)
@@ -35,9 +35,17 @@ def anillos(elemento):
         partes = [elemento.get("geometry", [])]
     else:
         partes = [m.get("geometry", []) for m in elemento.get("members", []) if m.get("role") in ("outer", "") and m["type"] == "way"]
+    tramos = [[(round(n["lon"], 5), round(n["lat"], 5)) for n in p] for p in partes if len(p) >= 2]
     salida = []
-    for p in partes:
-        anillo = [(round(n["lon"], 5), round(n["lat"], 5)) for n in p]
+    # en una relación el borde suele venir partido en varios tramos abiertos: se unen por las puntas
+    while tramos:
+        anillo = tramos.pop()
+        while anillo[0] != anillo[-1]:
+            sigue = next((t for t in tramos if anillo[-1] in (t[0], t[-1])), None)
+            if sigue is None:
+                break
+            tramos.remove(sigue)
+            anillo += (sigue if sigue[0] == anillo[-1] else sigue[::-1])[1:]
         if len(anillo) >= 4 and anillo[0] == anillo[-1]:
             salida.append(anillo)
     return salida
@@ -65,7 +73,7 @@ def distancia(lon1, lat1, lon2, lat2):
 
 
 def main():
-    sitios = json.loads((SEED / "sitios.json").read_text())
+    sitios = json.loads((SEED / "sitios.json").read_text(encoding="utf-8"))
     contornos = {}
     con_predio = [s for s in sitios if s["registro"] != "sin_registro"]  # las manchas sin predio conocido no tienen polígono propio
     zonas = "".join(f"way[landuse=landfill](around:{RADIO},{s['lat']},{s['lon']});relation[landuse=landfill](around:{RADIO},{s['lat']},{s['lon']});" for s in con_predio)
@@ -77,7 +85,8 @@ def main():
                 poligonos.append((ha, centro, anillo))
     for s in con_predio:
         candidatos = [(distancia(c[0], c[1], s["lon"], s["lat"]), ha, c, a) for ha, c, a in poligonos]
-        candidatos = [c for c in candidatos if c[0] <= RADIO + 1500]
+        # lejos del punto sólo se acepta un predio grande: uno chico a varios km suele ser otro relleno
+        candidatos = [c for c in candidatos if c[0] <= 2500 or (c[0] <= RADIO + 1500 and c[1] >= 100)]
         if not candidatos:
             print(f"{s['id']:16s} sin polígono")
             continue
@@ -87,9 +96,9 @@ def main():
         contornos[s["id"]] = {"type": "Polygon", "coordinates": [[list(p) for p in anillo]]}
         s["lon"], s["lat"], s["ha"] = round(centro[0], 4), round(centro[1], 4), round(ha)
         print(f"{s['id']:16s} {ha:7.0f} ha, {len(anillo)} vértices")
-    (SEED / "contornos.json").write_text(json.dumps(contornos, separators=(",", ":")) + "\n")
+    (SEED / "contornos.json").write_text(json.dumps(contornos, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
     filas = ",\n".join("  " + json.dumps(s, ensure_ascii=False) for s in sitios)
-    (SEED / "sitios.json").write_text(f"[\n{filas}\n]\n")
+    (SEED / "sitios.json").write_text(f"[\n{filas}\n]\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
