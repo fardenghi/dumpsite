@@ -1,0 +1,1501 @@
+{
+ "norte-iii": {
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "persistencia": 0.6,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 0.71
+  },
+  "eco_db": -9.9,
+  "px": 413,
+  "cubierto_por_manchas": 0.19,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.46,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.2,
+    "anillo": 0.35,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.25,
+    "anillo": 0.53,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.54,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.37,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.4,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.37,
+    "anillo": 0.54,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.26,
+    "anillo": 0.39,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.36,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.32,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.39,
+    "anillo": 0.4,
+    "despierto": false
+   }
+  ],
+  "osm": [
+   "relation/2625352"
+  ],
+  "nota": "Polígono `landuse=landfill` de 265 ha del CEAMSE; Climate TRACE lo llama módulo C de Norte III.",
+  "fuentes": [
+   "https://www.iprofesional.com/actualidad/457740-basural-amba-metano-bajo-lupa-global-genero-preocupacion-impacto-ambiental",
+   "https://www.catf.us/2026/05/satellites-super-emitters-smarter-waste-policy/"
+  ]
+ },
+ "gonzalez-catan": {
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -11.6,
+  "px": 243,
+  "cubierto_por_manchas": 0.58,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.4,
+    "anillo": 0.67,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.31,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.49,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.31,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.34,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.35,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.3,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.32,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.52,
+    "anillo": 0.7,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.27,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.44,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.44,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.56,
+    "despierto": true
+   }
+  ],
+  "osm": [
+   "way/1285683382"
+  ],
+  "nota": "Complejo ambiental del CEAMSE. No encontramos una fuente que confirme si hoy recibe residuos: por eso va sin registro.",
+  "fuentes": [
+   "https://www.openstreetmap.org/way/1285683382"
+  ]
+ },
+ "lujan": {
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.0
+  },
+  "eco_db": -7.5,
+  "px": 44,
+  "cubierto_por_manchas": 0.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.79,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.68,
+    "anillo": 0.65,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.59,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.75,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.75,
+    "anillo": 0.7,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.71,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.54,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.73,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.78,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.64,
+    "anillo": 0.52,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.44,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.77,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.7,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.45,
+    "anillo": 0.4,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.68,
+    "anillo": 0.56,
+    "despierto": false
+   }
+  ],
+  "osm": [
+   "relation/7867512"
+  ],
+  "nota": "Dejó de recibir residuos el 1/07/2026. El primer par de cada órbita cruza esa fecha.",
+  "fuentes": [
+   "https://www.perfil.com/noticias/empresas-y-protagonistas/lujan-cerro-definitivamente-el-basural-a-cielo-abierto-mas-grande-del-pais.phtml",
+   "https://www.iprofesional.com/actualidad/460008-basural-lujan-cerro-problema-ambiental-nadie-puede-resolver"
+  ]
+ },
+ "lujan-oeste": {
+  "motivo": "superficie lisa (eco -15.5 dB): la coherencia baja no distingue cambio de falta de señal",
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.43
+  },
+  "eco_db": -15.5,
+  "px": 9,
+  "cubierto_por_manchas": 0.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.55,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.61,
+    "anillo": 0.7,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.71,
+    "anillo": 0.69,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.52,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.51,
+    "anillo": 0.52,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.52,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.67,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.34,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.36,
+    "anillo": 0.42,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.66,
+    "anillo": 0.67,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.59,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.29,
+    "anillo": 0.4,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.42,
+    "anillo": 0.58,
+    "despierto": true
+   }
+  ],
+  "osm": [],
+  "nota": "Mancha de coherencia baja vista en la prueba con un par (idea/prueba-coherencia-nisar.md). Caja a mano: OSM no tiene polígono.",
+  "fuentes": []
+ },
+ "norte-iii-disposicion": {
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -8.9,
+  "px": 111,
+  "cubierto_por_manchas": 0.9,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.34,
+    "anillo": 0.67,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.19,
+    "anillo": 0.47,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.6,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.6,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.23,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.28,
+    "anillo": 0.6,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.24,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.38,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.23,
+    "anillo": 0.43,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.5,
+    "despierto": true
+   }
+  ],
+  "osm": [
+   "relation/2625353"
+  ],
+  "nota": "Polígono que OSM nombra «Complejo de disposición final Norte III» (CEAMSE), sobre el Camino del Buen Ayre.",
+  "fuentes": [
+   "https://www.iprofesional.com/actualidad/457740-basural-amba-metano-bajo-lupa-global-genero-preocupacion-impacto-ambiental"
+  ]
+ },
+ "ceamse-norte-oeste": {
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "persistencia": 0.6,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 0.71
+  },
+  "eco_db": -9.6,
+  "px": 231,
+  "cubierto_por_manchas": 0.48,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.17,
+    "anillo": 0.37,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.28,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.25,
+    "anillo": 0.37,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.34,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.16,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.29,
+    "anillo": 0.31,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.4,
+    "despierto": false
+   }
+  ],
+  "osm": [
+   "way/673017156"
+  ],
+  "nota": "Polígono `landuse=landfill` sin nombre en OSM, pegado al oeste de Norte III.",
+  "fuentes": [
+   "https://www.openstreetmap.org/way/673017156"
+  ]
+ },
+ "ceamse-norte-este": {
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -9.6,
+  "px": 101,
+  "cubierto_por_manchas": 1.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.63,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.19,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.18,
+    "anillo": 0.42,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.56,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.21,
+    "anillo": 0.49,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.28,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.23,
+    "anillo": 0.56,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.15,
+    "anillo": 0.44,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.39,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.17,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.48,
+    "despierto": true
+   }
+  ],
+  "osm": [
+   "relation/2644337"
+  ],
+  "nota": "Polígono `landuse=landfill` del CEAMSE sin nombre en OSM.",
+  "fuentes": [
+   "https://www.openstreetmap.org/relation/2644337"
+  ]
+ },
+ "ceamse-norte-norte": {
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -7.7,
+  "px": 25,
+  "cubierto_por_manchas": 1.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.38,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.21,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.3,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.28,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.28,
+    "anillo": 0.56,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.36,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.67,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.14,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.24,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.47,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.2,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.56,
+    "despierto": true
+   }
+  ],
+  "osm": [
+   "relation/2653293"
+  ],
+  "nota": "Polígono `landuse=landfill` sin nombre en OSM.",
+  "fuentes": [
+   "https://www.openstreetmap.org/relation/2653293"
+  ]
+ },
+ "villa-dominico": {
+  "motivo": "señal intermedia: ni quieto ni despierto",
+  "persistencia": 0.2,
+  "insomnio_orbita": {
+   "10": 0.38,
+   "161": 0.29
+  },
+  "eco_db": -5.8,
+  "px": 10,
+  "cubierto_por_manchas": 0.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.63,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.49,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.4,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.67,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.71,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.6,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.66,
+    "anillo": 0.73,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.51,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.64,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.55,
+    "anillo": 0.65,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.41,
+    "anillo": 0.51,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.45,
+    "anillo": 0.61,
+    "despierto": true
+   }
+  ],
+  "osm": [
+   "way/1568444604"
+  ],
+  "nota": "Relleno del CEAMSE. Página/12 informó el sábado 31/01/2004 que cerraba «el lunes»: el 2/02/2004.",
+  "fuentes": [
+   "https://www.pagina12.com.ar/diario/sociedad/3-30975-2004-01-31.html"
+  ]
+ },
+ "benavidez": {
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.12,
+   "161": 0.14
+  },
+  "eco_db": -5.4,
+  "px": 15,
+  "cubierto_por_manchas": 0.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.74,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.41,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.59,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.51,
+    "anillo": 0.58,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.71,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.62,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.47,
+    "anillo": 0.5,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.57,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.5,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.52,
+    "anillo": 0.56,
+    "despierto": false
+   }
+  ],
+  "osm": [
+   "way/516258694"
+  ],
+  "nota": "Polígono `landuse=landfill` sin nombre en OSM.",
+  "fuentes": [
+   "https://www.openstreetmap.org/way/516258694"
+  ]
+ },
+ "cuartel-v": {
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.25,
+   "161": 0.14
+  },
+  "eco_db": -7.8,
+  "px": 14,
+  "cubierto_por_manchas": 0.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.68,
+    "anillo": 0.73,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.61,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.54,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.59,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.64,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.54,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.41,
+    "anillo": 0.53,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.68,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.56,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.4,
+    "anillo": 0.51,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.56,
+    "anillo": 0.67,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.51,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.34,
+    "anillo": 0.44,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.51,
+    "anillo": 0.56,
+    "despierto": false
+   }
+  ],
+  "osm": [
+   "way/338232321",
+   "way/338232323"
+  ],
+  "nota": "Dos polígonos `landuse=landfill` de OSM (fuente de OSM: techo.org).",
+  "fuentes": [
+   "https://www.openstreetmap.org/way/338232321"
+  ]
+ },
+ "ministro-rivadavia": {
+  "motivo": "el predio ocupa 2 píxeles de 80 m: menos de 8",
+  "persistencia": 0.2,
+  "insomnio_orbita": {
+   "10": 0.5,
+   "161": 0.14
+  },
+  "eco_db": -8.3,
+  "px": 2,
+  "cubierto_por_manchas": 0.0,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.72,
+    "anillo": 0.75,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.36,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.68,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.53,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.53,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.4,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.49,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.6,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.57,
+    "anillo": 0.5,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.29,
+    "anillo": 0.4,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.52,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.33,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.41,
+    "anillo": 0.49,
+    "despierto": false
+   }
+  ],
+  "osm": [
+   "way/213571349"
+  ],
+  "nota": "Polígono `landuse=landfill` de OSM.",
+  "fuentes": [
+   "https://www.openstreetmap.org/way/213571349"
+  ]
+ }
+}

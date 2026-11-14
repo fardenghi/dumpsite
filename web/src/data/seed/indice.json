@@ -1,0 +1,40 @@
+{
+ "url": "indice/insomnio-amba.png",
+ "oeste": -59.35,
+ "sur": -34.9,
+ "este": -58.25,
+ "norte": -34.25,
+ "coordinates": [
+  [
+   -59.35,
+   -34.25
+  ],
+  [
+   -58.25,
+   -34.25
+  ],
+  [
+   -58.25,
+   -34.9
+  ],
+  [
+   -59.35,
+   -34.9
+  ]
+ ],
+ "ancho": 1400,
+ "alto": 1005,
+ "que": "Índice de insomnio relativo (0 a 1), paleta magma; transparente por debajo de 0,3 y en el agua",
+ "pares": 15,
+ "desde": "2026-06-25",
+ "hasta": "2026-10-12",
+ "parametros": {
+  "razon": 0.8,
+  "min_insomnio": 0.7,
+  "min_persistencia": 0.5
+ },
+ "fuentes": [
+  "NISAR GUNW (NASA/ISRO), vía ASF DAAC",
+  "JRC Global Surface Water v1.4 (máscara de agua)"
+ ]
+}
