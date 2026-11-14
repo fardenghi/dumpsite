@@ -1,0 +1,21 @@
+.DS_Store
+node_modules/
+__pycache__/
+*.pyc
+.env
+.venv/
+
+# Datos pesados de NISAR (2 GB por archivo): no van al repo
+*.h5
+motor/datos/*
+!motor/datos/README.md
+# Recortes y capas por frame: el pipeline los rehace
+data/salidas/recortes_*/
+data/salidas/*/recortes_*/
+data/salidas/*/indice_*.npz
+data/salidas/indice_20m.npz
+# Fuentes fijas de los otros frames (agua, usos, catálogo, cobertura): el pipeline las rehace solo si faltan
+motor/fijos/*/
+# Registros de buscar y procesar que vuelven de la VM en el tar de cada frame
+data/salidas/*/buscar.log
+data/salidas/*/procesar.log
