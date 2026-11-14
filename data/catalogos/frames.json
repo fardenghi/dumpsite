@@ -17,7 +17,28 @@
    "conteos dentro de la caja y de la huella de los frames elegidos",
    "n_basurales_10ha cuenta complejos (área sumada ≥ 10 ha) por el estado del complejo"
   ],
-  "prioridad": "0 = reservado (Argentina, ya procesado); 1 en adelante = orden de procesamiento"
+  "prioridad": "0 = reservado (Argentina, ya procesado); 1 en adelante = orden de procesamiento",
+  "agregados": {
+   "generado": "2026-11-14",
+   "generado_por": "herramientas/frames_elegir.py --agregar",
+   "n": 20,
+   "prioridad_desde": 10,
+   "criterio": "celdas de 1° con más basurales abiertos de 10 ha o más con polígono, por sitio (puntaje 2 × abiertos + cerrados), sin contar los que ya caen en una caja elegida; caja achicada a esos basurales más 5 km; al menos 15 pares GUNW PR; sin tocar una caja ya elegida; sin tope de EE. UU",
+   "n_sitios_10ha": "abiertos y cerrados de 10 ha o más con polígono, por sitio, dentro de la caja y de la huella (lo que definió el frame)",
+   "sesgo": "todos los frames agregados salen del registro de la EPA (EE. UU.): el modelo queda entrenado ahí y probado en Argentina",
+   "celdas_descartadas": [
+    {
+     "celda": [
+      -76,
+      39
+     ],
+     "frame": "USA_NJ_GLOUCESTER",
+     "abiertos": 6,
+     "cerrados": 1,
+     "motivo": "sólo 11 pares GUNW PR (hacen falta 15)"
+    }
+   ]
+  }
  },
  "frames": [
   {
@@ -556,6 +577,1291 @@
    "cobertura": {
     "010_A_174": 1.0,
     "018_D_092": 0.88
+   }
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "orbita": [
+    55,
+    119
+   ],
+   "ciudad": "New Boston, Wayne, MI (alrededor de Carleton Farms Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -84.0427,
+    42.0427,
+    -83.145,
+    43.0281
+   ],
+   "n_gunw": 25,
+   "fecha_inicio": "2026-03-06",
+   "fecha_fin": "2026-10-20",
+   "n_basurales_10ha": {
+    "abierto": 8,
+    "cerrado": 4,
+    "desconocido": 5,
+    "contradictorio": 1
+   },
+   "n_negativos": {
+    "acuicultura": 1,
+    "arena_duna_playa": 2,
+    "cantera": 7,
+    "chatarreria_desguace": 3,
+    "cultivo": 6,
+    "estacionamiento_playa": 3,
+    "feedlot": 7,
+    "humedal": 6,
+    "laguna_chica": 6,
+    "obra": 3,
+    "pileta_efluentes": 4,
+    "planta_residuos": 2,
+    "tosquera_arenera": 6,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "119_A_023",
+    "055_D_067"
+   ],
+   "prioridad": 10,
+   "puntaje": 17.0,
+   "n_negativos_a_10ha": 19,
+   "n_gunw_por_track": {
+    "119_A_023": 16,
+    "055_D_067": 9
+   },
+   "cobertura": {
+    "119_A_023": 0.93,
+    "055_D_067": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -84,
+    42
+   ],
+   "n_sitios_10ha": {
+    "abierto": 8,
+    "cerrado": 1
+   }
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "orbita": [
+    61,
+    170
+   ],
+   "ciudad": "Morgantown, Berks, PA (alrededor de Conestoga LF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32618,
+   "bbox": [
+    -76.0123,
+    40.0616,
+    -75.1556,
+    40.9038
+   ],
+   "n_gunw": 21,
+   "fecha_inicio": "2025-10-29",
+   "fecha_fin": "2026-10-16",
+   "n_basurales_10ha": {
+    "abierto": 7,
+    "cerrado": 2,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "cantera": 3,
+    "chatarreria_desguace": 2,
+    "cultivo": 6,
+    "estacionamiento_playa": 3,
+    "feedlot": 3,
+    "humedal": 1,
+    "ladrillera": 1,
+    "laguna_chica": 1,
+    "obra": 4,
+    "pileta_efluentes": 4,
+    "planta_residuos": 3,
+    "tosquera_arenera": 1,
+    "vegetacion_densa": 1
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "170_D_068",
+    "061_A_022"
+   ],
+   "prioridad": 11,
+   "puntaje": 15.0,
+   "n_negativos_a_10ha": 8,
+   "n_gunw_por_track": {
+    "170_D_068": 11,
+    "061_A_022": 10
+   },
+   "cobertura": {
+    "170_D_068": 1.0,
+    "061_A_022": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -76,
+    40
+   ],
+   "n_sitios_10ha": {
+    "abierto": 7,
+    "cerrado": 1
+   }
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "orbita": [
+    62,
+    113
+   ],
+   "ciudad": "Dallas, Dallas, TX (alrededor de McCommas Bluff Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32614,
+   "bbox": [
+    -97.0088,
+    32.0386,
+    -96.3628,
+    33.0105
+   ],
+   "n_gunw": 26,
+   "fecha_inicio": "2025-10-25",
+   "fecha_fin": "2026-10-20",
+   "n_basurales_10ha": {
+    "abierto": 7,
+    "cerrado": 4,
+    "desconocido": 1
+   },
+   "n_negativos": {
+    "cantera": 2,
+    "chatarreria_desguace": 2,
+    "cultivo": 5,
+    "estacionamiento_playa": 4,
+    "feedlot": 5,
+    "humedal": 5,
+    "laguna_chica": 4,
+    "obra": 5,
+    "pileta_efluentes": 2,
+    "planta_residuos": 1,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "113_D_072",
+    "062_A_018"
+   ],
+   "prioridad": 12,
+   "puntaje": 14.0,
+   "n_negativos_a_10ha": 10,
+   "n_gunw_por_track": {
+    "113_D_072": 15,
+    "062_A_018": 11
+   },
+   "cobertura": {
+    "113_D_072": 0.96,
+    "062_A_018": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -97,
+    32
+   ],
+   "n_sitios_10ha": {
+    "abierto": 7,
+    "cerrado": 0
+   }
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "orbita": [
+    26,
+    90
+   ],
+   "ciudad": "Monroeville, Allegheny, PA (alrededor de Monroeville LF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -80.0551,
+    40.082,
+    -79.0689,
+    40.5417
+   ],
+   "n_gunw": 18,
+   "fecha_inicio": "2025-11-04",
+   "fecha_fin": "2026-10-18",
+   "n_basurales_10ha": {
+    "abierto": 7,
+    "cerrado": 0,
+    "desconocido": 2
+   },
+   "n_negativos": {
+    "cantera": 3,
+    "chatarreria_desguace": 2,
+    "cultivo": 1,
+    "estacionamiento_playa": 2,
+    "feedlot": 1,
+    "humedal": 4,
+    "laguna_chica": 3,
+    "obra": 10,
+    "puerto_playa_contenedores": 1,
+    "vegetacion_densa": 1
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "090_A_022",
+    "026_D_068"
+   ],
+   "prioridad": 13,
+   "puntaje": 14.0,
+   "n_negativos_a_10ha": 8,
+   "n_gunw_por_track": {
+    "090_A_022": 10,
+    "026_D_068": 8
+   },
+   "cobertura": {
+    "090_A_022": 1.0,
+    "026_D_068": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -80,
+    40
+   ],
+   "n_sitios_10ha": {
+    "abierto": 7,
+    "cerrado": 0
+   }
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "orbita": [
+    12,
+    62
+   ],
+   "ciudad": "Humble, Harris, TX (alrededor de Atascocita RDF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32615,
+   "bbox": [
+    -95.7759,
+    29.3347,
+    -95.0043,
+    30.011
+   ],
+   "n_gunw": 41,
+   "fecha_inicio": "2025-10-30",
+   "fecha_fin": "2026-10-16",
+   "n_basurales_10ha": {
+    "abierto": 6,
+    "cerrado": 1,
+    "desconocido": 13,
+    "contradictorio": 1
+   },
+   "n_negativos": {
+    "cantera": 3,
+    "chatarreria_desguace": 2,
+    "cultivo": 3,
+    "estacionamiento_playa": 4,
+    "feedlot": 4,
+    "humedal": 1,
+    "laguna_chica": 1,
+    "obra": 3,
+    "pileta_efluentes": 5,
+    "planta_residuos": 1,
+    "puerto_playa_contenedores": 1,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "062_A_016",
+    "012_D_074"
+   ],
+   "prioridad": 14,
+   "puntaje": 12.0,
+   "n_negativos_a_10ha": 7,
+   "n_gunw_por_track": {
+    "062_A_016": 28,
+    "012_D_074": 13
+   },
+   "cobertura": {
+    "062_A_016": 0.9,
+    "012_D_074": 0.94
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -96,
+    29
+   ],
+   "n_sitios_10ha": {
+    "abierto": 6,
+    "cerrado": 0
+   }
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "orbita": [
+    13,
+    106
+   ],
+   "ciudad": "Rialto, San Bernardino, CA (alrededor de Mid-Valley Sanitary LF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32611,
+   "bbox": [
+    -117.4863,
+    33.9553,
+    -116.9601,
+    34.8865
+   ],
+   "n_gunw": 46,
+   "fecha_inicio": "2025-11-23",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 5,
+    "cerrado": 6,
+    "desconocido": 3
+   },
+   "n_negativos": {
+    "acuicultura": 1,
+    "arena_duna_playa": 1,
+    "cantera": 3,
+    "cultivo": 1,
+    "escombrera_acopio": 1,
+    "estacionamiento_playa": 4,
+    "feedlot": 2,
+    "humedal": 3,
+    "laguna_chica": 3,
+    "obra": 2,
+    "pileta_efluentes": 2,
+    "tosquera_arenera": 5,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "013_D_071",
+    "106_A_019"
+   ],
+   "prioridad": 15,
+   "puntaje": 13.0,
+   "n_negativos_a_10ha": 12,
+   "n_gunw_por_track": {
+    "013_D_071": 24,
+    "106_A_019": 22
+   },
+   "cobertura": {
+    "013_D_071": 1.0,
+    "106_A_019": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -118,
+    34
+   ],
+   "n_sitios_10ha": {
+    "abierto": 5,
+    "cerrado": 3
+   }
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "orbita": [
+    42,
+    135
+   ],
+   "ciudad": "Manteca, San Joaquin, CA (alrededor de Forward Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32610,
+   "bbox": [
+    -122.0562,
+    37.136,
+    -121.1262,
+    37.9287
+   ],
+   "n_gunw": 54,
+   "fecha_inicio": "2025-11-01",
+   "fecha_fin": "2026-10-21",
+   "n_basurales_10ha": {
+    "abierto": 7,
+    "cerrado": 5,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "arena_duna_playa": 2,
+    "cantera": 6,
+    "chatarreria_desguace": 3,
+    "cultivo": 3,
+    "estacionamiento_playa": 4,
+    "feedlot": 8,
+    "humedal": 4,
+    "laguna_chica": 7,
+    "obra": 5,
+    "pileta_efluentes": 3,
+    "planta_residuos": 2,
+    "salina": 3,
+    "tosquera_arenera": 2,
+    "vegetacion_densa": 1
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "042_D_070",
+    "135_A_020"
+   ],
+   "prioridad": 16,
+   "puntaje": 12.0,
+   "n_negativos_a_10ha": 15,
+   "n_gunw_por_track": {
+    "042_D_070": 27,
+    "135_A_020": 27
+   },
+   "cobertura": {
+    "042_D_070": 0.92,
+    "135_A_020": 0.76
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -122,
+    37
+   ],
+   "n_sitios_10ha": {
+    "abierto": 5,
+    "cerrado": 2
+   }
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "orbita": [
+    56,
+    77
+   ],
+   "ciudad": "Surprise, Maricopa, AZ (alrededor de Northwest Regional MSW Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32612,
+   "bbox": [
+    -112.7257,
+    33.0277,
+    -112.0636,
+    33.7689
+   ],
+   "n_gunw": 20,
+   "fecha_inicio": "2025-11-03",
+   "fecha_fin": "2026-10-17",
+   "n_basurales_10ha": {
+    "abierto": 5,
+    "cerrado": 4,
+    "desconocido": 2
+   },
+   "n_negativos": {
+    "arena_duna_playa": 1,
+    "cantera": 4,
+    "chatarreria_desguace": 2,
+    "cultivo": 3,
+    "estacionamiento_playa": 3,
+    "feedlot": 2,
+    "humedal": 6,
+    "laguna_chica": 5,
+    "obra": 5,
+    "pileta_efluentes": 4,
+    "planta_residuos": 1,
+    "salina": 2,
+    "tosquera_arenera": 2,
+    "vegetacion_densa": 1
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "077_A_018",
+    "056_D_072"
+   ],
+   "prioridad": 17,
+   "puntaje": 12.0,
+   "n_negativos_a_10ha": 19,
+   "n_gunw_por_track": {
+    "077_A_018": 12,
+    "056_D_072": 8
+   },
+   "cobertura": {
+    "077_A_018": 0.83,
+    "056_D_072": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -113,
+    33
+   ],
+   "n_sitios_10ha": {
+    "abierto": 5,
+    "cerrado": 2
+   }
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "orbita": [
+    18,
+    26
+   ],
+   "ciudad": "Salem, Mahoning, OH (alrededor de CLD Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -80.9807,
+    40.0977,
+    -80.1075,
+    40.9988
+   ],
+   "n_gunw": 22,
+   "fecha_inicio": "2025-10-30",
+   "fecha_fin": "2026-10-14",
+   "n_basurales_10ha": {
+    "abierto": 7,
+    "cerrado": 3,
+    "desconocido": 5
+   },
+   "n_negativos": {
+    "arena_duna_playa": 1,
+    "cantera": 4,
+    "chatarreria_desguace": 2,
+    "cultivo": 6,
+    "estacionamiento_playa": 1,
+    "feedlot": 6,
+    "humedal": 5,
+    "laguna_chica": 5,
+    "obra": 1,
+    "pileta_efluentes": 2,
+    "puerto_playa_contenedores": 1,
+    "tosquera_arenera": 3,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "018_A_022",
+    "026_D_068"
+   ],
+   "prioridad": 18,
+   "puntaje": 11.0,
+   "n_negativos_a_10ha": 12,
+   "n_gunw_por_track": {
+    "018_A_022": 14,
+    "026_D_068": 8
+   },
+   "cobertura": {
+    "018_A_022": 0.91,
+    "026_D_068": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -81,
+    40
+   ],
+   "n_sitios_10ha": {
+    "abierto": 5,
+    "cerrado": 1
+   }
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "orbita": [
+    162,
+    170
+   ],
+   "ciudad": "Frederick, Frederick, MD (alrededor de Reich's Ford Road SLF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32618,
+   "bbox": [
+    -77.8817,
+    38.9864,
+    -77.2808,
+    40.0168
+   ],
+   "n_gunw": 19,
+   "fecha_inicio": "2025-10-28",
+   "fecha_fin": "2026-10-11",
+   "n_basurales_10ha": {
+    "abierto": 5,
+    "cerrado": 1,
+    "desconocido": 1
+   },
+   "n_negativos": {
+    "cantera": 5,
+    "cultivo": 3,
+    "estacionamiento_playa": 3,
+    "feedlot": 5,
+    "humedal": 3,
+    "laguna_chica": 4,
+    "obra": 5,
+    "pileta_efluentes": 3,
+    "tosquera_arenera": 3,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "162_A_022",
+    "170_D_069"
+   ],
+   "prioridad": 19,
+   "puntaje": 11.0,
+   "n_negativos_a_10ha": 14,
+   "n_gunw_por_track": {
+    "162_A_022": 13,
+    "170_D_069": 6
+   },
+   "cobertura": {
+    "162_A_022": 0.79,
+    "170_D_069": 0.83
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -78,
+    39
+   ],
+   "n_sitios_10ha": {
+    "abierto": 5,
+    "cerrado": 1
+   }
+  },
+  {
+   "frame": "USA_GA_FORSYTH",
+   "orbita": [
+    127,
+    148
+   ],
+   "ciudad": "Ball Ground, Forsyth, GA (alrededor de Eagle Point Landfill LLC)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32616,
+   "bbox": [
+    -84.9975,
+    34.0911,
+    -84.1788,
+    34.7284
+   ],
+   "n_gunw": 27,
+   "fecha_inicio": "2025-10-26",
+   "fecha_fin": "2026-10-21",
+   "n_basurales_10ha": {
+    "abierto": 6,
+    "cerrado": 0,
+    "desconocido": 1
+   },
+   "n_negativos": {
+    "cantera": 5,
+    "chatarreria_desguace": 2,
+    "cultivo": 4,
+    "feedlot": 6,
+    "humedal": 2,
+    "ladrillera": 1,
+    "laguna_chica": 4,
+    "obra": 4,
+    "pileta_efluentes": 2,
+    "planta_residuos": 1,
+    "tosquera_arenera": 2,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "148_A_019",
+    "127_D_071"
+   ],
+   "prioridad": 20,
+   "puntaje": 10.0,
+   "n_negativos_a_10ha": 11,
+   "n_gunw_por_track": {
+    "148_A_019": 15,
+    "127_D_071": 12
+   },
+   "cobertura": {
+    "148_A_019": 1.0,
+    "127_D_071": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -85,
+    34
+   ],
+   "n_sitios_10ha": {
+    "abierto": 5,
+    "cerrado": 0
+   }
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "orbita": [
+    47,
+    119
+   ],
+   "ciudad": "Cincinnati, Hamilton, OH (alrededor de Rumpke SLF, Inc.)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32616,
+   "bbox": [
+    -84.8968,
+    39.1368,
+    -84.0994,
+    39.9056
+   ],
+   "n_gunw": 21,
+   "fecha_inicio": "2025-11-06",
+   "fecha_fin": "2026-10-20",
+   "n_basurales_10ha": {
+    "abierto": 5,
+    "cerrado": 7,
+    "desconocido": 6
+   },
+   "n_negativos": {
+    "cantera": 2,
+    "chatarreria_desguace": 2,
+    "cultivo": 4,
+    "estacionamiento_playa": 1,
+    "feedlot": 5,
+    "humedal": 1,
+    "laguna_chica": 6,
+    "obra": 5,
+    "planta_residuos": 2,
+    "tosquera_arenera": 3,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "119_A_022",
+    "047_A_021"
+   ],
+   "prioridad": 21,
+   "puntaje": 14.0,
+   "n_negativos_a_10ha": 12,
+   "n_gunw_por_track": {
+    "119_A_022": 12,
+    "047_A_021": 9
+   },
+   "cobertura": {
+    "119_A_022": 0.77,
+    "047_A_021": 0.92
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -85,
+    39
+   ],
+   "n_sitios_10ha": {
+    "abierto": 4,
+    "cerrado": 6
+   }
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "orbita": [
+    4,
+    12
+   ],
+   "ciudad": "East St. Louis, St. Clair, IL (alrededor de Milam Recycling and Disposal Facility)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32615,
+   "bbox": [
+    -90.985,
+    38.1241,
+    -89.953,
+    38.8757
+   ],
+   "n_gunw": 26,
+   "fecha_inicio": "2025-10-29",
+   "fecha_fin": "2026-10-13",
+   "n_basurales_10ha": {
+    "abierto": 4,
+    "cerrado": 8,
+    "desconocido": 3
+   },
+   "n_negativos": {
+    "arena_duna_playa": 1,
+    "cantera": 5,
+    "chatarreria_desguace": 2,
+    "cultivo": 8,
+    "estacionamiento_playa": 2,
+    "feedlot": 4,
+    "humedal": 5,
+    "laguna_chica": 7,
+    "obra": 8,
+    "pileta_efluentes": 5,
+    "planta_residuos": 2,
+    "puerto_playa_contenedores": 3,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "012_D_069",
+    "004_A_021"
+   ],
+   "prioridad": 22,
+   "puntaje": 11.0,
+   "n_negativos_a_10ha": 15,
+   "n_gunw_por_track": {
+    "012_D_069": 13,
+    "004_A_021": 13
+   },
+   "cobertura": {
+    "012_D_069": 1.0,
+    "004_A_021": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -91,
+    38
+   ],
+   "n_sitios_10ha": {
+    "abierto": 4,
+    "cerrado": 3
+   }
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "orbita": [
+    47,
+    98
+   ],
+   "ciudad": "St. Cloud, Osceola, FL (alrededor de J.E.D. Solid Waste Management Facility)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -81.9038,
+    27.9739,
+    -81.02,
+    28.8455
+   ],
+   "n_gunw": 53,
+   "fecha_inicio": "2025-10-24",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 4,
+    "cerrado": 3,
+    "desconocido": 6
+   },
+   "n_negativos": {
+    "acuicultura": 2,
+    "arena_duna_playa": 3,
+    "cantera": 6,
+    "chatarreria_desguace": 2,
+    "cultivo": 4,
+    "estacionamiento_playa": 4,
+    "feedlot": 4,
+    "humedal": 3,
+    "laguna_chica": 5,
+    "obra": 8,
+    "pileta_efluentes": 6,
+    "planta_residuos": 2,
+    "tosquera_arenera": 4,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "098_D_074",
+    "047_A_016"
+   ],
+   "prioridad": 23,
+   "puntaje": 11.0,
+   "n_negativos_a_10ha": 12,
+   "n_gunw_por_track": {
+    "098_D_074": 27,
+    "047_A_016": 26
+   },
+   "cobertura": {
+    "098_D_074": 0.91,
+    "047_A_016": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -82,
+    28
+   ],
+   "n_sitios_10ha": {
+    "abierto": 4,
+    "cerrado": 3
+   }
+  },
+  {
+   "frame": "USA_VA_ROCKINGHAM",
+   "orbita": [
+    90,
+    98
+   ],
+   "ciudad": "Harrisonburg, Rockingham, VA (alrededor de Rockingham County Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -78.9536,
+    37.9745,
+    -77.9722,
+    38.8934
+   ],
+   "n_gunw": 25,
+   "fecha_inicio": "2025-10-24",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 4,
+    "cerrado": 1,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "cantera": 3,
+    "chatarreria_desguace": 2,
+    "cultivo": 5,
+    "estacionamiento_playa": 4,
+    "feedlot": 2,
+    "humedal": 6,
+    "laguna_chica": 6,
+    "obra": 7,
+    "pileta_efluentes": 2,
+    "planta_residuos": 1,
+    "tosquera_arenera": 1,
+    "vegetacion_densa": 4
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "098_D_069",
+    "090_A_021"
+   ],
+   "prioridad": 24,
+   "puntaje": 9.0,
+   "n_negativos_a_10ha": 13,
+   "n_gunw_por_track": {
+    "098_D_069": 15,
+    "090_A_021": 10
+   },
+   "cobertura": {
+    "098_D_069": 1.0,
+    "090_A_021": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -79,
+    38
+   ],
+   "n_sitios_10ha": {
+    "abierto": 4,
+    "cerrado": 1
+   }
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "orbita": [
+    34,
+    114
+   ],
+   "ciudad": "Visalia, Tulare, CA (alrededor de Visalia Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32611,
+   "bbox": [
+    -120.0038,
+    35.9687,
+    -119.0421,
+    36.9906
+   ],
+   "n_gunw": 48,
+   "fecha_inicio": "2025-11-24",
+   "fecha_fin": "2026-10-20",
+   "n_basurales_10ha": {
+    "abierto": 3,
+    "cerrado": 9,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "acuicultura": 1,
+    "arena_duna_playa": 3,
+    "cantera": 4,
+    "chatarreria_desguace": 3,
+    "cultivo": 5,
+    "estacionamiento_playa": 3,
+    "feedlot": 6,
+    "humedal": 6,
+    "laguna_chica": 6,
+    "obra": 6,
+    "pileta_efluentes": 6,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "034_A_020",
+    "114_D_070"
+   ],
+   "prioridad": 25,
+   "puntaje": 11.0,
+   "n_negativos_a_10ha": 15,
+   "n_gunw_por_track": {
+    "034_A_020": 26,
+    "114_D_070": 22
+   },
+   "cobertura": {
+    "034_A_020": 1.0,
+    "114_D_070": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -120,
+    36
+   ],
+   "n_sitios_10ha": {
+    "abierto": 3,
+    "cerrado": 5
+   }
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "orbita": [
+    26,
+    119
+   ],
+   "ciudad": "Honea Path, Greenville, SC (alrededor de Twin Chimneys Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -83.0067,
+    34.1536,
+    -82.0108,
+    35.0475
+   ],
+   "n_gunw": 19,
+   "fecha_inicio": "2025-11-06",
+   "fecha_fin": "2026-10-20",
+   "n_basurales_10ha": {
+    "abierto": 4,
+    "cerrado": 7,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "arena_duna_playa": 1,
+    "cantera": 4,
+    "chatarreria_desguace": 2,
+    "cultivo": 8,
+    "estacionamiento_playa": 3,
+    "feedlot": 8,
+    "humedal": 6,
+    "laguna_chica": 5,
+    "obra": 7,
+    "pileta_efluentes": 3,
+    "puerto_playa_contenedores": 1,
+    "tosquera_arenera": 2,
+    "vegetacion_densa": 4
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "119_A_019",
+    "026_D_071"
+   ],
+   "prioridad": 26,
+   "puntaje": 10.0,
+   "n_negativos_a_10ha": 21,
+   "n_gunw_por_track": {
+    "119_A_019": 12,
+    "026_D_071": 7
+   },
+   "cobertura": {
+    "119_A_019": 0.84,
+    "026_D_071": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -83,
+    34
+   ],
+   "n_sitios_10ha": {
+    "abierto": 3,
+    "cerrado": 4
+   }
+  },
+  {
+   "frame": "USA_CA_LOS_ANGELES",
+   "orbita": [
+    13,
+    34
+   ],
+   "ciudad": "Palmdale, Los Angeles, CA (alrededor de Antelope Valley Recycling and Disposal Facility)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32611,
+   "bbox": [
+    -118.9463,
+    34.5207,
+    -118.0585,
+    35.0408
+   ],
+   "n_gunw": 50,
+   "fecha_inicio": "2025-11-23",
+   "fecha_fin": "2026-10-14",
+   "n_basurales_10ha": {
+    "abierto": 3,
+    "cerrado": 1,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "arena_duna_playa": 1,
+    "cantera": 3,
+    "chatarreria_desguace": 1,
+    "cultivo": 3,
+    "estacionamiento_playa": 1,
+    "feedlot": 6,
+    "humedal": 2,
+    "laguna_chica": 3,
+    "obra": 2,
+    "vegetacion_densa": 1
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "034_A_019",
+    "013_D_071"
+   ],
+   "prioridad": 27,
+   "puntaje": 7.0,
+   "n_negativos_a_10ha": 10,
+   "n_gunw_por_track": {
+    "034_A_019": 26,
+    "013_D_071": 24
+   },
+   "cobertura": {
+    "034_A_019": 1.0,
+    "013_D_071": 1.0
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -119,
+    34
+   ],
+   "n_sitios_10ha": {
+    "abierto": 3,
+    "cerrado": 1
+   }
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "orbita": [
+    34,
+    85
+   ],
+   "ciudad": "Corona, Riverside, CA (alrededor de El Sobrante SLF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32611,
+   "bbox": [
+    -117.5928,
+    33.0412,
+    -117.0465,
+    33.9119
+   ],
+   "n_gunw": 53,
+   "fecha_inicio": "2025-10-23",
+   "fecha_fin": "2026-10-18",
+   "n_basurales_10ha": {
+    "abierto": 2,
+    "cerrado": 6,
+    "desconocido": 1
+   },
+   "n_negativos": {
+    "acuicultura": 1,
+    "arena_duna_playa": 1,
+    "cantera": 6,
+    "cultivo": 4,
+    "estacionamiento_playa": 1,
+    "feedlot": 3,
+    "humedal": 4,
+    "laguna_chica": 3,
+    "obra": 2,
+    "pileta_efluentes": 5,
+    "planta_residuos": 1,
+    "tosquera_arenera": 1,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "085_D_072",
+    "034_A_018"
+   ],
+   "prioridad": 28,
+   "puntaje": 8.0,
+   "n_negativos_a_10ha": 15,
+   "n_gunw_por_track": {
+    "085_D_072": 27,
+    "034_A_018": 26
+   },
+   "cobertura": {
+    "085_D_072": 0.78,
+    "034_A_018": 0.91
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -118,
+    33
+   ],
+   "n_sitios_10ha": {
+    "abierto": 2,
+    "cerrado": 4
+   }
+  },
+  {
+   "frame": "USA_IN_FULTON",
+   "orbita": [
+    156
+   ],
+   "ciudad": "Argos, Fulton, IN (alrededor de County Line LF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32616,
+   "bbox": [
+    -86.9732,
+    41.1125,
+    -85.9441,
+    41.8583
+   ],
+   "n_gunw": 15,
+   "fecha_inicio": "2025-10-28",
+   "fecha_fin": "2026-10-11",
+   "n_basurales_10ha": {
+    "abierto": 2,
+    "cerrado": 2,
+    "desconocido": 1,
+    "contradictorio": 1
+   },
+   "n_negativos": {
+    "arena_duna_playa": 1,
+    "cantera": 3,
+    "chatarreria_desguace": 1,
+    "cultivo": 6,
+    "estacionamiento_playa": 3,
+    "feedlot": 6,
+    "humedal": 4,
+    "laguna_chica": 3,
+    "obra": 4,
+    "pileta_efluentes": 4,
+    "tosquera_arenera": 2,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "156_D_068"
+   ],
+   "prioridad": 29,
+   "puntaje": 6.0,
+   "n_negativos_a_10ha": 16,
+   "n_gunw_por_track": {
+    "156_D_068": 15
+   },
+   "cobertura": {
+    "156_D_068": 0.84
+   },
+   "criterio": "abiertos",
+   "celda": [
+    -87,
+    41
+   ],
+   "n_sitios_10ha": {
+    "abierto": 2,
+    "cerrado": 2
    }
   }
  ]
