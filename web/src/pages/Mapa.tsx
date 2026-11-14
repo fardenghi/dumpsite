@@ -7,6 +7,7 @@ import { Coherencia } from '../components/Coherencia'
 import { Dot, Kpi, RADAR, REGISTRO, fecha, num, pais, pct, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
+import indice from '../data/seed/indice.json'
 import type { Imagen, Sitio } from '../data/types'
 
 // El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
@@ -143,6 +144,7 @@ export default function Mapa() {
   useEffect(() => {
     if (sitios) precargar(sitios)
   }, [sitios])
+  const [verIndice, setVerIndice] = useState(true)
 
   // el mapa se crea una sola vez
   useEffect(() => {
@@ -190,6 +192,9 @@ export default function Mapa() {
     const deCerca = (desde: number, hasta: number): maplibregl.ExpressionSpecification => ['interpolate', ['linear'], ['zoom'], 9, desde, 10.5, hasta]
     m.addSource('sitios', { type: 'geojson', data: puntos })
     m.addSource('contornos', { type: 'geojson', data: contornos })
+    // índice de insomnio del AMBA: un PNG precalculado (pipeline_insomnio.py indice) con sus cuatro esquinas
+    m.addSource('indice', { type: 'image', url: `${import.meta.env.BASE_URL}${indice.url}`, coordinates: indice.coordinates as [[number, number], [number, number], [number, number], [number, number]] })
+    m.addLayer({ id: 'indice', type: 'raster', source: 'indice', minzoom: 7, paint: { 'raster-opacity': 0.8, 'raster-resampling': 'nearest', 'raster-fade-duration': 0 } })
     m.addLayer({ id: 'contorno-relleno', type: 'fill', source: 'contornos', minzoom: 9, paint: { 'fill-color': COLOR, 'fill-opacity': deCerca(0, 0.08) } })
     m.addLayer({ id: 'contorno-linea', type: 'line', source: 'contornos', minzoom: 9, layout: { 'line-join': 'round' }, paint: { 'line-color': COLOR, 'line-width': 2, 'line-opacity': deCerca(0, 1) } })
     m.addLayer({
@@ -225,6 +230,11 @@ export default function Mapa() {
       m.on('mouseleave', capa, () => (m.getCanvas().style.cursor = ''))
     }
   }, [listo, sitios])
+
+  useEffect(() => {
+    const m = mapa.current
+    if (m && listo && m.getLayer('indice')) m.setLayoutProperty('indice', 'visibility', verIndice ? 'visible' : 'none')
+  }, [listo, sitios, verIndice])
 
   // al elegir un sitio: volar hasta ahí y mostrar su imagen más reciente
   useEffect(() => {
@@ -265,7 +275,7 @@ export default function Mapa() {
     if (tiles) tiles.setTiles([s2(imagen)])
     else {
       m.addSource('escena', { type: 'raster', tiles: [s2(imagen)], tileSize: 512, minzoom: 8, maxzoom: 14 })
-      m.addLayer({ id: 'escena', type: 'raster', source: 'escena', minzoom: 8, paint: { 'raster-fade-duration': 200 } }, antesDe('recorte', 'contorno-relleno'))
+      m.addLayer({ id: 'escena', type: 'raster', source: 'escena', minzoom: 8, paint: { 'raster-fade-duration': 200 } }, antesDe('recorte', 'indice', 'contorno-relleno'))
     }
     if (!sel.caja) return
     const [o, s, e, n] = sel.caja
@@ -274,7 +284,7 @@ export default function Mapa() {
     if (guardado) guardado.updateImage(recorte)
     else {
       m.addSource('recorte', { type: 'image', ...recorte })
-      m.addLayer({ id: 'recorte', type: 'raster', source: 'recorte', paint: { 'raster-fade-duration': 0 } }, antesDe('contorno-relleno'))
+      m.addLayer({ id: 'recorte', type: 'raster', source: 'recorte', paint: { 'raster-fade-duration': 0 } }, antesDe('indice', 'contorno-relleno'))
     }
   }, [listo, imagen, sel])
 
@@ -296,7 +306,7 @@ export default function Mapa() {
         if (!vivo || mapa.current !== m) return
         token = t
         m.addSource('google', { type: 'raster', tiles: [tilesGoogle(t)], tileSize: 256, bounds: limites, minzoom: ZOOM_GOOGLE, maxzoom: 20 })
-        m.addLayer({ id: 'google', type: 'raster', source: 'google', minzoom: ZOOM_GOOGLE, paint: { 'raster-fade-duration': 200 } }, m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined)
+        m.addLayer({ id: 'google', type: 'raster', source: 'google', minzoom: ZOOM_GOOGLE, paint: { 'raster-fade-duration': 200 } }, m.getLayer('indice') ? 'indice' : m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined)
         m.on('moveend', acreditar)
         acreditar()
       },
@@ -354,6 +364,15 @@ export default function Mapa() {
             Ver todo
           </button>
         )}
+        <button
+          className="btn"
+          style={{ borderColor: 'transparent', boxShadow: 'var(--shadow)', opacity: verIndice ? 1 : 0.6 }}
+          onClick={() => setVerIndice((v) => !v)}
+          aria-pressed={verIndice}
+          title={`${indice.que}. ${indice.pares} pares de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}`}
+        >
+          Índice de insomnio: {verIndice ? 'sí' : 'no'}
+        </button>
       </div>
       <div className="map-legend">
         {(['despierto', 'quieto', 'no_alcanza'] as const).map((r) => (
@@ -369,7 +388,7 @@ export default function Mapa() {
             <b className="google">Google</b> {credito} ·{' '}
           </>
         )}
-        Imágenes:{' '}
+        Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap · Imágenes:{' '}
         <a href="https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api" target="_blank" rel="noreferrer">
           NASA GIBS
         </a>{' '}
