@@ -17,7 +17,20 @@ npm run build    # sitio estático en dist/
 | `#/modelo` | Cómo decide el modelo, con qué se entrenó y qué no ve. Las métricas están vacías hasta que exista la validación |
 
 ## Datos
-**Hoy son de ejemplo.** `src/data/seed/sitios.json` tiene 17 sitios: las coordenadas del AMBA y la coherencia del último par salen de la prueba con un GUNW real; el resto de las series, las superficies y los sitios de otros países están puestos a mano para armar la interfaz, con coordenadas aproximadas. La barra lateral lo avisa con "datos de ejemplo".
+**Son reales y están precalculados.** Los escribe el pipeline del índice de insomnio y no se editan a mano:
+
+```bash
+python ../idea-basurales-nisar/herramientas/pipeline_insomnio.py indice
+```
+
+| Archivo | Qué tiene |
+|---|---|
+| `src/data/seed/sitios.json` | 12 sitios del AMBA con la forma exacta de `Sitio[]` (`src/data/types.ts`): insomnio respecto del anillo de 1,5 km, veredicto del radar, 15 pares de NISAR (las dos órbitas, ordenados por fecha), registro con fuente y contorno de OpenStreetMap |
+| `src/data/seed/fichas.json` | Por sitio, lo que no entra en `Sitio`: motivo del veredicto, persistencia, insomnio por órbita, órbita de cada par, eco, objetos de OSM y fuentes del registro. La web todavía no lo muestra |
+| `src/data/seed/candidatos.json` | Las 219 manchas candidatas con centro, superficie y clase (`relleno_osm`, `uso_conocido`, `sin_explicar`). La web todavía no las muestra. Las "sin explicar" no están verificadas: hablar de "señal compatible con actividad" |
+| `public/indice/insomnio-amba.png` + `src/data/seed/indice.json` | El índice del AMBA como PNG (norte arriba, regular en Web Mercator) y sus límites: `oeste`, `sur`, `este`, `norte` y `coordinates`, las cuatro esquinas en el orden que pide una fuente `image` de MapLibre. `Mapa.tsx` lo carga así y el botón "Índice de insomnio" lo prende y lo apaga |
+
+Los sitios de otros países que tenía el seed se sacaron: no tienen NISAR procesado. `scripts/contornos.py` quedó sin uso (los contornos los escribe el pipeline). Cómo se calcula cada número: `../idea-basurales-nisar/idea/indice-final.md`.
 
 Toda la web lee los datos por `src/data/api.ts`. Para conectar un backend alcanza con definir `VITE_API_URL` (ver `.env.example`) y que responda `GET /sitios` con la forma de `Sitio` en `src/data/types.ts`.
 
@@ -35,7 +48,7 @@ Sin claves ni cuentas:
 - Google exige mostrar su nombre y el copyright de la zona; el mapa lo hace abajo a la derecha. Probado el 14/11 con una clave real.
 
 ## Contornos de los predios
-`python3 scripts/contornos.py` baja de OpenStreetMap el polígono `landuse=landfill` de cada sitio y lo guarda en `src/data/seed/contornos.json`. Hoy 14 de los 17 sitios tienen contorno real. Quedan con un aro: la mancha al oeste de Luján (no es un predio registrado), Bordo Poniente y Payatas (OpenStreetMap no los tiene como relleno). **Pendiente:** un modelo que delimite el borde donde no hay polígono.
+Los contornos salen del pipeline del índice (polígonos `landuse=landfill` de OpenStreetMap, bajados por `fuentes_fijas.py`): 11 de los 12 sitios tienen contorno real. Queda con un aro la mancha al oeste de Luján, que no es un predio registrado. `scripts/contornos.py` sirve para sitios nuevos fuera del AMBA, pero ya no escribe los de este seed.
 
 ## Caché del mapa
 `public/sw.js` guarda los tiles de Blue Marble y de Sentinel-2 la primera vez que se piden y después los sirve sin red. Además, al cargar la web se precarga la imagen Sentinel-2 más reciente de cada basural, que es lo que se recorre siempre. Los tiles de Google quedan afuera: sus términos no permiten guardarlos ni precargarlos, sólo el caché normal del navegador.
@@ -43,7 +56,8 @@ Sin claves ni cuentas:
 `python3 scripts/s2_fechas.py` consulta el catálogo STAC y guarda en `src/data/seed/imagenes.json` hasta 8 escenas con menos de 10 % de nubes por sitio. No tiene dependencias.
 
 ## Fuentes y licencias
-- NISAR (NASA/ISRO), vía ASF DAAC.
+- NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC.
+- JRC Global Surface Water v1.4 (Pekel et al., 2016, Nature 540), para la máscara de agua.
 - Blue Marble (NASA), vía GIBS.
 - Sentinel-2 (ESA Copernicus), vía Microsoft Planetary Computer.
 - OpenStreetMap, ODbL.
