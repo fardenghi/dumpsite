@@ -11,5 +11,29 @@
   "manchas_que_pasan_el_criterio": 8,
   "con_basurales": 5,
   "con_negativos": 3
+ },
+ "optico": {
+  "manchas_sha1": "2d14b92ec8514c5cd53f67c34fd0e16a37bc6bff",
+  "archivos": [
+   "tabla_optico.parquet",
+   "tabla_optico_catalogo.parquet"
+  ],
+  "desde": "2025-10-21",
+  "hasta": "2026-10-21",
+  "max_nube": 20.0,
+  "escenas": 118,
+  "fechas_disponibles": 61,
+  "segundos": 105,
+  "fuente": "Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer",
+  "tabla_optico": {
+   "filas": 274,
+   "con_escenas": 274,
+   "escenas_mediana": 8.0
+  },
+  "tabla_optico_catalogo": {
+   "filas": 90,
+   "con_escenas": 90,
+   "escenas_mediana": 8.0
+  }
  }
 }
