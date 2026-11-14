@@ -171,7 +171,7 @@ CONTRATOS = {c.nombre: c for c in (
         (_ID_MANCHA, _FRAME) + MOVIMIENTO + RUGOSIDAD + FORMA + CONTEXTO,
     ),
     Contrato(
-        "insomnio_catalogo", "salidas/insomnio_catalogo.parquet", "etapa 4 (la lógica, el prompt 5)", "etapas 8 y 9",
+        "insomnio_catalogo", "salidas/insomnio_catalogo.parquet", "etapa 4 (la lógica, el prompt 2)", "etapas 8 y 9",
         "un polígono del catálogo (basural o negativo) en un frame, esté o no en una mancha", ("id_catalogo", "frame"),
         (
             _ID_CATALOGO, _CATALOGO,
