@@ -243,8 +243,13 @@ def resumir(medidas):
     }
 
 
-def escenas_para(caja, escenas, max_fechas):
-    """Una escena por fecha (la que más cubre la celda), hasta `max_fechas` fechas de menos nubes, en orden."""
+def escenas_para(caja, escenas, max_fechas, periodo=None):
+    """Una escena por fecha (la que más cubre la celda), hasta `max_fechas` fechas, en orden.
+
+    Sin `periodo`, las `max_fechas` fechas de menos nubes. Con `periodo` = (desde, hasta), las fechas se **reparten**:
+    el período se parte en `max_fechas` tramos iguales y de cada tramo sale la fecha de menos nubes; los tramos sin
+    escenas se completan con las de menos nubes que queden. Así una serie de un año no queda toda en el verano.
+    """
     b = box(*caja)
     por_fecha = {}
     for e in escenas:
@@ -254,11 +259,23 @@ def escenas_para(caja, escenas, max_fechas):
         actual = por_fecha.get(e["fecha"])
         if actual is None or (cubre, -e["nube"]) > (actual[0], -actual[1]["nube"]):
             por_fecha[e["fecha"]] = (cubre, e)
-    elegidas = sorted(por_fecha.values(), key=lambda x: x[1]["nube"])[:max_fechas]
-    return sorted([e for _, e in elegidas], key=lambda e: e["fecha"])
+    candidatas = sorted((e for _, e in por_fecha.values()), key=lambda e: (e["nube"], e["fecha"]))
+    if periodo is None:
+        elegidas = candidatas[:max_fechas]
+    else:
+        d0, d1 = (np.datetime64(x, "D") for x in periodo)
+        largo = max(int((d1 - d0) / np.timedelta64(1, "D")) + 1, 1)
+        elegidas, usados = [], set()
+        for e in candidatas:  # de menos a más nubes: la primera de cada tramo es la mejor
+            tramo = min(max(int((np.datetime64(e["fecha"], "D") - d0) / np.timedelta64(1, "D")) * max_fechas // largo, 0), max_fechas - 1)
+            if tramo not in usados:
+                usados.add(tramo)
+                elegidas.append(e)
+        elegidas += [e for e in candidatas if e not in elegidas][:max_fechas - len(elegidas)]
+    return sorted(elegidas, key=lambda e: e["fecha"])
 
 
-def extraer(objetivos, escenas, excluir_deg, hilos=16, min_valido=0.6, max_fechas=10, cache=None, avisar=print):
+def extraer(objetivos, escenas, excluir_deg, hilos=16, min_valido=0.6, max_fechas=10, cache=None, avisar=print, periodo=None):
     firma = Firma()
     excl_cache, lock = {}, threading.Lock()
 
@@ -271,7 +288,7 @@ def extraer(objetivos, escenas, excluir_deg, hilos=16, min_valido=0.6, max_fecha
             return excl_cache[epsg]
 
     grupos = celdas(objetivos)
-    tareas = [(idx, escenas_para(caja_celda(objetivos, idx), escenas, max_fechas)) for idx in grupos]
+    tareas = [(idx, escenas_para(caja_celda(objetivos, idx), escenas, max_fechas, periodo)) for idx in grupos]
     avisar(f"{len(objetivos)} geometrías en {len(grupos)} celdas; {sum(len(e) for _, e in tareas)} ventanas de escena a leer")
     medidas = defaultdict(list)
     t0 = time.time()
