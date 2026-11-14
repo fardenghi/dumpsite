@@ -1,0 +1,1967 @@
+{
+ "norte-iii": {
+  "px": 413,
+  "px_anillo": 2465,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.46,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.2,
+    "anillo": 0.35,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.25,
+    "anillo": 0.53,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.54,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.37,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.4,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.37,
+    "anillo": 0.54,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.26,
+    "anillo": 0.39,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.36,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.32,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.39,
+    "anillo": 0.4,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.86,
+  "persistencia": 0.6,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 0.71
+  },
+  "eco_db": -9.9,
+  "radar": "despierto",
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "cubierto_por_manchas": 0.19,
+  "agua": 0.01
+ },
+ "gonzalez-catan": {
+  "px": 243,
+  "px_anillo": 2138,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.4,
+    "anillo": 0.67,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.31,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.49,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.31,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.34,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.35,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.3,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.32,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.52,
+    "anillo": 0.7,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.27,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.44,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.44,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.56,
+    "despierto": true
+   }
+  ],
+  "insomnio": 1.0,
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -11.6,
+  "radar": "despierto",
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "cubierto_por_manchas": 0.58,
+  "agua": 0.02
+ },
+ "lujan": {
+  "px": 44,
+  "px_anillo": 1785,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.79,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.68,
+    "anillo": 0.65,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.59,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.75,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.75,
+    "anillo": 0.7,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.71,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.54,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.73,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.78,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.64,
+    "anillo": 0.52,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.44,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.77,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.7,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.45,
+    "anillo": 0.4,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.68,
+    "anillo": 0.56,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.0,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.0
+  },
+  "eco_db": -7.5,
+  "radar": "quieto",
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.38
+ },
+ "lujan-oeste": {
+  "px": 9,
+  "px_anillo": 1546,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.55,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.61,
+    "anillo": 0.7,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.71,
+    "anillo": 0.69,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.52,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.51,
+    "anillo": 0.52,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.52,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.67,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.34,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.36,
+    "anillo": 0.42,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.66,
+    "anillo": 0.67,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.59,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.29,
+    "anillo": 0.4,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.42,
+    "anillo": 0.58,
+    "despierto": true
+   }
+  ],
+  "insomnio": 0.21,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.43
+  },
+  "eco_db": -15.5,
+  "radar": "no_alcanza",
+  "motivo": "superficie lisa (eco -15.5 dB): la coherencia baja no distingue cambio de falta de señal",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.82
+ },
+ "norte-iii-disposicion": {
+  "px": 111,
+  "px_anillo": 1769,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.34,
+    "anillo": 0.67,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.19,
+    "anillo": 0.47,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.6,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.6,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.23,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.28,
+    "anillo": 0.6,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.24,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.38,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.23,
+    "anillo": 0.43,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.5,
+    "despierto": true
+   }
+  ],
+  "insomnio": 1.0,
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -8.9,
+  "radar": "despierto",
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "cubierto_por_manchas": 0.9,
+  "agua": 0.01
+ },
+ "ceamse-norte-oeste": {
+  "px": 231,
+  "px_anillo": 2208,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.17,
+    "anillo": 0.37,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.28,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.25,
+    "anillo": 0.37,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.34,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.16,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.33,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.29,
+    "anillo": 0.31,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.4,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.86,
+  "persistencia": 0.6,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 0.71
+  },
+  "eco_db": -9.6,
+  "radar": "despierto",
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "cubierto_por_manchas": 0.48,
+  "agua": 0.0
+ },
+ "ceamse-norte-este": {
+  "px": 101,
+  "px_anillo": 1666,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.63,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.19,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.18,
+    "anillo": 0.42,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.56,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.24,
+    "anillo": 0.57,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.21,
+    "anillo": 0.49,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.28,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.23,
+    "anillo": 0.56,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.15,
+    "anillo": 0.44,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.39,
+    "anillo": 0.59,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.17,
+    "anillo": 0.41,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.48,
+    "despierto": true
+   }
+  ],
+  "insomnio": 1.0,
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -9.6,
+  "radar": "despierto",
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "cubierto_por_manchas": 1.0,
+  "agua": 0.0
+ },
+ "ceamse-norte-norte": {
+  "px": 25,
+  "px_anillo": 1347,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.38,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.29,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.21,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.3,
+    "anillo": 0.61,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.27,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.28,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.28,
+    "anillo": 0.56,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.36,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.67,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.62,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.14,
+    "anillo": 0.55,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.24,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.47,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.2,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.56,
+    "despierto": true
+   }
+  ],
+  "insomnio": 1.0,
+  "persistencia": 1.0,
+  "insomnio_orbita": {
+   "10": 1.0,
+   "161": 1.0
+  },
+  "eco_db": -7.7,
+  "radar": "despierto",
+  "motivo": "coherencia baja respecto del anillo en casi todos los pares y en los tres tramos de la serie",
+  "cubierto_por_manchas": 1.0,
+  "agua": 0.0
+ },
+ "villa-dominico": {
+  "px": 10,
+  "px_anillo": 1279,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.63,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.49,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.4,
+    "anillo": 0.58,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.67,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.71,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.6,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.66,
+    "anillo": 0.73,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.51,
+    "anillo": 0.65,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.64,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.55,
+    "anillo": 0.65,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.41,
+    "anillo": 0.51,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.45,
+    "anillo": 0.61,
+    "despierto": true
+   }
+  ],
+  "insomnio": 0.33,
+  "persistencia": 0.2,
+  "insomnio_orbita": {
+   "10": 0.38,
+   "161": 0.29
+  },
+  "eco_db": -5.8,
+  "radar": "no_alcanza",
+  "motivo": "señal intermedia: ni quieto ni despierto",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.23
+ },
+ "benavidez": {
+  "px": 15,
+  "px_anillo": 1060,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.74,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.41,
+    "anillo": 0.52,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.59,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.51,
+    "anillo": 0.58,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.71,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.62,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.47,
+    "anillo": 0.5,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.57,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.5,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.32,
+    "anillo": 0.48,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.52,
+    "anillo": 0.56,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.13,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.12,
+   "161": 0.14
+  },
+  "eco_db": -5.4,
+  "radar": "quieto",
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.0
+ },
+ "cuartel-v": {
+  "px": 14,
+  "px_anillo": 1646,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.68,
+    "anillo": 0.73,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.61,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.54,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.59,
+    "anillo": 0.64,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.64,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.54,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.41,
+    "anillo": 0.53,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.68,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.56,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.4,
+    "anillo": 0.51,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.56,
+    "anillo": 0.67,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.51,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.34,
+    "anillo": 0.44,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.51,
+    "anillo": 0.56,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.2,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.25,
+   "161": 0.14
+  },
+  "eco_db": -7.8,
+  "radar": "quieto",
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.0
+ },
+ "ministro-rivadavia": {
+  "px": 2,
+  "px_anillo": 1212,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.72,
+    "anillo": 0.75,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.56,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.36,
+    "anillo": 0.5,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.5,
+    "anillo": 0.68,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.53,
+    "anillo": 0.66,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.53,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.4,
+    "anillo": 0.51,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.49,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.6,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.57,
+    "anillo": 0.5,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.29,
+    "anillo": 0.4,
+    "despierto": true
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.52,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.3,
+    "anillo": 0.33,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.41,
+    "anillo": 0.49,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.32,
+  "persistencia": 0.2,
+  "insomnio_orbita": {
+   "10": 0.5,
+   "161": 0.14
+  },
+  "eco_db": -8.3,
+  "radar": "no_alcanza",
+  "motivo": "el predio ocupa 2 píxeles de 80 m: menos de 8",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.0
+ },
+ "control-caba": {
+  "px": 476,
+  "px_anillo": 2649,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.83,
+    "anillo": 0.83,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.77,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.72,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.81,
+    "anillo": 0.81,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.8,
+    "anillo": 0.8,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.79,
+    "anillo": 0.79,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.75,
+    "anillo": 0.74,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.77,
+    "anillo": 0.76,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.73,
+    "anillo": 0.74,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.7,
+    "anillo": 0.71,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.68,
+    "anillo": 0.68,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.72,
+    "anillo": 0.73,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.71,
+    "anillo": 0.72,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.59,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.63,
+    "anillo": 0.64,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.0,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.0
+  },
+  "eco_db": -3.3,
+  "radar": "quieto",
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.0
+ },
+ "control-rio": {
+  "px": 0,
+  "px_anillo": 0,
+  "pares": [],
+  "insomnio": null,
+  "persistencia": null,
+  "insomnio_orbita": {},
+  "eco_db": null,
+  "radar": "no_alcanza",
+  "motivo": "el predio es agua o queda fuera de la grilla",
+  "cubierto_por_manchas": 0.0,
+  "agua": 1.0
+ },
+ "control-delta": {
+  "px": 6842,
+  "px_anillo": 5619,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.76,
+    "anillo": 0.77,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.2,
+    "anillo": 0.22,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.26,
+    "anillo": 0.27,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.52,
+    "anillo": 0.53,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.49,
+    "anillo": 0.52,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.58,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.45,
+    "anillo": 0.44,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.47,
+    "anillo": 0.46,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.69,
+    "anillo": 0.7,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.6,
+    "anillo": 0.58,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.38,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.55,
+    "anillo": 0.55,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.43,
+    "anillo": 0.44,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.37,
+    "anillo": 0.34,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.45,
+    "anillo": 0.43,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.0,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.0
+  },
+  "eco_db": -5.4,
+  "radar": "quieto",
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "cubierto_por_manchas": 0.01,
+  "agua": 0.29
+ },
+ "control-roggero": {
+  "px": 569,
+  "px_anillo": 3305,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.77,
+    "anillo": 0.74,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.6,
+    "anillo": 0.57,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.55,
+    "anillo": 0.52,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.63,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.68,
+    "anillo": 0.65,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.67,
+    "anillo": 0.63,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.51,
+    "anillo": 0.51,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.53,
+    "anillo": 0.54,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.72,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.53,
+    "anillo": 0.47,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.41,
+    "anillo": 0.38,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.66,
+    "anillo": 0.65,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.6,
+    "anillo": 0.59,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.35,
+    "anillo": 0.37,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.46,
+    "anillo": 0.48,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.0,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.0
+  },
+  "eco_db": -7.1,
+  "radar": "quieto",
+  "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.59
+ },
+ "control-campo": {
+  "px": 5562,
+  "px_anillo": 6740,
+  "pares": [
+   {
+    "fecha": "2026-07-08",
+    "orbita": 10,
+    "sitio": 0.71,
+    "anillo": 0.69,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-20",
+    "orbita": 10,
+    "sitio": 0.62,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-13",
+    "orbita": 10,
+    "sitio": 0.57,
+    "anillo": 0.56,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-25",
+    "orbita": 10,
+    "sitio": 0.61,
+    "anillo": 0.61,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-06",
+    "orbita": 10,
+    "sitio": 0.69,
+    "anillo": 0.69,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-18",
+    "orbita": 10,
+    "sitio": 0.61,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-30",
+    "orbita": 10,
+    "sitio": 0.59,
+    "anillo": 0.58,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-12",
+    "orbita": 10,
+    "sitio": 0.7,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-07",
+    "orbita": 161,
+    "sitio": 0.62,
+    "anillo": 0.62,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-07-19",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.49,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-08-24",
+    "orbita": 161,
+    "sitio": 0.37,
+    "anillo": 0.37,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-05",
+    "orbita": 161,
+    "sitio": 0.65,
+    "anillo": 0.66,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-17",
+    "orbita": 161,
+    "sitio": 0.59,
+    "anillo": 0.6,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-09-29",
+    "orbita": 161,
+    "sitio": 0.49,
+    "anillo": 0.48,
+    "despierto": false
+   },
+   {
+    "fecha": "2026-10-11",
+    "orbita": 161,
+    "sitio": 0.66,
+    "anillo": 0.63,
+    "despierto": false
+   }
+  ],
+  "insomnio": 0.0,
+  "persistencia": 0.0,
+  "insomnio_orbita": {
+   "10": 0.0,
+   "161": 0.0
+  },
+  "eco_db": -14.3,
+  "radar": "no_alcanza",
+  "motivo": "superficie lisa (eco -14.3 dB): la coherencia baja no distingue cambio de falta de señal",
+  "cubierto_por_manchas": 0.0,
+  "agua": 0.0
+ }
+}
