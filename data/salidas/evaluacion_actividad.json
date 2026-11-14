@@ -1,17 +1,22 @@
 {
  "meta": {
-  "generado": "2026-11-14T22:16:16",
+  "generado": "2026-11-14T22:23:22",
   "generado_por": "herramientas/flujo.py (evaluar_actividad.evaluar)",
   "frames": [
    "AMBA",
    "LOS_ANGELES",
    "USA_OH_LAKE",
    "USA_MD_HOWARD",
-   "CDMX"
+   "CDMX",
+   "PRI_PONCE",
+   "USA_NH_HILLSBOROUGH",
+   "USA_NY_RICHMOND",
+   "DELHI",
+   "YAKARTA"
   ],
   "modo_insomnio": {
    "AMBA": [
-    "aproximado"
+    "exacto"
    ],
    "LOS_ANGELES": [
     "exacto"
@@ -24,6 +29,21 @@
    ],
    "CDMX": [
     "exacto"
+   ],
+   "PRI_PONCE": [
+    "exacto"
+   ],
+   "USA_NH_HILLSBOROUGH": [
+    "exacto"
+   ],
+   "USA_NY_RICHMOND": [
+    "exacto"
+   ],
+   "DELHI": [
+    "exacto"
+   ],
+   "YAKARTA": [
+    "exacto"
    ]
   },
   "fuentes_del_estado": [
@@ -33,76 +53,76 @@
   ],
   "min_ha": 10.0,
   "lectura": "Filas: estado del registro. Columnas: lo que dice el radar sobre el polígono. Las tasas se calculan sobre los que el radar pudo decidir; ic95 es el intervalo de Wilson.",
-  "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 33 sitios de estado conocido que el radar midió, 31 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, USA), no 'en el mundo'.",
+  "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 58 sitios de estado conocido que el radar midió, 44 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, PRI, USA), no 'en el mundo'.",
   "aviso": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados.",
   "firms": "no se consultó: falta la variable de entorno FIRMS_MAP_KEY"
  },
  "total": {
   "matriz": {
    "abierto": {
-    "despierto": 7,
-    "quieto": 3,
-    "no_alcanza": 1
+    "despierto": 9,
+    "quieto": 8,
+    "no_alcanza": 7
    },
    "cerrado": {
-    "despierto": 9,
-    "quieto": 5,
-    "no_alcanza": 8
+    "despierto": 10,
+    "quieto": 7,
+    "no_alcanza": 17
    }
   },
   "metricas": {
    "abiertos_que_salen_despiertos": {
-    "k": 7,
-    "n": 10,
-    "tasa": 0.7,
+    "k": 9,
+    "n": 17,
+    "tasa": 0.529,
     "ic95": [
-     0.397,
-     0.892
+     0.31,
+     0.738
     ]
    },
    "abiertos_que_salen_quietos": {
-    "k": 3,
-    "n": 10,
-    "tasa": 0.3,
+    "k": 8,
+    "n": 17,
+    "tasa": 0.471,
     "ic95": [
-     0.108,
-     0.603
+     0.262,
+     0.69
     ]
    },
    "cerrados_que_salen_quietos": {
-    "k": 5,
-    "n": 14,
-    "tasa": 0.357,
+    "k": 7,
+    "n": 17,
+    "tasa": 0.412,
     "ic95": [
-     0.163,
-     0.612
+     0.216,
+     0.64
     ]
    },
    "cerrados_que_salen_despiertos": {
-    "k": 9,
-    "n": 14,
-    "tasa": 0.643,
+    "k": 10,
+    "n": 17,
+    "tasa": 0.588,
     "ic95": [
-     0.388,
-     0.837
+     0.36,
+     0.784
     ]
    },
    "concordancia": {
-    "k": 12,
-    "n": 24,
-    "tasa": 0.5,
+    "k": 16,
+    "n": 34,
+    "tasa": 0.471,
     "ic95": [
-     0.314,
-     0.686
+     0.315,
+     0.633
     ]
    },
    "el_radar_no_alcanza": {
-    "k": 9,
-    "n": 33,
-    "tasa": 0.273,
+    "k": 24,
+    "n": 58,
+    "tasa": 0.414,
     "ic95": [
-     0.151,
-     0.442
+     0.296,
+     0.542
     ]
    }
   }
@@ -178,90 +198,157 @@
     }
    }
   },
-  "USA": {
+  "PRI": {
    "matriz": {
     "abierto": {
-     "despierto": 6,
-     "quieto": 3,
-     "no_alcanza": 1
+     "despierto": 0,
+     "quieto": 5,
+     "no_alcanza": 2
     },
     "cerrado": {
-     "despierto": 9,
-     "quieto": 4,
-     "no_alcanza": 8
+     "despierto": 0,
+     "quieto": 2,
+     "no_alcanza": 3
     }
    },
    "metricas": {
     "abiertos_que_salen_despiertos": {
-     "k": 6,
-     "n": 9,
-     "tasa": 0.667,
+     "k": 0,
+     "n": 5,
+     "tasa": 0.0,
      "ic95": [
-      0.354,
-      0.879
+      0.0,
+      0.434
+     ]
+    },
+    "abiertos_que_salen_quietos": {
+     "k": 5,
+     "n": 5,
+     "tasa": 1.0,
+     "ic95": [
+      0.566,
+      1.0
+     ]
+    },
+    "cerrados_que_salen_quietos": {
+     "k": 2,
+     "n": 2,
+     "tasa": 1.0,
+     "ic95": [
+      0.342,
+      1.0
+     ]
+    },
+    "cerrados_que_salen_despiertos": {
+     "k": 0,
+     "n": 2,
+     "tasa": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    },
+    "concordancia": {
+     "k": 2,
+     "n": 7,
+     "tasa": 0.286,
+     "ic95": [
+      0.082,
+      0.641
+     ]
+    },
+    "el_radar_no_alcanza": {
+     "k": 5,
+     "n": 12,
+     "tasa": 0.417,
+     "ic95": [
+      0.193,
+      0.68
+     ]
+    }
+   }
+  },
+  "USA": {
+   "matriz": {
+    "abierto": {
+     "despierto": 8,
+     "quieto": 3,
+     "no_alcanza": 5
+    },
+    "cerrado": {
+     "despierto": 10,
+     "quieto": 4,
+     "no_alcanza": 14
+    }
+   },
+   "metricas": {
+    "abiertos_que_salen_despiertos": {
+     "k": 8,
+     "n": 11,
+     "tasa": 0.727,
+     "ic95": [
+      0.434,
+      0.903
      ]
     },
     "abiertos_que_salen_quietos": {
      "k": 3,
-     "n": 9,
-     "tasa": 0.333,
+     "n": 11,
+     "tasa": 0.273,
      "ic95": [
-      0.121,
-      0.646
+      0.097,
+      0.566
      ]
     },
     "cerrados_que_salen_quietos": {
      "k": 4,
-     "n": 13,
-     "tasa": 0.308,
+     "n": 14,
+     "tasa": 0.286,
      "ic95": [
-      0.127,
-      0.576
+      0.117,
+      0.546
      ]
     },
     "cerrados_que_salen_despiertos": {
-     "k": 9,
-     "n": 13,
-     "tasa": 0.692,
+     "k": 10,
+     "n": 14,
+     "tasa": 0.714,
      "ic95": [
-      0.424,
-      0.873
+      0.454,
+      0.883
      ]
     },
     "concordancia": {
-     "k": 10,
-     "n": 22,
-     "tasa": 0.455,
+     "k": 12,
+     "n": 25,
+     "tasa": 0.48,
      "ic95": [
-      0.269,
-      0.653
+      0.3,
+      0.665
      ]
     },
     "el_radar_no_alcanza": {
-     "k": 9,
-     "n": 31,
-     "tasa": 0.29,
+     "k": 19,
+     "n": 44,
+     "tasa": 0.432,
      "ic95": [
-      0.161,
-      0.466
+      0.297,
+      0.578
      ]
     }
    }
   }
  },
  "chicos_menos_de_min_ha": {
-  "USA": 14
+  "USA": 32,
+  "PRI": 3
  },
  "sin_poligono_o_fuera_de_grilla": {
-  "USA": 17
+  "USA": 29,
+  "PRI": 3,
+  "IND": 1
  },
- "frames_sin_procesar": {
-  "PRI_PONCE": 15,
-  "USA_NH_HILLSBOROUGH": 12,
-  "USA_NY_RICHMOND": 13,
-  "DELHI": 1,
-  "YAKARTA": 0
- },
+ "frames_sin_procesar": {},
  "discordantes": {
   "cerrados_pero_despiertos": [
    {
@@ -408,6 +495,22 @@
     "radar": "despierto",
     "insomnio": 0.75,
     "coincide": false
+   },
+   {
+    "frame": "USA_NY_RICHMOND",
+    "pais": "USA",
+    "id_catalogo": "BAS-047298",
+    "nombre": "MSLA 1-D Landfill",
+    "complejo": "CPX-028920",
+    "area_ha": 33.56,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "fecha_cierre": null,
+    "radar": "despierto",
+    "insomnio": 0.98,
+    "coincide": false
    }
   ],
   "abiertos_pero_quietos": [
@@ -457,6 +560,86 @@
     "fecha_cierre": null,
     "radar": "quieto",
     "insomnio": 0.08,
+    "coincide": false
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062942",
+    "nombre": "Ponce Landfill",
+    "complejo": "CPX-055725",
+    "area_ha": 111.72,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062941",
+    "nombre": "Penuelas Valley Landfill",
+    "complejo": "CPX-055724",
+    "area_ha": 86.69,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062947",
+    "nombre": "Vega Baja Landfill",
+    "complejo": "CPX-055730",
+    "area_ha": 36.31,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062926",
+    "nombre": "Carolina Landfill",
+    "complejo": "CPX-055709",
+    "area_ha": 34.41,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.11,
+    "coincide": false
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062932",
+    "nombre": "Guayama Landfill",
+    "complejo": "CPX-055715",
+    "area_ha": 20.13,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
     "coincide": false
    }
   ]
@@ -992,6 +1175,406 @@
    "radar": "no_alcanza",
    "insomnio": 0.0,
    "coincide": null
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062942",
+   "nombre": "Ponce Landfill",
+   "complejo": "CPX-055725",
+   "area_ha": 111.72,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062941",
+   "nombre": "Penuelas Valley Landfill",
+   "complejo": "CPX-055724",
+   "area_ha": 86.69,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062938",
+   "nombre": "Juncos Landfill",
+   "complejo": "CPX-055721",
+   "area_ha": 44.44,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2012,
+   "radar": "no_alcanza",
+   "insomnio": 0.43,
+   "coincide": null
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062946",
+   "nombre": "Toa Baja LF",
+   "complejo": "CPX-055729",
+   "area_ha": 36.49,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.31,
+   "coincide": null
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062947",
+   "nombre": "Vega Baja Landfill",
+   "complejo": "CPX-055730",
+   "area_ha": 36.31,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062926",
+   "nombre": "Carolina Landfill",
+   "complejo": "CPX-055709",
+   "area_ha": 34.41,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.11,
+   "coincide": false
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062922",
+   "nombre": "Arecibo Landfill",
+   "complejo": "CPX-055705",
+   "area_ha": 28.66,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.53,
+   "coincide": null
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062933",
+   "nombre": "Guaynabo LF",
+   "complejo": "CPX-055716",
+   "area_ha": 20.97,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2008,
+   "radar": "no_alcanza",
+   "insomnio": 0.24,
+   "coincide": null
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062932",
+   "nombre": "Guayama Landfill",
+   "complejo": "CPX-055715",
+   "area_ha": 20.13,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062923",
+   "nombre": "Arroyo Landfill",
+   "complejo": "CPX-055706",
+   "area_ha": 14.41,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2019,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062927",
+   "nombre": "Cayey Landfill",
+   "complejo": "CPX-055710",
+   "area_ha": 12.01,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2017,
+   "radar": "no_alcanza",
+   "insomnio": 0.37,
+   "coincide": null
+  },
+  {
+   "frame": "PRI_PONCE",
+   "pais": "PRI",
+   "id_catalogo": "BAS-062945",
+   "nombre": "Toa Alta Landfill",
+   "complejo": "CPX-055728",
+   "area_ha": 10.71,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2022,
+   "radar": "quieto",
+   "insomnio": 0.11,
+   "coincide": true
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-065373",
+   "nombre": "Four Hills Landfill",
+   "complejo": "CPX-058029",
+   "area_ha": 82.57,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.69,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-065337",
+   "nombre": "Fitchburg-Westminster LF",
+   "complejo": "CPX-057993",
+   "area_ha": 63.22,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.38,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-065507",
+   "nombre": "Haverhill Landfill",
+   "complejo": "CPX-058157",
+   "area_ha": 42.69,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2022,
+   "radar": "no_alcanza",
+   "insomnio": 0.58,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-065793",
+   "nombre": "Lowell LF",
+   "complejo": "CPX-058423",
+   "area_ha": 29.12,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1992,
+   "radar": "no_alcanza",
+   "insomnio": 0.69,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-066413",
+   "nombre": "Shaffer Landfill",
+   "complejo": "CPX-042109",
+   "area_ha": 28.7,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1987,
+   "radar": "no_alcanza",
+   "insomnio": 0.25,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-048826",
+   "nombre": "Shrewsbury Landfill",
+   "complejo": "CPX-042686",
+   "area_ha": 22.98,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.25,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-044180",
+   "nombre": "Concord Landfill",
+   "complejo": "CPX-038732",
+   "area_ha": 11.58,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.5,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "pais": "USA",
+   "id_catalogo": "BAS-047398",
+   "nombre": "Merrimack Landfill (Closed 2002)",
+   "complejo": "CPX-000154",
+   "area_ha": 11.52,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.57,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NY_RICHMOND",
+   "pais": "USA",
+   "id_catalogo": "BAS-066070",
+   "nombre": "Ocean County LF",
+   "complejo": "CPX-058679",
+   "area_ha": 205.54,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.87,
+   "coincide": true
+  },
+  {
+   "frame": "USA_NY_RICHMOND",
+   "pais": "USA",
+   "id_catalogo": "BAS-065325",
+   "nombre": "Fairless Landfill",
+   "complejo": "CPX-057981",
+   "area_ha": 131.44,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.76,
+   "coincide": true
+  },
+  {
+   "frame": "USA_NY_RICHMOND",
+   "pais": "USA",
+   "id_catalogo": "BAS-064847",
+   "nombre": "Burlington County SLF",
+   "complejo": "CPX-057535",
+   "area_ha": 114.54,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.37,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NY_RICHMOND",
+   "pais": "USA",
+   "id_catalogo": "BAS-065929",
+   "nombre": "Monmouth County Reclamation Center",
+   "complejo": "CPX-058551",
+   "area_ha": 51.32,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.65,
+   "coincide": null
+  },
+  {
+   "frame": "USA_NY_RICHMOND",
+   "pais": "USA",
+   "id_catalogo": "BAS-047298",
+   "nombre": "MSLA 1-D Landfill",
+   "complejo": "CPX-028920",
+   "area_ha": 33.56,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.98,
+   "coincide": false
   }
  ],
  "sin_cerrados_osm": {
@@ -1002,69 +1585,69 @@
   "total": {
    "matriz": {
     "abierto": {
-     "despierto": 7,
-     "quieto": 3,
-     "no_alcanza": 1
+     "despierto": 9,
+     "quieto": 8,
+     "no_alcanza": 7
     },
     "cerrado": {
      "despierto": 8,
-     "quieto": 4,
-     "no_alcanza": 7
+     "quieto": 6,
+     "no_alcanza": 13
     }
    },
    "metricas": {
     "abiertos_que_salen_despiertos": {
-     "k": 7,
-     "n": 10,
-     "tasa": 0.7,
+     "k": 9,
+     "n": 17,
+     "tasa": 0.529,
      "ic95": [
-      0.397,
-      0.892
+      0.31,
+      0.738
      ]
     },
     "abiertos_que_salen_quietos": {
-     "k": 3,
-     "n": 10,
-     "tasa": 0.3,
+     "k": 8,
+     "n": 17,
+     "tasa": 0.471,
      "ic95": [
-      0.108,
-      0.603
+      0.262,
+      0.69
      ]
     },
     "cerrados_que_salen_quietos": {
-     "k": 4,
-     "n": 12,
-     "tasa": 0.333,
+     "k": 6,
+     "n": 14,
+     "tasa": 0.429,
      "ic95": [
-      0.138,
-      0.609
+      0.214,
+      0.674
      ]
     },
     "cerrados_que_salen_despiertos": {
      "k": 8,
-     "n": 12,
-     "tasa": 0.667,
+     "n": 14,
+     "tasa": 0.571,
      "ic95": [
-      0.391,
-      0.862
+      0.326,
+      0.786
      ]
     },
     "concordancia": {
-     "k": 11,
-     "n": 22,
-     "tasa": 0.5,
+     "k": 15,
+     "n": 31,
+     "tasa": 0.484,
      "ic95": [
-      0.307,
-      0.693
+      0.32,
+      0.652
      ]
     },
     "el_radar_no_alcanza": {
-     "k": 8,
-     "n": 30,
-     "tasa": 0.267,
+     "k": 20,
+     "n": 51,
+     "tasa": 0.392,
      "ic95": [
-      0.142,
-      0.444
+      0.27,
+      0.529
      ]
     }
    }
@@ -1140,36 +1723,106 @@
      }
     }
    },
-   "USA": {
+   "PRI": {
     "matriz": {
      "abierto": {
-      "despierto": 6,
-      "quieto": 3,
-      "no_alcanza": 1
+      "despierto": 0,
+      "quieto": 5,
+      "no_alcanza": 2
      },
      "cerrado": {
-      "despierto": 8,
-      "quieto": 3,
-      "no_alcanza": 7
+      "despierto": 0,
+      "quieto": 2,
+      "no_alcanza": 3
      }
     },
     "metricas": {
      "abiertos_que_salen_despiertos": {
-      "k": 6,
-      "n": 9,
-      "tasa": 0.667,
+      "k": 0,
+      "n": 5,
+      "tasa": 0.0,
       "ic95": [
-       0.354,
-       0.879
+       0.0,
+       0.434
+      ]
+     },
+     "abiertos_que_salen_quietos": {
+      "k": 5,
+      "n": 5,
+      "tasa": 1.0,
+      "ic95": [
+       0.566,
+       1.0
+      ]
+     },
+     "cerrados_que_salen_quietos": {
+      "k": 2,
+      "n": 2,
+      "tasa": 1.0,
+      "ic95": [
+       0.342,
+       1.0
+      ]
+     },
+     "cerrados_que_salen_despiertos": {
+      "k": 0,
+      "n": 2,
+      "tasa": 0.0,
+      "ic95": [
+       0.0,
+       0.658
+      ]
+     },
+     "concordancia": {
+      "k": 2,
+      "n": 7,
+      "tasa": 0.286,
+      "ic95": [
+       0.082,
+       0.641
+      ]
+     },
+     "el_radar_no_alcanza": {
+      "k": 5,
+      "n": 12,
+      "tasa": 0.417,
+      "ic95": [
+       0.193,
+       0.68
+      ]
+     }
+    }
+   },
+   "USA": {
+    "matriz": {
+     "abierto": {
+      "despierto": 8,
+      "quieto": 3,
+      "no_alcanza": 5
+     },
+     "cerrado": {
+      "despierto": 8,
+      "quieto": 3,
+      "no_alcanza": 10
+     }
+    },
+    "metricas": {
+     "abiertos_que_salen_despiertos": {
+      "k": 8,
+      "n": 11,
+      "tasa": 0.727,
+      "ic95": [
+       0.434,
+       0.903
       ]
      },
      "abiertos_que_salen_quietos": {
       "k": 3,
-      "n": 9,
-      "tasa": 0.333,
+      "n": 11,
+      "tasa": 0.273,
       "ic95": [
-       0.121,
-       0.646
+       0.097,
+       0.566
       ]
      },
      "cerrados_que_salen_quietos": {
@@ -1191,21 +1844,21 @@
       ]
      },
      "concordancia": {
-      "k": 9,
-      "n": 20,
-      "tasa": 0.45,
+      "k": 11,
+      "n": 22,
+      "tasa": 0.5,
       "ic95": [
-       0.258,
-       0.658
+       0.307,
+       0.693
       ]
      },
      "el_radar_no_alcanza": {
-      "k": 8,
-      "n": 28,
-      "tasa": 0.286,
+      "k": 15,
+      "n": 37,
+      "tasa": 0.405,
       "ic95": [
-       0.153,
-       0.471
+       0.263,
+       0.565
       ]
      }
     }
@@ -1214,6 +1867,46 @@
  },
  "casos_para_mirar": {
   "cerrados_pero_despiertos": [
+   {
+    "frame": "USA_NY_RICHMOND",
+    "pais": "USA",
+    "id_catalogo": "BAS-047298",
+    "nombre": "MSLA 1-D Landfill",
+    "complejo": "CPX-028920",
+    "area_ha": 33.56,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "fecha_cierre": null,
+    "radar": "despierto",
+    "insomnio": 0.98,
+    "lat": 40.747031,
+    "lon": -74.127815,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "sin dato",
+      "detalle": "el registro no lo dice"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "pasa los chequeos automáticos; falta mirarlo en óptico"
+   },
    {
     "frame": "USA_OH_LAKE",
     "pais": "USA",
@@ -1608,6 +2301,36 @@
     "resultado": "hay una explicación obvia sin descartar"
    },
    {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062926",
+    "nombre": "Carolina Landfill",
+    "complejo": "CPX-055709",
+    "area_ha": 34.41,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.11,
+    "lat": 18.408632,
+    "lon": -65.937777,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 34.41 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
     "frame": "USA_MD_HOWARD",
     "pais": "USA",
     "id_catalogo": "BAS-065494",
@@ -1658,6 +2381,126 @@
       "chequeo": "frente de descarga más chico que el píxel",
       "resultado": "no se descarta",
       "detalle": "el polígono mide 61.07 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062942",
+    "nombre": "Ponce Landfill",
+    "complejo": "CPX-055725",
+    "area_ha": 111.72,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 18.009563,
+    "lon": -66.658541,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 111.72 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062941",
+    "nombre": "Penuelas Valley Landfill",
+    "complejo": "CPX-055724",
+    "area_ha": 86.69,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 18.016078,
+    "lon": -66.700988,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 86.69 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062947",
+    "nombre": "Vega Baja Landfill",
+    "complejo": "CPX-055730",
+    "area_ha": 36.31,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 18.478259,
+    "lon": -66.359668,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 36.31 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "PRI_PONCE",
+    "pais": "PRI",
+    "id_catalogo": "BAS-062932",
+    "nombre": "Guayama Landfill",
+    "complejo": "CPX-055715",
+    "area_ha": 20.13,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 17.986034,
+    "lon": -66.138127,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 20.13 ha; un frente activo de 1 a 3 ha no mueve la mediana"
      },
      {
       "chequeo": "registro desactualizado",
