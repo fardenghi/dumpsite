@@ -176,7 +176,8 @@ class Frame:
 
     `epsg` es el de la grilla común. Si `epsg_fijo` es False, es el que le toca al centro de la caja y
     `pipeline_insomnio.py procesar` lo reemplaza por el del primer GUNW (dataset `projection`).
-    `orbitas` vacío quiere decir todas las que crucen la caja.
+    `orbitas` vacío quiere decir todas las que crucen la caja. `frames_nisar` (de `frames.json`) limita
+    además a esos frames de NISAR, que son los que cubren la caja; vacío quiere decir todos.
     """
     nombre: str = "AMBA"
     caja: tuple = CAJA
@@ -187,6 +188,7 @@ class Frame:
     epsg_fijo: bool = True
     ciudad: str = "Buenos Aires"
     pais: str = "ARG"
+    frames_nisar: tuple = ()  # frames de NISAR a usar, como "034_A_019" (órbita, dirección y frame); vacío = los que crucen la caja
 
     @property
     def bbox(self):
@@ -217,7 +219,7 @@ class Frame:
     def dict(self):
         return {"frame": self.nombre, "orbita": list(self.orbitas), "ciudad": self.ciudad, "pais": self.pais,
                 "hemisferio": self.hemisferio, "epsg": self.epsg, "epsg_fijo": self.epsg_fijo, "bbox": self.bbox,
-                "fecha_inicio": self.desde, "fecha_fin": self.hasta}
+                "fecha_inicio": self.desde, "fecha_fin": self.hasta, "frames_nisar": list(self.frames_nisar)}
 
 
 AMBA = Frame()
@@ -231,7 +233,8 @@ def frame_de_dict(d):
     return Frame(nombre=str(d["frame"]).upper(), caja=(n, o, s, e), epsg=int(epsg) if epsg else epsg_de((n + s) / 2, (o + e) / 2),
                  orbitas=tuple(int(x) for x in (orbitas if isinstance(orbitas, (list, tuple)) else [orbitas])),
                  desde=d.get("fecha_inicio") or "", hasta=d.get("fecha_fin") or "",
-                 epsg_fijo=bool(epsg) and d.get("epsg_fijo", True), ciudad=d.get("ciudad") or "", pais=d.get("pais") or "")
+                 epsg_fijo=bool(epsg) and d.get("epsg_fijo", True), ciudad=d.get("ciudad") or "", pais=d.get("pais") or "",
+                 frames_nisar=tuple(d.get("frames_nisar") or ()))
 
 
 def frame_de_caja(nombre, bbox, epsg=None, orbitas=()):
