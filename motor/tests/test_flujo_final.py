@@ -35,7 +35,11 @@ FICHAS = {"BAS-053307": "norte-iii", "BAS-053304": "norte-iii-disposicion", "BAS
 # ---------------------------------------------------------------- frames
 def test_frames_json_cumple_el_contrato_y_no_se_superponen():
     d = ct.leer(os.path.join(DATA, "frames.json"))
-    assert 8 <= len(d) <= 12
+    agregado = d["criterio"].eq("abiertos") if "criterio" in d else d["frame"].isna()  # los que sumó `--agregar` (prompt 6)
+    assert 8 <= (~agregado).sum() <= 12
+    # Los agregados van después de los de antes, en orden de prioridad, y todos tienen abiertos y 15 pares o más.
+    assert list(d["prioridad"]) == sorted(d["prioridad"]) and not agregado[: (~agregado).sum()].any()
+    assert all(n["abierto"] >= 1 for n in d.loc[agregado, "n_sitios_10ha"]) and (d.loc[agregado, "n_gunw"] >= 15).all()
     assert d.loc[d["pais"] == "ARG", "reservado_prueba"].all() and not d.loc[d["pais"] != "ARG", "reservado_prueba"].any()
     assert (d["pais"] != "USA").sum() >= 3, "no sólo EE. UU."
     cajas = list(d["bbox"])
@@ -44,6 +48,14 @@ def test_frames_json_cumple_el_contrato_y_no_se_superponen():
             assert not fe.se_tocan(cajas[i], cajas[j]), (d["frame"][i], d["frame"][j])
     amba = d[d["frame"] == "AMBA"].iloc[0]
     assert sorted(amba["orbita"]) == [10, 161] and amba["n_gunw"] == 15 and amba["epsg"] == 32721
+
+
+def test_caja_con_margen_y_nombre_de_celda():
+    o, s, e, n = fe.caja_con_margen([[-84.0, 42.0, -83.9, 42.1], [-83.5, 42.5, -83.4, 42.6]], km=5.0)
+    assert (s, n) == pytest.approx((42.0 - 5 / 111.32, 42.6 + 5 / 111.32), abs=1e-4)
+    assert -84.0 - o == pytest.approx(e + 83.4, abs=1e-4) and 0.055 < -84.0 - o < 0.065  # 5 km a 42° de latitud
+    assert fe._clave_area(-119, 34, "Sun Valley, Los Angeles, CA") == "USA_CA_LOS_ANGELES"
+    assert fe._clave_area(-67, 18, "Ponce, Ponce, PR") == "PRI_PONCE" and fe._clave_area(-119, 34, None) == "CELDA_N34_W119"
 
 
 def test_pares_por_frame_se_queda_con_pr_y_pares_unicos():
