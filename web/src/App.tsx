@@ -5,19 +5,19 @@ import Inicio from './pages/Inicio'
 import Modelo from './pages/Modelo'
 import Sitios from './pages/Sitios'
 
-// MapLibre pesa: se baja recién cuando se abre el mapa
+// MapLibre pesa: se baja aparte, pero el mapa es el fondo de toda la web y queda siempre montado
 const Mapa = lazy(() => import('./pages/Mapa'))
 
-const PAGES = [
-  { id: 'inicio', label: 'Inicio', el: Inicio },
-  { id: 'mapa', label: 'Mapa', el: Mapa },
+// Los paneles flotan sobre el mapa; "mapa" es no tener ninguno abierto
+const PANELES = [
+  { id: 'inicio', label: 'Resumen', el: Inicio },
   { id: 'sitios', label: 'Sitios', el: Sitios },
   { id: 'modelo', label: 'Modelo', el: Modelo },
 ]
 
 function leer() {
   const [path, q] = location.hash.replace(/^#\/?/, '').split('?')
-  return { page: path || 'inicio', query: new URLSearchParams(q || '') }
+  return { page: path || 'mapa', query: new URLSearchParams(q || '') }
 }
 
 export function useRoute() {
@@ -34,75 +34,72 @@ export function go(page: string, query = '') {
   location.hash = `/${page}${query ? '?' + query : ''}`
 }
 
-function Logo() {
-  return (
-    <a className="logo" href="#/inicio">
-      <Dot radar="despierto" />
-      Insomnes
-    </a>
-  )
-}
-
-function Vigilia() {
+export function Marca() {
   const { sitios } = useSitios()
   const despiertos = sitios?.filter((s) => s.radar === 'despierto').length
   return (
-    <div className="vigilia">
-      <div className="v">{despiertos ?? '–'}</div>
-      <div className="l">
-        <Dot radar="despierto" />
-        despiertos de {sitios?.length ?? '–'}
-      </div>
-    </div>
+    <a
+      className="marca"
+      href="#/mapa"
+      title={DEMO ? 'Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026' : undefined}
+    >
+      <Dot radar="despierto" />
+      <b>Basurales</b>
+      {sitios && (
+        <span>
+          {despiertos} de {sitios.length} despiertos
+        </span>
+      )}
+    </a>
   )
 }
 
 export default function App() {
   const { page } = useRoute()
-  const [menu, setMenu] = useState(false)
-  const P = PAGES.find((p) => p.id === page) ?? PAGES[0]
+  const P = PANELES.find((p) => p.id === page)
+  // el último panel queda montado mientras se cierra, para que salga con transición
+  const [ultimo, setUltimo] = useState(P)
+  useEffect(() => {
+    if (P) setUltimo(P)
+  }, [P])
+  const V = P ?? ultimo
+
+  useEffect(() => {
+    const f = (e: KeyboardEvent) => e.key === 'Escape' && P && go('mapa')
+    window.addEventListener('keydown', f)
+    return () => window.removeEventListener('keydown', f)
+  }, [P])
+
   return (
-    <div className="app">
-      <header className="topbar">
-        <Logo />
-        <span className="grow" />
-        <button className="menu-btn" onClick={() => setMenu(true)} aria-label="Abrir menú">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-            <path d="M4 7h16M4 12h16M4 17h16" />
+    <div className={`app ${P ? 'con-panel' : ''}`}>
+      <Suspense fallback={<div className="map" />}>
+        <Mapa />
+      </Suspense>
+
+      <section className={`flota ${P ? 'abierta' : ''}`} aria-label={V?.label} aria-hidden={!P} inert={!P}>
+        <a className="btn icon cerrar" href="#/mapa" aria-label="Cerrar panel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <path d="M5 5l14 14M19 5L5 19" />
           </svg>
-        </button>
-      </header>
-      <div className={`drawer-bg ${menu ? 'open' : ''}`} onClick={() => setMenu(false)} />
-      <aside className={`side ${menu ? 'open' : ''}`} onClick={(e) => (e.target as HTMLElement).closest('a') && setMenu(false)}>
-        <Logo />
-        <Vigilia />
-        <nav className="nav">
-          {PAGES.map((p) => (
-            <a key={p.id} href={`#/${p.id}`} className={p.id === P.id ? 'on' : ''} aria-current={p.id === P.id ? 'page' : undefined}>
-              {p.label}
-            </a>
-          ))}
-        </nav>
-        <div className="side-foot">
-          {DEMO && (
-            <span className="pill" title="Datos reales precalculados: 15 pares de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026. Sin backend: se regeneran con pipeline_insomnio.py indice.">
-              NISAR · AMBA · precalculado
-            </span>
-          )}
-          <span>NASA Space Apps 2026</span>
-        </div>
-      </aside>
-      <main className={P.id === 'mapa' ? 'full' : ''}>
-        <Suspense fallback={null}>
-          {P.id === 'mapa' ? (
-            <P.el />
-          ) : (
-            <div className="page" key={P.id}>
-              <P.el />
-            </div>
-          )}
-        </Suspense>
-      </main>
+        </a>
+        {V && (
+          <div className="flota-in" key={V.id}>
+            <V.el />
+          </div>
+        )}
+      </section>
+
+      <nav className="dock" aria-label="Secciones">
+        <a href="#/mapa" className={!P ? 'on' : ''} aria-current={!P ? 'page' : undefined}>
+          Mapa
+        </a>
+        {PANELES.map((p) => (
+          // tocar la sección abierta la cierra: el panel se pone y se saca
+          <a key={p.id} href={p.id === P?.id ? '#/mapa' : `#/${p.id}`} className={p.id === P?.id ? 'on' : ''} aria-current={p.id === P?.id ? 'page' : undefined}>
+            {p.label}
+          </a>
+        ))}
+      </nav>
     </div>
   )
 }
