@@ -13,17 +13,22 @@ export interface Serie {
  * Coherencia par a par, de 0 a 1. Una serie baja y plana es un lugar que no durmió.
  * `marca` dibuja una línea vertical en una fecha (por ejemplo, el cierre).
  */
-export function Coherencia({ fechas, series, marca, alto = 150 }: { fechas: string[]; series: Serie[]; marca?: { fecha: string; texto: string }; alto?: number }) {
+export function Coherencia({ fechas, series, marca, alto: altoFijo = 150, llenar }: { fechas: string[]; series: Serie[]; marca?: { fecha: string; texto: string }; alto?: number; /** el gráfico crece hasta ocupar el alto que le deje su contenedor */ llenar?: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const [w, setW] = useState(0)
+  const [h, setH] = useState(0)
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const ro = new ResizeObserver(([e]) => setW(Math.round(e.contentRect.width)))
+    const ro = new ResizeObserver(([e]) => {
+      setW(Math.round(e.contentRect.width))
+      setH(Math.round(e.contentRect.height))
+    })
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
 
+  const alto = llenar ? Math.max(altoFijo, h) : altoFijo
   const m = { t: 8, r: 8, b: 20, l: 28 }
   const iw = Math.max(0, w - m.l - m.r)
   const ih = alto - m.t - m.b
@@ -36,9 +41,10 @@ export function Coherencia({ fechas, series, marca, alto = 150 }: { fechas: stri
   const etiquetas = [0, Math.floor((fechas.length - 1) / 2), fechas.length - 1].filter((v, i, a) => a.indexOf(v) === i)
 
   return (
-    <div ref={ref}>
+    <div className={llenar ? 'coh llenar' : 'coh'}>
+      <div ref={ref} className="coh-area" style={{ minHeight: altoFijo }}>
       {w > 0 && (
-        <svg className="chart" width={w} height={alto} role="img" aria-label="Coherencia por par de pasadas">
+        <svg className="chart" width={w} height={alto} role="img" aria-label="Coherencia entre pasadas consecutivas">
           {[0, 0.5, 1].map((v) => (
             <g key={v}>
               <line x1={m.l} x2={w - m.r} y1={y(v)} y2={y(v)} stroke="var(--line)" />
@@ -76,6 +82,7 @@ export function Coherencia({ fechas, series, marca, alto = 150 }: { fechas: stri
           ))}
         </svg>
       )}
+      </div>
       <div className="legend" style={{ marginTop: 8, minHeight: 20 }}>
         {series.map((s) => (
           <span key={s.nombre}>
