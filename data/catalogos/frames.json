@@ -1,0 +1,562 @@
+{
+ "meta": {
+  "generado": "2026-11-14",
+  "generado_por": "herramientas/frames_elegir.py",
+  "fuente": "ASF Search API (api.daac.asf.alaska.edu), productos NISAR L2 GUNW PR (provisional V1)",
+  "catalogos": [
+   "data/basurales/complejos.json",
+   "data/negativos/negativos_mundo.json",
+   "data/negativos/negativos_amba.json"
+  ],
+  "criterio": "~10 frames que maximizan complejos de 10 ha o más con estado conocido, negativos de clase A de 10 ha o más y pares GUNW (ver `puntaje` en el script); tope de frames de EE. UU.; Argentina reservada para la prueba final",
+  "min_cobertura": 0.75,
+  "max_usa": 6,
+  "supuestos": [
+   "caja de ~1° por ciudad (el AMBA usa geo.CAJA)",
+   "EPSG por la zona UTM del centro de la caja: confirmar con el dataset `projection` del GUNW",
+   "conteos dentro de la caja y de la huella de los frames elegidos",
+   "n_basurales_10ha cuenta complejos (área sumada ≥ 10 ha) por el estado del complejo"
+  ],
+  "prioridad": "0 = reservado (Argentina, ya procesado); 1 en adelante = orden de procesamiento"
+ },
+ "frames": [
+  {
+   "frame": "AMBA",
+   "orbita": [
+    10,
+    161
+   ],
+   "ciudad": "Buenos Aires",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32721,
+   "bbox": [
+    -59.35,
+    -34.9,
+    -58.25,
+    -34.25
+   ],
+   "n_gunw": 15,
+   "fecha_inicio": "2026-06-25",
+   "fecha_fin": "2026-10-12",
+   "n_basurales_10ha": {
+    "abierto": 1,
+    "cerrado": 1,
+    "desconocido": 3
+   },
+   "n_negativos": {
+    "arena_duna_playa": 2,
+    "cantera": 32,
+    "chatarreria_desguace": 6,
+    "cultivo": 106,
+    "estacionamiento_playa": 122,
+    "feedlot": 134,
+    "humedal": 59,
+    "ladrillera": 4,
+    "laguna_chica": 125,
+    "obra": 115,
+    "pileta_efluentes": 18,
+    "planta_residuos": 6,
+    "puerto_playa_contenedores": 9,
+    "vegetacion_densa": 125
+   },
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "010_D_106",
+    "161_A_160"
+   ],
+   "prioridad": 0,
+   "puntaje": 22.0,
+   "n_negativos_a_10ha": 219,
+   "n_gunw_por_track": {
+    "010_D_106": 8,
+    "161_A_160": 7
+   },
+   "cobertura": {
+    "010_D_106": 1.0,
+    "161_A_160": 1.0
+   }
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "orbita": [
+    13,
+    34
+   ],
+   "ciudad": "Los Ángeles",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32611,
+   "bbox": [
+    -118.7,
+    33.7,
+    -117.6,
+    34.4
+   ],
+   "n_gunw": 50,
+   "fecha_inicio": "2025-11-23",
+   "fecha_fin": "2026-10-14",
+   "n_basurales_10ha": {
+    "abierto": 6,
+    "cerrado": 19,
+    "desconocido": 2
+   },
+   "n_negativos": {
+    "arena_duna_playa": 4,
+    "cantera": 2,
+    "cultivo": 8,
+    "estacionamiento_playa": 5,
+    "feedlot": 5,
+    "humedal": 9,
+    "laguna_chica": 14,
+    "obra": 14,
+    "pileta_efluentes": 3,
+    "planta_residuos": 3,
+    "puerto_playa_contenedores": 3,
+    "tosquera_arenera": 1,
+    "vegetacion_densa": 6
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "034_A_019",
+    "013_D_071"
+   ],
+   "prioridad": 1,
+   "puntaje": 57.75,
+   "n_negativos_a_10ha": 23,
+   "n_gunw_por_track": {
+    "034_A_019": 26,
+    "013_D_071": 24
+   },
+   "cobertura": {
+    "034_A_019": 0.97,
+    "013_D_071": 1.0
+   }
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "orbita": [
+    18,
+    127
+   ],
+   "ciudad": "Painesville, Lake, OH (alrededor de Industrial Rayon Corporation Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32617,
+   "bbox": [
+    -81.957,
+    40.942,
+    -81.057,
+    41.842
+   ],
+   "n_gunw": 26,
+   "fecha_inicio": "2025-10-26",
+   "fecha_fin": "2026-10-21",
+   "n_basurales_10ha": {
+    "abierto": 1,
+    "cerrado": 11,
+    "desconocido": 15
+   },
+   "n_negativos": {
+    "arena_duna_playa": 3,
+    "cantera": 5,
+    "chatarreria_desguace": 1,
+    "cultivo": 5,
+    "estacionamiento_playa": 4,
+    "feedlot": 7,
+    "humedal": 7,
+    "laguna_chica": 6,
+    "obra": 8,
+    "pileta_efluentes": 1,
+    "puerto_playa_contenedores": 2,
+    "tosquera_arenera": 3,
+    "vegetacion_densa": 4
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "018_A_022",
+    "127_D_068"
+   ],
+   "prioridad": 2,
+   "puntaje": 42.25,
+   "n_negativos_a_10ha": 13,
+   "n_gunw_por_track": {
+    "018_A_022": 14,
+    "127_D_068": 12
+   },
+   "cobertura": {
+    "018_A_022": 0.98,
+    "127_D_068": 0.81
+   }
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "orbita": [
+    162,
+    170
+   ],
+   "ciudad": "Marriottsville, Howard, MD (alrededor de Alpha Ridge Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32618,
+   "bbox": [
+    -77.054,
+    38.922,
+    -76.154,
+    39.822
+   ],
+   "n_gunw": 18,
+   "fecha_inicio": "2025-10-28",
+   "fecha_fin": "2026-10-11",
+   "n_basurales_10ha": {
+    "abierto": 6,
+    "cerrado": 8,
+    "desconocido": 7
+   },
+   "n_negativos": {
+    "acuicultura": 1,
+    "arena_duna_playa": 3,
+    "cantera": 4,
+    "chatarreria_desguace": 3,
+    "cultivo": 6,
+    "estacionamiento_playa": 4,
+    "feedlot": 6,
+    "humedal": 6,
+    "laguna_chica": 9,
+    "obra": 8,
+    "pileta_efluentes": 3,
+    "planta_residuos": 2,
+    "puerto_playa_contenedores": 3,
+    "tosquera_arenera": 1,
+    "vegetacion_densa": 6
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "162_A_021",
+    "170_D_069"
+   ],
+   "prioridad": 3,
+   "puntaje": 38.5,
+   "n_negativos_a_10ha": 14,
+   "n_gunw_por_track": {
+    "162_A_021": 12,
+    "170_D_069": 6
+   },
+   "cobertura": {
+    "162_A_021": 0.84,
+    "170_D_069": 0.96
+   }
+  },
+  {
+   "frame": "CDMX",
+   "orbita": [
+    19,
+    113
+   ],
+   "ciudad": "Ciudad de México",
+   "pais": "MEX",
+   "hemisferio": "N",
+   "epsg": 32614,
+   "bbox": [
+    -99.4,
+    19.15,
+    -98.8,
+    19.75
+   ],
+   "n_gunw": 57,
+   "fecha_inicio": "2025-10-25",
+   "fecha_fin": "2026-10-20",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 10
+   },
+   "n_negativos": {
+    "cantera": 1,
+    "estacionamiento_playa": 1,
+    "obra": 2,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "019_A_011",
+    "113_D_079"
+   ],
+   "prioridad": 4,
+   "puntaje": 10.25,
+   "n_negativos_a_10ha": 1,
+   "n_gunw_por_track": {
+    "019_A_011": 29,
+    "113_D_079": 28
+   },
+   "cobertura": {
+    "019_A_011": 1.0,
+    "113_D_079": 1.0
+   }
+  },
+  {
+   "frame": "PRI_PONCE",
+   "orbita": [
+    54,
+    133
+   ],
+   "ciudad": "Ponce, Ponce, PR (alrededor de Ponce Landfill)",
+   "pais": "PRI",
+   "hemisferio": "N",
+   "epsg": 32619,
+   "bbox": [
+    -66.783,
+    17.796,
+    -65.883,
+    18.696
+   ],
+   "n_gunw": 17,
+   "fecha_inicio": "2026-06-17",
+   "fecha_fin": "2026-10-21",
+   "n_basurales_10ha": {
+    "abierto": 9,
+    "cerrado": 6,
+    "desconocido": 0
+   },
+   "n_negativos": {
+    "arena_duna_playa": 5,
+    "cantera": 10,
+    "chatarreria_desguace": 4,
+    "cultivo": 14,
+    "estacionamiento_playa": 7,
+    "feedlot": 10,
+    "humedal": 15,
+    "laguna_chica": 13,
+    "obra": 7,
+    "puerto_playa_contenedores": 2,
+    "vegetacion_densa": 5
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "054_D_079",
+    "133_A_011"
+   ],
+   "prioridad": 5,
+   "puntaje": 37.75,
+   "n_negativos_a_10ha": 31,
+   "n_gunw_por_track": {
+    "054_D_079": 9,
+    "133_A_011": 8
+   },
+   "cobertura": {
+    "054_D_079": 0.98,
+    "133_A_011": 1.0
+   }
+  },
+  {
+   "frame": "USA_NH_HILLSBOROUGH",
+   "orbita": [
+    32,
+    69
+   ],
+   "ciudad": "Nashua, Hillsborough, NH (alrededor de Four Hills Landfill)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32619,
+   "bbox": [
+    -71.93,
+    42.043,
+    -71.03,
+    42.943
+   ],
+   "n_gunw": 27,
+   "fecha_inicio": "2025-10-21",
+   "fecha_fin": "2026-10-16",
+   "n_basurales_10ha": {
+    "abierto": 2,
+    "cerrado": 10,
+    "desconocido": 6
+   },
+   "n_negativos": {
+    "arena_duna_playa": 3,
+    "cantera": 4,
+    "chatarreria_desguace": 2,
+    "cultivo": 4,
+    "estacionamiento_playa": 3,
+    "feedlot": 4,
+    "humedal": 5,
+    "laguna_chica": 4,
+    "obra": 4,
+    "pileta_efluentes": 2,
+    "planta_residuos": 3,
+    "tosquera_arenera": 4,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "069_D_067",
+    "032_A_023"
+   ],
+   "prioridad": 6,
+   "puntaje": 33.0,
+   "n_negativos_a_10ha": 12,
+   "n_gunw_por_track": {
+    "069_D_067": 14,
+    "032_A_023": 13
+   },
+   "cobertura": {
+    "069_D_067": 0.84,
+    "032_A_023": 1.0
+   }
+  },
+  {
+   "frame": "USA_NY_RICHMOND",
+   "orbita": [
+    69,
+    133
+   ],
+   "ciudad": "Staten Island, Richmond, NY (alrededor de Fresh Kills SLF)",
+   "pais": "USA",
+   "hemisferio": "N",
+   "epsg": 32618,
+   "bbox": [
+    -74.786,
+    39.983,
+    -73.886,
+    40.883
+   ],
+   "n_gunw": 55,
+   "fecha_inicio": "2025-10-21",
+   "fecha_fin": "2026-10-21",
+   "n_basurales_10ha": {
+    "abierto": 3,
+    "cerrado": 9,
+    "desconocido": 4,
+    "contradictorio": 2
+   },
+   "n_negativos": {
+    "arena_duna_playa": 5,
+    "cantera": 4,
+    "chatarreria_desguace": 2,
+    "cultivo": 2,
+    "estacionamiento_playa": 2,
+    "feedlot": 6,
+    "humedal": 7,
+    "ladrillera": 1,
+    "laguna_chica": 5,
+    "obra": 5,
+    "pileta_efluentes": 4,
+    "planta_residuos": 1,
+    "puerto_playa_contenedores": 4,
+    "tosquera_arenera": 1,
+    "vegetacion_densa": 3
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "069_D_068",
+    "133_A_022"
+   ],
+   "prioridad": 7,
+   "puntaje": 31.75,
+   "n_negativos_a_10ha": 7,
+   "n_gunw_por_track": {
+    "069_D_068": 29,
+    "133_A_022": 26
+   },
+   "cobertura": {
+    "069_D_068": 1.0,
+    "133_A_022": 0.99
+   }
+  },
+  {
+   "frame": "DELHI",
+   "orbita": [
+    106,
+    156
+   ],
+   "ciudad": "Delhi",
+   "pais": "IND",
+   "hemisferio": "N",
+   "epsg": 32643,
+   "bbox": [
+    76.85,
+    28.35,
+    77.55,
+    28.95
+   ],
+   "n_gunw": 52,
+   "fecha_inicio": "2025-11-17",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 1,
+    "desconocido": 4
+   },
+   "n_negativos": {
+    "cantera": 3,
+    "cultivo": 5,
+    "estacionamiento_playa": 2,
+    "feedlot": 5,
+    "humedal": 4,
+    "laguna_chica": 3,
+    "obra": 6,
+    "pileta_efluentes": 6,
+    "tosquera_arenera": 3,
+    "vegetacion_densa": 2
+   },
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "106_D_074",
+    "156_A_016"
+   ],
+   "prioridad": 8,
+   "puntaje": 8.5,
+   "n_negativos_a_10ha": 10,
+   "n_gunw_por_track": {
+    "106_D_074": 30,
+    "156_A_016": 22
+   },
+   "cobertura": {
+    "106_D_074": 1.0,
+    "156_A_016": 1.0
+   }
+  },
+  {
+   "frame": "YAKARTA",
+   "orbita": [
+    10,
+    18
+   ],
+   "ciudad": "Yakarta",
+   "pais": "IDN",
+   "hemisferio": "S",
+   "epsg": 32748,
+   "bbox": [
+    106.55,
+    -6.55,
+    107.2,
+    -5.95
+   ],
+   "n_gunw": 16,
+   "fecha_inicio": "2026-06-26",
+   "fecha_fin": "2026-10-13",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 5
+   },
+   "n_negativos": {},
+   "reservado_prueba": false,
+   "frames_nisar": [
+    "010_A_174",
+    "018_D_092"
+   ],
+   "prioridad": 9,
+   "puntaje": 5.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "010_A_174": 8,
+    "018_D_092": 8
+   },
+   "cobertura": {
+    "010_A_174": 1.0,
+    "018_D_092": 0.88
+   }
+  }
+ ]
+}
