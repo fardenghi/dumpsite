@@ -85,8 +85,8 @@ export default function App() {
         </nav>
         <div className="side-foot">
           {DEMO && (
-            <span className="pill" title="Todavía no hay backend: los sitios y las series son de ejemplo.">
-              datos de ejemplo
+            <span className="pill" title="Datos reales precalculados: 15 pares de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026. Sin backend: se regeneran con pipeline_insomnio.py indice.">
+              NISAR · AMBA · precalculado
             </span>
           )}
           <span>NASA Space Apps 2026</span>
