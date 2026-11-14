@@ -13,6 +13,7 @@ Instalación: `python -m venv .venv` y `.venv/Scripts/pip install -r requirement
 | `coherencia_gunw.py` | `python coherencia_gunw.py <GUNW.h5> [carpeta_salida]` | Lista las capas de coherencia del archivo, recorta alrededor de sitios fijos (Norte III, Luján, CABA, campo) y guarda una figura con el panorama del AMBA |
 | `manchas.py` | `python manchas.py <GUNW.h5>` | Busca en el AMBA manchas de coherencia baja respecto de su entorno y las lista con superficie, coordenadas y elongación (compacta, alargada o lineal) |
 | `predios.py` | `python predios.py <GUNW.h5> <carpeta_salida>` | Mide la coherencia adentro de predios conocidos (cajas de OSM) contra un anillo de 1,5 km, en las capas de 80 m y 20 m, y guarda una figura |
+| `cruce_catalogo.py` | `python cruce_catalogo.py [--indice X.npz] [--min-ha 10]` | Cruza un índice ya calculado con los polígonos de basurales (por complejo) y de negativos de `../../data/`: insomnio mediano por polígono, por clase y AUC. No necesita los recortes: usa `../salidas/indice_80m.npz`. Resultados en `../idea/indice-final.md` |
 
 ## Reproducir el índice sin la VM
 Los recortes por par (35 `.npz` por capa) están en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB, proyecto `basurales-514714`). Se extraen `recortes_80m/` y `recortes_20m/` en `../salidas/` (el `.gitignore` los excluye) y se corre `python pipeline_insomnio.py indice`. No hacen falta los `.h5` ni credenciales de Earthdata.
