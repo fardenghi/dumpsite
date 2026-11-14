@@ -1,4 +1,4 @@
-import { Dot, PageHead, fecha, num } from '../components/ui'
+import { PageHead, fecha, num } from '../components/ui'
 import { resumen, useSitios } from '../data/api'
 import candidatos from '../data/seed/candidatos.json'
 
@@ -40,10 +40,7 @@ export default function Inicio() {
         </div>
         <div className="despierto">
           <b className="num">{num(r.despiertos)}</b>
-          <span>
-            <Dot radar="despierto" />
-            despiertos
-          </span>
+          <span>despiertos</span>
         </div>
         <div>
           <b className="num">{num(sinRegistro)}</b>
@@ -55,22 +52,23 @@ export default function Inicio() {
         </div>
       </div>
 
-      <div className="datos">
-        <span>
-          <b className="num">{num(r.hectareas)}</b> ha en sitios
-        </span>
-        <span>
-          {fecha(r.desde)} a {fecha(r.hasta, true)}
-        </span>
-      </div>
-
-      <div className="row" style={{ marginBottom: 'auto' }}>
-        <a className="btn primary" href="#/sitios">
-          Ver los sitios
-        </a>
-        <a className="btn" href="#/modelo">
-          Cómo se decide
-        </a>
+      <div className="resumen-pie">
+        <div className="row">
+          <a className="btn primary" href="#/sitios">
+            Ver los sitios
+          </a>
+          <a className="btn" href="#/modelo">
+            Cómo se decide
+          </a>
+        </div>
+        <div className="datos">
+          <span>
+            <b className="num">{num(r.hectareas)}</b> ha en sitios
+          </span>
+          <span>
+            {fecha(r.desde)} a {fecha(r.hasta, true)}
+          </span>
+        </div>
       </div>
 
       <Fuentes />
