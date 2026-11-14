@@ -11,3 +11,8 @@ pytest
 # para los contratos de datos del modelo (`contratos.py`) y las tablas en parquet
 pandas
 pyarrow
+# para el modelo (prompt 3): manchas como polígonos, cruce, óptico de Sentinel-2 y LightGBM
+shapely
+rasterio
+lightgbm
+scikit-learn
