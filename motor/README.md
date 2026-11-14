@@ -4,14 +4,15 @@ Instalación: `python -m venv .venv` y `.venv/Scripts/pip install -r requirement
 
 | Script | Uso | Qué hace |
 |---|---|---|
-| `pipeline_insomnio.py` | `python pipeline_insomnio.py indice` | **El pipeline completo.** `buscar` lista los GUNW y GCOV del AMBA con la API de ASF; `bajar` los baja con earthaccess; `procesar` recorta coherencia y backscatter a una grilla común (necesita `h5py`). **`indice` calcula la versión final del índice** con los recortes ya hechos: tarda 14 s a 80 m y escribe `../salidas/` y los datos de `../../insomnes-web/`. `calibrar` barre los umbrales. `todo` corre desde cero, pensado para la VM (`../infra/README.md`). Resultados: `../idea/indice-final.md` |
-| `insomnio.py` | se importa | El cálculo del índice, sin lectura ni escritura: máscara de agua, factor de separación, entorno, fracción por órbita, persistencia, manchas y ficha con veredicto por sitio. Los umbrales están en `Parametros` |
-| `geo.py` | se importa | UTM 21S ↔ lat/lon vectorizado, grilla común del AMBA, rasterizado de polígonos y remuestreo a Web Mercator para la web |
-| `fuentes_fijas.py` | `python fuentes_fijas.py agua` (o `sitios`, `usos`) | Se corre una sola vez, con red. Baja la máscara de agua de JRC Global Surface Water y los polígonos de OpenStreetMap, y los deja en `fijos/` (van al repo: `indice` no necesita red). Necesita `tifffile` e `imagecodecs` para `agua` |
+| `pipeline_insomnio.py` | `python pipeline_insomnio.py indice` | **El pipeline completo, para cualquier frame** (sin `--frame`, el AMBA). `buscar` lista los GUNW y GCOV que cruzan la caja con la API de ASF; `bajar` los baja con earthaccess; `procesar` recorta coherencia y backscatter a la grilla común del frame (necesita `h5py`). **`indice` calcula la versión final del índice** con los recortes ya hechos: tarda 14 s a 80 m y escribe `../salidas/` y, para el AMBA, los datos de `../../insomnes-web/`. `calibrar` barre los umbrales (sólo AMBA). `todo` corre desde cero, pensado para la VM (`../infra/README.md`). Resultados: `../idea/indice-final.md` |
+| `insomnio.py` | se importa | El cálculo del índice, sin lectura ni escritura: máscara de agua, factor de separación, entorno, fracción por órbita, persistencia, manchas y ficha con veredicto por sitio. El anillo de un sitio excluye el agua y los polígonos de los catálogos (`excluir`). Los umbrales están en `Parametros` |
+| `geo.py` | se importa | UTM ↔ lat/lon vectorizado para cualquier zona y hemisferio (el EPSG sale del producto), los frames (`geo.frame("DELHI")`, `geo.AMBA`), la grilla común, rasterizado de polígonos y remuestreo a Web Mercator para la web. Sin parámetros, todo es el AMBA en UTM 21S, como antes |
+| `fuentes_fijas.py` | `python fuentes_fijas.py todo --frame DELHI` (o `agua`, `usos`, `catalogo`, `sitios`) | Arma las fuentes fijas de un frame y las cachea en `fijos/<FRAME>/` (van al repo: `indice` no necesita red): máscara de agua de JRC Global Surface Water, usos conocidos de OSM desde Overture Maps y los polígonos de los catálogos de `../../data/` que caen en el frame. `indice` las arma solo si faltan. Las del AMBA están sueltas en `fijos/` y son las de referencia (usos de Nominatim). Necesita `tifffile` e `imagecodecs` para `agua`, y `duckdb` para `usos` |
 | `sitios_registro.json` | se edita a mano | Los sitios con ficha: objeto de OSM o caja, registro, fecha de cierre y fuentes. `rol` dice cuáles se usaron para calibrar y cuáles son controles |
 | `tests/test_insomnio.py` | `python -m pytest tests -q` | Caso sintético: ciudad quieta, basural despierto, agua, tosquera sin máscara, campo estacional, ruta y un predio demasiado chico |
+| `tests/test_frames.py` | `python -m pytest tests -q` | El pipeline fuera del AMBA, sin red: UTM en los dos hemisferios, grilla y máscaras en el norte, el anillo que excluye los catálogos, recortes entre zonas UTM y de frames de NISAR vecinos, y `procesar` + `indice` de punta a punta con productos sintéticos del hemisferio norte |
 | `coherencia_gunw.py` | `python coherencia_gunw.py <GUNW.h5> [carpeta_salida]` | Lista las capas de coherencia del archivo, recorta alrededor de sitios fijos (Norte III, Luján, CABA, campo) y guarda una figura con el panorama del AMBA |
-| `manchas.py` | `python manchas.py <GUNW.h5>` | Busca en el AMBA manchas de coherencia baja respecto de su entorno y las lista con superficie, coordenadas y elongación (compacta, alargada o lineal) |
+| `manchas.py` | `python manchas.py <GUNW.h5> [--frame X]` | Busca en un GUNW manchas de coherencia baja respecto de su entorno y las lista con superficie, coordenadas y elongación (compacta, alargada o lineal). Usa la zona UTM del producto; sin `--frame` ni `--caja` mira el AMBA |
 | `predios.py` | `python predios.py <GUNW.h5> <carpeta_salida>` | Mide la coherencia adentro de predios conocidos (cajas de OSM) contra un anillo de 1,5 km, en las capas de 80 m y 20 m, y guarda una figura |
 | `frames_elegir.py` | `python frames_elegir.py [--cache dir]` | Etapa 2. Con la API pública de ASF (GUNW `PR`, sin login) evalúa ciudades y las celdas con más basurales de estado conocido, y elige ~10 frames sin superponerse. Escribe `../../data/frames.json`, `../idea/frames-elegidos.md` y `../salidas/estado_conocido.json` (basurales de estado conocido por frame). Tarda ~1 min |
 | `insomnio_catalogo.py` | `python insomnio_catalogo.py [--modo exacto\|aproximado]` | Etapa 4, segunda dirección del cruce: el insomnio sobre cada polígono del catálogo (basurales y negativos) del frame, esté o no en una mancha. `exacto` usa los recortes por par y `insomnio.ficha()` (reproduce `fichas_80m.json`); `aproximado`, sólo `indice_80m.npz`. Escribe `../salidas/insomnio_catalogo.parquet`. Por ahora sólo el AMBA |
@@ -27,14 +28,36 @@ Instalación: `python -m venv .venv` y `.venv/Scripts/pip install -r requirement
 | `entrenar.py` | `python entrenar.py [--datos X --predecir]` | Etapa 7. LightGBM binario en CPU, peso por clase, validación cruzada por frame: AUC, precisión y recall por frame con intervalos, errores por clase de negativo e importancia. Escribe `modelo.txt`, `metricas.json` y, con `--predecir`, `predicciones.parquet`. `--humo` permite un solo frame (no reportar) |
 | `tests/test_modelo.py` | `python -m pytest tests -q` | Vectorizado, cruce, reglas de etiquetado, índices ópticos, máscaras del anillo y el flujo de punta a punta con el mock. No usan la red |
 
+## Otro frame que no sea el AMBA
+Un **frame** es un área de trabajo: una caja, el EPSG de su grilla y las órbitas de NISAR que la cubren. Sale de `../../data/frames.json` (etapa 2 de `../idea/plan-entrenamiento.md`) o de `--caja`.
+```bash
+python pipeline_insomnio.py todo --frame DELHI --remoto        # buscar, procesar por URL e índice, sin bajar los .h5
+```
+```bash
+python pipeline_insomnio.py todo --frame todos --remoto        # todos los de frames.json, en su orden de prioridad
+```
+```bash
+python pipeline_insomnio.py todo --frame PRUEBA --caja -118.75 33.85 -117.75 34.50 --orbitas 34 --remoto
+```
+- **Dónde escribe:** cada frame que no es el AMBA va a `../salidas/<FRAME>/` (`frame.json`, `lista_productos.json`, `recortes_80m/`, `indice_80m.npz`, `resumen_80m.json`, la figura) y cachea sus fuentes fijas en `fijos/<FRAME>/`. Los recortes y el `.npz` no van al repo. El AMBA sigue escribiendo en `../salidas/` a secas.
+- **`--caja`** va en el orden de GeoJSON y de `frames.json`: `lon_oeste lat_sur lon_este lat_norte`. **Ojo:** `geo.CAJA` y `Frame.caja` van en otro orden (`lat_norte, lon_oeste, lat_sur, lon_este`).
+- **La zona UTM sale del producto:** `procesar` lee el dataset `projection` de cada GUNW y GCOV. Con `--caja` sin `--epsg`, la grilla toma la del primer GUNW. Si una órbita viene en otra zona que la grilla, se reproyecta por vecino más cercano.
+- **Dos frames de NISAR de la misma órbita:** si la caja cruza dos, `buscar` guarda los dos y `indice` los junta por par.
+- **Período y órbitas:** `--desde`, `--hasta` y `--orbitas`. Por defecto son los del frame (AMBA: órbitas 10 y 161, del 25/06 al 12/10/2026). Sólo se usan productos `PR`.
+- **Sin bajar o bajando:** `--remoto` lee por URL sólo la ventana del frame. Sin `--remoto`, `todo --borrar` baja, recorta y borra cada `.h5`, frame por frame, para no llenar el disco.
+- **El anillo:** el de cada sitio excluye el agua y todos los polígonos de los catálogos del frame (`fijos/<FRAME>/catalogo.json`). `--sin-catalogos` lo deja como antes, para comparar.
+- **Sitios con ficha:** hoy `sitios_registro.json` sólo tiene sitios del AMBA. En otro frame `indice` da las capas y las manchas, y marca como `relleno_osm` las que pisan un basural del catálogo. El insomnio de cada polígono del catálogo lo saca `insomnio_catalogo.py` (etapa 4).
+- **Probado** con una caja de Los Ángeles (hemisferio norte, EPSG 32611): ver `../idea/indice-final.md`.
+
 ## Reproducir el índice sin la VM
 Los recortes por par (35 `.npz` por capa) están en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB, proyecto `basurales-514714`). Se extraen `recortes_80m/` y `recortes_20m/` en `../salidas/` (el `.gitignore` los excluye) y se corre `python pipeline_insomnio.py indice`. No hacen falta los `.h5` ni credenciales de Earthdata.
 
 Notas:
 - **`procesar --remoto`** lee por URL sólo la ventana necesaria, sin bajar los 2,2 GB: un sitio con su anillo son unos MB por par, y la coherencia de 80 m de un frame entero, unas decenas de MB. Necesita correr `buscar` antes y las credenciales de Earthdata. Si resulta muy lento (abrir el HDF5 a distancia hace muchas lecturas chicas), el plan B es `bajar` + `procesar`.
-- La estructura de los GUNW es `science/LSAR/GUNW/grids/frequencyA/{unwrappedInterferogram (80 m), wrappedInterferogram (20 m)}/HH/coherenceMagnitude`, en UTM 21S (EPSG 32721) para el AMBA.
-- La conversión de lat/lon a UTM está escrita a mano para no depender de pyproj (`geo.py`). Está verificada con el Obelisco.
+- La estructura de los GUNW es `science/LSAR/GUNW/grids/frequencyA/{unwrappedInterferogram (80 m), wrappedInterferogram (20 m)}/HH/coherenceMagnitude`, en la zona UTM del frame de NISAR: UTM 21S (EPSG 32721) para el AMBA, UTM 11N (EPSG 32611) para Los Ángeles. El EPSG está en el dataset `projection` del mismo grupo (su valor y el atributo `epsg_code`).
+- La conversión de lat/lon a UTM está escrita a mano para no depender de pyproj (`geo.py`). Está verificada con el Obelisco y, contra pyproj, con 500 puntos en cada una de 8 zonas de los dos hemisferios (diferencia máxima: 2 mm).
+- **En Claude Code en la nube**, `--remoto` necesita `env -u FSSPEC_GCS python pipeline_insomnio.py ...`: esa variable del entorno rompe la apertura por HTTPS de fsspec.
 - Los sitios del índice final están en `sitios_registro.json`. `coherencia_gunw.py`, `manchas.py` y `predios.py` son las pruebas de la primera hora, con las coordenadas en constantes.
 
 ## Licencia y uso de IA
-Código: Apache 2.0. El índice final (`insomnio.py`, `geo.py`, `fuentes_fijas.py`, `pipeline_insomnio.py` y los tests) se escribió con asistencia de IA (Claude); hay que declararlo en el campo "Use of SI" de la entrega.
+Código: Apache 2.0. El índice final (`insomnio.py`, `geo.py`, `fuentes_fijas.py`, `pipeline_insomnio.py`, `manchas.py` y los tests) se escribió con asistencia de IA (Claude); hay que declararlo en el campo "Use of SI" de la entrega.
