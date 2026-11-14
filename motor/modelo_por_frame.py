@@ -17,8 +17,10 @@ Cada archivo se valida con `contratos.py`. En `salidas/<FRAME>/modelo_por_frame.
     python modelo_por_frame.py --rehacer             # aunque ya estén hechos
     python modelo_por_frame.py juntar                # arma los tres archivos de `salidas/` con todos los frames
     python modelo_por_frame.py tabla                 # radar de todos los frames → `armar_tabla.py` → `entrenar.py --predecir`
+                                                     # (con los negativos de OSM; --solo-catalogo da las etiquetas de la corrida 1)
     python modelo_por_frame.py tabla --final         # ídem, y predice la prueba final (Argentina). Una sola vez, al terminar
                                                      # (predicciones.parquet va a salidas/ sólo si el modelo está validado)
+    python modelo_por_frame.py variantes             # las variantes de etiquetas de la corrida 2 → salidas/metricas_variantes.json
     python modelo_por_frame.py estado                # qué tiene cada frame
 
 `juntar` escribe `salidas/cruce_manchas_catalogo.parquet`, `tabla_optico.parquet` y `tabla_optico_catalogo.parquet`.
@@ -240,7 +242,8 @@ def radar_de_todos(base=SALIDAS, destino=DATOS_MODELO, avisar=print):
     return ruta, avisos
 
 
-def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_sin_validar=False, extra_entrenar=(), avisar=print):
+def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_sin_validar=False, extra_entrenar=(), avisar=print,
+                     negativos_osm=True, positivos="todos"):
     """`armar_tabla.py` y `entrenar.py --predecir --controles` sobre todos los frames. La tabla, las particiones, el
     modelo y las métricas van a `base`. **`predicciones.parquet` va a `base` sólo si el modelo está validado**
     (`validado` en `metricas.json`); si no, queda en `datos/modelo/` y se saca el de `base`, para que el veredicto
@@ -250,6 +253,11 @@ def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_s
     # una partición por frame (dejar un frame afuera por vez): la validación es por frame de verdad
     armar = [sys.executable, os.path.join(AQUI, "armar_tabla.py"), "--datos", base, "--radar", radar, "--salida", base,
              "--particiones", "50"]
+    if negativos_osm:  # desde la corrida 2: las manchas `uso_conocido` de OSM entran como otro_movil
+        armar.append("--negativos-osm")
+    ia = os.path.join(base, "etiquetas_optico_ia.json")
+    if os.path.exists(ia):
+        armar += ["--etiquetas-optico", ia, "--positivos", positivos]
     if umbral_insomnio is not None:
         armar += ["--umbral-insomnio", str(umbral_insomnio)]
     subprocess.run(armar, check=True)
@@ -276,6 +284,78 @@ def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_s
     return validado
 
 
+# ------------------------------------------------------------------ variantes de etiquetas (corrida 2)
+# nombre: (opciones de `armar_tabla.armar`, qué cambia). Todas con las mismas particiones (una por frame).
+VARIANTES = {
+    "catalogo": (dict(), "La de la corrida 1: positivos y negativos de los catálogos."),
+    "catalogo_y_osm": (dict(con_negativos_osm=True),
+                       "Suma como otro_movil las manchas `uso_conocido` de OSM que no tocan ningún basural."),
+    "osm_sin_los_sin": (dict(con_negativos_osm=True, positivos="sin_sin"),
+                        "Ídem, y saca de basural_activo los basurales donde la IA no ve actividad en Sentinel-2 (`sin`)."),
+    "osm_solo_act": (dict(con_negativos_osm=True, positivos="solo_act"),
+                     "Ídem, y deja como basural_activo sólo los basurales donde la IA ve actividad (`act`)."),
+}
+
+
+def variantes(base=SALIDAS, avisar=print):
+    """Entrena y valida por frame cada variante de etiquetas. Cada una queda entera en `datos/modelo/variantes/<nombre>/`
+    (no se sube) y el resumen de todas, en `<base>/metricas_variantes.json`. No toca la prueba final."""
+    import armar_tabla as at
+    import entrenar
+
+    radar_ruta, avisos = radar_de_todos(base, avisar=avisar)
+    radar = pd.read_parquet(radar_ruta)
+    optico = contratos.leer(contratos.ruta("tabla_optico", base))
+    cruce = contratos.leer(contratos.ruta("cruce_manchas_catalogo", base))
+    frames = at.leer_frames(FRAMES_JSON)
+    ia_ruta = os.path.join(base, "etiquetas_optico_ia.json")
+    ia = at.leer_etiquetas_optico(ia_ruta) if os.path.exists(ia_ruta) else None
+    todas = radar.drop(columns=[c for c in ("clase_osm", "que") if c in radar.columns]) \
+                 .merge(optico.drop(columns=["frame", "n_escenas", "fechas"]), on="id_mancha", how="left")
+    resumen = {"generado_por": "herramientas/modelo_por_frame.py variantes", "validacion": "una partición por frame (se deja un frame afuera por vez)",
+               "prueba_final": "reservada: ninguna variante miró ni predijo la prueba final (Argentina)", "avisos": avisos,
+               "etiquetas_optico": "salidas/etiquetas_optico_ia.json: las puso una IA en dos pasadas a ciegas y NO las revisó una persona",
+               "negativos_osm": "manchas con clase_osm = uso_conocido (OSM vía Overture, etapa 4) que no tocan ningún basural del catálogo",
+               "variantes": {}}
+    for nombre, (opciones, que) in VARIANTES.items():
+        if ia is None and opciones.get("positivos"):
+            continue
+        t, partes = at.armar(radar, optico, cruce, frames, k=50, optico_ia=ia, **opciones)
+        destino = os.path.join(DATOS_MODELO, "variantes", nombre)
+        os.makedirs(destino, exist_ok=True)
+        contratos.guardar(t, "tabla_entrenamiento", destino)
+        with open(contratos.ruta("particiones", destino), "w", encoding="utf-8") as fh:
+            json.dump(partes, fh, ensure_ascii=False, indent=1)
+        final, res, pred = entrenar.correr(t, partes, todas=todas.copy(), reservar=True, con_controles=True)
+        final.booster_.save_model(os.path.join(destino, "modelo.txt"))
+        with open(os.path.join(destino, "metricas.json"), "w", encoding="utf-8") as fh:
+            json.dump(res, fh, ensure_ascii=False, indent=1)
+        contratos.guardar(pred, "predicciones", destino)
+        g, c = res["fuera_de_particion"]["global"], res.get("controles", {})
+        resumen["variantes"][nombre] = {
+            "que": que, "filas": res["filas"]["por_clase"], "filas_por_frame": res["filas"]["por_frame"],
+            "positivos_sacados_por_el_optico": partes["meta"]["positivos_sacados_por_el_optico"],
+            "validado": res["validado"], "por_que_no_esta_validado": res["por_que_no_esta_validado"],
+            "global": g, "por_frame": res["fuera_de_particion"]["por_frame"],
+            "auc_de_las_variantes_de_columnas": {k: {"auc": v["global"]["auc"], "auc_ic95": v["global"]["auc_ic95"]}
+                                                 for k, v in (c.get("variantes") or {}).items()},
+            "auc_de_area_ha_sola": (c.get("tamano") or {}).get("auc_de_area_ha_sola"),
+            "diagnostico_mezclando_frames_no_reportar": (c.get("diagnostico_mezclando_frames") or {}).get("auc_media"),
+            "errores_por_clase_negativo": res["errores_por_clase_negativo"], "mayores_errores": c.get("mayores_errores"),
+            "importancia": dict(list(res["importancia"].items())[:10]),
+            "manchas_sin_etiqueta_dadas_como_basural": None,
+        }
+        etiquetadas = set(t["id_mancha"])
+        resto = pred[~pred["id_mancha"].isin(etiquetadas)]
+        resumen["variantes"][nombre]["manchas_sin_etiqueta_dadas_como_basural"] = {
+            "n": int(len(resto)), "p_basural_0_5_o_mas": int((resto["p_basural"] >= 0.5).sum())}
+        avisar(f"{nombre}: {res['filas']['por_clase']} · AUC {g['auc']} {g['auc_ic95']} · precisión {g['precision']} {g['precision_ic95']} · "
+               f"recall {g['recall']} {g['recall_ic95']} · validado: {res['validado']}")
+    with open(os.path.join(base, "metricas_variantes.json"), "w", encoding="utf-8") as fh:
+        json.dump(resumen, fh, ensure_ascii=False, indent=1)
+    return resumen
+
+
 # ------------------------------------------------------------------ estado
 def estado(frames, base=SALIDAS):
     filas = []
@@ -295,7 +375,7 @@ def estado(frames, base=SALIDAS):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("paso", nargs="?", choices=["frames", "juntar", "tabla", "estado"], default="frames")
+    a.add_argument("paso", nargs="?", choices=["frames", "juntar", "tabla", "variantes", "estado"], default="frames")
     a.add_argument("--frame", action="append", help="sólo estos frames (se puede repetir); por defecto, todos los que tengan manchas")
     a.add_argument("--base", default=SALIDAS, help="carpeta con una subcarpeta por frame (por defecto ../salidas)")
     a.add_argument("--solo-cruce", action="store_true", help="no correr el óptico")
@@ -307,6 +387,10 @@ def main():
     a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías de cada frame (para probar; no se anota)")
     a.add_argument("--final", action="store_true", help="`tabla`: predecir también la prueba final (Argentina). Una sola vez, al terminar")
     a.add_argument("--umbral-insomnio", type=float, help="`tabla`: insomnio mínimo de las manchas para entrenar (por defecto 0,70)")
+    a.add_argument("--solo-catalogo", action="store_true",
+                   help="`tabla`: sin los negativos de OSM (las etiquetas de la corrida 1: sólo los catálogos)")
+    a.add_argument("--positivos", choices=("todos", "sin_sin", "solo_act"), default="todos",
+                   help="`tabla`: qué basurales cuentan como basural_activo según las etiquetas ópticas de la IA (ver armar_tabla.py)")
     a.add_argument("--publicar-sin-validar", action="store_true",
                    help="`tabla`: escribir salidas/predicciones.parquet aunque el modelo no esté validado (decisión de la mesa)")
     args = a.parse_args()
@@ -318,8 +402,12 @@ def main():
     if args.paso == "juntar":
         juntar(args.base)
         return
+    if args.paso == "variantes":
+        variantes(args.base)
+        return
     if args.paso == "tabla":
-        tabla_y_entrenar(args.base, final=args.final, umbral_insomnio=args.umbral_insomnio, publicar_sin_validar=args.publicar_sin_validar)
+        tabla_y_entrenar(args.base, final=args.final, umbral_insomnio=args.umbral_insomnio, publicar_sin_validar=args.publicar_sin_validar,
+                         negativos_osm=not args.solo_catalogo, positivos=args.positivos)
         return
 
     elegidos = [f for f in con_manchas(frames, args.base) if not args.frame or f in set(args.frame)]
