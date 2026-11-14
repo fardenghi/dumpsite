@@ -13,6 +13,13 @@ Después ordena por prioridad (ver `puntaje`) y elige ~10 frames sin quedarse s�
     python frames_elegir.py                     # consulta ASF, escribe ../../data/frames.json y ../idea/frames-elegidos.md
     python frames_elegir.py --cache /tmp/asf    # guarda/reusa las respuestas de ASF
     python frames_elegir.py --n 10 --max-usa 5
+    python frames_elegir.py --agregar 20        # deja los frames ya elegidos como están y suma 20 por cantidad de abiertos
+
+`--agregar N` (prompt 6) no vuelve a elegir: lee `frames.json`, deja sus frames con el mismo nombre, la misma caja y
+la misma prioridad, y suma N más, con prioridad de ahí en adelante. Las candidatas son las celdas de 1° con más
+basurales **abiertos** de 10 ha o más con polígono (por sitio, no por complejo; puntaje 2 × abiertos + cerrados),
+sin contar los que ya caen en una caja elegida. La caja de cada una se achica a sus basurales más 5 km. Entran las
+que tienen al menos 15 pares GUNW `PR` y no se tocan con una caja ya elegida. No hay tope de EE. UU.
 
 Supuestos (se anotan en `meta`): un área es una caja de ~1° alrededor de la ciudad (la del AMBA es `geo.CAJA`);
 un frame "cubre" el área si su huella contiene al menos `--min-cobertura` de la caja; la EPSG sale de la zona UTM
@@ -248,6 +255,241 @@ def puntaje(f):
     return round(base * min(1.0, f["n_gunw"] / 15), 2)
 
 
+# ---------------------------------------------------------------- agregar frames por cantidad de abiertos (prompt 6)
+MARGEN_KM = 5.0
+MIN_PARES_AGREGAR = 15
+MARCA_MD = ("<!-- agregados: inicio (lo escribe `frames_elegir.py --agregar`) -->", "<!-- agregados: fin -->")
+
+
+def sitios_con_poligono():
+    """Los basurales abiertos o cerrados de 10 ha o más con polígono (los 1.008 de `optico_estado_conocido.py`).
+
+    Devuelve una lista de dicts con `id`, `estado`, `lon`, `lat`, `area_ha`, `nombre`, `pais` y `caja` (la del polígono).
+    """
+    with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
+        ficha = {s["id"]: s for s in json.load(fh)["sitios"]}
+    with open(os.path.join(DATA, "basurales", "geometrias.geojson"), encoding="utf-8") as fh:
+        feats = json.load(fh)["features"]
+    salida = []
+    for f in feats:
+        g = f.get("geometry")
+        s = ficha.get(f["properties"]["id"])
+        if not g or g["type"] not in ("Polygon", "MultiPolygon") or not s:
+            continue
+        if s["estado"] not in ("abierto", "cerrado") or (s.get("area_ha") or 0) < 10 or s.get("lat") is None:
+            continue
+        anillos = g["coordinates"] if g["type"] == "Polygon" else [a for pol in g["coordinates"] for a in pol]
+        xy = np.array([p[:2] for a in anillos for p in a], dtype=float)
+        salida.append({"id": s["id"], "estado": s["estado"], "lon": s["lon"], "lat": s["lat"], "area_ha": s["area_ha"],
+                       "nombre": s.get("nombre"), "pais": s.get("pais"),
+                       "caja": [xy[:, 0].min(), xy[:, 1].min(), xy[:, 0].max(), xy[:, 1].max()]})
+    return salida
+
+
+def caja_con_margen(cajas, km=MARGEN_KM):
+    """La caja que contiene a todas, más `km` de margen, redondeada a 4 decimales."""
+    c = np.array(cajas, dtype=float)
+    o, s, e, n = c[:, 0].min(), c[:, 1].min(), c[:, 2].max(), c[:, 3].max()
+    dlat = km / 111.32
+    dlon = km / (111.32 * math.cos(math.radians((s + n) / 2)))
+    return [round(float(v), 4) for v in (o - dlon, s - dlat, e + dlon, n + dlat)]
+
+
+def _clave_area(lo, la, loc):
+    """Nombre del frame de una celda: "Sun Valley, Los Angeles, CA" -> USA_CA_LOS_ANGELES; sin localidad, CELDA_N34_W119."""
+    if not loc:
+        return "CELDA_" + ("N" if la >= 0 else "S") + f"{abs(la):02d}_" + ("E" if lo >= 0 else "W") + f"{abs(lo):03d}"
+    partes = [p.strip() for p in loc.split(",")]
+    lugar = partes[1] if len(partes) > 2 else partes[0]
+    return "_".join((["PRI"] if partes[-1].upper() == "PR" else ["USA", partes[-1].upper()])
+                    + [re.sub(r"[^A-Z0-9]+", "_", _ascii(lugar).upper()).strip("_")])
+
+
+def _puntaje_abiertos(sitios):
+    return 2 * sum(s["estado"] == "abierto" for s in sitios) + sum(s["estado"] == "cerrado" for s in sitios)
+
+
+def agregar(args):
+    """Suma `args.agregar` frames a `frames.json` sin tocar los que ya están (ver el encabezado)."""
+    with open(args.salida, encoding="utf-8") as fh:
+        actual = json.load(fh)
+    viejos = actual["frames"]
+    if any(f.get("criterio") == "abiertos" for f in viejos):
+        sys.exit("frames.json ya tiene frames agregados por abiertos. Para rehacerlos, sacalos a mano y volvé a correr.")
+    complejos, negativos = cargar_catalogos()
+    localidades = _localidades_epa()
+    sitios = sitios_con_poligono()
+    total = collections.Counter(s["estado"] for s in sitios)
+    ya = [s for s in sitios if any(en_caja([s["lon"]], [s["lat"]], f["bbox"])[0] for f in viejos)]
+    libres = [s for s in sitios if s not in ya]
+    por_celda = collections.defaultdict(list)
+    for s in libres:
+        por_celda[(math.floor(s["lon"]), math.floor(s["lat"]))].append(s)
+    print(f"{len(sitios)} basurales de estado conocido de 10 ha o más con polígono ({total['abierto']} abiertos, {total['cerrado']} cerrados); "
+          f"{len(ya)} ya caen en una caja elegida; quedan {len(libres)} en {len(por_celda)} celdas")
+
+    elegidos, descartadas, nombres = [], [], {f["frame"] for f in viejos}
+    pendientes = dict(por_celda)
+
+    def descartar(lo, la, clave, ss, motivo):
+        print(f"   no entra: {motivo}")
+        descartadas.append({"celda": [lo, la], "frame": clave, "abiertos": sum(s["estado"] == "abierto" for s in ss),
+                            "cerrados": sum(s["estado"] == "cerrado" for s in ss), "motivo": motivo})
+
+    while len(elegidos) < args.agregar:
+        cajas = [f["bbox"] for f in viejos + elegidos]
+        # De cada celda quedan los basurales cuyo polígono con margen no se toca con una caja ya elegida.
+        utiles = {k: [s for s in v if not any(se_tocan(caja_con_margen([s["caja"]]), c) for c in cajas)] for k, v in pendientes.items()}
+        utiles = {k: v for k, v in utiles.items() if any(s["estado"] == "abierto" for s in v)}
+        if not utiles:
+            break  # no quedan celdas con abiertos libres
+        (lo, la), ss = max(utiles.items(), key=lambda kv: (_puntaje_abiertos(kv[1]), sum(s["estado"] == "abierto" for s in kv[1]), -kv[0][0], -kv[0][1]))
+        del pendientes[(lo, la)]
+        resto = []
+        # Cada basural por separado no se toca con una caja elegida, pero la caja que los junta puede tocarse:
+        # entonces la celda se parte y queda el lado (oeste, este, sur o norte de esa caja) con más puntaje.
+        while True:
+            caja = caja_con_margen([s["caja"] for s in ss])
+            toca = next((c for c in cajas if se_tocan(caja, c)), None)
+            if toca is None:
+                break
+            m = {s["id"]: caja_con_margen([s["caja"]]) for s in ss}
+            lados = [[s for s in ss if m[s["id"]][2] <= toca[0]], [s for s in ss if m[s["id"]][0] >= toca[2]],
+                     [s for s in ss if m[s["id"]][3] <= toca[1]], [s for s in ss if m[s["id"]][1] >= toca[3]]]
+            lado = max(lados, key=_puntaje_abiertos)
+            resto += [s for s in ss if s not in lado]
+            ss = lado
+        ref = max(ss, key=lambda s: s["area_ha"])
+        loc = localidades.get(ref["id"])
+        clave, i = _clave_area(lo, la, loc), 2
+        base = clave
+        while clave in nombres:
+            clave, i = f"{base}_{i}", i + 1
+        ciudad = f"{loc or 'celda ' + str(la) + ', ' + str(lo)} (alrededor de {ref['nombre'] or ref['id']})"
+        pais = collections.Counter(s["pais"] for s in ss if s.get("pais")).most_common(1)
+        pais = pais[0][0] if pais else "USA"
+        print(f"celda ({lo}, {la}) {clave}: {sum(s['estado'] == 'abierto' for s in ss)} abiertos y {sum(s['estado'] == 'cerrado' for s in ss)} cerrados"
+              + (f" (aparte quedan {len(resto)} por la caja de otro frame)" if resto else "") + f"; caja {caja}; consultando ASF…", flush=True)
+        f = evaluar_area(clave, ciudad, pais, caja, args, complejos, negativos)
+        if f.get("sin_cobertura"):
+            # Ningún frame de NISAR cubre la caja entera: queda la huella con más puntaje y la caja se achica a sus basurales.
+            lon, lat = np.array([s["lon"] for s in ss]), np.array([s["lat"] for s in ss])
+            grupos = pares_por_frame(consultar_asf(caja, args.cache))
+            mejor = max(([s for s, d in zip(ss, dentro_poligono(lon, lat, g["huella"])) if d] for g in grupos.values() if len(g["pares"]) >= 4),
+                        key=_puntaje_abiertos, default=[])
+            if not any(s["estado"] == "abierto" for s in mejor) or len(mejor) == len(ss):
+                descartar(lo, la, clave, ss, f"sin frame GUNW PR que cubra el {args.min_cobertura:.0%} de la caja (mejor cobertura {f['mejor_cobertura']:.0%})")
+                continue
+            print(f"   sin un frame que cubra la caja (mejor {f['mejor_cobertura']:.0%}): se achica a los {len(mejor)} basurales de la huella con más puntaje")
+            resto += [s for s in ss if s not in mejor]
+            ss = mejor
+            caja = caja_con_margen([s["caja"] for s in ss])
+            f = evaluar_area(clave, ciudad, pais, caja, args, complejos, negativos)
+            if f.get("sin_cobertura"):
+                descartar(lo, la, clave, ss, f"sin frame GUNW PR que cubra el {args.min_cobertura:.0%} de la caja, ni achicándola a una huella (mejor cobertura {f['mejor_cobertura']:.0%})")
+                continue
+        if resto:
+            pendientes[(lo, la)] = resto  # lo que quedó afuera puede armar otro frame más adelante
+        if f["n_gunw"] < MIN_PARES_AGREGAR:
+            descartar(lo, la, clave, ss, f"sólo {f['n_gunw']} pares GUNW PR (hacen falta {MIN_PARES_AGREGAR})")
+            continue
+        # Los que quedan adentro de la huella de los tracks elegidos (la caja puede no estar cubierta entera).
+        lon, lat = np.array([s["lon"] for s in ss]), np.array([s["lat"] for s in ss])
+        cubre = np.zeros(len(ss), dtype=bool)
+        for h in f["_huellas"]:
+            cubre |= dentro_poligono(lon, lat, h)
+        f["n_sitios_10ha"] = {e: int(sum(c and s["estado"] == e for s, c in zip(ss, cubre))) for e in ("abierto", "cerrado")}
+        if not f["n_sitios_10ha"]["abierto"]:
+            descartar(lo, la, clave, ss, "ningún abierto cae en la huella de los tracks elegidos")
+            continue
+        f["puntaje"] = float(2 * f["n_sitios_10ha"]["abierto"] + f["n_sitios_10ha"]["cerrado"])
+        f["criterio"], f["celda"] = "abiertos", [lo, la]
+        f["prioridad"] = max(g["prioridad"] for g in viejos) + 1 + len(elegidos)
+        print(f"   entra con prioridad {f['prioridad']}: {f['frames_nisar']}, {f['n_gunw']} pares, {f['fecha_inicio']} a {f['fecha_fin']}; "
+              f"en la huella {f['n_sitios_10ha']}")
+        elegidos.append(f)
+        nombres.add(clave)
+    # El orden de procesamiento es de más a menos abiertos.
+    elegidos.sort(key=lambda f: (-f["n_sitios_10ha"]["abierto"], -f["puntaje"], f["prioridad"]))
+    for i, f in enumerate(elegidos):
+        f["prioridad"] = max(g["prioridad"] for g in viejos) + 1 + i
+
+    claves = ["frame", "orbita", "ciudad", "pais", "hemisferio", "epsg", "bbox", "n_gunw", "fecha_inicio", "fecha_fin",
+              "n_basurales_10ha", "n_negativos", "reservado_prueba", "frames_nisar",
+              "prioridad", "puntaje", "n_negativos_a_10ha", "n_gunw_por_track", "cobertura", "criterio", "celda", "n_sitios_10ha"]
+    actual["frames"] = viejos + [{k: f[k] for k in claves} for f in elegidos]
+    actual["meta"]["agregados"] = {
+        "generado": dt.date.today().isoformat(), "generado_por": "herramientas/frames_elegir.py --agregar",
+        "n": len(elegidos), "prioridad_desde": max(g["prioridad"] for g in viejos) + 1,
+        "criterio": ("celdas de 1° con más basurales abiertos de 10 ha o más con polígono, por sitio (puntaje 2 × abiertos + cerrados), "
+                     "sin contar los que ya caen en una caja elegida; caja achicada a esos basurales más "
+                     f"{MARGEN_KM:g} km; al menos {MIN_PARES_AGREGAR} pares GUNW PR; sin tocar una caja ya elegida; sin tope de EE. UU"),
+        "n_sitios_10ha": "abiertos y cerrados de 10 ha o más con polígono, por sitio, dentro de la caja y de la huella (lo que definió el frame)",
+        "sesgo": "todos los frames agregados salen del registro de la EPA (EE. UU.): el modelo queda entrenado ahí y probado en Argentina",
+        "celdas_descartadas": descartadas,
+    }
+    import pandas as pd
+
+    import contratos
+    contratos.validar(pd.DataFrame(actual["frames"]), "frames")
+    with open(args.salida, "w", encoding="utf-8") as fh:
+        json.dump(actual, fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+    if args.estado_conocido:  # los frames de antes quedan como están; se suman los nuevos
+        with open(args.estado_conocido, encoding="utf-8") as fh:
+            ec = json.load(fh)
+        ec["frames"].update(estado_conocido(elegidos)["frames"])
+        ec["meta"]["agregados"] = f"{dt.date.today().isoformat()}: {len(elegidos)} frames de `frames_elegir.py --agregar`"
+        with open(args.estado_conocido, "w", encoding="utf-8") as fh:
+            json.dump(ec, fh, ensure_ascii=False, indent=1)
+            fh.write("\n")
+    if args.md:
+        _escribir_md_agregados(args.md, elegidos, descartadas, actual["meta"]["agregados"], len(sitios), total, len(ya))
+    ab, ce = (sum(f["n_sitios_10ha"][e] for f in elegidos) for e in ("abierto", "cerrado"))
+    print(f"\n{len(elegidos)} frames agregados -> {os.path.relpath(args.salida)}: {ab} abiertos y {ce} cerrados de 10 ha o más con polígono, "
+          f"{sum(f['n_gunw'] for f in elegidos)} pares GUNW")
+
+
+def _escribir_md_agregados(ruta, elegidos, descartadas, meta, n_sitios, total, n_ya):
+    """Agrega (o reemplaza) en el .md la sección de los frames sumados; el resto del documento no se toca."""
+    filas = ["| Prioridad | Frame | Ciudad | Celda (lon, lat) | Tracks (NISAR) | Pares | Fechas | Abiertos | Cerrados | Caja (lon O, lat S, lon E, lat N) | Puntaje |",
+             "|---|---|---|---|---|---|---|---|---|---|---|"]
+    for f in elegidos:
+        n = f["n_sitios_10ha"]
+        filas.append(f"| {f['prioridad']} | `{f['frame']}` | {f['ciudad']} | ({f['celda'][0]}, {f['celda'][1]}) | {', '.join(f['frames_nisar'])} | {f['n_gunw']} | "
+                     f"{f['fecha_inicio']} a {f['fecha_fin']} | {n['abierto']} | {n['cerrado']} | {', '.join(str(v) for v in f['bbox'])} | {f['puntaje']:g} |")
+    ab, ce = (sum(f["n_sitios_10ha"][e] for f in elegidos) for e in ("abierto", "cerrado"))
+    filas.append(f"| **Total** | {len(elegidos)} frames | | | | {sum(f['n_gunw'] for f in elegidos)} | | **{ab}** | **{ce}** | | |")
+    desc = ["| Celda (lon, lat) | Nombre | Abiertos | Cerrados | Por qué no entra |", "|---|---|---|---|---|"]
+    desc += [f"| ({d['celda'][0]}, {d['celda'][1]}) | `{d['frame']}` | {d['abiertos']} | {d['cerrados']} | {d['motivo']} |" for d in descartadas]
+    seccion = f"""{MARCA_MD[0]}
+## Frames agregados por cantidad de abiertos (prompt 6, {meta['generado']})
+
+Generado por `python frames_elegir.py --agregar {len(elegidos)}`. **Los frames de arriba no cambian** (mismo nombre, misma caja, misma prioridad); estos siguen con prioridad de {meta['prioridad_desde']} en adelante, que es el orden de procesamiento.
+
+**Por qué:** los 10 frames de arriba se eligieron por diversidad y cubren pocos basurales de estado conocido. El catálogo tiene {f'{n_sitios:,}'.replace(',', '.')} basurales abiertos o cerrados de 10 ha o más con polígono ({total['abierto']} abiertos y {total['cerrado']} cerrados); {n_ya} ya caen en una caja de arriba.
+
+{chr(10).join(filas)}
+
+- **Abiertos y cerrados acá se cuentan por sitio** (polígono de 10 ha o más con estado en el registro), no por complejo como en la tabla de arriba, y sólo los que caen en la huella de los tracks elegidos. `frames.json` trae los dos conteos: `n_sitios_10ha` (este) y `n_basurales_10ha` (por complejo, el del contrato).
+- Criterio: {meta['criterio']}.
+- Puntaje: 2 × abiertos + cerrados. Las celdas se eligen de a una: después de cada elección se descuentan los basurales que quedaron a menos de {MARGEN_KM:g} km de una caja elegida.
+- **Sesgo:** {meta['sesgo']}.
+
+### Celdas que no entraron
+{chr(10).join(desc) if descartadas else 'Ninguna.'}
+{MARCA_MD[1]}
+"""
+    with open(ruta, encoding="utf-8") as fh:
+        texto = fh.read()
+    if MARCA_MD[0] in texto:
+        texto = texto.split(MARCA_MD[0])[0].rstrip("\n") + "\n\n" + seccion + texto.split(MARCA_MD[1], 1)[1].lstrip("\n")
+    else:
+        texto = texto.rstrip("\n") + "\n\n" + seccion
+    with open(ruta, "w", encoding="utf-8") as fh:
+        fh.write(texto)
+
+
 # ---------------------------------------------------------------- principal
 def evaluar_area(clave, ciudad, pais, caja, args, complejos, negativos):
     res = consultar_asf(caja, args.cache)
@@ -344,12 +586,16 @@ def main():
     a.add_argument("--celdas", type=int, default=25, help="celdas de 1° con más basurales de estado conocido para probar")
     a.add_argument("--min-cobertura", type=float, default=0.75, help="fracción de la caja que tiene que cubrir la huella de un frame")
     a.add_argument("--cache", help="carpeta para guardar las respuestas de ASF")
+    a.add_argument("--agregar", type=int, metavar="N",
+                   help="no vuelve a elegir: deja los frames de frames.json como están y suma N por cantidad de abiertos (ver el encabezado)")
     a.add_argument("--salida", default=os.path.join(DATA, "frames.json"))
     a.add_argument("--md", default=os.path.join(IDEA, "idea", "frames-elegidos.md"))
     a.add_argument("--todos", help="si se da, guarda acá todas las áreas evaluadas (JSON)")
     a.add_argument("--estado-conocido", default=os.path.join(IDEA, "salidas", "estado_conocido.json"),
                    help="basurales de estado conocido de cada frame elegido (lo leen las etapas 8 y 9)")
     args = a.parse_args()
+    if args.agregar:
+        return agregar(args)
 
     complejos, negativos = cargar_catalogos()
     areas = list(CIUDADES)
