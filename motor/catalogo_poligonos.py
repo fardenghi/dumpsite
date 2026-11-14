@@ -3,8 +3,9 @@
 Lo usan `cruce_manchas.py` y `extraer_optico.py`. No calcula nada del radar.
 
 - Basurales: `basurales/geometrias.geojson`, con `complejo` (de `complejos.json`), `estado` y `area_ha`.
-- Negativos: en el AMBA, `negativos/geometrias_amba.geojson`; fuera, `negativos/geometrias_mundo.parquet`
-  (geometría WKB). Con `clase`, `rol` y `prioridad`.
+- Negativos: `negativos/geometrias_amba.geojson` y `negativos/geometrias_mundo.parquet` (geometría WKB), los dos,
+  como `fuentes_fijas.py catalogo` (así los ids coinciden con los de `insomnio_catalogo.parquet` de la etapa 4).
+  Con `clase`, `rol` y `prioridad`.
 - Todo se filtra por la caja de trabajo y se puede pasar a la UTM del frame para medir áreas en metros.
 """
 import json
@@ -84,30 +85,46 @@ def basurales(bbox):
     return salida
 
 
-def negativos(bbox, fuente="auto"):
-    """Negativos cuya geometría toca la caja. `fuente`: "amba", "mundo" o "auto" (amba si la caja cae en el AMBA)."""
-    if fuente == "auto":
-        b = BBOX_AMBA
-        fuente = "amba" if b[0] <= (bbox[0] + bbox[2]) / 2 <= b[2] and b[1] <= (bbox[1] + bbox[3]) / 2 <= b[3] else "mundo"
-    toca, salida = _toca(bbox), []
-    if fuente == "amba":
-        with open(os.path.join(DATA, "negativos", "geometrias_amba.geojson"), encoding="utf-8") as fh:
-            filas = [(f["properties"], shape(f["geometry"]) if f.get("geometry") else None) for f in json.load(fh)["features"]]
-    else:
+_MUNDO = None
+
+
+def _mundo():
+    global _MUNDO
+    if _MUNDO is None:
         import pyarrow.parquet as pq
         t = pq.read_table(os.path.join(DATA, "negativos", "geometrias_mundo.parquet")).to_pylist()
-        filas = [({k: v for k, v in r.items() if k != "geometry"}, shapely.from_wkb(r["geometry"]) if r["geometry"] else None) for r in t]
+        _MUNDO = [({k: v for k, v in r.items() if k != "geometry"}, r["geometry"]) for r in t]
+    return _MUNDO
+
+
+def negativos(bbox, fuente="ambos"):
+    """Negativos cuya geometría toca la caja. `fuente`: "ambos" (por defecto), "amba" o "mundo"."""
+    toca, salida, filas = _toca(bbox), [], []
+    o, s, e, n = bbox
+    if fuente in ("ambos", "amba") and BBOX_AMBA[0] < e and o < BBOX_AMBA[2] and BBOX_AMBA[1] < n and s < BBOX_AMBA[3]:
+        with open(os.path.join(DATA, "negativos", "geometrias_amba.geojson"), encoding="utf-8") as fh:
+            filas += [(f["properties"], shape(f["geometry"]) if f.get("geometry") else None) for f in json.load(fh)["features"]]
+    if fuente in ("ambos", "mundo"):
+        caja = box(o - 0.1, s - 0.1, e + 0.1, n + 0.1)
+        for p, wkb in _mundo():
+            if wkb is None:
+                continue
+            g = shapely.from_wkb(wkb)
+            if g.intersects(caja):
+                filas.append((p, g))
+    vistos = set()
     for p, g in filas:
         g = _valida(g)
-        if not toca(g):
+        if p["id"] in vistos or not toca(g):
             continue
+        vistos.add(p["id"])
         salida.append({"id_catalogo": p["id"], "catalogo": "negativos", "complejo": None, "estado": None,
                        "area_ha": p.get("area_ha"), "nombre": p.get("nombre"), "clase": p.get("clase"),
                        "rol": p.get("rol"), "geom": g})
     return salida
 
 
-def catalogo(bbox, fuente_negativos="auto"):
+def catalogo(bbox, fuente_negativos="ambos"):
     """Basurales y negativos que tocan la caja."""
     return basurales(bbox) + negativos(bbox, fuente_negativos)
 
