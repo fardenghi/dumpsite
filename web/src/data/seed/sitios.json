@@ -1,0 +1,19 @@
+[
+  {"id": "norte-iii", "nombre": "Norte III", "lugar": "José León Suárez", "pais": "AR", "lat": -34.5289, "lon": -58.6162, "ha": 264, "registro": "activo", "radar": "despierto", "insomnio": 0.87, "base": 0.38, "anillo": 0.51},
+  {"id": "lujan-oeste", "nombre": "Mancha al oeste de Luján", "lugar": "Luján", "pais": "AR", "lat": -34.5215, "lon": -59.126, "ha": 20, "registro": "sin_registro", "radar": "despierto", "insomnio": 0.8, "base": 0.21, "anillo": 0.62},
+  {"id": "lujan", "nombre": "Basural de Luján", "lugar": "Luján", "pais": "AR", "lat": -34.523, "lon": -59.1179, "ha": 18, "registro": "cerrado", "cierre": "2026-07-01", "radar": "quieto", "insomnio": 0.13, "base": 0.66, "anillo": 0.62},
+  {"id": "gonzalez-catan", "nombre": "González Catán", "lugar": "La Matanza", "pais": "AR", "lat": -34.786, "lon": -58.6622, "ha": 154, "registro": "activo", "radar": "despierto", "insomnio": 0.73, "base": 0.42, "anillo": 0.53},
+  {"id": "ensenada", "nombre": "Ensenada", "lugar": "Ensenada", "pais": "AR", "lat": -34.8494, "lon": -57.966, "ha": 114, "registro": "activo", "radar": "no_alcanza", "insomnio": 0.33, "base": 0.56, "anillo": 0.56},
+  {"id": "ghazipur", "nombre": "Ghazipur", "lugar": "Delhi", "pais": "IN", "lat": 28.6242, "lon": 77.3273, "ha": 29, "registro": "activo", "radar": "despierto", "insomnio": 0.93, "base": 0.29, "anillo": 0.58},
+  {"id": "deonar", "nombre": "Deonar", "lugar": "Mumbai", "pais": "IN", "lat": 19.0682, "lon": 72.9299, "ha": 127, "registro": "activo", "radar": "despierto", "insomnio": 0.8, "base": 0.34, "anillo": 0.55},
+  {"id": "bantar-gebang", "nombre": "Bantar Gebang", "lugar": "Bekasi", "pais": "ID", "lat": -6.3498, "lon": 106.9974, "ha": 113, "registro": "activo", "radar": "despierto", "insomnio": 0.93, "base": 0.27, "anillo": 0.49},
+  {"id": "dandora", "nombre": "Dandora", "lugar": "Nairobi", "pais": "KE", "lat": -1.2483, "lon": 36.8974, "ha": 42, "registro": "activo", "radar": "despierto", "insomnio": 0.67, "base": 0.36, "anillo": 0.52},
+  {"id": "olusosun", "nombre": "Olusosun", "lugar": "Lagos", "pais": "NG", "lat": 6.5948, "lon": 3.377, "ha": 49, "registro": "activo", "radar": "despierto", "insomnio": 0.87, "base": 0.31, "anillo": 0.57},
+  {"id": "mbeubeuss", "nombre": "Mbeubeuss", "lugar": "Dakar", "pais": "SN", "lat": 14.8024, "lon": -17.3146, "ha": 89, "registro": "activo", "radar": "despierto", "insomnio": 0.73, "base": 0.35, "anillo": 0.54},
+  {"id": "apex", "nombre": "Apex Regional", "lugar": "Las Vegas", "pais": "US", "lat": 36.404, "lon": -114.917, "ha": 890, "registro": "activo", "radar": "despierto", "insomnio": 0.6, "base": 0.47, "anillo": 0.71},
+  {"id": "puente-hills", "nombre": "Puente Hills", "lugar": "Los Ángeles", "pais": "US", "lat": 34.0206, "lon": -118.0128, "ha": 280, "registro": "cerrado", "cierre": "2013-10-31", "radar": "quieto", "insomnio": 0.07, "base": 0.6, "anillo": 0.58},
+  {"id": "bordo-poniente", "nombre": "Bordo Poniente", "lugar": "Ciudad de México", "pais": "MX", "lat": 19.456, "lon": -99.018, "ha": 370, "registro": "cerrado", "cierre": "2011-12-19", "radar": "quieto", "insomnio": 0.2, "base": 0.57, "anillo": 0.59},
+  {"id": "estrutural", "nombre": "Estrutural", "lugar": "Brasilia", "pais": "BR", "lat": -15.7679, "lon": -47.9985, "ha": 192, "registro": "cerrado", "cierre": "2018-01-20", "radar": "quieto", "insomnio": 0.13, "base": 0.61, "anillo": 0.6},
+  {"id": "dona-juana", "nombre": "Doña Juana", "lugar": "Bogotá", "pais": "CO", "lat": 4.5038, "lon": -74.1363, "ha": 355, "registro": "activo", "radar": "despierto", "insomnio": 0.8, "base": 0.33, "anillo": 0.5},
+  {"id": "payatas", "nombre": "Payatas", "lugar": "Ciudad Quezón", "pais": "PH", "lat": 14.715, "lon": 121.107, "ha": 22, "registro": "cerrado", "cierre": "2017-12-31", "radar": "no_alcanza", "insomnio": 0.4, "base": 0.5, "anillo": 0.52}
+]
