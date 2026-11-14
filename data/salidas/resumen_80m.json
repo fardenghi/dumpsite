@@ -1,6 +1,26 @@
 {
  "capa": "80m",
  "version": "final",
+ "frame": {
+  "frame": "AMBA",
+  "orbita": [
+   10,
+   161
+  ],
+  "ciudad": "Buenos Aires",
+  "pais": "ARG",
+  "hemisferio": "S",
+  "epsg": 32721,
+  "epsg_fijo": true,
+  "bbox": [
+   -59.35,
+   -34.9,
+   -58.25,
+   -34.25
+  ],
+  "fecha_inicio": "2026-06-25",
+  "fecha_fin": "2026-10-12"
+ },
  "parametros": {
   "razon": 0.8,
   "min_insomnio": 0.7,
@@ -20,6 +40,11 @@
   "min_px_sitio": 8,
   "min_coh_anillo": 0.3,
   "min_pares_orbita": 3
+ },
+ "anillo_excluye": {
+  "basurales": 18,
+  "negativos": 1059,
+  "ha": 17956
  },
  "pares": [
   {
@@ -174,7 +199,7 @@
    "cierre": null,
    "ha": 264.8,
    "px": 413,
-   "px_anillo": 2465,
+   "px_anillo": 2056,
    "insomnio": 0.86,
    "persistencia": 0.6,
    "insomnio_orbita": {
@@ -194,7 +219,7 @@
    "cierre": null,
    "ha": 155.1,
    "px": 243,
-   "px_anillo": 2138,
+   "px_anillo": 2118,
    "insomnio": 1.0,
    "persistencia": 1.0,
    "insomnio_orbita": {
@@ -214,7 +239,7 @@
    "cierre": "2026-07-01",
    "ha": 43.7,
    "px": 44,
-   "px_anillo": 1785,
+   "px_anillo": 1781,
    "insomnio": 0.0,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -234,7 +259,7 @@
    "cierre": null,
    "ha": 30.6,
    "px": 9,
-   "px_anillo": 1546,
+   "px_anillo": 1502,
    "insomnio": 0.21,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -254,7 +279,7 @@
    "cierre": null,
    "ha": 71.5,
    "px": 111,
-   "px_anillo": 1769,
+   "px_anillo": 1525,
    "insomnio": 1.0,
    "persistencia": 1.0,
    "insomnio_orbita": {
@@ -274,12 +299,12 @@
    "cierre": null,
    "ha": 149.8,
    "px": 231,
-   "px_anillo": 2208,
-   "insomnio": 0.86,
-   "persistencia": 0.6,
+   "px_anillo": 1795,
+   "insomnio": 0.93,
+   "persistencia": 0.8,
    "insomnio_orbita": {
     "10": 1.0,
-    "161": 0.71
+    "161": 0.86
    },
    "eco_db": -9.6,
    "radar": "despierto",
@@ -294,7 +319,7 @@
    "cierre": null,
    "ha": 63.5,
    "px": 101,
-   "px_anillo": 1666,
+   "px_anillo": 1572,
    "insomnio": 1.0,
    "persistencia": 1.0,
    "insomnio_orbita": {
@@ -314,7 +339,7 @@
    "cierre": null,
    "ha": 16.3,
    "px": 25,
-   "px_anillo": 1347,
+   "px_anillo": 1217,
    "insomnio": 1.0,
    "persistencia": 1.0,
    "insomnio_orbita": {
@@ -334,7 +359,7 @@
    "cierre": "2004-02-02",
    "ha": 7.8,
    "px": 10,
-   "px_anillo": 1279,
+   "px_anillo": 1272,
    "insomnio": 0.33,
    "persistencia": 0.2,
    "insomnio_orbita": {
@@ -354,7 +379,7 @@
    "cierre": null,
    "ha": 10.6,
    "px": 15,
-   "px_anillo": 1060,
+   "px_anillo": 1014,
    "insomnio": 0.13,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -374,16 +399,16 @@
    "cierre": null,
    "ha": 7.9,
    "px": 14,
-   "px_anillo": 1646,
-   "insomnio": 0.2,
+   "px_anillo": 1619,
+   "insomnio": 0.27,
    "persistencia": 0.0,
    "insomnio_orbita": {
     "10": 0.25,
-    "161": 0.14
+    "161": 0.29
    },
    "eco_db": -7.8,
-   "radar": "quieto",
-   "motivo": "coherencia igual o mayor que la del anillo en casi todos los pares",
+   "radar": "no_alcanza",
+   "motivo": "señal intermedia: ni quieto ni despierto",
    "cubierto_por_manchas": 0.0,
    "agua": 0.0
   },
@@ -394,7 +419,7 @@
    "cierre": null,
    "ha": 2.1,
    "px": 2,
-   "px_anillo": 1212,
+   "px_anillo": 1197,
    "insomnio": 0.32,
    "persistencia": 0.2,
    "insomnio_orbita": {
@@ -414,7 +439,7 @@
    "cierre": null,
    "ha": 305.2,
    "px": 476,
-   "px_anillo": 2649,
+   "px_anillo": 2538,
    "insomnio": 0.0,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -451,7 +476,7 @@
    "cierre": null,
    "ha": 6125.3,
    "px": 6842,
-   "px_anillo": 5619,
+   "px_anillo": 5429,
    "insomnio": 0.0,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -471,7 +496,7 @@
    "cierre": null,
    "ha": 889.5,
    "px": 569,
-   "px_anillo": 3305,
+   "px_anillo": 3251,
    "insomnio": 0.0,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -491,7 +516,7 @@
    "cierre": null,
    "ha": 3557.1,
    "px": 5562,
-   "px_anillo": 6740,
+   "px_anillo": 6380,
    "insomnio": 0.0,
    "persistencia": 0.0,
    "insomnio_orbita": {
@@ -1221,6 +1246,6 @@
  "fuentes": [
   "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC",
   "JRC Global Surface Water v1.4",
-  "© colaboradores de OpenStreetMap (ODbL)"
+  "© colaboradores de OpenStreetMap (ODbL), por Nominatim y por Overture Maps 2026-10-21.0"
  ]
 }
