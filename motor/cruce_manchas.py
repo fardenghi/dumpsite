@@ -81,11 +81,35 @@ def cruzar(lista_manchas, poligonos, epsg_por_frame):
              .sort_values(["id_mancha", "frac_area_menor"], ascending=[True, False]).reset_index(drop=True)
 
 
+def cruzar_por_frame(ms, fc, cargar):
+    """Cruza frame por frame: el catálogo se carga con la caja de cada frame (sirve para el geojson de todos los frames
+    que arma `extraer_manchas.py juntar`). Devuelve (DataFrame, polígonos cargados en total)."""
+    epsg_meta = (fc.get("meta") or {}).get("epsg") or fc.get("epsg")
+    frames = sorted({p["frame"] for p, _ in ms})
+    partes, total = [], 0
+
+    def epsg_por_frame(frame, lista):
+        if epsg_meta and len(frames) == 1:
+            return int(epsg_meta)
+        c = shapely.union_all([g for _, g in lista]).centroid
+        return cp.epsg_utm(c.x, c.y)
+
+    for f in frames:
+        sub = [(p, g) for p, g in ms if p["frame"] == f]
+        poligonos = cargar(cp.bbox_de([g for _, g in sub]))
+        total += len(poligonos)
+        if poligonos:
+            partes.append(cruzar(sub, poligonos, epsg_por_frame))
+    cols = list(contratos.CONTRATOS["cruce_manchas_catalogo"].nombres) + ["inter_ha"]
+    df = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame(columns=cols)
+    return df, total
+
+
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--manchas", default=os.path.join(AQUI, "..", "salidas", "manchas.geojson"))
     a.add_argument("--catalogo", help="GeoJSON de polígonos en vez de ../data/ (el mock)")
-    a.add_argument("--negativos", default="auto", choices=("auto", "amba", "mundo"))
+    a.add_argument("--negativos", default="ambos", choices=("ambos", "amba", "mundo"))
     a.add_argument("--todas", action="store_true", help="cruzar también las manchas descartadas")
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "salidas"))
     args = a.parse_args()
@@ -96,17 +120,9 @@ def main():
     ms = cp.manchas(fc, solo_candidatas=not args.todas)
     if not ms:
         sys.exit("No hay manchas para cruzar.")
-    bbox = cp.bbox_de([g for _, g in ms])
-    poligonos = _catalogo_archivo(args.catalogo) if args.catalogo else cp.catalogo(bbox, args.negativos)
-    epsg_meta = (fc.get("meta") or {}).get("epsg")
-
-    def epsg_por_frame(frame, lista):
-        if epsg_meta and len({p["frame"] for p, _ in ms}) == 1:
-            return int(epsg_meta)
-        c = shapely.union_all([g for _, g in lista]).centroid
-        return cp.epsg_utm(c.x, c.y)
-
-    df = cruzar(ms, poligonos, epsg_por_frame)
+    df, n_pol = cruzar_por_frame(ms, fc, (lambda bbox: _catalogo_archivo(args.catalogo)) if args.catalogo
+                                 else (lambda bbox: cp.catalogo(bbox, args.negativos)))
+    poligonos = range(n_pol)
     destino = contratos.guardar(df, "cruce_manchas_catalogo", args.salida)
     ok = df[df["frac_area_menor"] >= contratos.CRITERIO_CRUCE]
     print(f"{destino}: {len(df)} pares de {df['id_mancha'].nunique()} manchas (de {len(ms)}) con {len(poligonos)} polígonos "
