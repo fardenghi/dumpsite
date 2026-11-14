@@ -88,3 +88,15 @@ Los polígonos van en archivos aparte. Cada feature se enlaza con su catálogo p
 - **Simplificación:** `ST_SimplifyPreserveTopology` con 0,0001° (unos 10 m), menos que un píxel de NISAR. El área cambia un 0,8 % en la mediana respecto del `area_ha` del catálogo, que se calculó con el polígono original.
 - **Puntos:** los 9.913 basurales sin polígono van como punto con `geometria = "punto"`. Son los que vienen solo de la EPA o de Climate TRACE y los cerrados de OSM que Overture no trae. Entre los cerrados hay 1.925 con polígono y 1.654 con punto.
 - **Lectura:** el GeoParquet se abre con GeoPandas (`geopandas.read_parquet`), DuckDB o QGIS. Los GeoJSON se abren con cualquier herramienta.
+- **Revisión del 14/11:**
+  - En 7.595 basurales el polígono es más de un 20 % más chico que el `area_ha` del catálogo. **Casi todos son sitios de menos de 5 ha** (la mayoría de menos de 1 ha), donde la simplificación a ~10 m pesa mucho. **En los sitios de 5 ha o más, que son los que se usan con el radar, no hay desajustes.**
+  - De los 614 sitios formados por varios objetos OSM, sólo 33 (7 de 5 ha o más) quedaron con un contorno parcial, porque `geometrias_armar.py` se quedaba con el primer objeto. **El script ya une todos los objetos de cada sitio** (`ST_Union_Agg`), pero hay que volver a correrlo: los crudos (`geom_parts/`) no están en el repo.
+
+## Complejos
+`basurales/complejos.json` (14 MB) agrupa en **complejos** los basurales del catálogo que están a menos de 1 km entre sí, por ejemplo las tres entradas de Norte III. Lo arma `idea-basurales-nisar/herramientas/complejos_agrupar.py` a partir de `geometrias.geojson`, en unos 15 segundos.
+- **Para qué:** que cada complejo cuente una sola vez y caiga entero en la misma partición de la validación. Al extraer variables, el anillo de control excluye todos los polígonos de los catálogos.
+- **Estado del complejo:** `abierto` si alguna entrada está abierta y ninguna cerrada; `cerrado` al revés; `contradictorio` si hay de los dos; `desconocido` si ninguna tiene estado.
+- **Contenido:** `complejo_por_sitio` (id del sitio → id del complejo) y `complejos` (sitios, estado, estados por sitio, área sumada, centro y nombres).
+- **Conteos:** 59.538 complejos; 3.690 tienen varios sitios (11.133 sitios en total). Estados: 1.212 abiertos, 3.293 cerrados, 42 contradictorios y 54.991 desconocidos.
+- **Limitación:** los polígonos de menos de 1 ha no unen a otros. Hay ciudades con cientos de micro basurales mapeados que, encadenados de a menos de 1 km, armaban "complejos" de 10 a 18 km. Igual puede quedar alguna cadena larga entre sitios más grandes: el mayor complejo tiene 75 sitios (escombreras mineras en Alemania).
+- **Ojo con los nombres:** el sitio `BAS-061528`, "Ensenada", es Ensenada, Baja California (México), no la de Buenos Aires (`BAS-053303`).
