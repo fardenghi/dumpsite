@@ -18,6 +18,7 @@ Cada archivo se valida con `contratos.py`. En `salidas/<FRAME>/modelo_por_frame.
     python modelo_por_frame.py juntar                # arma los tres archivos de `salidas/` con todos los frames
     python modelo_por_frame.py tabla                 # radar de todos los frames → `armar_tabla.py` → `entrenar.py --predecir`
     python modelo_por_frame.py tabla --final         # ídem, y predice la prueba final (Argentina). Una sola vez, al terminar
+                                                     # (predicciones.parquet va a salidas/ sólo si el modelo está validado)
     python modelo_por_frame.py estado                # qué tiene cada frame
 
 `juntar` escribe `salidas/cruce_manchas_catalogo.parquet`, `tabla_optico.parquet` y `tabla_optico_catalogo.parquet`.
@@ -239,19 +240,40 @@ def radar_de_todos(base=SALIDAS, destino=DATOS_MODELO, avisar=print):
     return ruta, avisos
 
 
-def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, extra_entrenar=(), avisar=print):
+def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_sin_validar=False, extra_entrenar=(), avisar=print):
+    """`armar_tabla.py` y `entrenar.py --predecir --controles` sobre todos los frames. La tabla, las particiones, el
+    modelo y las métricas van a `base`. **`predicciones.parquet` va a `base` sólo si el modelo está validado**
+    (`validado` en `metricas.json`); si no, queda en `datos/modelo/` y se saca el de `base`, para que el veredicto
+    (prompt 5) deje las manchas como `sin_clasificar` en vez de clasificarlas con un modelo que no se distingue del azar."""
+    import shutil
     radar, avisos = radar_de_todos(base, avisar=avisar)
-    armar = [sys.executable, os.path.join(AQUI, "armar_tabla.py"), "--datos", base, "--radar", radar, "--salida", base]
+    # una partición por frame (dejar un frame afuera por vez): la validación es por frame de verdad
+    armar = [sys.executable, os.path.join(AQUI, "armar_tabla.py"), "--datos", base, "--radar", radar, "--salida", base,
+             "--particiones", "50"]
     if umbral_insomnio is not None:
         armar += ["--umbral-insomnio", str(umbral_insomnio)]
     subprocess.run(armar, check=True)
-    entrenar = [sys.executable, os.path.join(AQUI, "entrenar.py"), "--datos", base, "--radar", radar, "--salida", base,
+    entrenar = [sys.executable, os.path.join(AQUI, "entrenar.py"), "--datos", base, "--radar", radar, "--salida", DATOS_MODELO,
                 "--predecir", "--controles"]
     if not final:
         entrenar.append("--reservar-prueba-final")
     for a in avisos:
         entrenar += ["--aviso", a]
     subprocess.run(entrenar + list(extra_entrenar), check=True)
+    for archivo in ("modelo.txt", "metricas.json"):
+        shutil.copyfile(os.path.join(DATOS_MODELO, archivo), os.path.join(base, archivo))
+    with open(os.path.join(base, "metricas.json"), encoding="utf-8") as fh:
+        validado = json.load(fh).get("validado", False)
+    pred = contratos.ruta("predicciones", base)
+    if validado or publicar_sin_validar:
+        shutil.copyfile(contratos.ruta("predicciones", DATOS_MODELO), pred)
+        avisar(f"{os.path.relpath(pred, IDEA)}: publicado" + ("" if validado else " SIN VALIDAR (--publicar-sin-validar)"))
+    else:
+        if os.path.exists(pred):
+            os.remove(pred)
+        avisar(f"MODELO SIN VALIDAR: predicciones.parquet queda en {os.path.relpath(DATOS_MODELO, IDEA)}/ y no en salidas/ "
+               "(el veredicto deja las manchas sin catálogo como `sin_clasificar`). Ver metricas.json.")
+    return validado
 
 
 # ------------------------------------------------------------------ estado
@@ -285,6 +307,8 @@ def main():
     a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías de cada frame (para probar; no se anota)")
     a.add_argument("--final", action="store_true", help="`tabla`: predecir también la prueba final (Argentina). Una sola vez, al terminar")
     a.add_argument("--umbral-insomnio", type=float, help="`tabla`: insomnio mínimo de las manchas para entrenar (por defecto 0,70)")
+    a.add_argument("--publicar-sin-validar", action="store_true",
+                   help="`tabla`: escribir salidas/predicciones.parquet aunque el modelo no esté validado (decisión de la mesa)")
     args = a.parse_args()
 
     frames = leer_frames()
@@ -295,7 +319,7 @@ def main():
         juntar(args.base)
         return
     if args.paso == "tabla":
-        tabla_y_entrenar(args.base, final=args.final, umbral_insomnio=args.umbral_insomnio)
+        tabla_y_entrenar(args.base, final=args.final, umbral_insomnio=args.umbral_insomnio, publicar_sin_validar=args.publicar_sin_validar)
         return
 
     elegidos = [f for f in con_manchas(frames, args.base) if not args.frame or f in set(args.frame)]
