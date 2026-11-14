@@ -74,7 +74,13 @@ def test_el_cruce_del_mock_coincide_con_el_del_mock(mock):
     with open(ct.ruta("manchas", mock), encoding="utf-8") as fh:
         ms = cruce_manchas.cp.manchas(json.load(fh))
     pol = cruce_manchas._catalogo_archivo(os.path.join(mock, "catalogo_mock.geojson"))
-    df = cruce_manchas.cruzar(ms, pol, lambda f, l: cruce_manchas.cp.epsg_utm(*l[0][1].centroid.coords[0]))
+    cajas = []
+
+    def cargar(bbox):  # se llama una vez por frame, con la caja de ese frame
+        cajas.append(bbox)
+        return pol
+    df, _ = cruce_manchas.cruzar_por_frame(ms, {}, cargar)
+    assert len(cajas) == len({p["frame"] for p, _ in ms}) == 4
     esperado = ct.leer(mock, "cruce_manchas_catalogo")
     ok = lambda d: set(map(tuple, d[d.frac_area_menor >= ct.CRITERIO_CRUCE][["id_mancha", "id_catalogo"]].values))  # noqa: E731
     assert ok(df) == ok(esperado)
