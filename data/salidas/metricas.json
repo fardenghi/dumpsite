@@ -30,7 +30,9 @@
   "compacidad",
   "agua_anillo",
   "urbano_anillo",
-  "cultivo_anillo"
+  "cultivo_anillo",
+  "contraste_p10",
+  "eco_var_p90"
  ],
  "parametros": {
   "objective": "binary",
@@ -120,10 +122,10 @@
    "n": 592,
    "n_basural": 39,
    "n_otro": 553,
-   "auc": 0.788,
+   "auc": 0.794,
    "auc_ic95": [
-    0.712,
-    0.86
+    0.72,
+    0.866
    ],
    "precision": 0.29,
    "precision_ic95": [
@@ -141,30 +143,30 @@
     "n": 138,
     "n_basural": 5,
     "n_otro": 133,
-    "auc": 0.722,
+    "auc": 0.753,
     "auc_ic95": [
-     0.414,
-     0.951
+     0.488,
+     0.956
     ],
-    "precision": 0.0,
+    "precision": 0.143,
     "precision_ic95": [
-     0.0,
-     0.39
+     0.026,
+     0.513
     ],
-    "recall": 0.0,
+    "recall": 0.2,
     "recall_ic95": [
-     0.0,
-     0.434
+     0.036,
+     0.624
     ]
    },
    "1": {
     "n": 97,
     "n_basural": 10,
     "n_otro": 87,
-    "auc": 0.867,
+    "auc": 0.879,
     "auc_ic95": [
-     0.758,
-     0.955
+     0.777,
+     0.959
     ],
     "precision": 0.5,
     "precision_ic95": [
@@ -201,10 +203,10 @@
     "n": 79,
     "n_basural": 4,
     "n_otro": 75,
-    "auc": 0.847,
+    "auc": 0.883,
     "auc_ic95": [
-     0.462,
-     1.0
+     0.623,
+     0.996
     ],
     "precision": null,
     "precision_ic95": null,
@@ -220,7 +222,7 @@
     "n_otro": 43,
     "auc": 0.946,
     "auc_ic95": [
-     0.844,
+     0.858,
      1.0
     ],
     "precision": 0.4,
@@ -238,10 +240,10 @@
     "n": 44,
     "n_basural": 1,
     "n_otro": 43,
-    "auc": 0.535,
+    "auc": 0.674,
     "auc_ic95": [
-     0.374,
-     0.69
+     0.524,
+     0.813
     ],
     "precision": 0.0,
     "precision_ic95": [
@@ -258,30 +260,30 @@
     "n": 41,
     "n_basural": 5,
     "n_otro": 36,
-    "auc": 0.817,
+    "auc": 0.778,
     "auc_ic95": [
-     0.667,
-     0.947
+     0.574,
+     0.944
     ],
-    "precision": 0.25,
+    "precision": 0.0,
     "precision_ic95": [
-     0.046,
-     0.699
+     0.0,
+     0.562
     ],
-    "recall": 0.2,
+    "recall": 0.0,
     "recall_ic95": [
-     0.036,
-     0.624
+     0.0,
+     0.434
     ]
    },
    "7": {
     "n": 33,
     "n_basural": 6,
     "n_otro": 27,
-    "auc": 0.71,
+    "auc": 0.685,
     "auc_ic95": [
-     0.468,
-     0.957
+     0.419,
+     0.966
     ],
     "precision": null,
     "precision_ic95": null,
@@ -295,9 +297,9 @@
     "n": 20,
     "n_basural": 4,
     "n_otro": 16,
-    "auc": 0.734,
+    "auc": 0.75,
     "auc_ic95": [
-     0.333,
+     0.368,
      1.0
     ],
     "precision": 1.0,
@@ -317,20 +319,20 @@
     "n": 41,
     "n_basural": 5,
     "n_otro": 36,
-    "auc": 0.817,
+    "auc": 0.778,
     "auc_ic95": [
-     0.667,
-     0.947
+     0.574,
+     0.944
     ],
-    "precision": 0.25,
+    "precision": 0.0,
     "precision_ic95": [
-     0.046,
-     0.699
+     0.0,
+     0.562
     ],
-    "recall": 0.2,
+    "recall": 0.0,
     "recall_ic95": [
-     0.036,
-     0.624
+     0.0,
+     0.434
     ]
    },
    "DELHI": {
@@ -339,7 +341,7 @@
     "n_otro": 43,
     "auc": 0.946,
     "auc_ic95": [
-     0.844,
+     0.858,
      1.0
     ],
     "precision": 0.4,
@@ -357,10 +359,10 @@
     "n": 97,
     "n_basural": 10,
     "n_otro": 87,
-    "auc": 0.867,
+    "auc": 0.879,
     "auc_ic95": [
-     0.758,
-     0.955
+     0.777,
+     0.959
     ],
     "precision": 0.5,
     "precision_ic95": [
@@ -397,9 +399,9 @@
     "n": 20,
     "n_basural": 4,
     "n_otro": 16,
-    "auc": 0.734,
+    "auc": 0.75,
     "auc_ic95": [
-     0.333,
+     0.368,
      1.0
     ],
     "precision": 1.0,
@@ -417,10 +419,10 @@
     "n": 44,
     "n_basural": 1,
     "n_otro": 43,
-    "auc": 0.535,
+    "auc": 0.674,
     "auc_ic95": [
-     0.374,
-     0.69
+     0.524,
+     0.813
     ],
     "precision": 0.0,
     "precision_ic95": [
@@ -437,30 +439,30 @@
     "n": 138,
     "n_basural": 5,
     "n_otro": 133,
-    "auc": 0.722,
+    "auc": 0.753,
     "auc_ic95": [
-     0.414,
-     0.951
+     0.488,
+     0.956
     ],
-    "precision": 0.0,
+    "precision": 0.143,
     "precision_ic95": [
-     0.0,
-     0.39
+     0.026,
+     0.513
     ],
-    "recall": 0.0,
+    "recall": 0.2,
     "recall_ic95": [
-     0.0,
-     0.434
+     0.036,
+     0.624
     ]
    },
    "USA_OH_LAKE": {
     "n": 33,
     "n_basural": 6,
     "n_otro": 27,
-    "auc": 0.71,
+    "auc": 0.685,
     "auc_ic95": [
-     0.468,
-     0.957
+     0.419,
+     0.966
     ],
     "precision": null,
     "precision_ic95": null,
@@ -474,10 +476,10 @@
     "n": 79,
     "n_basural": 4,
     "n_otro": 75,
-    "auc": 0.847,
+    "auc": 0.883,
     "auc_ic95": [
-     0.462,
-     1.0
+     0.623,
+     0.996
     ],
     "precision": null,
     "precision_ic95": null,
@@ -509,6 +511,15 @@
     1.0
    ]
   },
+  "laguna_chica": {
+   "n": 2,
+   "dados_como_basural": 1,
+   "fraccion": 0.5,
+   "ic95": [
+    0.095,
+    0.905
+   ]
+  },
   "osm_cantera": {
    "n": 6,
    "dados_como_basural": 3,
@@ -538,11 +549,11 @@
   },
   "osm_reserva": {
    "n": 75,
-   "dados_como_basural": 4,
-   "fraccion": 0.053,
+   "dados_como_basural": 3,
+   "fraccion": 0.04,
    "ic95": [
-    0.021,
-    0.129
+    0.014,
+    0.111
    ]
   },
   "osm_parque": {
@@ -626,15 +637,6 @@
     0.49
    ]
   },
-  "laguna_chica": {
-   "n": 2,
-   "dados_como_basural": 0,
-   "fraccion": 0.0,
-   "ic95": [
-    0.0,
-    0.658
-   ]
-  },
   "osm_cementerio": {
    "n": 25,
    "dados_como_basural": 0,
@@ -673,33 +675,35 @@
   }
  },
  "importancia": {
-  "bsi_contraste": 1013.79,
-  "eco_db": 567.73,
-  "swir_b11": 470.07,
-  "ndwi_media": 459.25,
-  "cultivo_anillo": 423.07,
-  "ndvi_contraste": 422.1,
-  "hv_hh": 389.74,
-  "ndvi_media": 340.4,
-  "eco_variacion": 297.42,
-  "urbano_anillo": 283.9,
-  "ndvi_variacion": 264.87,
-  "swir_b12_contraste": 260.18,
-  "area_ha": 260.01,
-  "contraste_mediana": 254.6,
-  "eco_contraste": 249.26,
-  "agua_anillo": 243.9,
-  "swir_b11_contraste": 227.4,
-  "bsi_media": 222.94,
-  "compacidad": 217.6,
-  "swir_b12": 189.89,
-  "elongacion": 186.43,
-  "tendencia": 182.88,
-  "ndwi_contraste": 151.7,
-  "contraste_desvio": 107.28,
-  "insomnio": 104.99,
-  "coherencia_media": 98.08,
-  "persistencia": 27.18
+  "bsi_contraste": 1208.08,
+  "eco_db": 618.75,
+  "eco_var_p90": 552.99,
+  "ndwi_media": 455.93,
+  "cultivo_anillo": 434.63,
+  "swir_b11": 393.95,
+  "ndvi_media": 360.79,
+  "hv_hh": 350.27,
+  "ndvi_variacion": 275.73,
+  "urbano_anillo": 275.32,
+  "agua_anillo": 252.78,
+  "compacidad": 237.67,
+  "swir_b11_contraste": 233.99,
+  "contraste_p10": 232.23,
+  "eco_contraste": 225.33,
+  "area_ha": 205.68,
+  "ndvi_contraste": 204.82,
+  "tendencia": 187.94,
+  "elongacion": 175.25,
+  "eco_variacion": 173.18,
+  "contraste_mediana": 149.15,
+  "ndwi_contraste": 139.92,
+  "contraste_desvio": 139.67,
+  "swir_b12_contraste": 121.13,
+  "swir_b12": 96.73,
+  "insomnio": 88.79,
+  "coherencia_media": 74.43,
+  "bsi_media": 71.06,
+  "persistencia": 8.73
  },
  "validado": true,
  "criterio_validacion": "validación por frame, al menos 3 frames con 5 filas o más de cada clase, y límite inferior del IC 95 % del AUC fuera de partición mayor que 0,5",
@@ -707,15 +711,15 @@
  "controles": {
   "variantes": {
    "completo": {
-    "columnas": 27,
+    "columnas": 29,
     "global": {
      "n": 592,
      "n_basural": 39,
      "n_otro": 553,
-     "auc": 0.788,
+     "auc": 0.794,
      "auc_ic95": [
-      0.712,
-      0.86
+      0.72,
+      0.866
      ],
      "precision": 0.29,
      "precision_ic95": [
@@ -740,83 +744,83 @@
      "YAKARTA"
     ],
     "auc_por_frame": {
-     "CDMX": 0.817,
-     "DELHI": 0.946,
-     "LOS_ANGELES": 0.867,
-     "PRI_PONCE": 0.946,
-     "USA_MD_HOWARD": 0.734,
-     "USA_NH_HILLSBOROUGH": 0.535,
-     "USA_NY_RICHMOND": 0.722,
-     "USA_OH_LAKE": 0.71,
-     "YAKARTA": 0.847
-    }
-   },
-   "sin_forma": {
-    "columnas": 24,
-    "global": {
-     "n": 592,
-     "n_basural": 39,
-     "n_otro": 553,
-     "auc": 0.775,
-     "auc_ic95": [
-      0.701,
-      0.846
-     ],
-     "precision": 0.185,
-     "precision_ic95": [
-      0.082,
-      0.367
-     ],
-     "recall": 0.128,
-     "recall_ic95": [
-      0.056,
-      0.267
-     ]
-    },
-    "auc_por_frame": {
      "CDMX": 0.778,
-     "DELHI": 0.961,
-     "LOS_ANGELES": 0.802,
-     "PRI_PONCE": 0.925,
-     "USA_MD_HOWARD": 0.781,
-     "USA_NH_HILLSBOROUGH": 0.419,
-     "USA_NY_RICHMOND": 0.731,
-     "USA_OH_LAKE": 0.716,
+     "DELHI": 0.946,
+     "LOS_ANGELES": 0.879,
+     "PRI_PONCE": 0.946,
+     "USA_MD_HOWARD": 0.75,
+     "USA_NH_HILLSBOROUGH": 0.674,
+     "USA_NY_RICHMOND": 0.753,
+     "USA_OH_LAKE": 0.685,
      "YAKARTA": 0.883
     }
    },
-   "solo_radar": {
-    "columnas": 16,
+   "sin_forma": {
+    "columnas": 26,
     "global": {
      "n": 592,
      "n_basural": 39,
      "n_otro": 553,
-     "auc": 0.72,
+     "auc": 0.783,
      "auc_ic95": [
-      0.627,
-      0.819
+      0.712,
+      0.849
      ],
-     "precision": 0.276,
+     "precision": 0.207,
      "precision_ic95": [
-      0.147,
-      0.457
+      0.098,
+      0.384
      ],
-     "recall": 0.205,
+     "recall": 0.154,
      "recall_ic95": [
-      0.108,
-      0.355
+      0.072,
+      0.297
      ]
     },
     "auc_por_frame": {
-     "CDMX": 0.644,
-     "DELHI": 0.806,
-     "LOS_ANGELES": 0.84,
-     "PRI_PONCE": 0.559,
-     "USA_MD_HOWARD": 0.656,
-     "USA_NH_HILLSBOROUGH": 0.791,
-     "USA_NY_RICHMOND": 0.785,
-     "USA_OH_LAKE": 0.747,
-     "YAKARTA": 0.32
+     "CDMX": 0.756,
+     "DELHI": 0.953,
+     "LOS_ANGELES": 0.821,
+     "PRI_PONCE": 0.935,
+     "USA_MD_HOWARD": 0.734,
+     "USA_NH_HILLSBOROUGH": 0.395,
+     "USA_NY_RICHMOND": 0.761,
+     "USA_OH_LAKE": 0.679,
+     "YAKARTA": 0.903
+    }
+   },
+   "solo_radar": {
+    "columnas": 18,
+    "global": {
+     "n": 592,
+     "n_basural": 39,
+     "n_otro": 553,
+     "auc": 0.73,
+     "auc_ic95": [
+      0.647,
+      0.815
+     ],
+     "precision": 0.321,
+     "precision_ic95": [
+      0.179,
+      0.507
+     ],
+     "recall": 0.231,
+     "recall_ic95": [
+      0.126,
+      0.383
+     ]
+    },
+    "auc_por_frame": {
+     "CDMX": 0.617,
+     "DELHI": 0.829,
+     "LOS_ANGELES": 0.803,
+     "PRI_PONCE": 0.699,
+     "USA_MD_HOWARD": 0.688,
+     "USA_NH_HILLSBOROUGH": 0.814,
+     "USA_NY_RICHMOND": 0.792,
+     "USA_OH_LAKE": 0.722,
+     "YAKARTA": 0.6
     }
    },
    "solo_optico": {
@@ -854,15 +858,15 @@
     }
    },
    "con_cantidad_de_datos": {
-    "columnas": 29,
+    "columnas": 31,
     "global": {
      "n": 592,
      "n_basural": 39,
      "n_otro": 553,
-     "auc": 0.784,
+     "auc": 0.787,
      "auc_ic95": [
-      0.707,
-      0.859
+      0.708,
+      0.861
      ],
      "precision": 0.296,
      "precision_ic95": [
@@ -876,15 +880,49 @@
      ]
     },
     "auc_por_frame": {
-     "CDMX": 0.817,
-     "DELHI": 0.953,
-     "LOS_ANGELES": 0.841,
+     "CDMX": 0.744,
+     "DELHI": 0.946,
+     "LOS_ANGELES": 0.867,
      "PRI_PONCE": 0.946,
-     "USA_MD_HOWARD": 0.719,
-     "USA_NH_HILLSBOROUGH": 0.605,
-     "USA_NY_RICHMOND": 0.791,
-     "USA_OH_LAKE": 0.704,
-     "YAKARTA": 0.81
+     "USA_MD_HOWARD": 0.75,
+     "USA_NH_HILLSBOROUGH": 0.628,
+     "USA_NY_RICHMOND": 0.782,
+     "USA_OH_LAKE": 0.691,
+     "YAKARTA": 0.827
+    }
+   },
+   "sin_columnas_nuevas": {
+    "columnas": 27,
+    "global": {
+     "n": 592,
+     "n_basural": 39,
+     "n_otro": 553,
+     "auc": 0.788,
+     "auc_ic95": [
+      0.712,
+      0.86
+     ],
+     "precision": 0.29,
+     "precision_ic95": [
+      0.161,
+      0.466
+     ],
+     "recall": 0.231,
+     "recall_ic95": [
+      0.126,
+      0.383
+     ]
+    },
+    "auc_por_frame": {
+     "CDMX": 0.817,
+     "DELHI": 0.946,
+     "LOS_ANGELES": 0.867,
+     "PRI_PONCE": 0.946,
+     "USA_MD_HOWARD": 0.734,
+     "USA_NH_HILLSBOROUGH": 0.535,
+     "USA_NY_RICHMOND": 0.722,
+     "USA_OH_LAKE": 0.71,
+     "YAKARTA": 0.847
     }
    }
   },
@@ -914,7 +952,7 @@
    "columnas_fuera_del_contrato": [],
    "emit_o_metano": [],
    "registro_o_etiqueta": [],
-   "nota": "sólo entran columnas de contratos.COLUMNAS_MODELO (radar, óptico, forma y contexto); ni EMIT, ni el estado del catálogo, ni nada que salga de la etiqueta"
+   "nota": "sólo entran columnas de contratos.COLUMNAS_MODELO (radar, óptico, forma y contexto) y RADAR_NUEVAS; ni EMIT, ni el estado del catálogo, ni nada que salga de la etiqueta"
   },
   "auc_de_cada_variable_sola": {
    "bsi_contraste": 0.83,
@@ -924,9 +962,11 @@
    "ndwi_contraste": 0.8,
    "ndvi_media": 0.21,
    "swir_b12_contraste": 0.79,
+   "eco_var_p90": 0.79,
    "ndwi_media": 0.78,
    "eco_variacion": 0.75,
    "swir_b11": 0.73,
+   "contraste_p10": 0.29,
    "swir_b11_contraste": 0.71,
    "eco_db": 0.31,
    "contraste_mediana": 0.32,
@@ -946,12 +986,12 @@
    "compacidad": 0.5
   },
   "diagnostico_mezclando_frames": {
-   "auc_media": 0.852,
+   "auc_media": 0.85,
    "auc_por_semilla": [
-    0.842,
-    0.871,
-    0.843,
-    0.855,
+    0.841,
+    0.87,
+    0.837,
+    0.852,
     0.849
    ],
    "nota": "DIAGNÓSTICO, NO REPORTAR: validación mezclando frames, agrupando por complejo. Es optimista: el modelo ve el paisaje de cada frame al entrenar, y en varios frames hay una sola clase."
@@ -968,16 +1008,6 @@
     "insomnio": 0.96
    },
    {
-    "id_mancha": "MAN-YAKARTA-0167",
-    "frame": "YAKARTA",
-    "clase": "basural_activo",
-    "clase_negativo": null,
-    "id_catalogo": "BAS-059332",
-    "p_basural": 0.001,
-    "area_ha": 30.7,
-    "insomnio": 1.0
-   },
-   {
     "id_mancha": "MAN-USA_MD_HOWARD-0036",
     "frame": "USA_MD_HOWARD",
     "clase": "basural_activo",
@@ -986,6 +1016,16 @@
     "p_basural": 0.001,
     "area_ha": 18.6,
     "insomnio": 0.91
+   },
+   {
+    "id_mancha": "MAN-YAKARTA-0167",
+    "frame": "YAKARTA",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-059332",
+    "p_basural": 0.002,
+    "area_ha": 30.7,
+    "insomnio": 1.0
    },
    {
     "id_mancha": "MAN-USA_OH_LAKE-0078",
@@ -1003,7 +1043,7 @@
     "clase": "basural_activo",
     "clase_negativo": null,
     "id_catalogo": "BAS-045875",
-    "p_basural": 0.006,
+    "p_basural": 0.004,
     "area_ha": 42.9,
     "insomnio": 1.0
    },
@@ -1013,9 +1053,19 @@
     "clase": "basural_activo",
     "clase_negativo": null,
     "id_catalogo": "BAS-065325",
-    "p_basural": 0.017,
+    "p_basural": 0.019,
     "area_ha": 30.1,
     "insomnio": 0.91
+   },
+   {
+    "id_mancha": "MAN-YAKARTA-0270",
+    "frame": "YAKARTA",
+    "clase": "basural_activo",
+    "clase_negativo": null,
+    "id_catalogo": "BAS-059352",
+    "p_basural": 0.022,
+    "area_ha": 21.8,
+    "insomnio": 1.0
    },
    {
     "id_mancha": "MAN-USA_MD_HOWARD-0020",
@@ -1023,19 +1073,19 @@
     "clase": "basural_activo",
     "clase_negativo": null,
     "id_catalogo": "BAS-065416",
-    "p_basural": 0.022,
+    "p_basural": 0.031,
     "area_ha": 26.9,
     "insomnio": 1.0
    },
    {
-    "id_mancha": "MAN-USA_NY_RICHMOND-0098",
-    "frame": "USA_NY_RICHMOND",
+    "id_mancha": "MAN-CDMX-0190",
+    "frame": "CDMX",
     "clase": "basural_activo",
     "clase_negativo": null,
-    "id_catalogo": "BAS-047298",
-    "p_basural": 0.033,
-    "area_ha": 37.8,
-    "insomnio": 0.98
+    "id_catalogo": "BAS-062412",
+    "p_basural": 0.032,
+    "area_ha": 16.0,
+    "insomnio": 0.95
    },
    {
     "id_mancha": "MAN-PRI_PONCE-0097",
@@ -1043,19 +1093,9 @@
     "clase": "basural_activo",
     "clase_negativo": null,
     "id_catalogo": "BAS-062922",
-    "p_basural": 0.033,
+    "p_basural": 0.037,
     "area_ha": 54.4,
     "insomnio": 1.0
-   },
-   {
-    "id_mancha": "MAN-LOS_ANGELES-0069",
-    "frame": "LOS_ANGELES",
-    "clase": "basural_activo",
-    "clase_negativo": null,
-    "id_catalogo": "BAS-066131",
-    "p_basural": 0.035,
-    "area_ha": 44.2,
-    "insomnio": 0.96
    }
   ]
  },
