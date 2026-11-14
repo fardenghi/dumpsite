@@ -42,7 +42,7 @@ Hacen falta `pandas` y `pyarrow` (están en `herramientas/requirements.txt`).
 |---|---|---|---|
 | `salidas/manchas.geojson` | etapa 4 (en el AMBA, el prompt 3) | etapas 5, 6 y 9, y la web | una mancha de un frame, incluidas las descartadas |
 | `salidas/tabla_radar.parquet` | etapa 4 | etapa 6 | una mancha candidata (no descartada) de un frame |
-| `salidas/insomnio_catalogo.parquet` | etapa 4 (la lógica, el prompt 5) | etapas 8 y 9 | un polígono del catálogo (basural o negativo) en un frame, esté o no en una mancha |
+| `salidas/insomnio_catalogo.parquet` | etapa 4 (la lógica, el prompt 2) | etapas 8 y 9 | un polígono del catálogo (basural o negativo) en un frame, esté o no en una mancha |
 | `salidas/tabla_optico.parquet` | etapa 5 | etapa 6 | una mancha candidata de un frame |
 | `salidas/tabla_optico_catalogo.parquet` | etapa 5 | etapas 8 y 9 (ficha) | un polígono del catálogo en un frame |
 | `salidas/cruce_manchas_catalogo.parquet` | etapa 6 (`cruce_manchas.py`) | etapas 6 y 9 | un par mancha y polígono del catálogo que se tocan (intersección > 0), sin filtrar por el 30 % |
@@ -115,7 +115,7 @@ Además el mock escribe `catalogo_mock.geojson`, que no es un contrato: son los 
 **Clave** (no se repite): `id_mancha`.
 
 ## 3. `salidas/insomnio_catalogo.parquet`
-- **Lo escribe:** la etapa 4. La lógica es `insomnio_catalogo.py` (prompt 5).
+- **Lo escribe:** la etapa 4. La lógica es `insomnio_catalogo.py` (prompt 2).
 - **Lo leen:** la etapa 8 (evaluación de la actividad) y la etapa 9 (veredicto).
 - **Una fila por polígono del catálogo y frame, esté o no en una mancha.** Es la segunda dirección del cruce: sin esto no se puede decir "cerrado y quieto" de un basural que no formó ninguna mancha, como Luján.
 - Entran los basurales y los negativos cuyo polígono cae en el frame. Los de menos de 10 ha también entran, con `radar` = `no_alcanza`.
