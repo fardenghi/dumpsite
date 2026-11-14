@@ -118,7 +118,7 @@ def frame_sintetico(tmp_path_factory):
 def test_extraer_un_frame(frame_sintetico):
     base, a, relleno = frame_sintetico
     destino = base / "destino"
-    r = em.extraer(a, ins.Parametros(), str(destino / "SINTE"))
+    r = em.extraer(a, ins.Parametros(), str(destino / "SINTE"), 5.0)
     assert r["candidatas"] == 1 and r["pares"] == 16
 
     manchas = contratos.leer(str(destino / "SINTE"), "manchas")  # valida contra el contrato
