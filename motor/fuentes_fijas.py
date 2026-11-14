@@ -3,13 +3,14 @@
   python fuentes_fijas.py agua      [--frame X]   máscara de agua de JRC Global Surface Water sobre la grilla del frame
   python fuentes_fijas.py usos      [--frame X]   polígonos de usos conocidos (aeródromos, golf, parques, ...) de Overture Maps
   python fuentes_fijas.py catalogo  [--frame X]   polígonos de `data/basurales/` y `data/negativos/` que caen en el frame (sin red)
-  python fuentes_fijas.py todo      [--frame X]   las tres cosas
+  python fuentes_fijas.py cobertura [--frame X]   fracción urbana y de cultivo de ESA WorldCover (contexto del modelo, etapa 4)
+  python fuentes_fijas.py todo      [--frame X]   las cuatro cosas
   python fuentes_fijas.py sitios                  contornos de OpenStreetMap de los sitios de sitios_registro.json (sólo AMBA)
 
 El frame sale de `../../data/frames.json` o de `--caja lon_oeste lat_sur lon_este lat_norte` (con `--frame NOMBRE`).
-Los resultados quedan cacheados por frame en `fijos/<FRAME>/` y van al repo: `indice` no necesita red.
-El AMBA es la excepción: sus archivos están sueltos en `fijos/` y son los de referencia de `idea/indice-final.md`
-(los usos, de Nominatim). Para rehacerlos hay que pasar `--pisar`.
+Los resultados quedan cacheados por frame en `fijos/<FRAME>/` (no se suben: `indice` los rehace solo si faltan).
+Los del AMBA sí van al repo, sueltos en `fijos/`: son los de referencia de `idea/indice-final.md` (los usos, de
+Nominatim) y con ellos `indice` no necesita red. Para rehacerlos hay que pasar `--pisar`.
 
 Fuentes:
 - JRC Global Surface Water v1.4 (1984-2021), capa `occurrence`. Pekel, Cottam, Gorelick y Belward (2016),
@@ -18,6 +19,8 @@ Fuentes:
 - Overture Maps, release 2026-10-21.0, tema `base` (`land_use`, `land`, `infrastructure`). Son datos de
   © colaboradores de OpenStreetMap, licencia ODbL 1.0. https://docs.overturemaps.org/
 - © colaboradores de OpenStreetMap, licencia ODbL 1.0. Geometrías por la API de OSM y por Nominatim (sitios y usos del AMBA).
+- ESA WorldCover 10 m 2021 v200. Zanaga et al. (2022), doi:10.5281/zenodo.7254221. © ESA WorldCover project,
+  licencia CC BY 4.0. https://esa-worldcover.org/
 - Catálogos de `data/` (ver `../../data/README.md`): Overture/OSM (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP y NASA EMIT.
 """
 import argparse
@@ -44,6 +47,7 @@ AGENTE = {"User-Agent": "insomnes-contornos/0.1"}
 JRC = "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_{}v1_4_2021.tif"
 JRC_PASO, JRC_LADO = 0.00025, 40000  # tamaño de píxel en grados y píxeles por lado de un tile de 10° × 10°
 JRC_NORTE, JRC_OESTE = 80.0, -180.0  # esquina noroeste del mosaico mundial (los tiles se nombran por su esquina noroeste)
+WORLDCOVER = "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_{}_Map.tif"
 PASOS = {"80m": 80.0, "20m": 20.0}
 OVERTURE = "2026-10-21.0"
 OVERTURE_RAIZ = f"s3://overturemaps-us-west-2/release/{OVERTURE}/theme=base"
@@ -316,13 +320,17 @@ def catalogo(fr, destino=None, data=DATA):
     with open(os.path.join(data, "basurales", "geometrias.geojson"), encoding="utf-8") as fh:
         basurales = json.load(fh)["features"]
     with open(os.path.join(data, "basurales", "complejos.json"), encoding="utf-8") as fh:
-        complejo = json.load(fh)["complejo_por_sitio"]
+        complejos = json.load(fh)
+    complejo = complejos["complejo_por_sitio"]
+    estado_complejo = {c["id"]: c.get("estado") for c in complejos.get("complejos", [])}
+    del complejos
     for f in basurales:
         anillos = _exteriores(f["geometry"] or {})
         if anillos and toca(anillos):
             p = f["properties"]
             salida.append({"id": p["id"], "catalogo": "basurales", "nombre": p.get("nombre") or "", "estado": p.get("estado"),
-                           "complejo": complejo.get(p["id"]), "area_ha": p.get("area_ha"), "anillos": anillos})
+                           "complejo": complejo.get(p["id"]), "estado_complejo": estado_complejo.get(complejo.get(p["id"])),
+                           "area_ha": p.get("area_ha"), "anillos": anillos})
     del basurales
     vistos = set()
     ruta_amba = os.path.join(data, "negativos", "geometrias_amba.geojson")
@@ -353,6 +361,67 @@ def catalogo(fr, destino=None, data=DATA):
                          "armado": time.strftime("%Y-%m-%d"), "frame": fr.nombre, "bbox": fr.bbox, "margen_grados": MARGEN_CATALOGO,
                          "conteo": n, "poligonos": salida})
     print(f"{ruta}: {n['basurales']} basurales y {n['negativos']} negativos, {os.path.getsize(ruta) / 1e3:.0f} kB")
+
+
+# ------------------------------------------------------------------ cobertura del suelo
+def tile_worldcover(lat, lon):
+    """Nombre del tile de 3° × 3° de ESA WorldCover que contiene un punto, por su esquina sudoeste: `N33W120`, `S36W060`."""
+    la, lo = int(np.floor(lat / 3) * 3), int(np.floor(lon / 3) * 3)
+    return f"{'S' if la < 0 else 'N'}{abs(la):02d}{'W' if lo < 0 else 'E'}{abs(lo):03d}"
+
+
+def cobertura(fr, destino=None, capa="80m"):
+    """Fracción urbana (clase 50) y de cultivo (clase 40) de cada celda de la grilla, según ESA WorldCover 2021 (10 m).
+
+    Escribe `worldcover_<capa>.npz` con `urbano` y `cultivo` en % (uint8). Son las columnas de contexto del modelo
+    (`urbano_anillo`, `cultivo_anillo`). Baja uno o más tiles de ~100 MB a la carpeta temporal.
+    """
+    import tifffile
+
+    destino = destino or carpeta(fr)
+    os.makedirs(destino, exist_ok=True)
+    paso = PASOS[capa]
+    xs, ys = fr.grilla(paso)
+    k = 4  # 4 × 4 puntos por celda de 80 m: uno cada 20 m
+    desvios = (np.arange(k) + 0.5) / k * paso - paso / 2
+    urbano = np.zeros((len(ys), len(xs)), dtype=np.float32)
+    cultivo = np.zeros_like(urbano)
+    visto = np.zeros_like(urbano)
+    norte, oeste, sur, este = fr.caja
+    tiles = sorted({tile_worldcover(la, lo) for la in (norte + 0.05, sur - 0.05) for lo in (oeste - 0.05, este + 0.05)})
+    for nombre in tiles:
+        ruta = os.path.join(tempfile.gettempdir(), WORLDCOVER.format(nombre).rsplit("/", 1)[1])
+        if not os.path.exists(ruta):
+            print("Bajando", WORLDCOVER.format(nombre))
+            try:
+                urllib.request.urlretrieve(WORLDCOVER.format(nombre), ruta + ".parcial")
+            except urllib.error.HTTPError as e:
+                if e.code in (403, 404):  # WorldCover no publica tiles de mar abierto
+                    print(f"  WorldCover no publica el tile {nombre}")
+                    continue
+                raise
+            os.replace(ruta + ".parcial", ruta)
+        tile = tifffile.imread(ruta)  # 36000 × 36000, uint8: la clase de cada píxel de 10 m
+        lat0 = (-1 if nombre[0] == "S" else 1) * int(nombre[1:3]) + 3  # borde norte
+        lon0 = (-1 if nombre[3] == "W" else 1) * int(nombre[4:7])  # borde oeste
+        for dy in desvios:
+            for dx in desvios:
+                lat, lon = fr.latlon(xs[None, :] + dx, ys[:, None] + dy)
+                f = np.floor((lat0 - lat) * 12000).astype(int)
+                c = np.floor((lon - lon0) * 12000).astype(int)
+                ok = (f >= 0) & (f < tile.shape[0]) & (c >= 0) & (c < tile.shape[1])
+                clase = tile[f[ok], c[ok]]
+                urbano[ok] += clase == 50
+                cultivo[ok] += clase == 40
+                visto[ok] += 1
+        del tile
+    with np.errstate(invalid="ignore", divide="ignore"):
+        urbano = np.where(visto > 0, np.rint(100 * urbano / visto), 255).astype(np.uint8)
+        cultivo = np.where(visto > 0, np.rint(100 * cultivo / visto), 255).astype(np.uint8)
+    ruta = os.path.join(destino, f"worldcover_{capa}.npz")
+    np.savez_compressed(ruta, urbano=urbano, cultivo=cultivo, sin_dato=np.uint8(255),
+                        fuente=f"ESA WorldCover 10 m 2021 v200 (CC BY 4.0), tiles {', '.join(tiles)}; clase 50 = urbano, clase 40 = cultivo")
+    print(f"{ruta}: urbano {urbano[urbano < 255].mean():.0f} %, cultivo {cultivo[cultivo < 255].mean():.0f} %, {os.path.getsize(ruta) / 1e3:.0f} kB")
 
 
 def usos_nominatim(args):
@@ -393,7 +462,7 @@ def usos_nominatim(args):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("paso", choices=["agua", "sitios", "usos", "catalogo", "todo", "usos_nominatim"])
+    p.add_argument("paso", choices=["agua", "sitios", "usos", "catalogo", "cobertura", "todo", "usos_nominatim"])
     p.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos`")
     p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="caja de un frame que no está en frames.json (va con un solo --frame NOMBRE)")
     p.add_argument("--epsg", type=int, help="EPSG de la grilla, con --caja (si no, el del frame.json del pipeline o el de la zona UTM del centro)")
@@ -414,7 +483,7 @@ def main():
             fr = geo.frame(nombre, os.path.dirname(guardado)) if os.path.exists(guardado) and not args.epsg else geo.frame_de_caja(nombre, args.caja, args.epsg)
         else:
             fr = geo.frame(nombre, os.path.join(args.salida, nombre.upper()))
-        if fr.nombre == "AMBA" and not args.destino and not args.pisar and args.paso != "catalogo":
+        if fr.nombre == "AMBA" and not args.destino and not args.pisar and args.paso not in ("catalogo", "cobertura"):
             sys.exit("Los archivos de fijos/ del AMBA son los de referencia de idea/indice-final.md. Pasá --destino para "
                      "escribir en otro lado, o --pisar para rehacerlos (los usos pasan de Nominatim a Overture).")
         print(f"== {fr.nombre}: caja {fr.bbox}, EPSG {fr.epsg}")
@@ -424,6 +493,8 @@ def main():
             usos(fr, args.destino)
         if args.paso in ("catalogo", "todo"):
             catalogo(fr, args.destino)
+        if args.paso in ("cobertura", "todo"):
+            cobertura(fr, args.destino)
 
 
 if __name__ == "__main__":
