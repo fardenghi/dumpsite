@@ -161,8 +161,24 @@ def _buscar_eco(f):
     return f[ruta], f[grupo + "/xCoordinates"][()], f[grupo + "/yCoordinates"][()]
 
 
+_SESION_REMOTA = None
+
+
+def _abrir(ruta, remoto):
+    """Abre un .h5 local, o remoto por URL con earthaccess (lee sólo los bloques que se piden)."""
+    if not remoto:
+        return h5py.File(ruta, "r")
+    global _SESION_REMOTA
+    import earthaccess
+
+    if _SESION_REMOTA is None:  # una vez por proceso
+        _SESION_REMOTA = earthaccess.login(strategy="environment")
+    archivo = earthaccess.open([ruta])[0]
+    return h5py.File(archivo, "r")
+
+
 def _procesar_uno(tarea):
-    ruta, capa, carpeta = tarea
+    ruta, capa, carpeta, remoto = tarea
     nombre = os.path.basename(ruta).replace(".h5", "")
     fechas = re.findall(r"_(\d{8})T\d{6}", nombre)
     orbita = int(re.search(r"_(?:GUNW|GCOV)_\d{3}_(\d{3})_", nombre).group(1))
@@ -174,7 +190,7 @@ def _procesar_uno(tarea):
         return destino, "ya estaba"
     xs_dst, ys_dst = grilla(CAPAS[capa][1])
     try:
-        with h5py.File(ruta, "r") as f:
+        with _abrir(ruta, remoto) as f:
             if "_GUNW_" in nombre:
                 ds, xs, ys = _buscar_capa(f, CAPAS[capa][0])
                 valor = recortar(ds, xs, ys, xs_dst, ys_dst)
@@ -197,11 +213,18 @@ def _procesar_uno(tarea):
 def procesar(args):
     carpeta = os.path.join(args.salida, f"recortes_{args.capa}")
     os.makedirs(carpeta, exist_ok=True)
-    archivos = sorted(glob.glob(os.path.join(args.datos, "NISAR_*_GUNW_*.h5")) + glob.glob(os.path.join(args.datos, "NISAR_*_GCOV_*.h5")))
+    if args.remoto:
+        # Sin bajar nada: lee por URL sólo la ventana del AMBA (necesita `buscar` antes y credenciales).
+        with open(os.path.join(args.salida, "lista_productos.json"), encoding="utf-8") as fh:
+            lista = json.load(fh)
+        archivos = [x["url"] for x in lista if x["orbita"] in args.orbitas and (x["tipo"] == "GUNW" or not args.solo_gunw)]
+    else:
+        archivos = sorted(glob.glob(os.path.join(args.datos, "NISAR_*_GUNW_*.h5")) + glob.glob(os.path.join(args.datos, "NISAR_*_GCOV_*.h5")))
     archivos = [a for a in archivos if int(re.search(r"_(?:GUNW|GCOV)_\d{3}_(\d{3})_", os.path.basename(a)).group(1)) in args.orbitas]
-    print(f"Archivos a procesar: {len(archivos)} (capa {args.capa}, {args.procesos} procesos)")
+    modo = "remoto, sin bajar" if args.remoto else "local"
+    print(f"Archivos a procesar: {len(archivos)} (capa {args.capa}, {args.procesos} procesos, {modo})")
     with cf.ProcessPoolExecutor(max_workers=args.procesos) as ex:
-        for destino, estado in ex.map(_procesar_uno, [(a, args.capa, carpeta) for a in archivos]):
+        for destino, estado in ex.map(_procesar_uno, [(a, args.capa, carpeta, args.remoto) for a in archivos]):
             print(f"  {os.path.basename(destino)}: {estado}")
 
 
@@ -309,7 +332,9 @@ def main():
     p.add_argument("--capa", choices=list(CAPAS), default="80m")
     p.add_argument("--procesos", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     p.add_argument("--hilos", type=int, default=8, help="descargas en paralelo")
-    p.add_argument("--solo-gunw", action="store_true", help="no bajar GCOV")
+    p.add_argument("--solo-gunw", action="store_true", help="no bajar ni procesar GCOV")
+    p.add_argument("--remoto", action="store_true",
+                   help="procesar leyendo por URL sólo la ventana necesaria, sin bajar los .h5 (SIN PROBAR; necesita credenciales)")
     p.add_argument("--umbral", type=float, default=0.30, help="coherencia por debajo de la cual un par cuenta como 'despierto'")
     p.add_argument("--min-insomnio", type=float, default=0.6, help="fracción mínima de pares despiertos para ser candidato")
     p.add_argument("--eco-min-db", type=float, default=-15.0, help="backscatter mínimo (dB) para no ser superficie lisa; supuesto a calibrar")
