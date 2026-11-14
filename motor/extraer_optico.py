@@ -80,8 +80,13 @@ class Firma:
 def buscar_escenas(bbox, desde, hasta, max_nube):
     cuerpo = {"collections": ["sentinel-2-l2a"], "bbox": list(bbox), "datetime": f"{desde}/{hasta}",
               "query": {"eo:cloud_cover": {"lt": max_nube}}, "limit": 500}
-    pedido = urllib.request.Request(STAC, json.dumps(cuerpo).encode(), {"content-type": "application/json"})
-    feats = json.load(urllib.request.urlopen(pedido, timeout=120))["features"]
+    feats, url = [], STAC
+    while cuerpo is not None and len(feats) < 5000:  # paginado: un frame grande puede pasar de 500 escenas
+        pedido = urllib.request.Request(url, json.dumps(cuerpo).encode(), {"content-type": "application/json"})
+        r = json.load(urllib.request.urlopen(pedido, timeout=120))
+        feats += r["features"]
+        sig = next((l for l in r.get("links", []) if l.get("rel") == "next"), None)
+        cuerpo, url = (sig.get("body"), sig.get("href", STAC)) if sig and r["features"] else (None, None)
     escenas = []
     for f in feats:
         p = f["properties"]
@@ -295,7 +300,8 @@ def main():
     cat = a.add_mutually_exclusive_group()
     cat.add_argument("--catalogo", dest="catalogo", action="store_true", default=None, help="medir también los polígonos del catálogo")
     cat.add_argument("--sin-catalogo", dest="catalogo", action="store_false")
-    a.add_argument("--negativos", default="auto", choices=("auto", "amba", "mundo"))
+    a.add_argument("--negativos", default="ambos", choices=("ambos", "amba", "mundo"))
+    a.add_argument("--frame", action="append", help="sólo estos frames (se puede repetir); por defecto todos los del geojson")
     a.add_argument("--cache", help="carpeta para guardar las ventanas leídas (por ejemplo ../datos/s2); no se sube")
     a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías (para probar)")
     args = a.parse_args()
@@ -303,19 +309,25 @@ def main():
     contratos.leer(args.manchas)
     with open(args.manchas, encoding="utf-8") as fh:
         fc = json.load(fh)
-    ms = cp.manchas(fc)
-    frame = ms[0][0]["frame"] if ms else "AMBA"
-    con_catalogo = args.catalogo if args.catalogo is not None else frame == "AMBA"
-    bbox = cp.bbox_de([g for _, g in ms], margen=0.03)
-    poligonos = cp.catalogo(bbox, args.negativos)
-    objetivos = objetivos_desde(fc, poligonos, con_catalogo)
-    if args.limite:
-        objetivos = objetivos[:args.limite]
-    escenas = buscar_escenas(bbox, args.desde, args.hasta, args.max_nube)
-    print(f"{len(escenas)} escenas L2A con menos de {args.max_nube:.0f} % de nubes entre {args.desde} y {args.hasta} "
-          f"({len({e['fecha'] for e in escenas})} fechas)")
-    res = extraer(objetivos, escenas, [p["geom"] for p in poligonos], hilos=args.hilos, min_valido=args.min_valido,
-                  max_fechas=args.max_fechas, cache=args.cache)
+    frames = sorted({f["properties"]["frame"] for f in fc["features"] if not f["properties"].get("descartada")})
+    if args.frame:
+        frames = [f for f in frames if f in set(args.frame)]
+    objetivos, res = [], []
+    for frame in frames:  # cada frame con su caja: el geojson de `extraer_manchas.py juntar` trae todos
+        sub = {"type": "FeatureCollection", "features": [f for f in fc["features"] if f["properties"]["frame"] == frame]}
+        ms = cp.manchas(sub)
+        con_catalogo = args.catalogo if args.catalogo is not None else frame == "AMBA"
+        bbox = cp.bbox_de([g for _, g in ms], margen=0.03)
+        poligonos = cp.catalogo(bbox, args.negativos)
+        obj = objetivos_desde(sub, poligonos, con_catalogo)
+        if args.limite:
+            obj = obj[:args.limite]
+        escenas = buscar_escenas(bbox, args.desde, args.hasta, args.max_nube)
+        print(f"{frame}: {len(escenas)} escenas L2A con menos de {args.max_nube:.0f} % de nubes entre {args.desde} y "
+              f"{args.hasta} ({len({e['fecha'] for e in escenas})} fechas)")
+        res += extraer(obj, escenas, [p["geom"] for p in poligonos], hilos=args.hilos, min_valido=args.min_valido,
+                       max_fechas=args.max_fechas, cache=args.cache)
+        objetivos += obj
 
     filas_m = [{"id_mancha": o["clave"], "frame": o["frame"], **r} for o, r in zip(objetivos, res) if o["tipo"] == "mancha"]
     filas_c = [{"id_catalogo": o["clave"], "catalogo": o["catalogo"], "frame": o["frame"], **r}
