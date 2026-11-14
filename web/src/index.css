@@ -74,7 +74,7 @@ p { margin: 0; }
 /* panel flotante: colgado sobre el mapa, sin ocupar todo el alto ni el ancho */
 .flota { opacity: 0; visibility: hidden; transform: translateY(12px) scale(0.985); transform-origin: 50% 100%; transition: opacity 0.2s var(--ease), transform 0.28s var(--ease), visibility 0s 0.28s; position: absolute; z-index: 5; top: calc(var(--gap) + 44px + 12px); left: var(--gap); right: var(--gap); bottom: calc(var(--gap) + var(--dock) + 12px); background: #fff; border-radius: 24px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; }
 .flota.abierta { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
-.flota-in { animation: aparece 0.32s var(--ease) both; overflow-y: auto; overflow-x: hidden; padding: 36px max(32px, calc((100% - 960px) / 2)) 28px; flex: 1; min-height: 0; }
+.flota-in { animation: aparece 0.32s var(--ease) both; overflow-y: auto; overflow-x: hidden; padding: 36px max(32px, calc((100% - 1120px) / 2)) 28px; flex: 1; min-height: 0; }
 .cols2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 40px; align-items: start; margin-bottom: 28px; }
 .flota .cerrar { position: absolute; top: 20px; right: 20px; z-index: 1; }
 @keyframes aparece { from { opacity: 0; } }
