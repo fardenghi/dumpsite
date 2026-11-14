@@ -1,23 +1,33 @@
-"""Baja y prepara las fuentes fijas que usa `pipeline_insomnio.py indice`. Se corre una sola vez, con red.
+"""Baja y prepara las fuentes fijas que usa `pipeline_insomnio.py indice`, para cualquier frame. Con red.
 
-  python fuentes_fijas.py agua      máscara de agua de JRC Global Surface Water sobre la grilla del AMBA
-  python fuentes_fijas.py sitios    contornos de OpenStreetMap de los sitios de sitios_registro.json
-  python fuentes_fijas.py usos      polígonos de usos conocidos (aeródromos, golf, parques, ...) de OpenStreetMap
+  python fuentes_fijas.py agua      [--frame X]   máscara de agua de JRC Global Surface Water sobre la grilla del frame
+  python fuentes_fijas.py usos      [--frame X]   polígonos de usos conocidos (aeródromos, golf, parques, ...) de Overture Maps
+  python fuentes_fijas.py catalogo  [--frame X]   polígonos de `data/basurales/` y `data/negativos/` que caen en el frame (sin red)
+  python fuentes_fijas.py todo      [--frame X]   las tres cosas
+  python fuentes_fijas.py sitios                  contornos de OpenStreetMap de los sitios de sitios_registro.json (sólo AMBA)
 
-Los resultados quedan en `fijos/` y van al repo: el pipeline no necesita red.
+El frame sale de `../../data/frames.json` o de `--caja lon_oeste lat_sur lon_este lat_norte` (con `--frame NOMBRE`).
+Los resultados quedan cacheados por frame en `fijos/<FRAME>/` y van al repo: `indice` no necesita red.
+El AMBA es la excepción: sus archivos están sueltos en `fijos/` y son los de referencia de `idea/indice-final.md`
+(los usos, de Nominatim). Para rehacerlos hay que pasar `--pisar`.
 
 Fuentes:
 - JRC Global Surface Water v1.4 (1984-2021), capa `occurrence`. Pekel, Cottam, Gorelick y Belward (2016),
   Nature 540, 418-422, doi:10.1038/nature20584. Datos del EC JRC / Google, uso libre con cita.
   https://global-surface-water.appspot.com/download
-- © colaboradores de OpenStreetMap, licencia ODbL 1.0. Geometrías por la API de OSM y por Nominatim.
+- Overture Maps, release 2026-10-21.0, tema `base` (`land_use`, `land`, `infrastructure`). Son datos de
+  © colaboradores de OpenStreetMap, licencia ODbL 1.0. https://docs.overturemaps.org/
+- © colaboradores de OpenStreetMap, licencia ODbL 1.0. Geometrías por la API de OSM y por Nominatim (sitios y usos del AMBA).
+- Catálogos de `data/` (ver `../../data/README.md`): Overture/OSM (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP y NASA EMIT.
 """
 import argparse
 import json
 import os
+import struct
 import sys
 import tempfile
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -27,15 +37,42 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 import geo  # noqa: E402
 
+IDEA = os.path.dirname(AQUI)
 FIJOS = os.path.join(AQUI, "fijos")
+DATA = os.path.join(IDEA, "..", "data")
 AGENTE = {"User-Agent": "insomnes-contornos/0.1"}
-JRC = "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_60W_30Sv1_4_2021.tif"
-JRC_ORIGEN, JRC_PASO = (-60.0, -30.0), 0.00025  # esquina noroeste (lon, lat) y tamaño de píxel en grados
+JRC = "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_{}v1_4_2021.tif"
+JRC_PASO, JRC_LADO = 0.00025, 40000  # tamaño de píxel en grados y píxeles por lado de un tile de 10° × 10°
+JRC_NORTE, JRC_OESTE = 80.0, -180.0  # esquina noroeste del mosaico mundial (los tiles se nombran por su esquina noroeste)
+PASOS = {"80m": 80.0, "20m": 20.0}
+OVERTURE = "2026-10-21.0"
+OVERTURE_RAIZ = f"s3://overturemaps-us-west-2/release/{OVERTURE}/theme=base"
 # Usos conocidos que también dan coherencia baja permanente: (búsqueda en Nominatim, clase OSM, tipo OSM, etiqueta).
 USOS = [("aerodrome", "aeroway", "aerodrome", "aeródromo"), ("golf course", "leisure", "golf_course", "golf"),
         ("park", "leisure", "park", "parque"), ("cemetery", "landuse", "cemetery", "cementerio"),
         ("quarry", "landuse", "quarry", "cantera"), ("forest", "landuse", "forest", "forestación"),
         ("nature reserve", "leisure", "nature_reserve", "reserva")]
+# Los mismos usos en Overture: (capa, condición SQL, etiqueta). El orden importa: si dos se pisan, gana el primero,
+# por eso lo más específico va antes y las reservas (que pueden ser enormes) al final. `militar` es nuevo.
+USOS_OVERTURE = [
+    ("infrastructure", "subtype = 'airport' AND class LIKE '%airport%'", "aeródromo"),
+    ("land_use", "class = 'airfield'", "aeródromo"),
+    ("land_use", "class = 'golf_course'", "golf"),
+    ("land_use", "class = 'park'", "parque"),
+    ("land_use", "class = 'cemetery'", "cementerio"),
+    ("land_use", "class = 'quarry'", "cantera"),
+    ("land", "subtype = 'forest'", "forestación"),
+    ("land_use", "subtype = 'military' AND class <> 'airfield'", "militar"),
+    ("land_use", "subtype = 'protected'", "reserva"),
+]
+USO_MIN_HA = 2.0  # menos que esto no llega a 4 píxeles de 80 m
+MARGEN_CATALOGO = 0.03  # grados (~3 km): los polígonos de afuera de la caja que entran en el anillo de un sitio del borde
+
+
+def carpeta(fr, base=None):
+    """Dónde se cachean las fuentes fijas de un frame. El AMBA usa `fijos/` a secas (los archivos de referencia)."""
+    base = base or FIJOS
+    return base if fr.nombre == "AMBA" else os.path.join(base, fr.nombre)
 
 
 def pedir(url, pausa=1.2):
@@ -45,37 +82,82 @@ def pedir(url, pausa=1.2):
     return datos
 
 
+def _guardar_json(ruta, datos):
+    os.makedirs(os.path.dirname(ruta), exist_ok=True)
+    with open(ruta, "w", encoding="utf-8") as fh:
+        json.dump(datos, fh, ensure_ascii=False, separators=(",", ":"))
+        fh.write("\n")
+
+
 # ------------------------------------------------------------------ agua
-def agua(args):
+def tile_jrc(fila, columna):
+    """Nombre del tile de JRC por su esquina noroeste: `60W_30S`, `120W_40N`, `70E_30N`, `0E_0N`."""
+    lon, lat = int(JRC_OESTE) + 10 * columna, int(JRC_NORTE) - 10 * fila
+    return f"{abs(lon)}{'W' if lon < 0 else 'E'}_{abs(lat)}{'S' if lat < 0 else 'N'}"
+
+
+def _leer_tile(nombre, tif=None):
+    """Ocurrencia de agua (% de meses, uint8; 255 = sin dato) de un tile, o None si JRC no lo publica (mar abierto)."""
     import tifffile
 
-    ruta = args.tif
-    if not ruta:
-        ruta = os.path.join(tempfile.gettempdir(), os.path.basename(JRC))
-        if not os.path.exists(ruta):
-            print("Bajando", JRC)
-            urllib.request.urlretrieve(JRC, ruta)
-    ocurrencia = tifffile.imread(ruta)  # 40000 × 40000, uint8: % de meses con agua; 255 = sin dato
-    norte, oeste, sur, este = geo.CAJA
-    f0, f1 = int((JRC_ORIGEN[1] - norte) / JRC_PASO) - 800, int((JRC_ORIGEN[1] - sur) / JRC_PASO) + 800
-    c0, c1 = int((oeste - JRC_ORIGEN[0]) / JRC_PASO) - 800, int((este - JRC_ORIGEN[0]) / JRC_PASO) + 800
-    rec = ocurrencia[f0:f1, c0:c1]
-    rec = np.where(rec == 255, 0, rec).astype(np.float32)
-    for capa, paso in (("80m", 80.0), ("20m", 20.0)):
-        xs, ys = geo.grilla(paso)
+    ruta = tif or os.path.join(tempfile.gettempdir(), os.path.basename(JRC.format(nombre)))
+    if not os.path.exists(ruta):
+        print("Bajando", JRC.format(nombre))
+        try:
+            urllib.request.urlretrieve(JRC.format(nombre), ruta + ".parcial")
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            raise
+        os.replace(ruta + ".parcial", ruta)
+    return tifffile.imread(ruta)
+
+
+def ocurrencia_jrc(fr, tif=None):
+    """Recorte de la capa `occurrence` de JRC que cubre la caja del frame, con margen. Devuelve (recorte, fila0, columna0)
+    en índices del mosaico mundial. Si la caja cruza tiles, los junta. Un tile que JRC no publica cuenta como agua."""
+    norte, oeste, sur, este = fr.caja
+    f0, f1 = int((JRC_NORTE - norte) / JRC_PASO) - 800, int((JRC_NORTE - sur) / JRC_PASO) + 800
+    c0, c1 = int((oeste - JRC_OESTE) / JRC_PASO) - 800, int((este - JRC_OESTE) / JRC_PASO) + 800
+    rec = np.zeros((f1 - f0, c1 - c0), dtype=np.uint8)
+    tiles = [(tf, tc) for tf in range(f0 // JRC_LADO, (f1 - 1) // JRC_LADO + 1) for tc in range(c0 // JRC_LADO, (c1 - 1) // JRC_LADO + 1)]
+    if tif and len(tiles) > 1:
+        sys.exit(f"La caja de {fr.nombre} cruza {len(tiles)} tiles de JRC: no se puede usar --tif.")
+    for tf, tc in tiles:
+        nombre = tile_jrc(tf, tc)
+        tile = _leer_tile(nombre, tif)
+        a0, a1 = max(f0, tf * JRC_LADO), min(f1, (tf + 1) * JRC_LADO)
+        b0, b1 = max(c0, tc * JRC_LADO), min(c1, (tc + 1) * JRC_LADO)
+        if tile is None:
+            print(f"  JRC no publica el tile {nombre} (mar abierto): cuenta como agua")
+            rec[a0 - f0:a1 - f0, b0 - c0:b1 - c0] = 100
+        else:
+            rec[a0 - f0:a1 - f0, b0 - c0:b1 - c0] = tile[a0 - tf * JRC_LADO:a1 - tf * JRC_LADO, b0 - tc * JRC_LADO:b1 - tc * JRC_LADO]
+        del tile
+    return np.where(rec == 255, 0, rec).astype(np.float32), f0, c0, [tile_jrc(*t) for t in tiles]
+
+
+def agua(fr, capas=("80m", "20m"), destino=None, tif=None):
+    """Máscara de agua de JRC sobre la grilla del frame: `agua_jrc_<capa>.npz` con el % de ocurrencia por celda."""
+    destino = destino or carpeta(fr)
+    os.makedirs(destino, exist_ok=True)
+    rec, f0, c0, tiles = ocurrencia_jrc(fr, tif)
+    for capa in capas:
+        paso = PASOS[capa]
+        xs, ys = fr.grilla(paso)
         k = max(1, int(round(paso / 20)))  # submuestreo: la celda de JRC mide unos 25 m
         desvios = (np.arange(k) + 0.5) / k * paso - paso / 2
         suma = np.zeros((len(ys), len(xs)), dtype=np.float32)
         for dy in desvios:
             for dx in desvios:
-                lat, lon = geo.latlon(xs[None, :] + dx, ys[:, None] + dy)
-                f = np.floor((JRC_ORIGEN[1] - lat) / JRC_PASO).astype(int) - f0
-                c = np.floor((lon - JRC_ORIGEN[0]) / JRC_PASO).astype(int) - c0
+                lat, lon = fr.latlon(xs[None, :] + dx, ys[:, None] + dy)
+                f = np.clip(np.floor((JRC_NORTE - lat) / JRC_PASO).astype(int) - f0, 0, rec.shape[0] - 1)
+                c = np.clip(np.floor((lon - JRC_OESTE) / JRC_PASO).astype(int) - c0, 0, rec.shape[1] - 1)
                 suma += rec[f, c]
         media = np.rint(suma / (k * k)).astype(np.uint8)
-        destino = os.path.join(FIJOS, f"agua_jrc_{capa}.npz")
-        np.savez_compressed(destino, ocurrencia=media, fuente="JRC Global Surface Water v1.4, occurrence 1984-2021, tile 60W_30S")
-        print(f"{destino}: {media.shape}, {os.path.getsize(destino) / 1e3:.0f} kB, celdas con ocurrencia >= 10 %: {(media >= 10).mean():.1%}")
+        ruta = os.path.join(destino, f"agua_jrc_{capa}.npz")
+        np.savez_compressed(ruta, ocurrencia=media, fuente=f"JRC Global Surface Water v1.4, occurrence 1984-2021, tile {', '.join(tiles)}")
+        print(f"{ruta}: {media.shape}, {os.path.getsize(ruta) / 1e3:.0f} kB, celdas con ocurrencia >= 10 %: {(media >= 10).mean():.1%}")
 
 
 # ------------------------------------------------------------------ contornos de OSM
@@ -133,7 +215,148 @@ def sitios(args):
 
 
 # ------------------------------------------------------------------ usos conocidos
-def usos(args):
+def _exteriores(geometria):
+    """Anillos exteriores (lon, lat) de un Polygon o MultiPolygon de GeoJSON, con 5 decimales (~1 m)."""
+    partes = [geometria["coordinates"]] if geometria.get("type") == "Polygon" else geometria.get("coordinates", []) if geometria.get("type") == "MultiPolygon" else []
+    return [[[round(p[0], 5), round(p[1], 5)] for p in parte[0]] for parte in partes if parte and len(parte[0]) >= 4]
+
+
+def usos(fr, destino=None):
+    """Usos conocidos del frame, de Overture Maps (datos de OSM), exhaustivo en la caja. Necesita `duckdb` y red.
+
+    Mismo formato que el archivo de Nominatim del AMBA: `{"usos": [{"osm", "uso", "nombre", "anillos"}]}`.
+    """
+    import duckdb
+
+    destino = destino or carpeta(fr)
+    norte, oeste, sur, este = fr.caja
+    c = duckdb.connect()
+    c.sql("INSTALL httpfs; LOAD httpfs; INSTALL spatial; LOAD spatial; SET geometry_always_xy = true; SET enable_progress_bar = false;")
+    c.sql("CREATE SECRET ov (TYPE s3, KEY_ID '', SECRET '', REGION 'us-west-2');")
+    tipos = {"w": "way", "r": "relation", "n": "node"}
+    salida, vistos, cuenta = [], set(), {}
+    for capa, condicion, etiqueta in USOS_OVERTURE:
+        filas = c.sql(f"""
+            SELECT id, names.primary, sources[1].record_id, ST_AsGeoJSON(ST_SimplifyPreserveTopology(geometry, 0.0001))
+            FROM read_parquet('{OVERTURE_RAIZ}/type={capa}/*', hive_partitioning = 1)
+            WHERE bbox.xmin <= {este} AND bbox.xmax >= {oeste} AND bbox.ymin <= {norte} AND bbox.ymax >= {sur}
+              AND ({condicion}) AND ST_GeometryType(geometry) IN ('POLYGON', 'MULTIPOLYGON')
+              AND ST_Area_Spheroid(geometry) >= {USO_MIN_HA * 1e4}
+            ORDER BY id""").fetchall()
+        for ident, nombre, registro, gj in filas:
+            if ident in vistos:
+                continue
+            vistos.add(ident)
+            anillos = _exteriores(json.loads(gj))
+            if not anillos:
+                continue
+            m = (registro or "")[:1], (registro or "")[1:].split("@")[0]
+            osm = f"{tipos[m[0]]}/{m[1]}" if m[0] in tipos and m[1].isdigit() else f"overture/{ident}"
+            salida.append({"osm": osm, "uso": etiqueta, "nombre": nombre or "", "anillos": anillos})
+            cuenta[etiqueta] = cuenta.get(etiqueta, 0) + 1
+    for etiqueta, n in cuenta.items():
+        print(f"{etiqueta:12s} {n} polígonos")
+    ruta = os.path.join(destino, "usos_osm.json")
+    _guardar_json(ruta, {"fuente": f"Overture Maps {OVERTURE}, tema base (© colaboradores de OpenStreetMap, ODbL 1.0)",
+                         "bajado": time.strftime("%Y-%m-%d"), "frame": fr.nombre, "min_ha": USO_MIN_HA,
+                         "advertencia": "Todos los polígonos de esas clases que tocan la caja del frame y miden 2 ha o más. "
+                                        "OSM puede estar incompleto o desactualizado.",
+                         "usos": salida})
+    print(f"{ruta}: {len(salida)} polígonos, {os.path.getsize(ruta) / 1e3:.0f} kB")
+
+
+# ------------------------------------------------------------------ polígonos de los catálogos
+def _wkb_exteriores(b):
+    """Anillos exteriores (lon, lat) de un Polygon o MultiPolygon en WKB (el GeoParquet de negativos)."""
+    def poligono(pos):
+        orden = "<" if b[pos] == 1 else ">"
+        tipo, = struct.unpack_from(orden + "I", b, pos + 1)
+        pos += 5
+        if tipo % 1000 == 6:  # MultiPolygon
+            n, = struct.unpack_from(orden + "I", b, pos)
+            pos += 4
+            salida = []
+            for _ in range(n):
+                anillos, pos = poligono(pos)
+                salida += anillos
+            return salida, pos
+        if tipo % 1000 != 3:
+            raise ValueError(f"WKB de tipo {tipo}: se esperaba Polygon o MultiPolygon")
+        dim = 2 + (tipo // 1000 in (1, 2)) + 2 * (tipo // 1000 == 3)
+        n_anillos, = struct.unpack_from(orden + "I", b, pos)
+        pos += 4
+        exterior = None
+        for i in range(n_anillos):
+            n, = struct.unpack_from(orden + "I", b, pos)
+            pos += 4
+            if i == 0:
+                exterior = np.frombuffer(b, dtype=orden + "f8", count=n * dim, offset=pos).reshape(n, dim)[:, :2]
+            pos += 8 * n * dim
+        return ([exterior] if exterior is not None and len(exterior) >= 4 else []), pos
+
+    return [np.round(a, 5).tolist() for a in poligono(0)[0]]
+
+
+def catalogo(fr, destino=None, data=DATA):
+    """Los polígonos de los catálogos de `data/` que caen en el frame (con un margen de ~3 km), en un archivo chico.
+
+    Sirve para dos cosas: el anillo de cada sitio excluye todos estos polígonos (`insomnio.anillo`), y la VM puede
+    correr sin los 100 MB de `data/`. No necesita red. Entran los basurales con polígono (los que sólo tienen un
+    punto no se pueden rasterizar) y los negativos de `geometrias_amba.geojson` y de `geometrias_mundo.parquet`.
+    """
+    destino = destino or carpeta(fr)
+    norte, oeste, sur, este = fr.caja
+    norte, sur, oeste, este = norte + MARGEN_CATALOGO, sur - MARGEN_CATALOGO, oeste - MARGEN_CATALOGO, este + MARGEN_CATALOGO
+
+    def toca(anillos):
+        lon, lat = np.array([q[:2] for a in anillos for q in a]).T
+        return lon.min() <= este and lon.max() >= oeste and lat.min() <= norte and lat.max() >= sur
+
+    salida = []
+    with open(os.path.join(data, "basurales", "geometrias.geojson"), encoding="utf-8") as fh:
+        basurales = json.load(fh)["features"]
+    with open(os.path.join(data, "basurales", "complejos.json"), encoding="utf-8") as fh:
+        complejo = json.load(fh)["complejo_por_sitio"]
+    for f in basurales:
+        anillos = _exteriores(f["geometry"] or {})
+        if anillos and toca(anillos):
+            p = f["properties"]
+            salida.append({"id": p["id"], "catalogo": "basurales", "nombre": p.get("nombre") or "", "estado": p.get("estado"),
+                           "complejo": complejo.get(p["id"]), "area_ha": p.get("area_ha"), "anillos": anillos})
+    del basurales
+    vistos = set()
+    ruta_amba = os.path.join(data, "negativos", "geometrias_amba.geojson")
+    if os.path.exists(ruta_amba):
+        with open(ruta_amba, encoding="utf-8") as fh:
+            for f in json.load(fh)["features"]:
+                anillos = _exteriores(f["geometry"] or {})
+                if anillos and toca(anillos):
+                    p = f["properties"]
+                    vistos.add(p["id"])
+                    salida.append({"id": p["id"], "catalogo": "negativos", "nombre": p.get("nombre") or "", "clase": p.get("clase"),
+                                   "prioridad": p.get("prioridad"), "rol": p.get("rol"), "area_ha": p.get("area_ha"), "anillos": anillos})
+    ruta_mundo = os.path.join(data, "negativos", "geometrias_mundo.parquet")
+    if os.path.exists(ruta_mundo):
+        import pyarrow.parquet as pq
+
+        for p in pq.read_table(ruta_mundo).to_pylist():
+            if p["id"] in vistos or not p.get("geometry"):
+                continue
+            anillos = _wkb_exteriores(p["geometry"])
+            if anillos and toca(anillos):
+                salida.append({"id": p["id"], "catalogo": "negativos", "nombre": p.get("nombre") or "", "clase": p.get("clase"),
+                               "prioridad": p.get("prioridad"), "rol": p.get("rol"), "area_ha": p.get("area_ha"), "anillos": anillos})
+    ruta = os.path.join(destino, "catalogo.json")
+    n = {c: sum(1 for x in salida if x["catalogo"] == c) for c in ("basurales", "negativos")}
+    _guardar_json(ruta, {"fuente": "data/basurales/geometrias.geojson, data/negativos/geometrias_amba.geojson y geometrias_mundo.parquet "
+                                   "(Overture Maps 2026-10-21.0: © colaboradores de OpenStreetMap, ODbL 1.0; ver data/README.md)",
+                         "armado": time.strftime("%Y-%m-%d"), "frame": fr.nombre, "bbox": fr.bbox, "margen_grados": MARGEN_CATALOGO,
+                         "conteo": n, "poligonos": salida})
+    print(f"{ruta}: {n['basurales']} basurales y {n['negativos']} negativos, {os.path.getsize(ruta) / 1e3:.0f} kB")
+
+
+def usos_nominatim(args):
+    """La versión original, sólo para el AMBA: lo que devuelve la búsqueda de Nominatim. No es exhaustiva."""
     norte, oeste, sur, este = geo.CAJA
     salida, vistos = [], set()
     for consulta, clase, tipo, etiqueta in USOS:
@@ -170,11 +393,37 @@ def usos(args):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("paso", choices=["agua", "sitios", "usos"])
+    p.add_argument("paso", choices=["agua", "sitios", "usos", "catalogo", "todo", "usos_nominatim"])
+    p.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos`")
+    p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="caja de un frame que no está en frames.json (va con un solo --frame NOMBRE)")
+    p.add_argument("--epsg", type=int, help="EPSG de la grilla, con --caja (si no, el del frame.json del pipeline o el de la zona UTM del centro)")
+    p.add_argument("--salida", default=os.path.join(IDEA, "salidas"), help="carpeta de salidas del pipeline: ahí busca <FRAME>/frame.json")
+    p.add_argument("--capas", nargs="+", choices=list(PASOS), default=["80m"], help="capas de la máscara de agua (por defecto sólo 80 m)")
+    p.add_argument("--destino", help="carpeta donde escribir (por defecto, fijos/<FRAME>/)")
+    p.add_argument("--pisar", action="store_true", help="permite rehacer los archivos de referencia del AMBA")
     p.add_argument("--tif", help="tile de JRC ya bajado (si no, lo baja a la carpeta temporal)")
     args = p.parse_args()
     os.makedirs(FIJOS, exist_ok=True)
-    globals()[args.paso](args)
+    if args.paso in ("sitios", "usos_nominatim"):
+        globals()[args.paso](args)
+        return
+    nombres = list(geo.frames_conocidos()) if args.frame == ["todos"] else args.frame
+    for nombre in nombres:
+        if args.caja:
+            guardado = os.path.join(args.salida, nombre.upper(), "frame.json")
+            fr = geo.frame(nombre, os.path.dirname(guardado)) if os.path.exists(guardado) and not args.epsg else geo.frame_de_caja(nombre, args.caja, args.epsg)
+        else:
+            fr = geo.frame(nombre, os.path.join(args.salida, nombre.upper()))
+        if fr.nombre == "AMBA" and not args.destino and not args.pisar and args.paso != "catalogo":
+            sys.exit("Los archivos de fijos/ del AMBA son los de referencia de idea/indice-final.md. Pasá --destino para "
+                     "escribir en otro lado, o --pisar para rehacerlos (los usos pasan de Nominatim a Overture).")
+        print(f"== {fr.nombre}: caja {fr.bbox}, EPSG {fr.epsg}")
+        if args.paso in ("agua", "todo"):
+            agua(fr, tuple(args.capas), args.destino, args.tif)
+        if args.paso in ("usos", "todo"):
+            usos(fr, args.destino)
+        if args.paso in ("catalogo", "todo"):
+            catalogo(fr, args.destino)
 
 
 if __name__ == "__main__":
