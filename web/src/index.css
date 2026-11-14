@@ -174,15 +174,17 @@ select:hover { border-color: var(--green); }
 /* ---------- resumen: números grandes y poco más */
 .resumen { min-height: 100%; display: flex; flex-direction: column; }
 .resumen .page-head h1 { font-size: clamp(28px, 3.4vw, 44px); max-width: 18em; }
-.heroes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin: 8px 0 40px; }
-.heroes > div { border-top: 2px solid var(--text); padding-top: 16px; }
+.resumen .page-head { margin-bottom: 0; }
+.heroes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin: auto 0; padding: 56px 0; }
+.heroes > div { border-top: 2px solid var(--text); padding-top: 20px; }
 .heroes b { display: block; font-family: var(--display); font-weight: 500; font-size: clamp(56px, 8vw, 112px); line-height: 1; letter-spacing: -0.02em; }
 .heroes .despierto b { color: var(--coral); }
 .heroes .despierto { border-color: var(--coral); }
-.heroes span { display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--ink-2); }
-.datos { display: flex; flex-wrap: wrap; gap: 8px 32px; color: var(--muted); margin-bottom: 32px; }
+.heroes span { display: block; margin-top: 14px; color: var(--ink-2); }
+.resumen-pie { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.datos { display: flex; flex-wrap: wrap; gap: 8px 32px; color: var(--muted); }
 .datos b { font-weight: 500; color: var(--text); }
-.resumen .sources { margin-top: 32px; }
+.resumen .sources { margin-top: 24px; }
 
 .pasos { max-width: 780px; margin: 0 auto; }
 .coh.llenar { flex: 1; min-height: 0; display: flex; flex-direction: column; }
@@ -350,6 +352,7 @@ select:hover { border-color: var(--green); }
   .ficha { top: auto; left: var(--gap); right: var(--gap); bottom: calc(var(--gap) + var(--dock) + 12px); width: auto; max-height: 58dvh; padding: 20px 18px; }
   .con-panel .map-credit { display: none; }
   .g4, .heroes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .heroes { padding: 32px 0; }
   .fila { padding-top: 14px; padding-bottom: 14px; }
   .section { margin-bottom: 32px; }
   .lista-head, .fila { grid-template-columns: minmax(0, 1fr) 40px 72px; gap: 10px; }
