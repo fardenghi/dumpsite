@@ -17,6 +17,9 @@ tablas de todas las manchas candidatas, `predicciones.parquet` (según `idea/con
   en `metricas.json` que **no es una métrica para reportar**.
 - `n_pares` y `n_orbitas` no entran al modelo: son casi constantes por frame (dicen cuántos datos hay, no qué es la
   mancha) y con frames que sólo tienen una clase serían una forma de aprenderse el frame. `--con-cantidad-de-datos` las suma.
+- `contraste_p10` y `eco_var_p90` (etapa 4, `idea/indice-actividad.md`) entran al modelo si la tabla las trae: miran la
+  parte más activa de la mancha y no la mediana. No son del contrato (`RADAR_NUEVAS`). `indice_actividad` no entra: se
+  ajustó con etiquetas de una IA. `ha_insomnio_90` tampoco: es otra medida de tamaño.
 - `--controles` (prompt 4, parte C): con las mismas particiones, entrena también sin las columnas de Forma, sólo con
   radar, sólo con óptico y con la cantidad de datos; compara `area_ha` entre clases (¿aprende "grande es basural"?);
   revisa que no entre ninguna columna de fuera del contrato; y lista los diez errores más grandes.
@@ -70,16 +73,19 @@ def parametros(n_filas):
 
 
 CANTIDAD_DE_DATOS = ("n_pares", "n_orbitas")  # casi constantes por frame: no dicen qué es la mancha
+RADAR_NUEVAS = ("contraste_p10", "eco_var_p90")  # la parte más activa de la mancha (etapa 4); fuera del contrato
 GRUPOS = {"movimiento": tuple(c.nombre for c in contratos.MOVIMIENTO), "rugosidad": tuple(c.nombre for c in contratos.RUGOSIDAD),
           "optico": tuple(c.nombre for c in contratos.OPTICO), "forma": tuple(c.nombre for c in contratos.FORMA),
           "contexto": tuple(c.nombre for c in contratos.CONTEXTO)}
 # Lo que no puede entrar nunca: sale de la etiqueta o del registro (fuga de datos).
-PROHIBIDAS = ("clase", "clase_negativo", "id_catalogo", "complejo", "estado", "catalogo", "frame", "ciudad", "pais", "p_basural")
+PROHIBIDAS = ("clase", "clase_negativo", "id_catalogo", "complejo", "estado", "catalogo", "frame", "ciudad", "pais", "p_basural",
+              "actividad_optica", "indice_actividad", "clase_osm", "que")
 
 
 def columnas(t, con_cantidad=False):
     cols = [c for c in contratos.COLUMNAS_MODELO if c in t.columns and t[c].notna().any()
             and (con_cantidad or c not in CANTIDAD_DE_DATOS)]
+    cols += [c for c in RADAR_NUEVAS if c in t.columns and t[c].notna().any()]
     if "cnn_p_basural" in t.columns and t["cnn_p_basural"].notna().any():
         cols.append("cnn_p_basural")
     return cols
@@ -87,12 +93,12 @@ def columnas(t, con_cantidad=False):
 
 def revisar_fuga(cols):
     """Falla si entra una columna que no es del contrato, o una de EMIT, del registro o de la etiqueta."""
-    permitidas = set(contratos.COLUMNAS_MODELO) | {"cnn_p_basural"}
+    permitidas = set(contratos.COLUMNAS_MODELO) | {"cnn_p_basural"} | set(RADAR_NUEVAS)
     malas = [c for c in cols if c not in permitidas or c in PROHIBIDAS or "emit" in c.lower() or "metano" in c.lower()]
     if malas:
         raise SystemExit(f"Fuga de datos: estas columnas no pueden entrar al modelo: {malas}")
     return {"columnas_fuera_del_contrato": [], "emit_o_metano": [], "registro_o_etiqueta": [],
-            "nota": "sólo entran columnas de contratos.COLUMNAS_MODELO (radar, óptico, forma y contexto); "
+            "nota": "sólo entran columnas de contratos.COLUMNAS_MODELO (radar, óptico, forma y contexto) y RADAR_NUEVAS; "
                     "ni EMIT, ni el estado del catálogo, ni nada que salga de la etiqueta"}
 
 
@@ -211,6 +217,7 @@ def controles(t, y, grupos, ent, cols, oof):
         "solo_radar": [c for c in cols if c not in GRUPOS["optico"] and c != "cnn_p_basural"],
         "solo_optico": [c for c in cols if c in GRUPOS["optico"]],
         "con_cantidad_de_datos": columnas(t, con_cantidad=True),
+        "sin_columnas_nuevas": [c for c in cols if c not in RADAR_NUEVAS],
     }
     res_var = {"completo": {"columnas": len(cols), **{k: v for k, v in resumen_validacion(t, y, oof).items() if k != "por_frame"}}}
     for nombre, cs in variantes.items():
