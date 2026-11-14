@@ -64,6 +64,12 @@ python herramientas/pipeline_insomnio.py todo --datos /mnt/datos --salida salida
 ```bash
 python herramientas/pipeline_insomnio.py buscar --salida salidas && python herramientas/pipeline_insomnio.py procesar --remoto --salida salidas --capa 80m && python herramientas/pipeline_insomnio.py indice --salida salidas --capa 80m
 ```
+**Otros frames** (etapa 4; los frames salen de `data/frames.json`). Cada uno escribe en `salidas/<FRAME>/`:
+```bash
+python herramientas/pipeline_insomnio.py todo --frame todos --remoto --salida salidas
+```
+Si la lectura remota anda mal, bajando: `todo --frame todos --datos /mnt/datos --borrar` baja, recorta y borra cada `.h5`, frame por frame, así el disco de 200 GB nunca junta más de un frame. Detalle en `../herramientas/README.md`.
+
 Usen `tmux` para que no se corte si se cae el SSH (`tmux new -s nisar`; para volver, `tmux attach -t nisar`).
 
 ## Apagar (importante)
