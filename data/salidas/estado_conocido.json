@@ -9,7 +9,8 @@
   ],
   "criterio": "sitios con estado abierto, cerrado o contradictorio dentro de la caja y de la huella de los frames elegidos",
   "uso": "etiquetas independientes del insomnio para la etapa 8 (evaluar_actividad.py). `grande` = 10 ha o más.",
-  "advertencia": "el estado de OSM sale de etiquetas disused/abandoned, sin fecha; el de la EPA es de 2024-09"
+  "advertencia": "el estado de OSM sale de etiquetas disused/abandoned, sin fecha; el de la EPA es de 2024-09",
+  "agregados": "2026-11-14: 20 frames de `frames_elegir.py --agregar`"
  },
  "frames": {
   "AMBA": [
@@ -3670,6 +3671,5581 @@
     "caso_curado": null
    }
   ],
-  "YAKARTA": []
+  "YAKARTA": [],
+  "USA_MI_WAYNE": [
+   {
+    "id_catalogo": "BAS-064893",
+    "nombre": "Carleton Farms Landfill",
+    "pais": "USA",
+    "lat": 42.094274,
+    "lon": -83.43007,
+    "area_ha": 263.64,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1892",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057578",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066294",
+    "nombre": "Riverview Land Preserve",
+    "pais": "USA",
+    "lat": 42.157772,
+    "lon": -83.212974,
+    "area_ha": 157.96,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1885",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058888",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064994",
+    "nombre": "Citizens Disposal Landfill",
+    "pais": "USA",
+    "lat": 42.911877,
+    "lon": -83.722262,
+    "area_ha": 132.35,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1880",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057676",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064660",
+    "nombre": "Arbor Hills Landfill",
+    "pais": "USA",
+    "lat": 42.40507,
+    "lon": -83.556321,
+    "area_ha": 131.8,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1879",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057366",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000005",
+    "nombre": "Woodland Meadows Landfill",
+    "pais": "USA",
+    "lat": 42.267028,
+    "lon": -83.432009,
+    "area_ha": 85.54,
+    "grande": true,
+    "estado": "contradictorio",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/383857970",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "osm",
+      "id_fuente": "way/935645081",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1912",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000005",
+    "estado_complejo": "contradictorio",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065261",
+    "nombre": "Eagle Valley RDF",
+    "pais": "USA",
+    "lat": 42.724068,
+    "lon": -83.255122,
+    "area_ha": 81.52,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1936",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057925",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064996",
+    "nombre": "City Sand & Landfill, Inc.",
+    "pais": "USA",
+    "lat": 42.112845,
+    "lon": -83.494061,
+    "area_ha": 74.46,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039213692",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1881",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-057678",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066386",
+    "nombre": "Sauk Trail Hills Landfill",
+    "pais": "USA",
+    "lat": 42.273147,
+    "lon": -83.4562,
+    "area_ha": 67.19,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1855",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-028007",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066066",
+    "nombre": "Oakland Heights Development Landfill",
+    "pais": "USA",
+    "lat": 42.70714,
+    "lon": -83.248404,
+    "area_ha": 66.53,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1894",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-028305",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066678",
+    "nombre": "Venice Park Recycling & Disposal Facility",
+    "pais": "USA",
+    "lat": 42.979978,
+    "lon": -83.972603,
+    "area_ha": 65.54,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1888",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059251",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064645",
+    "nombre": "Ann Arbor SLF Phase I & II",
+    "pais": "USA",
+    "lat": 42.227187,
+    "lon": -83.704463,
+    "area_ha": 53.86,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/681490935",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366624",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1878",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1992,
+    "complejo": "CPX-057352",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065799",
+    "nombre": "Lyon Development LF",
+    "pais": "USA",
+    "lat": 42.5143,
+    "lon": -83.616,
+    "area_ha": 48.56,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1901",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-058429",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066720",
+    "nombre": "Wayne Disposal LF",
+    "pais": "USA",
+    "lat": 42.223251,
+    "lon": -83.526718,
+    "area_ha": 20.32,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366631",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1889",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-000135",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000137",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.096527,
+    "lon": -83.644599,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1157749561",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000133",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000138",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.222569,
+    "lon": -83.54634,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366633",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000134",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000139",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.222999,
+    "lon": -83.515563,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366628",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000135",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000140",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.222423,
+    "lon": -83.511089,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366629",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000135",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000141",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.22871,
+    "lon": -83.547946,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366634",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000134",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000142",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.226993,
+    "lon": -83.515571,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366626",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000135",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000143",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 42.226861,
+    "lon": -83.511192,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1039366627",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000135",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065773",
+    "nombre": "Livingston County Landfill",
+    "pais": "USA",
+    "lat": 42.650167,
+    "lon": -83.920333,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "20894",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1988,
+    "complejo": "CPX-058403",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_PA_BERKS": [
+   {
+    "id_catalogo": "BAS-065134",
+    "nombre": "Conestoga LF",
+    "pais": "USA",
+    "lat": 40.179361,
+    "lon": -75.911345,
+    "area_ha": 190.1,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1269",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057807",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066306",
+    "nombre": "Rolling Hills LF",
+    "pais": "USA",
+    "lat": 40.361096,
+    "lon": -75.716881,
+    "area_ha": 105.25,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1261",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058900",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066213",
+    "nombre": "Pottstown LF",
+    "pais": "USA",
+    "lat": 40.27087,
+    "lon": -75.66966,
+    "area_ha": 85.79,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1251",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2005,
+    "complejo": "CPX-029344",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065706",
+    "nombre": "Lanchester LF",
+    "pais": "USA",
+    "lat": 40.108115,
+    "lon": -75.945732,
+    "area_ha": 79.04,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1266",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058338",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064747",
+    "nombre": "Bethlehem Landfill",
+    "pais": "USA",
+    "lat": 40.625115,
+    "lon": -75.307079,
+    "area_ha": 72.38,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1293",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057444",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065433",
+    "nombre": "Grand Central SLF",
+    "pais": "USA",
+    "lat": 40.856769,
+    "lon": -75.261853,
+    "area_ha": 61.89,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1255",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058085",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066186",
+    "nombre": "Pioneer Crossing LF",
+    "pais": "USA",
+    "lat": 40.27453,
+    "lon": -75.813097,
+    "area_ha": 58.65,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1263",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058787",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064991",
+    "nombre": "Chrin Brothers LF",
+    "pais": "USA",
+    "lat": 40.665819,
+    "lon": -75.226283,
+    "area_ha": 53.7,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1253",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057673",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066745",
+    "nombre": "Western Berks Community Landfill & Recycling Center",
+    "pais": "USA",
+    "lat": 40.304463,
+    "lon": -75.909218,
+    "area_ha": 12.22,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1271",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2023,
+    "complejo": "CPX-059315",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-047519",
+    "nombre": "Moyer's Landfill",
+    "pais": "USA",
+    "lat": 40.156217,
+    "lon": -75.436443,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/244904979",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-041623",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_TX_DALLAS": [
+   {
+    "id_catalogo": "BAS-065850",
+    "nombre": "McCommas Bluff Landfill",
+    "pais": "USA",
+    "lat": 32.683834,
+    "lon": -96.718245,
+    "area_ha": 425.06,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1459",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058476",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066444",
+    "nombre": "Skyline LF",
+    "pais": "USA",
+    "lat": 32.549088,
+    "lon": -96.678618,
+    "area_ha": 245.13,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1456",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059030",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064861",
+    "nombre": "C.M. Hinton Jr Regional Landfill",
+    "pais": "USA",
+    "lat": 32.958879,
+    "lon": -96.543189,
+    "area_ha": 124.0,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "11761",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057549",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065567",
+    "nombre": "Hunter Ferrell Landfill",
+    "pais": "USA",
+    "lat": 32.783889,
+    "lon": -96.940893,
+    "area_ha": 64.07,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1828",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057709",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065029",
+    "nombre": "City of Grand Prairie LF",
+    "pais": "USA",
+    "lat": 32.771176,
+    "lon": -96.949326,
+    "area_ha": 60.02,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1475",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057709",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065025",
+    "nombre": "City of Garland Castle Drive Landfill",
+    "pais": "USA",
+    "lat": 32.935001,
+    "lon": -96.583334,
+    "area_ha": 57.22,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1778",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2003,
+    "complejo": "CPX-057705",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065844",
+    "nombre": "Maxwell Creek LF",
+    "pais": "USA",
+    "lat": 32.999,
+    "lon": -96.5796,
+    "area_ha": 56.17,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1457",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2005,
+    "complejo": "CPX-058471",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066617",
+    "nombre": "Trinity Oaks Landfill",
+    "pais": "USA",
+    "lat": 32.680834,
+    "lon": -96.630001,
+    "area_ha": 55.16,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1801",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2003,
+    "complejo": "CPX-059192",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065012",
+    "nombre": "City of Corsicana LF",
+    "pais": "USA",
+    "lat": 32.090726,
+    "lon": -96.416802,
+    "area_ha": 54.7,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1516",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-013853",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065254",
+    "nombre": "ECD Landfill",
+    "pais": "USA",
+    "lat": 32.391279,
+    "lon": -96.654472,
+    "area_ha": 48.99,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2437",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057919",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064865",
+    "nombre": "CSC Disposal and Landfill",
+    "pais": "USA",
+    "lat": 32.223334,
+    "lon": -96.787501,
+    "area_ha": 40.47,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1478",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057552",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065573",
+    "nombre": "Hutchins Landfill",
+    "pais": "USA",
+    "lat": 32.660184,
+    "lon": -96.693158,
+    "area_ha": 34.2,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2044",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1992,
+    "complejo": "CPX-058220",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_PA_ALLEGHENY": [
+   {
+    "id_catalogo": "BAS-065934",
+    "nombre": "Monroeville LF",
+    "pais": "USA",
+    "lat": 40.405471,
+    "lon": -79.790615,
+    "area_ha": 99.08,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1280",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058556",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066748",
+    "nombre": "Westmoreland Waste SLF LLC",
+    "pais": "USA",
+    "lat": 40.14598,
+    "lon": -79.857773,
+    "area_ha": 79.48,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "11721",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059318",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065454",
+    "nombre": "Greenridge Reclamation Landfill",
+    "pais": "USA",
+    "lat": 40.129974,
+    "lon": -79.582616,
+    "area_ha": 67.9,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1287",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058105",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066466",
+    "nombre": "South Hills Landfill",
+    "pais": "USA",
+    "lat": 40.27729,
+    "lon": -79.993158,
+    "area_ha": 61.15,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1843",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059051",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065320",
+    "nombre": "Evergreen Landfill",
+    "pais": "USA",
+    "lat": 40.492866,
+    "lon": -79.136913,
+    "area_ha": 60.32,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1281",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057977",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065652",
+    "nombre": "Kelly Run SLF",
+    "pais": "USA",
+    "lat": 40.253185,
+    "lon": -79.881265,
+    "area_ha": 59.88,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1295",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058291",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066666",
+    "nombre": "Valley LF",
+    "pais": "USA",
+    "lat": 40.388003,
+    "lon": -79.673606,
+    "area_ha": 54.36,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1285",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059239",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066379",
+    "nombre": "Sanitary LF",
+    "pais": "USA",
+    "lat": 40.1521,
+    "lon": -79.8837,
+    "area_ha": 0.13,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1283",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2012,
+    "complejo": "CPX-058971",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065927",
+    "nombre": "Mon Valley Landfill",
+    "pais": "USA",
+    "lat": 40.112,
+    "lon": -79.911,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1317",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058549",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_TX_HARRIS": [
+   {
+    "id_catalogo": "BAS-064671",
+    "nombre": "Atascocita RDF",
+    "pais": "USA",
+    "lat": 29.956853,
+    "lon": -95.237816,
+    "area_ha": 227.04,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1479",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057377",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065847",
+    "nombre": "McCarty Road LF",
+    "pais": "USA",
+    "lat": 29.82777,
+    "lon": -95.24206,
+    "area_ha": 168.9,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1465",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-013856",
+    "estado_complejo": "contradictorio",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064735",
+    "nombre": "Bellfort Boulevard Landfill",
+    "pais": "USA",
+    "lat": 29.669,
+    "lon": -95.372,
+    "area_ha": 106.84,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10420",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1970,
+    "complejo": "CPX-057433",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064773",
+    "nombre": "Blue Ridge LF",
+    "pais": "USA",
+    "lat": 29.5559,
+    "lon": -95.4419,
+    "area_ha": 96.72,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1812",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-013854",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065107",
+    "nombre": "Coastal Plains RDF",
+    "pais": "USA",
+    "lat": 29.424364,
+    "lon": -95.191554,
+    "area_ha": 80.06,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1808",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057782",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066758",
+    "nombre": "Whispering Pines LF",
+    "pais": "USA",
+    "lat": 29.879215,
+    "lon": -95.265751,
+    "area_ha": 72.92,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1811",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059328",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065354",
+    "nombre": "Fort Bend Regional Landfill",
+    "pais": "USA",
+    "lat": 29.396867,
+    "lon": -95.723454,
+    "area_ha": 52.0,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12101",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058010",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065402",
+    "nombre": "Galveston County LF",
+    "pais": "USA",
+    "lat": 29.385933,
+    "lon": -95.056714,
+    "area_ha": 17.96,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1810",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-013859",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064771",
+    "nombre": "Blue Bonnet LF",
+    "pais": "USA",
+    "lat": 29.818258,
+    "lon": -95.24369,
+    "area_ha": 17.81,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1520",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-013856",
+    "estado_complejo": "contradictorio",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066025",
+    "nombre": "North County C&D Landfill",
+    "pais": "USA",
+    "lat": 29.484,
+    "lon": -95.053,
+    "area_ha": null,
+    "grande": false,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2274",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058639",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   }
+  ],
+  "USA_CA_SAN_BERNARDINO": [
+   {
+    "id_catalogo": "BAS-065887",
+    "nombre": "Mid-Valley Sanitary LF",
+    "pais": "USA",
+    "lat": 34.14361,
+    "lon": -117.428427,
+    "area_ha": 167.27,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "338",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058512",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066682",
+    "nombre": "Victorville Sanitary Landfill",
+    "pais": "USA",
+    "lat": 34.593436,
+    "lon": -117.269587,
+    "area_ha": 69.82,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "311",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059255",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066369",
+    "nombre": "San Timoteo Solid Waste Disposal Site",
+    "pais": "USA",
+    "lat": 34.011726,
+    "lon": -117.213973,
+    "area_ha": 66.62,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "270",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058961",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066101",
+    "nombre": "Oro Grande LF",
+    "pais": "USA",
+    "lat": 34.634,
+    "lon": -117.307,
+    "area_ha": 65.15,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "234",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-058708",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064705",
+    "nombre": "Barstow Sanitary Landfill",
+    "pais": "USA",
+    "lat": 34.834508,
+    "lon": -117.019505,
+    "area_ha": 61.36,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "60",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057407",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065534",
+    "nombre": "Highgrove SLF",
+    "pais": "USA",
+    "lat": 34.006346,
+    "lon": -117.285456,
+    "area_ha": 51.99,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/121239492",
+      "estado": "cerrado",
+      "motivo": "end_date=1998-07"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "171",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-058184",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065121",
+    "nombre": "Colton Sanitary Landfill",
+    "pais": "USA",
+    "lat": 34.045479,
+    "lon": -117.340878,
+    "area_ha": 39.27,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "124",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2014,
+    "complejo": "CPX-037458",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064875",
+    "nombre": "California Street LF",
+    "pais": "USA",
+    "lat": 34.08874,
+    "lon": -117.221194,
+    "area_ha": 34.62,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "90",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057561",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066811",
+    "nombre": "Yucaipa Refuse Disposal Site",
+    "pais": "USA",
+    "lat": 34.04793,
+    "lon": -117.058951,
+    "area_ha": 17.27,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10560",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1980,
+    "complejo": "CPX-059377",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064659",
+    "nombre": "Apple Valley Disposal Site",
+    "pais": "USA",
+    "lat": 34.5,
+    "lon": -117.11,
+    "area_ha": 15.38,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "49",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1997,
+    "complejo": "CPX-057365",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065524",
+    "nombre": "Hesperia Refuse Disposal Site",
+    "pais": "USA",
+    "lat": 34.346,
+    "lon": -117.349,
+    "area_ha": 15.38,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "170",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1997,
+    "complejo": "CPX-058174",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_CA_SAN_JOAQUIN": [
+   {
+    "id_catalogo": "BAS-066675",
+    "nombre": "Vasco Road SLF",
+    "pais": "USA",
+    "lat": 37.753529,
+    "lon": -121.723252,
+    "area_ha": 126.31,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "309",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059248",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066001",
+    "nombre": "Newby Island SLF Phases I, II, & III",
+    "pais": "USA",
+    "lat": 37.459071,
+    "lon": -121.941477,
+    "area_ha": 118.99,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "225",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058619",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065464",
+    "nombre": "Guadalupe Rubbish Disposal Facility",
+    "pais": "USA",
+    "lat": 37.212142,
+    "lon": -121.90117,
+    "area_ha": 114.69,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "164",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058115",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064629",
+    "nombre": "Altamont Landfill & Resource Recovery Facility",
+    "pais": "USA",
+    "lat": 37.75,
+    "lon": -121.65667,
+    "area_ha": 96.03,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "39",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-037489",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064620",
+    "nombre": "All Purpose Landfill",
+    "pais": "USA",
+    "lat": 37.41639,
+    "lon": -121.97056,
+    "area_ha": 84.98,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "349",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-057330",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065674",
+    "nombre": "Kirby Canyon Recycling & Disposal Facility",
+    "pais": "USA",
+    "lat": 37.18512,
+    "lon": -121.67109,
+    "area_ha": 54.07,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "188",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058308",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064684",
+    "nombre": "Austin Road Landfill",
+    "pais": "USA",
+    "lat": 37.7795,
+    "lon": -121.1767,
+    "area_ha": 50.14,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "51",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057387",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066609",
+    "nombre": "Tri-Cities Landfill",
+    "pais": "USA",
+    "lat": 37.492512,
+    "lon": -121.992996,
+    "area_ha": 48.97,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "137",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2012,
+    "complejo": "CPX-059184",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066533",
+    "nombre": "Sunnyvale LF",
+    "pais": "USA",
+    "lat": 37.418229,
+    "lon": -122.010834,
+    "area_ha": 42.19,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "114",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-059114",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065334",
+    "nombre": "Fink Road LF",
+    "pais": "USA",
+    "lat": 37.38816,
+    "lon": -121.13633,
+    "area_ha": 28.73,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "151",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057990",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065145",
+    "nombre": "Corral Hollow LF",
+    "pais": "USA",
+    "lat": 37.669609,
+    "lon": -121.45737,
+    "area_ha": 22.58,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "126",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1995,
+    "complejo": "CPX-057818",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066812",
+    "nombre": "Zanker Road (Nine Par) SLF",
+    "pais": "USA",
+    "lat": 37.434654,
+    "lon": -121.954891,
+    "area_ha": 17.85,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "331",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059378",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   }
+  ],
+  "USA_AZ_MARICOPA": [
+   {
+    "id_catalogo": "BAS-066055",
+    "nombre": "Northwest Regional MSW Landfill",
+    "pais": "USA",
+    "lat": 33.676335,
+    "lon": -112.478779,
+    "area_ha": 437.76,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1786",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058667",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064855",
+    "nombre": "Butterfield Station Landfill",
+    "pais": "USA",
+    "lat": 33.081562,
+    "lon": -112.276854,
+    "area_ha": 390.29,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1783",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057543",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066443",
+    "nombre": "Skunk Creek Landfill",
+    "pais": "USA",
+    "lat": 33.71246,
+    "lon": -112.127602,
+    "area_ha": 252.36,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1790",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2005,
+    "complejo": "CPX-059029",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066507",
+    "nombre": "State Route 85 Landfill",
+    "pais": "USA",
+    "lat": 33.178303,
+    "lon": -112.665495,
+    "area_ha": 197.04,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12141",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059090",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065026",
+    "nombre": "City of Glendale Municipal Landfill",
+    "pais": "USA",
+    "lat": 33.539058,
+    "lon": -112.305755,
+    "area_ha": 147.56,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1787",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057706",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066487",
+    "nombre": "Southwest Regional Landfill",
+    "pais": "USA",
+    "lat": 33.222166,
+    "lon": -112.63707,
+    "area_ha": 111.84,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1772",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059071",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065779",
+    "nombre": "Lone Cactus Landfill",
+    "pais": "USA",
+    "lat": 33.680212,
+    "lon": -112.067074,
+    "area_ha": 79.32,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/682036051",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12205",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2013,
+    "complejo": "CPX-058409",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064589",
+    "nombre": "27th Avenue Landfill",
+    "pais": "USA",
+    "lat": 33.420114,
+    "lon": -112.119553,
+    "area_ha": 56.51,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1768",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1995,
+    "complejo": "CPX-057302",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066436",
+    "nombre": "Sierra Estrella Landfill",
+    "pais": "USA",
+    "lat": 33.08,
+    "lon": -112.1253,
+    "area_ha": 10.97,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2392",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2000,
+    "complejo": "CPX-059022",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065216",
+    "nombre": "Deer Valley Landfill",
+    "pais": "USA",
+    "lat": 33.621,
+    "lon": -112.0996,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2335",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1972,
+    "complejo": "CPX-057883",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_OH_MAHONING": [
+   {
+    "id_catalogo": "BAS-065581",
+    "nombre": "Imperial Sanitary Landfill",
+    "pais": "USA",
+    "lat": 40.43512,
+    "lon": -80.29125,
+    "area_ha": 152.93,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1278",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-028238",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064864",
+    "nombre": "CLD Landfill",
+    "pais": "USA",
+    "lat": 40.949688,
+    "lon": -80.845162,
+    "area_ha": 115.84,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "20900",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2009,
+    "complejo": "CPX-057551",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064662",
+    "nombre": "Arden LF",
+    "pais": "USA",
+    "lat": 40.209063,
+    "lon": -80.266738,
+    "area_ha": 109.97,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1276",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057368",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066431",
+    "nombre": "Short Creek Sanitary Landfill",
+    "pais": "USA",
+    "lat": 40.14863,
+    "lon": -80.641192,
+    "area_ha": 107.15,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2224",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059017",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064657",
+    "nombre": "Apex Sanitary Landfill",
+    "pais": "USA",
+    "lat": 40.43375,
+    "lon": -80.9113,
+    "area_ha": 75.9,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12061",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057363",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064823",
+    "nombre": "Brooke County LF (Subtitle D)",
+    "pais": "USA",
+    "lat": 40.38123,
+    "lon": -80.57751,
+    "area_ha": 72.84,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10160",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057513",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065604",
+    "nombre": "J.J. Brunner LF",
+    "pais": "USA",
+    "lat": 40.721551,
+    "lon": -80.170837,
+    "area_ha": 37.83,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1279",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058248",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065846",
+    "nombre": "Mazzaro LF",
+    "pais": "USA",
+    "lat": 40.4748,
+    "lon": -80.285,
+    "area_ha": 36.42,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1300",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1987,
+    "complejo": "CPX-058473",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065814",
+    "nombre": "Mahoning LF",
+    "pais": "USA",
+    "lat": 40.916001,
+    "lon": -80.584402,
+    "area_ha": 27.37,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2243",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058444",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065272",
+    "nombre": "East Liverpool LF, Inc.",
+    "pais": "USA",
+    "lat": 40.688,
+    "lon": -80.673,
+    "area_ha": 24.28,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1165",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-057936",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_MD_FREDERICK": [
+   {
+    "id_catalogo": "BAS-066270",
+    "nombre": "Reich's Ford Road SLF",
+    "pais": "USA",
+    "lat": 39.373125,
+    "lon": -77.351508,
+    "area_ha": 196.32,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "764",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058865",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065955",
+    "nombre": "Mountain View Reclamation Landfill",
+    "pais": "USA",
+    "lat": 39.794107,
+    "lon": -77.803064,
+    "area_ha": 148.59,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1259",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058577",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065789",
+    "nombre": "Loudoun County SLF",
+    "pais": "USA",
+    "lat": 39.041172,
+    "lon": -77.583487,
+    "area_ha": 136.25,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1585",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058419",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064774",
+    "nombre": "Blue Ridge Landfill",
+    "pais": "USA",
+    "lat": 39.96991,
+    "lon": -77.55722,
+    "area_ha": 88.76,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1270",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057468",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065368",
+    "nombre": "Forty West SLF",
+    "pais": "USA",
+    "lat": 39.658707,
+    "lon": -77.818445,
+    "area_ha": 71.92,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10740",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058024",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066273",
+    "nombre": "Resh Road II SLF",
+    "pais": "USA",
+    "lat": 39.680234,
+    "lon": -77.802029,
+    "area_ha": 19.56,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/875505831",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "765",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2000,
+    "complejo": "CPX-058868",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_GA_FORSYTH": [
+   {
+    "id_catalogo": "BAS-065259",
+    "nombre": "Eagle Point Landfill LLC",
+    "pais": "USA",
+    "lat": 34.325083,
+    "lon": -84.240853,
+    "area_ha": 160.6,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10403",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057923",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066175",
+    "nombre": "Pine Bluff Landfill",
+    "pais": "USA",
+    "lat": 34.273119,
+    "lon": -84.388449,
+    "area_ha": 151.73,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2303",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058777",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064708",
+    "nombre": "Bartow County MSWLF",
+    "pais": "USA",
+    "lat": 34.143277,
+    "lon": -84.762647,
+    "area_ha": 98.94,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1985",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057410",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065962",
+    "nombre": "Murray County Landfill",
+    "pais": "USA",
+    "lat": 34.680489,
+    "lon": -84.731656,
+    "area_ha": 80.0,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10380",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058583",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066081",
+    "nombre": "Old Dixie Highway MSW Landfill",
+    "pais": "USA",
+    "lat": 34.652071,
+    "lon": -84.94403,
+    "area_ha": 43.19,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "462",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058690",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065428",
+    "nombre": "Gordon County Redbone Ridges LF",
+    "pais": "USA",
+    "lat": 34.510557,
+    "lon": -84.765811,
+    "area_ha": 19.83,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10407",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058081",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064962",
+    "nombre": "Cherokee County - Blalock Road Ph 3 & 4",
+    "pais": "USA",
+    "lat": 34.15,
+    "lon": -84.48,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "437",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-057645",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_OH_HAMILTON": [
+   {
+    "id_catalogo": "BAS-066328",
+    "nombre": "Rumpke SLF, Inc.",
+    "pais": "USA",
+    "lat": 39.274912,
+    "lon": -84.597417,
+    "area_ha": 300.93,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1177",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058922",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065995",
+    "nombre": "New Paris Pike LF",
+    "pais": "USA",
+    "lat": 39.852749,
+    "lon": -84.831394,
+    "area_ha": 116.15,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "555",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058614",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065256",
+    "nombre": "ELDA RDF",
+    "pais": "USA",
+    "lat": 39.187475,
+    "lon": -84.510705,
+    "area_ha": 74.71,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/44491900",
+      "estado": "cerrado",
+      "motivo": "disused=yes / abandoned=yes"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1178",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-040064",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064784",
+    "nombre": "Bond Road Landfill",
+    "pais": "USA",
+    "lat": 39.206214,
+    "lon": -84.817794,
+    "area_ha": 43.92,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "21200",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057477",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066033",
+    "nombre": "North Sanitary Landfill",
+    "pais": "USA",
+    "lat": 39.694706,
+    "lon": -84.256488,
+    "area_ha": 38.02,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1977",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1994,
+    "complejo": "CPX-058646",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064779",
+    "nombre": "Bobmeyer Road MSW Landfill",
+    "pais": "USA",
+    "lat": 39.359758,
+    "lon": -84.528144,
+    "area_ha": 35.02,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2427",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1987,
+    "complejo": "CPX-057472",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065892",
+    "nombre": "Middletown City LF",
+    "pais": "USA",
+    "lat": 39.54063,
+    "lon": -84.370261,
+    "area_ha": 31.91,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1206",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1990,
+    "complejo": "CPX-058516",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064754",
+    "nombre": "Bigfoot Run Landfill",
+    "pais": "USA",
+    "lat": 39.365982,
+    "lon": -84.16672,
+    "area_ha": 29.99,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1199",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1999,
+    "complejo": "CPX-057451",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066220",
+    "nombre": "Preble County SLF",
+    "pais": "USA",
+    "lat": 39.7446,
+    "lon": -84.6525,
+    "area_ha": 21.04,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1192",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058817",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-048277",
+    "nombre": "Powell Road Landfill",
+    "pais": "USA",
+    "lat": 39.833494,
+    "lon": -84.160687,
+    "area_ha": 16.91,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/367856128",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-042239",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066517",
+    "nombre": "Stony Hollow Landfill Inc.",
+    "pais": "USA",
+    "lat": 39.715412,
+    "lon": -84.249033,
+    "area_ha": 14.59,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1941",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059099",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065060",
+    "nombre": "City of Oxford Sanitary Landfill",
+    "pais": "USA",
+    "lat": 39.497195,
+    "lon": -84.74148,
+    "area_ha": 6.76,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "21223",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1986,
+    "complejo": "CPX-057739",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-047032",
+    "nombre": "Landfill 2",
+    "pais": "USA",
+    "lat": 39.773097,
+    "lon": -84.124854,
+    "area_ha": 6.06,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1180363710",
+      "estado": "cerrado",
+      "motivo": "disused=yes / abandoned=yes"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-041205",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-047029",
+    "nombre": "Landfill 1",
+    "pais": "USA",
+    "lat": 39.782291,
+    "lon": -84.115848,
+    "area_ha": 1.08,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1180365892",
+      "estado": "cerrado",
+      "motivo": "disused=yes / abandoned=yes"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-041203",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-000133",
+    "nombre": null,
+    "pais": "USA",
+    "lat": 39.217853,
+    "lon": -84.457687,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/294432946",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-000130",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-045735",
+    "nombre": "Former Center Hill Landfill",
+    "pais": "USA",
+    "lat": 39.190244,
+    "lon": -84.496053,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/44491528",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-040064",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-045743",
+    "nombre": "Former Lawrenceburg Road Landfill",
+    "pais": "USA",
+    "lat": 39.150414,
+    "lon": -84.791866,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "relation/19801221",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-040072",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_IL_ST_CLAIR": [
+   {
+    "id_catalogo": "BAS-065898",
+    "nombre": "Milam Recycling and Disposal Facility",
+    "pais": "USA",
+    "lat": 38.655071,
+    "lon": -90.126885,
+    "area_ha": 126.33,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "516",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058521",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064947",
+    "nombre": "Champ Landfill",
+    "pais": "USA",
+    "lat": 38.744363,
+    "lon": -90.457122,
+    "area_ha": 122.92,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "832",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057631",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064814",
+    "nombre": "Bridgeton Landfill",
+    "pais": "USA",
+    "lat": 38.766179,
+    "lon": -90.445168,
+    "area_ha": 88.55,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "851",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2004,
+    "complejo": "CPX-057506",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066324",
+    "nombre": "Roxana LF",
+    "pais": "USA",
+    "lat": 38.826831,
+    "lon": -90.014306,
+    "area_ha": 78.92,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1874",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058918",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064944",
+    "nombre": "Chain of Rocks RDF",
+    "pais": "USA",
+    "lat": 38.76235,
+    "lon": -90.12949,
+    "area_ha": 59.08,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "504",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2004,
+    "complejo": "CPX-057629",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066063",
+    "nombre": "Oak Ridge Landfill",
+    "pais": "USA",
+    "lat": 38.557526,
+    "lon": -90.528504,
+    "area_ha": 50.05,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "850",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2011,
+    "complejo": "CPX-058674",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065922",
+    "nombre": "Modern Landfill",
+    "pais": "USA",
+    "lat": 38.48846,
+    "lon": -90.02839,
+    "area_ha": 42.49,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "514",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1997,
+    "complejo": "CPX-058544",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065579",
+    "nombre": "IESI Timber Ridge Landfill",
+    "pais": "USA",
+    "lat": 38.171939,
+    "lon": -90.770294,
+    "area_ha": 30.5,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12208",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058225",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065915",
+    "nombre": "Missouri Pass Landfill",
+    "pais": "USA",
+    "lat": 38.70767,
+    "lon": -90.416613,
+    "area_ha": 29.14,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "848",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1995,
+    "complejo": "CPX-058538",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064734",
+    "nombre": "Belleville Sanitary LF",
+    "pais": "USA",
+    "lat": 38.48359,
+    "lon": -90.011824,
+    "area_ha": 26.3,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1856",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-057432",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-046635",
+    "nombre": "Interstate Disposal Systems Inc. Sanitary Landfill",
+    "pais": "USA",
+    "lat": 38.372266,
+    "lon": -90.925472,
+    "area_ha": 17.67,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1365696929",
+      "estado": "cerrado",
+      "motivo": "end_date=1993-10-08"
+     }
+    ],
+    "fecha_cierre": "1993-10-08",
+    "complejo": "CPX-040867",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066053",
+    "nombre": "Northside Sanitary Landfill",
+    "pais": "USA",
+    "lat": 38.5221,
+    "lon": -90.9492,
+    "area_ha": 12.14,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "841",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2004,
+    "complejo": "CPX-058665",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065896",
+    "nombre": "Midwest Landfill",
+    "pais": "USA",
+    "lat": 38.3438,
+    "lon": -90.8308,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "839",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1994,
+    "complejo": "CPX-058519",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066267",
+    "nombre": "Redbird Landfill",
+    "pais": "USA",
+    "lat": 38.45013,
+    "lon": -90.406883,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2078",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1986,
+    "complejo": "CPX-058863",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_FL_OSCEOLA": [
+   {
+    "id_catalogo": "BAS-065603",
+    "nombre": "J.E.D. Solid Waste Management Facility",
+    "pais": "USA",
+    "lat": 28.061501,
+    "lon": -81.097269,
+    "area_ha": 207.18,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "11621",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058247",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066104",
+    "nombre": "Osceola Landfill",
+    "pais": "USA",
+    "lat": 28.792241,
+    "lon": -81.086689,
+    "area_ha": 179.15,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "431",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058711",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065693",
+    "nombre": "Lake County Central Phase I Landfill",
+    "pais": "USA",
+    "lat": 28.756333,
+    "lon": -81.738152,
+    "area_ha": 108.3,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12213",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2023,
+    "complejo": "CPX-058327",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066023",
+    "nombre": "North Central Landfill",
+    "pais": "USA",
+    "lat": 28.023382,
+    "lon": -81.847421,
+    "area_ha": 72.14,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "424",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-014108",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066180",
+    "nombre": "Pine Ridge Recycling & Disposal",
+    "pais": "USA",
+    "lat": 28.486755,
+    "lon": -81.652143,
+    "area_ha": 56.9,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "20853",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1999,
+    "complejo": "CPX-058781",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066097",
+    "nombre": "Orange County SLF",
+    "pais": "USA",
+    "lat": 28.481399,
+    "lon": -81.206626,
+    "area_ha": 48.86,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "420",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-042040",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066350",
+    "nombre": "Saint Cloud City LF Class I",
+    "pais": "USA",
+    "lat": 28.234438,
+    "lon": -81.307568,
+    "area_ha": 17.63,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "421",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2003,
+    "complejo": "CPX-058943",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066484",
+    "nombre": "Southport Road SLF Phase I & II",
+    "pais": "USA",
+    "lat": 28.1558,
+    "lon": -81.422575,
+    "area_ha": 0.2,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "422",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2004,
+    "complejo": "CPX-059068",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_VA_ROCKINGHAM": [
+   {
+    "id_catalogo": "BAS-066304",
+    "nombre": "Rockingham County Landfill",
+    "pais": "USA",
+    "lat": 38.397766,
+    "lon": -78.883579,
+    "area_ha": 88.74,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2131",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058898",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065600",
+    "nombre": "Ivy Material Utilization Center",
+    "pais": "USA",
+    "lat": 38.022008,
+    "lon": -78.653977,
+    "area_ha": 60.8,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1570",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2001,
+    "complejo": "CPX-058244",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066424",
+    "nombre": "Shenandoah County LF",
+    "pais": "USA",
+    "lat": 38.843385,
+    "lon": -78.550609,
+    "area_ha": 53.49,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2338",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059011",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064712",
+    "nombre": "Battle Creek Landfill",
+    "pais": "USA",
+    "lat": 38.62226,
+    "lon": -78.586354,
+    "area_ha": 30.67,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "10083",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057413",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066095",
+    "nombre": "Orange County Landfill",
+    "pais": "USA",
+    "lat": 38.243546,
+    "lon": -78.033527,
+    "area_ha": 26.68,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "12241",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058703",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065450",
+    "nombre": "Greene County Landfill",
+    "pais": "USA",
+    "lat": 38.276,
+    "lon": -78.422,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1603",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-058101",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066121",
+    "nombre": "Page County Landfill",
+    "pais": "USA",
+    "lat": 38.56316,
+    "lon": -78.516304,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2134",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2000,
+    "complejo": "CPX-058726",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_CA_TULARE": [
+   {
+    "id_catalogo": "BAS-066687",
+    "nombre": "Visalia Landfill",
+    "pais": "USA",
+    "lat": 36.392391,
+    "lon": -119.38989,
+    "area_ha": 252.67,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "312",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059260",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066797",
+    "nombre": "Woodville Landfill",
+    "pais": "USA",
+    "lat": 36.15044,
+    "lon": -119.231522,
+    "area_ha": 153.56,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "324",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059364",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065024",
+    "nombre": "City of Fresno Landfill",
+    "pais": "USA",
+    "lat": 36.703296,
+    "lon": -119.830172,
+    "area_ha": 52.92,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "11220",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1987,
+    "complejo": "CPX-057704",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066558",
+    "nombre": "Teapot Dome Landfill",
+    "pais": "USA",
+    "lat": 36.020505,
+    "lon": -119.104958,
+    "area_ha": 51.96,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "290",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2023,
+    "complejo": "CPX-059135",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065487",
+    "nombre": "Hanford SLF",
+    "pais": "USA",
+    "lat": 36.30907,
+    "lon": -119.59573,
+    "area_ha": 31.16,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "165",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1997,
+    "complejo": "CPX-058137",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064954",
+    "nombre": "Chateau Fresno LF",
+    "pais": "USA",
+    "lat": 36.687869,
+    "lon": -119.945891,
+    "area_ha": 30.38,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "100",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1996,
+    "complejo": "CPX-057637",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065009",
+    "nombre": "City of Clovis LF",
+    "pais": "USA",
+    "lat": 36.943016,
+    "lon": -119.686012,
+    "area_ha": 30.04,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "107",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057691",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066477",
+    "nombre": "Southeast Regional Solid Waste Disposal Site",
+    "pais": "USA",
+    "lat": 36.59049,
+    "lon": -119.56238,
+    "area_ha": 29.95,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "283",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1990,
+    "complejo": "CPX-059061",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064976",
+    "nombre": "Chestnut Avenue SLF",
+    "pais": "USA",
+    "lat": 36.550539,
+    "lon": -119.739793,
+    "area_ha": 17.84,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "102",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-057658",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065323",
+    "nombre": "Exeter Disposal Site",
+    "pais": "USA",
+    "lat": 36.229912,
+    "lon": -119.152277,
+    "area_ha": 13.76,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/131191852",
+      "estado": "cerrado",
+      "motivo": "etiqueta disused/abandoned/was/historic"
+     },
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "149",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2005,
+    "complejo": "CPX-057979",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-048051",
+    "nombre": "Orosi Landfill",
+    "pais": "USA",
+    "lat": 36.564705,
+    "lon": -119.284892,
+    "area_ha": 13.62,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/1080307113",
+      "estado": "cerrado",
+      "motivo": "disused=yes / abandoned=yes"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-042062",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066092",
+    "nombre": "Orange Avenue Disposal Inc.",
+    "pais": "USA",
+    "lat": 36.68694,
+    "lon": -119.76306,
+    "area_ha": 11.74,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "233",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2007,
+    "complejo": "CPX-058700",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-049802",
+    "nombre": "Tulare Landfill",
+    "pais": "USA",
+    "lat": 36.217236,
+    "lon": -119.490707,
+    "area_ha": 6.55,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/131197884",
+      "estado": "cerrado",
+      "motivo": "disused=yes / abandoned=yes"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-043385",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_SC_GREENVILLE": [
+   {
+    "id_catalogo": "BAS-066636",
+    "nombre": "Twin Chimneys Landfill",
+    "pais": "USA",
+    "lat": 34.538156,
+    "lon": -82.310992,
+    "area_ha": 196.98,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "11180",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059209",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066728",
+    "nombre": "Wellford LF",
+    "pais": "USA",
+    "lat": 34.995726,
+    "lon": -82.13782,
+    "area_ha": 132.75,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1918",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-059298",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066128",
+    "nombre": "Palmetto Landfill",
+    "pais": "USA",
+    "lat": 34.932043,
+    "lon": -82.075045,
+    "area_ha": 88.64,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1928",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2016,
+    "complejo": "CPX-058733",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064765",
+    "nombre": "Blackberry Valley Landfill",
+    "pais": "USA",
+    "lat": 34.913,
+    "lon": -82.486,
+    "area_ha": 49.37,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1847",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1987,
+    "complejo": "CPX-057461",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066403",
+    "nombre": "Seneca MSWLF",
+    "pais": "USA",
+    "lat": 34.653438,
+    "lon": -82.947284,
+    "area_ha": 40.11,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2121",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-058993",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065310",
+    "nombre": "Enoree Landfill",
+    "pais": "USA",
+    "lat": 34.80122,
+    "lon": -82.1847,
+    "area_ha": 36.79,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1848",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2007,
+    "complejo": "CPX-057968",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064643",
+    "nombre": "Anderson Regional Landfill",
+    "pais": "USA",
+    "lat": 34.5752,
+    "lon": -82.458,
+    "area_ha": 36.54,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2051",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057350",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065031",
+    "nombre": "City of Greenville Closed Landfill",
+    "pais": "USA",
+    "lat": 34.785,
+    "lon": -82.357,
+    "area_ha": 34.36,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2114",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1995,
+    "complejo": "CPX-057710",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066165",
+    "nombre": "Pickens County Landfill",
+    "pais": "USA",
+    "lat": 34.826273,
+    "lon": -82.663765,
+    "area_ha": 33.84,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2122",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-058768",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065457",
+    "nombre": "Greenwood County Landfills",
+    "pais": "USA",
+    "lat": 34.198961,
+    "lon": -82.077963,
+    "area_ha": 21.35,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2115",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058108",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066506",
+    "nombre": "Starr Sanitary Landfill",
+    "pais": "USA",
+    "lat": 34.411651,
+    "lon": -82.684853,
+    "area_ha": 16.91,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2130",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-059089",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064597",
+    "nombre": "Abbeville County Subtitle D MSWLF",
+    "pais": "USA",
+    "lat": 34.185,
+    "lon": -82.5155,
+    "area_ha": 0.54,
+    "grande": false,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2102",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057309",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064596",
+    "nombre": "Abbeville County Sanitary LF",
+    "pais": "USA",
+    "lat": 34.19452,
+    "lon": -82.51534,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2101",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1998,
+    "complejo": "CPX-057308",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066146",
+    "nombre": "Pendleton Sanitary Landfill",
+    "pais": "USA",
+    "lat": 34.62604,
+    "lon": -82.79831,
+    "area_ha": null,
+    "grande": false,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "2097",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1993,
+    "complejo": "CPX-058750",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_CA_LOS_ANGELES": [
+   {
+    "id_catalogo": "BAS-064652",
+    "nombre": "Antelope Valley Recycling and Disposal Facility",
+    "pais": "USA",
+    "lat": 34.568432,
+    "lon": -118.151492,
+    "area_ha": 83.27,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "47",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057359",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065705",
+    "nombre": "Lancaster Landfill",
+    "pais": "USA",
+    "lat": 34.74641,
+    "lon": -118.116862,
+    "area_ha": 61.64,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "314",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058337",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065926",
+    "nombre": "Mojave-Rosamond SLF",
+    "pais": "USA",
+    "lat": 34.993639,
+    "lon": -118.138691,
+    "area_ha": 17.16,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "215",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058548",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065735",
+    "nombre": "Lebec SLF",
+    "pais": "USA",
+    "lat": 34.826958,
+    "lon": -118.887886,
+    "area_ha": 15.21,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "197",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1991,
+    "complejo": "CPX-058365",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ],
+  "USA_CA_RIVERSIDE": [
+   {
+    "id_catalogo": "BAS-065297",
+    "nombre": "El Sobrante SLF",
+    "pais": "USA",
+    "lat": 33.798032,
+    "lon": -117.468913,
+    "area_ha": 397.28,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "147",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057958",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-048710",
+    "nombre": "San Marcos Landfill (Closed)",
+    "pais": "USA",
+    "lat": 33.089885,
+    "lon": -117.197948,
+    "area_ha": 56.93,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "osm",
+      "id_fuente": "way/401746646",
+      "estado": "cerrado",
+      "motivo": "disused=yes / abandoned=yes"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-042594",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066366",
+    "nombre": "San Marcos LF",
+    "pais": "USA",
+    "lat": 33.07833,
+    "lon": -117.165,
+    "area_ha": 41.28,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "268",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1997,
+    "complejo": "CPX-058958",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065236",
+    "nombre": "Double Butte Disposal Site",
+    "pais": "USA",
+    "lat": 33.720877,
+    "lon": -117.106963,
+    "area_ha": 40.53,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "136",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1994,
+    "complejo": "CPX-057903",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065721",
+    "nombre": "Las Pulgas LF",
+    "pais": "USA",
+    "lat": 33.364617,
+    "lon": -117.419411,
+    "area_ha": 30.9,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "193",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058351",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065142",
+    "nombre": "Corona Disposal Site",
+    "pais": "USA",
+    "lat": 33.865528,
+    "lon": -117.537623,
+    "area_ha": 27.07,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "342",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1986,
+    "complejo": "CPX-057815",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065864",
+    "nombre": "Mead Valley Disposal Site",
+    "pais": "USA",
+    "lat": 33.796512,
+    "lon": -117.28414,
+    "area_ha": 24.57,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "210",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 1997,
+    "complejo": "CPX-058490",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-064788",
+    "nombre": "Bonsall Landfill",
+    "pais": "USA",
+    "lat": 33.2412,
+    "lon": -117.1799,
+    "area_ha": 18.6,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1774",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057481",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066368",
+    "nombre": "San Onofre LF",
+    "pais": "USA",
+    "lat": 33.39667,
+    "lon": -117.54028,
+    "area_ha": 8.5,
+    "grande": false,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "269",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058960",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   }
+  ],
+  "USA_IN_FULTON": [
+   {
+    "id_catalogo": "BAS-065154",
+    "nombre": "County Line LF",
+    "pais": "USA",
+    "lat": 41.166629,
+    "lon": -86.234606,
+    "area_ha": 145.23,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "536",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057827",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-066217",
+    "nombre": "Prairie View RDF",
+    "pais": "USA",
+    "lat": 41.499811,
+    "lon": -86.171453,
+    "area_ha": 118.82,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "559",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-058814",
+    "estado_complejo": "abierto",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065349",
+    "nombre": "Forest Lawn Landfill",
+    "pais": "USA",
+    "lat": 41.774022,
+    "lon": -86.654065,
+    "area_ha": 91.74,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "1895",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2017,
+    "complejo": "CPX-058005",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065301",
+    "nombre": "Elkhart County Landfill",
+    "pais": "USA",
+    "lat": 41.633661,
+    "lon": -85.976749,
+    "area_ha": 68.85,
+    "grande": true,
+    "estado": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "542",
+      "estado": "abierto",
+      "motivo": "LMOP 'Current Landfill Status'=Open"
+     }
+    ],
+    "fecha_cierre": null,
+    "complejo": "CPX-057928",
+    "estado_complejo": "contradictorio",
+    "en_basurales_cerrados": false,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065264",
+    "nombre": "Earthmovers LF",
+    "pais": "USA",
+    "lat": 41.622137,
+    "lon": -85.972762,
+    "area_ha": 63.21,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "540",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2023,
+    "complejo": "CPX-057928",
+    "estado_complejo": "contradictorio",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   },
+   {
+    "id_catalogo": "BAS-065217",
+    "nombre": "Deercroft RDF",
+    "pais": "USA",
+    "lat": 41.652647,
+    "lon": -86.904124,
+    "area_ha": 52.82,
+    "grande": true,
+    "estado": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "estados_por_fuente": [
+     {
+      "fuente": "epa_lmop",
+      "id_fuente": "550",
+      "estado": "cerrado",
+      "motivo": "LMOP 'Current Landfill Status'=Closed"
+     }
+    ],
+    "fecha_cierre": 2002,
+    "complejo": "CPX-057884",
+    "estado_complejo": "cerrado",
+    "en_basurales_cerrados": true,
+    "caso_curado": null
+   }
+  ]
  }
 }
