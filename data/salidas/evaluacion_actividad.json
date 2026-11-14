@@ -1,0 +1,1672 @@
+{
+ "meta": {
+  "generado": "2026-11-14T22:16:16",
+  "generado_por": "herramientas/flujo.py (evaluar_actividad.evaluar)",
+  "frames": [
+   "AMBA",
+   "LOS_ANGELES",
+   "USA_OH_LAKE",
+   "USA_MD_HOWARD",
+   "CDMX"
+  ],
+  "modo_insomnio": {
+   "AMBA": [
+    "aproximado"
+   ],
+   "LOS_ANGELES": [
+    "exacto"
+   ],
+   "USA_OH_LAKE": [
+    "exacto"
+   ],
+   "USA_MD_HOWARD": [
+    "exacto"
+   ],
+   "CDMX": [
+    "exacto"
+   ]
+  },
+  "fuentes_del_estado": [
+   "epa_lmop",
+   "curado_manual",
+   "osm"
+  ],
+  "min_ha": 10.0,
+  "lectura": "Filas: estado del registro. Columnas: lo que dice el radar sobre el polígono. Las tasas se calculan sobre los que el radar pudo decidir; ic95 es el intervalo de Wilson.",
+  "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 33 sitios de estado conocido que el radar midió, 31 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, USA), no 'en el mundo'.",
+  "aviso": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados.",
+  "firms": "no se consultó: falta la variable de entorno FIRMS_MAP_KEY"
+ },
+ "total": {
+  "matriz": {
+   "abierto": {
+    "despierto": 7,
+    "quieto": 3,
+    "no_alcanza": 1
+   },
+   "cerrado": {
+    "despierto": 9,
+    "quieto": 5,
+    "no_alcanza": 8
+   }
+  },
+  "metricas": {
+   "abiertos_que_salen_despiertos": {
+    "k": 7,
+    "n": 10,
+    "tasa": 0.7,
+    "ic95": [
+     0.397,
+     0.892
+    ]
+   },
+   "abiertos_que_salen_quietos": {
+    "k": 3,
+    "n": 10,
+    "tasa": 0.3,
+    "ic95": [
+     0.108,
+     0.603
+    ]
+   },
+   "cerrados_que_salen_quietos": {
+    "k": 5,
+    "n": 14,
+    "tasa": 0.357,
+    "ic95": [
+     0.163,
+     0.612
+    ]
+   },
+   "cerrados_que_salen_despiertos": {
+    "k": 9,
+    "n": 14,
+    "tasa": 0.643,
+    "ic95": [
+     0.388,
+     0.837
+    ]
+   },
+   "concordancia": {
+    "k": 12,
+    "n": 24,
+    "tasa": 0.5,
+    "ic95": [
+     0.314,
+     0.686
+    ]
+   },
+   "el_radar_no_alcanza": {
+    "k": 9,
+    "n": 33,
+    "tasa": 0.273,
+    "ic95": [
+     0.151,
+     0.442
+    ]
+   }
+  }
+ },
+ "por_pais": {
+  "ARG": {
+   "matriz": {
+    "abierto": {
+     "despierto": 1,
+     "quieto": 0,
+     "no_alcanza": 0
+    },
+    "cerrado": {
+     "despierto": 0,
+     "quieto": 1,
+     "no_alcanza": 0
+    }
+   },
+   "metricas": {
+    "abiertos_que_salen_despiertos": {
+     "k": 1,
+     "n": 1,
+     "tasa": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "abiertos_que_salen_quietos": {
+     "k": 0,
+     "n": 1,
+     "tasa": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "cerrados_que_salen_quietos": {
+     "k": 1,
+     "n": 1,
+     "tasa": 1.0,
+     "ic95": [
+      0.207,
+      1.0
+     ]
+    },
+    "cerrados_que_salen_despiertos": {
+     "k": 0,
+     "n": 1,
+     "tasa": 0.0,
+     "ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "concordancia": {
+     "k": 2,
+     "n": 2,
+     "tasa": 1.0,
+     "ic95": [
+      0.342,
+      1.0
+     ]
+    },
+    "el_radar_no_alcanza": {
+     "k": 0,
+     "n": 2,
+     "tasa": 0.0,
+     "ic95": [
+      0.0,
+      0.658
+     ]
+    }
+   }
+  },
+  "USA": {
+   "matriz": {
+    "abierto": {
+     "despierto": 6,
+     "quieto": 3,
+     "no_alcanza": 1
+    },
+    "cerrado": {
+     "despierto": 9,
+     "quieto": 4,
+     "no_alcanza": 8
+    }
+   },
+   "metricas": {
+    "abiertos_que_salen_despiertos": {
+     "k": 6,
+     "n": 9,
+     "tasa": 0.667,
+     "ic95": [
+      0.354,
+      0.879
+     ]
+    },
+    "abiertos_que_salen_quietos": {
+     "k": 3,
+     "n": 9,
+     "tasa": 0.333,
+     "ic95": [
+      0.121,
+      0.646
+     ]
+    },
+    "cerrados_que_salen_quietos": {
+     "k": 4,
+     "n": 13,
+     "tasa": 0.308,
+     "ic95": [
+      0.127,
+      0.576
+     ]
+    },
+    "cerrados_que_salen_despiertos": {
+     "k": 9,
+     "n": 13,
+     "tasa": 0.692,
+     "ic95": [
+      0.424,
+      0.873
+     ]
+    },
+    "concordancia": {
+     "k": 10,
+     "n": 22,
+     "tasa": 0.455,
+     "ic95": [
+      0.269,
+      0.653
+     ]
+    },
+    "el_radar_no_alcanza": {
+     "k": 9,
+     "n": 31,
+     "tasa": 0.29,
+     "ic95": [
+      0.161,
+      0.466
+     ]
+    }
+   }
+  }
+ },
+ "chicos_menos_de_min_ha": {
+  "USA": 14
+ },
+ "sin_poligono_o_fuera_de_grilla": {
+  "USA": 17
+ },
+ "frames_sin_procesar": {
+  "PRI_PONCE": 15,
+  "USA_NH_HILLSBOROUGH": 12,
+  "USA_NY_RICHMOND": 13,
+  "DELHI": 1,
+  "YAKARTA": 0
+ },
+ "discordantes": {
+  "cerrados_pero_despiertos": [
+   {
+    "frame": "LOS_ANGELES",
+    "pais": "USA",
+    "id_catalogo": "BAS-066091",
+    "nombre": "Operating Industries, Inc. LF (OII)",
+    "complejo": "CPX-058699",
+    "area_ha": 63.16,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "fecha_cierre": 1984,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "coincide": false
+   },
+   {
+    "frame": "LOS_ANGELES",
+    "pais": "USA",
+    "id_catalogo": "BAS-066131",
+    "nombre": "Palos Verdes Landfill",
+    "complejo": "CPX-058736",
+    "area_ha": 60.65,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1980,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "coincide": false
+   },
+   {
+    "frame": "LOS_ANGELES",
+    "pais": "USA",
+    "id_catalogo": "BAS-064805",
+    "nombre": "Bradley Landfill",
+    "complejo": "CPX-057497",
+    "area_ha": 41.74,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2007,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-065187",
+    "nombre": "Cuyahoga Regional Sanitary LF",
+    "complejo": "CPX-042694",
+    "area_ha": 69.7,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1996,
+    "radar": "despierto",
+    "insomnio": 0.89,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-065420",
+    "nombre": "Glenwillow Landfill",
+    "complejo": "CPX-058073",
+    "area_ha": 48.3,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1997,
+    "radar": "despierto",
+    "insomnio": 0.81,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-066326",
+    "nombre": "Royalton Road Sanitary LF",
+    "complejo": "CPX-058920",
+    "area_ha": 30.08,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2004,
+    "radar": "despierto",
+    "insomnio": 0.85,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-050060",
+    "nombre": "Warner Hill LF",
+    "complejo": "CPX-040483",
+    "area_ha": 22.11,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "fecha_cierre": null,
+    "radar": "despierto",
+    "insomnio": 0.92,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-066018",
+    "nombre": "Norris Farms Landfill",
+    "complejo": "CPX-058633",
+    "area_ha": 89.33,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1986,
+    "radar": "despierto",
+    "insomnio": 1.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-065416",
+    "nombre": "Glen Burnie Landfill",
+    "complejo": "CPX-058069",
+    "area_ha": 61.57,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1982,
+    "radar": "despierto",
+    "insomnio": 0.75,
+    "coincide": false
+   }
+  ],
+  "abiertos_pero_quietos": [
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-065281",
+    "nombre": "Eastern Sanitary Landfill Solid Waste Management Facility (ESL)",
+    "complejo": "CPX-038821",
+    "area_ha": 143.26,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.17,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-066050",
+    "nombre": "Northern SLF",
+    "complejo": "CPX-058662",
+    "area_ha": 61.07,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-065494",
+    "nombre": "Harford Waste Disposal Center",
+    "complejo": "CPX-058144",
+    "area_ha": 56.53,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.08,
+    "coincide": false
+   }
+  ]
+ },
+ "sitios": [
+  {
+   "frame": "AMBA",
+   "pais": "ARG",
+   "id_catalogo": "BAS-053304",
+   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "complejo": "CPX-015400",
+   "area_ha": 71.5,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "curado_manual"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "coincide": true
+  },
+  {
+   "frame": "AMBA",
+   "pais": "ARG",
+   "id_catalogo": "BAS-000007",
+   "nombre": "Basural de Luján",
+   "complejo": "CPX-000007",
+   "area_ha": 43.72,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "curado_manual"
+   ],
+   "fecha_cierre": "2026-07-01",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-065376",
+   "nombre": "Frank R. Bowerman SLF",
+   "complejo": "CPX-058032",
+   "area_ha": 233.91,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.92,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066083",
+   "nombre": "Olinda Alpha SLF",
+   "complejo": "CPX-058692",
+   "area_ha": 200.03,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066227",
+   "nombre": "Puente Hills LF",
+   "complejo": "CPX-058823",
+   "area_ha": 139.56,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2013,
+   "radar": "no_alcanza",
+   "insomnio": 0.25,
+   "coincide": null
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066391",
+   "nombre": "Scholl Canyon SLF",
+   "complejo": "CPX-058981",
+   "area_ha": 127.51,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066488",
+   "nombre": "Spadra LF",
+   "complejo": "CPX-059072",
+   "area_ha": 99.2,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 2000,
+   "radar": "no_alcanza",
+   "insomnio": 0.24,
+   "coincide": null
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-048731",
+   "nombre": "Santiago Canyon Landfill",
+   "complejo": "CPX-042610",
+   "area_ha": 74.65,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": "1996",
+   "radar": "quieto",
+   "insomnio": 0.08,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066091",
+   "nombre": "Operating Industries, Inc. LF (OII)",
+   "complejo": "CPX-058699",
+   "area_ha": 63.16,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 1984,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": false
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066131",
+   "nombre": "Palos Verdes Landfill",
+   "complejo": "CPX-058736",
+   "area_ha": 60.65,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1980,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": false
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-064805",
+   "nombre": "Bradley Landfill",
+   "complejo": "CPX-057497",
+   "area_ha": 41.74,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2007,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": false
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-066387",
+   "nombre": "Savage Canyon LF",
+   "complejo": "CPX-058977",
+   "area_ha": 28.62,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-064846",
+   "nombre": "Burbank LF Site No. 3",
+   "complejo": "CPX-057534",
+   "area_ha": 18.25,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.79,
+   "coincide": true
+  },
+  {
+   "frame": "LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-000104",
+   "nombre": null,
+   "complejo": "CPX-000103",
+   "area_ha": 17.55,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.46,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065187",
+   "nombre": "Cuyahoga Regional Sanitary LF",
+   "complejo": "CPX-042694",
+   "area_ha": 69.7,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1996,
+   "radar": "despierto",
+   "insomnio": 0.89,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065420",
+   "nombre": "Glenwillow Landfill",
+   "complejo": "CPX-058073",
+   "area_ha": 48.3,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1997,
+   "radar": "despierto",
+   "insomnio": 0.81,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064612",
+   "nombre": "Akron Regional Landfill",
+   "complejo": "CPX-057322",
+   "area_ha": 45.1,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 2002,
+   "radar": "no_alcanza",
+   "insomnio": 0.66,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065695",
+   "nombre": "Lake County Recycling and Disposal Facility",
+   "complejo": "CPX-058329",
+   "area_ha": 37.77,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066326",
+   "nombre": "Royalton Road Sanitary LF",
+   "complejo": "CPX-058920",
+   "area_ha": 30.08,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2004,
+   "radar": "despierto",
+   "insomnio": 0.85,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064936",
+   "nombre": "Central Waste, Inc. LF",
+   "complejo": "CPX-057621",
+   "area_ha": 28.18,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2012,
+   "radar": "quieto",
+   "insomnio": 0.08,
+   "coincide": true
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-050060",
+   "nombre": "Warner Hill LF",
+   "complejo": "CPX-040483",
+   "area_ha": 22.11,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.92,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065003",
+   "nombre": "City of Brooklyn LF",
+   "complejo": "CPX-057685",
+   "area_ha": 20.11,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2010,
+   "radar": "quieto",
+   "insomnio": 0.12,
+   "coincide": true
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065095",
+   "nombre": "Cleveland Land Development LF",
+   "complejo": "CPX-037538",
+   "area_ha": 16.07,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1995,
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_LAKE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066776",
+   "nombre": "Willowcreek Landfill",
+   "complejo": "CPX-059346",
+   "area_ha": 12.93,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-065281",
+   "nombre": "Eastern Sanitary Landfill Solid Waste Management Facility (ESL)",
+   "complejo": "CPX-038821",
+   "area_ha": 143.26,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.17,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-066018",
+   "nombre": "Norris Farms Landfill",
+   "complejo": "CPX-058633",
+   "area_ha": 89.33,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1986,
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-065906",
+   "nombre": "Millersville SLF",
+   "complejo": "CPX-058529",
+   "area_ha": 78.22,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.65,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-065416",
+   "nombre": "Glen Burnie Landfill",
+   "complejo": "CPX-058069",
+   "area_ha": 61.57,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1982,
+   "radar": "despierto",
+   "insomnio": 0.75,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-066050",
+   "nombre": "Northern SLF",
+   "complejo": "CPX-058662",
+   "area_ha": 61.07,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-065494",
+   "nombre": "Harford Waste Disposal Center",
+   "complejo": "CPX-058144",
+   "area_ha": 56.53,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.08,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-066239",
+   "nombre": "Quarantine Road SLF",
+   "complejo": "CPX-058835",
+   "area_ha": 54.66,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.7,
+   "coincide": true
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-066452",
+   "nombre": "Solley Road Landfill",
+   "complejo": "CPX-059037",
+   "area_ha": 21.93,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1982,
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MD_HOWARD",
+   "pais": "USA",
+   "id_catalogo": "BAS-064608",
+   "nombre": "Adams Sanitation Company, Inc. Landfill",
+   "complejo": "CPX-057318",
+   "area_ha": 16.13,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  }
+ ],
+ "sin_cerrados_osm": {
+  "fuentes_del_estado": [
+   "epa_lmop",
+   "curado_manual"
+  ],
+  "total": {
+   "matriz": {
+    "abierto": {
+     "despierto": 7,
+     "quieto": 3,
+     "no_alcanza": 1
+    },
+    "cerrado": {
+     "despierto": 8,
+     "quieto": 4,
+     "no_alcanza": 7
+    }
+   },
+   "metricas": {
+    "abiertos_que_salen_despiertos": {
+     "k": 7,
+     "n": 10,
+     "tasa": 0.7,
+     "ic95": [
+      0.397,
+      0.892
+     ]
+    },
+    "abiertos_que_salen_quietos": {
+     "k": 3,
+     "n": 10,
+     "tasa": 0.3,
+     "ic95": [
+      0.108,
+      0.603
+     ]
+    },
+    "cerrados_que_salen_quietos": {
+     "k": 4,
+     "n": 12,
+     "tasa": 0.333,
+     "ic95": [
+      0.138,
+      0.609
+     ]
+    },
+    "cerrados_que_salen_despiertos": {
+     "k": 8,
+     "n": 12,
+     "tasa": 0.667,
+     "ic95": [
+      0.391,
+      0.862
+     ]
+    },
+    "concordancia": {
+     "k": 11,
+     "n": 22,
+     "tasa": 0.5,
+     "ic95": [
+      0.307,
+      0.693
+     ]
+    },
+    "el_radar_no_alcanza": {
+     "k": 8,
+     "n": 30,
+     "tasa": 0.267,
+     "ic95": [
+      0.142,
+      0.444
+     ]
+    }
+   }
+  },
+  "por_pais": {
+   "ARG": {
+    "matriz": {
+     "abierto": {
+      "despierto": 1,
+      "quieto": 0,
+      "no_alcanza": 0
+     },
+     "cerrado": {
+      "despierto": 0,
+      "quieto": 1,
+      "no_alcanza": 0
+     }
+    },
+    "metricas": {
+     "abiertos_que_salen_despiertos": {
+      "k": 1,
+      "n": 1,
+      "tasa": 1.0,
+      "ic95": [
+       0.207,
+       1.0
+      ]
+     },
+     "abiertos_que_salen_quietos": {
+      "k": 0,
+      "n": 1,
+      "tasa": 0.0,
+      "ic95": [
+       0.0,
+       0.793
+      ]
+     },
+     "cerrados_que_salen_quietos": {
+      "k": 1,
+      "n": 1,
+      "tasa": 1.0,
+      "ic95": [
+       0.207,
+       1.0
+      ]
+     },
+     "cerrados_que_salen_despiertos": {
+      "k": 0,
+      "n": 1,
+      "tasa": 0.0,
+      "ic95": [
+       0.0,
+       0.793
+      ]
+     },
+     "concordancia": {
+      "k": 2,
+      "n": 2,
+      "tasa": 1.0,
+      "ic95": [
+       0.342,
+       1.0
+      ]
+     },
+     "el_radar_no_alcanza": {
+      "k": 0,
+      "n": 2,
+      "tasa": 0.0,
+      "ic95": [
+       0.0,
+       0.658
+      ]
+     }
+    }
+   },
+   "USA": {
+    "matriz": {
+     "abierto": {
+      "despierto": 6,
+      "quieto": 3,
+      "no_alcanza": 1
+     },
+     "cerrado": {
+      "despierto": 8,
+      "quieto": 3,
+      "no_alcanza": 7
+     }
+    },
+    "metricas": {
+     "abiertos_que_salen_despiertos": {
+      "k": 6,
+      "n": 9,
+      "tasa": 0.667,
+      "ic95": [
+       0.354,
+       0.879
+      ]
+     },
+     "abiertos_que_salen_quietos": {
+      "k": 3,
+      "n": 9,
+      "tasa": 0.333,
+      "ic95": [
+       0.121,
+       0.646
+      ]
+     },
+     "cerrados_que_salen_quietos": {
+      "k": 3,
+      "n": 11,
+      "tasa": 0.273,
+      "ic95": [
+       0.097,
+       0.566
+      ]
+     },
+     "cerrados_que_salen_despiertos": {
+      "k": 8,
+      "n": 11,
+      "tasa": 0.727,
+      "ic95": [
+       0.434,
+       0.903
+      ]
+     },
+     "concordancia": {
+      "k": 9,
+      "n": 20,
+      "tasa": 0.45,
+      "ic95": [
+       0.258,
+       0.658
+      ]
+     },
+     "el_radar_no_alcanza": {
+      "k": 8,
+      "n": 28,
+      "tasa": 0.286,
+      "ic95": [
+       0.153,
+       0.471
+      ]
+     }
+    }
+   }
+  }
+ },
+ "casos_para_mirar": {
+  "cerrados_pero_despiertos": [
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-050060",
+    "nombre": "Warner Hill LF",
+    "complejo": "CPX-040483",
+    "area_ha": 22.11,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "osm"
+    ],
+    "fecha_cierre": null,
+    "radar": "despierto",
+    "insomnio": 0.92,
+    "lat": 41.431119,
+    "lon": -81.636321,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "sin dato",
+      "detalle": "el registro no lo dice"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "pasa los chequeos automáticos; falta mirarlo en óptico"
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-066018",
+    "nombre": "Norris Farms Landfill",
+    "complejo": "CPX-058633",
+    "area_ha": 89.33,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1986,
+    "radar": "despierto",
+    "insomnio": 1.0,
+    "lat": 39.287161,
+    "lon": -76.47961,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "LOS_ANGELES",
+    "pais": "USA",
+    "id_catalogo": "BAS-066091",
+    "nombre": "Operating Industries, Inc. LF (OII)",
+    "complejo": "CPX-058699",
+    "area_ha": 63.16,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "fecha_cierre": 1984,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "lat": 34.031323,
+    "lon": -118.107159,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "no se descarta",
+      "detalle": "sitio Superfund de la EPA (remediación)"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "LOS_ANGELES",
+    "pais": "USA",
+    "id_catalogo": "BAS-066131",
+    "nombre": "Palos Verdes Landfill",
+    "complejo": "CPX-058736",
+    "area_ha": 60.65,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1980,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "lat": 33.790314,
+    "lon": -118.350501,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "LOS_ANGELES",
+    "pais": "USA",
+    "id_catalogo": "BAS-064805",
+    "nombre": "Bradley Landfill",
+    "complejo": "CPX-057497",
+    "area_ha": 41.74,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2007,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "lat": 34.239829,
+    "lon": -118.380644,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "no se descarta",
+      "detalle": "el nombre lo sugiere: Bradley Landfill & Recycling Center; Bradley Landfill & Sun Valley Recycling Park"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-065187",
+    "nombre": "Cuyahoga Regional Sanitary LF",
+    "complejo": "CPX-042694",
+    "area_ha": 69.7,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1996,
+    "radar": "despierto",
+    "insomnio": 0.89,
+    "lat": 41.379224,
+    "lon": -81.472817,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-066326",
+    "nombre": "Royalton Road Sanitary LF",
+    "complejo": "CPX-058920",
+    "area_ha": 30.08,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2004,
+    "radar": "despierto",
+    "insomnio": 0.85,
+    "lat": 41.319987,
+    "lon": -81.664417,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_LAKE",
+    "pais": "USA",
+    "id_catalogo": "BAS-065420",
+    "nombre": "Glenwillow Landfill",
+    "complejo": "CPX-058073",
+    "area_ha": 48.3,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1997,
+    "radar": "despierto",
+    "insomnio": 0.81,
+    "lat": 41.355266,
+    "lon": -81.465111,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-065416",
+    "nombre": "Glen Burnie Landfill",
+    "complejo": "CPX-058069",
+    "area_ha": 61.57,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1982,
+    "radar": "despierto",
+    "insomnio": 0.75,
+    "lat": 39.186409,
+    "lon": -76.599853,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "no se descarta",
+      "detalle": "el nombre lo sugiere: Northern Recycling Center"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "sin dato",
+      "detalle": "el registro no lo dice"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   }
+  ],
+  "abiertos_pero_quietos": [
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-065281",
+    "nombre": "Eastern Sanitary Landfill Solid Waste Management Facility (ESL)",
+    "complejo": "CPX-038821",
+    "area_ha": 143.26,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.17,
+    "lat": 39.394132,
+    "lon": -76.395639,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 143.26 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-065494",
+    "nombre": "Harford Waste Disposal Center",
+    "complejo": "CPX-058144",
+    "area_ha": 56.53,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.08,
+    "lat": 39.640096,
+    "lon": -76.299579,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 56.53 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MD_HOWARD",
+    "pais": "USA",
+    "id_catalogo": "BAS-066050",
+    "nombre": "Northern SLF",
+    "complejo": "CPX-058662",
+    "area_ha": 61.07,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 39.553733,
+    "lon": -76.940258,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 61.07 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   }
+  ]
+ }
+}
