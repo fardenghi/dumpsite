@@ -62,6 +62,10 @@ cd nasa-space-apps-context/idea-basurales-nisar && source .venv/bin/activate
 ```bash
 python herramientas/pipeline_insomnio.py todo --datos /mnt/datos --salida salidas --orbitas 10 161 --capa 80m
 ```
+**Sin bajar los .h5** (lectura remota por ventana, sin probar todavía):
+```bash
+python herramientas/pipeline_insomnio.py buscar --salida salidas && python herramientas/pipeline_insomnio.py procesar --remoto --salida salidas --capa 80m && python herramientas/pipeline_insomnio.py indice --salida salidas --capa 80m
+```
 Pasos sueltos: `buscar`, `bajar`, `procesar` e `indice` (ver `python herramientas/pipeline_insomnio.py -h`). Corran `--capa 20m` cuando la de 80 m funcione.
 
 Para que no se corte si se cae el SSH, usen `tmux` (`tmux new -s nisar`; para volver, `tmux attach -t nisar`).
