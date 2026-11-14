@@ -336,13 +336,22 @@ META = {"fuente": "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC; índice de insomn
         "generado_por": "herramientas/extraer_manchas.py", "aviso": "Señal compatible con actividad; no son basurales verificados."}
 
 
-def extraer(a, p, destino):
+def _sin_chicas(features, min_ha):
+    """Las descartadas por chicas son miles por frame: de ésas sólo quedan las de `min_ha` o más. Las demás, todas."""
+    return [f for f in features if f["properties"]["descartada"] != "chica" or f["properties"]["ha"] >= min_ha]
+
+
+def extraer(a, p, destino, min_ha_descartadas=0.0):
     """Corre un frame y escribe sus tres archivos en `destino`."""
     d, lista, etiquetas = preparar(a, p)
     fr = d["fr"]
     features, filas = manchas_y_tabla(d, lista, etiquetas, p)
     cat = catalogo_del_frame(d, p)
-    _guardar_manchas(features, destino, {**META, "frame": fr.nombre, "pares": len(d["pares"])})
+    orbitas = sorted({int(o) for o in d["orbitas"]})
+    _guardar_manchas(_sin_chicas(features, min_ha_descartadas), destino, {
+        **META, "frame": fr.nombre, "pares": len(d["pares"]), "orbitas": orbitas, "epsg": fr.epsg, "bbox": fr.bbox,
+        "desde": min(x["desde"] for x in d["pares"]), "hasta": max(x["hasta"] for x in d["pares"]), "manchas_en_total": len(features),
+        "recorte": f"de las descartadas por chicas sólo están las de {min_ha_descartadas:g} ha o más; las candidatas están todas"})
     if filas:
         contratos.guardar(_tabla_radar(filas), "tabla_radar", destino)
     if len(cat):
@@ -364,8 +373,7 @@ def juntar(base, destino, min_ha_descartadas):
         with open(os.path.join(c, "manchas.geojson"), encoding="utf-8") as fh:
             fs = json.load(fh)["features"]
         frames.append(fs[0]["properties"]["frame"] if fs else os.path.basename(c))
-        # Las descartadas por chicas son miles por frame: de ésas sólo van las de `min_ha_descartadas` o más.
-        features += [f for f in fs if f["properties"]["descartada"] != "chica" or f["properties"]["ha"] >= min_ha_descartadas]
+        features += _sin_chicas(fs, min_ha_descartadas)
     ruta = _guardar_manchas(features, destino, {**META, "frames": frames,
                             "recorte": f"de las descartadas por chicas sólo están las de {min_ha_descartadas:g} ha o más; las candidatas están todas"})
     print(f"{os.path.relpath(ruta)}: {len(features)} manchas de {len(frames)} frames, {os.path.getsize(ruta) / 1e6:.1f} MB")
@@ -386,7 +394,8 @@ def main():
     q.add_argument("--capa", choices=list(pl.CAPAS), default="80m")
     q.add_argument("--min-insomnio", type=float, help="umbral de insomnio para armar las manchas. Sólo para juntar más filas de entrenamiento "
                    "(por ejemplo 0,5); el veredicto usa el de `insomnio.Parametros` (0,70)")
-    q.add_argument("--min-ha-descartadas", type=float, default=5.0, help="`juntar`: superficie mínima de las manchas descartadas por chicas que van al archivo junto")
+    q.add_argument("--min-ha-descartadas", type=float, default=5.0, help="superficie mínima de las manchas descartadas por chicas que se escriben "
+                   "en `manchas.geojson` (son miles por frame; 0 = todas). Las candidatas y las demás descartadas van siempre")
     args = q.parse_args()
     destino = args.destino or args.salida
     if args.paso == "juntar":
@@ -404,7 +413,7 @@ def main():
             fallados.append(nombre)
             continue
         try:
-            resumen.append(extraer(a, p, os.path.join(destino, a.fr.nombre)))
+            resumen.append(extraer(a, p, os.path.join(destino, a.fr.nombre), args.min_ha_descartadas))
         except (Exception, SystemExit) as e:
             if len(nombres) == 1:
                 raise
