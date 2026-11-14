@@ -18,18 +18,9 @@ from numpy.lib.stride_tricks import sliding_window_view
 from scipy import ndimage
 
 
-CUANTILES = (0.01, 0.02, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50)  # percentiles del entorno que se pueden usar
-
-
 @dataclass(frozen=True)
 class Parametros:
-    # Cómo se compara cada par con su entorno:
-    #   "razon"     despierto si la coherencia < razon × la mediana del entorno (la versión final calibrada);
-    #   "percentil" despierto si la coherencia < el percentil `percentil` de la coherencia del entorno, o sea,
-    #               más oscuro que el (100 - percentil) % de lo que lo rodea. Se adapta solo a entornos heterogéneos.
-    comparacion: str = "razon"
     razon: float = 0.80  # un par está "despierto" si la coherencia < razon × la del entorno
-    percentil: float = 10.0  # sólo con comparacion="percentil"; tiene que ser uno de CUANTILES × 100
     min_insomnio: float = 0.70  # fracción mínima de pares despiertos para ser candidato o "despierto"
     min_persistencia: float = 0.50  # fracción mínima de pares despiertos en CADA tercio de la serie
     max_quieto: float = 0.20  # un sitio es "quieto" si su insomnio no pasa de esto
@@ -47,12 +38,6 @@ class Parametros:
     min_px_sitio: int = 8  # un sitio con menos píxeles de tierra que esto no se puede medir
     min_coh_anillo: float = 0.30  # si el anillo no llega a esto, el entorno tampoco es coherente
     min_pares_orbita: int = 3  # pares válidos mínimos para que una órbita cuente en un píxel
-
-    def __post_init__(self):
-        if self.comparacion not in ("razon", "percentil"):
-            raise ValueError(f"comparacion tiene que ser 'razon' o 'percentil', no {self.comparacion!r}")
-        if self.comparacion == "percentil" and not any(abs(self.percentil / 100 - q) < 1e-9 for q in CUANTILES):
-            raise ValueError(f"percentil tiene que ser uno de {[round(q * 100) for q in CUANTILES]}")
 
     def dict(self):
         return asdict(self)
@@ -121,77 +106,6 @@ def entorno(c, tierra, paso, p):
     return ndimage.map_coordinates(f, np.meshgrid(fi, ci, indexing="ij"), order=1, mode="nearest").astype(np.float32)
 
 
-def cuantiles_entorno(c, tierra, paso, p, q=CUANTILES):
-    """Percentiles q de la coherencia sobre tierra en un disco de p.radio_entorno_m alrededor de cada píxel.
-
-    Misma geometría que `entorno` (bloques de p.bloque_entorno_m y disco de bloques), pero en lugar de la mediana
-    de las medianas guarda la distribución de los píxeles: como mucho 4 × 4 por bloque, así a 20 m cuesta lo mismo
-    que a 80 m. Devuelve (len(q), filas, columnas).
-    """
-    b = max(1, int(round(p.bloque_entorno_m / paso)))
-    h, w = c.shape
-    hb, wb = -(-h // b), -(-w // b)
-    lleno = np.full((hb * b, wb * b), np.nan, dtype=np.float32)
-    lleno[:h, :w] = np.where(tierra, c, np.nan)
-    s = max(1, b // 4)
-    bloques = lleno.reshape(hb, b, wb, b)[:, ::s, :, ::s].transpose(0, 2, 1, 3).reshape(hb, wb, -1)
-    k = max(1, int(round(p.radio_entorno_m / (paso * b))))
-    vecinos = [(dy, dx) for dy in range(-k, k + 1) for dx in range(-k, k + 1) if dy * dy + dx * dx <= k * k + 1]
-    pad = np.pad(bloques, ((k, k), (k, k), (0, 0)), constant_values=np.nan)
-    q = np.asarray(q)
-    g = np.full((len(q), hb, wb), np.nan, dtype=np.float32)
-    for f0 in range(0, hb, 16):  # por tiras, para acotar la memoria
-        f1 = min(hb, f0 + 16)
-        v = np.concatenate([pad[f0 + k + dy:f1 + k + dy, k + dx:wb + k + dx] for dy, dx in vecinos], axis=-1)
-        n = np.isfinite(v).sum(-1)
-        v = np.sort(np.where(np.isfinite(v), v, np.inf), axis=-1)
-        for j, qq in enumerate(q):
-            i = np.clip(np.floor(qq * (n - 1)).astype(int), 0, None)
-            g[j, f0:f1] = np.where(n > 0, np.take_along_axis(v, i[..., None], axis=-1)[..., 0], np.nan)
-    fi = (np.arange(h) - (b - 1) / 2) / b
-    ci = (np.arange(w) - (b - 1) / 2) / b
-    coords = np.meshgrid(fi, ci, indexing="ij")
-    salida = np.empty((len(q), h, w), dtype=np.float32)
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", RuntimeWarning)
-        for j in range(len(q)):
-            gj = np.where(np.isfinite(g[j]), g[j], np.nanmedian(g[j]))  # discos enteros de agua
-            salida[j] = ndimage.map_coordinates(gj, coords, order=1, mode="nearest")
-    return salida
-
-
-def rangos(coh, tierra, paso, p):
-    """Por par y por píxel, el menor percentil del entorno (de CUANTILES) que supera a la coherencia suavizada.
-
-    1 si la coherencia está por encima de la mediana del entorno. Un par está despierto con percentil P si rango <= P/100,
-    o sea, si la coherencia es menor que el percentil P del entorno. No depende de P: se calcula una vez y se barre.
-    """
-    q = np.asarray(CUANTILES, dtype=np.float32)
-    salida = np.empty(coh.shape, dtype=np.float32)
-    for i, c in enumerate(coh):
-        sv = suavizar(c, paso, p)
-        cu = cuantiles_entorno(sv, tierra, paso, p)  # la distribución, también suavizada: misma escala de ruido
-        r = np.ones(c.shape, dtype=np.float32)
-        for j in range(len(q) - 1, -1, -1):  # del más alto al más bajo: queda el menor que supera
-            r = np.where(sv < cu[j], q[j], r)
-        r[~np.isfinite(sv)] = np.nan
-        salida[i] = r
-    return salida
-
-
-def puntajes(coh, tierra, paso, p):
-    """Lo caro del cálculo, según `p.comparacion`: cocientes con la mediana del entorno o rangos dentro del entorno."""
-    return rangos(coh, tierra, paso, p) if p.comparacion == "percentil" else cocientes(coh, tierra, paso, p)
-
-
-def despierto_por_par(puntaje, p):
-    """Pares despiertos a partir de `puntajes`."""
-    with np.errstate(invalid="ignore"):
-        if p.comparacion == "percentil":
-            return puntaje <= p.percentil / 100 + 1e-6
-        return puntaje < p.razon
-
-
 def tercios(fechas):
     """Reparte los pares en tres tramos consecutivos por fecha de la segunda pasada: 0, 1 o 2."""
     fechas = np.asarray(fechas)
@@ -253,8 +167,7 @@ def cocientes(coh, tierra, paso, p):
 def calcular(coh, orbitas, dias, fechas, agua, paso, p, eco=None, orbitas_eco=None, cociente=None, eco_db=None):
     """Capas del índice. coh: (pares, filas, columnas) con NaN donde no hay dato; agua: máscara booleana.
 
-    `cociente` (la salida de `puntajes` para p.comparacion) y `eco_db` se pueden pasar ya calculados
-    (para barrer umbrales sin repetir lo caro).
+    `cociente` y `eco_db` se pueden pasar ya calculados (para barrer umbrales sin repetir lo caro).
     """
     orbitas, dias = np.asarray(orbitas), np.asarray(dias)
     tierra = ~agua
@@ -265,10 +178,11 @@ def calcular(coh, orbitas, dias, fechas, agua, paso, p, eco=None, orbitas_eco=No
         normal = np.clip(coh / fac[:, None, None], 0, 1)
         absoluto, abs_orbita = por_orbita(normal < p.umbral_abs, valido, orbitas, p.min_pares_orbita)
 
-    # La comparación con el entorno no depende del factor de separación: cada par se compara consigo mismo.
+    # El cociente con el entorno no depende del factor de separación: cada par se compara consigo mismo.
     if cociente is None:
-        cociente = puntajes(coh, tierra, paso, p)
-    despierto = despierto_por_par(cociente, p)
+        cociente = cocientes(coh, tierra, paso, p)
+    with np.errstate(invalid="ignore"):
+        despierto = cociente < p.razon
     relativo, rel_orbita = por_orbita(despierto, valido, orbitas, p.min_pares_orbita)
     persiste = persistencia(despierto, valido, fechas)
     if eco_db is None:
@@ -357,9 +271,8 @@ def anillo(mascara, tierra, paso, p):
 def ficha(mascara, coh, orbitas, fechas, tierra, paso, p, eco_db=None):
     """Serie par a par y veredicto de un sitio.
 
-    Por cada par compara la mediana de la coherencia adentro del sitio con el anillo. El par está despierto si
-    adentro < p.razon × la mediana del anillo, o, con comparacion="percentil", si adentro < el percentil
-    p.percentil de los píxeles del anillo. Veredictos:
+    Por cada par compara la mediana de la coherencia adentro del sitio con la del anillo. El par está
+    despierto si adentro < p.razon × anillo. Veredictos:
       despierto   insomnio >= p.min_insomnio y persistencia >= p.min_persistencia
       quieto      insomnio <= p.max_quieto, con un entorno coherente
       no_alcanza  todo lo demás, con el motivo
@@ -375,15 +288,8 @@ def ficha(mascara, coh, orbitas, fechas, tierra, paso, p, eco_db=None):
         warnings.simplefilter("ignore", RuntimeWarning)
         m_sitio = np.nanmedian(coh[:, adentro], axis=1)
         m_aro = np.nanmedian(coh[:, aro], axis=1)
-        if p.comparacion == "percentil":
-            # Percentil de la coherencia suavizada del anillo: el píxel crudo es mucho más ruidoso que la mediana del predio.
-            ff, cc = np.nonzero(aro | mascara)
-            caja = (slice(ff.min(), ff.max() + 1), slice(cc.min(), cc.max() + 1))
-            umbral = np.array([np.nanquantile(suavizar(c[caja], paso, p)[aro[caja]], p.percentil / 100) for c in coh])
-        else:
-            umbral = p.razon * m_aro
     valido = np.isfinite(m_sitio) & np.isfinite(m_aro)
-    despierto = valido & (m_sitio < umbral)
+    despierto = valido & (m_sitio < p.razon * m_aro)
     orbitas = np.asarray(orbitas)
     ins, partes = por_orbita(despierto[:, None], valido[:, None], orbitas, p.min_pares_orbita)
     per = persistencia(despierto[:, None], valido[:, None], fechas)
