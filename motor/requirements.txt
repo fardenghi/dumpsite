@@ -8,3 +8,6 @@ earthaccess
 tifffile
 imagecodecs
 pytest
+# para los contratos de datos del modelo (`contratos.py`) y las tablas en parquet
+pandas
+pyarrow
