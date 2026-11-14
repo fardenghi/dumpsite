@@ -1,26 +1,38 @@
-"""Pipeline del índice de insomnio sobre el AMBA con NISAR (Idea B).
+"""Pipeline del índice de insomnio con NISAR (Idea B), para cualquier frame. Sin `--frame` trabaja sobre el AMBA.
 
 Pasos (se pueden correr sueltos o todos con `todo`):
-  buscar    consulta la API pública de ASF y guarda la lista de GUNW (y GCOV) sobre el AMBA
+  buscar    consulta la API pública de ASF y guarda la lista de GUNW (y GCOV) que cruzan la caja del frame
   bajar     baja los .h5 con earthaccess (credenciales por variable de entorno), en paralelo
-  procesar  recorta la coherencia (y el backscatter de los GCOV, si hay) a una grilla común del AMBA, en paralelo
-  indice    calcula el índice de insomnio final (insomnio.py), las fichas por sitio, las manchas candidatas,
-            la figura y los archivos que lee la web (insomnes-web/)
-  calibrar  barre los umbrales y dice con cuáles entran los sitios conocidos y no entran los controles
+  procesar  recorta la coherencia (y el backscatter de los GCOV, si hay) a la grilla común del frame, en paralelo.
+            La zona UTM y el hemisferio salen del EPSG de cada producto (dataset `projection`)
+  indice    calcula el índice de insomnio final (insomnio.py), las fichas por sitio, las manchas candidatas
+            y la figura; para el AMBA, también los archivos que lee la web (insomnes-web/)
+  calibrar  barre los umbrales y dice con cuáles entran los sitios conocidos y no entran los controles (sólo AMBA)
 
-Con los recortes ya hechos, un solo comando reproduce todo lo que se informa:
+Con los recortes ya hechos, un solo comando reproduce todo lo que se informa del AMBA:
   python pipeline_insomnio.py indice
 
-Desde cero (en la VM):
-  python pipeline_insomnio.py todo --datos /mnt/datos --orbitas 10 161 --capa 80m
+Otro frame, sin bajar los .h5 (lectura remota por ventana; así corre en la VM):
+  python pipeline_insomnio.py todo --frame DELHI --remoto
+  python pipeline_insomnio.py todo --frame todos --remoto          # todos los de data/frames.json, en orden
+  python pipeline_insomnio.py todo --frame PRUEBA --caja -118.40 33.90 -118.00 34.20 --remoto
+
+Bajando los .h5 (frame por frame: baja, procesa y borra antes de pasar al siguiente):
+  python pipeline_insomnio.py todo --frame todos --datos /mnt/datos --borrar
+
+Los frames salen de `../../data/frames.json` (etapa 2) o de `--caja lon_oeste lat_sur lon_este lat_norte`.
+Cada frame que no es el AMBA escribe en `<salida>/<FRAME>/`, baja en `<datos>/<FRAME>/` y cachea sus fuentes
+fijas (agua de JRC, usos de Overture y polígonos de los catálogos) en `fijos/<FRAME>/`.
 
 Credenciales: EARTHDATA_TOKEN, o EARTHDATA_USERNAME y EARTHDATA_PASSWORD. Nunca en el repo.
 """
 import argparse
 import concurrent.futures as cf
+import dataclasses
 import glob
 import json
 import math
+import multiprocessing
 import os
 import re
 import sys
@@ -31,14 +43,13 @@ import numpy as np
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
+import fuentes_fijas as ff  # noqa: E402
 import geo  # noqa: E402
 import insomnio as ins  # noqa: E402
-from geo import CAJA, grilla  # noqa: E402
 
 IDEA = os.path.dirname(AQUI)
 FIJOS = os.path.join(AQUI, "fijos")
 WEB = os.path.join(os.path.dirname(IDEA), "insomnes-web")
-POLIGONO_AMBA = "POLYGON((-59.35 -34.25,-58.25 -34.25,-58.25 -34.90,-59.35 -34.90,-59.35 -34.25))"
 API_ASF = "https://api.daac.asf.alaska.edu/services/search/param"
 CAPAS = {
     "80m": ("unwrappedInterferogram", 80.0),
@@ -47,9 +58,25 @@ CAPAS = {
 
 
 # ---------------------------------------------------------------- grilla común
-def recortar(ds, xs_src, ys_src, xs_dst, ys_dst):
-    """Lleva ds (2D) a la grilla destino por vecino más cercano. Lee sólo la ventana necesaria."""
+def recortar(ds, xs_src, ys_src, xs_dst, ys_dst, epsg_src=None, epsg_dst=None):
+    """Lleva ds (2D) a la grilla destino por vecino más cercano. Lee sólo la ventana necesaria.
+
+    Si el producto está en otra zona UTM que la grilla (pasa cuando la caja queda cerca del borde de una zona
+    y dos órbitas caen en zonas distintas), cada celda destino se busca en el producto pasando por lat/lon.
+    """
     dx, dy = xs_src[1] - xs_src[0], ys_src[1] - ys_src[0]
+    if epsg_src and epsg_dst and int(epsg_src) != int(epsg_dst):
+        lat, lon = geo.latlon(xs_dst[None, :], ys_dst[:, None], epsg_dst)
+        x, y = geo.utm(lat, lon, epsg_src)
+        cols, filas = np.rint((x - xs_src[0]) / dx).astype(int), np.rint((y - ys_src[0]) / dy).astype(int)
+        ok = (cols >= 0) & (cols < len(xs_src)) & (filas >= 0) & (filas < len(ys_src))
+        salida = np.full((len(ys_dst), len(xs_dst)), np.nan, dtype=np.float32)
+        if not ok.any():
+            return salida
+        c0, c1, f0, f1 = cols[ok].min(), cols[ok].max() + 1, filas[ok].min(), filas[ok].max() + 1
+        ventana = np.asarray(ds[f0:f1, c0:c1], dtype=np.float32)
+        salida[ok] = ventana[filas[ok] - f0, cols[ok] - c0]
+        return salida
     cols = np.rint((xs_dst - xs_src[0]) / dx).astype(int)
     filas = np.rint((ys_dst - ys_src[0]) / dy).astype(int)
     vc = (cols >= 0) & (cols < len(xs_src))
@@ -64,45 +91,74 @@ def recortar(ds, xs_src, ys_src, xs_dst, ys_dst):
     return salida
 
 
+# ---------------------------------------------------------------- frames
+def _guardar_frame(args):
+    """Deja en `<salida>/frame.json` el frame con el que se trabajó (caja, EPSG y órbitas)."""
+    _json(os.path.join(args.salida, "frame.json"), args.fr.dict(), indent=1)
+
+
+def _partes(nombre):
+    """(tipo, órbita, frame de NISAR) a partir del nombre de un producto GUNW o GCOV."""
+    m = re.search(r"_(GUNW|GCOV)_\d{3}_(\d{3})_[AD]_(\d{3})_", nombre)
+    return m.group(1), int(m.group(2)), int(m.group(3))
+
+
 # ---------------------------------------------------------------- buscar
 def buscar(args):
+    fr = args.fr
     os.makedirs(args.salida, exist_ok=True)
+    norte, oeste, sur, este = fr.caja
     params = {
         "dataset": "NISAR",
         "processingLevel": "GUNW,GCOV",
-        "intersectsWith": POLIGONO_AMBA,
+        "intersectsWith": f"POLYGON(({oeste} {norte},{este} {norte},{este} {sur},{oeste} {sur},{oeste} {norte}))",
         "output": "jsonlite",
         "maxResults": "5000",
     }
     url = API_ASF + "?" + urllib.parse.urlencode(params)
     with urllib.request.urlopen(url, timeout=120) as r:
         resultados = json.load(r)["results"]
+    desde, hasta = (fr.desde or "").replace("-", ""), (fr.hasta or "").replace("-", "")
     elegidos = {}
     for g in resultados:
         nombre = g["granuleName"]
-        if g.get("path") not in args.orbitas or not g.get("downloadUrl"):
+        # Sólo productos PR (los UR, de respuesta urgente, duplican fechas) y de las órbitas pedidas.
+        if not nombre.startswith("NISAR_L2_PR_") or not g.get("downloadUrl") or (args.orbitas and g.get("path") not in args.orbitas):
             continue
         tipo = g["productType"]
+        _, _, frame_nisar = _partes(nombre)
         if tipo == "GUNW":
             fechas = re.findall(r"_(\d{8})T\d{6}", nombre)
-            clave = (tipo, g["path"], fechas[0], fechas[2] if len(fechas) > 2 else fechas[-1])
+            dias = (fechas[0], fechas[2] if len(fechas) > 2 else fechas[-1])
         else:
-            clave = (tipo, g["path"], g["startTime"][:10])
+            dias = (g["startTime"][:10].replace("-", ""),) * 2
+        if (desde and dias[0] < desde) or (hasta and dias[1] > hasta):
+            continue
+        # Una caja puede cruzar dos frames de NISAR de la misma órbita: se guardan los dos y `indice` los junta.
+        clave = (tipo, g["path"], frame_nisar) + ((_fecha(dias[0]), _fecha(dias[1])) if tipo == "GUNW" else (_fecha(dias[0]),))
         # Preferimos frame completo (_F_) y la versión más nueva (sufijo _NNN).
         rango = ("_F_" in nombre, nombre[-3:])
         if clave not in elegidos or rango > elegidos[clave][0]:
             elegidos[clave] = (rango, g)
     lista = [
-        {"tipo": k[0], "orbita": k[1], "fechas": list(k[2:]), "nombre": v[1]["granuleName"],
+        {"tipo": k[0], "orbita": k[1], "frame_nisar": k[2], "fechas": list(k[3:]), "nombre": v[1]["granuleName"],
          "url": v[1]["downloadUrl"], "direccion": v[1].get("flightDirection")}
         for k, v in sorted(elegidos.items())
     ]
     destino = os.path.join(args.salida, "lista_productos.json")
     with open(destino, "w", encoding="utf-8") as fh:
         json.dump(lista, fh, indent=1, ensure_ascii=False)
+    _guardar_frame(args)
+    por_orbita = {}
+    for x in lista:
+        por_orbita.setdefault(x["orbita"], {"GUNW": 0, "GCOV": 0})[x["tipo"]] += 1
+    print(f"{fr.nombre}: caja {fr.bbox}, período {fr.desde or '...'} a {fr.hasta or '...'}")
     for t in ("GUNW", "GCOV"):
         print(f"{t}: {sum(1 for x in lista if x['tipo'] == t)}")
+    print("Por órbita:", ", ".join(f"{o}: {n['GUNW']} GUNW y {n['GCOV']} GCOV" for o, n in sorted(por_orbita.items())))
     print("Lista:", destino)
+    if not any(x["tipo"] == "GUNW" for x in lista):
+        sys.exit(f"No hay GUNW de NISAR sobre {fr.nombre} con esas órbitas y fechas.")
 
 
 # ---------------------------------------------------------------- bajar
@@ -123,13 +179,25 @@ def bajar(args):
 
 
 # ---------------------------------------------------------------- procesar
+def _epsg(f, grupo):
+    """EPSG de la grilla de un producto: el dataset `projection` del grupo (su valor, o el atributo `epsg_code`)."""
+    for ruta in (f"{grupo}/projection", f"{grupo.rsplit('/', 1)[0]}/projection"):
+        if ruta in f:
+            ds = f[ruta]
+            valor = ds.attrs.get("epsg_code")
+            if valor is None:
+                valor = ds[()]
+            return int(np.asarray(valor).ravel()[0])
+    raise KeyError(f"No hay `projection` en {grupo}")
+
+
 def _buscar_capa(f, grupo):
-    """Devuelve (dataset de coherencia, xs, ys) para la primera polarización disponible del grupo."""
+    """Devuelve (dataset de coherencia, xs, ys, epsg) para la primera polarización disponible del grupo."""
     base = f"science/LSAR/GUNW/grids/frequencyA/{grupo}"
     for pol in ("HH", "VV", "HV", "VH"):
         ruta = f"{base}/{pol}/coherenceMagnitude"
         if ruta in f:
-            return f[ruta], f[f"{base}/xCoordinates"][()], f[f"{base}/yCoordinates"][()]
+            return f[ruta], f[f"{base}/xCoordinates"][()], f[f"{base}/yCoordinates"][()], _epsg(f, base)
     raise KeyError(f"No hay coherencia en {base}")
 
 
@@ -148,78 +216,124 @@ def _buscar_eco(f):
         raise KeyError("No hay HHHH ni VVVV en el GCOV")
     ruta = sorted(encontrado)[0]
     grupo = ruta.rsplit("/", 1)[0]
-    return f[ruta], f[grupo + "/xCoordinates"][()], f[grupo + "/yCoordinates"][()]
+    return f[ruta], f[grupo + "/xCoordinates"][()], f[grupo + "/yCoordinates"][()], _epsg(f, grupo)
 
 
 _SESION_REMOTA = None
 
 
-def _abrir(ruta, remoto):
-    """Abre un .h5 local, o remoto por URL con earthaccess (lee sólo los bloques que se piden)."""
+def _abrir(ruta, remoto, intentos=4):
+    """Abre un .h5 local, o remoto por URL con earthaccess (lee sólo los bloques que se piden).
+
+    El login y la apertura remota se reintentan: Earthdata corta conexiones cada tanto.
+    """
     import h5py
 
     if not remoto:
         return h5py.File(ruta, "r")
     global _SESION_REMOTA
+    import time
+
     import earthaccess
 
-    if _SESION_REMOTA is None:  # una vez por proceso
-        _SESION_REMOTA = earthaccess.login(strategy="environment")
-    archivo = earthaccess.open([ruta])[0]
-    return h5py.File(archivo, "r")
+    for i in range(intentos):
+        try:
+            if _SESION_REMOTA is None:  # una vez por proceso
+                _SESION_REMOTA = earthaccess.login(strategy="environment")
+            return h5py.File(earthaccess.open([ruta])[0], "r")
+        except Exception:
+            if i == intentos - 1:
+                raise
+            _SESION_REMOTA = None
+            time.sleep(5 * (i + 1))
 
 
 def _procesar_uno(tarea):
-    ruta, capa, carpeta, remoto = tarea
+    ruta, capa, carpeta, remoto, caja, epsg = tarea
     nombre = os.path.basename(ruta).replace(".h5", "")
     fechas = re.findall(r"_(\d{8})T\d{6}", nombre)
-    orbita = int(re.search(r"_(?:GUNW|GCOV)_\d{3}_(\d{3})_", nombre).group(1))
+    tipo, orbita, frame_nisar = _partes(nombre)
     fecha_sec = fechas[2] if len(fechas) > 2 else fechas[0]
-    prefijo = "gunw" if "_GUNW_" in nombre else "gcov"
+    prefijo = tipo.lower()
     # Nombre corto: los nombres de NISAR superan el límite de rutas de Windows.
-    destino = os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")
-    if os.path.exists(destino):
+    destino = os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{frame_nisar:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")
+    viejo = os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")  # recortes de antes de los frames
+    if os.path.exists(destino) or os.path.exists(viejo):
         return destino, "ya estaba"
-    xs_dst, ys_dst = grilla(CAPAS[capa][1])
-    try:
-        with _abrir(ruta, remoto) as f:
-            if "_GUNW_" in nombre:
-                ds, xs, ys = _buscar_capa(f, CAPAS[capa][0])
-                valor = recortar(ds, xs, ys, xs_dst, ys_dst)
-                valor[(valor <= 0) | (valor > 1)] = np.nan
-                tipo = "coherencia"
-            else:
-                ds, xs, ys = _buscar_eco(f)
-                lin = recortar(ds, xs, ys, xs_dst, ys_dst)
-                with np.errstate(divide="ignore", invalid="ignore"):
-                    valor = (10 * np.log10(lin)).astype(np.float32)
-                valor[~np.isfinite(valor)] = np.nan
-                tipo = "eco_db"
-    except Exception as e:  # un archivo roto no frena a los demás
-        return destino, f"ERROR {e}"
-    np.savez_compressed(destino, valor=valor.astype(np.float16), tipo=tipo, orbita=orbita,
-                        fecha_ref=fechas[0], fecha_sec=fecha_sec, producto=nombre)
-    return destino, f"ok {tipo} cobertura {np.isfinite(valor).mean():.0%}"
+    xs_dst, ys_dst = geo.grilla(CAPAS[capa][1], caja, epsg)
+    intentos = 3 if remoto else 1  # la lectura por URL se corta cada tanto: se reintenta el archivo entero
+    for i in range(intentos):
+        try:
+            with _abrir(ruta, remoto) as f:
+                if tipo == "GUNW":
+                    ds, xs, ys, epsg_src = _buscar_capa(f, CAPAS[capa][0])
+                    valor = recortar(ds, xs, ys, xs_dst, ys_dst, epsg_src, epsg)
+                    valor[(valor <= 0) | (valor > 1)] = np.nan
+                    tipo_valor = "coherencia"
+                else:
+                    ds, xs, ys, epsg_src = _buscar_eco(f)
+                    lin = recortar(ds, xs, ys, xs_dst, ys_dst, epsg_src, epsg)
+                    with np.errstate(divide="ignore", invalid="ignore"):
+                        valor = (10 * np.log10(lin)).astype(np.float32)
+                    valor[~np.isfinite(valor)] = np.nan
+                    tipo_valor = "eco_db"
+            break
+        except Exception as e:  # un archivo roto no frena a los demás
+            if i == intentos - 1:
+                return destino, f"ERROR {type(e).__name__}: {e}"
+    np.savez_compressed(destino, valor=valor.astype(np.float16), tipo=tipo_valor, orbita=orbita, frame_nisar=frame_nisar,
+                        fecha_ref=fechas[0], fecha_sec=fecha_sec, producto=nombre, epsg=epsg, epsg_producto=epsg_src)
+    otra = "" if epsg_src == epsg else f", reproyectado de EPSG {epsg_src}"
+    return destino, f"ok {tipo_valor} cobertura {np.isfinite(valor).mean():.0%}{otra}"
+
+
+def _fijar_epsg(args, archivos):
+    """Si el frame vino de `--caja` sin EPSG, la grilla toma la zona UTM del primer GUNW (dataset `projection`)."""
+    fr = args.fr
+    if fr.epsg_fijo:
+        return
+    primero = next((a for a in archivos if "_GUNW_" in os.path.basename(a)), None)
+    if primero is None:
+        return
+    with _abrir(primero, args.remoto) as f:
+        epsg = _buscar_capa(f, CAPAS[args.capa][0])[3]
+    geo.zona_de_epsg(epsg)  # falla si no es UTM
+    if epsg != fr.epsg:
+        print(f"  La grilla de {fr.nombre} pasa de EPSG {fr.epsg} (centro de la caja) a {epsg} (el del producto)")
+    args.fr = dataclasses.replace(fr, epsg=epsg, epsg_fijo=True)
+    _guardar_frame(args)
 
 
 def procesar(args):
     carpeta = os.path.join(args.salida, f"recortes_{args.capa}")
     os.makedirs(carpeta, exist_ok=True)
     if args.remoto:
-        # Sin bajar nada: lee por URL sólo la ventana del AMBA (necesita `buscar` antes y credenciales).
+        # Sin bajar nada: lee por URL sólo la ventana del frame (necesita `buscar` antes y credenciales).
         with open(os.path.join(args.salida, "lista_productos.json"), encoding="utf-8") as fh:
             lista = json.load(fh)
-        archivos = [x["url"] for x in lista if x["orbita"] in args.orbitas and (x["tipo"] == "GUNW" or not args.solo_gunw)]
+        archivos = [x["url"] for x in lista if x["tipo"] == "GUNW" or not args.solo_gunw]
     else:
         archivos = sorted(glob.glob(os.path.join(args.datos, "NISAR_*_GUNW_*.h5")) + glob.glob(os.path.join(args.datos, "NISAR_*_GCOV_*.h5")))
-    archivos = [a for a in archivos if int(re.search(r"_(?:GUNW|GCOV)_\d{3}_(\d{3})_", os.path.basename(a)).group(1)) in args.orbitas]
+        if args.solo_gunw:
+            archivos = [a for a in archivos if "_GUNW_" in os.path.basename(a)]
+    if args.orbitas:
+        archivos = [a for a in archivos if _partes(os.path.basename(a))[1] in args.orbitas]
+    _fijar_epsg(args, archivos)
+    fr = args.fr
+    _guardar_frame(args)
     modo = "remoto, sin bajar" if args.remoto else "local"
-    print(f"Archivos a procesar: {len(archivos)} (capa {args.capa}, {args.procesos} procesos, {modo})")
-    with cf.ProcessPoolExecutor(max_workers=args.procesos) as ex:
-        for destino, estado in ex.map(_procesar_uno, [(a, args.capa, carpeta, args.remoto) for a in archivos]):
-            print(f"  {os.path.basename(destino)}: {estado}")
-
-
+    print(f"{fr.nombre} (EPSG {fr.epsg}): {len(archivos)} archivos a procesar (capa {args.capa}, {args.procesos} procesos, {modo})")
+    errores = 0
+    # Procesos nuevos (spawn) y no copias (fork): la sesión remota y h5py no sobreviven bien a un fork.
+    with cf.ProcessPoolExecutor(max_workers=args.procesos, mp_context=multiprocessing.get_context("spawn")) as ex:
+        tareas = [(a, args.capa, carpeta, args.remoto, fr.caja, fr.epsg) for a in archivos]
+        for archivo, (destino, estado) in zip(archivos, ex.map(_procesar_uno, tareas)):
+            print(f"  {os.path.basename(destino)}: {estado}", flush=True)
+            errores += estado.startswith("ERROR")
+            if args.borrar and not args.remoto and not estado.startswith("ERROR"):
+                os.remove(archivo)  # frame por frame: el disco nunca junta los .h5 de más de un frame
+    if errores:
+        print(f"  {errores} archivo(s) con error: se pueden reintentar corriendo `procesar` de nuevo")
 
 
 # ---------------------------------------------------------------- índice
@@ -240,55 +354,109 @@ def _json(ruta, datos, **kw):
         fh.write("\n")
 
 
+def _juntar(piezas):
+    """Junta los recortes de un mismo par o fecha que vienen de frames de NISAR vecinos: manda el que más cubre."""
+    piezas = sorted(piezas, key=lambda v: -np.isfinite(v).sum())
+    salida = piezas[0]
+    for otra in piezas[1:]:
+        salida = np.where(np.isfinite(salida), salida, otra)
+    return salida
+
+
+def _fijo(args, archivo, armar):
+    """Ruta de una fuente fija del frame. Si no está cacheada, la arma (con red) y la deja en `fijos/<FRAME>/`."""
+    ruta = os.path.join(args.fijos, archivo)
+    if not os.path.exists(ruta):
+        print(f"Falta {os.path.relpath(ruta)}: lo armo (fuentes_fijas.py)")
+        armar()
+    return ruta
+
+
 def cargar(args):
-    """Lee una sola vez los recortes, la máscara de agua, los sitios y los usos conocidos."""
+    """Lee una sola vez los recortes, la máscara de agua, los sitios, los usos conocidos y los polígonos de los catálogos."""
+    fr = args.fr
     paso = CAPAS[args.capa][1]
-    xs, ys = grilla(paso)
-    coh, pares, eco, orb_eco = [], [], [], []
+    xs, ys = fr.grilla(paso)
+    grupos = {}
     for ruta in sorted(glob.glob(os.path.join(args.salida, f"recortes_{args.capa}", "*.npz"))):
         with np.load(ruta) as d:
-            if int(d["orbita"]) not in args.orbitas:
+            if args.orbitas and int(d["orbita"]) not in args.orbitas:
                 continue
-            valor = d["valor"].astype(np.float32)
-            if str(d["tipo"]) == "coherencia":
-                ref, sec = _fecha(str(d["fecha_ref"])), _fecha(str(d["fecha_sec"]))
-                coh.append(valor)
-                pares.append({"orbita": int(d["orbita"]), "desde": ref, "hasta": sec, "dias": _dias(ref, sec), "producto": str(d["producto"])})
-            elif np.isfinite(valor).mean() >= 0.5:  # hay GCOV que no cubren el AMBA
-                eco.append(valor)
-                orb_eco.append(int(d["orbita"]))
+            clave = (str(d["tipo"]), int(d["orbita"]), str(d["fecha_ref"]), str(d["fecha_sec"]))
+            grupos.setdefault(clave, []).append((d["valor"].astype(np.float32), str(d["producto"])))
+    coh, pares, eco, orb_eco = [], [], [], []
+    for (tipo, orbita, f_ref, f_sec), piezas in sorted(grupos.items(), key=lambda kv: (kv[0][0] != "coherencia", kv[0][1:])):
+        if any(v.shape != (len(ys), len(xs)) for v, _ in piezas):
+            sys.exit(f"Los recortes miden {piezas[0][0].shape} y la grilla de {fr.nombre} {(len(ys), len(xs))}: "
+                     f"son de otra caja o de otro EPSG. Borrá {os.path.join(args.salida, f'recortes_{args.capa}')} y corré `procesar`.")
+        valor = _juntar([v for v, _ in piezas])
+        if tipo == "coherencia":
+            ref, sec = _fecha(f_ref), _fecha(f_sec)
+            coh.append(valor)
+            pares.append({"orbita": orbita, "desde": ref, "hasta": sec, "dias": _dias(ref, sec), "producto": piezas[0][1]})
+        elif np.isfinite(valor).mean() >= 0.5:  # hay GCOV que no cubren la caja
+            eco.append(valor)
+            orb_eco.append(orbita)
     if not coh:
         sys.exit("No hay recortes de coherencia: corré `procesar` primero (o bajá los recortes, ver README).")
     coh = np.stack(coh)
-    if coh.shape[1:] != (len(ys), len(xs)):
-        sys.exit(f"Los recortes miden {coh.shape[1:]} y la grilla {(len(ys), len(xs))}.")
-    with np.load(os.path.join(FIJOS, f"agua_jrc_{args.capa}.npz")) as d:
+    with np.load(_fijo(args, f"agua_jrc_{args.capa}.npz", lambda: ff.agua(fr, (args.capa,), args.fijos))) as d:
         ocurrencia = d["ocurrencia"]
+    if ocurrencia.shape != (len(ys), len(xs)):
+        sys.exit(f"La máscara de agua mide {ocurrencia.shape} y la grilla de {fr.nombre} {(len(ys), len(xs))}: "
+                 f"rehacela con `python fuentes_fijas.py agua --frame {fr.nombre}`.")
+    # Sitios con ficha: los del registro, que hoy son todos del AMBA (`frame` en el registro, por defecto AMBA).
     with open(os.path.join(AQUI, "sitios_registro.json"), encoding="utf-8") as fh:
-        registro = json.load(fh)["sitios"]
-    with open(os.path.join(FIJOS, "contornos_osm.json"), encoding="utf-8") as fh:
-        contornos = json.load(fh)["sitios"]
+        registro = [s for s in json.load(fh)["sitios"] if s.get("frame", "AMBA") == fr.nombre]
+    contornos = {}
+    if any("osm" in s for s in registro):
+        with open(os.path.join(FIJOS, "contornos_osm.json"), encoding="utf-8") as fh:
+            contornos = json.load(fh)["sitios"]
     sitios = []
     for s in registro:
         anillos = contornos[s["id"]]["anillos"] if "osm" in s else [geo.caja_a_anillo(s["caja"])]
         mayor = max(anillos, key=lambda a: geo.area_y_centro(a)[0])
-        sitios.append({**s, "anillos": anillos, "mascara": geo.mascara_poligonos(anillos, xs, ys),
+        sitios.append({**s, "anillos": anillos, "mascara": fr.mascara_poligonos(anillos, xs, ys),
                        "ha": sum(geo.area_y_centro(a)[0] for a in anillos), "centro": geo.area_y_centro(mayor)[1],
                        "lugar": s.get("lugar") or contornos.get(s["id"], {}).get("lugar_osm", "")})
-    with open(os.path.join(FIJOS, "usos_osm.json"), encoding="utf-8") as fh:
-        usos = json.load(fh)["usos"]
+    try:
+        with open(_fijo(args, "usos_osm.json", lambda: ff.usos(fr, args.fijos)), encoding="utf-8") as fh:
+            usos = json.load(fh)["usos"]
+    except Exception as e:  # sin red o sin duckdb: el índice sale igual, sin la clase "uso conocido"
+        print(f"AVISO: no hay usos conocidos para {fr.nombre} ({type(e).__name__}: {e}). Las manchas salen sin esa clase.")
+        usos = []
     uso_px = np.zeros((len(ys), len(xs)), dtype=np.int16)  # 0 = sin uso conocido; i = usos[i - 1]
     for i, u in enumerate(usos, start=1):
-        uso_px[geo.mascara_poligonos(u["anillos"], xs, ys) & (uso_px == 0)] = i
+        uso_px[fr.mascara_poligonos(u["anillos"], xs, ys) & (uso_px == 0)] = i
+    # Polígonos de los catálogos (basurales y negativos) del frame: el anillo de cada sitio los excluye a todos.
+    try:
+        with open(_fijo(args, "catalogo.json", lambda: ff.catalogo(fr, args.fijos)), encoding="utf-8") as fh:
+            catalogo = json.load(fh)["poligonos"]
+    except Exception as e:
+        print(f"AVISO: no hay polígonos de los catálogos para {fr.nombre} ({type(e).__name__}: {e}). El anillo excluye sólo el sitio y el agua.")
+        catalogo = []
+    catalogo_px = np.zeros((len(ys), len(xs)), dtype=bool)
+    for c in catalogo:
+        catalogo_px |= fr.mascara_poligonos(c["anillos"], xs, ys)
+    # Rellenos conocidos, para decir qué pisa cada mancha: los sitios del registro o, si el frame no tiene, los basurales del catálogo.
     sitio_px = np.zeros_like(uso_px)
-    for i, s in enumerate(sitios, start=1):
-        if s["rol"] != "control":
-            sitio_px[s["mascara"] & (sitio_px == 0)] = i
-    return {"paso": paso, "xs": xs, "ys": ys, "coh": coh, "pares": pares,
+    rellenos = []
+    if registro:
+        for s in sitios:
+            if s["rol"] != "control":
+                rellenos.append(s["id"])
+                sitio_px[s["mascara"] & (sitio_px == 0)] = len(rellenos)
+    else:
+        for c in catalogo:
+            if c["catalogo"] == "basurales":
+                rellenos.append(c["id"])
+                sitio_px[fr.mascara_poligonos(c["anillos"], xs, ys) & (sitio_px == 0)] = len(rellenos)
+    return {"fr": fr, "paso": paso, "xs": xs, "ys": ys, "coh": coh, "pares": pares,
             "orbitas": np.array([x["orbita"] for x in pares]), "dias": np.array([x["dias"] for x in pares]),
             "fechas": np.array([x["hasta"] for x in pares]),
             "eco": np.stack(eco) if eco else None, "orbitas_eco": np.array(orb_eco), "ocurrencia": ocurrencia,
-            "sitios": sitios, "usos": usos, "uso_px": uso_px, "sitio_px": sitio_px}
+            "sitios": sitios, "usos": usos, "uso_px": uso_px, "sitio_px": sitio_px, "rellenos": rellenos,
+            "catalogo": catalogo, "catalogo_px": catalogo_px, "sin_catalogos": args.sin_catalogos}
 
 
 def evaluar(ctx, p, cociente=None, eco_db=None):
@@ -315,19 +483,20 @@ def evaluar(ctx, p, cociente=None, eco_db=None):
 
     en_sitio, en_uso = mayoritario(ctx["sitio_px"]), mayoritario(ctx["uso_px"])
     for m in lista:
-        lat, lon = geo.latlon(ctx["xs"][0] + m["columna"] * paso, ctx["ys"][0] - m["fila"] * paso)
+        lat, lon = ctx["fr"].latlon(ctx["xs"][0] + m["columna"] * paso, ctx["ys"][0] - m["fila"] * paso)
         m["lat"], m["lon"] = round(float(lat), 5), round(float(lon), 5)
         s, u = en_sitio.get(m["etiqueta"], (0, 0)), en_uso.get(m["etiqueta"], (0, 0))
         if s[1] >= 0.3:
-            m["clase"], m["que"] = "relleno_osm", ctx["sitios"][s[0] - 1]["id"]
+            m["clase"], m["que"] = "relleno_osm", ctx["rellenos"][s[0] - 1]
         elif u[1] >= 0.3:
             uso = ctx["usos"][u[0] - 1]
             m["clase"], m["que"] = "uso_conocido", f"{uso['uso']}: {uso['nombre']}".rstrip(": ")
         else:
             m["clase"], m["que"] = "sin_explicar", None
     fichas = {}
+    excluir = ctx["catalogo_px"] if ctx["catalogo_px"].any() and not ctx["sin_catalogos"] else None
     for s in ctx["sitios"]:
-        f = ins.ficha(s["mascara"], ctx["coh"], ctx["orbitas"], ctx["fechas"], ~agua, paso, p, eco_db=capas["eco_db"])
+        f = ins.ficha(s["mascara"], ctx["coh"], ctx["orbitas"], ctx["fechas"], ~agua, paso, p, eco_db=capas["eco_db"], excluir=excluir)
         tierra_px = max(int((s["mascara"] & ~agua).sum()), 1)
         buenas = np.isin(etiquetas, [m["etiqueta"] for m in lista if not m["descartada"]])
         f["cubierto_por_manchas"] = round(float((buenas & s["mascara"]).sum() / tierra_px), 2)
@@ -343,7 +512,7 @@ def _figura(ctx, capas, lista, etiquetas, p, destino):
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
 
-    norte, oeste, sur, este = CAJA
+    norte, oeste, sur, este = ctx["fr"].caja
     fig, ejes = plt.subplots(1, 3, figsize=(21, 6.6))
     marco = dict(extent=(oeste, este, sur, norte), aspect=1 / math.cos(math.radians((norte + sur) / 2)), interpolation="nearest")
     magma = plt.get_cmap("magma").copy()
@@ -365,7 +534,7 @@ def _figura(ctx, capas, lista, etiquetas, p, destino):
                 lon, lat = np.array(a).T
                 for eje in ejes:
                     eje.plot(lon, lat, color="#22d3ee", lw=0.8)
-    fig.suptitle(f"Índice de insomnio, AMBA, {len(ctx['pares'])} pares de NISAR (GUNW, {ctx['paso']:.0f} m), órbitas "
+    fig.suptitle(f"Índice de insomnio, {ctx['fr'].nombre}, {len(ctx['pares'])} pares de NISAR (GUNW, {ctx['paso']:.0f} m), órbitas "
                  f"{sorted(set(ctx['orbitas'].tolist()))}. Agua: JRC Global Surface Water. Contornos: © OpenStreetMap", fontsize=10)
     fig.tight_layout()
     fig.savefig(destino, dpi=110)
@@ -379,7 +548,7 @@ def _png_web(capas, ctx, destino):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    img, limites = geo.a_mercator(capas["insomnio"], ctx["xs"], ctx["ys"])
+    img, limites = geo.a_mercator(capas["insomnio"], ctx["xs"], ctx["ys"], caja=ctx["fr"].caja, epsg=ctx["fr"].epsg)
     rgba = plt.get_cmap("magma")(np.clip(np.nan_to_num(img), 0, 1))
     rgba[..., 3] = np.where(np.isfinite(img), np.clip((img - 0.3) / 0.4, 0, 1) * 0.85, 0)
     os.makedirs(os.path.dirname(destino), exist_ok=True)
@@ -451,6 +620,7 @@ def indice(args):
     t0 = time.time()
     p = ins.Parametros()
     ctx = cargar(args)
+    fr = ctx["fr"]
     capas, lista, etiquetas, fichas = evaluar(ctx, p)
     capa, paso = args.capa, ctx["paso"]
     buenas = [m for m in lista if not m["descartada"]]
@@ -462,11 +632,15 @@ def indice(args):
         persistencia=f16(capas["persistencia"]), coherencia_media=f16(capas["coherencia_media"]),
         eco_db=f16(capas["eco_db"] if capas["eco_db"] is not None else np.zeros(1)), agua=capas["agua"], candidato=capas["candidato"],
         manchas=etiquetas.astype(np.int32), pares=capas["pares_validos"].astype(np.uint8), xs=ctx["xs"], ys=ctx["ys"],
+        frame=fr.nombre, epsg=fr.epsg, bbox=np.array(fr.bbox), catalogo=ctx["catalogo_px"],
         **{f"insomnio_orbita_{o}": f16(v) for o, v in capas["insomnio_orbita"].items()})
 
     limpio = lambda m: {k: v for k, v in m.items() if k not in ("etiqueta", "fila", "columna")}  # noqa: E731
     resumen = {
-        "capa": capa, "version": "final", "parametros": p.dict(),
+        "capa": capa, "version": "final", "frame": fr.dict(), "parametros": p.dict(),
+        "anillo_excluye": None if ctx["sin_catalogos"] else {"basurales": sum(1 for c in ctx["catalogo"] if c["catalogo"] == "basurales"),
+                           "negativos": sum(1 for c in ctx["catalogo"] if c["catalogo"] == "negativos"),
+                           "ha": round(float(ctx["catalogo_px"].sum() * paso * paso / 1e4))},
         "pares": [{**x, "mediana_tierra": round(float(m), 3), "factor_separacion": round(float(f), 3)}
                   for x, m, f in zip(ctx["pares"], capas["mediana_par"], capas["factor_separacion"])],
         "gcov": int(len(ctx["orbitas_eco"])),
@@ -484,14 +658,20 @@ def indice(args):
                     "descartadas_lisas": sum(1 for m in lista if m["descartada"] == "lisa"),
                     "descartadas_chicas": sum(1 for m in lista if m["descartada"] == "chica"),
                     "primeras": [limpio(m) for m in buenas[:50]]},
-        "fuentes": ["NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC", "JRC Global Surface Water v1.4", "© colaboradores de OpenStreetMap (ODbL)"],
+        "fuentes": ["NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC", "JRC Global Surface Water v1.4",
+                    "© colaboradores de OpenStreetMap (ODbL), por Nominatim y por Overture Maps 2026-10-21.0"],
     }
     _json(os.path.join(args.salida, f"resumen_{capa}.json"), resumen, indent=1)
     _json(os.path.join(args.salida, f"fichas_{capa}.json"), {k: v for k, v in fichas.items()}, indent=1)
     _figura(ctx, capas, lista, etiquetas, p, os.path.join(args.salida, f"indice_{capa}.png"))
-    n_web = _escribir_web(ctx, capas, lista, fichas, p, args.web) if args.web and os.path.isdir(args.web) and capa == "80m" else 0
+    # La web lee el AMBA: los otros frames no tocan insomnes-web.
+    n_web = _escribir_web(ctx, capas, lista, fichas, p, args.web) if args.web and os.path.isdir(args.web) and capa == "80m" and fr.nombre == "AMBA" else 0
 
-    print(f"{'sitio':26s} {'radar':10s} insomnio persist.  órbitas          eco   px  manchas")
+    print(f"{fr.nombre}: {len(ctx['pares'])} pares GUNW y {len(ctx['orbitas_eco'])} GCOV, órbitas {sorted(set(ctx['orbitas'].tolist()))}, "
+          f"grilla {len(ctx['ys'])} × {len(ctx['xs'])} de {paso:.0f} m en EPSG {fr.epsg}. " + ("El anillo NO excluye los catálogos" if ctx["sin_catalogos"] else
+          f"El anillo excluye {resumen['anillo_excluye']['basurales']} basurales y {resumen['anillo_excluye']['negativos']} negativos de los catálogos"))
+    if ctx["sitios"]:
+        print(f"{'sitio':26s} {'radar':10s} insomnio persist.  órbitas          eco   px  manchas")
     for s in ctx["sitios"]:
         f = fichas[s["id"]]
         orb = " ".join(f"{o}:{v:.2f}" for o, v in f["insomnio_orbita"].items())
@@ -517,6 +697,8 @@ def calibrar(args):
     """
     import dataclasses
 
+    if args.fr.nombre != "AMBA":
+        sys.exit("`calibrar` usa los sitios y los controles del AMBA (sitios_registro.json): no corre sobre otro frame.")
     base = ins.Parametros()
     ctx = cargar(args)
     agua = ins.mascara_agua(ctx["ocurrencia"], ctx["paso"], base)
@@ -557,23 +739,75 @@ def calibrar(args):
 
 
 # ---------------------------------------------------------------- main
+def preparar(args, nombre):
+    """Copia de los argumentos para un frame: el frame, sus órbitas y sus carpetas propias."""
+    a = argparse.Namespace(**vars(args))
+    nombre = nombre.upper()
+    amba = nombre == "AMBA"
+    a.salida = args.salida if amba else os.path.join(args.salida, nombre)
+    a.datos = args.datos if amba else os.path.join(args.datos, nombre)
+    if args.caja and not amba:
+        fr = geo.frame_de_caja(nombre, args.caja)
+        guardado = os.path.join(a.salida, "frame.json")
+        if os.path.exists(guardado):  # el EPSG que ya fijó `procesar` con el primer producto
+            with open(guardado, encoding="utf-8") as fh:
+                previo = geo.frame_de_dict(json.load(fh))
+            if previo.bbox == fr.bbox:
+                fr = previo
+    else:
+        fr = geo.frame(nombre, a.salida)
+    if args.epsg and not amba:
+        fr = dataclasses.replace(fr, epsg=args.epsg, epsg_fijo=True)
+    if args.orbitas:
+        fr = dataclasses.replace(fr, orbitas=tuple(args.orbitas))
+    if args.desde is not None:
+        fr = dataclasses.replace(fr, desde=args.desde)
+    if args.hasta is not None:
+        fr = dataclasses.replace(fr, hasta=args.hasta)
+    a.fr, a.orbitas, a.fijos = fr, list(fr.orbitas), ff.carpeta(fr, args.fijos)
+    return a
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("paso", choices=["buscar", "bajar", "procesar", "indice", "calibrar", "todo"])
+    p.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos` (en su orden de prioridad). Por defecto, AMBA")
+    p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"),
+                   help="caja de un frame que no está en frames.json, en el orden de GeoJSON (va con un solo --frame NOMBRE)")
+    p.add_argument("--epsg", type=int, help="EPSG de la grilla (UTM). Si no se da: el de frames.json o, con --caja, el del primer GUNW")
     p.add_argument("--datos", default=os.path.join(IDEA, "datos"), help="carpeta de los .h5 (fuera del repo en la VM, por ejemplo /mnt/datos)")
     p.add_argument("--salida", default=os.path.join(IDEA, "salidas"), help="carpeta de productos chicos (lista, recortes, índice, figuras)")
-    p.add_argument("--web", default=WEB, help="carpeta de insomnes-web; `indice` a 80 m escribe ahí los datos de la web ('' para no escribir)")
-    p.add_argument("--orbitas", type=int, nargs="+", default=[10, 161], help="órbitas (path) a usar; 10 y 161 cubren todo el AMBA")
+    p.add_argument("--fijos", default=FIJOS, help="carpeta de las fuentes fijas: cada frame cachea las suyas en <fijos>/<FRAME>/ (el AMBA, sueltas)")
+    p.add_argument("--web", default=WEB, help="carpeta de insomnes-web; `indice` del AMBA a 80 m escribe ahí los datos de la web ('' para no escribir)")
+    p.add_argument("--orbitas", type=int, nargs="+", help="órbitas (path) a usar. Por defecto, las del frame (AMBA: 10 y 161) o todas las que crucen la caja")
+    p.add_argument("--desde", help="AAAA-MM-DD: primera fecha de los productos que toma `buscar` (por defecto, la del frame; '' = sin límite)")
+    p.add_argument("--hasta", help="AAAA-MM-DD: última fecha de los productos que toma `buscar` (por defecto, la del frame; '' = sin límite)")
     p.add_argument("--capa", choices=list(CAPAS), default="80m")
     p.add_argument("--procesos", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     p.add_argument("--hilos", type=int, default=8, help="descargas en paralelo")
     p.add_argument("--solo-gunw", action="store_true", help="no bajar ni procesar GCOV")
     p.add_argument("--remoto", action="store_true", help="procesar leyendo por URL sólo la ventana necesaria, sin bajar los .h5 (necesita credenciales)")
+    p.add_argument("--sin-catalogos", action="store_true", help="el anillo de cada sitio excluye sólo el sitio y el agua, como antes de la etapa 1 (para comparar)")
+    p.add_argument("--borrar", action="store_true", help="borrar cada .h5 local después de recortarlo (para bajar, procesar y borrar frame por frame)")
     args = p.parse_args()
-    pasos = ["buscar", "bajar", "procesar", "indice"] if args.paso == "todo" else [args.paso]
-    for paso in pasos:
-        print(f"== {paso}")
-        globals()[paso](args)
+    nombres = list(geo.frames_conocidos()) if args.frame == ["todos"] else args.frame
+    if args.caja and len(nombres) != 1:
+        sys.exit("--caja define un solo frame: pasá un único --frame NOMBRE.")
+    pasos = ["buscar"] + ([] if args.remoto else ["bajar"]) + ["procesar", "indice"] if args.paso == "todo" else [args.paso]
+    fallados = []
+    for nombre in nombres:
+        try:
+            a = preparar(args, nombre)
+            for paso in pasos:
+                print(f"== {paso}" + ("" if nombres == ["AMBA"] else f" [{a.fr.nombre}]"), flush=True)
+                globals()[paso](a)
+        except (Exception, SystemExit) as e:
+            if len(nombres) == 1:
+                raise
+            fallados.append(nombre)  # un frame que falla no frena a los demás
+            print(f"ERROR en {nombre}: {type(e).__name__}: {e}", flush=True)
+    if fallados:
+        sys.exit(f"Frames con error: {', '.join(fallados)}")
 
 
 if __name__ == "__main__":
