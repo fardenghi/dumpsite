@@ -6,18 +6,50 @@ import { go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
 import { Dot, Kpi, RADAR, REGISTRO, fecha, num, pais, pct, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
+import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import type { Imagen, Sitio } from '../data/types'
 
-// Sin claves. El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena
-// Sentinel-2 de 10 m de la fecha elegida, servida por Microsoft Planetary Computer.
+// El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
+// de la fecha elegida, servida por Microsoft Planetary Computer. Las dos andan sin claves.
+// Con VITE_GOOGLE_MAPS_KEY hay además una vista de alta resolución (Google, menos de 1 m, sin
+// fecha): se pide sólo adentro de la caja del sitio abierto y desde ZOOM_GOOGLE, porque cada
+// tile se cobra. Para comparar fechas se sigue usando Sentinel-2.
 const FONDO = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg'
 const s2 = (i: Imagen) =>
   `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${i.item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`
 
 const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5bb3a8', '#d8d2cc'] as unknown as maplibregl.ExpressionSpecification
 const MUNDO = { center: [-20, 8] as [number, number], zoom: 1.5 }
+const ZOOM_GOOGLE = 13
+type Vista = 'google' | 'sentinel'
 
-function Ficha({ s, imagen, onImagen }: { s: Sitio; imagen: Imagen | null; onImagen: (i: Imagen) => void }) {
+/** Tiles Sentinel-2 que MapLibre pide al abrir un sitio (fuente de 512 px: el z del tile es el del mapa menos 1). */
+function tilesDelSitio(s: Sitio): string[] {
+  const ultima = s.imagenes[s.imagenes.length - 1]
+  if (!ultima || !s.caja) return []
+  const [o, sur, e, n] = s.caja
+  const urls: string[] = []
+  for (const z of [12, 13]) {
+    const x = (lon: number) => Math.floor(((lon + 180) / 360) * 2 ** z)
+    const y = (lat: number) => Math.floor(((1 - Math.asinh(Math.tan((lat * Math.PI) / 180)) / Math.PI) / 2) * 2 ** z)
+    for (let i = x(o); i <= x(e); i++) for (let j = y(n); j <= y(sur); j++) urls.push(s2(ultima).replace('{z}', String(z)).replace('{x}', String(i)).replace('{y}', String(j)))
+  }
+  return urls
+}
+
+/** Deja en el caché de public/sw.js la imagen más reciente de cada basural, de a poco y sin apurar al mapa. */
+async function precargar(sitios: Sitio[]) {
+  if (!('serviceWorker' in navigator)) return
+  await navigator.serviceWorker.ready
+  if (!navigator.serviceWorker.controller) return // primera visita: el caché empieza a llenarse en la próxima carga
+  const cola = sitios.flatMap(tilesDelSitio)
+  const tanda = async () => {
+    for (let url = cola.shift(); url; url = cola.shift()) await fetch(url).catch(() => null)
+  }
+  await Promise.all([tanda(), tanda(), tanda()])
+}
+
+function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imagen | null; onImagen: (i: Imagen) => void; vista: Vista; onVista: (v: Vista) => void }) {
   return (
     <aside className="ficha" key={s.id}>
       <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
@@ -65,19 +97,23 @@ function Ficha({ s, imagen, onImagen }: { s: Sitio; imagen: Imagen | null; onIma
 
       <div>
         <h3>
-          Imagen <span>Sentinel-2, 10 m</span>
+          Imagen <span>{vista === 'google' ? 'Google, alta resolución, sin fecha' : 'Sentinel-2, 10 m'}</span>
         </h3>
-        {s.imagenes.length ? (
+        {(HAY_GOOGLE || s.imagenes.length > 0) && (
           <div className="dates">
+            {HAY_GOOGLE && (
+              <button aria-pressed={vista === 'google'} onClick={() => onVista('google')}>
+                Alta resolución
+              </button>
+            )}
             {s.imagenes.map((i) => (
-              <button key={i.fecha} aria-pressed={imagen?.fecha === i.fecha} onClick={() => onImagen(i)}>
+              <button key={i.fecha} aria-pressed={vista === 'sentinel' && imagen?.fecha === i.fecha} onClick={() => onImagen(i)}>
                 {fecha(i.fecha)}
               </button>
             ))}
           </div>
-        ) : (
-          <p className="muted small">Sin imagen despejada en el período</p>
         )}
+        {!s.imagenes.length && <p className="muted small">Sin imagen Sentinel-2 despejada en el período</p>}
       </div>
 
       <div className="row" style={{ justifyContent: 'space-between' }}>
@@ -101,6 +137,12 @@ export default function Mapa() {
   const mapa = useRef<maplibregl.Map | null>(null)
   const [listo, setListo] = useState(false)
   const [imagen, setImagen] = useState<Imagen | null>(null)
+  const [vista, setVista] = useState<Vista>(HAY_GOOGLE ? 'google' : 'sentinel')
+  const [credito, setCredito] = useState('')
+
+  useEffect(() => {
+    if (sitios) precargar(sitios)
+  }, [sitios])
 
   // el mapa se crea una sola vez
   useEffect(() => {
@@ -112,7 +154,7 @@ export default function Mapa() {
         layers: [{ id: 'fondo', type: 'raster', source: 'fondo' }],
       },
       ...MUNDO,
-      maxZoom: 15,
+      maxZoom: HAY_GOOGLE ? 19 : 15,
       attributionControl: false,
       dragRotate: false,
       pitchWithRotate: false,
@@ -194,9 +236,18 @@ export default function Mapa() {
       return
     }
     setImagen(sel.imagenes[sel.imagenes.length - 1] ?? null)
+    if (HAY_GOOGLE) setVista('google')
     const ancho = m.getContainer().clientWidth
     const margen = ancho > 860 ? { right: 440, top: 60, bottom: 60, left: 60 } : { bottom: 340, top: 80, left: 24, right: 24 }
-    if (sel.caja) {
+    const anillo = sel.contorno?.coordinates[0]
+    if (HAY_GOOGLE && anillo) {
+      // con alta resolución se encuadra el predio, no la caja de varios km
+      const lons = anillo.map((p) => p[0])
+      const lats = anillo.map((p) => p[1])
+      m.fitBounds([Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)], { padding: margen, maxZoom: 17, duration: 2200, essential: true })
+    } else if (HAY_GOOGLE) {
+      m.flyTo({ center: [sel.lon, sel.lat], zoom: 15.5, padding: margen, duration: 2200, essential: true })
+    } else if (sel.caja) {
       const [o, s, e, n] = sel.caja
       m.fitBounds([o, s, e, n], { padding: margen, maxZoom: 14.5, duration: 1800, essential: true })
     } else {
@@ -226,6 +277,59 @@ export default function Mapa() {
       m.addLayer({ id: 'recorte', type: 'raster', source: 'recorte', paint: { 'raster-fade-duration': 0 } }, antesDe('contorno-relleno'))
     }
   }, [listo, imagen, sel])
+
+  // alta resolución de Google: sólo adentro de la caja del sitio abierto y con zoom alto
+  const idSel = sel?.id
+  useEffect(() => {
+    const m = mapa.current
+    if (!HAY_GOOGLE || !m || !listo || !sel?.caja) return
+    const limites = sel.caja
+    let vivo = true
+    let token = ''
+    const acreditar = () => {
+      if (!token || m.getZoom() < ZOOM_GOOGLE) return setCredito('')
+      const b = m.getBounds()
+      creditoGoogle(token, m.getZoom(), [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]).then((c) => vivo && setCredito(c), () => null)
+    }
+    sesionGoogle().then(
+      (t) => {
+        if (!vivo || mapa.current !== m) return
+        token = t
+        m.addSource('google', { type: 'raster', tiles: [tilesGoogle(t)], tileSize: 256, bounds: limites, minzoom: ZOOM_GOOGLE, maxzoom: 20 })
+        m.addLayer({ id: 'google', type: 'raster', source: 'google', minzoom: ZOOM_GOOGLE, paint: { 'raster-fade-duration': 200 } }, m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined)
+        m.on('moveend', acreditar)
+        acreditar()
+      },
+      (e: Error) => {
+        console.warn(e.message)
+        if (vivo) setVista('sentinel')
+      },
+    )
+    return () => {
+      vivo = false
+      setCredito('')
+      if (mapa.current !== m) return
+      m.off('moveend', acreditar)
+      if (m.getLayer('google')) m.removeLayer('google')
+      if (m.getSource('google')) m.removeSource('google')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listo, idSel])
+
+  // la vista elegida: Google tapa a Sentinel-2 o se esconde; con Google el relleno del contorno no tiñe la imagen
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo) return
+    const aplicar = () => {
+      if (m.getLayer('google')) m.setLayoutProperty('google', 'visibility', vista === 'google' ? 'visible' : 'none')
+      if (m.getLayer('contorno-relleno')) m.setPaintProperty('contorno-relleno', 'fill-opacity', ['interpolate', ['linear'], ['zoom'], 9, 0, 10.5, 0.08, ZOOM_GOOGLE + 1, vista === 'google' && idSel ? 0 : 0.08])
+    }
+    aplicar()
+    m.on('styledata', aplicar)
+    return () => {
+      m.off('styledata', aplicar)
+    }
+  }, [listo, vista, idSel])
 
   return (
     <>
@@ -260,6 +364,11 @@ export default function Mapa() {
         ))}
       </div>
       <div className="map-credit">
+        {vista === 'google' && credito && (
+          <>
+            <b className="google">Google</b> {credito} ·{' '}
+          </>
+        )}
         Imágenes:{' '}
         <a href="https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api" target="_blank" rel="noreferrer">
           NASA GIBS
@@ -269,7 +378,18 @@ export default function Mapa() {
           ESA Copernicus, vía Planetary Computer
         </a>
       </div>
-      {sel && <Ficha s={sel} imagen={imagen} onImagen={setImagen} />}
+      {sel && (
+        <Ficha
+          s={sel}
+          imagen={imagen}
+          vista={vista}
+          onVista={setVista}
+          onImagen={(i) => {
+            setImagen(i)
+            setVista('sentinel')
+          }}
+        />
+      )}
     </>
   )
 }
