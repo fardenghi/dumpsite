@@ -15,7 +15,6 @@ export default function Inicio() {
   const r = resumen(sitios)
   const orden = [...sitios].sort((a, b) => b.insomnio - a.insomnio).slice(0, 8)
   const lujan = sitios.find((s) => s.id === 'lujan')
-  const mancha = sitios.find((s) => s.id === 'lujan-oeste')
 
   return (
     <>
@@ -72,12 +71,12 @@ export default function Inicio() {
           </div>
         </div>
 
-        {lujan && mancha && (
+        {lujan && (
           <div className="panel col" style={{ gap: 16 }}>
             <div>
               <h3>Luján cerró el 1 de julio</h3>
               <p className="muted small" style={{ marginTop: 4 }}>
-                El predio se durmió. A 700 m, una mancha sigue despierta
+                En los 15 pares el predio quedó tan quieto como su entorno. La mancha vecina es agua
               </p>
             </div>
             <Coherencia
@@ -85,11 +84,11 @@ export default function Inicio() {
               marca={{ fecha: lujan.cierre!, texto: 'cierre' }}
               series={[
                 { nombre: 'Predio', color: 'var(--quieto)', valores: lujan.pares.map((p) => p.sitio) },
-                { nombre: 'Mancha vecina', color: 'var(--despierto)', valores: mancha.pares.map((p) => p.sitio) },
+                { nombre: 'Anillo de 1,5 km', color: 'var(--muted, #999)', valores: lujan.pares.map((p) => p.anillo) },
               ]}
             />
-            <a className="btn sm" href="#/mapa?sitio=lujan-oeste" style={{ alignSelf: 'flex-start', marginTop: 'auto' }}>
-              Ver la mancha
+            <a className="btn sm" href="#/mapa?sitio=lujan" style={{ alignSelf: 'flex-start', marginTop: 'auto' }}>
+              Ver en el mapa
             </a>
           </div>
         )}
