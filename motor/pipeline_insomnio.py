@@ -348,9 +348,8 @@ def _figura(ctx, capas, lista, etiquetas, p, destino):
     marco = dict(extent=(oeste, este, sur, norte), aspect=1 / math.cos(math.radians((norte + sur) / 2)), interpolation="nearest")
     magma = plt.get_cmap("magma").copy()
     magma.set_bad("#9fb6c9")  # agua
-    regla = f"{p.razon} × entorno" if p.comparacion == "razon" else f"percentil {p.percentil:g} del entorno"
     for eje, clave, titulo in ((ejes[0], "insomnio_abs", f"Absoluto: fracción de pares con coherencia < {p.umbral_abs}"),
-                               (ejes[1], "insomnio", f"Relativo: fracción de pares con coherencia < {regla}")):
+                               (ejes[1], "insomnio", f"Relativo: fracción de pares con coherencia < {p.razon} × entorno")):
         im = eje.imshow(capas[clave], cmap=magma, vmin=0, vmax=1, **marco)
         eje.set_title(titulo, fontsize=10)
         fig.colorbar(im, ax=eje, fraction=0.03)
@@ -440,8 +439,7 @@ def _escribir_web(ctx, capas, lista, fichas, p, web):
         "coordinates": [[o, n], [e, n], [e, s_], [o, s_]], "ancho": forma[1], "alto": forma[0],
         "que": "Índice de insomnio relativo (0 a 1), paleta magma; transparente por debajo de 0,3 y en el agua",
         "pares": len(ctx["pares"]), "desde": min(x["desde"] for x in ctx["pares"]), "hasta": max(x["hasta"] for x in ctx["pares"]),
-        "parametros": {"comparacion": p.comparacion, "razon": p.razon, "percentil": p.percentil,
-                       "min_insomnio": p.min_insomnio, "min_persistencia": p.min_persistencia},
+        "parametros": {"razon": p.razon, "min_insomnio": p.min_insomnio, "min_persistencia": p.min_persistencia},
         "fuentes": ["NISAR GUNW (NASA/ISRO), vía ASF DAAC", "JRC Global Surface Water v1.4 (máscara de agua)"],
     }, indent=1)
     return len(sitios)
@@ -451,12 +449,10 @@ def indice(args):
     import time
 
     t0 = time.time()
-    p = _parametros(args)
+    p = ins.Parametros()
     ctx = cargar(args)
     capas, lista, etiquetas, fichas = evaluar(ctx, p)
-    paso = ctx["paso"]
-    # Con la variante por percentil los productos llevan sufijo, para no pisar los de la versión de referencia.
-    capa = args.capa if p.comparacion == "razon" else f"{args.capa}_percentil{p.percentil:g}"
+    capa, paso = args.capa, ctx["paso"]
     buenas = [m for m in lista if not m["descartada"]]
     tierra = ~capas["agua"]
 
@@ -493,7 +489,7 @@ def indice(args):
     _json(os.path.join(args.salida, f"resumen_{capa}.json"), resumen, indent=1)
     _json(os.path.join(args.salida, f"fichas_{capa}.json"), {k: v for k, v in fichas.items()}, indent=1)
     _figura(ctx, capas, lista, etiquetas, p, os.path.join(args.salida, f"indice_{capa}.png"))
-    n_web = _escribir_web(ctx, capas, lista, fichas, p, args.web) if args.web and os.path.isdir(args.web) and args.capa == "80m" else 0
+    n_web = _escribir_web(ctx, capas, lista, fichas, p, args.web) if args.web and os.path.isdir(args.web) and capa == "80m" else 0
 
     print(f"{'sitio':26s} {'radar':10s} insomnio persist.  órbitas          eco   px  manchas")
     for s in ctx["sitios"]:
@@ -510,11 +506,6 @@ def indice(args):
     print(f"Listo en {time.time() - t0:.1f} s. Resumen: {os.path.join(args.salida, f'resumen_{capa}.json')}")
 
 
-def _parametros(args):
-    """Parámetros de la versión final, con la comparación con el entorno que se pidió por línea de comandos."""
-    return ins.Parametros(comparacion=getattr(args, "comparacion", "razon"), percentil=getattr(args, "percentil", ins.Parametros.percentil))
-
-
 # ---------------------------------------------------------------- calibrar
 def calibrar(args):
     """Barre `razon` y `min_insomnio` y marca las combinaciones en las que entran los sitios de calibración y no entran los controles.
@@ -526,35 +517,32 @@ def calibrar(args):
     """
     import dataclasses
 
-    base = _parametros(args)
+    base = ins.Parametros()
     ctx = cargar(args)
     agua = ins.mascara_agua(ctx["ocurrencia"], ctx["paso"], base)
-    cociente = ins.puntajes(ctx["coh"], ~agua, ctx["paso"], base)
+    cociente = ins.cocientes(ctx["coh"], ~agua, ctx["paso"], base)
     eco_db = ins.eco_medio(ctx["eco"], ctx["orbitas_eco"])
     tierra_px = (~agua).sum()
     positivos = [s["id"] for s in ctx["sitios"] if s["rol"] == "calibracion"]
     controles = [s["id"] for s in ctx["sitios"] if s["rol"] == "control"]
-    # Con "razon" se barre la razón; con "percentil", el percentil del entorno. La columna se llama igual en los dos casos.
-    eje = "razon" if base.comparacion == "razon" else "percentil"
-    razones = [round(0.60 + 0.025 * i, 3) for i in range(15)] if eje == "razon" else [round(q * 100) for q in ins.CUANTILES]
-    minimos = [0.5, 0.6, 0.7, 0.8, 0.9]
+    razones, minimos = [round(0.60 + 0.025 * i, 3) for i in range(15)], [0.5, 0.6, 0.7, 0.8, 0.9]
     tabla = []
     for r in razones:
         for t in minimos:
-            p = dataclasses.replace(base, **{eje: r}, min_insomnio=t)
+            p = dataclasses.replace(base, razon=r, min_insomnio=t)
             capas, lista, _, fichas = evaluar(ctx, p, cociente=cociente, eco_db=eco_db)
             cumple = (all(fichas[i]["radar"] == "despierto" and fichas[i]["cubierto_por_manchas"] >= 0.05 for i in positivos)
                       and fichas["control-caba"]["radar"] == "quieto"
                       and all(fichas[i]["cubierto_por_manchas"] < 0.05 for i in controles))
-            tabla.append({"comparacion": base.comparacion, eje: r, "min_insomnio": t, "cumple": bool(cumple),
+            tabla.append({"razon": r, "min_insomnio": t, "cumple": bool(cumple),
                           "tierra_candidata": round(float(sum(m["ha"] for m in lista if not m["descartada"]) * 1e4 / (ctx["paso"] ** 2) / tierra_px), 4),
                           "manchas": sum(1 for m in lista if not m["descartada"]),
                           **{i: {"radar": fichas[i]["radar"], "insomnio": fichas[i]["insomnio"], "cubierto": fichas[i]["cubierto_por_manchas"]}
                              for i in positivos + controles}})
-    print(f"Filas: {eje}. Columnas: min_insomnio. Celda: '*' si cumple, % de la tierra que queda candidata.")
+    print("Filas: razon. Columnas: min_insomnio. Celda: '*' si cumple, % de la tierra que queda candidata.")
     print("        " + "".join(f"{t:>10.1f}" for t in minimos))
     for r in razones:
-        print(f"  {r:5.3g} " + "".join(f"{('*' if x['cumple'] else ' ') + format(x['tierra_candidata'], '.1%'):>10s}" for x in tabla if x[eje] == r))
+        print(f"  {r:.3f} " + "".join(f"{('*' if x['cumple'] else ' ') + format(x['tierra_candidata'], '.1%'):>10s}" for x in tabla if x["razon"] == r))
     # eco: el umbral tiene que quedar entre lo liso conocido y los rellenos conocidos
     eco_sitio = lambda i: float(np.nanmedian(eco_db[next(s for s in ctx["sitios"] if s["id"] == i)["mascara"]]))  # noqa: E731
     lisos = {i: round(eco_sitio(i), 1) for i in ("control-rio", "lujan-oeste")}
@@ -563,10 +551,8 @@ def calibrar(args):
           f"usamos {base.eco_min_db}.")
     aguas = {str(a): round(float(ins.mascara_agua(ctx["ocurrencia"], ctx["paso"], dataclasses.replace(base, agua_min=a)).mean()), 4) for a in (5, 10, 25, 50, 75)}
     print("Fracción de la grilla que queda como agua según `agua_min` (% de ocurrencia JRC):", aguas)
-    sufijo = "" if base.comparacion == "razon" else "_percentil"
-    _json(os.path.join(args.salida, f"calibracion_{args.capa}{sufijo}.json"),
-          {"criterios": calibrar.__doc__.split("Criterios")[1].strip(),
-           "elegido": {"comparacion": base.comparacion, eje: getattr(base, eje), "min_insomnio": base.min_insomnio, "eco_min_db": base.eco_min_db},
+    _json(os.path.join(args.salida, f"calibracion_{args.capa}.json"),
+          {"criterios": calibrar.__doc__.split("Criterios")[1].strip(), "elegido": {"razon": base.razon, "min_insomnio": base.min_insomnio, "eco_min_db": base.eco_min_db},
            "eco_db": {"lisos": lisos, "rellenos": rellenos}, "agua_fraccion_por_umbral": aguas, "tabla": tabla}, indent=1)
 
 
@@ -583,9 +569,6 @@ def main():
     p.add_argument("--hilos", type=int, default=8, help="descargas en paralelo")
     p.add_argument("--solo-gunw", action="store_true", help="no bajar ni procesar GCOV")
     p.add_argument("--remoto", action="store_true", help="procesar leyendo por URL sólo la ventana necesaria, sin bajar los .h5 (necesita credenciales)")
-    p.add_argument("--comparacion", choices=["razon", "percentil"], default="razon",
-                   help="cómo se compara cada par con su entorno en `indice` y `calibrar`: razón con la mediana (referencia) o percentil del entorno")
-    p.add_argument("--percentil", type=float, default=ins.Parametros.percentil, help="percentil del entorno con --comparacion percentil")
     args = p.parse_args()
     pasos = ["buscar", "bajar", "procesar", "indice"] if args.paso == "todo" else [args.paso]
     for paso in pasos:
