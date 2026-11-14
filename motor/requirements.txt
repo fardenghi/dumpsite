@@ -1,5 +1,10 @@
-h5py
 numpy
-matplotlib
 scipy
+matplotlib
+# sólo para `procesar` (leer los .h5) y `bajar`
+h5py
 earthaccess
+# sólo para `fuentes_fijas.py agua` y para los tests
+tifffile
+imagecodecs
+pytest
