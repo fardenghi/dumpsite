@@ -255,8 +255,12 @@ def manchas(candidato, capas, paso, p):
 
 
 # ------------------------------------------------------------------ sitios
-def anillo(mascara, tierra, paso, p):
-    """Anillo de p.anillo_m alrededor de un sitio, sin el sitio y sin agua."""
+def anillo(mascara, tierra, paso, p, excluir=None):
+    """Anillo de p.anillo_m alrededor de un sitio, sin el sitio, sin agua y sin lo que marque `excluir`.
+
+    `excluir` es una máscara con todos los polígonos de los catálogos (basurales y negativos) del frame: así un
+    relleno vecino o un aeródromo, que también pierden coherencia, no bajan la referencia del sitio.
+    """
     n = int(round(p.anillo_m / paso))
     yy, xx = np.mgrid[-n:n + 1, -n:n + 1]
     f0, f1 = np.nonzero(mascara.any(1))[0][[0, -1]]
@@ -265,25 +269,27 @@ def anillo(mascara, tierra, paso, p):
     sc = slice(max(c0 - n, 0), c1 + n + 1)
     salida = np.zeros_like(mascara)
     salida[sf, sc] = ndimage.binary_dilation(mascara[sf, sc], structure=yy**2 + xx**2 <= n * n)
-    return salida & ~mascara & tierra
+    salida &= ~mascara & tierra
+    return salida if excluir is None else salida & ~excluir
 
 
-def ficha(mascara, coh, orbitas, fechas, tierra, paso, p, eco_db=None):
+def ficha(mascara, coh, orbitas, fechas, tierra, paso, p, eco_db=None, excluir=None):
     """Serie par a par y veredicto de un sitio.
 
-    Por cada par compara la mediana de la coherencia adentro del sitio con la del anillo. El par está
-    despierto si adentro < p.razon × anillo. Veredictos:
+    Por cada par compara la mediana de la coherencia adentro del sitio con la del anillo (sin agua y sin los
+    polígonos de `excluir`, ver `anillo`). El par está despierto si adentro < p.razon × anillo. Veredictos:
       despierto   insomnio >= p.min_insomnio y persistencia >= p.min_persistencia
       quieto      insomnio <= p.max_quieto, con un entorno coherente
       no_alcanza  todo lo demás, con el motivo
     """
     adentro = mascara & tierra
-    aro = anillo(mascara, tierra, paso, p)
+    aro = anillo(mascara, tierra, paso, p, excluir)
     n_px = int(adentro.sum())
     base = {"px": n_px, "px_anillo": int(aro.sum()), "pares": [], "insomnio": None, "persistencia": None,
             "insomnio_orbita": {}, "eco_db": None}
     if n_px == 0 or not aro.any():
-        return {**base, "radar": "no_alcanza", "motivo": "el predio es agua o queda fuera de la grilla"}
+        motivo = "el predio es agua o queda fuera de la grilla" if n_px == 0 else "no queda anillo: alrededor todo es agua o polígonos de los catálogos"
+        return {**base, "radar": "no_alcanza", "motivo": motivo}
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
         m_sitio = np.nanmedian(coh[:, adentro], axis=1)
