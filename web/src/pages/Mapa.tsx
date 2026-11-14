@@ -2,9 +2,9 @@ import maplibregl, { type GeoJSONSource, type ImageSource, type RasterTileSource
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { FeatureCollection } from 'geojson'
 import { useEffect, useRef, useState } from 'react'
-import { go, useRoute } from '../App'
+import { Marca, go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
-import { Dot, Kpi, RADAR, REGISTRO, fecha, num, pais, pct, veredicto } from '../components/ui'
+import { Dot, Kpi, Picker, RADAR, RegistroTag, fecha, num, pct, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
@@ -19,8 +19,10 @@ const FONDO = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_Sha
 const s2 = (i: Imagen) =>
   `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${i.item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`
 
-const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5bb3a8', '#d8d2cc'] as unknown as maplibregl.ExpressionSpecification
-const MUNDO = { center: [-20, 8] as [number, number], zoom: 1.5 }
+const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5bb3a8', '#dfe5e1'] as unknown as maplibregl.ExpressionSpecification
+// la vista de partida es el AMBA entero: la grilla del índice de insomnio
+const AMBA: [number, number, number, number] = [indice.oeste, indice.sur, indice.este, indice.norte]
+const margenAmba = (ancho: number) => (ancho > 860 ? { top: 70, bottom: 90, left: 40, right: 40 } : { top: 70, bottom: 90, left: 12, right: 12 })
 const ZOOM_GOOGLE = 13
 type Vista = 'google' | 'sentinel'
 
@@ -57,7 +59,7 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
         <div className="grow">
           <h2>{s.nombre}</h2>
           <div className="where">
-            {s.lugar}, {pais(s.pais)}
+            {s.lugar}
           </div>
         </div>
         <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
@@ -72,21 +74,20 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
           <Dot radar={s.radar} />
           {veredicto(s)}
         </span>
-        {s.registro !== 'cerrado' && <span className="tag">Registro: {REGISTRO[s.registro].toLowerCase()}</span>}
-        {s.cierre && <span className="tag">Cierre: {fecha(s.cierre, true)}</span>}
+        <RegistroTag s={s} />
       </div>
 
-      <div className="kpis sm grid g3">
+      <div className="kpis sm grid g2">
         <Kpi label="Insomnio" value={pct(s.insomnio)} />
         <Kpi label="Superficie" value={num(s.ha)} unit="ha" />
-        <Kpi label="Pares" value={s.pares.length} />
       </div>
 
-      <div>
+      <div className="crece">
         <h3>
           Coherencia <span>NISAR, cada 12 días</span>
         </h3>
         <Coherencia
+          llenar
           fechas={s.pares.map((p) => p.fecha)}
           marca={s.cierre ? { fecha: s.cierre, texto: 'cierre' } : undefined}
           series={[
@@ -131,8 +132,10 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
 
 export default function Mapa() {
   const { sitios } = useSitios()
-  const { query } = useRoute()
-  const id = query.get('sitio')
+  const { page, query } = useRoute()
+  // con un panel abierto no hay ficha: el mapa queda donde estaba
+  const enMapa = page === 'mapa'
+  const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
   const caja = useRef<HTMLDivElement>(null)
   const mapa = useRef<maplibregl.Map | null>(null)
@@ -140,11 +143,12 @@ export default function Mapa() {
   const [imagen, setImagen] = useState<Imagen | null>(null)
   const [vista, setVista] = useState<Vista>(HAY_GOOGLE ? 'google' : 'sentinel')
   const [credito, setCredito] = useState('')
+  const habiaSitio = useRef(false)
 
   useEffect(() => {
     if (sitios) precargar(sitios)
   }, [sitios])
-  const [verIndice, setVerIndice] = useState(true)
+  const [verIndice, setVerIndice] = useState(false)
 
   // el mapa se crea una sola vez
   useEffect(() => {
@@ -155,7 +159,8 @@ export default function Mapa() {
         sources: { fondo: { type: 'raster', tiles: [FONDO], tileSize: 256, maxzoom: 8 } },
         layers: [{ id: 'fondo', type: 'raster', source: 'fondo' }],
       },
-      ...MUNDO,
+      bounds: AMBA,
+      fitBoundsOptions: { padding: margenAmba(caja.current!.clientWidth) },
       maxZoom: HAY_GOOGLE ? 19 : 15,
       attributionControl: false,
       dragRotate: false,
@@ -241,14 +246,16 @@ export default function Mapa() {
     const m = mapa.current
     if (!m || !listo) return
     if (!sel) {
-      // sin sitio elegido se vuelve a la vista del mundo; la última imagen queda cargada
-      if (m.getZoom() > MUNDO.zoom + 0.5) m.flyTo({ ...MUNDO, padding: 0, duration: 1400 })
+      // al cerrar la ficha se vuelve a la vista del AMBA; la última imagen queda cargada
+      if (habiaSitio.current && enMapa) m.fitBounds(AMBA, { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
+      habiaSitio.current = false
       return
     }
+    habiaSitio.current = true
     setImagen(sel.imagenes[sel.imagenes.length - 1] ?? null)
     if (HAY_GOOGLE) setVista('google')
     const ancho = m.getContainer().clientWidth
-    const margen = ancho > 860 ? { right: 440, top: 60, bottom: 60, left: 60 } : { bottom: 340, top: 80, left: 24, right: 24 }
+    const margen = ancho > 860 ? { right: 440, top: 80, bottom: 100, left: 60 } : { bottom: 400, top: 80, left: 24, right: 24 }
     const anillo = sel.contorno?.coordinates[0]
     if (HAY_GOOGLE && anillo) {
       // con alta resolución se encuadra el predio, no la caja de varios km
@@ -263,6 +270,7 @@ export default function Mapa() {
     } else {
       m.flyTo({ center: [sel.lon, sel.lat], zoom: 13.6, padding: margen, duration: 1800, essential: true })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, sel])
 
   // la imagen de la fecha elegida: el recorte guardado del sitio (anda sin conexión) y,
@@ -286,6 +294,13 @@ export default function Mapa() {
       m.addSource('recorte', { type: 'image', ...recorte })
       m.addLayer({ id: 'recorte', type: 'raster', source: 'recorte', paint: { 'raster-fade-duration': 0 } }, antesDe('indice', 'contorno-relleno'))
     }
+  }, [listo, imagen, sel])
+
+  // la imagen Sentinel-2 del sitio sólo se ve con ese sitio abierto: en la vista general quedaría como un parche
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo) return
+    for (const capa of ['escena', 'recorte']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', sel ? 'visible' : 'none')
   }, [listo, imagen, sel])
 
   // alta resolución de Google: sólo adentro de la caja del sitio abierto y con zoom alto
@@ -344,43 +359,48 @@ export default function Mapa() {
   return (
     <>
       <div className="map" ref={caja} />
-      <div className="map-top">
-        <select value={id ?? ''} onChange={(e) => go('mapa', e.target.value ? `sitio=${e.target.value}` : '')} aria-label="Ir a un sitio" style={{ boxShadow: 'var(--shadow)', borderColor: 'transparent' }}>
-          <option value="">Ir a un sitio</option>
-          {[...(sitios ?? [])]
-            .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
-            .map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.nombre} · {pais(s.pais)}
-              </option>
-            ))}
-        </select>
+      <div className={`map-top ${sel ? 'con-ficha' : ''}`}>
+        <Marca />
+        <Picker
+          className="float"
+          label="Ir a un sitio"
+          placeholder="Ir a un sitio"
+          value={id ?? ''}
+          onChange={(v) => go('mapa', `sitio=${v}`)}
+          options={[...(sitios ?? [])].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')).map((s) => ({ value: s.id, label: s.nombre, sub: s.lugar, radar: s.radar }))}
+        />
         {sel && (
-          <button
-            className="btn"
-            style={{ borderColor: 'transparent', boxShadow: 'var(--shadow)' }}
-            onClick={() => go('mapa')}
-          >
+          <button className="btn float" onClick={() => go('mapa')}>
             Ver todo
           </button>
         )}
-        <button
-          className="btn"
-          style={{ borderColor: 'transparent', boxShadow: 'var(--shadow)', opacity: verIndice ? 1 : 0.6 }}
-          onClick={() => setVerIndice((v) => !v)}
-          aria-pressed={verIndice}
-          title={`${indice.que}. ${indice.pares} pares de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}`}
-        >
-          Índice de insomnio: {verIndice ? 'sí' : 'no'}
-        </button>
       </div>
       <div className="map-legend">
-        {(['despierto', 'quieto', 'no_alcanza'] as const).map((r) => (
-          <span key={r}>
-            <span className={`dot ${r}`} style={{ animation: 'none' }} />
-            {RADAR[r]}
-          </span>
-        ))}
+        <div className="estados">
+          {(['despierto', 'quieto', 'no_alcanza'] as const).map((r) => (
+            <span key={r}>
+              <span className={`dot ${r}`} />
+              {RADAR[r]}
+            </span>
+          ))}
+        </div>
+        <button
+          className="capa"
+          role="switch"
+          aria-checked={verIndice}
+          onClick={() => setVerIndice((v) => !v)}
+          title={`${indice.que}. ${indice.pares} comparaciones de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}`}
+        >
+          <span>Índice de insomnio</span>
+          <i />
+        </button>
+        {verIndice && (
+          <div className="escala">
+            <div />
+            <span>0,3</span>
+            <span>1</span>
+          </div>
+        )}
       </div>
       <div className="map-credit">
         {vista === 'google' && credito && (
