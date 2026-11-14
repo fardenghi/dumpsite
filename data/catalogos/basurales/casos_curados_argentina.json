@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "titulo": "Casos curados a mano en Argentina (AMBA y provincia de Buenos Aires)",
+    "generado": "2026-11-14",
+    "descripcion": "Sitios con historia documentada en notas, fallos u organismos. Sirven de casos de validación para Insomnes: el objetivo es encontrar los que se anunciaron cerrados pero el radar sigue viendo activos.",
+    "precision_coordenadas": {
+      "poligono_osm": "centro del polígono de OSM usado en herramientas/predios.py",
+      "aproximada": "estimada a partir de una descripción o del centro del partido; hay que ubicar el predio exacto antes de procesar"
+    },
+    "advertencias": [
+      "Las superficies difieren según la fuente; se listan todas.",
+      "No acusar a nadie: hablar de 'señal compatible con actividad' hasta verificar."
+    ]
+  },
+  "sitios": [
+    {
+      "id": "AR-LUJAN",
+      "nombre": "Basural de Luján",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "Luján",
+      "lat": -34.52105,
+      "lon": -59.119,
+      "precision_coordenadas": "poligono_osm",
+      "bbox": {
+        "lat_min": -34.5271,
+        "lat_max": -34.515,
+        "lon_min": -59.1228,
+        "lon_max": -59.1152
+      },
+      "tipo": "basural a cielo abierto",
+      "estado_oficial": "cerrado",
+      "fecha_cierre": "2026-07-01",
+      "anios_operacion": 52,
+      "area": [
+        {
+          "valor_ha": 18,
+          "fuente": "Defensoría del Pueblo de la Nación"
+        },
+        {
+          "valor_ha": 12,
+          "fuente": "notas periodísticas (iProfesional y otras)"
+        },
+        {
+          "valor_ha": 3,
+          "detalle": "'zona de sacrificio' con residuos bajo la cobertura",
+          "fuente": "EconomíaSustentable"
+        },
+        {
+          "valor_ha": 43.72,
+          "detalle": "polígono OSM 'Basural municipal'; probablemente incluye zonas ya cubiertas y el entorno del predio",
+          "fuente": "OpenStreetMap vía Overture Maps 2026-10-21.0"
+        }
+      ],
+      "residuos_recibidos": [
+        {
+          "valor": "100 t/día antes del cierre",
+          "fuente": "El Cronista"
+        },
+        {
+          "valor": "hasta ~40.000 t/año en los últimos años",
+          "fuente": "iProfesional"
+        }
+      ],
+      "situacion": "Desde el cierre, el 100% de los residuos domiciliarios va al CEAMSE según el municipio. La remediación no está completa, la obra de reconversión quedó trabada por una disputa judicial y se reportan recuperadores informales.",
+      "senales_cerrado_pero_activo": [
+        {
+          "tipo": "mancha_coherencia_nisar",
+          "detalle": "Pegada al oeste del polígono hay una mancha de baja coherencia de ~500 m en -34.5215, -59.1260 (par NISAR 30/09-12/10/2026). En la corrida completa tiene eco de -17,7 dB: superficie lisa, probablemente agua o barro, así que lo más probable es que NO sea vuelco activo. Falta mirarla en óptico.",
+          "fuente": "idea-basurales-nisar/idea/prueba-coherencia-nisar.md; idea-basurales-nisar/idea/corrida-completa-vm.md",
+          "evidencia": "debil"
+        }
+      ],
+      "rol_en_insomnes": "caso estrella: ¿cerrado y quieto o cerrado pero despierto?",
+      "fuentes": [
+        {
+          "nombre": "Perfil",
+          "url": "https://www.perfil.com/noticias/empresas-y-protagonistas/lujan-cerro-definitivamente-el-basural-a-cielo-abierto-mas-grande-del-pais.phtml"
+        },
+        {
+          "nombre": "iProfesional",
+          "url": "https://www.iprofesional.com/actualidad/460008-basural-lujan-cerro-problema-ambiental-nadie-puede-resolver"
+        },
+        {
+          "nombre": "El Cronista",
+          "url": "https://www.cronista.com/informacion-gral/despues-de-50-anos-cerro-definitivamente-el-basural-a-cielo-abierto-mas-grande-del-pais-recibia-100-toneladas-de-residuos-por-dia/"
+        },
+        {
+          "nombre": "La Nación",
+          "url": "https://www.lanacion.com.ar/sociedad/cerro-el-basural-a-cielo-abierto-mas-grande-del-pais-podemos-abrir-las-ventanas-sin-sentir-el-olor-nid20092026/"
+        },
+        {
+          "nombre": "EconomíaSustentable",
+          "url": "https://economiasustentable.com/noticias/lujan-cerro-el-mayor-basural-a-cielo-abierto-del-pais-pero-deja-una-amenaza-bajo-tierra/"
+        },
+        {
+          "nombre": "Defensoría del Pueblo de la Nación",
+          "url": "https://defensor.gov.ar/documentos/20240215_33183_558837.pdf"
+        },
+        {
+          "nombre": "Polígono OpenStreetMap (landuse=landfill)",
+          "url": "https://www.openstreetmap.org",
+          "licencia": "ODbL"
+        }
+      ],
+      "insomnio_nisar_80m": {
+        "valor": 0.09,
+        "lectura": "quieto",
+        "fuente": "idea-basurales-nisar/idea/corrida-completa-vm.md"
+      }
+    },
+    {
+      "id": "AR-NORTE-III",
+      "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "San Martín / San Miguel (José León Suárez)",
+      "lat": -34.5375,
+      "lon": -58.6125,
+      "precision_coordenadas": "aproximada",
+      "bbox": {
+        "lat_min": -34.55,
+        "lat_max": -34.525,
+        "lon_min": -58.63,
+        "lon_max": -58.595
+      },
+      "tipo": "relleno sanitario",
+      "estado_oficial": "abierto",
+      "area": [
+        {
+          "valor_ha": 90,
+          "detalle": "módulo C",
+          "fuente": "Climate TRACE (Capacity)"
+        },
+        {
+          "valor_ha": 65,
+          "detalle": "registro 'Environmental Complex Norte III'",
+          "fuente": "Climate TRACE (Capacity)"
+        }
+      ],
+      "situacion": "Recibe alrededor del 85% de la basura del AMBA. Un informe con datos de Carbon Mapper (Tanager-1 y EMIT de la NASA) lo ubicó como el mayor emisor de metano entre basurales detectado por satélite en 2025; el CEAMSE cuestionó la metodología.",
+      "metano_emit": {
+        "plumas": 7,
+        "fechas": [
+          "2023-01-22",
+          "2023-11-24",
+          "2023-12-26",
+          "2024-01-12",
+          "2024-01-20",
+          "2024-07-03",
+          "2024-10-26"
+        ],
+        "detalle": "plumas únicas de EMIT L2B CH4PLM v002 a menos de 1,5 km de los dos registros de Climate TRACE de Norte III",
+        "fuente": "nasa_emit"
+      },
+      "rol_en_insomnes": "control positivo: activo seguro",
+      "fuentes": [
+        {
+          "nombre": "iProfesional",
+          "url": "https://www.iprofesional.com/actualidad/457740-basural-amba-metano-bajo-lupa-global-genero-preocupacion-impacto-ambiental"
+        },
+        {
+          "nombre": "Meteored",
+          "url": "https://www.meteored.com.ar/noticias/actualidad/el-mayor-emisor-de-metano-entre-basurales-del-mundo-esta-en-buenos-aires-el-informe-que-pone-bajo-la-lupa-al-ceamse.html"
+        },
+        {
+          "nombre": "CATF",
+          "url": "https://www.catf.us/2026/05/satellites-super-emitters-smarter-waste-policy/"
+        },
+        {
+          "nombre": "Climate TRACE",
+          "url": "https://climatetrace.org/data",
+          "licencia": "CC BY 4.0"
+        },
+        {
+          "nombre": "NASA EMIT L2B CH4PLM v002",
+          "url": "https://doi.org/10.5067/EMIT/EMITL2BCH4PLM.002"
+        }
+      ],
+      "insomnio_nisar_80m": {
+        "valor": 0.34,
+        "fuente": "idea-basurales-nisar/idea/corrida-completa-vm.md"
+      }
+    },
+    {
+      "id": "AR-GONZALEZ-CATAN",
+      "nombre": "Complejo Ambiental González Catán (CEAMSE)",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "La Matanza",
+      "lat": -34.7856,
+      "lon": -58.6618,
+      "precision_coordenadas": "poligono_osm",
+      "bbox": {
+        "lat_min": -34.7921,
+        "lat_max": -34.7791,
+        "lon_min": -58.6738,
+        "lon_max": -58.6498
+      },
+      "tipo": "relleno sanitario",
+      "estado_oficial": "sin confirmar",
+      "area": [
+        {
+          "valor_ha": 120,
+          "fuente": "Climate TRACE (Capacity)"
+        }
+      ],
+      "senales_cerrado_pero_activo": [
+        {
+          "tipo": "coherencia_nisar_baja",
+          "detalle": "-0,10 de coherencia respecto del entorno en el par 30/09-12/10/2026",
+          "fuente": "idea/prueba-coherencia-nisar.md"
+        }
+      ],
+      "pendiente": "Confirmar si sigue recibiendo residuos: hubo anuncios de cierre en años anteriores que no se verificaron en esta búsqueda.",
+      "fuentes": [
+        {
+          "nombre": "Climate TRACE",
+          "url": "https://climatetrace.org/data",
+          "licencia": "CC BY 4.0"
+        },
+        {
+          "nombre": "Polígono OpenStreetMap (landuse=landfill)",
+          "url": "https://www.openstreetmap.org",
+          "licencia": "ODbL"
+        }
+      ],
+      "insomnio_nisar_80m": {
+        "valor": 0.23,
+        "fuente": "idea-basurales-nisar/idea/corrida-completa-vm.md"
+      }
+    },
+    {
+      "id": "AR-ENSENADA",
+      "nombre": "Complejo Ambiental Ensenada (CEAMSE)",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "Ensenada",
+      "lat": -34.84905,
+      "lon": -57.96705,
+      "precision_coordenadas": "poligono_osm",
+      "bbox": {
+        "lat_min": -34.8558,
+        "lat_max": -34.8423,
+        "lon_min": -57.9741,
+        "lon_max": -57.96
+      },
+      "tipo": "relleno sanitario",
+      "estado_oficial": "sin confirmar",
+      "area": [
+        {
+          "valor_ha": 60,
+          "fuente": "Climate TRACE (Capacity)"
+        }
+      ],
+      "pendiente": "Confirmar el estado operativo con una fuente oficial o periodística.",
+      "fuentes": [
+        {
+          "nombre": "Climate TRACE",
+          "url": "https://climatetrace.org/data",
+          "licencia": "CC BY 4.0"
+        },
+        {
+          "nombre": "Polígono OpenStreetMap (landuse=landfill)",
+          "url": "https://www.openstreetmap.org",
+          "licencia": "ODbL"
+        }
+      ]
+    },
+    {
+      "id": "AR-SAN-PEDRO",
+      "nombre": "Basural a cielo abierto de San Pedro",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "San Pedro",
+      "lat": null,
+      "lon": null,
+      "precision_coordenadas": "sin ubicar: solo se conoce el partido",
+      "tipo": "basural a cielo abierto",
+      "estado_oficial": "abierto",
+      "area": [
+        {
+          "valor_ha": 20,
+          "fuente": "Infobae"
+        }
+      ],
+      "situacion": "La Justicia federal ordenó en octubre de 2026 medidas urgentes para controlarlo.",
+      "rol_en_insomnes": "activo grande, ideal para la resolución de 80 m",
+      "fuentes": [
+        {
+          "nombre": "Infobae",
+          "url": "https://www.infobae.com/judiciales/2026/10/27/la-justicia-ordeno-medidas-urgentes-para-controlar-un-basural-a-cielo-abierto-de-20-hectareas-en-san-pedro/"
+        }
+      ]
+    },
+    {
+      "id": "AR-NAVARRO",
+      "nombre": "Basural de Navarro",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "Navarro",
+      "lat": null,
+      "lon": null,
+      "precision_coordenadas": "sin ubicar: solo se conoce el partido",
+      "tipo": "basural a cielo abierto",
+      "estado_oficial": "cerrado",
+      "fecha_cierre": "2026-02 (anuncio)",
+      "situacion": "La Provincia anunció el cierre (el quinto de la gestión) con una celda sanitaria nueva.",
+      "rol_en_insomnes": "cerrado antes del inicio de NISAR: verificar si sigue quieto",
+      "fuentes": [
+        {
+          "nombre": "Gobierno de la Provincia de Buenos Aires",
+          "url": "https://www.gba.gob.ar/comunicacion_publica/gacetillas/la_provincia_anunci%C3%B3_el_cierre_de_un_basural_cielo_abierto_en"
+        }
+      ]
+    },
+    {
+      "id": "AR-NUEVE-DE-JULIO",
+      "nombre": "Basural de Nueve de Julio",
+      "pais": "ARG",
+      "provincia": "Buenos Aires",
+      "partido": "Nueve de Julio",
+      "lat": null,
+      "lon": null,
+      "precision_coordenadas": "sin ubicar: solo se conoce el partido",
+      "tipo": "basural a cielo abierto",
+      "estado_oficial": "en cierre",
+      "situacion": "Cierre progresivo en curso por un convenio de junio de 2026.",
+      "fuentes": [
+        {
+          "nombre": "Cadena Nueve",
+          "url": "https://www.cadenanueve.com/2026/06/16/nueve-de-julio-avanza-hacia-el-cierre-del-basural-a-cielo-abierto-con-una-inversion-en-infraestructura-ambiental/"
+        }
+      ]
+    }
+  ],
+  "inventarios_relacionados": [
+    {
+      "nombre": "ACUMAR, Línea de Base de Basurales 2017 (CSV)",
+      "cobertura": "Cuenca Matanza-Riachuelo",
+      "url": "https://datos.gob.ar/dataset?tags=microbasurales",
+      "nota": "clasifica micro (15-500 m3), basurales (501-15.000 m3) y macrobasurales (>15.000 m3)"
+    },
+    {
+      "nombre": "CIM-FADU-UBA, base georreferenciada de basurales del AMBA",
+      "cobertura": "AMBA",
+      "url": "https://cim.fadu.uba.ar",
+      "nota": "sin descarga pública; hay que pedirla"
+    },
+    {
+      "nombre": "Devesa y Vazquez Brust 2021: 81 basurales anotados en la provincia de Buenos Aires",
+      "url": "https://arxiv.org/abs/2110.08599",
+      "nota": "salen del relevamiento de ACUMAR y de la Defensoría de la Provincia"
+    }
+  ]
+}
