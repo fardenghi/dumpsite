@@ -31,7 +31,7 @@
    "manchas": 30,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.38,
+    "insomnio": 0.51,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -73,7 +73,7 @@
    "manchas": 28,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.38,
+    "insomnio": 0.51,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -115,7 +115,7 @@
    "manchas": 24,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.38,
+    "insomnio": 0.51,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -157,7 +157,7 @@
    "manchas": 15,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.38,
+    "insomnio": 0.51,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -199,7 +199,7 @@
    "manchas": 11,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.38,
+    "insomnio": 0.51,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -241,7 +241,7 @@
    "manchas": 37,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.45,
+    "insomnio": 0.72,
     "cubierto": 0.04
    },
    "gonzalez-catan": {
@@ -283,7 +283,7 @@
    "manchas": 35,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.45,
+    "insomnio": 0.72,
     "cubierto": 0.04
    },
    "gonzalez-catan": {
@@ -325,7 +325,7 @@
    "manchas": 29,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.45,
+    "insomnio": 0.72,
     "cubierto": 0.04
    },
    "gonzalez-catan": {
@@ -367,7 +367,7 @@
    "manchas": 23,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.45,
+    "insomnio": 0.72,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -409,7 +409,7 @@
    "manchas": 11,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.45,
+    "insomnio": 0.72,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -451,7 +451,7 @@
    "manchas": 48,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.58,
+    "insomnio": 0.79,
     "cubierto": 0.05
    },
    "gonzalez-catan": {
@@ -493,7 +493,7 @@
    "manchas": 47,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.58,
+    "insomnio": 0.79,
     "cubierto": 0.05
    },
    "gonzalez-catan": {
@@ -535,7 +535,7 @@
    "manchas": 46,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.58,
+    "insomnio": 0.79,
     "cubierto": 0.04
    },
    "gonzalez-catan": {
@@ -577,7 +577,7 @@
    "manchas": 27,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.58,
+    "insomnio": 0.79,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -619,7 +619,7 @@
    "manchas": 18,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.58,
+    "insomnio": 0.79,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -661,7 +661,7 @@
    "manchas": 60,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.65,
+    "insomnio": 0.79,
     "cubierto": 0.1
    },
    "gonzalez-catan": {
@@ -703,7 +703,7 @@
    "manchas": 59,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.65,
+    "insomnio": 0.79,
     "cubierto": 0.05
    },
    "gonzalez-catan": {
@@ -745,7 +745,7 @@
    "manchas": 52,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.65,
+    "insomnio": 0.79,
     "cubierto": 0.05
    },
    "gonzalez-catan": {
@@ -787,7 +787,7 @@
    "manchas": 39,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.65,
+    "insomnio": 0.79,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -829,7 +829,7 @@
    "manchas": 23,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.65,
+    "insomnio": 0.79,
     "cubierto": 0.0
    },
    "gonzalez-catan": {
@@ -1076,12 +1076,12 @@
   {
    "razon": 0.725,
    "min_insomnio": 0.5,
-   "cumple": false,
+   "cumple": true,
    "tierra_candidata": 0.0052,
    "manchas": 109,
    "norte-iii": {
-    "radar": "no_alcanza",
-    "insomnio": 0.79,
+    "radar": "despierto",
+    "insomnio": 0.86,
     "cubierto": 0.14
    },
    "gonzalez-catan": {
@@ -1118,12 +1118,12 @@
   {
    "razon": 0.725,
    "min_insomnio": 0.6,
-   "cumple": false,
+   "cumple": true,
    "tierra_candidata": 0.005,
    "manchas": 105,
    "norte-iii": {
-    "radar": "no_alcanza",
-    "insomnio": 0.79,
+    "radar": "despierto",
+    "insomnio": 0.86,
     "cubierto": 0.07
    },
    "gonzalez-catan": {
@@ -1160,12 +1160,12 @@
   {
    "razon": 0.725,
    "min_insomnio": 0.7,
-   "cumple": false,
+   "cumple": true,
    "tierra_candidata": 0.0044,
    "manchas": 93,
    "norte-iii": {
-    "radar": "no_alcanza",
-    "insomnio": 0.79,
+    "radar": "despierto",
+    "insomnio": 0.86,
     "cubierto": 0.07
    },
    "gonzalez-catan": {
@@ -1206,8 +1206,8 @@
    "tierra_candidata": 0.0034,
    "manchas": 73,
    "norte-iii": {
-    "radar": "no_alcanza",
-    "insomnio": 0.79,
+    "radar": "despierto",
+    "insomnio": 0.86,
     "cubierto": 0.06
    },
    "gonzalez-catan": {
@@ -1249,7 +1249,7 @@
    "manchas": 42,
    "norte-iii": {
     "radar": "no_alcanza",
-    "insomnio": 0.79,
+    "insomnio": 0.86,
     "cubierto": 0.05
    },
    "gonzalez-catan": {
@@ -2971,7 +2971,7 @@
    "manchas": 1101,
    "norte-iii": {
     "radar": "despierto",
-    "insomnio": 0.86,
+    "insomnio": 1.0,
     "cubierto": 0.38
    },
    "gonzalez-catan": {
@@ -3013,7 +3013,7 @@
    "manchas": 1089,
    "norte-iii": {
     "radar": "despierto",
-    "insomnio": 0.86,
+    "insomnio": 1.0,
     "cubierto": 0.37
    },
    "gonzalez-catan": {
@@ -3055,7 +3055,7 @@
    "manchas": 1027,
    "norte-iii": {
     "radar": "despierto",
-    "insomnio": 0.86,
+    "insomnio": 1.0,
     "cubierto": 0.34
    },
    "gonzalez-catan": {
@@ -3097,7 +3097,7 @@
    "manchas": 853,
    "norte-iii": {
     "radar": "despierto",
-    "insomnio": 0.86,
+    "insomnio": 1.0,
     "cubierto": 0.25
    },
    "gonzalez-catan": {
@@ -3138,8 +3138,8 @@
    "tierra_candidata": 0.0384,
    "manchas": 608,
    "norte-iii": {
-    "radar": "no_alcanza",
-    "insomnio": 0.86,
+    "radar": "despierto",
+    "insomnio": 1.0,
     "cubierto": 0.27
    },
    "gonzalez-catan": {
