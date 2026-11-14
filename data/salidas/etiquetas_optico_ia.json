@@ -1,0 +1,2173 @@
+{
+ "meta": {
+  "que": "Etiquetas ópticas de actividad por predio: ¿se ve actividad (suelo removido que cambia entre fechas) adentro del polígono?",
+  "generado_por": "IA: dos pasadas independientes de un modelo de lenguaje con visión (Claude), a ciegas, sobre hojas de Sentinel-2 L2A en tres fechas (color real e infrarrojo), sin nombre, registro ni radar. No las revisó una persona.",
+  "fecha": "2026-11-14",
+  "respuestas": {
+   "act": "se ve actividad",
+   "sin": "no se ve actividad",
+   "nose": "no se puede decir"
+  },
+  "regla": "`final` es la respuesta común cuando las dos pasadas coinciden; si no coinciden, `nose`. `confianza` es la menor de las dos.",
+  "acuerdo_entre_pasadas": {
+   "casos": 89,
+   "coinciden": 77,
+   "kappa_de_cohen": 0.8,
+   "opuestos_act_contra_sin": 0
+  },
+  "imagenes": "Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer; recuadro del polígono más un margen, a 10 m",
+  "pagina_de_revision": "https://claude.ai/artifact/N5ewboCuqJYVB7VfH3Z1SG (privada; ahí una persona puede corregir cada respuesta)",
+  "advertencia": "Etiquetas sin validación humana. `act` quiere decir que se ve movimiento de suelo en óptico, no que el predio reciba residuos. El AMBA no está (reservado para la prueba final)."
+ },
+ "etiquetas": [
+  {
+   "id_catalogo": "BAS-000104",
+   "frame": "LOS_ANGELES",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Ladera con vegetación y caminos en zigzag idénticos en las tres fechas; sólo cambia el tono con la estación."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Ladera con vegetación y caminos en zigzag idénticos en las tres fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.46,
+   "area_ha": 17.6
+  },
+  {
+   "id_catalogo": "BAS-011642",
+   "frame": "YAKARTA",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "El contorno es un cuadradito de unos pocos píxeles en zona urbana; no se distingue nada adentro y sólo hay dos fechas."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "El predio es de unos pocos píxeles y no se distingue nada adentro."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": null,
+   "area_ha": 0.0
+  },
+  {
+   "id_catalogo": "BAS-011654",
+   "frame": "YAKARTA",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "El predio mide una fracción de hectárea, son un par de píxeles y no se distingue nada adentro."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "El predio mide un puñado de píxeles en zona urbana densa y no se distingue nada adentro; la segunda fecha tiene sombras de nube."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": null,
+   "area_ha": 0.1
+  },
+  {
+   "id_catalogo": "BAS-015076",
+   "frame": "CDMX",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Montículo con anillos concéntricos idénticos; cambia de seco a verde todo junto con el paisaje."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Anillos concéntricos de terrazas idénticos en las tres fechas; el pasto se seca y reverdece junto con el entorno."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.98,
+   "area_ha": 14.7
+  },
+  {
+   "id_catalogo": "BAS-015311",
+   "frame": "CDMX",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "baja",
+    "que_vi": "Lote chico con vegetación que se seca y reverdece junto con el entorno; sólo un parche claro muy chico al este en la segunda fecha."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Predio chico con vegetación que se seca en la segunda fecha y reverdece en la tercera igual que los lotes vecinos; el parche claro del extremo este acompaña ese ciclo."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.95,
+   "area_ha": 3.7
+  },
+  {
+   "id_catalogo": "BAS-015333",
+   "frame": "CDMX",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio grande con construcciones chicas en grilla y suelo claro al sureste que no cambia de forma con claridad; los cambios de verde acompañan al paisaje de alrededor."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "baja",
+    "que_vi": "Predio ocupado por caserío y terreno ralo; lo que cambia es el verdor general junto con el entorno, el suelo claro del sudeste queda igual."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.79,
+   "area_ha": 108.8
+  },
+  {
+   "id_catalogo": "BAS-015334",
+   "frame": "CDMX",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Vegetación rala y suelo seco que cambian de tono junto con todo el paisaje (seco en la segunda fecha, verde en las otras), sin cambios localizados."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Terreno con matorral que se seca y reverdece junto con todo el entorno; no hay suelo removido que cambie de forma."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.48,
+   "area_ha": 124.3
+  },
+  {
+   "id_catalogo": "BAS-025871",
+   "frame": "DELHI",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "Predio muy chico en zona urbana, no se distingue cobertura; la tercera fecha está bajo sombra de nube."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio muy chico y angosto de suelo claro en zona urbana; la tercera fecha tiene sombra de nube encima y no se distingue cambio."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.71,
+   "area_ha": 2.4
+  },
+  {
+   "id_catalogo": "BAS-025872",
+   "frame": "DELHI",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Franja muy chica (menos de una hectárea) que parece vegetada en las tres fechas; demasiado chica para juzgar y la tercera tiene sombra de nube."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Franja muy chica con algo de vegetación en zona urbana; son pocos píxeles y en la tercera fecha tiene sombra de nube."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.64,
+   "area_ha": 0.7
+  },
+  {
+   "id_catalogo": "BAS-032435",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Mancha gris en el centro que parece estable; el sur pasa de gris a vegetado pero hay nubes, sombras y bruma en la primera y tercera fecha."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Zona gris sin vegetación en el centro que parece igual en las tres fechas; el lóbulo sur se ve gris en la segunda y con vegetación en la tercera, lo que coincide con la estación."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.44,
+   "area_ha": 15.4
+  },
+  {
+   "id_catalogo": "BAS-042292",
+   "frame": "USA_MD_HOWARD",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Franja de suelo claro al norte que es grande en las dos primeras fechas y en la tercera queda reducida a una tira fina, cubierta de vegetación."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "La franja clara del borde norte, ancha y brillante en las dos primeras fechas, se angosta y se cubre en la tercera; el resto es vegetación."
+   },
+   "grupos": [
+    "entrenamiento",
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.32,
+   "area_ha": 49.5
+  },
+  {
+   "id_catalogo": "BAS-042294",
+   "frame": "USA_MD_HOWARD",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Predio cubierto de vegetación pareja, con el mismo dibujo interno en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Predio con árboles y pasto, con el mismo dibujo en las tres fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "area_ha": 17.0
+  },
+  {
+   "id_catalogo": "BAS-042627",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto liso y parejo en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto parejo en todo el predio, igual en las tres fechas."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.86,
+   "area_ha": 12.9
+  },
+  {
+   "id_catalogo": "BAS-042646",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto parejo en todo el predio en las tres fechas, sin suelo desnudo."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto liso y parejo en las tres fechas."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.77,
+   "area_ha": 8.2
+  },
+  {
+   "id_catalogo": "BAS-043018",
+   "frame": "LOS_ANGELES",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Montículo con terrazas que pasa de verde a seco entero; los caminos claros del sector este parecen variar entre la segunda y la tercera fecha pero no alcanza la resolución para asegurarlo."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Terrazas regulares que pasan de verdes a secas todas juntas con los cerros de alrededor; el trazado no cambia."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "area_ha": 145.4
+  },
+  {
+   "id_catalogo": "BAS-044180",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo claro con una franja al norte que pasa de gris oscuro a blanco brillante entre la primera y la segunda fecha (parece cubierta o techo); la tercera está tapada por nube."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo claro con una franja gris al norte igual en las dos primeras fechas (con reflejo blanco en la segunda); la tercera está tapada por una nube."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.5,
+   "area_ha": 11.6
+  },
+  {
+   "id_catalogo": "BAS-044220",
+   "frame": "USA_MD_HOWARD",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Sector oeste de suelo naranja que cambia de patrón en cada fecha: aparecen estructuras grises en la segunda y se oscurece con parches nuevos en la tercera; además aparece una zona gris clara en el borde norte del estanque."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "La celda oeste pasa de suelo anaranjado con dos rectángulos a un dibujo distinto y más oscuro en la tercera fecha; la laguna del este no cambia."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.6,
+   "area_ha": 96.9
+  },
+  {
+   "id_catalogo": "BAS-044310",
+   "frame": "USA_OH_LAKE",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Campo de pasto con una franja clara sobre el borde noreste en la primera fecha que luego se ve cubierta; la segunda fecha tiene bruma y el cambio puede ser pasto seco."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Parches claros que cambian de lugar: franja al noreste en la primera fecha, bordes sur y oeste en la segunda (con bruma) y pasto ralo parejo en la tercera; podría ser pasto seco."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.43,
+   "area_ha": 16.9
+  },
+  {
+   "id_catalogo": "BAS-044787",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto al oeste y árboles al este sin cambios; la segunda fecha tiene bruma."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Vegetación en todo el predio que cambia de tono con la estación; la segunda fecha tiene algo de bruma."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.36,
+   "area_ha": 21.0
+  },
+  {
+   "id_catalogo": "BAS-045318",
+   "frame": "USA_NY_RICHMOND",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Superficie marrón oscura con borde claro al oeste, casi igual en las tres fechas; predio chico y sin cambio de forma evidente."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio chico con una superficie oscura sin vegetación en el centro y borde claro, prácticamente idéntica en las tres fechas."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 1.0,
+   "area_ha": 7.2
+  },
+  {
+   "id_catalogo": "BAS-045875",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto liso y parejo en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto parejo en todo el predio, sin cambios entre fechas."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.85,
+   "area_ha": 20.9
+  },
+  {
+   "id_catalogo": "BAS-046319",
+   "frame": "USA_NY_RICHMOND",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Sector oeste con material oscuro y construcciones que se ve igual en las tres fechas; el saliente noreste es vegetación; no se distingue suelo que cambie."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Playa gris con franjas oscuras alargadas en la parte principal, igual en las tres fechas, y un brazo con vegetación al noreste; no se ve suelo claro que cambie."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.35,
+   "area_ha": 12.7
+  },
+  {
+   "id_catalogo": "BAS-046322",
+   "frame": "USA_MD_HOWARD",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Gran zona clara al oeste cuyo dibujo interno cambia y cuya cola hacia el este se angosta y se cubre de vegetación entre la primera y la tercera fecha."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Gran zona de suelo claro al oeste cuyo brazo este se angosta y cuyas manchas internas cambian de lugar entre fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.64,
+   "area_ha": 39.3
+  },
+  {
+   "id_catalogo": "BAS-047298",
+   "frame": "USA_NY_RICHMOND",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Predio triangular con vegetación baja pareja que se seca en la segunda fecha y reverdece en la tercera junto con el entorno; sin suelo claro localizado."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Pastizal ralo parejo que cambia de tono con la estación; sin manchas de suelo que se corran."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.98,
+   "area_ha": 33.6
+  },
+  {
+   "id_catalogo": "BAS-047488",
+   "frame": "USA_NY_RICHMOND",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Todo el predio cambia: cobertura marrón pareja en la primera, suelo blanco removido con franjas en la segunda y superficie oscura azulada regular en la tercera (parece obra de paneles solares)."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Cobertura rala en la primera fecha, superficie blanca removida en el oeste en la segunda y todo cubierto de paneles oscuros en la tercera: obra en curso."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.45,
+   "area_ha": 31.8
+  },
+  {
+   "id_catalogo": "BAS-047498",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Loma de pasto parejo con caminos fijos, igual en las tres fechas salvo el tono estacional."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto parejo con senderos internos idénticos en las tres fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.21,
+   "area_ha": 22.3
+  },
+  {
+   "id_catalogo": "BAS-048144",
+   "frame": "USA_MD_HOWARD",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Vegetación arbolada pareja dentro del contorno, sin cambios."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Vegetación pareja dentro del contorno en forma de U en las tres fechas; lo oscuro queda en la entrada excluida."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.35,
+   "area_ha": 27.3
+  },
+  {
+   "id_catalogo": "BAS-048376",
+   "frame": "USA_OH_LAKE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio angosto con una franja gris clara a lo largo que se ve igual en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Franja angosta con caminos y playones grises; en la tercera fecha se ve algo más de suelo claro al este, pero es de pocos píxeles."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.5,
+   "area_ha": 15.8
+  },
+  {
+   "id_catalogo": "BAS-048396",
+   "frame": "DELHI",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Campo que pasa de pardo a seco y luego a verde parejo en todo el predio a la vez, acompañando la estación."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Cobertura vegetal continua que se seca en mayo y reverdece en octubre junto con el paisaje; sin manchas de suelo que se muevan."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.46,
+   "area_ha": 14.7
+  },
+  {
+   "id_catalogo": "BAS-048621",
+   "frame": "USA_OH_LAKE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Parche de suelo claro al noroeste con la misma forma en las tres fechas y un galpón al sureste; sólo varía el brillo del techo."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Montículo claro chico al oeste y un galpón al este; el montículo tiene la misma forma en las tres fechas y es de pocas hectáreas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.43,
+   "area_ha": 11.3
+  },
+  {
+   "id_catalogo": "BAS-048826",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto con un bloque de paneles grises de forma idéntica en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Paneles oscuros en el centro rodeados de pasto, con la misma forma en las tres fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.25,
+   "area_ha": 23.0
+  },
+  {
+   "id_catalogo": "BAS-048827",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Interior gris con construcciones y pilas, de contorno igual en las tres fechas; aparecen parches más claros en el centro en la segunda fecha que pueden ser iluminación."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Playa gris con estructuras y borde de pasto; la banda de suelo claro del borde sur de la primera fecha desaparece y en la tercera cambia el trazado de caminos al este; cambios chicos."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.38,
+   "area_ha": 19.9
+  },
+  {
+   "id_catalogo": "BAS-048835",
+   "frame": "USA_OH_LAKE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio muy chico con un parche marrón y pasto, igual en las tres fechas; demasiado chico para ver cambio."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio muy chico con una mancha marrón al noroeste y pasto; la mancha es de pocos píxeles y no se distingue cambio."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.6,
+   "area_ha": 2.7
+  },
+  {
+   "id_catalogo": "BAS-048836",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Predio con vegetación que cambia de tono junto con el bosque de alrededor, sin suelo desnudo."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Campo con vegetación pareja que cambia de tono con la estación igual que el entorno."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.65,
+   "area_ha": 12.3
+  },
+  {
+   "id_catalogo": "BAS-049303",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Pasto con una mancha oscura fija en el centro y un edificio al sur, iguales en las dos primeras fechas; la tercera está tapada en parte por nubes."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Pasto con una laguna oscura al centro y un galpón, iguales en las dos primeras fechas; la tercera tiene nubes al borde oeste pero se ve lo mismo."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.5,
+   "area_ha": 14.3
+  },
+  {
+   "id_catalogo": "BAS-049336",
+   "frame": "LOS_ANGELES",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Gran superficie de suelo claro cuyas manchas blancas y caminos internos cambian de lugar: banda blanca al centro-sur en la primera fecha, parches blancos nuevos más al este en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Gran superficie de suelo desnudo cuyo dibujo interno cambia: banda blanca curva al centro-sur en la primera fecha, manchas oscuras en la segunda y un parche blanco nuevo al centro-este en la tercera."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.76,
+   "area_ha": 272.4
+  },
+  {
+   "id_catalogo": "BAS-050027",
+   "frame": "LOS_ANGELES",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Suelo claro en todo el predio; un rectángulo verde al noreste de la primera fecha pasa a suelo desnudo en las otras dos, pero los lotes vecinos también pierden el verde (puede ser estacional)."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Predio chico casi todo suelo claro; un parche verde al noreste de la primera fecha desaparece después, pero puede ser pasto que se secó y es de poco más de una hectárea."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.9,
+   "area_ha": 7.0
+  },
+  {
+   "id_catalogo": "BAS-050060",
+   "frame": "USA_OH_LAKE",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Franja de suelo claro en el centro del pasto que aparece chica en la primera fecha, crece en la segunda y es alargada y nítida en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Mancha de suelo claro en el centro-este de la franja de pasto que crece y se alarga de la primera a la tercera fecha."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.92,
+   "area_ha": 22.1
+  },
+  {
+   "id_catalogo": "BAS-050275",
+   "frame": "USA_OH_LAKE",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Pasto parejo con un parche claro chico al este que no cambia de forma en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Pasto parejo con un parche claro en el extremo este que se ve algo más grande desde la segunda fecha, pero la diferencia es de menos de una hectárea."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.86,
+   "area_ha": 8.6
+  },
+  {
+   "id_catalogo": "BAS-050289",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Montículo con pasto y una zona gris alargada en el centro que mantiene la forma; en la tercera fecha se ve más clara y algo más extendida al sur, no se distingue si es reflejo o cambio."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Mancha gris central rodeada de pasto que en la tercera fecha se ve más grande y clara, extendida hacia el sur, mientras el entorno está más verde."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.69,
+   "area_ha": 24.9
+  },
+  {
+   "id_catalogo": "BAS-059331",
+   "frame": "YAKARTA",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Montículo gris sin vegetación que ocupa casi todo el predio; la segunda fecha está tapada por nube y sombra, y entre la primera y la tercera no se ve cambio de forma."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Superficie gris sin vegetación parecida en la primera y tercera fecha; la segunda está tapada por nube y sombra, y hay bruma."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 14.8
+  },
+  {
+   "id_catalogo": "BAS-059332",
+   "frame": "YAKARTA",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Mancha de suelo claro en el centro que entre la primera y la segunda fecha se agranda hacia el norte y achica el anillo de vegetación; la primera fecha tiene bruma."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "La zona clara central se agranda hacia el norte y el sur, sobre lo que era vegetación, entre la primera fecha (con bruma) y las otras dos."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 12.4
+  },
+  {
+   "id_catalogo": "BAS-059333",
+   "frame": "YAKARTA",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "La mitad oeste se ve oscura en la primera fecha y pasa a suelo claro en la segunda y tercera, mientras la vegetación de alrededor sigue igual; predio chico."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Predio chico con bruma; el oeste se ve más oscuro en la primera fecha y más claro después, pero no se distingue si es suelo removido o atmósfera."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "no_alcanza",
+   "insomnio": 0.81,
+   "area_ha": 6.7
+  },
+  {
+   "id_catalogo": "BAS-059352",
+   "frame": "YAKARTA",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Todo el predio es suelo gris-marrón sin vegetación; hay nubes y sombras en la primera y segunda fecha y no se distingue un cambio de forma claro."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo desnudo gris-marrón en todo el predio; nubes y sombras en las dos primeras fechas impiden comparar formas."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 28.0
+  },
+  {
+   "id_catalogo": "BAS-059356",
+   "frame": "YAKARTA",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo gris sin vegetación que sigue fuera del contorno; nubes en la segunda y tercera fecha y no se distingue cambio de forma adentro."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo desnudo gris-marrón en casi todo el predio, sin cambio de forma apreciable; hay nubes y bruma en la segunda y tercera fecha."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.88,
+   "area_ha": 22.1
+  },
+  {
+   "id_catalogo": "BAS-059423",
+   "frame": "DELHI",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Todo el predio es suelo desnudo y las manchas oscuras internas cambian de lugar entre fechas (franja al noroeste en la primera, parches al norte y centro en la tercera)."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Todo el predio es suelo desnudo; la franja clara recta del centro de la primera fecha desaparece y en la tercera las manchas oscuras están en el norte; podría influir la iluminación."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 11.8
+  },
+  {
+   "id_catalogo": "BAS-059505",
+   "frame": "DELHI",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Montículo de suelo desnudo con terrazas concéntricas que se ven prácticamente iguales en las tres fechas; diferencias atribuibles a nitidez e iluminación."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Montículo de suelo desnudo con terrazas, sin vegetación en ninguna fecha; con bruma en la primera no se alcanza a ver que el borde o las terrazas se muevan."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 29.2
+  },
+  {
+   "id_catalogo": "BAS-059706",
+   "frame": "DELHI",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Predio de suelo claro donde una mancha oscura al sur se achica de fecha en fecha y cambia el dibujo de caminos al norte; parte puede ser sombra del relieve."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Suelo desnudo en todo el predio; la mancha oscura del sur se achica fecha a fecha y aparecen trazas claras curvas nuevas en el norte."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 25.8
+  },
+  {
+   "id_catalogo": "BAS-062004",
+   "frame": "CDMX",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Predio de suelo claro con huellas internas y parches blancos al noreste que se mantienen; sólo entra vegetación por los bordes en la tercera fecha, junto con el entorno."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "Predio de suelo desnudo donde las franjas blancas internas cambian de lugar entre fechas (centro-sur en la segunda, noreste en la tercera)."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 28.4
+  },
+  {
+   "id_catalogo": "BAS-062108",
+   "frame": "CDMX",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Mitad noreste con suelo claro rosado de forma casi idéntica en las tres fechas; el resto cambia de tono junto con el entorno."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Gran zona clara sin vegetación en la mitad noreste con el mismo contorno en las tres fechas; sólo un óvalo gris al este se ve distinto en la tercera, y no alcanza para decir que hay cambio."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 35.0
+  },
+  {
+   "id_catalogo": "BAS-062412",
+   "frame": "CDMX",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo claro con caminos curvos de traza similar en las tres fechas; lo que más cambia es la vegetación, que reverdece junto con el entorno en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Caminos internos en anillo y una playa clara central iguales en las tres fechas; lo demás se seca y reverdece junto con el entorno."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "desconocido",
+   "radar": "despierto",
+   "insomnio": 0.95,
+   "area_ha": 21.4
+  },
+  {
+   "id_catalogo": "BAS-062922",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Todo el predio es suelo claro con terrazas concéntricas que se ven idénticas en las tres fechas; no se alcanza a ver cambio."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Todo el predio es suelo claro con la misma forma en las tres fechas; sólo cambia apenas una franja oscura interna que puede ser sombra."
+   },
+   "grupos": [
+    "entrenamiento",
+    "intermedia"
+   ],
+   "estado_registro": "abierto",
+   "radar": "no_alcanza",
+   "insomnio": 0.53,
+   "area_ha": 28.7
+  },
+  {
+   "id_catalogo": "BAS-062923",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Sólo dos fechas: la zona clara del noroeste se achica y el sur y el este se cubren de vegetación en la segunda; la primera tiene bruma."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Sólo dos fechas y la primera con bruma; la zona de suelo claro del oeste se achica por rebrote en la segunda, sin que se abra otra parte."
+   },
+   "grupos": [
+    "ejemplo"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "area_ha": 14.4
+  },
+  {
+   "id_catalogo": "BAS-062927",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "Una sola fecha útil: se ve una zona de suelo claro al noreste dentro de un predio con vegetación, pero no se puede ver cambio."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "alta",
+    "que_vi": "Una sola fecha útil: se ve una mancha de suelo claro al noreste, pero no hay con qué comparar."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.37,
+   "area_ha": 12.0
+  },
+  {
+   "id_catalogo": "BAS-062932",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Sólo dos fechas: la celda ovalada de suelo claro al noroeste es igual en ambas y el sector sureste se cubre de verde junto con todo el paisaje."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Sólo dos fechas; la cubeta clara del noroeste es igual en ambas y el sur reverdece junto con todo el paisaje."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "area_ha": 20.1
+  },
+  {
+   "id_catalogo": "BAS-062933",
+   "frame": "PRI_PONCE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Sólo dos fechas: loma de pasto parejo con caminos fijos igual en ambas; una nube chica roza el norte en la segunda."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "baja",
+    "que_vi": "Sólo dos fechas: loma con pasto y camino en anillo; el triángulo central de pasto ralo de la primera se ve más verde en la segunda, sin suelo desnudo claro."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.24,
+   "area_ha": 21.0
+  },
+  {
+   "id_catalogo": "BAS-062941",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Gran superficie blanca de suelo desnudo con la misma forma en las tres fechas; sombra de nube en la tercera al este; no se alcanza a ver el frente moverse."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Gran zona blanca saturada con el mismo contorno en las tres fechas; las diferencias internas son menores y en la tercera hay sombra de nube sobre el este."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "area_ha": 86.7
+  },
+  {
+   "id_catalogo": "BAS-062942",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Zonas de suelo claro (grande al sur, caminos al norte) con la misma forma en las tres fechas; la primera tiene nubes y sombras sobre el sector norte."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "En el lóbulo sur las manchas grises dentro de la gran zona clara cambian de lugar y las terrazas del este se aclaran entre la segunda y la tercera fecha; la primera tiene nubes sobre el lóbulo norte."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "area_ha": 111.7
+  },
+  {
+   "id_catalogo": "BAS-062946",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Zona anaranjada de suelo desnudo en la mitad este con forma casi idéntica en las tres fechas, que además están muy cerca en el tiempo."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Suelo naranja desnudo en la mitad este con forma casi igual en las tres fechas, muy cercanas entre sí; las diferencias internas son mínimas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "abierto",
+   "radar": "no_alcanza",
+   "insomnio": 0.31,
+   "area_ha": 36.5
+  },
+  {
+   "id_catalogo": "BAS-062947",
+   "frame": "PRI_PONCE",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "Suelo claro con una celda central de borde igual en las tres fechas; apenas varían manchas grisáceas internas de poca superficie."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Suelo desnudo en todo el predio; el piso del óvalo central pierde el parche con algo de vegetación de la primera fecha y cambia de dibujo en la tercera, mientras el entorno reverdece."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "area_ha": 36.3
+  },
+  {
+   "id_catalogo": "BAS-064612",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Loma de pasto liso; el sector este es algo más apagado pero con el mismo borde en las tres fechas; sólo cambia el tono estacional."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Loma de pasto con el tercio este más ralo; el límite entre ambas partes es el mismo en las tres fechas y el tono varía con la estación."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.66,
+   "area_ha": 45.1
+  },
+  {
+   "id_catalogo": "BAS-064805",
+   "frame": "LOS_ANGELES",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Predio todo de suelo claro con manchas oscuras y surcos que cambian de lugar: franja oscura al centro-noroeste en la primera, canal fino en la segunda, mancha oscura al borde norte en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Todo el predio es suelo desnudo y las zonas oscuras de adentro cambian de lugar: franja diagonal al centro en la primera fecha, casi nada en la segunda, noroeste y centro-este en la tercera."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "area_ha": 41.7
+  },
+  {
+   "id_catalogo": "BAS-064847",
+   "frame": "USA_NY_RICHMOND",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Gran zona de suelo claro al noreste que cambia de forma y de dibujo interno entre fechas; en la tercera aparece una cuña vegetada al sur y un rectángulo claro nuevo al oeste."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "El suelo desnudo del sector noreste cambia de dibujo en cada fecha, en la tercera aparece una cuña con vegetación al sur y un rectángulo claro nuevo al oeste."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "abierto",
+   "radar": "no_alcanza",
+   "insomnio": 0.37,
+   "area_ha": 114.5
+  },
+  {
+   "id_catalogo": "BAS-064936",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Pasto parejo con caminos internos fijos; sin manchas claras que cambien, sólo variación de tono estacional."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Loma con pasto y senderos idénticos; en la primera fecha hay unos parches claros mínimos al centro y al sudoeste, de menos de una hectárea, que después no están."
+   },
+   "grupos": [
+    "control"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "quieto",
+   "insomnio": 0.08,
+   "area_ha": 28.2
+  },
+  {
+   "id_catalogo": "BAS-065003",
+   "frame": "USA_OH_LAKE",
+   "final": "nose",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "media",
+    "que_vi": "La mitad sur tiene paneles oscuros (con reflejo fuerte en la primera fecha) y la mitad norte pasa de pasto a una superficie oscura con puntos brillantes en la tercera; es un cambio localizado pero no se ve suelo desnudo."
+   },
+   "pasada_b": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "La mitad norte pasa de pasto a una superficie oscura con brillos y hay un destello fuerte en la primera fecha; parece cambio de cobertura (paneles) pero no se ve suelo removido claro."
+   },
+   "grupos": [
+    "ejemplo"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "quieto",
+   "insomnio": 0.12,
+   "area_ha": 20.1
+  },
+  {
+   "id_catalogo": "BAS-065095",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Cobertura vegetal baja y pareja en todo el predio; sólo cambia el tono con la estación, sin suelo claro."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Cobertura vegetal pareja en todo el predio que sólo cambia de tono con la estación."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "area_ha": 16.1
+  },
+  {
+   "id_catalogo": "BAS-065187",
+   "frame": "USA_OH_LAKE",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Zona clara al este del pasto que cambia de forma y, en la tercera fecha, aparece una mancha anaranjada nueva en el brazo norte."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "En la tercera fecha aparece una franja de suelo naranja nueva en el lóbulo norte y cambia el borde de la zona clara del centro-este."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.89,
+   "area_ha": 69.7
+  },
+  {
+   "id_catalogo": "BAS-065281",
+   "frame": "USA_MD_HOWARD",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Las zonas de suelo desnudo del centro y noroeste cambian de forma en cada fecha: se abre un sector nuevo en la segunda y en la tercera una parte del norte se cubre de vegetación y el frente claro se corre."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Zonas de suelo claro en el centro que cambian de forma: la franja norte se cubre de vegetación mientras el frente claro del centro se corre y se redibuja."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.17,
+   "area_ha": 143.3
+  },
+  {
+   "id_catalogo": "BAS-065288",
+   "frame": "USA_NY_RICHMOND",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "La cima de suelo desnudo cambia de dibujo interno: parches oscuros en la primera fecha, casi todo claro y liso en la segunda y parches oscuros nuevos al norte y centro en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Todo el interior es suelo desnudo y las manchas oscuras y caminos internos cambian de lugar entre las tres fechas, sobre todo al norte y centro."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "contradictorio",
+   "radar": "despierto",
+   "insomnio": 0.95,
+   "area_ha": 56.4
+  },
+  {
+   "id_catalogo": "BAS-065325",
+   "frame": "USA_NY_RICHMOND",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Montículo con terrazas cubierto de pasto; las franjas pardas del oeste y noreste aparecen en las fechas de otoño y se ven como pasto seco, sin suelo claro que cambie de forma."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "baja",
+    "que_vi": "Terrazas cubiertas de pasto; cambian los tonos de la vegetación (una franja más parda al noreste en la tercera fecha) pero no aparece suelo claro."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "abierto",
+   "radar": "despierto",
+   "insomnio": 0.76,
+   "area_ha": 131.4
+  },
+  {
+   "id_catalogo": "BAS-065376",
+   "frame": "LOS_ANGELES",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Gran superficie de suelo claro cuyas bandas oscuras y terrazas del lado este cambian de forma y posición entre fechas, y el área clara se agranda en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "Gran zona de suelo claro cuyos frentes y bancos oscuros internos cambian de forma y lugar en las tres fechas, sobre todo en el centro-este."
+   },
+   "grupos": [
+    "control"
+   ],
+   "estado_registro": "abierto",
+   "radar": "despierto",
+   "insomnio": 0.92,
+   "area_ha": 233.9
+  },
+  {
+   "id_catalogo": "BAS-065399",
+   "frame": "USA_NY_RICHMOND",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Montículo alargado cubierto de pasto parejo, sin cambios."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Loma alargada cubierta de pasto, pareja e igual en las tres fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.59,
+   "area_ha": 61.5
+  },
+  {
+   "id_catalogo": "BAS-065416",
+   "frame": "USA_MD_HOWARD",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Loma de pasto parejo al sur y un sector gris regular al norte (parecen paneles) idénticos en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto al sur y un sector gris oscuro regular al norte, iguales en las tres fechas."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.75,
+   "area_ha": 61.6
+  },
+  {
+   "id_catalogo": "BAS-065420",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Campo de pasto parejo en las tres fechas; sólo cambia el tono con la estación."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto parejo en todo el predio que sólo cambia de tono con la estación."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.81,
+   "area_ha": 48.3
+  },
+  {
+   "id_catalogo": "BAS-065494",
+   "frame": "USA_MD_HOWARD",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Las dos zonas de suelo claro (centro y noreste) se agrandan en la segunda fecha y se achican y cubren en parte de vegetación en la tercera; el montículo oeste sigue con pasto."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Los dos parches claros, el del centro y el del lóbulo noreste, se agrandan en la segunda fecha y se achican y cambian de forma en la tercera; la loma sudoeste es pasto estable."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.08,
+   "area_ha": 56.5
+  },
+  {
+   "id_catalogo": "BAS-065507",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Loma de pasto parejo con dos parches grisáceos (parecen paneles) idénticos en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Pasto con dos sectores de paneles solares idénticos en las tres fechas."
+   },
+   "grupos": [
+    "entrenamiento",
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.58,
+   "area_ha": 42.7
+  },
+  {
+   "id_catalogo": "BAS-065793",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "nose",
+   "acuerdo": false,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "nose",
+    "confianza": "baja",
+    "que_vi": "Loma de pasto con marcas blancas chicas en la cima que varían de brillo; la primera fecha tiene sombra de nube y el posible cambio es de menos de una hectárea."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Lomas cubiertas de pasto con unos objetos blancos fijos arriba; la mancha oscura de la primera fecha es sombra de nube."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.69,
+   "area_ha": 29.1
+  },
+  {
+   "id_catalogo": "BAS-065906",
+   "frame": "USA_MD_HOWARD",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Dos lomas de pasto con caminos internos fijos; pierden verdor de forma pareja igual que las lomas vecinas de afuera, sin manchas de suelo que cambien."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Dos lomas con pasto y senderos idénticos en las tres fechas; el pasto pierde vigor parejo en la tercera, igual que las lomas vecinas de afuera."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "abierto",
+   "radar": "no_alcanza",
+   "insomnio": 0.65,
+   "area_ha": 78.2
+  },
+  {
+   "id_catalogo": "BAS-066018",
+   "frame": "USA_MD_HOWARD",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Montículo con pasto que pasa de seco en febrero a verde en las otras fechas, todo junto y con el mismo dibujo."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Cobertura de pasto seca en febrero y verde después, todo el predio a la vez con el entorno; los caminos internos son los mismos."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 1.0,
+   "area_ha": 89.3
+  },
+  {
+   "id_catalogo": "BAS-066050",
+   "frame": "USA_MD_HOWARD",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Mancha de suelo claro en el centro que se agranda y cambia de forma entre la primera y la segunda fecha y vuelve a cambiar de borde en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "La zona clara del centro se agranda mucho entre la primera y la segunda fecha y vuelve a cambiar de forma hacia el este en la tercera."
+   },
+   "grupos": [
+    "contradice"
+   ],
+   "estado_registro": "abierto",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "area_ha": 61.1
+  },
+  {
+   "id_catalogo": "BAS-066091",
+   "frame": "LOS_ANGELES",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Terrazas regulares idénticas en las tres fechas; el pasto pasa de verde a seco en todo el predio a la vez, sin cambios localizados."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Terrazas regulares idénticas en las tres fechas que pasan de verdes a secas todas juntas; sin frentes de suelo nuevo."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "area_ha": 63.2
+  },
+  {
+   "id_catalogo": "BAS-066131",
+   "frame": "LOS_ANGELES",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Campo de pasto con senderos idénticos; pasa de verde a seco en todo el predio a la vez, sin cambios localizados."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Campo de pasto parejo que pasa de verde a seco en todo el predio a la vez; sin bordes ni manchas que se corran."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "area_ha": 60.6
+  },
+  {
+   "id_catalogo": "BAS-066227",
+   "frame": "LOS_ANGELES",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Terrazas regulares idénticas en las tres fechas; sólo cambia el tono general con la estación."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Terrazas regulares idénticas en las tres fechas; sólo cambia el tono general con la estación."
+   },
+   "grupos": [
+    "entrenamiento",
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.25,
+   "area_ha": 139.6
+  },
+  {
+   "id_catalogo": "BAS-066326",
+   "frame": "USA_OH_LAKE",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Montículo cubierto de pasto parejo, igual en las tres fechas."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Loma de pasto pareja con los mismos caminos perimetrales en las tres fechas."
+   },
+   "grupos": [
+    "contradice",
+    "entrenamiento"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "despierto",
+   "insomnio": 0.85,
+   "area_ha": 30.1
+  },
+  {
+   "id_catalogo": "BAS-066387",
+   "frame": "LOS_ANGELES",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Montículo aterrazado donde la zona más clara cambia de lugar y forma entre fechas, se pierde vegetación al oeste y aparece un punto blanco nuevo al noreste en la tercera."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "alta",
+    "que_vi": "El parche con vegetación del centro-oeste de la primera fecha pasa a suelo desnudo en la segunda, aunque el entorno está más verde, y en la tercera aparece un objeto blanco nuevo al centro-este."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "abierto",
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "area_ha": 28.6
+  },
+  {
+   "id_catalogo": "BAS-066391",
+   "frame": "LOS_ANGELES",
+   "final": "act",
+   "acuerdo": true,
+   "confianza": "baja",
+   "pasada_a": {
+    "respuesta": "act",
+    "confianza": "baja",
+    "que_vi": "En la zona central de suelo claro los parches oscuros cambian de lugar entre la segunda y la tercera fecha y el área desnuda se ve más grande; parte del cambio es pasto que se seca."
+   },
+   "pasada_b": {
+    "respuesta": "act",
+    "confianza": "media",
+    "que_vi": "Zona central de suelo claro que se agranda y cuyas manchas y caminos internos cambian de disposición entre la primera y la tercera fecha."
+   },
+   "grupos": [
+    "entrenamiento"
+   ],
+   "estado_registro": "abierto",
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "area_ha": 127.5
+  },
+  {
+   "id_catalogo": "BAS-066413",
+   "frame": "USA_NH_HILLSBOROUGH",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Dos sectores con paneles oscuros de forma idéntica rodeados de pasto; el blanco de la tercera fecha es reflejo, no suelo."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Dos lomas con paneles solares y borde de pasto, iguales en las tres fechas salvo reflejos blancos en la tercera."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.25,
+   "area_ha": 28.7
+  },
+  {
+   "id_catalogo": "BAS-066452",
+   "frame": "USA_MD_HOWARD",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "media",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Montículo cubierto de pasto parejo en las tres fechas; sólo una manchita clara de menos de una hectárea en el centro."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "media",
+    "que_vi": "Loma cubierta de pasto con terrazas regulares iguales en las tres fechas; sólo un punto claro de pocos píxeles en el centro en la segunda."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "area_ha": 21.9
+  },
+  {
+   "id_catalogo": "BAS-066488",
+   "frame": "LOS_ANGELES",
+   "final": "sin",
+   "acuerdo": true,
+   "confianza": "alta",
+   "pasada_a": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Terrazas regulares con arbolado idénticas en las tres fechas; la meseta central pasa de verde a seca junto con el paisaje."
+   },
+   "pasada_b": {
+    "respuesta": "sin",
+    "confianza": "alta",
+    "que_vi": "Terrazas con arbolado y una meseta de pasto que se seca con la estación; la forma es idéntica en las tres fechas."
+   },
+   "grupos": [
+    "intermedia"
+   ],
+   "estado_registro": "cerrado",
+   "radar": "no_alcanza",
+   "insomnio": 0.24,
+   "area_ha": 99.2
+  }
+ ]
+}
