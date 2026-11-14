@@ -1,89 +1,83 @@
 # VM para procesar NISAR (Idea B)
 
-Una sola VM de CPU con mucha RAM, cerca de donde están los datos. Sin GPU, Kubernetes ni buckets: la descarga es el cuello de botella y el cálculo es liviano.
+Una sola VM de CPU con mucha RAM, cerca de donde están los datos. Sin GPU ni Kubernetes: la descarga es el cuello de botella y el cálculo es liviano.
 
-## Por qué esta VM
+## La VM que existe (14/11/2026)
+| | |
+|---|---|
+| Proyecto GCP | `basurales-514714` (cuenta de facturación con créditos) |
+| Nombre | `insomnio-vm`, zona `us-west1-b` |
+| Tipo | `n2-custom-12-98304` (12 vCPU, 96 GB) |
+| Disco | 200 GB `pd-balanced`; los 35 `.h5` (100 GB) están en `/mnt/datos` |
+| Cuenta de servicio | ninguna (`--no-service-account`): la VM no toca GCP |
+| Estado | **apagada**. Se prende con `gcloud compute instances start insomnio-vm --zone=us-west1-b` |
+
+**Por qué 12 vCPU y no 16:** la cuota global de la cuenta es `CPUS_ALL_REGIONS = 12` y no se puede subir. `n2-highmem-12` no existe, así que es una N2 a medida con el máximo de memoria (8 GB por vCPU). Los 200 GB de disco vienen de la cuota `SSD_TOTAL_GB = 250` en us-west1.
+
+**Tiempos medidos** (detalle en `../idea/corrida-completa-vm.md`): bajar los 35 archivos (100 GB) tarda 531 s; procesar e índice tardan 8 s a 80 m y ~50 s a 20 m.
+
+## Por qué us-west1
 - Los datos de NISAR están en NASA Earthdata Cloud, en **AWS us-west-2 (Oregón)**. Las regiones más cercanas son **GCP us-west1 (Oregón)** y **Azure West US 2 (Washington)**.
-- **Mucha RAM:** apilar unos 15 pares a 20 m son 15-30 GB en memoria.
-- **16 vCPU:** se procesan los pares en paralelo, y la VM tiene más ancho de banda de red.
-- **Sin GPU:** no acelera la descarga, el cálculo ya es rápido en CPU y la cuota de GPU suele estar en cero en cuentas nuevas.
+- **Mucha RAM:** apilar 15 pares a 20 m son 15-30 GB en memoria.
+- **Sin GPU:** no acelera la descarga y el cálculo ya es rápido en CPU.
 
-| | GCP (recomendada) | Azure (alternativa) |
-|---|---|---|
-| Tipo | `n2-highmem-16` (16 vCPU, 128 GB) | `Standard_E16s_v5` (16 vCPU, 128 GB) |
-| Región | `us-west1` (zona `us-west1-b`) | `westus2` |
-| Disco | 300 GB SSD (`pd-ssd`) | 300 GB Premium SSD |
-| Sistema | Ubuntu 24.04 LTS | Ubuntu 24.04 LTS |
-| Costo aprox. | del orden de USD 1/h (confirmar en la calculadora oficial) | del orden de USD 1/h |
+## Tope de gasto (automático)
+- **Budget "Space Apps tope 275"** en la cuenta de facturación, filtrado al proyecto, del 1/11/2026 al 31/12/2027 y **sin descontar créditos**: mide lo que se consume de los créditos. Avisa al 91 % (USD 250) y al 100 % (USD 275).
+- **Corte automático:** el budget publica en el tema de Pub/Sub `corte-budget`. La Cloud Function `corte-budget` (us-west1, código en `corte-budget/`) **detiene todas las VMs del proyecto** cuando el costo llega al monto del budget. Los discos y los datos se conservan.
+- **Probado el 14/11:** con un mensaje de 10 de 275 no hace nada; con 275 de 275 detuvo `insomnio-vm`.
+- **No es un tope exacto:** GCP informa los costos con horas de atraso. Por eso el corte está en 275 y no en 300.
+- La función corre con la cuenta de servicio `corte-budget`, que tiene `compute.instanceAdmin.v1`, `cloudbuild.builds.builder` y permiso de invocar la función.
 
-Con USD 300 + 200 de créditos alcanza de sobra: 48 h prendida son unos USD 50. **Apáguenla cuando no se use.**
+## Correrla sin SSH (como se hizo el 14/11)
+Desde una sesión de Claude Code en la nube no hay SSH: el proxy sólo deja pasar HTTPS. Todo se maneja con la API de Compute:
+1. **Código:** el repo es privado y la VM no tiene token de GitHub, así que `pipeline_insomnio.py`, `manchas.py` y `requirements.txt` van como metadatos de la VM (`pipeline-py`, `manchas-py`, `requirements-txt`).
+2. **Token de Earthdata:** cada uno el suyo, en el metadato `earthdata-token`. Se carga desde la máquina de la persona, nunca por el chat ni en el repo:
+   ```bash
+   gcloud compute instances add-metadata insomnio-vm --zone=us-west1-b --metadata=earthdata-token=TU_TOKEN
+   ```
+   Lo puede leer cualquiera con acceso de lectura al proyecto. Se borra con `gcloud compute instances remove-metadata insomnio-vm --zone=us-west1-b --keys=earthdata-token`.
+3. **Qué corre:** un script de arranque (`vm-sin-ssh/`) que corre una vez y escribe el avance en el puerto serie, con prefijo `INSOMNIO:`:
+   - `arranque-prueba.sh` prueba bajar, `procesar --remoto` y GCOV;
+   - `arranque-pipeline.sh` corre el pipeline completo;
+   - `arranque-subida.sh` sube `/opt/salidas` a una URL de subida de un solo uso.
+   Se carga con `add-metadata --metadata-from-file=startup-script=...` y se ejecuta con `gcloud compute instances reset`.
+4. **Avance:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
+5. **Resultados:** la VM no tiene permisos de GCP. Quien tiene permisos crea una sesión de subida resumible en el bucket `gs://basurales-514714-salidas` y pasa la URL en el metadato `upload-url`. El tar completo de `salidas/`, con los recortes de 20 m, quedó en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB). Los productos chicos están en `../salidas/`.
 
-## 1. Crear la VM (la crea una persona del equipo, con su cuenta)
+**gcloud en Claude Code en la nube:** el entorno define `CLOUDSDK_AUTH_ACCESS_TOKEN` con un valor de relleno para el proxy. Si no hay una credencial de Google cargada en el entorno, hay que correr `env -u CLOUDSDK_AUTH_ACCESS_TOKEN gcloud ...` después de `gcloud auth login --no-launch-browser`. La política de la organización (`iam.disableServiceAccountKeyCreation`) no deja crear claves de cuentas de servicio; en lugar de claves se usa la personificación de `claude-vm` (`auth/impersonate_service_account`).
 
-**GCP** (con `gcloud` instalado y logueado, y el proyecto de los créditos seleccionado):
+## Correrla con SSH (desde una laptop)
 ```bash
-gcloud compute instances create insomnio-vm --zone=us-west1-b --machine-type=n2-highmem-16 --image-family=ubuntu-2404-lts-amd64 --image-project=ubuntu-os-cloud --boot-disk-size=300GB --boot-disk-type=pd-ssd
+gcloud compute instances start insomnio-vm --zone=us-west1-b
 ```
 ```bash
 gcloud compute ssh insomnio-vm --zone=us-west1-b
 ```
+Para clonar el repo privado adentro de la VM hace falta un token de GitHub o una llave SSH de quien lo clona. Después se prepara con `bash nasa-space-apps-context/idea-basurales-nisar/infra/setup-vm.sh` (los `.h5` ya están en `/mnt/datos`, así que `bajar` no vuelve a bajarlos):
+```bash
+export EARTHDATA_TOKEN='...'
+```
+```bash
+python herramientas/pipeline_insomnio.py todo --datos /mnt/datos --salida salidas --orbitas 10 161 --capa 80m
+```
+**Sin bajar los .h5** (lectura remota por ventana; probada, ~240 MB por GUNW):
+```bash
+python herramientas/pipeline_insomnio.py buscar --salida salidas && python herramientas/pipeline_insomnio.py procesar --remoto --salida salidas --capa 80m && python herramientas/pipeline_insomnio.py indice --salida salidas --capa 80m
+```
+Usen `tmux` para que no se corte si se cae el SSH (`tmux new -s nisar`; para volver, `tmux attach -t nisar`).
 
-**Azure** (con `az` instalado y logueado en la suscripción de los créditos):
+## Apagar (importante)
+```bash
+gcloud compute instances stop insomnio-vm --zone=us-west1-b
+```
+Al terminar el hackathon, bórrenla junto con el disco y el bucket: `gcloud compute instances delete insomnio-vm --zone=us-west1-b` y `gcloud storage rm -r gs://basurales-514714-salidas`.
+
+## Alternativa en Azure
+`Standard_E16s_v5` (16 vCPU, 128 GB) en `westus2`, 300 GB Premium SSD, Ubuntu 24.04:
 ```bash
 az group create --name spaceapps-rg --location westus2
 ```
 ```bash
 az vm create --resource-group spaceapps-rg --name insomnio-vm --image Ubuntu2404 --size Standard_E16s_v5 --os-disk-size-gb 300 --storage-sku Premium_LRS --admin-username equipo --generate-ssh-keys
 ```
-Para entrar: `ssh equipo@<ip-publica que devuelve el comando>`.
-
-Si el tipo de máquina no está disponible o falta cuota, sirve cualquier equivalente con unos 16 vCPU y 64-128 GB de RAM: GCP `n2-highmem-8` o `e2-highmem-16`; Azure `E8s_v5` o `D16s_v5`.
-
-## 2. Preparar la VM (una vez)
-El repo es privado: para clonarlo hace falta un token de GitHub (PAT) o una llave SSH de quien lo clona.
-```bash
-git clone https://github.com/nicopriotto/nasa-space-apps-context.git
-```
-```bash
-bash nasa-space-apps-context/idea-basurales-nisar/infra/setup-vm.sh
-```
-
-## 3. Credenciales de NASA Earthdata (cada uno las suyas, nunca en el repo)
-Generar un token en https://urs.earthdata.nasa.gov/ (perfil → Generate Token) y exportarlo **sólo en la sesión de la VM**:
-```bash
-export EARTHDATA_TOKEN='...'
-```
-Alternativa: `EARTHDATA_USERNAME` y `EARTHDATA_PASSWORD`. La primera vez que usen la cuenta con datos de ASF tienen que autorizar la aplicación de ASF en el sitio de Earthdata.
-
-## 4. Correr el pipeline
-```bash
-cd nasa-space-apps-context/idea-basurales-nisar && source .venv/bin/activate
-```
-```bash
-python herramientas/pipeline_insomnio.py todo --datos /mnt/datos --salida salidas --orbitas 10 161 --capa 80m
-```
-**Sin bajar los .h5** (lectura remota por ventana, sin probar todavía):
-```bash
-python herramientas/pipeline_insomnio.py buscar --salida salidas && python herramientas/pipeline_insomnio.py procesar --remoto --salida salidas --capa 80m && python herramientas/pipeline_insomnio.py indice --salida salidas --capa 80m
-```
-Pasos sueltos: `buscar`, `bajar`, `procesar` e `indice` (ver `python herramientas/pipeline_insomnio.py -h`). Corran `--capa 20m` cuando la de 80 m funcione.
-
-Para que no se corte si se cae el SSH, usen `tmux` (`tmux new -s nisar`; para volver, `tmux attach -t nisar`).
-
-## 5. Traer los resultados
-Sólo los productos chicos (`salidas/`: PNG, NPZ y JSON) se suben al repo o se copian con `gcloud compute scp` o `scp`. **Los `.h5` no se suben** (están en `.gitignore`).
-
-## 6. Apagar (importante)
-**GCP:**
-```bash
-gcloud compute instances stop insomnio-vm --zone=us-west1-b
-```
-**Azure** (`deallocate` para que deje de cobrar el cómputo):
-```bash
-az vm deallocate --resource-group spaceapps-rg --name insomnio-vm
-```
-Al terminar el hackathon, bórrenla: `gcloud compute instances delete ...` o `az group delete --name spaceapps-rg`.
-
-## Control de gastos
-- Configuren una **alerta de presupuesto** en la consola: en GCP, Billing → Budgets & alerts; en Azure, Cost Management → Budgets. Por ejemplo, avisos al 25%, 50% y 90% de los créditos.
-- Si después hace falta GPU, **pidan la cuota ahora** (es gratis pedirla y puede tardar horas en aprobarse), pero no la usen si no hay un motivo concreto.
+Para apagarla sin que cobre el cómputo: `az vm deallocate --resource-group spaceapps-rg --name insomnio-vm`.
