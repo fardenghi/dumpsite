@@ -150,3 +150,60 @@ def test_fuga_falla_con_columnas_prohibidas():
     for mala in ("estado", "emit_metano_kg_h", "clase_negativo"):
         with pytest.raises(SystemExit):
             entrenar.revisar_fuga(["insomnio", mala])
+
+
+# ------------------------------------------------------------------ corrida 2: negativos de OSM y etiquetas ópticas
+def _radar_con_osm(mock):
+    """El radar del mock con `clase_osm` y `que`, como el de la etapa 4: las manchas que no cruzan nada, de uso conocido."""
+    radar = ct.leer(mock, "tabla_radar")
+    cruce = ct.leer(mock, "cruce_manchas_catalogo")
+    libres = ~radar["id_mancha"].isin(set(cruce["id_mancha"]))
+    radar["clase_osm"] = ["uso_conocido" if x else "sin_explicar" for x in libres]
+    radar["que"] = [("golf: Club de Prueba" if i % 2 else "forestación") if x else None for i, x in enumerate(libres)]
+    return radar, cruce
+
+
+def test_negativos_osm_entran_como_otro_movil(mock):
+    radar, cruce = _radar_con_osm(mock)
+    frames = armar_tabla.leer_frames(os.path.join(mock, "frames.json"))
+    optico = ct.leer(mock, "tabla_optico")
+    base, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50)
+    t, partes = armar_tabla.armar(radar, optico, cruce, frames, k=50, con_negativos_osm=True)
+    ct.validar(t, "tabla_entrenamiento")
+    osm = t[t["id_catalogo"].str.startswith("NEG-OSM-")]
+    assert len(osm) and set(osm["clase"]) == {"otro_movil"} and set(osm["clase_negativo"]) == {"osm_golf", "osm_forestación"}
+    assert "AMBA" not in set(osm["frame"])  # la prueba final no recibe negativos de OSM
+    assert not set(osm["id_mancha"]) & set(cruce.loc[cruce["catalogo"] == "basurales", "id_mancha"])
+    # un lugar con nombre cuenta una vez por frame; la forestación sin nombre, cada mancha
+    golf = osm[osm["clase_negativo"] == "osm_golf"]
+    assert golf.groupby("frame").size().max() == 1
+    assert len(t) > len(base) and partes["meta"]["negativos_osm"] is True
+    assert "clase_osm" not in t.columns and "que" not in t.columns  # no pueden llegar al modelo
+    # un parque que se llama como un relleno no es un negativo
+    i = radar.index[radar["clase_osm"] == "uso_conocido"][0]
+    radar.loc[i, "que"] = "parque: Toyon Canyon Closed Landfill"
+    t2, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50, con_negativos_osm=True)
+    assert radar.loc[i, "id_mancha"] not in set(t2["id_mancha"])
+
+
+def test_positivos_segun_las_etiquetas_opticas(mock):
+    radar, cruce = _radar_con_osm(mock)
+    frames = armar_tabla.leer_frames(os.path.join(mock, "frames.json"))
+    optico = ct.leer(mock, "tabla_optico")
+    todos, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50)
+    bas = todos[(todos["clase"] == "basural_activo") & (todos["frame"] != "AMBA")]
+    ids = list(bas["id_catalogo"])
+    ia = {ids[0]: "act", ids[1]: "sin", ids[2]: "nose"}
+    con, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50, optico_ia=ia)
+    assert dict(zip(con["id_catalogo"], con["actividad_optica"]))[ids[0]] == "act" and len(con) == len(todos)
+    sin_sin, p1 = armar_tabla.armar(radar, optico, cruce, frames, k=50, optico_ia=ia, positivos="sin_sin")
+    assert ids[1] not in set(sin_sin["id_catalogo"]) and ids[2] in set(sin_sin["id_catalogo"])
+    assert p1["meta"]["positivos_sacados_por_el_optico"] == {"sin": 1}
+    solo, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50, optico_ia=ia, positivos="solo_act")
+    entrena = solo[(solo["clase"] == "basural_activo") & (solo["frame"] != "AMBA")]
+    assert list(entrena["id_catalogo"]) == [ids[0]]
+    # la prueba final no se toca, y los negativos tampoco
+    assert (solo["frame"] == "AMBA").sum() == (todos["frame"] == "AMBA").sum()
+    assert (solo["clase"] == "otro_movil").sum() == (todos["clase"] == "otro_movil").sum()
+    with pytest.raises(SystemExit):
+        armar_tabla.armar(radar, optico, cruce, frames, k=50, positivos="solo_act")
