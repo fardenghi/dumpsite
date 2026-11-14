@@ -88,7 +88,9 @@ def clasificar(tipo, clase, tags):
     t = {k: (v or "").lower() for k, v in (tags or {}).items() if v}
     if tipo == "land_use":
         if clase == "quarry":
-            return ("tosquera_arenera" if t.get("resource") in ARENAS else "cantera"), "alta"
+            if t.get("resource") in ARENAS:
+                return "tosquera_arenera", "alta"
+            return "cantera", "alta" if t.get("resource") else "media"
         if clase == "salt_pond":
             return "salina", "media"
         if clase in ("construction", "greenfield"):
@@ -120,7 +122,7 @@ def clasificar(tipo, clase, tags):
                 return "ladrillera", "media"
             if ind in ("port", "container_terminal", "harbour"):
                 return "puerto_playa_contenedores", "media"
-            if ind in ("depot", "stockpile", "aggregate"):
+            if ind in ("stockpile", "aggregate", "aggregate_stockpile"):
                 return "escombrera_acopio", "baja"
             if t.get("man_made") == "wastewater_plant" or ind == "wastewater_plant":
                 return "pileta_efluentes", "media"
@@ -220,30 +222,59 @@ def main(dir_in, ruta_catalogo, dir_out):
                         mejor = (d, p)
         return mejor[1] if mejor else None
 
-    partes = sorted(glob.glob(os.path.join(dir_in, "neg_parts", "*.parquet")))
-    filas = duckdb.sql(
-        f"select id, nombre, tipo_overture, subtype, class, src_id, src_dataset, tags, lat, lon, area_m2, xmin, ymin, xmax, ymax "
-        f"from read_parquet({partes!r})"
-    ).fetchall()
-    print("polígonos extraídos:", len(filas))
+    import heapq
 
+    partes = sorted(glob.glob(os.path.join(dir_in, "neg_parts", "*.parquet")))
     disponibles, excluidos = Counter(), Counter()
-    pool = []
+    # Muestreo en streaming: por cada (clase, celda de 1°) y por cada clase del AMBA se guardan solo
+    # los candidatos con hash más chico (con margen x4 para reponer los que se excluyan por cercanía).
+    MARGEN = 4
+    cand_mundo = defaultdict(list)  # clave -> heap de (-hash, fila)
+    cand_amba = defaultdict(list)
     vistos = set()
-    for (oid, nombre, tipo, sub, clase, src_id, src_ds, tags, lat, lon, area, xmin, ymin, xmax, ymax) in filas:
-        if oid in vistos:
-            continue
-        vistos.add(oid)
-        cl, conf = clasificar(tipo, clase, tags)
-        if not cl:
-            continue
-        disponibles[cl] += 1
-        rn = math.sqrt(area / math.pi)
-        bc = basural_cercano(lat, lon)
-        if bc and bc[0] - rn < DIST_MIN_BASURAL_M:
-            excluidos[cl] += 1
-            continue
-        pool.append((cl, conf, oid, nombre, tipo, clase, src_id, src_ds, tags, lat, lon, area, (xmin, ymin, xmax, ymax), bc))
+    total = 0
+
+    def empujar(heap, cupo, h, fila):
+        if len(heap) < cupo:
+            heapq.heappush(heap, (-h, fila))
+        elif -heap[0][0] > h:
+            heapq.heapreplace(heap, (-h, fila))
+
+    for parte in partes:
+        filas = duckdb.sql(
+            f"select id, nombre, tipo_overture, class, src_id, src_dataset, tags, lat, lon, area_m2, xmin, ymin, xmax, ymax "
+            f"from read_parquet('{parte}')"
+        ).fetchall()
+        total += len(filas)
+        for (oid, nombre, tipo, clase, src_id, src_ds, tags, lat, lon, area, xmin, ymin, xmax, ymax) in filas:
+            if oid in vistos:
+                continue
+            vistos.add(oid)
+            cl, conf = clasificar(tipo, clase, tags)
+            if not cl:
+                continue
+            disponibles[cl] += 1
+            h = int(hash_orden(oid)[:15], 16)
+            fila = (cl, conf, oid, nombre, tipo, clase, src_id, src_ds, tags, lat, lon, area, (xmin, ymin, xmax, ymax))
+            empujar(cand_mundo[(cl, int(lat // 1), int(lon // 1))], CUPO_POR_CELDA[CLASES[cl][0]] * MARGEN, h, fila)
+            if AMBA["lat_min"] <= lat <= AMBA["lat_max"] and AMBA["lon_min"] <= lon <= AMBA["lon_max"]:
+                empujar(cand_amba[cl], TOPE_AMBA_POR_CLASE * MARGEN, h, fila)
+        del filas
+    print("polígonos extraídos:", total)
+
+    def filtrar(heap, cupo, contar):
+        """Ordena por hash, descarta los cercanos a un basural y se queda con `cupo`."""
+        res = []
+        for _, f in sorted(heap, key=lambda x: -x[0]):
+            if len(res) >= cupo:
+                break
+            bc = basural_cercano(f[9], f[10])
+            if bc and bc[0] - math.sqrt(f[11] / math.pi) < DIST_MIN_BASURAL_M:
+                if contar:
+                    excluidos[f[0]] += 1
+                continue
+            res.append(f + (bc,))
+        return res
 
     def registro(p):
         cl, conf, oid, nombre, tipo, clase, src_id, src_ds, tags, lat, lon, area, bb, bc = p
@@ -269,28 +300,14 @@ def main(dir_in, ruta_catalogo, dir_out):
             "url": url,
             "licencia": "ODbL 1.0",
             "confianza": conf,
+            # None = no hay ningún basural del catálogo a menos de ~5 km
             "basural_mas_cercano": {"id": bc[1], "nombre": bc[2], "distancia_borde_m": round(max(0, bc[0] - math.sqrt(area / math.pi)))} if bc else None,
             "etiquetas_osm": t or None,
             "notas": None,
         }
 
-    def en_amba(p):
-        return AMBA["lat_min"] <= p[9] <= AMBA["lat_max"] and AMBA["lon_min"] <= p[10] <= AMBA["lon_max"]
-
-    # AMBA: todo, con tope por clase
-    amba, por_clase = [], Counter()
-    for p in sorted((p for p in pool if en_amba(p)), key=lambda p: hash_orden(p[2])):
-        if por_clase[p[0]] < TOPE_AMBA_POR_CLASE:
-            por_clase[p[0]] += 1
-            amba.append(registro(p))
-
-    # mundo: cupo por clase y celda de 1°, orden reproducible por hash
-    mundo, cupo = [], Counter()
-    for p in sorted(pool, key=lambda p: hash_orden(p[2])):
-        k = (p[0], int(p[9] // 1), int(p[10] // 1))
-        if cupo[k] < CUPO_POR_CELDA[CLASES[p[0]][0]]:
-            cupo[k] += 1
-            mundo.append(registro(p))
+    mundo = [registro(p) for k, heap in cand_mundo.items() for p in filtrar(heap, CUPO_POR_CELDA[CLASES[k[0]][0]], True)]
+    amba = [registro(p) for cl, heap in cand_amba.items() for p in filtrar(heap, TOPE_AMBA_POR_CLASE, False)]
 
     for lista, pref in ((mundo, "NEG"), (amba, "NEG-AMBA")):
         lista.sort(key=lambda r: (r["prioridad"], r["clase"], r["pais"] or "", r["lat"]))
@@ -324,7 +341,7 @@ def main(dir_in, ruta_catalogo, dir_out):
         ],
         "conteos": {
             "poligonos_clasificados": dict(sorted(disponibles.items())),
-            "excluidos_por_cercania_a_basural": dict(sorted(excluidos.items())),
+            "excluidos_por_cercania_a_basural_entre_los_muestreados": dict(sorted(excluidos.items())),
             "mundo_por_clase": dict(sorted(Counter(r["clase"] for r in mundo).items())),
             "amba_por_clase": dict(sorted(Counter(r["clase"] for r in amba).items())),
             "mundo": len(mundo),
