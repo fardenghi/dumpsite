@@ -1,4 +1,4 @@
-# Insomnes · web
+# Basurales · web
 
 Los basurales que el radar NISAR nunca ve quietos. Proyecto para el NASA Space Apps Challenge 2026 (challenge "Dancing with the SARs").
 
@@ -9,12 +9,14 @@ npm run build    # sitio estático en dist/
 ```
 
 ## Secciones
+El mapa es el fondo de toda la web y queda siempre a la vista. Las secciones son paneles que flotan encima y se abren y cierran desde la barra de abajo (o con Esc).
+
 | Ruta | Qué muestra |
 |---|---|
-| `#/inicio` | Resumen: cantidad de sitios, ranking de insomnio y el caso Luján |
-| `#/mapa` | Mapa navegable con todos los sitios. Al abrir uno: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha |
-| `#/sitios` | Tabla filtrable por país y por estado del radar, exportable a CSV |
-| `#/modelo` | Cómo decide el modelo, con qué se entrenó y qué no ve. Las métricas están vacías hasta que exista la validación |
+| `#/mapa` | El AMBA con el índice de insomnio y los sitios. Al abrir uno: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha |
+| `#/inicio` | Panel "Resumen": cantidad de sitios, ranking de insomnio y el caso Luján |
+| `#/sitios` | Panel con la lista filtrable por estado del radar, exportable a CSV |
+| `#/modelo` | Panel con la regla par por par (con un sitio de ejemplo), el embudo de la grilla a las manchas candidatas, los umbrales calibrados y el clasificador propuesto, que todavía no tiene métricas |
 
 ## Datos
 **Son reales y están precalculados.** Los escribe el pipeline del índice de insomnio y no se editan a mano:
@@ -26,8 +28,8 @@ python ../idea-basurales-nisar/herramientas/pipeline_insomnio.py indice
 | Archivo | Qué tiene |
 |---|---|
 | `src/data/seed/sitios.json` | 12 sitios del AMBA con la forma exacta de `Sitio[]` (`src/data/types.ts`): insomnio respecto del anillo de 1,5 km, veredicto del radar, 15 pares de NISAR (las dos órbitas, ordenados por fecha), registro con fuente y contorno de OpenStreetMap |
-| `src/data/seed/fichas.json` | Por sitio, lo que no entra en `Sitio`: motivo del veredicto, persistencia, insomnio por órbita, órbita de cada par, eco, objetos de OSM y fuentes del registro. La web todavía no lo muestra |
-| `src/data/seed/candidatos.json` | Las 219 manchas candidatas con centro, superficie y clase (`relleno_osm`, `uso_conocido`, `sin_explicar`). La web todavía no las muestra. Las "sin explicar" no están verificadas: hablar de "señal compatible con actividad" |
+| `src/data/seed/fichas.json` | Por sitio, lo que no entra en `Sitio`: motivo del veredicto, persistencia, insomnio por órbita, órbita de cada par, eco, objetos de OSM y fuentes del registro. Lo usa el panel Modelo |
+| `src/data/seed/candidatos.json` | Las 219 manchas candidatas con centro, superficie y clase (`relleno_osm`, `uso_conocido`, `sin_explicar`). El panel Modelo muestra el conteo por clase; en el mapa todavía no están. Las "sin explicar" no están verificadas: hablar de "señal compatible con actividad" |
 | `public/indice/insomnio-amba.png` + `src/data/seed/indice.json` | El índice del AMBA como PNG (norte arriba, regular en Web Mercator) y sus límites: `oeste`, `sur`, `este`, `norte` y `coordinates`, las cuatro esquinas en el orden que pide una fuente `image` de MapLibre. `Mapa.tsx` lo carga así y el botón "Índice de insomnio" lo prende y lo apaga |
 
 Los sitios de otros países que tenía el seed se sacaron: no tienen NISAR procesado. `scripts/contornos.py` quedó sin uso (los contornos los escribe el pipeline). Cómo se calcula cada número: `../idea-basurales-nisar/idea/indice-final.md`.
