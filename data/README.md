@@ -1,6 +1,16 @@
 # data/
 
-Datos curados y livianos que usa el equipo. Los pesados (por ejemplo, los `.h5` de NISAR) no van acá ni al repo.
+Toda la data del proyecto: los catálogos que entran al motor y lo que el motor calcula. Los `.h5` de NISAR (2 GB cada uno), los recortes por par y las fuentes fijas de cada frame no se suben: el pipeline los rehace (ver `.gitignore`).
+
+| Carpeta | Qué tiene | Quién lo escribe |
+|---|---|---|
+| `catalogos/` | Basurales del mundo, negativos (lo que el radar confunde con un basural), sus geometrías, los complejos y `frames.json` | `motor/curar_basurales.py`, `negativos_*.py`, `geometrias_*.py`, `complejos_agrupar.py`, `frames_elegir.py` |
+| `salidas/` | Índice de insomnio, manchas candidatas, cruce con los catálogos, óptico, modelo y veredictos, para 30 frames | El pipeline de `motor/` (detalle abajo) |
+
+Todos los archivos pesados van en git normal (sin LFS). El más grande es `catalogos/basurales/basurales_mundo.json`, con 57 MB.
+
+## catalogos/frames.json
+Los 30 frames de NISAR donde se corrió el pipeline: caja, EPSG de la grilla, órbitas y por qué se eligió cada uno (10 elegidos primero y 20 más por cantidad de basurales abiertos). Lo arma `motor/frames_elegir.py` (`--agregar` para los 20 nuevos) con la API pública de ASF.
 
 ## catalogos/basurales/
 Catálogo de basurales y rellenos del mundo, armado el 14/11/2026 por `motor/curar_basurales.py`. El objetivo es encontrar sitios que **en teoría están cerrados pero en la práctica siguen activos**.
@@ -100,3 +110,55 @@ Los polígonos van en archivos aparte. Cada feature se enlaza con su catálogo p
 - **Conteos:** 59.538 complejos; 3.690 tienen varios sitios (11.133 sitios en total). Estados: 1.212 abiertos, 3.293 cerrados, 42 contradictorios y 54.991 desconocidos.
 - **Limitación:** los polígonos de menos de 1 ha no unen a otros. Hay ciudades con cientos de micro basurales mapeados que, encadenados de a menos de 1 km, armaban "complejos" de 10 a 18 km. Igual puede quedar alguna cadena larga entre sitios más grandes: el mayor complejo tiene 75 sitios (escombreras mineras en Alemania).
 - **Ojo con los nombres:** el sitio `BAS-061528`, "Ensenada", es Ensenada, Baja California (México), no la de Buenos Aires (`BAS-053303`).
+
+## salidas/
+Lo que calcula el motor. Cada archivo dice en `generado_por` qué script lo escribió. Se regenera corriendo ese script desde `motor/` (ver `motor/README.md`).
+
+### Por frame: `salidas/<FRAME>/`
+Una carpeta por cada uno de los 30 frames (el AMBA, Los Ángeles, CDMX, Delhi, Yakarta, Ponce y 24 condados de EE. UU.).
+
+| Archivo | Qué tiene | Script |
+|---|---|---|
+| `frame.json`, `lista_productos.json` | La grilla del frame y los productos GUNW y GCOV de NISAR que la cruzan | `pipeline_insomnio.py buscar` |
+| `manchas.geojson` | Manchas candidatas como polígonos, con su insomnio | `extraer_manchas.py --frame <FRAME>` |
+| `tabla_radar.parquet` | Variables de radar de cada mancha contra su anillo | `extraer_manchas.py` |
+| `insomnio_catalogo.parquet` | Insomnio de cada polígono de los catálogos que cae en el frame | `extraer_manchas.py` |
+| `cruce_manchas_catalogo.parquet` | Qué manchas tocan qué polígonos de los catálogos | `modelo_por_frame.py` |
+| `tabla_optico.parquet`, `tabla_optico_catalogo.parquet` | Variables de Sentinel-2 de las manchas y de los polígonos (sólo los 10 primeros frames) | `modelo_por_frame.py` (usa `extraer_optico.py`) |
+| `modelo_por_frame.json` | Resumen del cruce y del óptico del frame | `modelo_por_frame.py` |
+
+### Todos los frames juntos
+| Archivo | Qué tiene | Script |
+|---|---|---|
+| `manchas.geojson`, `tabla_radar.parquet`, `insomnio_catalogo.parquet` | Lo de cada frame, junto | `extraer_manchas.py juntar` |
+| `cruce_manchas_catalogo.parquet`, `tabla_optico*.parquet` | Cruce y óptico de todos los frames | `modelo_por_frame.py` |
+| `veredictos.json` | Un veredicto por polígono del catálogo y por mancha sin catálogo (lo que muestra la web) | `flujo.py` |
+| `evaluacion_actividad.json` | Matriz de abierto contra cerrado por país, con intervalos de Wilson | `flujo.py` |
+| `resumen_flujo.json` | Conteos del flujo por frame y en total | `flujo.py` |
+| `estado_conocido.json` | Basurales con estado conocido (abierto o cerrado según el registro) por frame | `frames_elegir.py` |
+
+### Índice de insomnio del AMBA
+| Archivo | Qué tiene | Script |
+|---|---|---|
+| `indice_80m.npz`, `indice_80m.png`, `indice_20m.png` | El índice de insomnio del AMBA a 80 m (y la figura a 20 m) | `pipeline_insomnio.py indice` |
+| `resumen_80m.json`, `resumen_20m.json`, `lista_productos.json` | Pares usados, parámetros y conteos | `pipeline_insomnio.py` |
+| `fichas_80m.json`, `fichas_20m.json`, `calibracion_80m.json` | Ficha de cada sitio con registro y la calibración de los umbrales | `pipeline_insomnio.py indice` y `calibrar` |
+
+### Modelo
+| Archivo | Qué tiene | Script |
+|---|---|---|
+| `tabla_entrenamiento.parquet`, `particiones.json` | Tabla de manchas con etiqueta y particiones por frame | `armar_tabla.py` |
+| `metricas.json`, `modelo.txt`, `predicciones.parquet` | Modelo LightGBM por mancha, sus métricas y predicciones (**sin validar**) | `entrenar.py` |
+| `metricas_variantes.json` | Variantes del modelo con las etiquetas ópticas | `modelo_por_frame.py variantes` |
+| `etiquetas_optico_ia.json` | Etiquetas de actividad de 89 predios asignadas por IA mirando Sentinel-2, a ciegas. No las revisó una persona | A mano, ver `docs/modelo.md` |
+| `optico_estado_conocido.parquet`, `optico_estado_conocido/`, `optico_estado_conocido_resumen.json` | Óptico de los 1.008 basurales de estado conocido (en 3 partes) | `optico_estado_conocido.py` |
+| `optico_catalogo_frames.parquet` | Óptico de los basurales de 10 ha o más de los frames nuevos | `optico_catalogo_frames.py` |
+| `radar_frente.parquet`, `radar_frente_evaluacion.json` | Variables de radar del frente activo de cada basural y su evaluación | `radar_frente.py` |
+| `modelo_estado.json`, `predicciones_estado.parquet` | Modelo de abierto contra cerrado con las etiquetas del registro | `modelo_estado.py` |
+| `prueba_resolucion.json` | Prueba del modelo del frente a 20 m contra 80 m | `prueba_resolucion.py` |
+
+### Fuentes de las salidas
+- **NISAR** L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC.
+- **Sentinel-2** L2A (Copernicus, ESA), vía Microsoft Planetary Computer.
+- **JRC Global Surface Water** v1.4 (agua) y **ESA WorldCover** 2021 v200 (cobertura, CC BY 4.0).
+- Los catálogos de `catalogos/`, con las fuentes y licencias de arriba.
