@@ -89,3 +89,15 @@ az group create --name spaceapps-rg --location westus2
 az vm create --resource-group spaceapps-rg --name insomnio-vm --image Ubuntu2404 --size Standard_E16s_v5 --os-disk-size-gb 300 --storage-sku Premium_LRS --admin-username equipo --generate-ssh-keys
 ```
 Para apagarla sin que cobre el cómputo: `az vm deallocate --resource-group spaceapps-rg --name insomnio-vm`.
+
+## Corrida completa del AMBA (14/11/2026)
+La primera corrida con todos los datos de NISAR sobre el AMBA: 15 GUNW y 20 GCOV de las órbitas 10 y 161, en una VM de GCP en us-west1.
+
+| Paso | Medido |
+|---|---|
+| `buscar` | 15 GUNW y 20 GCOV, en 2 s |
+| `bajar` (todo) | 35 archivos, 100 GB, en 531 s (~190 MB/s). Un GUNW pesa ~2,1 GB y un GCOV ~3,4 GB |
+| `procesar --remoto` | 8 GUNW de la órbita 10 en 20 s, leyendo ~240 MB por archivo (~11 % del archivo) |
+| `procesar` + `indice` | 8 s a 80 m y ~50 s a 20 m, 35 de 35 archivos sin error |
+
+Esa corrida fue la v0 del índice: con un umbral absoluto de coherencia, el río salía como la mayor mancha y ningún relleno conocido pasaba el umbral. De ahí salieron la máscara de agua, la comparación con el entorno y la calibración de `docs/indice-insomnio.md`.
