@@ -1,29 +1,29 @@
-"""Etapa 2: elige los frames de NISAR donde se entrena y evalúa el modelo, y arma `data/frames.json`.
+"""Stage 2: picks the NISAR frames where the model is trained and evaluated, and builds `data/catalogos/frames.json`.
 
-Por cada área candidata (ciudades fijas + las celdas de 1° con más basurales de estado conocido):
-  1. consulta la API pública de ASF (sin login) por los GUNW `PR` que la tocan;
-  2. agrupa por track y frame de NISAR y se queda con los que cubren el área (hasta 2 tracks, mejor uno
-     ascendente y uno descendente, como el AMBA);
-  3. cuenta, dentro del área y de la huella de esos frames:
-     - basurales de 10 ha o más por estado, agrupados por complejo (`basurales/complejos.json`);
-     - negativos por clase (`rol = negativo`), y aparte los de clase A de 10 ha o más;
-     - pares GUNW y rango de fechas.
-Después ordena por prioridad (ver `puntaje`) y elige ~10 frames sin quedarse sólo en EE. UU.
+For each candidate area (fixed cities + the 1° cells with the most known-status dump sites):
+  1. queries the public ASF API (no login) for the `PR` GUNWs that touch it;
+  2. groups by NISAR track and frame and keeps those that cover the area (up to 2 tracks, preferably one
+     ascending and one descending, like the AMBA);
+  3. counts, within the area and the footprint of those frames:
+     - dump sites of 10 ha or more by status, grouped by complex (`basurales/complejos.json`);
+     - negatives by class (`rol = negativo`), and separately the class A ones of 10 ha or more;
+     - GUNW pairs and date range.
+Then it sorts by priority (see `puntaje`) and picks ~10 frames without staying only in the USA.
 
-    python frames_elegir.py                     # consulta ASF, escribe ../data/catalogos/frames.json y datos/frames-elegidos.md
-    python frames_elegir.py --cache /tmp/asf    # guarda/reusa las respuestas de ASF
+    python frames_elegir.py                     # queries ASF, writes ../data/catalogos/frames.json and datos/frames-elegidos.md
+    python frames_elegir.py --cache /tmp/asf    # saves/reuses the ASF responses
     python frames_elegir.py --n 10 --max-usa 5
-    python frames_elegir.py --agregar 20        # deja los frames ya elegidos como están y suma 20 por cantidad de abiertos
+    python frames_elegir.py --agregar 20        # leaves the already chosen frames as they are and adds 20 by number of open sites
 
-`--agregar N` (prompt 6) no vuelve a elegir: lee `frames.json`, deja sus frames con el mismo nombre, la misma caja y
-la misma prioridad, y suma N más, con prioridad de ahí en adelante. Las candidatas son las celdas de 1° con más
-basurales **abiertos** de 10 ha o más con polígono (por sitio, no por complejo; puntaje 2 × abiertos + cerrados),
-sin contar los que ya caen en una caja elegida. La caja de cada una se achica a sus basurales más 5 km. Entran las
-que tienen al menos 15 pares GUNW `PR` y no se tocan con una caja ya elegida. No hay tope de EE. UU.
+`--agregar N` (prompt 6) doesn't choose again: it reads `frames.json`, keeps its frames with the same name, the same box and
+the same priority, and adds N more, with priority from there on. The candidates are the 1° cells with the most
+**open** dump sites of 10 ha or more with a polygon (per site, not per complex; score 2 × open + closed),
+without counting those that already fall in a chosen box. Each one's box is shrunk to its dump sites plus 5 km. Those
+with at least 15 `PR` GUNW pairs that don't touch an already chosen box get in. There's no USA cap.
 
-Supuestos (se anotan en `meta`): un área es una caja de ~1° alrededor de la ciudad (la del AMBA es `geo.CAJA`);
-un frame "cubre" el área si su huella contiene al menos `--min-cobertura` de la caja; la EPSG sale de la zona UTM
-del centro del área (la grilla de los GUNW usa la del frame; hay que confirmarla con el dataset `projection`).
+Assumptions (noted in `meta`): an area is a box of ~1° around the city (the AMBA's is `geo.CAJA`);
+a frame "covers" the area if its footprint contains at least `--min-cobertura` of the box; the EPSG comes from the UTM zone
+of the area's center (the GUNW grid uses the frame's; it has to be confirmed with the `projection` dataset).
 """
 import argparse
 import collections
@@ -46,9 +46,9 @@ sys.path.insert(0, AQUI)
 import geo  # noqa: E402
 
 API_ASF = "https://api.daac.asf.alaska.edu/services/search/param"
-EEUU = {"USA", "PRI", "VIR", "GUM", "ASM", "MNP"}  # EE. UU. y territorios: el estado sale de la EPA en todos
+EEUU = {"USA", "PRI", "VIR", "GUM", "ASM", "MNP"}  # USA and territories: the status comes from the EPA in all of them
 
-# frame, ciudad, país, caja [oeste, sur, este, norte]. El AMBA usa la caja del pipeline (geo.CAJA, otro orden).
+# frame, city, country, box [west, south, east, north]. The AMBA uses the pipeline's box (geo.CAJA, another order).
 _N, _O, _S, _E = geo.CAJA
 CIUDADES = [
     ("AMBA", "Buenos Aires", "ARG", [_O, _S, _E, _N]),
@@ -62,7 +62,7 @@ CIUDADES = [
 ]
 
 
-# ---------------------------------------------------------------- geometría
+# ---------------------------------------------------------------- geometry
 def wkt_anillo(wkt):
     """Primer anillo (lon, lat) de un POLYGON en WKT."""
     nums = re.findall(r"(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)", wkt)
@@ -70,7 +70,7 @@ def wkt_anillo(wkt):
 
 
 def dentro_poligono(lon, lat, anillo):
-    """Regla par-impar, vectorizada sobre puntos."""
+    """Even-odd rule, vectorized over points."""
     lon, lat = np.asarray(lon, float), np.asarray(lat, float)
     adentro = np.zeros(lon.shape, dtype=bool)
     for (x1, y1), (x2, y2) in zip(anillo, np.roll(anillo, -1, axis=0)):
@@ -89,7 +89,7 @@ def en_caja(lon, lat, caja):
 
 
 def cobertura(caja, anillo, n=15):
-    """Fracción de una grilla n×n de puntos de la caja que cae adentro de la huella."""
+    """Fraction of an n×n grid of points of the box that falls inside the footprint."""
     o, s, e, nn = caja
     lon, lat = np.meshgrid(np.linspace(o, e, n), np.linspace(s, nn, n))
     return float(dentro_poligono(lon.ravel(), lat.ravel(), anillo).mean())
@@ -119,7 +119,7 @@ def consultar_asf(caja, cache=None, reintentos=3):
             with urllib.request.urlopen(url, timeout=180) as r:
                 res = json.load(r)["results"]
             break
-        except Exception as ex:  # noqa: BLE001 (la API a veces corta; reintentamos)
+        except Exception as ex:  # noqa: BLE001 (the API sometimes cuts off; we retry)
             if i == reintentos - 1:
                 raise
             print(f"  ASF falló ({ex}); reintento", file=sys.stderr)
@@ -131,7 +131,7 @@ def consultar_asf(caja, cache=None, reintentos=3):
 
 
 def pares_por_frame(resultados):
-    """Agrupa los GUNW PR por (track, dirección, frame): pares únicos, fechas y huella."""
+    """Groups the PR GUNWs by (track, direction, frame): unique pairs, dates and footprint."""
     grupos = {}
     for g in resultados:
         nombre = g.get("granuleName", "")
@@ -154,7 +154,7 @@ def pares_por_frame(resultados):
 
 
 def elegir_tracks(caja, grupos, min_cob, max_tracks=2):
-    """Los (track, dir, frame) que cubren la caja, ordenados por pares; hasta max_tracks, mejor de direcciones distintas."""
+    """The (track, dir, frame) that cover the box, sorted by pairs; up to max_tracks, preferably from different directions."""
     ok = []
     for clave, g in grupos.items():
         c = cobertura(caja, g["huella"])
@@ -162,18 +162,18 @@ def elegir_tracks(caja, grupos, min_cob, max_tracks=2):
             ok.append((len(g["pares"]), c, clave))
     ok.sort(reverse=True)
     elegidos = []
-    for n, c, clave in ok:  # primero uno por dirección
+    for n, c, clave in ok:  # first one per direction
         if clave[0] not in [e[0] for e in elegidos] and clave[1] not in [e[1] for e in elegidos]:
             elegidos.append(clave)
         if len(elegidos) == max_tracks:
             break
-    for n, c, clave in ok:  # si falta, otro track cualquiera
+    for n, c, clave in ok:  # if one is missing, any other track
         if len(elegidos) < max_tracks and clave not in elegidos and clave[0] not in [e[0] for e in elegidos]:
             elegidos.append(clave)
     return elegidos, {clave: c for n, c, clave in ok}
 
 
-# ---------------------------------------------------------------- catálogos
+# ---------------------------------------------------------------- catalogs
 def cargar_catalogos():
     with open(os.path.join(DATA, "basurales", "complejos.json"), encoding="utf-8") as fh:
         cx = json.load(fh)
@@ -189,10 +189,10 @@ def cargar_catalogos():
 
 
 def celdas_conocidas(complejos, n, lado=0.9):
-    """Las n celdas de 1° con más complejos de 10 ha o más con estado conocido (abierto o cerrado).
+    """The n 1° cells with the most complexes of 10 ha or more with known status (open or closed).
 
-    Cada celda se convierte en una caja de `lado` grados centrada en el centro de esos complejos (una caja más
-    chica que la celda queda cubierta por un solo frame de NISAR más seguido).
+    Each cell becomes a box of `lado` degrees centered on the center of those complexes (a box smaller
+    than the cell is more often covered by a single NISAR frame).
     """
     por_celda = collections.defaultdict(list)
     for c in complejos:
@@ -241,12 +241,12 @@ def contar(caja, huellas, complejos, negativos):
 
 
 def puntaje(f):
-    """Prioridad: basurales grandes (los de estado conocido pesan doble), negativos A de 10 ha o más, y pares.
+    """Priority: large dump sites (known-status ones count double), class A negatives of 10 ha or more, and pairs.
 
-    (2 × conocidos + desconocidos + 0,25 × min(negativos A ≥ 10 ha, 60)) × min(1, pares / 15). Menos de 4 pares vale 0.
-    - Los de estado conocido pesan doble porque sirven para el modelo y para la matriz de actividad (etapa 8);
-      los desconocidos sólo para el modelo (`basural_activo` si están despiertos).
-    - Los 15 pares son los del AMBA; con menos, el insomnio por tercios queda flojo.
+    (2 × known + unknown + 0.25 × min(A negatives ≥ 10 ha, 60)) × min(1, pairs / 15). Fewer than 4 pairs is worth 0.
+    - Known-status ones count double because they serve for the model and for the activity matrix (stage 8);
+      unknown ones only for the model (`basural_activo` if they're awake).
+    - The 15 pairs are the AMBA's; with fewer, the insomnia by thirds is weak.
     """
     b = f["n_basurales_10ha"]
     if f["n_gunw"] < 4:
@@ -255,16 +255,16 @@ def puntaje(f):
     return round(base * min(1.0, f["n_gunw"] / 15), 2)
 
 
-# ---------------------------------------------------------------- agregar frames por cantidad de abiertos (prompt 6)
+# ---------------------------------------------------------------- add frames by number of open sites (prompt 6)
 MARGEN_KM = 5.0
 MIN_PARES_AGREGAR = 15
 MARCA_MD = ("<!-- agregados: inicio (lo escribe `frames_elegir.py --agregar`) -->", "<!-- agregados: fin -->")
 
 
 def sitios_con_poligono():
-    """Los basurales abiertos o cerrados de 10 ha o más con polígono (los 1.008 de `optico_estado_conocido.py`).
+    """The open or closed dump sites of 10 ha or more with a polygon (the 1,008 of `optico_estado_conocido.py`).
 
-    Devuelve una lista de dicts con `id`, `estado`, `lon`, `lat`, `area_ha`, `nombre`, `pais` y `caja` (la del polígono).
+    Returns a list of dicts with `id`, `estado`, `lon`, `lat`, `area_ha`, `nombre`, `pais` and `caja` (the polygon's).
     """
     with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
         ficha = {s["id"]: s for s in json.load(fh)["sitios"]}
@@ -287,7 +287,7 @@ def sitios_con_poligono():
 
 
 def caja_con_margen(cajas, km=MARGEN_KM):
-    """La caja que contiene a todas, más `km` de margen, redondeada a 4 decimales."""
+    """The box containing all of them, plus `km` of margin, rounded to 4 decimals."""
     c = np.array(cajas, dtype=float)
     o, s, e, n = c[:, 0].min(), c[:, 1].min(), c[:, 2].max(), c[:, 3].max()
     dlat = km / 111.32
@@ -296,7 +296,7 @@ def caja_con_margen(cajas, km=MARGEN_KM):
 
 
 def _clave_area(lo, la, loc):
-    """Nombre del frame de una celda: "Sun Valley, Los Angeles, CA" -> USA_CA_LOS_ANGELES; sin localidad, CELDA_N34_W119."""
+    """Frame name of a cell: "Sun Valley, Los Angeles, CA" -> USA_CA_LOS_ANGELES; without a locality, CELDA_N34_W119."""
     if not loc:
         return "CELDA_" + ("N" if la >= 0 else "S") + f"{abs(la):02d}_" + ("E" if lo >= 0 else "W") + f"{abs(lo):03d}"
     partes = [p.strip() for p in loc.split(",")]
@@ -310,7 +310,7 @@ def _puntaje_abiertos(sitios):
 
 
 def agregar(args):
-    """Suma `args.agregar` frames a `frames.json` sin tocar los que ya están (ver el encabezado)."""
+    """Adds `args.agregar` frames to `frames.json` without touching the existing ones (see the header)."""
     with open(args.salida, encoding="utf-8") as fh:
         actual = json.load(fh)
     viejos = actual["frames"]
@@ -338,16 +338,16 @@ def agregar(args):
 
     while len(elegidos) < args.agregar:
         cajas = [f["bbox"] for f in viejos + elegidos]
-        # De cada celda quedan los basurales cuyo polígono con margen no se toca con una caja ya elegida.
+        # Of each cell, the dump sites whose polygon with margin doesn't touch an already chosen box are kept.
         utiles = {k: [s for s in v if not any(se_tocan(caja_con_margen([s["caja"]]), c) for c in cajas)] for k, v in pendientes.items()}
         utiles = {k: v for k, v in utiles.items() if any(s["estado"] == "abierto" for s in v)}
         if not utiles:
-            break  # no quedan celdas con abiertos libres
+            break  # no cells with free open sites are left
         (lo, la), ss = max(utiles.items(), key=lambda kv: (_puntaje_abiertos(kv[1]), sum(s["estado"] == "abierto" for s in kv[1]), -kv[0][0], -kv[0][1]))
         del pendientes[(lo, la)]
         resto = []
-        # Cada basural por separado no se toca con una caja elegida, pero la caja que los junta puede tocarse:
-        # entonces la celda se parte y queda el lado (oeste, este, sur o norte de esa caja) con más puntaje.
+        # Each dump site separately doesn't touch a chosen box, but the box joining them can:
+        # then the cell is split and the side (west, east, south or north of that box) with the highest score is kept.
         while True:
             caja = caja_con_margen([s["caja"] for s in ss])
             toca = next((c for c in cajas if se_tocan(caja, c)), None)
@@ -372,7 +372,7 @@ def agregar(args):
               + (f" (aparte quedan {len(resto)} por la caja de otro frame)" if resto else "") + f"; caja {caja}; consultando ASF…", flush=True)
         f = evaluar_area(clave, ciudad, pais, caja, args, complejos, negativos)
         if f.get("sin_cobertura"):
-            # Ningún frame de NISAR cubre la caja entera: queda la huella con más puntaje y la caja se achica a sus basurales.
+            # No NISAR frame covers the whole box: the footprint with the highest score is kept and the box shrinks to its dump sites.
             lon, lat = np.array([s["lon"] for s in ss]), np.array([s["lat"] for s in ss])
             grupos = pares_por_frame(consultar_asf(caja, args.cache))
             mejor = max(([s for s, d in zip(ss, dentro_poligono(lon, lat, g["huella"])) if d] for g in grupos.values() if len(g["pares"]) >= 4),
@@ -389,11 +389,11 @@ def agregar(args):
                 descartar(lo, la, clave, ss, f"sin frame GUNW PR que cubra el {args.min_cobertura:.0%} de la caja, ni achicándola a una huella (mejor cobertura {f['mejor_cobertura']:.0%})")
                 continue
         if resto:
-            pendientes[(lo, la)] = resto  # lo que quedó afuera puede armar otro frame más adelante
+            pendientes[(lo, la)] = resto  # what was left out can form another frame later
         if f["n_gunw"] < MIN_PARES_AGREGAR:
             descartar(lo, la, clave, ss, f"sólo {f['n_gunw']} pares GUNW PR (hacen falta {MIN_PARES_AGREGAR})")
             continue
-        # Los que quedan adentro de la huella de los tracks elegidos (la caja puede no estar cubierta entera).
+        # Those inside the footprint of the chosen tracks (the box may not be fully covered).
         lon, lat = np.array([s["lon"] for s in ss]), np.array([s["lat"] for s in ss])
         cubre = np.zeros(len(ss), dtype=bool)
         for h in f["_huellas"]:
@@ -409,7 +409,7 @@ def agregar(args):
               f"en la huella {f['n_sitios_10ha']}")
         elegidos.append(f)
         nombres.add(clave)
-    # El orden de procesamiento es de más a menos abiertos.
+    # The processing order goes from most to fewest open sites.
     elegidos.sort(key=lambda f: (-f["n_sitios_10ha"]["abierto"], -f["puntaje"], f["prioridad"]))
     for i, f in enumerate(elegidos):
         f["prioridad"] = max(g["prioridad"] for g in viejos) + 1 + i
@@ -435,7 +435,7 @@ def agregar(args):
     with open(args.salida, "w", encoding="utf-8") as fh:
         json.dump(actual, fh, ensure_ascii=False, indent=1)
         fh.write("\n")
-    if args.estado_conocido:  # los frames de antes quedan como están; se suman los nuevos
+    if args.estado_conocido:  # the earlier frames stay as they are; the new ones are added
         with open(args.estado_conocido, encoding="utf-8") as fh:
             ec = json.load(fh)
         ec["frames"].update(estado_conocido(elegidos)["frames"])
@@ -451,7 +451,7 @@ def agregar(args):
 
 
 def _escribir_md_agregados(ruta, elegidos, descartadas, meta, n_sitios, total, n_ya):
-    """Agrega (o reemplaza) en el .md la sección de los frames sumados; el resto del documento no se toca."""
+    """Adds (or replaces) in the .md the section of the added frames; the rest of the document isn't touched."""
     filas = ["| Prioridad | Frame | Ciudad | Celda (lon, lat) | Tracks (NISAR) | Pares | Fechas | Abiertos | Cerrados | Caja (lon O, lat S, lon E, lat N) | Puntaje |",
              "|---|---|---|---|---|---|---|---|---|---|---|"]
     for f in elegidos:
@@ -520,10 +520,10 @@ def evaluar_area(clave, ciudad, pais, caja, args, complejos, negativos):
 
 
 def elegir(evaluados, n, max_usa, min_fuera_top=1, top=4):
-    """Argentina (reservada) primero; después por puntaje, sin áreas superpuestas y con tope de EE. UU.
+    """Argentina (reserved) first; then by score, without overlapping areas and with a USA cap.
 
-    - Dos áreas que se tocan no pueden entrar las dos (un complejo tiene que caer en una sola partición).
-    - Entre los primeros `top` (los que se procesan si no da el tiempo) entra al menos `min_fuera_top` de fuera de EE. UU.
+    - Two areas that touch can't both get in (a complex has to fall in a single partition).
+    - Among the first `top` (those processed if time runs short) at least `min_fuera_top` from outside the USA get in.
     """
     con_datos = [f for f in evaluados if f.get("n_gunw", 0) >= 4 and f.get("puntaje", 0) > 0 or f.get("pais") == "ARG" and f.get("n_gunw", 0)]
     reservados = [f for f in con_datos if f["reservado_prueba"]]
@@ -539,7 +539,7 @@ def elegir(evaluados, n, max_usa, min_fuera_top=1, top=4):
                 continue
             n_usa += 1
         elegidos.append(f)
-    # que el corte de los primeros `top` no quede sólo en EE. UU.
+    # so the cut of the first `top` doesn't stay only in the USA
     fuera = [f for f in elegidos if f["pais"] not in EEUU]
     if fuera and sum(f["pais"] not in EEUU for f in elegidos[:top]) < min_fuera_top:
         mejor = fuera[0]
@@ -581,18 +581,18 @@ def tabla_md(frames, descartados, meta):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--n", type=int, default=10, help="cuántos frames elegir (contando el AMBA)")
+    a.add_argument("--n", type=int, default=10, help="how many frames to choose (counting the AMBA)")
     a.add_argument("--max-usa", type=int, default=6, help="tope de frames de EE. UU. y sus territorios")
-    a.add_argument("--celdas", type=int, default=25, help="celdas de 1° con más basurales de estado conocido para probar")
-    a.add_argument("--min-cobertura", type=float, default=0.75, help="fracción de la caja que tiene que cubrir la huella de un frame")
-    a.add_argument("--cache", help="carpeta para guardar las respuestas de ASF")
+    a.add_argument("--celdas", type=int, default=25, help="1° cells with the most known-status dump sites to try")
+    a.add_argument("--min-cobertura", type=float, default=0.75, help="fraction of the box a frame's footprint has to cover")
+    a.add_argument("--cache", help="folder to save the ASF responses")
     a.add_argument("--agregar", type=int, metavar="N",
-                   help="no vuelve a elegir: deja los frames de frames.json como están y suma N por cantidad de abiertos (ver el encabezado)")
+                   help="doesn't choose again: leaves the frames in frames.json as they are and adds N by number of open sites (see the header)")
     a.add_argument("--salida", default=os.path.join(DATA, "frames.json"))
     a.add_argument("--md", default=os.path.join(AQUI, "datos", "frames-elegidos.md"))
-    a.add_argument("--todos", help="si se da, guarda acá todas las áreas evaluadas (JSON)")
+    a.add_argument("--todos", help="if given, saves here all the evaluated areas (JSON)")
     a.add_argument("--estado-conocido", default=os.path.join(RAIZ, "data", "salidas", "estado_conocido.json"),
-                   help="basurales de estado conocido de cada frame elegido (lo leen las etapas 8 y 9)")
+                   help="known-status dump sites of each chosen frame (read by stages 8 and 9)")
     args = a.parse_args()
     if args.agregar:
         return agregar(args)
@@ -612,7 +612,7 @@ def main():
     paises_sitio = _paises_por_complejo()
     evaluados = []
     for clave, ciudad, pais, caja in areas:
-        if pais is None:  # celdas: el país más común entre los basurales de la caja
+        if pais is None:  # cells: the most common country among the dump sites in the box
             ids = [c["id"] for c in complejos if en_caja([c["lon"]], [c["lat"]], caja)[0]]
             pais = collections.Counter(paises_sitio.get(i) for i in ids if paises_sitio.get(i)).most_common(1)
             pais = pais[0][0] if pais else "USA"
@@ -667,11 +667,11 @@ FUENTES_ESTADO = ("epa_lmop", "curado_manual", "osm")
 
 
 def estado_conocido(frames):
-    """Por frame elegido, los basurales del catálogo con estado conocido (abierto, cerrado o contradictorio).
+    """Per chosen frame, the catalog dump sites with known status (open, closed or contradictory).
 
-    Salen de `basurales_mundo.json` (que ya junta EPA LMOP, OSM y los casos curados de Argentina; los cerrados
-    son los de `basurales_cerrados.json`). Se cruzan con `casos_curados_argentina.json` por `id_fuente`.
-    Cada sitio dice qué fuente da el estado: la etapa 8 puede quedarse sólo con EPA y casos curados.
+    They come from `basurales_mundo.json` (which already joins EPA LMOP, OSM and the curated Argentine cases; the closed
+    ones are those of `basurales_cerrados.json`). They're matched with `casos_curados_argentina.json` by `id_fuente`.
+    Each site says which source gives the status: stage 8 can keep only EPA and curated cases.
     """
     with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
         sitios = json.load(fh)["sitios"]
@@ -725,7 +725,7 @@ def _ascii(t):
 
 
 def _localidades_epa():
-    """sitio -> "localidad, condado, estado" de la EPA (para nombrar las celdas de EE. UU.)."""
+    """site -> "locality, county, state" from the EPA (to name the USA cells)."""
     with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
         sitios = json.load(fh)["sitios"]
     salida = {}
@@ -739,7 +739,7 @@ def _localidades_epa():
 
 
 def _paises_por_complejo():
-    """complejo -> país, desde basurales_mundo.json (los complejos no traen país)."""
+    """complex -> country, from basurales_mundo.json (complexes don't carry a country)."""
     with open(os.path.join(DATA, "basurales", "complejos.json"), encoding="utf-8") as fh:
         por_sitio = json.load(fh)["complejo_por_sitio"]
     with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:

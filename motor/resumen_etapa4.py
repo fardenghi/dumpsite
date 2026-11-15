@@ -1,10 +1,10 @@
-"""Tablas de `../docs/resultados.md`, en Markdown, a partir de `salidas/<FRAME>/` (no calcula nada nuevo).
+"""Tables for `../docs/resultados.md`, in Markdown, built from `salidas/<FRAME>/` (computes nothing new).
 
-    python resumen_etapa4.py            # manchas por frame, y despierto / quieto / no alcanza por estado
+    python resumen_etapa4.py            # blobs per frame, and awake / quiet / not enough per status
 
-Lee de cada frame `manchas.geojson` (encabezado), `tabla_radar.parquet` e `insomnio_catalogo.parquet`. Separa los
-frames de `data/frames.json` en dos grupos: los de antes y los agregados por cantidad de abiertos (`criterio` =
-`abiertos`, prompt 6). Cuenta polígonos de `data/catalogos/basurales/` de 10 ha o más por el estado del registro.
+Reads each frame's `manchas.geojson` (header), `tabla_radar.parquet` and `insomnio_catalogo.parquet`. Splits the
+frames in `data/catalogos/frames.json` into two groups: the original ones and the ones added by number of open sites
+(`criterio` = `abiertos`, prompt 6). Counts polygons of `data/catalogos/basurales/` of 10 ha or more by registry status.
 """
 import json
 import os

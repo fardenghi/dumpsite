@@ -1,6 +1,6 @@
-"""Etapa 4: de las manchas en píxeles a polígonos, la tabla de radar y el insomnio del catálogo. Sintético y sin red.
+"""Stage 4: from blobs in pixels to polygons, the radar table and the catalog insomnia. Synthetic and offline.
 
-Correr desde `motor/`:  python -m pytest tests -q
+Run from `motor/`:  python -m pytest tests -q
 """
 import argparse
 import json
@@ -26,14 +26,14 @@ def _mascara(texto):
 
 @pytest.mark.parametrize("texto, exteriores, agujeros", [
     ("#", 1, 0), ("## ##", 1, 0), ("### #.# ###", 1, 1),
-    ("##. #.# ###", 1, 1),  # el agujero toca el exterior en un vértice
+    ("##. #.# ###", 1, 1),  # the hole touches the exterior at a vertex
     ("#.. ##. .## ..#", 1, 0), ("###. #.## ##.# .###", 1, 2),
 ])
 def test_contornos(texto, exteriores, agujeros):
     m = _mascara(texto)
     ext, agu = em.contornos(m)
     assert (len(ext), len(agu)) == (exteriores, agujeros)
-    assert sum(a for a, _ in ext) - sum(a for a, _ in agu) == m.sum()  # el área de los anillos es la de los píxeles
+    assert sum(a for a, _ in ext) - sum(a for a, _ in agu) == m.sum()  # the area of the rings is that of the pixels
 
 
 def test_contornos_al_azar():
@@ -45,34 +45,34 @@ def test_contornos_al_azar():
             ext, agu = em.contornos(m)
             assert sum(a for a, _ in ext) - sum(a for a, _ in agu) == pytest.approx(m.sum())
             for _, v in ext + agu:
-                assert len({tuple(x) for x in v.tolist()}) == len(v)  # anillos simples: ningún vértice repetido
+                assert len({tuple(x) for x in v.tolist()}) == len(v)  # simple rings: no repeated vertex
 
 
 def test_geometria_en_el_mapa():
     fr = geo.frame_de_caja("LA", [-118.75, 33.85, -117.75, 34.50], epsg=32611)
     xs, ys = fr.grilla(80.0)
-    m = _mascara("#### #..# ####")  # 10 píxeles y un agujero de 2
+    m = _mascara("#### #..# ####")  # 10 pixels and a hole of 2
     geom, perimetro = em.geometria(m, 400, 500, xs, ys, fr)
     assert geom["type"] == "Polygon" and len(geom["coordinates"]) == 2 and perimetro == (14 + 6) * 80
     exterior = np.array(geom["coordinates"][0])
     assert (exterior[0] == exterior[-1]).all() and len(exterior) == 5
     ha, (lat, lon) = geo.area_y_centro(exterior[:-1])
-    assert ha == pytest.approx(12 * 0.64, rel=1e-3)  # el rectángulo de 4 × 3 píxeles de 80 m
-    assert fr.latlon(xs[501] + 40, ys[401]) == pytest.approx((lat, lon), abs=1e-5)  # centrado donde están los píxeles
+    assert ha == pytest.approx(12 * 0.64, rel=1e-3)  # the 4 × 3 rectangle of 80 m pixels
+    assert fr.latlon(xs[501] + 40, ys[401]) == pytest.approx((lat, lon), abs=1e-5)  # centered where the pixels are
     x, y = exterior[:-1, 0], exterior[:-1, 1]
-    assert (x * np.roll(y, -1) - np.roll(x, -1) * y).sum() > 0  # exterior antihorario, como pide GeoJSON
+    assert (x * np.roll(y, -1) - np.roll(x, -1) * y).sum() > 0  # exterior counterclockwise, as GeoJSON requires
 
 
 @pytest.fixture(scope="module")
 def frame_sintetico(tmp_path_factory):
-    """Un frame del hemisferio norte con recortes inventados: un relleno siempre despierto, un aeródromo quieto y campo."""
+    """A northern hemisphere frame with made-up crops: an always-awake landfill, a quiet airfield and countryside."""
     base = tmp_path_factory.mktemp("etapa4")
     caja = [-118.32, 33.98, -118.20, 34.08]
     fr = geo.frame_de_caja("SINTE", caja, epsg=32611)
     xs, ys = fr.grilla(80.0)
     forma = (len(ys), len(xs))
     relleno = np.zeros(forma, dtype=bool)
-    relleno[60:80, 50:75] = True  # 500 píxeles = 320 ha
+    relleno[60:80, 50:75] = True  # 500 pixels = 320 ha
     rng = np.random.default_rng(1)
     recortes = base / "salidas" / "SINTE" / "recortes_80m"
     recortes.mkdir(parents=True)
@@ -86,18 +86,18 @@ def frame_sintetico(tmp_path_factory):
         for a in fechas[:4]:
             for prefijo, tipo, valor in (("gcov", "eco_db", -8.0), ("gcovhv", "eco_hv_db", -15.0)):
                 eco = np.full(forma, valor + (2.0 if prefijo == "gcov" else 0.0), dtype=np.float32)
-                eco[relleno] = valor  # el relleno devuelve 2 dB menos que su entorno en HH
+                eco[relleno] = valor  # the landfill returns 2 dB less than its surroundings in HH
                 np.savez_compressed(recortes / f"{prefijo}_{orbita:03d}_019_{a}_{a}_80m.npz", valor=eco.astype(np.float16), tipo=tipo,
                                     orbita=orbita, frame_nisar=19, fecha_ref=a, fecha_sec=a, producto=f"GCOV {orbita} {a}", epsg=32611, epsg_producto=32611)
     fijos = base / "fijos" / "SINTE"
     fijos.mkdir(parents=True)
     agua = np.zeros(forma, dtype=np.uint8)
-    agua[:, :10] = 100  # una franja de agua al oeste
+    agua[:, :10] = 100  # a strip of water to the west
     np.savez_compressed(fijos / "agua_jrc_80m.npz", ocurrencia=agua)
     np.savez_compressed(fijos / "worldcover_80m.npz", urbano=np.full(forma, 60, dtype=np.uint8), cultivo=np.full(forma, 10, dtype=np.uint8))
     (fijos / "usos_osm.json").write_text(json.dumps({"usos": []}))
 
-    def poligono(filas, cols):  # el contorno de un bloque de píxeles, en lon/lat
+    def poligono(filas, cols):  # the outline of a block of pixels, in lon/lat
         esquinas = [(cols[0], filas[0]), (cols[1], filas[0]), (cols[1], filas[1]), (cols[0], filas[1])]
         lat, lon = fr.latlon(np.array([xs[0] + (c - 0.5) * 80 for c, _ in esquinas]), np.array([ys[0] - (f - 0.5) * 80 for _, f in esquinas]))
         return [[float(a), float(b)] for a, b in zip(lon, lat)]
@@ -121,11 +121,11 @@ def test_extraer_un_frame(frame_sintetico):
     r = em.extraer(a, ins.Parametros(), str(destino / "SINTE"), 5.0)
     assert r["candidatas"] == 1 and r["pares"] == 16
 
-    manchas = contratos.leer(str(destino / "SINTE"), "manchas")  # valida contra el contrato
+    manchas = contratos.leer(str(destino / "SINTE"), "manchas")  # validates against the contract
     candidatas = manchas[manchas["descartada"].isna()]
     assert list(candidatas["id_mancha"]) == ["MAN-SINTE-0001"] and candidatas["ha"].iloc[0] == pytest.approx(relleno.sum() * 0.64, rel=0.1)
     ha, (lat, lon) = geo.area_y_centro(candidatas["geometry"].iloc[0]["coordinates"][0][:-1])
-    assert ha == pytest.approx(candidatas["ha"].iloc[0], rel=0.01)  # el polígono mide lo que dicen los píxeles
+    assert ha == pytest.approx(candidatas["ha"].iloc[0], rel=0.01)  # the polygon measures what the pixels say
     assert (lat, lon) == pytest.approx((candidatas["lat"].iloc[0], candidatas["lon"].iloc[0]), abs=1e-3)
     assert candidatas["clase_osm"].iloc[0] == "relleno_osm" and candidatas["que"].iloc[0] == "BAS-000001"
 
@@ -139,17 +139,17 @@ def test_extraer_un_frame(frame_sintetico):
     assert f["urbano_anillo"] == pytest.approx(0.60) and f["cultivo_anillo"] == pytest.approx(0.10) and f["agua_anillo"] == 0.0
     assert abs(f["tendencia"]) < 1e-3 and 0.3 < f["compacidad"] <= 1.0 and f["area_ha"] == candidatas["ha"].iloc[0]
 
-    # las mediciones de la parte más activa: el relleno, con coherencia 0,25 contra 0,70 del anillo y eco constante
+    # measurements of the most active part: the landfill, with coherence 0.25 versus 0.70 in the ring and constant echo
     assert f["contraste_p10"] == pytest.approx(0.25 / 0.70, abs=0.03) and f["eco_var_p90"] == pytest.approx(0.0, abs=0.01)
     assert f["ha_insomnio_90"] == pytest.approx(f["area_ha"], rel=0.15) and 0 <= f["indice_actividad"] <= 1
-    assert em.indice_actividad(0.25, 4.0) > em.UMBRAL_ACTIVIDAD > em.indice_actividad(0.65, 2.5)  # frente que se mueve contra cobertura pareja
+    assert em.indice_actividad(0.25, 4.0) > em.UMBRAL_ACTIVIDAD > em.indice_actividad(0.65, 2.5)  # moving front versus even cover
     assert np.isnan(em.indice_actividad(np.nan, 3.0))
 
     c = contratos.leer(str(destino / "SINTE"), "insomnio_catalogo").set_index("id_catalogo")
     assert {"contraste_p10", "eco_var_p90", "ha_insomnio_90", "hv_hh", "indice_actividad"} <= set(c.columns)
     assert c.loc["BAS-000001", "contraste_p10"] < c.loc["NEG-000001", "contraste_p10"]
-    assert c.loc["BAS-000001", "radar"] == "despierto" and c.loc["BAS-000001", "insomnio"] == 1.0  # figura cerrado y está despierto
-    assert c.loc["NEG-000001", "radar"] == "quieto" and c.loc["NEG-000001", "insomnio"] == 0.0  # no formó mancha y se mide igual
+    assert c.loc["BAS-000001", "radar"] == "despierto" and c.loc["BAS-000001", "insomnio"] == 1.0  # listed as closed and it's awake
+    assert c.loc["NEG-000001", "radar"] == "quieto" and c.loc["NEG-000001", "insomnio"] == 0.0  # it formed no blob and is measured anyway
     assert c.loc["NEG-000002", "radar"] == "no_alcanza" and "menos de 10 ha" in c.loc["NEG-000002", "motivo"]
     assert c.loc["BAS-000001", "complejo"] == "CPX-000001" and c.loc["NEG-000001", "clase"] == "aeropuerto"
 

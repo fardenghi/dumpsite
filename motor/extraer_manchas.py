@@ -1,23 +1,23 @@
-"""Etapa 4: manchas y extractor de radar, frame por frame (ver `../docs/modelo.md`).
+"""Stage 4: blobs and radar extractor, frame by frame (see `../docs/modelo.md`).
 
-Por cada frame, con los recortes que dejó `pipeline_insomnio.py procesar`:
-  1. calcula el insomnio por píxel y arma las manchas (los mismos filtros del índice: agua, forma, eco y 10 ha);
-  2. escribe cada mancha como polígono en `manchas.geojson` (todas, también las descartadas);
-  3. mide cada mancha candidata contra su anillo de 1,5 km y escribe `tabla_radar.parquet`
-     (las columnas de Movimiento, Rugosidad, Forma y Contexto de la sección 4 del plan);
-  4. mide el insomnio de cada polígono de los catálogos del frame, haya quedado o no en una mancha, y escribe
-     `insomnio_catalogo.parquet` (la segunda dirección del cruce: sin esto no hay "cerrado y quieto").
+For each frame, with the crops left by `pipeline_insomnio.py procesar`:
+  1. computes the per-pixel insomnia and builds the blobs (the same filters as the index: water, shape, echo and 10 ha);
+  2. writes each blob as a polygon in `manchas.geojson` (all of them, including the discarded ones);
+  3. measures each candidate blob against its 1.5 km ring and writes `tabla_radar.parquet`
+     (the Movement, Roughness, Shape and Context columns of section 4 of the plan);
+  4. measures the insomnia of each catalog polygon in the frame, whether or not it ended up in a blob, and writes
+     `insomnio_catalogo.parquet` (the second direction of the cross: without it there's no "closed and quiet").
 
-    python extraer_manchas.py --frame LOS_ANGELES             # un frame: escribe en ../data/salidas/LOS_ANGELES/
-    python extraer_manchas.py --frame todos                   # todos los de data/frames.json que tengan recortes
-    python extraer_manchas.py juntar                          # junta los frames en ../data/salidas/*.geojson y *.parquet
+    python extraer_manchas.py --frame LOS_ANGELES             # one frame: writes to ../data/salidas/LOS_ANGELES/
+    python extraer_manchas.py --frame todos                   # all those in data/catalogos/frames.json that have crops
+    python extraer_manchas.py juntar                          # joins the frames into ../data/salidas/*.geojson and *.parquet
 
-Los tres archivos siguen `../docs/contratos-datos.md` (se validan con `contratos.py`). El anillo no tiene agua ni
-polígonos de los catálogos. Todo sale de `insomnio.py`, sin copiar la lógica: `cocientes`, `por_orbita`,
-`persistencia`, `anillo` y `ficha`.
+The three files follow `../docs/contratos-datos.md` (validated with `contratos.py`). The ring has no water or
+catalog polygons. Everything comes from `insomnio.py`, without copying the logic: `cocientes`, `por_orbita`,
+`persistencia`, `anillo` and `ficha`.
 
-Fuentes: NISAR L2 GUNW y GCOV (NASA/ISRO, ASF DAAC); JRC Global Surface Water v1.4; ESA WorldCover 2021 v200
-(CC BY 4.0); catálogos de `data/` (Overture Maps / © colaboradores de OpenStreetMap, ODbL; EPA LMOP; Climate TRACE).
+Sources: NISAR L2 GUNW and GCOV (NASA/ISRO, ASF DAAC); JRC Global Surface Water v1.4; ESA WorldCover 2021 v200
+(CC BY 4.0); catalogs in `data/` (Overture Maps / © OpenStreetMap contributors, ODbL; EPA LMOP; Climate TRACE).
 """
 import argparse
 import dataclasses
@@ -43,18 +43,18 @@ import pipeline_insomnio as pl  # noqa: E402
 RAIZ = os.path.dirname(AQUI)
 PARTES = ("manchas.geojson", "tabla_radar.parquet", "insomnio_catalogo.parquet")
 
-# Índice de actividad (experimental, sin validar): combina dos mediciones de la parte más activa del predio.
-#   contraste_p10  coherencia del 10 % menos coherente del predio / coherencia del anillo (mediana entre pares)
-#   eco_var_p90    variación del eco en el tiempo, por píxel (percentil 90 del predio, dB)
-# Es una regresión logística ajustada con 53 predios de 9 frames (19 con actividad visible en Sentinel-2 y 34 sin),
-# con etiquetas ópticas asignadas por IA (`salidas/etiquetas_optico_ia.json`). Dejando un frame afuera por vez da
-# AUC 0,75 (IC 95 %: 0,59 a 0,89), contra 0,60 de la mediana del predio. El AMBA no se usó. Ver ../docs/indice-insomnio.md.
-ACTIVIDAD = {"intercepto": -0.75, "contraste_p10": (-1.17, 0.483, 0.136), "eco_var_p90": (0.65, 3.046, 0.790)}  # (coeficiente, media, desvío)
-UMBRAL_ACTIVIDAD = 0.45  # el que maximiza la exactitud balanceada sobre los 53 predios
+# Activity index (experimental, not validated): combines two measurements of the most active part of the site.
+#   contraste_p10  coherence of the least coherent 10 % of the site / ring coherence (median across pairs)
+#   eco_var_p90    echo variation over time, per pixel (90th percentile of the site, dB)
+# It's a logistic regression fitted with 53 sites from 9 frames (19 with activity visible in Sentinel-2 and 34 without),
+# with optical labels assigned by AI (`salidas/etiquetas_optico_ia.json`). Leaving one frame out at a time it gives
+# AUC 0.75 (95 % CI: 0.59 to 0.89), versus 0.60 for the site median. The AMBA wasn't used. See ../docs/indice-insomnio.md.
+ACTIVIDAD = {"intercepto": -0.75, "contraste_p10": (-1.17, 0.483, 0.136), "eco_var_p90": (0.65, 3.046, 0.790)}  # (coefficient, mean, deviation)
+UMBRAL_ACTIVIDAD = 0.45  # the one that maximizes balanced accuracy over the 53 sites
 
 
 def indice_actividad(contraste_p10, eco_var_p90):
-    """Índice de actividad entre 0 y 1 (NaN si falta alguna de las dos mediciones). No es una probabilidad calibrada."""
+    """Activity index between 0 and 1 (NaN if either measurement is missing). It's not a calibrated probability."""
     if not (np.isfinite(contraste_p10) and np.isfinite(eco_var_p90)):
         return np.nan
     z = ACTIVIDAD["intercepto"]
@@ -64,18 +64,18 @@ def indice_actividad(contraste_p10, eco_var_p90):
     return float(1 / (1 + np.exp(-z)))
 
 
-# ------------------------------------------------------------------ de píxeles a polígonos
+# ------------------------------------------------------------------ from pixels to polygons
 def contornos(mascara):
-    """Anillos del borde de una máscara, en coordenadas de esquina de píxel (x = columna, y = fila).
+    """Edge rings of a mask, in pixel-corner coordinates (x = column, y = row).
 
-    Recorre los lados de píxel que separan adentro de afuera, con el adentro siempre a la derecha. En un vértice
-    donde se tocan dos píxeles en diagonal sigue por el mismo píxel, y si un anillo pasa dos veces por un vértice
-    se parte en dos: así todos los anillos son simples. Devuelve (exteriores, agujeros): los exteriores tienen
-    área positiva con la fórmula del cordón en estas coordenadas (y hacia abajo) y los agujeros, negativa.
+    Walks the pixel sides that separate inside from outside, always with the inside on the right. At a vertex
+    where two pixels touch diagonally it continues along the same pixel, and if a ring passes twice through a vertex
+    it's split in two: that way all rings are simple. Returns (exteriors, holes): exteriors have
+    positive area with the shoelace formula in these coordinates (y downward) and holes, negative.
     """
     p = np.pad(mascara, 1)
     r, c = np.nonzero(p)
-    lados = []  # (x0, y0, x1, y1) en coordenadas sin el relleno
+    lados = []  # (x0, y0, x1, y1) in coordinates without the padding
     for libre, a, b in ((~p[r - 1, c], (0, 0), (1, 0)), (~p[r, c + 1], (1, 0), (1, 1)),
                         (~p[r + 1, c], (1, 1), (0, 1)), (~p[r, c - 1], (0, 1), (0, 0))):
         x, y = c[libre] - 1, r[libre] - 1
@@ -93,14 +93,14 @@ def contornos(mascara):
             opciones = sigue[actual]
             if len(opciones) == 1 or previo is None:
                 destino = opciones.pop(0)
-            else:  # dos píxeles en diagonal: giro a la derecha, que es seguir por el mismo píxel
+            else:  # two diagonal pixels: turn right, which means following the same pixel
                 dx, dy = actual[0] - previo[0], actual[1] - previo[1]
                 giro = (actual[0] - dy, actual[1] + dx)
                 destino = opciones.pop(opciones.index(giro) if giro in opciones else 0)
             if not opciones:
                 del sigue[actual]
             previo, actual = actual, destino
-            if actual in donde:  # se cerró un lazo: sale como anillo y el camino sigue desde ahí
+            if actual in donde:  # a loop closed: it comes out as a ring and the path continues from there
                 i = donde[actual]
                 lazo = camino[i:]
                 for v in lazo[1:]:
@@ -117,7 +117,7 @@ def contornos(mascara):
     for a in anillos:
         v = np.array(a, dtype=float)
         area = 0.5 * float((v[:, 0] * np.roll(v[:, 1], -1) - np.roll(v[:, 0], -1) * v[:, 1]).sum())
-        # saco los vértices alineados: sólo quedan las esquinas
+        # drop the collinear vertices: only the corners are left
         d0, d1 = v - np.roll(v, 1, axis=0), np.roll(v, -1, axis=0) - v
         v = v[(d0 != d1).any(axis=1)]
         (exteriores if area > 0 else agujeros).append((abs(area), v))
@@ -134,22 +134,22 @@ def _adentro(punto, anillo):
 
 
 def geometria(mascara, fila0, col0, xs, ys, fr):
-    """GeoJSON (Polygon o MultiPolygon, en lon/lat) de una mancha dada por su máscara y la esquina de su ventana.
+    """GeoJSON (Polygon or MultiPolygon, in lon/lat) of a blob given by its mask and the corner of its window.
 
-    También devuelve el perímetro en metros (todos los bordes, también los de los agujeros).
+    It also returns the perimeter in meters (all edges, including those of the holes).
     """
     paso = float(xs[1] - xs[0])
     exteriores, agujeros = contornos(mascara)
 
     def lonlat(v):
-        v = v[::-1]  # en el mapa el recorrido queda al revés: exteriores antihorarios y agujeros horarios, como pide GeoJSON
+        v = v[::-1]  # on the map the direction flips: exteriors counterclockwise and holes clockwise, as GeoJSON requires
         lat, lon = fr.latlon(xs[0] + (v[:, 0] + col0 - 0.5) * paso, ys[0] - (v[:, 1] + fila0 - 0.5) * paso)
         anillo = [[round(float(a), 6), round(float(b), 6)] for a, b in zip(lon, lat)]
         return anillo + [anillo[0]]
 
     partes = [[lonlat(v)] for _, v in exteriores]
     for _, h in agujeros:
-        medio = (h[0] + h[1]) / 2  # el medio de un lado del agujero: nunca cae sobre otro anillo
+        medio = (h[0] + h[1]) / 2  # the middle of a side of the hole: it never falls on another ring
         for i, (_, v) in enumerate(exteriores):
             if len(exteriores) == 1 or _adentro(medio, v):
                 partes[i].append(lonlat(h))
@@ -162,7 +162,7 @@ def geometria(mascara, fila0, col0, xs, ys, fr):
 
 # ------------------------------------------------------------------ mancha contra anillo
 def _ventana(mascara, n):
-    """Recorte de la grilla que contiene la máscara y n píxeles alrededor."""
+    """Crop of the grid containing the mask and n pixels around it."""
     f = np.nonzero(mascara.any(1))[0]
     c = np.nonzero(mascara.any(0))[0]
     return (slice(max(f[0] - n, 0), f[-1] + n + 1), slice(max(c[0] - n, 0), c[-1] + n + 1))
@@ -176,12 +176,12 @@ def _media(capa, mascara):
 
 
 def medir(mascara, d, p):
-    """Las columnas de radar de una mancha (o de cualquier máscara) contra su anillo. `d` es el contexto de `preparar`."""
+    """The radar columns of a blob (or of any mask) against its ring. `d` is the context from `preparar`."""
     paso = d["paso"]
     v = _ventana(mascara, int(round(p.anillo_m / paso)) + 1)
     m, tierra = mascara[v], d["tierra"][v]
     aro = ins.anillo(m, tierra, paso, p, excluir=d["catalogo_px"][v])
-    aro_bruto = ins.anillo(m, np.ones_like(tierra), paso, p)  # con el agua y los catálogos: para el contexto
+    aro_bruto = ins.anillo(m, np.ones_like(tierra), paso, p)  # with water and catalogs: for the context
     adentro = m & tierra
     coh = d["coh"][(slice(None),) + v]
     with warnings.catch_warnings():
@@ -201,7 +201,7 @@ def medir(mascara, d, p):
         fila.update(insomnio=float(i[0]), persistencia=float(ins.persistencia(despierto[:, None], valido[:, None], d["fechas"])[0]),
                     contraste_mediana=float(np.median(cociente)), contraste_desvio=float(np.std(cociente)),
                     n_pares=int(valido.sum()), n_orbitas=int(sum(np.isfinite(x[0]) for x in partes.values())))
-    # La parte más activa del predio: el decil menos coherente contra el anillo, par a par.
+    # The most active part of the site: the least coherent decile against the ring, pair by pair.
     if adentro.sum() >= 4 and aro.any():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", RuntimeWarning)
@@ -209,12 +209,12 @@ def medir(mascara, d, p):
         ok = np.isfinite(p10) & np.isfinite(m_aro) & (m_aro > 0)
         if ok.any():
             fila["contraste_p10"] = float(np.median(p10[ok] / m_aro[ok]))
-    # La mayor zona conexa del predio con insomnio por píxel >= 0,9 (ha).
+    # The largest connected area of the site with per-pixel insomnia >= 0.9 (ha).
     alto = adentro & (np.nan_to_num(d["insomnio_px"][v]) >= 0.9)
     etq, _ = ndimage.label(alto)
     fila["ha_insomnio_90"] = float(max(np.bincount(etq.ravel())[1:], default=0) * paso * paso / 1e4)
     con_dato = np.isfinite(m_sitio)
-    if con_dato.sum() >= 3:  # pendiente de la coherencia de la mancha, llevada a pares de 12 días, en el tiempo
+    if con_dato.sum() >= 3:  # slope over time of the blob's coherence, brought to 12-day pairs
         dias = d["dia"][con_dato]
         if np.ptp(dias) > 0:
             fila["tendencia"] = float(np.polyfit(dias, np.clip(m_sitio[con_dato] / d["factor"][con_dato], 0, 1), 1)[0])
@@ -228,9 +228,9 @@ def medir(mascara, d, p):
             warnings.simplefilter("ignore", RuntimeWarning)
             serie = np.nanmean(eco[:, adentro], axis=1) if adentro.any() else np.full(len(eco), np.nan)
         desvios = [np.nanstd(serie[d["orbitas_eco"] == o]) for o in np.unique(d["orbitas_eco"]) if np.isfinite(serie[d["orbitas_eco"] == o]).sum() >= 2]
-        if desvios:  # entre fechas de una misma órbita (cada órbita mira con otra geometría)
+        if desvios:  # between dates of the same orbit (each orbit looks with another geometry)
             fila["eco_variacion"] = float(np.mean(desvios))
-        # Lo mismo por píxel: un frente que se mueve cambia el eco de sus píxeles aunque la media del predio no cambie.
+        # The same per pixel: a moving front changes the echo of its pixels even if the site mean doesn't change.
         if adentro.any():
             por_px = [np.nanstd(eco[d["orbitas_eco"] == o][:, adentro], axis=0) for o in np.unique(d["orbitas_eco"]) if (d["orbitas_eco"] == o).sum() >= 3]
             if por_px:
@@ -255,7 +255,7 @@ def medir(mascara, d, p):
 
 # ------------------------------------------------------------------ un frame
 def preparar(a, p):
-    """Lee el frame con el lector del pipeline y calcula las capas del índice. Devuelve (contexto, manchas, etiquetas)."""
+    """Reads the frame with the pipeline's reader and computes the index layers. Returns (context, blobs, labels)."""
     ctx = pl.cargar(a)
     fr = ctx["fr"]
     capas, lista, etiquetas, _ = pl.evaluar(ctx, p)
@@ -267,7 +267,7 @@ def preparar(a, p):
             ff.cobertura(fr, a.fijos, a.capa)
         with np.load(cobertura) as z:
             urbano, cultivo = z["urbano"], z["cultivo"]
-    except Exception as e:  # sin red: las dos columnas de contexto quedan vacías
+    except Exception as e:  # offline: the two context columns stay empty
         print(f"AVISO: sin ESA WorldCover para {fr.nombre} ({type(e).__name__}: {e}): urbano_anillo y cultivo_anillo quedan vacías")
     import datetime as dt
 
@@ -288,7 +288,7 @@ def manchas_y_tabla(d, lista, etiquetas, p):
     cajas = ndimage.find_objects(etiquetas)
     features, filas = [], []
     nulo = lambda v: None if v is None or (isinstance(v, float) and not np.isfinite(v)) else v  # noqa: E731
-    for n, m in enumerate(lista, start=1):  # el orden de `insomnio.manchas()`: de mayor a menor superficie
+    for n, m in enumerate(lista, start=1):  # the order of `insomnio.manchas()`: largest area first
         sl = cajas[m["etiqueta"] - 1]
         mascara = etiquetas[sl] == m["etiqueta"]
         geom, perimetro = geometria(mascara, sl[0].start, sl[1].start, xs, ys, fr)
@@ -303,7 +303,7 @@ def manchas_y_tabla(d, lista, etiquetas, p):
         entera = np.zeros(etiquetas.shape, dtype=bool)
         entera[sl] = mascara
         r = medir(entera, d, p)
-        if not np.isfinite(r["insomnio"]):  # sin anillo (todo agua o catálogos alrededor): queda el promedio por píxel
+        if not np.isfinite(r["insomnio"]):  # no ring (all water or catalogs around): the per-pixel mean is kept
             r["insomnio"], r["persistencia"] = float(m["insomnio"]), float(m["persistencia"])
         area_m2 = m["ha"] * 1e4
         filas.append({"id_mancha": ident, "frame": fr.nombre, **{k: r[k] for k in (
@@ -318,9 +318,9 @@ def manchas_y_tabla(d, lista, etiquetas, p):
 
 
 def catalogo_del_frame(d, p, min_ha=contratos.MIN_HA):
-    """Una fila por polígono de los catálogos cuyo centro cae en la caja del frame: `insomnio.ficha()` contra su anillo.
+    """One row per catalog polygon whose center falls in the frame's box: `insomnio.ficha()` against its ring.
 
-    Es la lógica de `insomnio_catalogo.py` (modo exacto), con la grilla del frame y el anillo sin catálogos.
+    It's the logic of `insomnio_catalogo.py` (exact mode), with the frame's grid and the ring without catalogs.
     """
     fr, xs, ys = d["fr"], d["xs"], d["ys"]
     filas = []
@@ -385,7 +385,7 @@ META = {"fuente": "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC; índice de insomn
 
 
 def _sin_chicas(features, min_ha):
-    """Las descartadas por chicas son miles por frame: de ésas sólo quedan las de `min_ha` o más. Las demás, todas."""
+    """The ones discarded for being small are thousands per frame: of those only the ones of `min_ha` or more are kept. All the others are kept."""
     return [f for f in features if f["properties"]["descartada"] != "chica" or f["properties"]["ha"] >= min_ha]
 
 
@@ -412,7 +412,7 @@ def extraer(a, p, destino, min_ha_descartadas=0.0):
 
 
 def juntar(base, destino, min_ha_descartadas):
-    """Junta los archivos de todos los frames (`<base>/<FRAME>/`) en los tres de `destino`, que son los del contrato."""
+    """Joins the files of all frames (`<base>/<FRAME>/`) into the three in `destino`, which are the contract's."""
     carpetas = sorted(os.path.dirname(r) for r in glob.glob(os.path.join(base, "*", "manchas.geojson")))
     if not carpetas:
         sys.exit(f"No hay frames extraídos en {base}.")
@@ -435,15 +435,15 @@ def juntar(base, destino, min_ha_descartadas):
 def main():
     q = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     q.add_argument("paso", nargs="?", choices=["extraer", "juntar"], default="extraer")
-    q.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos`")
-    q.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta del pipeline: los recortes de un frame están en <salida>/<FRAME>/ (los del AMBA, en <salida>/)")
-    q.add_argument("--destino", help="carpeta donde escribir: cada frame en <destino>/<FRAME>/ y `juntar` en <destino>/ (por defecto, --salida)")
-    q.add_argument("--fijos", default=pl.FIJOS, help="carpeta de las fuentes fijas (ver pipeline_insomnio.py)")
+    q.add_argument("--frame", nargs="+", default=["AMBA"], help="one or more frames from data/catalogos/frames.json, or `todos`")
+    q.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="pipeline folder: a frame's crops are in <salida>/<FRAME>/ (the AMBA's, in <salida>/)")
+    q.add_argument("--destino", help="folder to write to: each frame in <destino>/<FRAME>/ and `juntar` in <destino>/ (default: --salida)")
+    q.add_argument("--fijos", default=pl.FIJOS, help="folder of the fixed sources (see pipeline_insomnio.py)")
     q.add_argument("--capa", choices=list(pl.CAPAS), default="80m")
-    q.add_argument("--min-insomnio", type=float, help="umbral de insomnio para armar las manchas. Sólo para juntar más filas de entrenamiento "
-                   "(por ejemplo 0,5); el veredicto usa el de `insomnio.Parametros` (0,70)")
-    q.add_argument("--min-ha-descartadas", type=float, default=5.0, help="superficie mínima de las manchas descartadas por chicas que se escriben "
-                   "en `manchas.geojson` (son miles por frame; 0 = todas). Las candidatas y las demás descartadas van siempre")
+    q.add_argument("--min-insomnio", type=float, help="insomnia threshold to build the blobs. Only to gather more training rows "
+                   "(for example 0.5); the verdict uses the one in `insomnio.Parametros` (0.70)")
+    q.add_argument("--min-ha-descartadas", type=float, default=5.0, help="minimum area of the blobs discarded for being small that get written "
+                   "to `manchas.geojson` (they are thousands per frame; 0 = all). Candidates and the other discarded ones are always written")
     args = q.parse_args()
     destino = args.destino or args.salida
     if args.paso == "juntar":
