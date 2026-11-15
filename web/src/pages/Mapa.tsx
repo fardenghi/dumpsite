@@ -9,7 +9,7 @@ import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
 import { ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
-import type { Imagen, Sitio, Veredicto } from '../data/types'
+import { UMBRAL_BAJO, type Imagen, type Sitio, type Veredicto } from '../data/types'
 import { FRAME_AMBA, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
@@ -146,6 +146,8 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
         <Kpi label={t('Superficie')} value={num(s.ha)} unit="ha" />
       </div>
 
+      {s.umbral_bajo && <p className="motivo">{t('Despierto con el umbral bajo: insomnio mayor que {0}. El predio es chico, liso o de señal intermedia para la regla calibrada', pct(UMBRAL_BAJO))}</p>}
+
       <div className="crece">
         <h3>
           {t('Coherencia')} <span>{t('NISAR, cada 12 días')}</span>
@@ -278,7 +280,7 @@ function FichaSinDato({ s }: { s: SitioCatalogo }) {
       <div className="row" style={{ gap: 8 }}>
         <span className="tag sin_dato">
           <Dot radar="sin_dato" />
-          {t('Sin dato de radar')}
+          {t('Sin procesar todavía')}
         </span>
       </div>
 
@@ -329,6 +331,7 @@ function FichaCatalogo({ v, lugar }: { v: Veredicto; lugar: string }) {
         <Kpi label={t('Superficie')} value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
       </div>
 
+      {v.umbral_bajo && <p className="motivo">{t('Despierto con el umbral bajo: insomnio mayor que {0}. El predio es chico, liso o de señal intermedia para la regla calibrada', pct(UMBRAL_BAJO))}</p>}
       <p className="note">{t('Señal compatible con actividad, sin verificar en terreno')}</p>
 
       <span className="grow" />
@@ -875,7 +878,7 @@ export default function Mapa() {
           {catalogo && (
             <span title={t('Basurales del catálogo donde todavía no procesamos pasadas de NISAR')}>
               <span className="dot sin_dato" />
-              {t('Sin dato de radar')}
+              {t('Sin procesar todavía')}
               <b className="num">{num(sinDato)}</b>
             </span>
           )}

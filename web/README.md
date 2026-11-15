@@ -52,6 +52,12 @@ El mismo script escribe `src/data/seed/calibracion.json` desde `../idea-basurale
 - **El índice completo, píxel por píxel, sólo está para el AMBA** (`public/indice/insomnio-amba.png`). De los otros 29 frames el repo tiene las manchas (el índice por encima del umbral, vectorizado), no la grilla: para tener la imagen completa hay que exportar un PNG por frame desde la máquina donde están los GUNW.
 - En el AMBA no hay modelo de "basural contra otra cosa", así que no hay posibles nuevos: sus manchas sin catálogo quedan sin clasificar.
 
+### Umbral bajo (decisión del equipo, 15/11)
+Los sitios que el pipeline deja en "no alcanza" (predio chico, superficie lisa o señal intermedia) **se muestran como despiertos si su insomnio medido es mayor que 0,2**, el techo de "quieto" del índice. Es una regla de la web, no del pipeline: `conUmbralBajo` en `src/data/types.ts` se aplica al cargar `sitios.json` y `veredictos.json`, que no se tocan, y deja la marca `umbral_bajo`. La ficha y el panel Modelo lo dicen ("Despierto con el umbral bajo").
+- Con esto pasan a despiertos 278 sitios: 4 del AMBA (Villa Domínico, Ministro Rivadavia, Cuartel V y la mancha al oeste de Luján) y 274 del catálogo.
+- Quedan 169 en "no alcanza": 78 sin insomnio medido (más chicos que un píxel o fuera de la grilla) y 91 con insomnio de 0,2 o menos.
+- **Ojo en el pitch:** la regla calibrada sigue siendo insomnio de 0,7 o más (panel Modelo). Los del umbral bajo no pasaron esa calibración: son "señal compatible con actividad", no un veredicto validado.
+
 ### Veredictos de todos los frames y modelo de abierto contra cerrado
 Los escribe `python ../idea-basurales-nisar/herramientas/flujo.py --web`. **Los dos archivos son opcionales**: la web los busca con `import.meta.glob` (`src/data/veredictos.ts`) y, si faltan o no traen las claves nuevas, queda como antes.
 

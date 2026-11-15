@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Dot, PageHead, Picker, dec, fecha, num, pct, radar } from '../components/ui'
 import { useSitios } from '../data/api'
+import { UMBRAL_BAJO } from '../data/types'
 import { getLang, t } from '../i18n'
 import cal from '../data/seed/calibracion.json'
 import candidatos from '../data/seed/candidatos.json'
@@ -185,7 +186,12 @@ export default function Modelo() {
             <Dot radar={s.radar} />
             <div>
               <b>{radar(s.radar)}</b>
-              {getLang() === 'es' && <span>{f.motivo.replace('todos los pares', 'todas las pasadas')}</span>}
+              {/* con el umbral bajo el motivo del pipeline ("señal intermedia"…) ya no explica el veredicto: se dice la regla que se usó */}
+              {s.umbral_bajo ? (
+                <span>{t('Despierto con el umbral bajo: insomnio mayor que {0}. El predio es chico, liso o de señal intermedia para la regla calibrada', pct(UMBRAL_BAJO))}</span>
+              ) : (
+                getLang() === 'es' && <span>{f.motivo.replace('todos los pares', 'todas las pasadas')}</span>
+              )}
             </div>
           </div>
         </div>

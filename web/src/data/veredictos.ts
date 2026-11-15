@@ -2,7 +2,7 @@
 // Both files are written by `motor/flujo.py --web` and may be missing:
 // that's why they're looked up with `import.meta.glob` (a direct `import` of a missing file breaks the build).
 import { useEffect, useState } from 'react'
-import type { LecturaModelo, ModeloEstado, Sitio, Veredicto, Veredictos } from './types'
+import { conUmbralBajo, type LecturaModelo, type ModeloEstado, type Sitio, type Veredicto, type Veredictos } from './types'
 
 const cargaVeredictos = import.meta.glob<Veredictos>('./seed/veredictos.json', { import: 'default' })
 const modeloJson = import.meta.glob<{ estado?: ModeloEstado | null }>('./seed/modelo.json', { import: 'default', eager: true })
@@ -17,7 +17,7 @@ let cache: Promise<Veredictos | null> | null = null
 
 export function getVeredictos(): Promise<Veredictos | null> {
   const carga = Object.values(cargaVeredictos)[0]
-  cache ??= carga ? carga().then((v) => (Array.isArray(v?.sitios) ? v : null), () => null) : Promise.resolve(null)
+  cache ??= carga ? carga().then((v) => (Array.isArray(v?.sitios) ? { ...v, sitios: v.sitios.map((x) => (x.tipo === 'catalogo' ? conUmbralBajo(x) : x)) } : null), () => null) : Promise.resolve(null)
   return cache
 }
 

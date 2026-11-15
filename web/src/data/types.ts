@@ -20,6 +20,17 @@ export interface Imagen {
   item: string
 }
 
+/** Umbral bajo, decidido por el equipo el 15/11: un sitio que el pipeline deja en "no alcanza" (predio chico, superficie
+ * lisa o señal intermedia) se muestra como despierto si su insomnio medido supera el techo de "quieto" (`max_quieto` del
+ * índice, 0,2). No toca los datos del pipeline: se aplica al cargarlos y deja la marca `umbral_bajo`.
+ * Los que no tienen insomnio medido, o lo tienen en 0,2 o menos, siguen en "no alcanza". */
+export const UMBRAL_BAJO = 0.2
+
+/** Aplica el umbral bajo a un sitio o a una fila de veredictos. */
+export function conUmbralBajo<T extends { radar: Radar | null; insomnio: number | null; umbral_bajo?: boolean }>(x: T): T {
+  return x.radar === 'no_alcanza' && typeof x.insomnio === 'number' && x.insomnio > UMBRAL_BAJO ? { ...x, radar: 'despierto', umbral_bajo: true } : x
+}
+
 export interface Sitio {
   id: string
   nombre: string
@@ -35,6 +46,8 @@ export interface Sitio {
   radar: Radar
   /** fraction of pairs with low coherence relative to the surroundings, 0 to 1 */
   insomnio: number
+  /** true si el pipeline lo dejó en "no alcanza" y se muestra despierto por el umbral bajo */
+  umbral_bajo?: boolean
   pares: Par[]
   imagenes: Imagen[]
   /** site outline according to OpenStreetMap, if it exists */
@@ -89,6 +102,8 @@ export interface Veredicto {
   que?: string | null
   persistencia?: number | null
   modelo_estado?: LecturaModelo | null
+  /** true si el flujo lo dejó en "no alcanza" y se muestra despierto por el umbral bajo */
+  umbral_bajo?: boolean
 }
 
 export interface Veredictos {

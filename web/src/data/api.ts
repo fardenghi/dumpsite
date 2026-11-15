@@ -3,7 +3,7 @@
 //   GET /sitios  -> Sitio[]   (ver types.ts)
 // The summary is computed here: a few thousand rows at most.
 import { useEffect, useState } from 'react'
-import type { Resumen, Sitio } from './types'
+import { conUmbralBajo, type Resumen, type Sitio } from './types'
 
 const API = import.meta.env.VITE_API_URL as string | undefined
 
@@ -13,12 +13,14 @@ export const DEMO = !API
 let cache: Promise<Sitio[]> | null = null
 
 export function getSitios(): Promise<Sitio[]> {
-  cache ??= API
-    ? fetch(`${API}/sitios`).then((r) => {
-        if (!r.ok) throw new Error(`GET /sitios ${r.status}`)
-        return r.json() as Promise<Sitio[]>
-      })
-    : import('./seed').then((m) => m.SITIOS)
+  cache ??= (
+    API
+      ? fetch(`${API}/sitios`).then((r) => {
+          if (!r.ok) throw new Error(`GET /sitios ${r.status}`)
+          return r.json() as Promise<Sitio[]>
+        })
+      : import('./seed').then((m) => m.SITIOS)
+  ).then((sitios) => sitios.map(conUmbralBajo))
   return cache
 }
 
