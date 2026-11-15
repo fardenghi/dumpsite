@@ -1,31 +1,31 @@
-"""Etapa 9: el flujo completo sobre los frames procesados (veredicto por sitio, matriz de actividad y salida para la web).
+"""Stage 9: the full flow over the processed frames (verdict per site, activity matrix and output for the web).
 
-Recorre los frames de `../data/catalogos/frames.json` que ya tienen `salidas/<FRAME>/insomnio_catalogo.parquet` (los sube la
-etapa 4) y, para cada uno, junta lo que haya:
+Goes through the frames in `../data/catalogos/frames.json` that already have `salidas/<FRAME>/insomnio_catalogo.parquet`
+(uploaded by stage 4) and, for each one, gathers whatever is there:
 
-| Entrada                          | De dónde, en orden                                                                     |
+| Input                            | Where from, in order                                                                   |
 |----------------------------------|----------------------------------------------------------------------------------------|
-| `insomnio_catalogo.parquet`      | `salidas/<FRAME>/`; el AMBA, mientras no llegue `salidas/AMBA/`, se calcula con       |
-|                                  | `insomnio_catalogo.py --modo aproximado` en `datos/flujo/AMBA/` (y se dice)            |
-| `manchas.geojson`                | `salidas/<FRAME>/`; el AMBA, `salidas/manchas.geojson` (lo vectorizó el prompt 3)      |
-| `cruce_manchas_catalogo.parquet` | `salidas/<FRAME>/` o `salidas/` (prompt 4); si no está o no corresponde a esas         |
-|                                  | manchas, se calcula con las funciones de `cruce_manchas.py` en `datos/flujo/<FRAME>/`  |
-| `predicciones.parquet`           | `salidas/<FRAME>/` o `salidas/` (prompt 4). Si no está, las manchas sin catálogo       |
-|                                  | salen `sin_clasificar`                                                                 |
+| `insomnio_catalogo.parquet`      | `salidas/<FRAME>/`; for the AMBA, until `salidas/AMBA/` arrives, it's computed with    |
+|                                  | `insomnio_catalogo.py --modo aproximado` in `datos/flujo/AMBA/` (and it says so)       |
+| `manchas.geojson`                | `salidas/<FRAME>/`; for the AMBA, `salidas/manchas.geojson` (vectorized by prompt 3)   |
+| `cruce_manchas_catalogo.parquet` | `salidas/<FRAME>/` or `salidas/` (prompt 4); if it's missing or doesn't match those    |
+|                                  | blobs, it's computed with the `cruce_manchas.py` functions in `datos/flujo/<FRAME>/`   |
+| `predicciones.parquet`           | `salidas/<FRAME>/` or `salidas/` (prompt 4). If it's missing, the blobs without a      |
+|                                  | catalog come out `sin_clasificar`                                                      |
 
-Escribe (todo lo propio del prompt 5):
-- `salidas/veredictos.json`: un veredicto por polígono del catálogo de basurales y por mancha sin catálogo.
-- `salidas/evaluacion_actividad.json`: la matriz de abierto contra cerrado por país, con Wilson, con todas las fuentes
-  del estado y sin los cerrados de OSM; los casos para mirar a mano con los descartes automáticos.
-- `salidas/resumen_flujo.json`: los conteos de la frase del pitch por frame y en total, y qué entró de cada frame.
-- `datos/resultados-flujo.md` y, con `--web`, `../web/src/data/seed/veredictos.json` (y `modelo.json` si hay
+Writes (everything from prompt 5):
+- `salidas/veredictos.json`: one verdict per dump-site catalog polygon and per blob without a catalog.
+- `salidas/evaluacion_actividad.json`: the open-versus-closed matrix by country, with Wilson, with all the status
+  sources and without the closed OSM ones; the cases to check by hand with the automatic discards.
+- `salidas/resumen_flujo.json`: the counts of the pitch sentence per frame and in total, and what went in from each frame.
+- `datos/resultados-flujo.md` and, with `--web`, `../web/src/data/seed/veredictos.json` (and `modelo.json` if there's
   `salidas/metricas.json`).
 
-Lo quieto no pasa por el modelo: "cerrado y quieto" sale del registro y del insomnio del polígono (`veredicto.py`).
+What's quiet doesn't go through the model: "closed and quiet" comes from the registry and the polygon's insomnia (`veredicto.py`).
 
-    python flujo.py                         # todos los frames que haya
+    python flujo.py                         # every frame available
     python flujo.py --frame LOS_ANGELES AMBA
-    python flujo.py --web                   # además, la salida para la web
+    python flujo.py --web                   # also the output for the web
 """
 import argparse
 import datetime as dt
@@ -48,11 +48,11 @@ sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 import evaluar_actividad as ea  # noqa: E402
 import veredicto as ve  # noqa: E402
-import veredicto_estado as vest  # noqa: E402  (el modelo de abierto contra cerrado, al lado de la regla; no cambia veredictos)
+import veredicto_estado as vest  # noqa: E402  (the open-versus-closed model, next to the rule; it doesn't change verdicts)
 
 FUENTES_TODAS = ("epa_lmop", "curado_manual", "osm")
 FUENTES_SIN_OSM = ("epa_lmop", "curado_manual")
-VECINO_KM = 1.5  # el anillo de control mide 1,5 km
+VECINO_KM = 1.5  # the control ring is 1.5 km
 
 
 def _rel(p):
@@ -67,9 +67,9 @@ def _json(obj, ruta):
         fh.write("\n")
 
 
-# ---------------------------------------------------------------- entradas por frame
+# ---------------------------------------------------------------- inputs per frame
 def frames_conocidos():
-    """Frames de frames.json en el orden de prioridad (el AMBA primero)."""
+    """Frames from frames.json in priority order (the AMBA first)."""
     with open(os.path.join(DATA, "frames.json"), encoding="utf-8") as fh:
         fr = json.load(fh)
     lista = fr["frames"] if isinstance(fr, dict) else fr
@@ -114,7 +114,7 @@ def manchas_de(frame, salidas):
 
 
 def _calcular_cruce(ruta_manchas, frame, cache):
-    """Con las funciones de cruce_manchas.py (sin modificarlo). Se cachea en datos/flujo/<FRAME>/."""
+    """With the cruce_manchas.py functions (unmodified). It's cached in datos/flujo/<FRAME>/."""
     destino = os.path.join(cache, frame)
     ruta = os.path.join(destino, "cruce_manchas_catalogo.parquet")
     if os.path.exists(ruta) and os.path.getmtime(ruta) >= os.path.getmtime(ruta_manchas):
@@ -132,7 +132,7 @@ def _calcular_cruce(ruta_manchas, frame, cache):
 
 
 def cruce_de(frame, salidas, manchas, ruta_manchas, cache):
-    """El del prompt 4 si corresponde a estas manchas; si no, calculado. (df, ruta, origen)."""
+    """Prompt 4's, if it matches these blobs; otherwise, computed. (df, path, origin)."""
     ids = _ids_manchas(manchas)
     for ruta in (os.path.join(salidas, frame, "cruce_manchas_catalogo.parquet"),
                  os.path.join(salidas, "cruce_manchas_catalogo.parquet")):
@@ -161,7 +161,7 @@ def predicciones_de(frame, salidas, manchas):
 
 # ---------------------------------------------------------------- modelo
 def estado_modelo(salidas):
-    """¿Hay un modelo validado? Sólo si `metricas.json` no es una prueba de humo y valida por frame."""
+    """Is there a validated model? Only if `metricas.json` isn't a smoke test and validates by frame."""
     ruta = os.path.join(salidas, "metricas.json")
     if not os.path.exists(ruta):
         return {"hay_metricas": False, "validado": False, "motivo": "no hay salidas/metricas.json (prompt 4)"}
@@ -178,7 +178,7 @@ def estado_modelo(salidas):
     return {"hay_metricas": True, "validado": True, "motivo": f"validado en {len(afuera)} frames", "metricas": m}
 
 
-# ---------------------------------------------------------------- catálogo (para mirar a mano)
+# ---------------------------------------------------------------- catalog (to check by hand)
 def sitios_catalogo():
     """id -> sitio de basurales_mundo.json (coordenadas, fuentes, operador)."""
     with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
@@ -196,7 +196,7 @@ PATRON_PLANTA = re.compile(r"transfer|recycl|recicl|compost|material recovery|mr
 
 
 def descartes(caso, sitio, veredictos_frame, cat):
-    """Lo obvio que se puede chequear solo, sin mirar imágenes. Devuelve (lista de chequeos, resultado)."""
+    """The obvious things that can be checked automatically, without looking at images. Returns (list of checks, result)."""
     ch = []
     nombres = [caso.get("nombre") or ""]
     biogas, superfund = False, False
@@ -212,7 +212,7 @@ def descartes(caso, sitio, veredictos_frame, cat):
     planta = sorted({n for n in nombres if n and PATRON_PLANTA.search(n)})
     abierto = caso["registro"] == "abierto"
 
-    # 1. una celda vecina activa: otro basural despierto del mismo complejo o a menos de 1,5 km del borde
+    # 1. an active neighboring cell: another awake dump site of the same complex or within 1.5 km of the edge
     vecinos = []
     if sitio:
         for v in veredictos_frame:
@@ -304,7 +304,7 @@ def correr(frames=None, salidas=SALIDAS, cache=CACHE, aproximar_amba=True):
         cruce, ruta_c, origen_c = cruce_de(fr, salidas, manchas, ruta_m, cache)
         pred, ruta_p = predicciones_de(fr, salidas, manchas)
         vs = ve.calcular(ic, cruce, manchas, pred, frame=fr)
-        if manchas is not None:  # qué dice OSM de cada mancha sin catálogo (contexto para la web, no decide)
+        if manchas is not None:  # what OSM says about each blob without a catalog (context for the web, it doesn't decide)
             info = manchas.set_index("id_mancha")
             for v in vs:
                 if v["tipo"] == "mancha" and v["id"] in info.index:
@@ -338,25 +338,25 @@ def frase(total, modelo, frames):
 
 def main(argv=None):
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--frame", nargs="+", help="sólo estos frames (por defecto, todos los de frames.json que tengan datos)")
+    a.add_argument("--frame", nargs="+", help="only these frames (default: every frame in frames.json that has data)")
     a.add_argument("--salidas", default=SALIDAS)
-    a.add_argument("--destino", default=SALIDAS, help="dónde escribir veredictos, evaluación y resumen")
+    a.add_argument("--destino", default=SALIDAS, help="where to write verdicts, evaluation and summary")
     a.add_argument("--estado-conocido", default=os.path.join(SALIDAS, "estado_conocido.json"))
-    a.add_argument("--web", action="store_true", help="escribir también ../web/src/data/seed/veredictos.json")
-    a.add_argument("--md", default=os.path.join(AQUI, "datos", "resultados-flujo.md"), help="'' para no escribirlo")
+    a.add_argument("--web", action="store_true", help="also write ../web/src/data/seed/veredictos.json")
+    a.add_argument("--md", default=os.path.join(AQUI, "datos", "resultados-flujo.md"), help="'' to skip writing it")
     args = a.parse_args(argv)
 
     vs, por_frame, ic, entradas, modelo = correr(args.frame, args.salidas)
     if ic is None:
         sys.exit("Ningún frame tiene insomnio_catalogo.parquet todavía.")
-    vest.anotar(vs, args.salidas)  # suma `modelo_estado` a cada polígono de basural, si `modelo_estado.py` ya corrió
+    vest.anotar(vs, args.salidas)  # adds `modelo_estado` to each dump-site polygon, if `modelo_estado.py` has already run
     frames = list(por_frame)
     ahora = dt.datetime.now().isoformat(timespec="seconds")
     total = ve.resumen(vs)
     total["frase"] = frase(total, modelo, frames)
     aviso = "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados."
 
-    # matriz de actividad (etapa 8), con y sin los cerrados de OSM
+    # activity matrix (stage 8), with and without the closed OSM ones
     with open(args.estado_conocido, encoding="utf-8") as fh:
         ec = json.load(fh)
     ec = {**ec, "frames": {k: v for k, v in ec["frames"].items() if not args.frame or k in args.frame}}
@@ -412,15 +412,15 @@ def _sin_metricas(modelo):
 
 # ---------------------------------------------------------------- web y markdown
 def escribir_web(vs, total, frames, modelo, ahora, carpeta=WEB_SEED, estado=None):
-    """Archivos nuevos en el seed de la web; no toca los que ya están. `estado` es el bloque del modelo de abierto
-    contra cerrado (`veredicto_estado.bloque_web`): va en la clave `estado` de `modelo.json`."""
+    """New files in the web seed; it doesn't touch the existing ones. `estado` is the block of the open-versus-closed
+    model (`veredicto_estado.bloque_web`): it goes in the `estado` key of `modelo.json`."""
     claves = ("tipo", "id", "frame", "nombre", "complejo", "area_ha", "registro", "radar", "insomnio", "persistencia",
               "p_basural", "veredicto", "veredicto_texto", "motivo", "lat", "lon", "que")
     cat = sitios_catalogo()
     filas = []
     for v in vs:
         if v["tipo"] == "mancha" and v["veredicto"] == "sin_clasificar" and not modelo["validado"]:
-            continue  # sin modelo, la web no muestra las manchas sueltas como veredicto
+            continue  # without a model, the web doesn't show the loose blobs as a verdict
         f = {k: v.get(k) for k in claves}
         if v["tipo"] == "catalogo" and v["id"] in cat:
             f["lat"], f["lon"] = cat[v["id"]]["lat"], cat[v["id"]]["lon"]

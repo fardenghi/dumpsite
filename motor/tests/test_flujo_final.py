@@ -1,9 +1,9 @@
-"""Final del flujo: frames (etapa 2), insomnio por polígono del catálogo, veredicto (etapa 9) y actividad (etapa 8).
+"""End of the flow: frames (stage 2), insomnia per catalog polygon, verdict (stage 9) and activity (stage 8).
 
-Casos sintéticos para cada fila de la tabla del veredicto y pruebas con el AMBA real (`salidas/`).
-Las del modo exacto necesitan los recortes por par (`salidas/recortes_80m/`); si no están, se saltean.
+Synthetic cases for each row of the verdict table and tests with the real AMBA (`salidas/`).
+The exact-mode ones need the per-pair crops (`salidas/recortes_80m/`); if they're missing, they're skipped.
 
-Correr desde `motor/`:  python -m pytest tests -q
+Run from `motor/`:  python -m pytest tests -q
 """
 import json
 import os
@@ -27,7 +27,7 @@ DATA = os.path.join(HERR, "..", "data", "catalogos")
 HAY_INDICE = os.path.exists(os.path.join(SALIDAS, "indice_80m.npz"))
 HAY_RECORTES = os.path.isdir(os.path.join(SALIDAS, "recortes_80m"))
 
-# polígono del catálogo -> ficha del pipeline (mismo objeto de OSM)
+# catalog polygon -> pipeline record (same OSM object)
 FICHAS = {"BAS-053307": "norte-iii", "BAS-053304": "norte-iii-disposicion", "BAS-016796": "ceamse-norte-oeste",
           "BAS-000001": "gonzalez-catan", "BAS-000007": "lujan"}
 
@@ -35,9 +35,9 @@ FICHAS = {"BAS-053307": "norte-iii", "BAS-053304": "norte-iii-disposicion", "BAS
 # ---------------------------------------------------------------- frames
 def test_frames_json_cumple_el_contrato_y_no_se_superponen():
     d = ct.leer(os.path.join(DATA, "frames.json"))
-    agregado = d["criterio"].eq("abiertos") if "criterio" in d else d["frame"].isna()  # los que sumó `--agregar` (prompt 6)
+    agregado = d["criterio"].eq("abiertos") if "criterio" in d else d["frame"].isna()  # the ones added by `--agregar` (prompt 6)
     assert 8 <= (~agregado).sum() <= 12
-    # Los agregados van después de los de antes, en orden de prioridad, y todos tienen abiertos y 15 pares o más.
+    # The added ones come after the original ones, in priority order, and all have open sites and 15 pairs or more.
     assert list(d["prioridad"]) == sorted(d["prioridad"]) and not agregado[: (~agregado).sum()].any()
     assert all(n["abierto"] >= 1 for n in d.loc[agregado, "n_sitios_10ha"]) and (d.loc[agregado, "n_gunw"] >= 15).all()
     assert d.loc[d["pais"] == "ARG", "reservado_prueba"].all() and not d.loc[d["pais"] != "ARG", "reservado_prueba"].any()
@@ -76,11 +76,11 @@ def test_elegir_reserva_argentina_evita_superposicion_y_mete_uno_de_afuera_arrib
           f("X", "IND", [50, 0, 51, 1], 3)]
     sel = fe.elegir(ev, n=10, max_usa=6, top=4)
     assert sel[0]["frame"] == "AMBA" and sel[0]["prioridad"] == 0
-    assert "B" not in [x["frame"] for x in sel]  # se superpone con A
-    assert "X" in [x["frame"] for x in sel[1:5]]  # entre los primeros 4
+    assert "B" not in [x["frame"] for x in sel]  # overlaps with A
+    assert "X" in [x["frame"] for x in sel[1:5]]  # among the first 4
 
 
-# ---------------------------------------------------------------- insomnio por polígono (sintético)
+# ---------------------------------------------------------------- insomnia per polygon (synthetic)
 def test_medir_aproximado_quieto_despierto_y_liso():
     p = icat.ins.Parametros()
     n = 60
@@ -97,7 +97,7 @@ def test_medir_aproximado_quieto_despierto_y_liso():
     assert icat.medir_aproximado(m, d, p)["radar"] == "no_alcanza"
 
 
-# ---------------------------------------------------------------- veredicto (sintético: cada fila de la tabla)
+# ---------------------------------------------------------------- verdict (synthetic: each row of the table)
 def _ic(filas):
     base = {"catalogo": "basurales", "complejo": None, "frame": "F", "persistencia": 0.8, "eco_db": -9.0, "n_pares": 15,
             "motivo": None, "area_ha": 50.0, "clase": None, "nombre": None}
@@ -113,7 +113,7 @@ def test_veredicto_cada_fila_de_la_tabla():
         {"id_catalogo": "BAS-T3", "estado": "cerrado", "insomnio": 0.0, "radar": "quieto"},
         {"id_catalogo": "BAS-T4", "estado": "abierto", "insomnio": 0.1, "radar": "quieto"},
         {"id_catalogo": "BAS-T5", "estado": "abierto", "insomnio": 0.9, "radar": "despierto", "area_ha": 4.0},
-        {"id_catalogo": "BAS-T6", "estado": "desconocido", "insomnio": 0.9, "radar": "despierto"},  # sin mancha
+        {"id_catalogo": "BAS-T6", "estado": "desconocido", "insomnio": 0.9, "radar": "despierto"},  # no blob
         {"id_catalogo": "BAS-T7", "estado": "abierto", "insomnio": 0.4, "radar": "no_alcanza", "motivo": "intermedio"},
     ])
     cruce = pd.DataFrame({"id_mancha": ["MAN-F-0001", "MAN-F-0002", "MAN-F-0003", "MAN-F-0004", "MAN-F-0005"],
@@ -126,12 +126,12 @@ def test_veredicto_cada_fila_de_la_tabla():
     assert vs["BAS-T1"]["veredicto"] == "activo_conocido"
     assert vs["BAS-T2"]["veredicto"] == "cerrado_despierto"
     assert vs["BAS-T3"]["veredicto"] == "cerrado_quieto"
-    assert vs["BAS-T4"]["veredicto"] == "quieto_radar"  # el 10 % de cruce no llega al 30 %
+    assert vs["BAS-T4"]["veredicto"] == "quieto_radar"  # the 10 % cross doesn't reach 30 %
     assert vs["BAS-T5"]["veredicto"] == "no_alcanza"
     assert vs["BAS-T6"]["veredicto"] == "activo_conocido" and "no formó mancha" in vs["BAS-T6"]["motivo"]
     assert vs["BAS-T7"]["veredicto"] == "no_alcanza" and vs["BAS-T7"]["motivo"] == "intermedio"
     assert vs["MAN-F-0003"]["veredicto"] == "descartada" and "cantera" in vs["MAN-F-0003"]["motivo"]
-    assert vs["MAN-F-0005"]["veredicto"] == "posible_nuevo"  # roza BAS-T4 con menos del 30 %
+    assert vs["MAN-F-0005"]["veredicto"] == "posible_nuevo"  # grazes BAS-T4 with less than 30 %
     assert vs["MAN-F-0006"]["veredicto"] == "posible_nuevo"
     r = ve.resumen(list(vs.values()))
     assert r["cerrados_pero_despiertos"] == 1 and r["posibles_nuevos"] == 2 and r["activos_ya_conocidos"] == 3
@@ -153,7 +153,7 @@ def test_veredicto_con_el_mock(tmp_path):
     assert {"activo_conocido", "cerrado_despierto", "cerrado_quieto", "quieto_radar", "posible_nuevo", "descartada", "no_alcanza"} <= hay
 
 
-# ---------------------------------------------------------------- actividad (sintético)
+# ---------------------------------------------------------------- activity (synthetic)
 def test_evaluar_actividad_matriz_y_un_sitio_por_complejo():
     ec = {"frames": {"F": [
         {"id_catalogo": "BAS-A1", "estado": "abierto", "fuentes_estado": ["epa_lmop"], "area_ha": 50, "complejo": "CPX-1", "pais": "USA"},
@@ -170,7 +170,7 @@ def test_evaluar_actividad_matriz_y_un_sitio_por_complejo():
               {"id_catalogo": "BAS-C3", "estado": "cerrado", "insomnio": 0.9, "radar": "despierto", "area_ha": 3.0}])
     r = ea.evaluar(ec, ic)
     m = r["por_pais"]["USA"]["matriz"]
-    assert m["abierto"] == {"despierto": 1, "quieto": 0, "no_alcanza": 0}  # BAS-A2 no cuenta: mismo complejo
+    assert m["abierto"] == {"despierto": 1, "quieto": 0, "no_alcanza": 0}  # BAS-A2 doesn't count: same complex
     assert m["cerrado"] == {"despierto": 1, "quieto": 1, "no_alcanza": 0}
     assert r["chicos_menos_de_min_ha"] == {"USA": 1} and r["frames_sin_procesar"] == {"G": 1}
     assert [s["id_catalogo"] for s in r["discordantes"]["cerrados_pero_despiertos"]] == ["BAS-C2"]
@@ -179,7 +179,7 @@ def test_evaluar_actividad_matriz_y_un_sitio_por_complejo():
     assert ea.wilson(0, 0) is None and ea.wilson(5, 10)[0] < 0.5 < ea.wilson(5, 10)[1]
 
 
-# ---------------------------------------------------------------- el AMBA real
+# ---------------------------------------------------------------- the real AMBA
 @pytest.fixture(scope="module")
 def amba_aproximado(tmp_path_factory):
     if not HAY_INDICE:
@@ -219,5 +219,5 @@ def test_amba_exacto_reproduce_fichas_80m(tmp_path):
         assert ic.loc[bas, "radar"] == f["radar"], bas
     vs = {v["id"]: v for v in ve.calcular(ic.reset_index())}
     assert vs["BAS-000007"]["veredicto"] == "cerrado_quieto"
-    assert vs["BAS-053307"]["veredicto"] == "activo_conocido"  # Norte III, por el estado del complejo
+    assert vs["BAS-053307"]["veredicto"] == "activo_conocido"  # Norte III, through the complex status
     assert vs["BAS-053304"]["veredicto"] == "activo_conocido"

@@ -1,7 +1,7 @@
-"""flujo.py (etapa 9): frames reales de salidas/<FRAME>/, controles del AMBA, matriz y casos para mirar a mano.
+"""flujo.py (stage 9): real frames from salidas/<FRAME>/, AMBA controls, matrix and cases to check by hand.
 
-Correr desde `motor/`:  python -m pytest tests/test_flujo.py -q
-Los tests con datos reales se saltean si la etapa 4 todavía no subió frames.
+Run from `motor/`:  python -m pytest tests/test_flujo.py -q
+Tests with real data are skipped if stage 4 hasn't uploaded frames yet.
 """
 import glob
 import json
@@ -49,7 +49,7 @@ def test_controles_del_amba(corrida):
 
 
 def test_lo_quieto_no_pasa_por_el_modelo(corrida):
-    """Un 'cerrado y quieto' nunca depende de p_basural: el veredicto es el mismo con una probabilidad cualquiera."""
+    """A 'closed and quiet' never depends on p_basural: the verdict is the same with any probability."""
     _, _, _, vs = corrida
     quietos = [x for x in vs["veredictos"] if x["veredicto"] in ("cerrado_quieto", "quieto_radar")]
     assert quietos and all(x["radar"] == "quieto" and not x["manchas"] for x in quietos)

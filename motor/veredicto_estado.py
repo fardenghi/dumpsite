@@ -1,16 +1,16 @@
-"""El modelo de abierto contra cerrado (`modelo_estado.py`) al lado de los veredictos del flujo.
+"""The open-versus-closed model (`modelo_estado.py`) next to the flow's verdicts.
 
-No cambia ningún veredicto: la regla del insomnio queda como está y el modelo se agrega como un dato más de cada
-polígono de basural. Lo usa `flujo.py`:
+It doesn't change any verdict: the insomnia rule stays as is and the model is added as one more fact for each
+dump-site polygon. Used by `flujo.py`:
 
-- `anotar(veredictos, salidas)` le suma a cada veredicto de catálogo el objeto `modelo_estado`:
-  `{"p_abierto": número o null, "lectura": "compatible con abierto" | "compatible con cerrado" | "sin dato", "origen": texto}`.
-- `bloque_web(salidas)` arma la clave `estado` de `web/src/data/seed/modelo.json`.
-- `matriz(salidas)` y `lineas_md(salidas)` comparan, sobre los mismos predios de estado conocido, lo que dice la regla
-  del insomnio y lo que dice el modelo (predicciones hechas sin el frame del predio).
+- `anotar(veredictos, salidas)` adds the `modelo_estado` object to each catalog verdict:
+  `{"p_abierto": number or null, "lectura": "compatible con abierto" | "compatible con cerrado" | "sin dato", "origen": text}`.
+- `bloque_web(salidas)` builds the `estado` key of `web/src/data/seed/modelo.json`.
+- `matriz(salidas)` and `lineas_md(salidas)` compare, over the same known-status sites, what the insomnia rule
+  says and what the model says (predictions made without the site's frame).
 
-Lee `salidas/predicciones_estado.parquet` y `salidas/modelo_estado.json`. Si faltan, no hace nada.
-"compatible con abierto según el modelo" no es un estado verificado: es lo que ordena el modelo, con etiquetas del registro.
+Reads `salidas/predicciones_estado.parquet` and `salidas/modelo_estado.json`. If they're missing, it does nothing.
+"compatible with open according to the model" is not a verified status: it's how the model ranks, with registry labels.
 """
 import json
 import os
@@ -49,7 +49,7 @@ ETIQUETAS = {
 
 
 def cargar(salidas):
-    """(predicciones por id_catalogo, modelo) o (None, None) si todavía no corrió `modelo_estado.py`."""
+    """(predictions by id_catalogo, model) or (None, None) if `modelo_estado.py` hasn't run yet."""
     pred, mod = os.path.join(salidas, "predicciones_estado.parquet"), os.path.join(salidas, "modelo_estado.json")
     if not (os.path.exists(pred) and os.path.exists(mod)):
         return None, None
@@ -65,7 +65,7 @@ def _lectura(p):
 
 
 def anotar(veredictos, salidas):
-    """Suma `modelo_estado` a cada veredicto de un polígono de basural. Devuelve cuántos quedaron con dato."""
+    """Adds `modelo_estado` to each verdict of a dump-site polygon. Returns how many ended up with data."""
     pred, _ = cargar(salidas)
     if pred is None:
         return 0
@@ -85,7 +85,7 @@ def anotar(veredictos, salidas):
 
 
 def bloque_web(salidas):
-    """La clave `estado` de `modelo.json` de la web, o None si no hay modelo."""
+    """The `estado` key of the web's `modelo.json`, or None if there is no model."""
     _, m = cargar(salidas)
     if m is None:
         return None
@@ -102,7 +102,7 @@ def bloque_web(salidas):
 
 
 def matriz(salidas):
-    """Regla del insomnio contra modelo, sobre los mismos predios de estado conocido con predicción de validación."""
+    """Insomnia rule versus model, over the same known-status sites with a validation prediction."""
     pred, m = cargar(salidas)
     if pred is None:
         return None
@@ -127,7 +127,7 @@ def matriz(salidas):
 
 
 def lineas_md(salidas):
-    """La sección de `resultados-flujo.md` que compara la regla con el modelo."""
+    """The section of `resultados-flujo.md` that compares the rule with the model."""
     x = matriz(salidas)
     if x is None:
         return []

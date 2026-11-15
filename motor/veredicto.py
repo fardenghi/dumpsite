@@ -1,30 +1,30 @@
-"""Etapa 9: junta el cruce en las dos direcciones y da un veredicto por sitio (tabla de `../docs/modelo.md`).
+"""Stage 9: joins the cross in both directions and gives a verdict per site (table in `../docs/modelo.md`).
 
-Del catálogo a las manchas (`insomnio_catalogo.parquet`, una fila por polígono del catálogo) y de las manchas al
-catálogo (`cruce_manchas_catalogo.parquet`, lo escribe el prompt 3). La probabilidad de basural sale de
-`predicciones.parquet` (el modelo, o el mock mientras no haya) o de una columna `p_basural` en el cruce o en
+From the catalog to the blobs (`insomnio_catalogo.parquet`, one row per catalog polygon) and from the blobs to the
+catalog (`cruce_manchas_catalogo.parquet`, written by prompt 3). The dump-site probability comes from
+`predicciones.parquet` (the model, or the mock while there isn't one) or from a `p_basural` column in the cross or in
 `manchas.geojson`.
 
-| Registro            | Radar y modelo                                   | Veredicto                      |
+| Registry            | Radar and model                                  | Verdict                        |
 |---------------------|--------------------------------------------------|--------------------------------|
-| abierto o sin estado | mancha despierta (o polígono despierto)         | activo_conocido                |
-| cerrado             | mancha despierta (o polígono despierto)          | cerrado_despierto              |
-| cerrado             | sin mancha; el polígono sale quieto              | cerrado_quieto                 |
-| abierto o sin estado | sin mancha; el polígono sale quieto             | quieto_radar                   |
-| no figura           | mancha despierta, p_basural >= umbral            | posible_nuevo                  |
-| no figura           | mancha despierta, p_basural < umbral             | descartada                     |
-| no figura           | mancha despierta, sin modelo                     | sin_clasificar                 |
-| cualquiera          | menos de 10 ha, o el radar no decide             | no_alcanza                     |
+| open or no status   | awake blob (or awake polygon)                    | activo_conocido                |
+| closed              | awake blob (or awake polygon)                    | cerrado_despierto              |
+| closed              | no blob; the polygon comes out quiet             | cerrado_quieto                 |
+| open or no status   | no blob; the polygon comes out quiet             | quieto_radar                   |
+| not listed          | awake blob, p_basural >= threshold               | posible_nuevo                  |
+| not listed          | awake blob, p_basural < threshold                | descartada                     |
+| not listed          | awake blob, no model                             | sin_clasificar                 |
+| any                 | under 10 ha, or the radar can't decide           | no_alcanza                     |
 
-Decisiones (no estaban en el plan):
-- Un polígono del catálogo de basurales con una mancha encima es basural por el catálogo, no por el modelo: el
-  modelo responde "¿qué es?" y eso ya lo dice el registro. Si el modelo duda, se anota en `motivo`.
-- Si el polígono no quedó en ninguna mancha pero su ficha sale `despierto`, cuenta como despierto (la mancha pudo
-  cortarse por el umbral de 10 ha o la forma).
-- El registro de un polígono sin estado toma el de su complejo si lo tiene (Norte III C no tiene estado propio; el
-  complejo Norte III figura abierto).
+Decisions (they weren't in the plan):
+- A dump-site catalog polygon with a blob on top is a dump site because of the catalog, not the model: the
+  model answers "what is it?" and the registry already says that. If the model hesitates, it is noted in `motivo`.
+- If the polygon didn't end up in any blob but its record comes out `despierto`, it counts as awake (the blob may have
+  been cut by the 10 ha threshold or by its shape).
+- The registry status of a polygon without a status takes its complex's, if it has one (Norte III C has no status of its
+  own; the Norte III complex is listed as open).
 
-    python veredicto.py                                   # lee y escribe en ../data/salidas
+    python veredicto.py                                   # reads and writes in ../data/salidas
     python veredicto.py --carpeta datos/mock --salida /tmp/v.json
     python veredicto.py --frame AMBA --umbral 0.5
 """
@@ -58,13 +58,13 @@ TEXTOS = {
 
 # ---------------------------------------------------------------- lectura
 def _opcional(carpeta, nombre, ruta=None):
-    """Lee y valida un contrato; None si no está. Una ruta explícita tiene que tener el nombre del contrato."""
+    """Reads and validates a contract; None if it's not there. An explicit path must have the contract's name."""
     camino = ruta or contratos.ruta(nombre, carpeta)
     return contratos.leer(camino) if os.path.exists(camino) else None
 
 
 def _estados_catalogo():
-    """id del sitio -> (estado del sitio, estado del complejo), desde complejos.json."""
+    """site id -> (site status, complex status), from complejos.json."""
     camino = os.path.join(DATA, "basurales", "complejos.json")
     if not os.path.exists(camino):
         return {}, {}
@@ -79,7 +79,7 @@ def _estados_catalogo():
 
 
 def registro(fila, est_sitio, est_cx):
-    """Estado del registro de un polígono de basural: el propio; si no tiene, el de su complejo."""
+    """Registry status of a dump-site polygon: its own; if it has none, its complex's."""
     e = fila.get("estado") if isinstance(fila.get("estado"), str) else est_sitio.get(fila["id_catalogo"], "desconocido")
     if e == "desconocido":
         c = fila.get("estado_complejo") if isinstance(fila.get("estado_complejo"), str) else est_cx.get(fila["id_catalogo"])
@@ -89,7 +89,7 @@ def registro(fila, est_sitio, est_cx):
 
 
 def probabilidades(pred, cruce, manchas):
-    """id_mancha -> p_basural. Prioridad: predicciones.parquet, columna p_basural del cruce, propiedad de manchas."""
+    """id_mancha -> p_basural. Priority: predicciones.parquet, p_basural column of the cross, blob property."""
     p = {}
     if manchas is not None and "p_basural" in manchas:
         p.update({m: v for m, v in zip(manchas["id_mancha"], manchas["p_basural"]) if pd.notna(v)})
@@ -102,7 +102,7 @@ def probabilidades(pred, cruce, manchas):
 
 # ---------------------------------------------------------------- veredicto
 def veredicto_catalogo(fila, reg, manchas_sitio, p, umbral, min_ha):
-    """Veredicto de un polígono del catálogo de basurales."""
+    """Verdict for a polygon of the dump-site catalog."""
     ps = [p[m] for m in manchas_sitio if m in p]
     p_max = max(ps) if ps else None
     if (fila["area_ha"] if pd.notna(fila.get("area_ha")) else 0) < min_ha:
@@ -132,7 +132,7 @@ def veredicto_mancha(p_basural, umbral, negativos):
 
 def calcular(ic, cruce=None, manchas=None, pred=None, umbral=0.5, criterio=contratos.CRITERIO_CRUCE, min_ha=contratos.MIN_HA,
              frame=None):
-    """Devuelve la lista de veredictos (dicts). `ic` es insomnio_catalogo; lo demás puede faltar."""
+    """Returns the list of verdicts (dicts). `ic` is insomnio_catalogo; the rest may be missing."""
     if frame:
         ic = ic[ic["frame"] == frame]
         cruce = None if cruce is None else cruce[cruce["frame"] == frame]
@@ -165,7 +165,7 @@ def calcular(ic, cruce=None, manchas=None, pred=None, umbral=0.5, criterio=contr
             "manchas": ms, "p_basural": p_max, "veredicto": v, "veredicto_texto": TEXTOS[v], "motivo": motivo,
         })
 
-    # manchas que no se cruzan con ningún basural
+    # blobs that don't cross any dump site
     todas = set(candidatas) if candidatas is not None else set(cruces["id_mancha"]) | set(p)
     con_basural = set(cruces.loc[cruces["catalogo"] == "basurales", "id_mancha"])
     neg_de = cruces[cruces["catalogo"] == "negativos"]
@@ -188,7 +188,7 @@ def calcular(ic, cruce=None, manchas=None, pred=None, umbral=0.5, criterio=contr
 
 
 def resumen(veredictos):
-    """Conteos para el pitch, con cada complejo una sola vez (se queda con su veredicto más 'activo')."""
+    """Counts for the pitch, with each complex only once (it keeps its most 'active' verdict)."""
     orden = ["cerrado_despierto", "activo_conocido", "cerrado_quieto", "quieto_radar", "no_alcanza"]
     por_cx = {}
     for v in veredictos:
@@ -215,13 +215,13 @@ def resumen(veredictos):
 
 def main(argv=None):
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--carpeta", default=SALIDAS, help="de dónde leer los contratos (salidas/ o datos/mock/)")
+    a.add_argument("--carpeta", default=SALIDAS, help="where to read the contracts from (salidas/ or datos/mock/)")
     a.add_argument("--insomnio-catalogo")
-    a.add_argument("--cruce", help="cruce_manchas_catalogo.parquet (opcional; lo escribe el prompt 3)")
+    a.add_argument("--cruce", help="cruce_manchas_catalogo.parquet (optional; written by prompt 3)")
     a.add_argument("--manchas", help="manchas.geojson (opcional)")
-    a.add_argument("--predicciones", help="predicciones.parquet (opcional; sin modelo, el mock)")
-    a.add_argument("--frame", help="sólo este frame")
-    a.add_argument("--umbral", type=float, default=0.5, help="p_basural a partir de la cual el modelo dice basural")
+    a.add_argument("--predicciones", help="predicciones.parquet (optional; without a model, the mock)")
+    a.add_argument("--frame", help="only this frame")
+    a.add_argument("--umbral", type=float, default=0.5, help="p_basural from which the model says dump site")
     a.add_argument("--salida", default=os.path.join(SALIDAS, "veredictos.json"))
     args = a.parse_args(argv)
 

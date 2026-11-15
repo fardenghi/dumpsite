@@ -1,16 +1,16 @@
-"""Etapa 8: ¿el radar coincide con el registro? Matriz de abierto contra cerrado, por país.
+"""Stage 8: does the radar agree with the registry? Open-versus-closed matrix, by country.
 
-Sobre los basurales de estado conocido de cada frame (`salidas/estado_conocido.json`, que arma `frames_elegir.py` desde
-la EPA, OSM y los casos curados de Argentina) compara el estado del registro con lo que dice el radar sobre su polígono
-(`salidas/insomnio_catalogo.parquet`). Las etiquetas son independientes del insomnio: nunca salen de él.
+Over the known-status dump sites of each frame (`salidas/estado_conocido.json`, built by `frames_elegir.py` from
+the EPA, OSM and the curated Argentine cases) it compares the registry status with what the radar says about its polygon
+(`salidas/insomnio_catalogo.parquet`). The labels are independent of the insomnia: they never come from it.
 
-- Cada complejo cuenta una vez: se usa su sitio de estado conocido más grande.
-- Entran los de `--min-ha` (10 ha) o más; los más chicos se cuentan aparte (el radar no alcanza).
-- Los frames que todavía no tienen filas en `insomnio_catalogo` se informan como "sin procesar".
-- Intervalo de confianza de Wilson al 95 % para las tasas: con pocos sitios, el margen es grande y hay que decirlo.
+- Each complex counts once: its largest known-status site is used.
+- Those of `--min-ha` (10 ha) or more are included; smaller ones are counted separately (the radar can't resolve them).
+- Frames that don't have rows in `insomnio_catalogo` yet are reported as "unprocessed".
+- 95 % Wilson confidence interval for the rates: with few sites the margin is wide and that has to be said.
 
     python evaluar_actividad.py                                  # ../data/salidas -> ../data/salidas/evaluacion_actividad.json
-    python evaluar_actividad.py --fuentes epa_lmop curado_manual # sin los cerrados de OSM (etiquetas disused, sin fecha)
+    python evaluar_actividad.py --fuentes epa_lmop curado_manual # without the closed OSM ones (disused tags, no date)
 """
 import argparse
 import datetime as dt
@@ -33,7 +33,7 @@ RADARES = ("despierto", "quieto", "no_alcanza")
 
 
 def wilson(k, n, z=1.96):
-    """Intervalo de Wilson para k de n. None si n = 0."""
+    """Wilson interval for k out of n. None if n = 0."""
     if n == 0:
         return None
     p = k / n
@@ -51,7 +51,7 @@ def matriz_vacia():
 
 
 def metricas(m):
-    """Tasas sobre los que el radar pudo decidir (despierto o quieto)."""
+    """Rates over the ones the radar could decide (awake or quiet)."""
     ab_d, ab_q = m["abierto"]["despierto"], m["abierto"]["quieto"]
     ce_d, ce_q = m["cerrado"]["despierto"], m["cerrado"]["quieto"]
     return {
@@ -66,7 +66,7 @@ def metricas(m):
 
 
 def elegir_por_complejo(sitios, fuentes):
-    """Un sitio por complejo: el de estado abierto o cerrado (de las fuentes pedidas) más grande."""
+    """One site per complex: the largest one with open or closed status (from the requested sources)."""
     por_cx = {}
     for s in sitios:
         if s["estado"] not in REGISTROS or not set(s["fuentes_estado"]) & set(fuentes):
@@ -94,7 +94,7 @@ def evaluar(estado_conocido, ic, fuentes=("epa_lmop", "curado_manual", "osm"), m
                 chicos[pais] += 1
                 continue
             r = radar.get((frame, s["id_catalogo"]))
-            if r is None:  # sin polígono en el catálogo (sitios de la EPA que son un punto) o fuera de la grilla
+            if r is None:  # no polygon in the catalog (EPA sites that are a point) or outside the grid
                 sin_poligono[pais] += 1
                 continue
             por_pais[pais][s["estado"]][r] += 1
@@ -122,7 +122,7 @@ def main(argv=None):
     a.add_argument("--estado-conocido", default=os.path.join(SALIDAS, "estado_conocido.json"))
     a.add_argument("--insomnio-catalogo", default=os.path.join(SALIDAS, "insomnio_catalogo.parquet"))
     a.add_argument("--fuentes", nargs="+", default=["epa_lmop", "curado_manual", "osm"],
-                   help="fuentes del estado que valen como etiqueta")
+                   help="status sources that count as a label")
     a.add_argument("--min-ha", type=float, default=contratos.MIN_HA)
     a.add_argument("--salida", default=os.path.join(SALIDAS, "evaluacion_actividad.json"))
     args = a.parse_args(argv)
