@@ -10,9 +10,9 @@ Two ways to pass the recording (see video/VOZ-GRABADA.md):
   A. One file per sentence, named with the sentence id (problema.wav, dumpsite.m4a, ...), in a folder:
        python3 -I compartido/scripts/voz_grabada.py --carpeta ~/grabacion
 
-  B. Una sola toma con los cortes marcados en Audacity (Edición > Etiquetas > Exportar etiquetas: un .txt con
-     "inicio<TAB>fin<TAB>id" por línea, en segundos). Una cuarta columna opcional indica otra toma (ruta relativa al
-     .txt) para esa frase, por ejemplo una frase regrabada aparte:
+  B. A single take with the cuts marked in Audacity (Edit > Labels > Export Labels: a .txt with
+     "start<TAB>end<TAB>id" per line, in seconds). An optional fourth column gives another take (path relative to the
+     .txt) for that sentence, for example a sentence re-recorded separately:
        python3 -I compartido/scripts/voz_grabada.py --toma toma.wav --cortes etiquetas.txt
      With --tiempos-originales the pace of the take is kept (each sentence starts where it starts in the recording)
      instead of using the script's gaps.
@@ -39,7 +39,7 @@ def a_wav(origen, destino, desde=None, hasta=None, normalizar=True):
         cmd += ["-ss", f"{desde:.3f}"]
     if hasta is not None:
         cmd += ["-to", f"{hasta:.3f}"]
-    # loudnorm empareja el volumen entre frases grabadas en momentos distintos
+    # loudnorm evens out the volume between sentences recorded at different times
     cmd += ["-i", str(origen), "-ac", "1", "-ar", "48000", "-sample_fmt", "s16"]
     if normalizar:
         cmd += ["-af", "loudnorm=I=-16:TP=-1.5:LRA=11"]
@@ -52,7 +52,7 @@ def leer_cortes(path):
     for linea in pathlib.Path(path).read_text().splitlines():
         partes = linea.strip().split("\t")
         if len(partes) >= 3 and partes[0]:
-            # cuarta columna opcional: otra toma (ruta relativa al archivo de cortes), para reemplazar frases regrabadas
+            # optional fourth column: another take (path relative to the cuts file), to replace re-recorded sentences
             otra = (pathlib.Path(path).parent / partes[3].strip()) if len(partes) >= 4 and partes[3].strip() else None
             cortes[partes[2].strip()] = (float(partes[0].replace(",", ".")), float(partes[1].replace(",", ".")), otra)
     return cortes
@@ -67,10 +67,10 @@ def main():
     ap.add_argument("--carpeta", help="option A: folder with one file per sentence, named with the id")
     ap.add_argument("--toma", help="option B: single recording")
     ap.add_argument("--cortes", help="forma B: etiquetas de Audacity (inicio, fin, id)")
-    ap.add_argument("--tiempos-originales", action="store_true", help="forma B: respetar las pausas de la toma")
-    ap.add_argument("--umbral", type=int, default=400, help="nivel bajo el cual se considera silencio (subir si hay ruido de fondo)")
-    ap.add_argument("--sin-recorte", action="store_true", help="no recortar silencios")
-    ap.add_argument("--sin-normalizar", action="store_true", help="no aplicar loudnorm por frase (la toma ya viene nivelada, ver limpiar_toma.sh)")
+    ap.add_argument("--tiempos-originales", action="store_true", help="option B: keep the pauses of the take")
+    ap.add_argument("--umbral", type=int, default=400, help="level below which it counts as silence (raise it if there's background noise)")
+    ap.add_argument("--sin-recorte", action="store_true", help="don't trim silences")
+    ap.add_argument("--sin-normalizar", action="store_true", help="don't apply loudnorm per sentence (the take is already leveled, see limpiar_toma.sh)")
     args = ap.parse_args()
     if bool(args.carpeta) == bool(args.toma) or (args.toma and not args.cortes):
         ap.error("usar --carpeta, o --toma junto con --cortes")
@@ -117,7 +117,7 @@ def main():
         if args.tiempos_originales:
             t = h["antes_de_la_primera"] + (desde - t0_toma)
         elif n > 1 and "hueco_antes_s" in f:
-            t += f["hueco_antes_s"] - h["entre_frases"]  # pausa propia de esta frase (p. ej. un cambio de tema)
+            t += f["hueco_antes_s"] - h["entre_frases"]  # this sentence's own pause (e.g. a change of topic)
         elif n == 2:
             t += h["antes_de_la_2"] - h["entre_frases"]
         texto = " ".join(p["texto"] for p in f["partes"])

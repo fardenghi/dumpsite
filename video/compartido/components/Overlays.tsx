@@ -5,9 +5,9 @@ import {C, F} from "../theme";
 
 const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
 
-/* Subtítulos integrados: sin caja, palabra por palabra al ritmo de la voz, con sombra suave. */
+/* Built-in subtitles: no box, word by word at the pace of the voice, with a soft shadow. */
 type FraseSub = {inicio: number; duracion: number; texto: string; palabras?: [string, number][]};
-// Parte una frase larga en bloques de hasta `max` caracteres, cortando preferentemente después de una coma o un punto.
+// Splits a long sentence into blocks of up to `max` characters, preferably cutting after a comma or a period.
 const bloques = (texto: string, max: number) => {
   const palabras = texto.split(" ");
   const out: string[][] = [[]];
@@ -35,7 +35,7 @@ export const Subtitulos: React.FC<{frases?: FraseSub[]; max?: number}> = ({frase
   if (i < 0) return null;
   const fr = FRASES[i];
   const total = fr.texto.length;
-  // momento de cada palabra: el medido en la voz (palabras_voz.py) o, si no hay, proporcional a los caracteres
+  // time of each word: the one measured in the voice (palabras_voz.py) or, if there's none, proportional to the characters
   const todas = fr.texto.split(" ");
   let acc = 0;
   const tiempos = todas.map((p, k) => {
@@ -43,7 +43,7 @@ export const Subtitulos: React.FC<{frases?: FraseSub[]; max?: number}> = ({frase
     acc += p.length + 1;
     return tp;
   });
-  // qué bloque se está diciendo ahora: el último cuyo comienzo ya pasó
+  // which block is being said now: the last one whose start has passed
   const partes = bloques(fr.texto, max);
   let desde = 0, elegido = 0, inicioBloque = 0;
   partes.forEach((b, k) => {
@@ -61,7 +61,7 @@ export const Subtitulos: React.FC<{frases?: FraseSub[]; max?: number}> = ({frase
         letterSpacing: 0.2, color: "#fff", opacity: salida,
         textShadow: "0 2px 3px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.65), 0 0 60px rgba(0,0,0,0.45)"}}>
         {palabras.map((p, k) => {
-          // cada palabra aparece cuando la voz llega a ella
+          // each word appears when the voice reaches it
           const tPalabra = tiempos[inicioBloque + k];
           const v = interpolate(t, [tPalabra - 0.05, tPalabra + 0.15], [0, 1], clamp);
           return (

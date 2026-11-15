@@ -5,7 +5,7 @@ The two videos the Buenos Aires venue of Space Apps 2026 asks for (challenge "Da
 | Video | Composition | Length | Status |
 |---|---|---|---|
 | International, in English (30 s max) | `DumpsiteIntl` | 29.5 s | **Almost final**: the team approved it. Only the final links are missing. |
-| Local, in Spanish (3 min max) | `DumpsiteLocal` | 2:15 | **Version 1, will change.** The synthetic voice will probably be replaced by a recorded one (see `VOZ-GRABADA.md`). |
+| Local, in Spanish (3 min max) | `DumpsiteLocal` | 2:51 | **Voice recorded by the team**, as a single track (`public/voz-es/voz-completa.wav`), with each scene anchored to the word that names it (`compartido/scripts/palabras_voz.py`). See `VOZ-GRABADA.md`. |
 
 The rendered mp4 files and the Higgsfield clip aren't in the repo: they're rebuilt with the commands below (`out/` is in `.gitignore`).
 
@@ -18,6 +18,7 @@ video/
 ├── README.md            ← this file
 ├── CONTEXTO.md          ← everything learned: decisions, content rules, figures with sources, tools
 ├── VOZ-GRABADA.md       ← how to replace the Spanish video's synthetic voice with a recorded one
+├── MODEL-CONTEXT.md     ← which model we actually trained (LightGBM, not ResNet-50) and what the script can say about it
 ├── package.json · tsconfig.json · remotion.config.ts · .env.example
 ├── compartido/          ← code shared by both videos
 │   ├── index.ts · Root.tsx        registration of the two compositions

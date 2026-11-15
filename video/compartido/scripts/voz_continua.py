@@ -1,15 +1,15 @@
-"""Arma una sola pista de voz continua para el video en castellano, sin huecos de silencio digital entre frases.
+"""Builds a single continuous voice track for the Spanish video, without gaps of digital silence between sentences.
 
-voz_grabada.py deja cada frase en su propio .wav y entre una y otra queda silencio absoluto: con voz grabada eso se
-nota, porque el ruido de fondo de la sala desaparece de golpe en cada corte. Este script toma un tramo de "ruido de
-sala" de la toma (sin voz), lo repite a lo largo de todo el video y encima pone cada frase en su lugar, con fundidos
-cortos en los bordes. El resultado es public/<audio>/voz-completa.wav, que Local.tsx reproduce como una sola pista.
+voz_grabada.py leaves each sentence in its own .wav with absolute silence between them: with a recorded voice that
+shows, because the room's background noise disappears suddenly at every cut. This script takes a stretch of "room
+tone" from the take (no voice), repeats it along the whole video and puts each sentence on top in its place, with
+short fades at the edges. The result is public/<audio>/voz-completa.wav, which Local.tsx plays as a single track.
 
-Correr después de voz_grabada.py (que borra los .wav de la carpeta):
+Run after voz_grabada.py (which deletes the .wav files in the folder):
   python3 -I compartido/scripts/voz_continua.py --toma grabacion/toma-v1-limpia.wav --sala 90.45:92.15 --sala 70.70:71.80
 
-Cada --sala es un tramo de la toma (en segundos) donde solo hay ruido de fondo. Conviene usar la toma ya limpia
-(limpiar_toma.sh) para que el ruido de sala sea el mismo que queda debajo de la voz.
+Each --sala is a stretch of the take (in seconds) with only background noise. It's best to use the already cleaned take
+(limpiar_toma.sh) so the room tone is the same one left under the voice.
 """
 import argparse
 import array
@@ -36,9 +36,9 @@ def leer(path, desde=None, hasta=None):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--voz", default="espanol/voz-es.json")
-    ap.add_argument("--audio", default="voz-es", help="carpeta dentro de public/ con las frases")
-    ap.add_argument("--toma", required=True, help="toma de donde sale el ruido de sala")
-    ap.add_argument("--sala", action="append", required=True, help="tramo inicio:fin (s) con solo ruido de fondo; se puede repetir")
+    ap.add_argument("--audio", default="voz-es", help="folder inside public/ with the sentences")
+    ap.add_argument("--toma", required=True, help="take the room tone comes from")
+    ap.add_argument("--sala", action="append", required=True, help="start:end stretch (s) with only background noise; can be repeated")
     ap.add_argument("--fundido-ms", type=float, default=40.0, help="fundido entre ruido de sala y frase")
     args = ap.parse_args()
 
@@ -46,7 +46,7 @@ def main():
     voz = json.loads(voz_path.read_text())
     n = int(round(voz["duracion_video"] * SR))
 
-    # 1. cama de ruido de sala: trozos de los tramos elegidos, encadenados con fundidos para que no se note la costura
+    # 1. room-tone bed: pieces of the chosen stretches, chained with fades so the seam doesn't show
     trozos = []
     for t in args.sala:
         a, b = (float(x) for x in t.split(":"))
@@ -69,7 +69,7 @@ def main():
         cama.extend(pedazo[k:])
     salida = cama[:n]
 
-    # 2. cada frase reemplaza a la cama en su lugar, con un fundido corto en cada borde
+    # 2. each sentence replaces the bed in its place, with a short fade at each edge
     f = max(1, int(args.fundido_ms / 1000 * SR))
     for fr in voz["frases"]:
         frase = leer(VIDEO / "public" / fr["archivo"])

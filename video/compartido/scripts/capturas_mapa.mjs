@@ -1,11 +1,11 @@
-// Imágenes de mapa para el video local, renderizadas con el mismo mapa de la web (MapLibre), sin la interfaz:
-//   public/casos/argentina.jpg        Argentina con NASA GIBS Blue Marble
-//   public/casos/<sitio>/<fecha>.jpg  Sentinel-2 L2A (Planetary Computer) del sitio en cada fecha que tiene la web
-//   compartido/casos.json             contornos y puntos ya pasados a píxeles de esas imágenes, más las pasadas del radar
+// Map images for the local video, rendered with the same map as the web (MapLibre), without the interface:
+//   public/casos/argentina.jpg        Argentina with NASA GIBS Blue Marble
+//   public/casos/<sitio>/<fecha>.jpg  Sentinel-2 L2A (Planetary Computer) of the site on each date the web has
+//   compartido/casos.json             outlines and points already converted to pixels of those images, plus the radar passes
 // Uso (desde video/):
-//   1. cd ../insomnes-web && npm run build && npx vite preview --port 4174 --strictPort
-//   2. node compartido/scripts/capturas_mapa.mjs <ruta a chrome>
-// Necesita red (teselas de GIBS y de Planetary Computer).
+//   1. cd ../web && npm run build && npx vite preview --port 4174 --strictPort
+//   2. node compartido/scripts/capturas_mapa.mjs <path to chrome>
+// Needs network (GIBS and Planetary Computer tiles).
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";
 
@@ -26,7 +26,7 @@ async function preparar(w, h) {
   await pg.goto("http://localhost:4174/?captura&lang=es#/mapa", {waitUntil: "domcontentloaded"});
   await pg.waitForFunction(() => window.mapa && window.mapa.isStyleLoaded() && window.mapa.getLayer("punto"), {timeout: 60000});
   await espera(1500);
-  // fuera la interfaz y las capas propias de la web: sólo el fondo
+  // remove the interface and the web's own layers: only the background
   await pg.addStyleTag({content: ".map-top,.map-legend,.dock,.ficha,.panel,.maplibregl-ctrl,.map-credit,.map-cred,.cred,nav{display:none!important}"});
   await pg.evaluate(() => {
     const m = window.mapa;
@@ -43,7 +43,7 @@ const [AW, AH] = [1920, 1080];
 await preparar(AW, AH);
 await pg.evaluate(() => {
   const m = window.mapa;
-  // límites y costas de NASA GIBS (Reference_Features_15m) sobre el Blue Marble
+  // NASA GIBS borders and coastlines (Reference_Features_15m) over the Blue Marble
   m.addSource("limites", {type: "raster", tiles: ["https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/Reference_Features_15m/default/default/GoogleMapsCompatible_Level13/{z}/{y}/{x}.png"], tileSize: 256, maxzoom: 9});
   m.addLayer({id: "limites", type: "raster", source: "limites", paint: {"raster-opacity": 0.9}});
   m.jumpTo({center: [-58.5, -39.5], zoom: 3.75});
@@ -54,7 +54,7 @@ salida.argentina = {ancho: AW, alto: AH, puntos: await proyectar(catalogo.map((x
   amba: (await proyectar([[-58.45, -34.6]]))[0]};
 console.log("argentina", catalogo.length, "puntos");
 
-// 2 · Cada sitio, en cada fecha de Sentinel-2
+// 2 · Each site, on each Sentinel-2 date
 const LADO = 1000;
 for (const id of ["lujan", "gonzalez-catan", "norte-iii"]) {
   const s = sitios[id];

@@ -1,8 +1,8 @@
-// Video para el jurado local de Buenos Aires: hasta 3 minutos, en castellano, mismo estilo que el internacional.
-// Voz grabada por el equipo (una sola pista, voz-es.json → "pista") con el momento de cada palabra (palabras_voz.py):
-// cada escena y cada elemento se ancla a la palabra que lo nombra, así que si cambia la voz se reacomoda sola.
-// Cifras: idea-basurales-nisar/context/README.md, insomnes-web/src/data/seed (sitios.json), data/basurales (catálogo),
-// compartido/casos.json (capturas_mapa.mjs) y compartido/web-rects.json (capturas_web.mjs). Ver guion-es.json.
+// Video for the local Buenos Aires jury: up to 3 minutes, in Spanish, same style as the international one.
+// Voice recorded by the team (a single track, voz-es.json → "pista") with the time of each word (palabras_voz.py):
+// each scene and each element is anchored to the word that names it, so if the voice changes it rearranges itself.
+// Figures: docs/idea.md, docs/results.md, web/src/data/seed (sitios.json), data/catalogos/basurales (catalog),
+// compartido/casos.json (capturas_mapa.mjs) and compartido/web-rects.json (capturas_web.mjs). See guion-es.json.
 import React from "react";
 import {AbsoluteFill, Easing, Html5Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {ALTO, ANCHO, EQUIPO, FPS, NOMBRE_EQUIPO, RESULTADOS} from "../compartido/data";
@@ -19,7 +19,7 @@ const VOZ_ES = voz as unknown as {duracion_video: number; pista: string; frases:
 export const DURACION_LOCAL = VOZ_ES.duracion_video;
 const fr = (id: string) => VOZ_ES.frases.find((x) => x.id === id)!;
 const norm = (p: string) => p.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
-// segundo (absoluto) en que la voz dice la n-ésima palabra de la frase que empieza con `palabra`
+// second (absolute) at which the voice says the n-th word of the sentence that starts with `palabra`
 const en = (id: string, palabra: string, n = 1) => {
   let c = 0;
   for (const [p, t] of fr(id).palabras) if (norm(p).startsWith(norm(palabra)) && ++c === n) return t;
@@ -34,8 +34,8 @@ const RECTS = rectsJson as unknown as {mapa: {lujan: number[]}; lujan: Record<st
 
 const RADAR_ES: [string, string] = ["Radar", "NASA–ISRO NISAR · ASF DAAC"];
 const OPTICO_ES: [string, string] = ["Óptico", "Sentinel-2 · Copernicus"];
-const CLIP_IA = 4.733; // el clip de Higgsfield a velocidad normal: cubre la primera oración
-const FOTO_EQUIPO: string | null = null; // p. ej. "equipo.jpg" en public/ cuando esté la foto de los seis
+const CLIP_IA = 4.733; // the Higgsfield clip at normal speed: it covers the first sentence
+const FOTO_EQUIPO: string | null = null; // e.g. "equipo.jpg" in public/ once the photo of the six is there
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 const fechaEs = (iso: string) => `${Number(iso.slice(8, 10))} ${MESES[Number(iso.slice(5, 7)) - 1]}`;
 const FONDO = "radial-gradient(ellipse at 50% 45%, #0d1a26 0%, #05080c 72%)";
@@ -51,7 +51,7 @@ const Pill: React.FC<{children: React.ReactNode; color?: string; v?: number; siz
 const Mono: React.FC<{children: React.ReactNode; size?: number; color?: string; style?: React.CSSProperties}> = ({children, size = 18, color = "rgba(231,235,241,0.6)", style}) => (
   <div style={{fontFamily: F.mono, fontSize: size, color, ...style}}>{children}</div>
 );
-// aparición estándar de un elemento a partir de un frame
+// standard entrance of an element from a frame on
 const useEntra = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -60,10 +60,10 @@ const useEntra = () => {
 const Aparece: React.FC<{v: number; dy?: number; dx?: number; children: React.ReactNode; style?: React.CSSProperties}> = ({v, dy = 18, dx = 0, children, style}) => (
   <div style={{opacity: Math.min(1, v * 1.4), transform: `translate(${(1 - v) * dx}px, ${(1 - v) * dy}px)`, ...style}}>{children}</div>
 );
-// fin del movimiento del título de sección: recién ahí entra el resto (así nada queda debajo del título)
+// end of the section title movement: only then the rest comes in (so nothing sits under the title)
 const tras = (salida: number) => salida + 20;
 
-/* 1 · Clip de IA (primera oración) */
+/* 1 · AI clip (first sentence) */
 const ClipIA: React.FC = () => (
   <AbsoluteFill>
     <OffthreadVideo src={staticFile("clip1-ai.mp4")} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
@@ -73,7 +73,7 @@ const ClipIA: React.FC = () => (
   </AbsoluteFill>
 );
 
-/* 2 · Argentina: ≈5.000 basurales estimados y ningún inventario abierto */
+/* 2 · Argentina: ≈5,000 estimated dump sites and no open inventory */
 const Argentina: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const f = useCurrentFrame();
   const e = useEntra();
@@ -182,7 +182,7 @@ const DumpsiteNisar: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   );
 };
 
-/* 4 · Insomnio: el basural cambia, la coherencia lo mide, el índice lo cuenta, el mapa lo extiende */
+/* 4 · Insomnia: the dump site changes, coherence measures it, the index counts it, the map extends it */
 const Insomnio: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const f = useCurrentFrame();
   const e = useEntra();
@@ -196,7 +196,7 @@ const Insomnio: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const fundido = interpolate((f - aIni) - idx * porImagen, [0, 6], [0, 1], clamp);
   const partA = interpolate(f, [aIni - 4, aIni + 6, b0 - 6, b0 + 4], [0, 1, 1, 0], clamp);
   const partB = interpolate(f, [b0, b0 + 8, c0 - 6, c0 + 4], [0, 1, 1, 0], clamp);
-  // B · las barras entran con "coherencia"; los ojos, pasada por pasada, con "cambió más de lo que tiene alrededor"
+  // B · the bars come in with "coherencia"; the eyes, pass by pass, with "cambió más de lo que tiene alrededor"
   const barras = at(en("coherencia", "cuanto")) - 6;
   const ojos0 = at(en("insomnio", "cambio")) - 4, ojos1 = at(en("insomnio", "alrededor")) + 6;
   const paso = (ojos1 - ojos0) / pasadas.length;
@@ -295,7 +295,7 @@ const Insomnio: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   );
 };
 
-/* Un sitio en Sentinel-2, fecha por fecha, con su contorno */
+/* A site in Sentinel-2, date by date, with its outline */
 const PanelSitio: React.FC<{id: string; f: number; desde: number; dibujo: number; color: string; cada?: number}> = ({id, f, desde, dibujo, color, cada = 14}) => {
   const x = CASOS.sitios[id];
   const k = Math.max(0, Math.floor((f - desde) / cada)) % x.fechas.length;
@@ -311,7 +311,7 @@ const PanelSitio: React.FC<{id: string; f: number; desde: number; dibujo: number
     </div>
   );
 };
-// Las 15 comparaciones del radar: cada celda se prende cuando le toca
+// The radar's 15 comparisons: each cell lights up on its turn
 const Comparaciones: React.FC<{f: number; desde: number; hasta: number; cambio: boolean; ancho: number}> = ({f, desde, hasta, cambio, ancho}) => {
   const n = 15, gap = 6, w = (ancho - gap * (n - 1)) / n;
   const color = cambio ? C.glow : C.radar;
@@ -330,14 +330,14 @@ const Comparaciones: React.FC<{f: number; desde: number; hasta: number; cambio: 
   );
 };
 
-/* 5 · Luján (cerrado, quieto) contra González Catán (cambia en todas) */
+/* 5 · Luján (closed, quiet) against González Catán (changes in every pair) */
 const Casos: React.FC<{t0: number; dur: number}> = ({t0}) => {
   const f = useCurrentFrame();
   const e = useEntra();
   const at = (abs: number) => s(abs - t0);
   const salida = 6;
   const panelL = tras(salida);
-  const dos = at(fr("norte3").inicio); // entra González Catán
+  const dos = at(fr("norte3").inicio); // González Catán comes in
   const lado = 520, y = 200;
   const xL = 330, xC = 1070;
   const lCells: [number, number] = [at(en("lujan", "radar")) - 2, at(en("lujan", "comparaciones")) + 10];
@@ -359,7 +359,7 @@ const Casos: React.FC<{t0: number; dur: number}> = ({t0}) => {
         <Comparaciones f={f} desde={lCells[0]} hasta={lCells[1]} cambio={false} ancho={lado} />
         <Texto size={30} style={{marginTop: 12}}>quieto en <b style={{color: C.radar}}>{cuentaL}</b> de 15 comparaciones</Texto>
       </div>
-      {/* la explicación de Luján ocupa el lugar de Catán hasta que entra Catán */}
+      {/* the Luján explanation takes Catán's place until Catán comes in */}
       <div style={{position: "absolute", left: xC, top: y + 20, width: 640, opacity: info}}>
         <Aparece v={e(at(en("lujan", "cerro")) - 4)}>
           <Mono size={20} color={C.radar} style={{letterSpacing: 3}}>ANUNCIO OFICIAL</Mono>
@@ -391,7 +391,7 @@ const Casos: React.FC<{t0: number; dur: number}> = ({t0}) => {
   );
 };
 
-/* 6 · Los datos: el radar dice qué cambia, el catálogo enseña qué es */
+/* 6 · The data: the radar says what changes, the catalog teaches what it is */
 const FUENTES_CATALOGO: [string, string, string][] = [
   ["OpenStreetMap · Overture", "polígonos de rellenos y basurales", "openstreetmap"],
   ["Climate TRACE", "emisiones por sitio", "climate"],
@@ -416,7 +416,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
   const parecidos = [{t: "canteras", img: "chip-tres-febrero.jpg", w: "canteras"}, {t: "aeródromos", img: "chip-el-palomar.jpg", w: "aerodromos"}];
   return (
     <AbsoluteFill style={{background: FONDO}}>
-      {/* A · un punto que cambia: ¿qué es? */}
+      {/* A · a point that changes: what is it? */}
       <AbsoluteFill style={{opacity: partA}}>
         <div style={{position: "absolute", left: 470, top: 200, width: 500, height: 500}}>
           <PanelSitio id="gonzalez-catan" f={f} desde={a0} dibujo={interpolate(f, [a0, a0 + 24], [0, 1], clamp)} color={C.glow} cada={10} />
@@ -432,7 +432,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
           </Aparece>
         </div>
       </AbsoluteFill>
-      {/* B · el catálogo */}
+      {/* B · the catalog */}
       <AbsoluteFill style={{opacity: partB}}>
         <div style={{position: "absolute", left: x0, top: 200, display: "grid", gridTemplateColumns: `repeat(${cols}, ${ch}px)`, gap}}>
           {entreno.muestras.slice(0, 28).map((m, k) => {
@@ -480,7 +480,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
   );
 };
 
-/* 7 · LightGBM: como en el video en inglés, la imagen entra al modelo y cae en "Basural" u "Otra cosa" */
+/* 7 · LightGBM: like in the English video, the image goes into the model and lands on "Basural" or "Otra cosa" */
 const VARIABLES_ES: [string, string][] = [
   ["coherencia", "radar"], ["eco de radar", "radar"], ["infrarrojo · SWIR", "sentinel"], ["vegetación · NDVI", "vegetacion"],
   ["suelo desnudo · BSI", "suelo"], ["agua · NDWI", "agua"], ["forma", "forma"], ["tamaño", "forma"], ["entorno", "forma"],
@@ -508,7 +508,7 @@ const Modelo: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const clasifica = at(en("modelo", "clasifica")) - 6;
   const intervalo = 11;
   const caja = e(base, 16);
-  // al entrar, las imágenes del catálogo vuelan hacia la caja: con eso se entrena
+  // on entry, the catalog images fly into the box: that's what it trains with
   const vuelo = interpolate(f, [base + 4, base + 30], [0, 1], {...clamp, easing: Easing.in(Easing.cubic)});
   return (
     <AbsoluteFill style={{background: FONDO_AZUL}}>
@@ -535,7 +535,7 @@ const Modelo: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
           <span style={{fontFamily: F.mono, fontSize: 22, color: "#fff", opacity: e(arboles0 + 30)}}>… cientos</span>
         </div>
       </div>
-      {/* las dos salidas */}
+      {/* the two outputs */}
       <AbsoluteFill style={{opacity: interpolate(f, [clasifica - 10, clasifica], [0, 1], clamp)}}>
         {[{t: "Basural", c: C.glow, y: cajaY}, {t: "Otra cosa", c: C.radar, y: cajaY + 210}].map((x) => (
           <div key={x.t} style={{position: "absolute", left: salX, top: x.y, width: trayW, height: 190, borderRadius: 16, border: `2px dashed ${x.c}`, background: "rgba(5,8,12,0.4)"}}>
@@ -578,8 +578,8 @@ const Modelo: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   );
 };
 
-/* 8 · Resultados: el modelo en toda la Argentina */
-// PLACEHOLDER hasta tener la corrida nacional en el repo: la voz dice "unos siete mil" y "dos mil más" que la estimación oficial (≈5.000).
+/* 8 · Results: the model across Argentina */
+// PLACEHOLDER until the national run is in the repo: the voice says "unos siete mil" and "dos mil más" than the official estimate (≈5,000).
 const MODELO_AR = 7000, ESTIMACION = 5000;
 const Resultados: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const f = useCurrentFrame();
@@ -595,13 +595,13 @@ const Resultados: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const comp = at(en("argentina", "dos")) - 4;
   const vComp = e(comp);
   const reg = at(en("argentina", "ningun")) - 4;
-  const dx = -330; // Argentina a la izquierda
+  const dx = -330; // Argentina on the left
   const yScan = 60 + barrido * 960;
   return (
     <AbsoluteFill style={{background: C.bg}}>
       <div style={{position: "absolute", inset: 0, transform: `translateX(${dx}px) scale(${interpolate(f, [0, n], [1.02, 1.08], clamp)})`, transformOrigin: `${A.amba[0]}px ${A.amba[1]}px`}}>
         <Img src={staticFile("casos/argentina.jpg")} style={{width: ANCHO, height: ALTO, filter: "brightness(0.72) saturate(0.85)"}} />
-        {/* el modelo recorre el país: un barrido de norte a sur */}
+        {/* the model sweeps the country: a north-to-south pass */}
         <div style={{position: "absolute", left: 0, right: 0, top: 0, height: yScan, background: "linear-gradient(to bottom, rgba(255,165,61,0.0) 0%, rgba(255,165,61,0.10) 85%, rgba(255,165,61,0.22) 100%)", opacity: barrido < 1 ? 1 : interpolate(f, [at(en("argentina", "modelo")) + 6, at(en("argentina", "modelo")) + 30], [1, 0.45], clamp)}} />
         {barrido > 0 && barrido < 1 && <div style={{position: "absolute", left: 0, right: 0, top: yScan - 2, height: 4, background: C.glow, boxShadow: `0 0 24px 6px ${C.glow}`}} />}
       </div>
@@ -638,7 +638,7 @@ const Resultados: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   );
 };
 
-/* 9 · La web, en una ventana de navegador normal, sin recortes */
+/* 9 · The web, in a normal browser window, without crops */
 const W_NAV = 1360, ESC = W_NAV / 1920, H_NAV = 1080 * ESC, X_NAV = (ANCHO - W_NAV) / 2, Y_NAV = 64, BARRA = 40;
 const Resalte: React.FC<{r: Rect; v: number; pad?: number}> = ({r, v, pad = 8}) => (
   <div style={{position: "absolute", left: X_NAV + r[0] * ESC - pad, top: Y_NAV + BARRA + r[1] * ESC - pad, width: r[2] * ESC + 2 * pad, height: r[3] * ESC + 2 * pad,
@@ -662,7 +662,7 @@ const Web: React.FC<{t0: number; dur: number}> = ({t0}) => {
   const k = pasos.reduce((acc, p, i) => (f >= p.desde ? i : acc), 0);
   const fade = interpolate(f - pasos[k].desde, [0, 8], [0, 1], clamp);
   const vNav = e(nav, 18);
-  // resaltes: [rect, desde, hasta]
+  // highlights: [rect, from, to]
   const R = RECTS;
   const resaltes: [Rect, number, number][] = [
     [[0, 0, 1500, 1080], at(en("ficha", "imagen")) - 2, at(en("ficha", "radar")) - 6],
@@ -673,7 +673,7 @@ const Web: React.FC<{t0: number; dur: number}> = ({t0}) => {
     [R.sitios.lista, at(en("lista", "todos")) - 4, at(en("lista", "descargar")) - 6],
     [R.sitios.csv, at(en("lista", "descargar")) - 4, at(fr("lista").inicio + fr("lista").duracion) + 10],
   ];
-  // el cursor va hasta Luján y hace clic
+  // the cursor goes to Luján and clicks
   const [lx, ly] = R.mapa.lujan;
   const c0 = at(en("ficha", "clic")) - 10;
   const mov = interpolate(f, [c0, clic - 4], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
@@ -766,7 +766,7 @@ const Cierre: React.FC<{t0: number; dur: number}> = ({t0}) => {
   );
 };
 
-/* 11 · Dumpsite y el lema */
+/* 11 · Dumpsite and the tagline */
 const Lema: React.FC<{t0: number}> = ({t0}) => {
   const f = useCurrentFrame();
   const e = useEntra();

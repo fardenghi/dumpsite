@@ -1,14 +1,14 @@
-"""Momento exacto de cada palabra de la voz, para los subtítulos y para sincronizar las escenas (video en castellano).
+"""Exact time of each word of the voice, for the subtitles and to sync the scenes (Spanish video).
 
-Pasa cada frase grabada (public/<audio>/frase-N.wav) por whisper.cpp con tiempos por palabra, ajusta el comienzo de las
-palabras que vienen después de una pausa al final de esa pausa (whisper suele adelantarlas) y alinea lo reconocido con
-el texto del guion: las palabras que whisper escribió distinto ("5.000" por "cinco mil") toman el tiempo de sus vecinas,
-repartido por cantidad de letras. Escribe en voz-es.json, por frase, "palabras": [[palabra, segundo absoluto], ...].
+Runs each recorded sentence (public/<audio>/frase-N.wav) through whisper.cpp with per-word timing, moves the start of
+words that come after a pause to the end of that pause (whisper tends to bring them forward) and aligns what was
+recognized with the script text: words whisper wrote differently ("5.000" for "cinco mil") take their neighbours'
+time, split by number of letters. Writes to voz-es.json, per sentence, "palabras": [[word, absolute second], ...].
 
   python3 -I compartido/scripts/palabras_voz.py
-  (necesita whisper-cli y ffmpeg en el PATH y el modelo en ~/.cache/whisper-cpp/ggml-large-v3-turbo.bin)
+  (needs whisper-cli and ffmpeg on the PATH and the model in ~/.cache/whisper-cpp/ggml-large-v3-turbo.bin)
 
-Correr después de voz_grabada.py y voz_continua.py, cada vez que cambie la voz.
+Run after voz_grabada.py and voz_continua.py, every time the voice changes.
 """
 import argparse
 import difflib
@@ -60,19 +60,19 @@ def main():
             subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(VIDEO / "public" / fr["archivo"]), "-ar", "16000", "-ac", "1", str(wav16)], check=True)
             rec = whisper(wav16, tmp)
             sil = silencios(wav16)
-            # la palabra que sigue a una pausa empieza cuando termina la pausa
+            # the word after a pause starts when the pause ends
             ajust = []
             for txt, a, b in rec:
                 for s0, s1 in sil:
                     if s0 - 0.15 <= a <= s1 + 0.05 and s1 - s0 > 0.12:
                         a = max(a, s1 - 0.03)
                 ajust.append((txt, a))
-            # monótonas
+            # monotonic
             for k in range(1, len(ajust)):
                 if ajust[k][1] < ajust[k - 1][1]:
                     ajust[k] = (ajust[k][0], ajust[k - 1][1])
-            # palabras amontonadas en el mismo instante (whisper las puso dentro de una pausa): se reparten por letras
-            # hasta la siguiente palabra con otro tiempo, a no más de 0,09 s por letra
+            # words piled up at the same instant (whisper put them inside a pause): spread by letters
+            # up to the next word with a different time, at no more than 0.09 s per letter
             k = 0
             while k < len(ajust) - 1:
                 j = k
@@ -94,7 +94,7 @@ def main():
             for bl in sm.get_matching_blocks():
                 for k in range(bl.size):
                     tiempos[bl.a + k] = ajust[bl.b + k][1]
-            # bordes: la primera palabra arranca con la frase; huecos interpolados por letras
+            # edges: the first word starts with the sentence; gaps interpolated by letters
             if tiempos[0] is None:
                 tiempos[0] = 0.0
             fin = fr["duracion"]
