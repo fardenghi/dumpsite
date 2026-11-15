@@ -1,0 +1,168 @@
+{
+ "generado_por": "herramientas/optico_estado_conocido.py resumen",
+ "periodo": [
+  "2025-10-21",
+  "2026-10-21"
+ ],
+ "umbral_ndvi_contraste": -0.15,
+ "nota": "pelado = ndvi_contraste < umbral. AUC = probabilidad de que un abierto sea menos verde, contra su entorno, que un cerrado. El estado es el del registro y puede estar desactualizado.",
+ "grupos": [
+  {
+   "grupo": "todos",
+   "abiertos": 602,
+   "cerrados": 404,
+   "abiertos_pelados": 332,
+   "abiertos_pelados_ic95": [
+    0.512,
+    0.591
+   ],
+   "cerrados_pelados": 75,
+   "cerrados_pelados_ic95": [
+    0.151,
+    0.226
+   ],
+   "ndvi_contraste_mediana": [
+    -0.167,
+    -0.027
+   ],
+   "auc": 0.773
+  },
+  {
+   "grupo": "fuera de los 10 frames con que se fijó el umbral (prueba independiente)",
+   "abiertos": 578,
+   "cerrados": 369,
+   "abiertos_pelados": 313,
+   "abiertos_pelados_ic95": [
+    0.501,
+    0.582
+   ],
+   "cerrados_pelados": 71,
+   "cerrados_pelados_ic95": [
+    0.155,
+    0.236
+   ],
+   "ndvi_contraste_mediana": [
+    -0.163,
+    -0.028
+   ],
+   "auc": 0.767
+  },
+  {
+   "grupo": "en los 10 frames con que se fijó el umbral",
+   "abiertos": 24,
+   "cerrados": 35,
+   "abiertos_pelados": 19,
+   "abiertos_pelados_ic95": [
+    0.595,
+    0.908
+   ],
+   "cerrados_pelados": 4,
+   "cerrados_pelados_ic95": [
+    0.045,
+    0.26
+   ],
+   "ndvi_contraste_mediana": [
+    -0.206,
+    -0.003
+   ],
+   "auc": 0.838
+  },
+  {
+   "grupo": "país PRI",
+   "abiertos": 14,
+   "cerrados": 6,
+   "abiertos_pelados": 13,
+   "abiertos_pelados_ic95": [
+    0.685,
+    0.987
+   ],
+   "cerrados_pelados": 3,
+   "cerrados_pelados_ic95": [
+    0.188,
+    0.812
+   ],
+   "ndvi_contraste_mediana": [
+    -0.227,
+    -0.157
+   ],
+   "auc": 0.619
+  },
+  {
+   "grupo": "país USA",
+   "abiertos": 587,
+   "cerrados": 228,
+   "abiertos_pelados": 319,
+   "abiertos_pelados_ic95": [
+    0.503,
+    0.583
+   ],
+   "cerrados_pelados": 45,
+   "cerrados_pelados_ic95": [
+    0.151,
+    0.254
+   ],
+   "ndvi_contraste_mediana": [
+    -0.166,
+    -0.031
+   ],
+   "auc": 0.768
+  },
+  {
+   "grupo": "país sin país",
+   "abiertos": 0,
+   "cerrados": 134,
+   "abiertos_pelados": 0,
+   "abiertos_pelados_ic95": null,
+   "cerrados_pelados": 17,
+   "cerrados_pelados_ic95": [
+    0.081,
+    0.194
+   ],
+   "ndvi_contraste_mediana": [
+    null,
+    -0.001
+   ],
+   "auc": null
+  },
+  {
+   "grupo": "cerrados con fecha de cierre hasta 2015",
+   "abiertos": 602,
+   "cerrados": 214,
+   "abiertos_pelados": 332,
+   "abiertos_pelados_ic95": [
+    0.512,
+    0.591
+   ],
+   "cerrados_pelados": 37,
+   "cerrados_pelados_ic95": [
+    0.128,
+    0.229
+   ],
+   "ndvi_contraste_mediana": [
+    -0.167,
+    -0.02
+   ],
+   "auc": 0.788
+  },
+  {
+   "grupo": "cerrados con fecha de cierre desde 2016",
+   "abiertos": 602,
+   "cerrados": 36,
+   "abiertos_pelados": 332,
+   "abiertos_pelados_ic95": [
+    0.512,
+    0.591
+   ],
+   "cerrados_pelados": 10,
+   "cerrados_pelados_ic95": [
+    0.158,
+    0.44
+   ],
+   "ndvi_contraste_mediana": [
+    -0.167,
+    -0.086
+   ],
+   "auc": 0.683
+  }
+ ]
+}
