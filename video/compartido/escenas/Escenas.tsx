@@ -50,7 +50,7 @@ export const EscenaIA: React.FC<{durTotal: number}> = ({durTotal}) => {
       <OffthreadVideo src={staticFile("clip1-ai.mp4")} playbackRate={4.733 / durTotal} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
       <AbsoluteFill style={{background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)"}} />
       <div style={{opacity: aviso}}><AvisoIA /></div>
-      <Equipo titulo="Team · NASA Space Apps 2026" dur={durTotal} />
+      <Equipo dur={durTotal} />
     </AbsoluteFill>
   );
 };
