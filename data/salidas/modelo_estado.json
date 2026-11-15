@@ -12,21 +12,45 @@
    "AMBA"
   ]
  },
- "validacion": "un frame afuera por vez; IC 95 % por remuestreo de predios",
+ "validacion": "un frame afuera por vez; IC 95 % por remuestreo de predios; control con 5 grupos de frames",
+ "criterio_del_principal": "de ['frente', 'frente + óptico', 'frente + óptico + radar de antes'], del más simple al más complejo, el primero cuyo AUC (logística, un frame afuera) no queda a más de 0.02 del mejor de los tres; fijado antes de mirar el AMBA",
  "modelo_principal": {
-  "variables": "radar + óptico",
-  "tipo": "regresión logística (C = 0,5), faltantes con la mediana"
+  "variables": "frente",
+  "lista": [
+   "eco_std_rel_p90",
+   "ecohv_std_rel_p90",
+   "eco_std_rel_max3",
+   "eco_cambio_rel_p90",
+   "frente_coh_3x3",
+   "frente_coh_fijo",
+   "frente_vs_predio",
+   "parche_bajo_ha",
+   "parche_bajo_frac",
+   "parche_se_mueve"
+  ],
+  "tipo": "regresión logística (C = 0,5), faltantes con la mediana",
+  "auc": 0.908,
+  "ic95": [
+   0.867,
+   0.946
+  ],
+  "n": 198,
+  "abiertos": 121,
+  "auc_5_grupos_de_frames": 0.9,
+  "n_variables": 10
  },
  "auc": {
   "logística": {
-   "radar": {
-    "auc": 0.778,
+   "frente": {
+    "auc": 0.908,
     "ic95": [
-     0.708,
-     0.839
+     0.867,
+     0.946
     ],
     "n": 198,
-    "abiertos": 121
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.9,
+    "n_variables": 10
    },
    "óptico": {
     "auc": 0.869,
@@ -35,43 +59,64 @@
      0.92
     ],
     "n": 198,
-    "abiertos": 121
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.857,
+    "n_variables": 8
    },
-   "radar + óptico": {
+   "frente + óptico": {
+    "auc": 0.927,
+    "ic95": [
+     0.889,
+     0.958
+    ],
+    "n": 198,
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.916,
+    "n_variables": 18
+   },
+   "radar de antes": {
+    "auc": 0.778,
+    "ic95": [
+     0.708,
+     0.839
+    ],
+    "n": 198,
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.747,
+    "n_variables": 7
+   },
+   "frente + radar de antes": {
+    "auc": 0.893,
+    "ic95": [
+     0.841,
+     0.939
+    ],
+    "n": 198,
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.873,
+    "n_variables": 17
+   },
+   "óptico + radar de antes": {
     "auc": 0.877,
     "ic95": [
      0.815,
      0.929
     ],
     "n": 198,
-    "abiertos": 121
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.84,
+    "n_variables": 15
    },
-   "radar + área": {
-    "auc": 0.84,
+   "frente + óptico + radar de antes": {
+    "auc": 0.916,
     "ic95": [
-     0.781,
-     0.892
+     0.871,
+     0.954
     ],
     "n": 198,
-    "abiertos": 121
-   },
-   "óptico + área": {
-    "auc": 0.915,
-    "ic95": [
-     0.873,
-     0.951
-    ],
-    "n": 198,
-    "abiertos": 121
-   },
-   "radar + óptico + área": {
-    "auc": 0.909,
-    "ic95": [
-     0.858,
-     0.953
-    ],
-    "n": 198,
-    "abiertos": 121
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.888,
+    "n_variables": 25
    },
    "sólo área": {
     "auc": 0.791,
@@ -80,15 +125,39 @@
      0.853
     ],
     "n": 198,
-    "abiertos": 121
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.8,
+    "n_variables": 1
+   },
+   "frente + área": {
+    "auc": 0.907,
+    "ic95": [
+     0.865,
+     0.944
+    ],
+    "n": 198,
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.899,
+    "n_variables": 11
+   },
+   "frente + óptico + área": {
+    "auc": 0.931,
+    "ic95": [
+     0.895,
+     0.96
+    ],
+    "n": 198,
+    "abiertos": 121,
+    "auc_5_grupos_de_frames": 0.926,
+    "n_variables": 19
    }
   },
   "árboles": {
-   "radar": {
-    "auc": 0.809,
+   "frente": {
+    "auc": 0.894,
     "ic95": [
-     0.741,
-     0.869
+     0.845,
+     0.936
     ],
     "n": 198,
     "abiertos": 121
@@ -102,7 +171,34 @@
     "n": 198,
     "abiertos": 121
    },
-   "radar + óptico": {
+   "frente + óptico": {
+    "auc": 0.891,
+    "ic95": [
+     0.839,
+     0.934
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar de antes": {
+    "auc": 0.809,
+    "ic95": [
+     0.741,
+     0.869
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "frente + radar de antes": {
+    "auc": 0.886,
+    "ic95": [
+     0.836,
+     0.93
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "óptico + radar de antes": {
     "auc": 0.893,
     "ic95": [
      0.838,
@@ -111,29 +207,11 @@
     "n": 198,
     "abiertos": 121
    },
-   "radar + área": {
-    "auc": 0.857,
+   "frente + óptico + radar de antes": {
+    "auc": 0.904,
     "ic95": [
-     0.802,
-     0.906
-    ],
-    "n": 198,
-    "abiertos": 121
-   },
-   "óptico + área": {
-    "auc": 0.872,
-    "ic95": [
-     0.816,
-     0.917
-    ],
-    "n": 198,
-    "abiertos": 121
-   },
-   "radar + óptico + área": {
-    "auc": 0.902,
-    "ic95": [
-     0.856,
-     0.941
+     0.855,
+     0.943
     ],
     "n": 198,
     "abiertos": 121
@@ -146,16 +224,34 @@
     ],
     "n": 198,
     "abiertos": 121
+   },
+   "frente + área": {
+    "auc": 0.897,
+    "ic95": [
+     0.851,
+     0.938
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "frente + óptico + área": {
+    "auc": 0.888,
+    "ic95": [
+     0.836,
+     0.93
+    ],
+    "n": 198,
+    "abiertos": 121
    }
   }
  },
  "aciertos_con_umbral_0.5": {
   "abiertos": [
-   111,
+   105,
    121
   ],
   "cerrados": [
-   58,
+   65,
    77
   ]
  },
@@ -163,12 +259,26 @@
   {
    "zona": "California y Arizona",
    "n": 54,
-   "auc": 0.891
+   "auc": 0.937
   },
   {
    "zona": "resto",
    "n": 144,
-   "auc": 0.867
+   "auc": 0.897
+  }
+ ],
+ "auc_por_tanda_de_frames": [
+  {
+   "frames": "los 10 de antes",
+   "n": 57,
+   "abiertos": 23,
+   "auc": 0.935
+  },
+  {
+   "frames": "los 20 agregados",
+   "n": 141,
+   "abiertos": 98,
+   "auc": 0.893
   }
  ],
  "lineas_de_base": {
@@ -201,127 +311,107 @@
    "n": 198,
    "abiertos": 121,
    "sentido": "más bajo = más abierto"
+  },
+  "eco_std_rel_p90": {
+   "auc": 0.821,
+   "ic95": [
+    0.763,
+    0.878
+   ],
+   "n": 198,
+   "abiertos": 121,
+   "sentido": "más alto = más abierto"
   }
  },
  "variables": [
   {
-   "variable": "swir_b12_contraste",
-   "coeficiente": 1.13,
-   "sentido": "más alto = más abierto",
-   "auc_sola": 0.751,
-   "caida_auc_al_desordenar": 0.084,
-   "faltantes": 0
-  },
-  {
-   "variable": "insomnio",
-   "coeficiente": -0.89,
+   "variable": "frente_vs_predio",
+   "familia": "frente",
+   "coeficiente": -1.36,
    "sentido": "más alto = más cerrado",
-   "auc_sola": 0.369,
-   "caida_auc_al_desordenar": 0.046,
+   "auc_sola": 0.153,
+   "caida_auc_al_desordenar": 0.089,
    "faltantes": 2
   },
   {
-   "variable": "contraste_p10",
-   "coeficiente": -0.77,
+   "variable": "parche_bajo_frac",
+   "familia": "frente",
+   "coeficiente": -1.12,
    "sentido": "más alto = más cerrado",
-   "auc_sola": 0.449,
-   "caida_auc_al_desordenar": 0.018,
+   "auc_sola": 0.388,
+   "caida_auc_al_desordenar": 0.048,
    "faltantes": 2
   },
   {
-   "variable": "frac_insomnio_90",
-   "coeficiente": -0.56,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.478,
-   "caida_auc_al_desordenar": 0.011,
-   "faltantes": 0
-  },
-  {
-   "variable": "ndvi_contraste",
-   "coeficiente": -0.46,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.169,
-   "caida_auc_al_desordenar": 0.01,
-   "faltantes": 0
-  },
-  {
-   "variable": "ndwi_contraste",
-   "coeficiente": 0.51,
+   "variable": "eco_std_rel_p90",
+   "familia": "frente",
+   "coeficiente": 0.84,
    "sentido": "más alto = más abierto",
-   "auc_sola": 0.842,
+   "auc_sola": 0.821,
+   "caida_auc_al_desordenar": 0.024,
+   "faltantes": 0
+  },
+  {
+   "variable": "frente_coh_3x3",
+   "familia": "frente",
+   "coeficiente": -0.69,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.279,
+   "caida_auc_al_desordenar": 0.015,
+   "faltantes": 2
+  },
+  {
+   "variable": "parche_se_mueve",
+   "familia": "frente",
+   "coeficiente": 0.46,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.576,
    "caida_auc_al_desordenar": 0.009,
-   "faltantes": 0
+   "faltantes": 2
   },
   {
-   "variable": "bsi_contraste",
-   "coeficiente": -0.52,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.707,
-   "caida_auc_al_desordenar": 0.007,
-   "faltantes": 0
-  },
-  {
-   "variable": "hv_hh",
-   "coeficiente": -0.44,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.362,
-   "caida_auc_al_desordenar": 0.006,
-   "faltantes": 0
-  },
-  {
-   "variable": "ndvi_media",
-   "coeficiente": -0.43,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.249,
-   "caida_auc_al_desordenar": 0.005,
-   "faltantes": 0
-  },
-  {
-   "variable": "persistencia",
-   "coeficiente": 0.29,
+   "variable": "parche_bajo_ha",
+   "familia": "frente",
+   "coeficiente": 0.14,
    "sentido": "más alto = más abierto",
-   "auc_sola": 0.387,
+   "auc_sola": 0.556,
    "caida_auc_al_desordenar": 0.001,
    "faltantes": 2
   },
   {
-   "variable": "eco_db",
-   "coeficiente": 0.07,
+   "variable": "frente_coh_fijo",
+   "familia": "frente",
+   "coeficiente": 0.13,
    "sentido": "más alto = más abierto",
-   "auc_sola": 0.477,
-   "caida_auc_al_desordenar": -0.0,
-   "faltantes": 0
+   "auc_sola": 0.321,
+   "caida_auc_al_desordenar": 0.0,
+   "faltantes": 2
   },
   {
-   "variable": "swir_b11_contraste",
-   "coeficiente": -0.39,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.558,
-   "caida_auc_al_desordenar": -0.0,
-   "faltantes": 0
-  },
-  {
-   "variable": "ndvi_variacion",
-   "coeficiente": -0.38,
-   "sentido": "más alto = más cerrado",
-   "auc_sola": 0.23,
-   "caida_auc_al_desordenar": -0.001,
-   "faltantes": 0
-  },
-  {
-   "variable": "bsi_media",
+   "variable": "ecohv_std_rel_p90",
+   "familia": "frente",
    "coeficiente": -0.04,
    "sentido": "más alto = más cerrado",
-   "auc_sola": 0.659,
+   "auc_sola": 0.765,
    "caida_auc_al_desordenar": -0.001,
    "faltantes": 0
   },
   {
-   "variable": "eco_var_p90",
-   "coeficiente": 0.07,
+   "variable": "eco_cambio_rel_p90",
+   "familia": "frente",
+   "coeficiente": 0.17,
    "sentido": "más alto = más abierto",
-   "auc_sola": 0.787,
-   "caida_auc_al_desordenar": -0.005,
+   "auc_sola": 0.757,
+   "caida_auc_al_desordenar": -0.002,
+   "faltantes": 3
+  },
+  {
+   "variable": "eco_std_rel_max3",
+   "familia": "frente",
+   "coeficiente": 0.12,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.843,
+   "caida_auc_al_desordenar": -0.003,
    "faltantes": 0
   }
  ],
@@ -334,7 +424,7 @@
    ],
    "n": 66,
    "abiertos": 20,
-   "auc": 0.863
+   "auc": 0.762
   },
   {
    "tercil": "medianos",
@@ -344,7 +434,7 @@
    ],
    "n": 66,
    "abiertos": 44,
-   "auc": 0.849
+   "auc": 0.898
   },
   {
    "tercil": "grandes",
@@ -354,83 +444,302 @@
    ],
    "n": 66,
    "abiertos": 57,
-   "auc": 0.979
+   "auc": 0.965
   }
  ],
  "sin_estado": {
   "n": 148,
-  "p_abierto_mayor_0.5": 49
+  "con_p_abierto": 145,
+  "p_abierto_mayor_0.5": 56
  },
  "prueba": [
   {
    "id_catalogo": "BAS-000007",
    "nombre": "Basural de Luján",
    "estado": "cerrado",
-   "p_abierto": 0.66
+   "p_abierto": 0.161
+  },
+  {
+   "id_catalogo": "CPX-015400",
+   "nombre": "Norte III, el complejo como una sola unidad (BAS-053304 + módulo C + BAS-016796)",
+   "estado": "abierto",
+   "p_abierto": 0.989
   },
   {
    "id_catalogo": "BAS-053304",
-   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
    "estado": "abierto",
-   "p_abierto": 0.018
+   "p_abierto": 0.069
+  },
+  {
+   "id_catalogo": "BAS-053307",
+   "nombre": "Norte III, módulo C (BAS-053307)",
+   "estado": "desconocido",
+   "p_abierto": 0.777
+  },
+  {
+   "id_catalogo": "BAS-016796",
+   "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+   "estado": "desconocido",
+   "p_abierto": 0.957
+  },
+  {
+   "id_catalogo": "BAS-000001",
+   "nombre": "González Catán",
+   "estado": "desconocido",
+   "p_abierto": 0.874
   }
  ],
  "prueba_por_grupo_de_variables": [
   {
-   "variables": "radar",
+   "variables": "frente",
+   "id_catalogo": "BAS-000007",
    "nombre": "Basural de Luján",
    "estado": "cerrado",
-   "p_abierto": 0.399
+   "p_abierto": 0.161
   },
   {
-   "variables": "radar",
-   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "variables": "frente",
+   "id_catalogo": "CPX-015400",
+   "nombre": "Norte III, el complejo como una sola unidad (BAS-053304 + módulo C + BAS-016796)",
    "estado": "abierto",
-   "p_abierto": 0.379
+   "p_abierto": 0.989
+  },
+  {
+   "variables": "frente",
+   "id_catalogo": "BAS-053304",
+   "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
+   "estado": "abierto",
+   "p_abierto": 0.069
+  },
+  {
+   "variables": "frente",
+   "id_catalogo": "BAS-053307",
+   "nombre": "Norte III, módulo C (BAS-053307)",
+   "estado": "desconocido",
+   "p_abierto": 0.777
+  },
+  {
+   "variables": "frente",
+   "id_catalogo": "BAS-016796",
+   "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+   "estado": "desconocido",
+   "p_abierto": 0.957
+  },
+  {
+   "variables": "frente",
+   "id_catalogo": "BAS-000001",
+   "nombre": "González Catán",
+   "estado": "desconocido",
+   "p_abierto": 0.874
+  },
+  {
+   "variables": "frente + óptico",
+   "id_catalogo": "BAS-000007",
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "p_abierto": 0.213
+  },
+  {
+   "variables": "frente + óptico",
+   "id_catalogo": "BAS-053304",
+   "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
+   "estado": "abierto",
+   "p_abierto": 0.007
+  },
+  {
+   "variables": "frente + óptico",
+   "id_catalogo": "BAS-053307",
+   "nombre": "Norte III, módulo C (BAS-053307)",
+   "estado": "desconocido",
+   "p_abierto": 0.836
+  },
+  {
+   "variables": "frente + óptico",
+   "id_catalogo": "BAS-016796",
+   "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+   "estado": "desconocido",
+   "p_abierto": 0.997
+  },
+  {
+   "variables": "frente + óptico",
+   "id_catalogo": "BAS-000001",
+   "nombre": "González Catán",
+   "estado": "desconocido",
+   "p_abierto": 0.744
+  },
+  {
+   "variables": "frente + óptico + radar de antes",
+   "id_catalogo": "BAS-000007",
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "p_abierto": 0.362
+  },
+  {
+   "variables": "frente + óptico + radar de antes",
+   "id_catalogo": "BAS-053304",
+   "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
+   "estado": "abierto",
+   "p_abierto": 0.006
+  },
+  {
+   "variables": "frente + óptico + radar de antes",
+   "id_catalogo": "BAS-053307",
+   "nombre": "Norte III, módulo C (BAS-053307)",
+   "estado": "desconocido",
+   "p_abierto": 0.99
+  },
+  {
+   "variables": "frente + óptico + radar de antes",
+   "id_catalogo": "BAS-016796",
+   "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+   "estado": "desconocido",
+   "p_abierto": 0.999
+  },
+  {
+   "variables": "frente + óptico + radar de antes",
+   "id_catalogo": "BAS-000001",
+   "nombre": "González Catán",
+   "estado": "desconocido",
+   "p_abierto": 0.668
   },
   {
    "variables": "óptico",
+   "id_catalogo": "BAS-000007",
    "nombre": "Basural de Luján",
    "estado": "cerrado",
    "p_abierto": 0.705
   },
   {
    "variables": "óptico",
-   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "id_catalogo": "BAS-053304",
+   "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
    "estado": "abierto",
    "p_abierto": 0.029
   },
   {
-   "variables": "radar + óptico",
+   "variables": "óptico",
+   "id_catalogo": "BAS-053307",
+   "nombre": "Norte III, módulo C (BAS-053307)",
+   "estado": "desconocido",
+   "p_abierto": 0.793
+  },
+  {
+   "variables": "óptico",
+   "id_catalogo": "BAS-016796",
+   "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+   "estado": "desconocido",
+   "p_abierto": 0.996
+  },
+  {
+   "variables": "óptico",
+   "id_catalogo": "BAS-000001",
+   "nombre": "González Catán",
+   "estado": "desconocido",
+   "p_abierto": 0.38
+  },
+  {
+   "variables": "óptico + radar de antes",
+   "id_catalogo": "BAS-000007",
    "nombre": "Basural de Luján",
    "estado": "cerrado",
    "p_abierto": 0.66
   },
   {
-   "variables": "radar + óptico",
-   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "variables": "óptico + radar de antes",
+   "id_catalogo": "BAS-053304",
+   "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
    "estado": "abierto",
    "p_abierto": 0.018
+  },
+  {
+   "variables": "óptico + radar de antes",
+   "id_catalogo": "BAS-053307",
+   "nombre": "Norte III, módulo C (BAS-053307)",
+   "estado": "desconocido",
+   "p_abierto": 0.94
+  },
+  {
+   "variables": "óptico + radar de antes",
+   "id_catalogo": "BAS-016796",
+   "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+   "estado": "desconocido",
+   "p_abierto": 0.998
+  },
+  {
+   "variables": "óptico + radar de antes",
+   "id_catalogo": "BAS-000001",
+   "nombre": "González Catán",
+   "estado": "desconocido",
+   "p_abierto": 0.253
   }
  ],
  "prueba_mediciones": [
   {
-   "nombre": "Basural de Luján",
+   "id_catalogo": "BAS-000007",
    "estado": "cerrado",
    "insomnio": 0.0,
-   "contraste_p10": 0.865,
-   "eco_var_p90": 2.002,
+   "eco_std_rel_p90": 0.419,
+   "eco_std_rel_max3": 0.434,
+   "frente_vs_predio": 0.859,
+   "parche_bajo_frac": 0.0,
    "ndvi_contraste": -0.121,
    "swir_b12_contraste": 0.001
   },
   {
-   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "id_catalogo": "CPX-015400",
+   "estado": "abierto",
+   "insomnio": NaN,
+   "eco_std_rel_p90": 0.935,
+   "eco_std_rel_max3": 1.597,
+   "frente_vs_predio": 0.334,
+   "parche_bajo_frac": 0.424,
+   "ndvi_contraste": NaN,
+   "swir_b12_contraste": NaN
+  },
+  {
+   "id_catalogo": "BAS-053304",
    "estado": "abierto",
    "insomnio": 1.0,
-   "contraste_p10": 0.283,
-   "eco_var_p90": 2.261,
+   "eco_std_rel_p90": 0.738,
+   "eco_std_rel_max3": 0.736,
+   "frente_vs_predio": 0.788,
+   "parche_bajo_frac": 0.853,
    "ndvi_contraste": 0.246,
    "swir_b12_contraste": -0.03
+  },
+  {
+   "id_catalogo": "BAS-053307",
+   "estado": "desconocido",
+   "insomnio": 0.86,
+   "eco_std_rel_p90": 0.723,
+   "eco_std_rel_max3": 0.805,
+   "frente_vs_predio": 0.432,
+   "parche_bajo_frac": 0.693,
+   "ndvi_contraste": -0.171,
+   "swir_b12_contraste": 0.059
+  },
+  {
+   "id_catalogo": "BAS-016796",
+   "estado": "desconocido",
+   "insomnio": 0.93,
+   "eco_std_rel_p90": 1.218,
+   "eco_std_rel_max3": 1.577,
+   "frente_vs_predio": 0.355,
+   "parche_bajo_frac": 0.61,
+   "ndvi_contraste": -0.53,
+   "swir_b12_contraste": 0.109
+  },
+  {
+   "id_catalogo": "BAS-000001",
+   "estado": "desconocido",
+   "insomnio": 1.0,
+   "eco_std_rel_p90": 0.694,
+   "eco_std_rel_max3": 0.707,
+   "frente_vs_predio": 0.448,
+   "parche_bajo_frac": 0.369,
+   "ndvi_contraste": 0.051,
+   "swir_b12_contraste": 0.003
   }
  ],
  "medianas_entrenamiento": {
@@ -438,13 +747,21 @@
    0.34,
    0.585
   ],
-  "contraste_p10": [
-   0.482,
-   0.505
+  "eco_std_rel_p90": [
+   1.053,
+   0.616
   ],
-  "eco_var_p90": [
-   3.17,
-   2.671
+  "eco_std_rel_max3": [
+   1.172,
+   0.49
+  ],
+  "frente_vs_predio": [
+   0.583,
+   0.792
+  ],
+  "parche_bajo_frac": [
+   0.086,
+   0.218
   ],
   "ndvi_contraste": [
    -0.187,
@@ -459,6 +776,7 @@
   "casi todo EE. UU. (registro de la EPA)",
   "el estado es el del registro, no una observación de actividad",
   "p_abierto no es una probabilidad calibrada",
-  "en el registro los abiertos son más grandes: por eso el modelo principal no usa el área"
+  "en el registro los abiertos son más grandes: por eso el modelo no usa el área",
+  "en el AMBA la serie de radar es de cuatro meses y en EE. UU. de un año: la variación del eco no es del todo comparable"
  ]
 }
