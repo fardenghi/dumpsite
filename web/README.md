@@ -13,10 +13,10 @@ The map is the background of the whole site and is always visible. The sections 
 
 | Route | What it shows |
 |---|---|
-| `#/mapa` | The AMBA with the insomnia index and the sites. Opening one shows: verdict, pair-by-pair coherence and Sentinel-2 images by date. The catalog dump sites of the other frames are shown as points; the legend has a button to zoom out until all of them are visible |
-| `#/inicio` | "Resumen" (summary) panel: number of sites, insomnia ranking and the Luján case |
-| `#/sitios` | Panel with the list, filterable by frame and by radar status, exportable to CSV. It starts on the AMBA |
-| `#/modelo` | Panel with the pair-by-pair rule (with an example site), the funnel from the grid to the candidate blobs, the calibrated thresholds, **the open-versus-closed model with its metrics** (if `modelo.json` carries them) and the proposed per-blob classifier, which has no metrics yet |
+| `#/mapa` | Arranca en el AMBA. Muestra **todo el catálogo de basurales** (66.981) y los 30 frames de NISAR procesados; ver "Capas del mapa". Al abrir un sitio curado del AMBA: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha. "Ir a un sitio" lista todo lo que tiene dato de radar, agrupado por país y con buscador |
+| `#/inicio` | Panel "Resumen": cantidad de sitios, ranking de insomnio y el caso Luján |
+| `#/sitios` | Panel con la lista filtrable por frame y por estado del radar, exportable a CSV. Arranca en el AMBA |
+| `#/modelo` | Panel con la regla par por par (con un sitio de ejemplo), el embudo de la grilla a las manchas candidatas, los umbrales calibrados, **el modelo de abierto contra cerrado con sus métricas** (si `modelo.json` las trae) y el clasificador por mancha propuesto, que todavía no tiene métricas |
 
 ## Data
 **They're real and precomputed.** They're written by the insomnia index pipeline and aren't edited by hand:
@@ -32,8 +32,26 @@ python ../motor/pipeline_insomnio.py indice
 | `src/data/seed/candidatos.json` | The 219 candidate blobs with center, area and class (`relleno_osm`, `uso_conocido`, `sin_explicar`). The Model panel shows the count per class; they're not on the map yet. The "unexplained" ones aren't verified: say "signal compatible with activity" |
 | `public/indice/insomnio-amba.png` + `src/data/seed/indice.json` | The AMBA index as a PNG (north up, regular in Web Mercator) and its bounds: `oeste`, `sur`, `este`, `norte` and `coordinates`, the four corners in the order a MapLibre `image` source expects. `Mapa.tsx` loads it that way and the "Índice de insomnio" button toggles it |
 
-### Verdicts for all frames and open-versus-closed model
-Written by `python ../motor/flujo.py --web`. **Both files are optional**: the web looks for them with `import.meta.glob` (`src/data/veredictos.ts`) and, if they're missing or don't carry the new keys, it stays as before.
+### Capas del mapa
+Lo que no entra en el bundle va en `public/datos/` y la web lo pide al cargar. Lo escribe, sin dependencias y sin tocar las fuentes:
+
+```bash
+python3 scripts/datos_mapa.py
+```
+
+| Archivo | Sale de | Qué dibuja |
+|---|---|---|
+| `public/datos/catalogo.json` (2,7 MB) | `../data/basurales/basurales_mundo.json` | Los 66.981 basurales del catálogo, en columnas. Los que no caen en un frame procesado van como puntos chicos celestes, **"Sin dato de radar"**: la ficha muestra nombre, país, estado del registro, superficie y fuente, y dice que no hay índice ni veredicto |
+| `public/datos/manchas.geojson` (6,3 MB) | `../idea-basurales-nisar/salidas/manchas.geojson` + `seed/veredictos.json` | Las 20.589 manchas despiertas de los 30 frames, simplificadas a un píxel de 80 m. Con "Índice de insomnio" prendido se pintan por insomnio con la paleta del PNG del AMBA |
+| `public/datos/frames.json` | `../data/frames.json` | La caja de cada frame (línea punteada, con el índice prendido), su ciudad y su país |
+
+- **Colores:** coral, verde agua y blanco son el veredicto del radar (despierto, quieto, no alcanza). **Amarillo es "posible basural nuevo"**: una mancha despierta que no está en ningún catálogo y que el modelo lee como basural (`veredicto = posible_nuevo` en `veredictos.json`). Va arriba de todo, con halo, y desde el zoom 8 con su contorno. Celeste es el catálogo sin dato de radar.
+- **De los 163 "posibles nuevos" del flujo se destacan 131.** Los otros 32 caen sobre algo que OpenStreetMap ya explica (aeródromos, reservas, canteras, golf: por ejemplo el aeropuerto de Los Ángeles) y no se pintan de amarillo. La regla está en `posiblesNuevos` (`src/data/veredictos.ts`). Ninguno está verificado.
+- **El índice completo, píxel por píxel, sólo está para el AMBA** (`public/indice/insomnio-amba.png`). De los otros 29 frames el repo tiene las manchas (el índice por encima del umbral, vectorizado), no la grilla: para tener la imagen completa hay que exportar un PNG por frame desde la máquina donde están los GUNW.
+- En el AMBA no hay modelo de "basural contra otra cosa", así que no hay posibles nuevos: sus manchas sin catálogo quedan sin clasificar.
+
+### Veredictos de todos los frames y modelo de abierto contra cerrado
+Los escribe `python ../idea-basurales-nisar/herramientas/flujo.py --web`. **Los dos archivos son opcionales**: la web los busca con `import.meta.glob` (`src/data/veredictos.ts`) y, si faltan o no traen las claves nuevas, queda como antes.
 
 | File | What the web uses |
 |---|---|
@@ -78,7 +96,7 @@ The outlines come from the index pipeline (OpenStreetMap `landuse=landfill` poly
 - Blue Marble (NASA), via GIBS.
 - Sentinel-2 (ESA Copernicus), via Microsoft Planetary Computer.
 - OpenStreetMap, ODbL.
-- Dump-site catalog for the other frames: OpenStreetMap polygons via Overture Maps (release 2026-10-21.0, ODbL) and registry status from U.S. EPA LMOP (2024-09, public domain). Details in `../data/README.md`.
-- Google satellite imagery (Map Tiles API), only if the key is configured. It's copyrighted by Google and its providers: it has to be declared in the submission form.
-- Roboto Slab (Apache 2.0) and DM Sans (OFL) fonts. Map with MapLibre GL JS (BSD-3).
-- Code: Apache 2.0. Written with AI assistance (Claude).
+- Catálogo de basurales: polígonos de OpenStreetMap vía Overture Maps (release 2026-10-21.0, ODbL), Climate TRACE (solid-waste-disposal, API v6, CC BY 4.0), estado del registro de U.S. EPA LMOP (2024-09, dominio público) y plumas de NASA EMIT L2B CH4PLM v002. Detalle en `../data/README.md`.
+- Imagen satelital de Google (Map Tiles API), sólo si se configura la clave. Tiene copyright de Google y de sus proveedores: hay que declararla en el formulario de entrega.
+- Tipografías Roboto Slab (Apache 2.0) y DM Sans (OFL). Mapa con MapLibre GL JS (BSD-3).
+- Código: Apache 2.0. Escrito con asistencia de IA (Claude).

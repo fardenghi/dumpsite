@@ -29,6 +29,8 @@
   --despierto: var(--coral);
   --quieto: var(--teal);
   --no-alcanza: var(--faint);
+  --nuevo: #ffd21f;
+  --sin-dato: #9db4e8;
 
   --display: 'Roboto Slab', Georgia, serif;
   --sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -113,10 +115,15 @@ h4 { font-size: 15px; font-weight: 500; }
 .dot.despierto { background: var(--despierto); }
 .dot.quieto { background: var(--quieto); }
 .dot.no_alcanza { background: transparent; box-shadow: inset 0 0 0 1.5px var(--no-alcanza); }
+/* lo que el sistema busca: una mancha despierta que no está en ningún catálogo */
+.dot.nuevo { background: var(--nuevo); box-shadow: 0 0 0 1.5px #3a2c00, 0 0 0 4px rgba(255, 210, 31, 0.35); }
+.dot.sin_dato { background: var(--sin-dato); }
 
 .tag { display: inline-flex; align-items: center; gap: 8px; min-height: 28px; padding: 2px 12px; border-radius: 999px; background: var(--soft); font-size: 13px; color: var(--ink-2); font-family: var(--sans); font-weight: 400; }
 .tag.despierto { background: #fde6e1; color: var(--coral-ink); }
 .tag.quieto { background: var(--tint); color: var(--teal-ink); }
+.tag.nuevo { background: #fff3bf; color: #5c4700; font-weight: 500; }
+.tag.sin_dato { background: #e9eefb; color: #33477a; }
 
 /* ---------- controles */
 .btn { background: #fff; border: 1px solid var(--line-2); border-radius: 999px; height: 40px; padding: 0 20px; cursor: pointer; white-space: nowrap; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: border-color 0.15s var(--ease), background-color 0.15s var(--ease), transform 0.15s var(--ease); }
@@ -166,6 +173,11 @@ select:hover { border-color: var(--green); }
 .picker-lista button:hover, .picker-lista button:focus-visible { background: var(--soft); outline: none; }
 .picker-lista button[aria-selected='true'] { background: var(--tint); }
 .picker-lista b { display: block; font-weight: 500; font-size: 14px; }
+.picker-lista input { flex: none; height: 38px; padding: 0 12px; margin-bottom: 4px; border: 1px solid var(--line-2); border-radius: 12px; font: inherit; font-size: 14px; background: #fff; position: sticky; top: 0; z-index: 1; }
+.picker-lista input:focus { outline: none; border-color: var(--green); }
+.picker-grupo { flex: none; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 12px 4px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.picker-grupo span { letter-spacing: 0; }
+.picker-vacio { padding: 16px 12px; font-size: 13px; color: var(--muted); }
 .picker-lista small { display: block; font-size: 12px; color: var(--muted); }
 
 .reg { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 12px; border-radius: 999px; font-size: 13px; background: var(--tint); color: var(--green); }
@@ -321,9 +333,12 @@ select:hover { border-color: var(--green); }
   .app:has(.ficha) .maplibregl-ctrl-bottom-right { right: 0; }
 }
 
-.map-legend { position: absolute; left: var(--gap); top: calc(var(--gap) + 44px + 12px); z-index: 2; width: 196px; background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: var(--shadow); font-size: 13px; color: var(--ink-2); display: flex; flex-direction: column; gap: 12px; }
+.map-legend { position: absolute; left: var(--gap); top: calc(var(--gap) + 44px + 12px); z-index: 2; width: 232px; background: #fff; border-radius: 18px; padding: 14px 16px; box-shadow: var(--shadow); font-size: 13px; color: var(--ink-2); display: flex; flex-direction: column; gap: 12px; }
 .map-legend .estados { display: flex; flex-direction: column; gap: 6px; }
-.map-legend .estados span { display: flex; align-items: center; gap: 10px; }
+.map-legend .estados > span { display: flex; align-items: center; gap: 10px; }
+.map-legend .estados b { margin-left: auto; font-weight: 400; color: var(--muted); font-size: 12px; }
+.map-legend .estados .destacado { font-weight: 500; color: var(--text); padding-bottom: 8px; margin-bottom: 2px; border-bottom: 1px solid var(--line); }
+.escala small { flex: 0 0 100%; margin-top: 6px; font-size: 11px; line-height: 1.35; }
 .capa { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: none; border: 0; border-top: 1px solid var(--line); padding: 12px 0 0; cursor: pointer; text-align: left; width: 100%; }
 .capa i { width: 30px; height: 18px; border-radius: 9px; background: var(--line-2); position: relative; flex: none; transition: background-color 0.15s var(--ease); }
 .capa i::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 0.15s var(--ease); }

@@ -44,7 +44,24 @@ export function fueraDelAmba(v: Veredictos | null): Veredicto[] {
   return delCatalogo(v).filter((x) => x.frame !== FRAME_AMBA)
 }
 
-/** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Derived from the key: there's no other source in the seed. */
+/** Las manchas despiertas que no están en ningún catálogo y que el modelo lee como basural: lo que el sistema busca.
+ * Quedan afuera las que OpenStreetMap ya explica con otro uso (un aeródromo, una reserva, una cantera). */
+export function posiblesNuevos(v: Veredictos | null): Veredicto[] {
+  return (v?.sitios ?? []).filter((x) => x.tipo === 'mancha' && x.veredicto === 'posible_nuevo' && !x.que && typeof x.lat === 'number' && typeof x.lon === 'number')
+}
+
+/** Las manchas que el flujo marca como posible basural nuevo pero OpenStreetMap explica con otro uso. */
+export function nuevosConUsoConocido(v: Veredictos | null): number {
+  return (v?.sitios ?? []).filter((x) => x.tipo === 'mancha' && x.veredicto === 'posible_nuevo' && !!x.que).length
+}
+
+/** Los polígonos del catálogo con dato de radar que el mapa dibuja como punto: los de los otros frames y los del AMBA
+ * que no son uno de los sitios curados (esos ya están, con su contorno). */
+export function conRadar(v: Veredictos | null, curados: Sitio[]): Veredicto[] {
+  return delCatalogo(v).filter((x) => x.frame !== FRAME_AMBA || !curados.some((s) => km(s, x as { lat: number; lon: number }) <= 0.5))
+}
+
+/** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Sale de la clave: no hay otra fuente en el seed. */
 export function nombreFrame(frame: string): string {
   const palabras = (t: string[]) => t.map((p) => p.charAt(0) + p.slice(1).toLowerCase()).join(' ')
   const partes = frame.split('_')

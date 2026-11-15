@@ -83,6 +83,11 @@ export interface Veredicto {
   motivo?: string | null
   lat: number | null
   lon: number | null
+  /** sólo en las manchas: puntaje del modelo de "basural contra otra cosa que se mueve", de 0 a 1 */
+  p_basural?: number | null
+  /** sólo en las manchas: lo que OpenStreetMap tiene mapeado ahí (aeródromo, reserva…), si hay algo */
+  que?: string | null
+  persistencia?: number | null
   modelo_estado?: LecturaModelo | null
 }
 

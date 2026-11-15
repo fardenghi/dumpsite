@@ -4,12 +4,13 @@ import type { FeatureCollection } from 'geojson'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Marca, go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
-import { Dot, Kpi, Picker, RADAR, RegistroCatalogo, RegistroTag, SegunModelo, fecha, num, pct, veredicto } from '../components/ui'
+import { Dot, Kpi, Picker, RADAR, RegistroCatalogo, RegistroTag, SegunModelo, fecha, num, pct, puntaje, veredicto, type Opcion } from '../components/ui'
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
+import { ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
 import type { Imagen, LecturaModelo, Sitio, Veredicto } from '../data/types'
-import { fueraDelAmba, lecturaModelo, nombreFrame, useVeredictos, veredictoDeSitio } from '../data/veredictos'
+import { FRAME_AMBA, conRadar, lecturaModelo, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos, veredictoDeSitio } from '../data/veredictos'
 
 // The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
 // of the chosen date, served by Microsoft Planetary Computer. Both work without keys.
@@ -21,7 +22,16 @@ const s2 = (i: Imagen) =>
   `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${i.item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`
 
 const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5bb3a8', '#dfe5e1'] as unknown as maplibregl.ExpressionSpecification
-// the starting view is the whole AMBA: the insomnia index grid
+// lo que el sistema busca: manchas despiertas que no están en ningún catálogo. Tiene que destacarse de todo lo demás
+const COLOR_NUEVO = '#ffd21f'
+// basurales del catálogo que no caen en ningún frame procesado: no hay dato de radar
+const COLOR_SIN_DATO = '#9db4e8'
+// el índice de insomnio fuera del AMBA: las manchas, con la misma paleta que el PNG del AMBA (magma, de 0,3 a 1)
+const MAGMA = ['interpolate', ['linear'], ['get', 'i'], 0.3, '#641a80', 0.55, '#b73779', 0.8, '#fc8961', 1, '#fcfdbf'] as unknown as maplibregl.ExpressionSpecification
+const ES_NUEVO = ['all', ['==', ['get', 'v'], 'posible_nuevo'], ['==', ['get', 'q'], 0]] as unknown as maplibregl.FilterSpecification
+// las capas que se pueden tocar, de más a menos importante: si hay varias debajo del cursor gana la primera
+const TOCABLES = ['punto', 'aro', 'contorno-relleno', 'nuevos', 'otros', 'catalogo']
+// la vista de partida es el AMBA entero: la grilla del índice de insomnio
 const AMBA: [number, number, number, number] = [indice.oeste, indice.sur, indice.este, indice.norte]
 const margenAmba = (ancho: number) => (ancho > 860 ? { top: 70, bottom: 90, left: 40, right: 40 } : { top: 70, bottom: 90, left: 12, right: 12 })
 const ZOOM_GOOGLE = 13
@@ -135,8 +145,119 @@ function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; mode
   )
 }
 
-/** Card for a catalog polygon of another frame: what `veredictos.json` carries, no series or images. */
-function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
+const Cerrar = () => (
+  <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <path d="M5 5l14 14M19 5L5 19" />
+    </svg>
+  </button>
+)
+
+const Pie = ({ lat, lon }: { lat: number; lon: number }) => (
+  <div className="row" style={{ justifyContent: 'space-between' }}>
+    <span className="coords">
+      {lat.toFixed(4)}, {lon.toFixed(4)}
+    </span>
+    <a className="btn sm" href={`https://www.google.com/maps/@${lat},${lon},900m/data=!3m1!1e3`} target="_blank" rel="noreferrer">
+      Ver en Google Maps
+    </a>
+  </div>
+)
+
+/** Ficha de una mancha despierta que no está en ningún catálogo y que el modelo lee como basural. */
+function FichaNuevo({ v, lugar, aviso }: { v: Veredicto; lugar: string; aviso?: string }) {
+  const p = typeof v.p_basural === 'number' ? v.p_basural : null
+  return (
+    <aside className="ficha" key={v.id}>
+      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
+        <div className="grow">
+          <h2>Posible basural nuevo</h2>
+          <div className="where">
+            {lugar} · {v.id}
+          </div>
+        </div>
+        <Cerrar />
+      </div>
+
+      <div className="row" style={{ gap: 8 }}>
+        <span className="tag nuevo">
+          <Dot radar="nuevo" />
+          {v.veredicto_texto}
+        </span>
+        <span className="reg no">No figura en ningún catálogo</span>
+      </div>
+
+      {p != null && (
+        <div className="segun-modelo">
+          <span className="src">Según el modelo · basural u otra cosa que se mueve</span>
+          <div className="puntaje" role="img" aria-label={`Puntaje de basural ${puntaje(p)}, de 0 a 1`}>
+            <div className="bar">
+              <div style={{ width: `${Math.round(Math.max(0, Math.min(1, p)) * 100)}%` }} />
+            </div>
+            <span className="num">{puntaje(p)}</span>
+          </div>
+          <small>Puntaje de basural, de 0 a 1. No es una probabilidad</small>
+        </div>
+      )}
+
+      <div className="kpis sm grid g2">
+        <Kpi label="Insomnio" value={v.insomnio == null ? '–' : pct(v.insomnio)} />
+        <Kpi label="Superficie" value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
+      </div>
+
+      {v.motivo && <p className="motivo">Radar: {v.motivo}</p>}
+      <p className="note">
+        Mancha que el radar NISAR nunca ve quieta y que no está en OpenStreetMap, Climate TRACE ni la EPA. {aviso ?? 'Señal compatible con actividad, no prueba.'} No está verificado: hay que mirarlo
+        en una imagen antes de nombrarlo
+      </p>
+
+      <span className="grow" />
+      <Pie lat={v.lat as number} lon={v.lon as number} />
+    </aside>
+  )
+}
+
+/** Ficha de un basural del catálogo que no cae en ningún frame de NISAR procesado. */
+function FichaSinDato({ s }: { s: SitioCatalogo }) {
+  return (
+    <aside className="ficha" key={s.id}>
+      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
+        <div className="grow">
+          <h2>{s.nombre ?? 'Basural sin nombre'}</h2>
+          <div className="where">
+            {s.pais ? `${nombrePais(s.pais)} · ` : ''}
+            {s.id}
+          </div>
+        </div>
+        <Cerrar />
+      </div>
+
+      <div className="row" style={{ gap: 8 }}>
+        <span className="tag sin_dato">
+          <Dot radar="sin_dato" />
+          Sin dato de radar
+        </span>
+        <RegistroCatalogo registro={s.estado} />
+      </div>
+
+      <div className="kpis sm grid g2">
+        <Kpi label="Insomnio" value="–" />
+        <Kpi label="Superficie" value={s.ha == null ? '–' : num(s.ha < 10 ? s.ha : Math.round(s.ha))} unit={s.ha == null ? undefined : 'ha'} />
+      </div>
+
+      <p className="note">
+        Está en el catálogo de basurales, pero todavía no procesamos pasadas de NISAR sobre este lugar: no hay índice de insomnio ni veredicto.
+        {s.fuentes.length > 0 && ` Fuente del catálogo: ${s.fuentes.join(', ')}`}
+      </p>
+
+      <span className="grow" />
+      <Pie lat={s.lat} lon={s.lon} />
+    </aside>
+  )
+}
+
+/** Ficha de un polígono del catálogo con dato de radar: lo que trae `veredictos.json`, sin serie ni imágenes. */
+function FichaCatalogo({ v, lugar, aviso }: { v: Veredicto; lugar: string; aviso?: string }) {
   const radar = v.radar ?? 'no_alcanza'
   const modelo = lecturaModelo(v)
   return (
@@ -145,7 +266,7 @@ function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
         <div className="grow">
           <h2>{v.nombre ?? 'Polígono sin nombre'}</h2>
           <div className="where">
-            {nombreFrame(v.frame)} · {v.id}
+            {lugar} · {v.id}
           </div>
         </div>
         <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
@@ -171,7 +292,7 @@ function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
       </div>
 
       {v.motivo && <p className="motivo">Radar: {v.motivo}</p>}
-      <p className="note">Polígono del catálogo de basurales, en un frame de NISAR fuera del AMBA. {aviso ?? 'Señal compatible con actividad, no prueba.'} No está verificado</p>
+      <p className="note">Polígono del catálogo de basurales, medido con NISAR. {aviso ?? 'Señal compatible con actividad, no prueba.'} No está verificado</p>
 
       <span className="grow" />
       <div className="row" style={{ justifyContent: 'space-between' }}>
@@ -189,14 +310,28 @@ function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
 export default function Mapa() {
   const { sitios } = useSitios()
   const veredictos = useVeredictos()
-  // the catalog dump sites of the other frames: they go as points, without touching the AMBA view
-  const otros = useMemo(() => fueraDelAmba(veredictos), [veredictos])
+  const catalogo = useCatalogo()
+  const frames = useFrames()
+  const manchas = useManchas()
+  // los basurales del catálogo con dato de radar que no son un sitio curado: van como puntos, sin tocar la vista del AMBA
+  const otros = useMemo(() => conRadar(veredictos, sitios ?? []), [veredictos, sitios])
+  // las manchas despiertas que no están en ningún catálogo: lo que el sistema busca
+  const nuevos = useMemo(() => posiblesNuevos(veredictos), [veredictos])
+  const porFrame = useMemo(() => new Map((frames ?? []).map((f) => [f.frame, f] as [string, Frame])), [frames])
+  const lugarDe = (frame: string) => ciudadFrame(porFrame.get(frame)) ?? nombreFrame(frame)
   const { page, query } = useRoute()
   // with a panel open there's no card: the map stays where it was
   const enMapa = page === 'mapa'
   const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
-  const selOtro = (!sel && id && otros.find((v) => v.id === id)) || null
+  const selOtro = (!sel && id && (otros.find((v) => v.id === id) ?? nuevos.find((v) => v.id === id))) || null
+  // un basural del catálogo sin dato de radar
+  const selCat = useMemo(() => {
+    const i = sel || selOtro || !catalogo ? -1 : filaCatalogo(catalogo, id)
+    return i >= 0 ? sitioCatalogo(catalogo!, i) : null
+  }, [sel, selOtro, catalogo, id])
+  // el punto elegido cuando no es un sitio curado (esos tienen contorno)
+  const punto = selOtro ? { lat: selOtro.lat as number, lon: selOtro.lon as number, color: selOtro.tipo === 'mancha' ? COLOR_NUEVO : '#ffffff' } : selCat ? { lat: selCat.lat, lon: selCat.lon, color: '#ffffff' } : null
   const modeloSel = useMemo(() => (sel ? lecturaModelo(veredictoDeSitio(sel, veredictos)) : null), [sel, veredictos])
   const caja = useRef<HTMLDivElement>(null)
   const mapa = useRef<maplibregl.Map | null>(null)
@@ -290,17 +425,128 @@ export default function Mapa() {
         'circle-stroke-opacity': deCerca(1, 0),
       },
     })
-    for (const capa of ['punto', 'aro', 'contorno-relleno']) {
-      m.on('click', capa, (e) => go('mapa', `sitio=${e.features![0].properties.id}`))
-      m.on('mouseenter', capa, () => (m.getCanvas().style.cursor = 'pointer'))
-      m.on('mouseleave', capa, () => (m.getCanvas().style.cursor = ''))
-    }
   }, [listo, sitios])
+
+  // un solo manejador para todo lo que se puede tocar: con varias capas debajo del cursor gana la más importante
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo) return
+    const debajo = (e: maplibregl.MapMouseEvent) => {
+      const capas = TOCABLES.filter((c) => m.getLayer(c))
+      const fs = capas.length ? m.queryRenderedFeatures([[e.point.x - 3, e.point.y - 3], [e.point.x + 3, e.point.y + 3]], { layers: capas }) : []
+      return fs.sort((a, b) => TOCABLES.indexOf(a.layer.id) - TOCABLES.indexOf(b.layer.id))[0]
+    }
+    const click = (e: maplibregl.MapMouseEvent) => {
+      const f = debajo(e)
+      if (f) go('mapa', `sitio=${f.properties.id}`)
+    }
+    const mover = (e: maplibregl.MapMouseEvent) => (m.getCanvas().style.cursor = debajo(e) ? 'pointer' : '')
+    m.on('click', click)
+    m.on('mousemove', mover)
+    return () => {
+      m.off('click', click)
+      m.off('mousemove', mover)
+    }
+  }, [listo])
+
+  // todos los basurales del catálogo que no tienen dato de radar: puntos chicos y de otro color, debajo de todo
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo || !catalogo || !sitios || !veredictos) return
+    // los que ya se dibujan con su veredicto (o son un sitio curado) no se repiten
+    const yaEstan = new Set(veredictos.sitios.filter((v) => v.tipo === 'catalogo').map((v) => v.id))
+    const features: FeatureCollection['features'] = []
+    for (let i = 0; i < catalogo.n; i++) {
+      const idc = idCatalogo(i)
+      if (!yaEstan.has(idc)) features.push({ type: 'Feature', geometry: { type: 'Point', coordinates: [catalogo.lon[i], catalogo.lat[i]] }, properties: { id: idc } })
+    }
+    const datos: FeatureCollection = { type: 'FeatureCollection', features }
+    const src = m.getSource('catalogo') as GeoJSONSource | undefined
+    if (src) {
+      src.setData(datos)
+      return
+    }
+    m.addSource('catalogo', { type: 'geojson', data: datos })
+    m.addLayer(
+      {
+        id: 'catalogo',
+        type: 'circle',
+        source: 'catalogo',
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 1.4, 5, 2.4, 8, 3.6, 12, 6],
+          'circle-color': COLOR_SIN_DATO,
+          'circle-opacity': ['interpolate', ['linear'], ['zoom'], 1, 0.7, 8, 0.95],
+          'circle-stroke-color': '#16233f',
+          'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 4, 0, 7, 1],
+        },
+      },
+      ['otros', 'nuevo-contorno', 'nuevos', 'halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c)),
+    )
+  }, [listo, catalogo, sitios, veredictos])
+
+  // el índice de insomnio de todos los frames: la caja de cada frame y sus manchas despiertas, pintadas por insomnio.
+  // El AMBA tiene además el índice completo como imagen, así que sus manchas no se pintan encima
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo || !sitios || !frames || m.getSource('frames')) return
+    const cajas: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: frames.map((f) => {
+        const [o, s, e, n] = f.bbox
+        return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [[[o, s], [e, s], [e, n], [o, n], [o, s]]] }, properties: { frame: f.frame } }
+      }),
+    }
+    m.addSource('frames', { type: 'geojson', data: cajas })
+    m.addLayer({ id: 'frames', type: 'line', source: 'frames', paint: { 'line-color': '#fc8961', 'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1, 6, 1.5], 'line-opacity': 0.9, 'line-dasharray': [3, 2] } }, m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined)
+  }, [listo, sitios, frames])
 
   useEffect(() => {
     const m = mapa.current
-    if (m && listo && m.getLayer('indice')) m.setLayoutProperty('indice', 'visibility', verIndice ? 'visible' : 'none')
-  }, [listo, sitios, verIndice])
+    if (!m || !listo || !sitios || !manchas || m.getSource('manchas')) return
+    const fueraDelAmba: FeatureCollection = { ...manchas, features: manchas.features.filter((f) => !String(f.properties?.id).startsWith(`MAN-${FRAME_AMBA}-`)) }
+    const debajoDe = ['frames', 'contorno-relleno'].find((c) => m.getLayer(c))
+    m.addSource('manchas', { type: 'geojson', data: fueraDelAmba })
+    m.addLayer({ id: 'manchas', type: 'fill', source: 'manchas', paint: { 'fill-color': MAGMA, 'fill-opacity': 0.8, 'fill-antialias': false } }, debajoDe)
+    // de lejos una mancha mide menos que un píxel de pantalla: sin esta línea el índice no se vería hasta acercarse
+    m.addLayer({ id: 'manchas-borde', type: 'line', source: 'manchas', maxzoom: 9, paint: { 'line-color': MAGMA, 'line-width': 1.2, 'line-opacity': 0.9 } }, debajoDe)
+    // el contorno de los posibles basurales nuevos queda siempre, con el índice prendido o apagado
+    m.addLayer({ id: 'nuevo-contorno', type: 'line', source: 'manchas', minzoom: 8, filter: ES_NUEVO, layout: { 'line-join': 'round' }, paint: { 'line-color': COLOR_NUEVO, 'line-width': 2.5 } }, ['nuevos', 'halo'].find((c) => m.getLayer(c)))
+    m.addLayer({ id: 'nuevo-relleno', type: 'fill', source: 'manchas', minzoom: 8, filter: ES_NUEVO, paint: { 'fill-color': COLOR_NUEVO, 'fill-opacity': 0.12 } }, 'nuevo-contorno')
+  }, [listo, sitios, manchas])
+
+  // los posibles basurales nuevos: arriba de todo el catálogo, con otro color y un halo
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo || !sitios || !nuevos.length) return
+    const datos: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: nuevos.map((v) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [v.lon as number, v.lat as number] }, properties: { id: v.id } })),
+    }
+    const src = m.getSource('nuevos') as GeoJSONSource | undefined
+    if (src) {
+      src.setData(datos)
+      return
+    }
+    const debajoDe = ['halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c))
+    const deLejos: maplibregl.ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 9.5, 1, 11.5, 0]
+    m.addSource('nuevos', { type: 'geojson', data: datos })
+    m.addLayer({ id: 'nuevos-halo', type: 'circle', source: 'nuevos', paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 9, 8, 15], 'circle-color': COLOR_NUEVO, 'circle-opacity': ['interpolate', ['linear'], ['zoom'], 9.5, 0.3, 11.5, 0] } }, debajoDe)
+    m.addLayer(
+      {
+        id: 'nuevos',
+        type: 'circle',
+        source: 'nuevos',
+        paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4.5, 8, 6.5], 'circle-color': COLOR_NUEVO, 'circle-opacity': deLejos, 'circle-stroke-color': '#3a2c00', 'circle-stroke-width': 1.5, 'circle-stroke-opacity': deLejos },
+      },
+      debajoDe,
+    )
+  }, [listo, sitios, nuevos])
+
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo) return
+    for (const capa of ['indice', 'frames', 'manchas', 'manchas-borde']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', verIndice ? 'visible' : 'none')
+  }, [listo, sitios, frames, manchas, verIndice])
 
   // the dump sites of the other frames: one point per catalog polygon, under the AMBA sites
   useEffect(() => {
@@ -326,34 +572,30 @@ export default function Mapa() {
       },
       debajoDe,
     )
-    // the chosen one, with a ring
-    m.addLayer(
-      {
-        id: 'otros-sel',
-        type: 'circle',
-        source: 'otros',
-        filter: ['==', ['get', 'id'], ''],
-        paint: { 'circle-radius': 16, 'circle-opacity': 0, 'circle-stroke-color': COLOR, 'circle-stroke-width': 2.5 },
-      },
-      debajoDe,
-    )
-    m.on('click', 'otros', (e) => go('mapa', `sitio=${e.features![0].properties.id}`))
-    m.on('mouseenter', 'otros', () => (m.getCanvas().style.cursor = 'pointer'))
-    m.on('mouseleave', 'otros', () => (m.getCanvas().style.cursor = ''))
   }, [listo, otros])
 
-  const idOtro = selOtro?.id ?? ''
+  // el punto elegido, con un aro
+  const puntoSel = punto ? `${punto.lon},${punto.lat},${punto.color}` : ''
   useEffect(() => {
     const m = mapa.current
-    if (m && listo && m.getLayer('otros-sel')) m.setFilter('otros-sel', ['==', ['get', 'id'], idOtro])
-  }, [listo, otros, idOtro])
+    if (!m || !listo) return
+    const datos: FeatureCollection = { type: 'FeatureCollection', features: punto ? [{ type: 'Feature', geometry: { type: 'Point', coordinates: [punto.lon, punto.lat] }, properties: { color: punto.color } }] : [] }
+    const src = m.getSource('elegido') as GeoJSONSource | undefined
+    if (src) {
+      src.setData(datos)
+      return
+    }
+    m.addSource('elegido', { type: 'geojson', data: datos })
+    m.addLayer({ id: 'elegido', type: 'circle', source: 'elegido', paint: { 'circle-radius': 16, 'circle-opacity': 0, 'circle-stroke-color': ['get', 'color'], 'circle-stroke-width': 2.5 } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listo, puntoSel])
 
-  /** Zoom out to see all the frames: the AMBA and the catalog points. */
+  /** Alejar hasta ver todos los frames procesados. */
   const verOtros = () => {
     const m = mapa.current
-    if (!m || !otros.length) return
-    const lons = [AMBA[0], AMBA[2], ...otros.map((v) => v.lon as number)]
-    const lats = [AMBA[1], AMBA[3], ...otros.map((v) => v.lat as number)]
+    if (!m) return
+    const lons = [AMBA[0], AMBA[2], ...(frames ?? []).flatMap((f) => [f.bbox[0], f.bbox[2]]), ...otros.map((v) => v.lon as number)]
+    const lats = [AMBA[1], AMBA[3], ...(frames ?? []).flatMap((f) => [f.bbox[1], f.bbox[3]]), ...otros.map((v) => v.lat as number)]
     go('mapa')
     m.fitBounds([Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))], { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
   }
@@ -362,8 +604,8 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    if (!sel && !selOtro) {
-      // closing the card goes back to the AMBA view; the last image stays loaded
+    if (!sel && !punto) {
+      // al cerrar la ficha se vuelve a la vista del AMBA; la última imagen queda cargada
       if (habiaSitio.current && enMapa) m.fitBounds(AMBA, { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
       habiaSitio.current = false
       return
@@ -372,8 +614,10 @@ export default function Mapa() {
     const ancho = m.getContainer().clientWidth
     const margen = ancho > 860 ? { right: 440, top: 80, bottom: 100, left: 60 } : { bottom: 400, top: 80, left: 24, right: 24 }
     if (!sel) {
-      // a dump site from another frame: there's no outline or crop, fly to the point
-      m.flyTo({ center: [selOtro!.lon as number, selOtro!.lat as number], zoom: Math.max(ZOOM_OTRO, Math.min(m.getZoom(), 12)), padding: margen, duration: 2200, essential: true })
+      // un punto del catálogo o una mancha nueva: no hay recorte guardado, se vuela hasta el punto
+      // (las manchas nuevas tienen contorno desde el zoom 8: se va un poco más cerca para verlo)
+      const zoom = selOtro?.tipo === 'mancha' ? 11 : ZOOM_OTRO
+      m.flyTo({ center: [punto!.lon, punto!.lat], zoom: Math.max(zoom, Math.min(m.getZoom(), 12)), padding: margen, duration: 2200, essential: true })
       return
     }
     setImagen(sel.imagenes[sel.imagenes.length - 1] ?? null)
@@ -393,7 +637,7 @@ export default function Mapa() {
       m.flyTo({ center: [sel.lon, sel.lat], zoom: 13.6, padding: margen, duration: 1800, essential: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listo, sel, selOtro])
+  }, [listo, sel, puntoSel])
 
   // the image of the chosen date: the site's stored crop (works offline) and,
   // underneath, the whole scene in tiles to see the surroundings when online
@@ -478,10 +722,33 @@ export default function Mapa() {
     }
   }, [listo, vista, idSel])
 
+  // "Ir a un sitio": todo lo que tiene dato de radar, agrupado por país. Primero la Argentina y, dentro de cada país,
+  // los posibles nuevos, después los que tienen nombre y al final los polígonos sin nombre
+  const opciones = useMemo(() => {
+    type Op = Opcion<string> & { orden: number }
+    const paisDe = (frame: string) => nombrePais(porFrame.get(frame)?.pais ?? (frame === FRAME_AMBA ? 'ARG' : frame.split('_')[0]))
+    const ops: Op[] = [
+      ...(sitios ?? []).map((s) => ({ value: s.id, label: s.nombre, sub: s.lugar, radar: s.radar, grupo: nombrePais(s.pais), orden: 1 })),
+      ...nuevos.map((v) => ({ value: v.id, label: `Posible basural nuevo · ${num(Math.round(v.area_ha ?? 0))} ha`, sub: `${lugarDe(v.frame)} · ${v.id}`, radar: 'nuevo' as const, grupo: paisDe(v.frame), orden: 0 })),
+      ...otros.map((v) => ({ value: v.id, label: v.nombre ?? `Polígono sin nombre · ${v.id}`, sub: `${lugarDe(v.frame)} · ${v.veredicto_texto}`, radar: v.radar ?? ('no_alcanza' as const), grupo: paisDe(v.frame), orden: v.nombre ? 1 : 2 })),
+    ]
+    const argentina = nombrePais('ARG')
+    return ops.sort((a, b) => Number(b.grupo === argentina) - Number(a.grupo === argentina) || a.grupo!.localeCompare(b.grupo!, 'es') || a.orden - b.orden || a.label.localeCompare(b.label, 'es'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sitios, otros, nuevos, porFrame])
+  const cuenta = useMemo(() => {
+    const n = { despierto: 0, quieto: 0, no_alcanza: 0 }
+    for (const s of sitios ?? []) n[s.radar]++
+    for (const v of otros) n[v.radar ?? 'no_alcanza']++
+    return n
+  }, [sitios, otros])
+  const sinDato = catalogo ? catalogo.n - (veredictos?.sitios.filter((v) => v.tipo === 'catalogo').length ?? 0) : 0
+  const conUso = nuevosConUsoConocido(veredictos)
+
   return (
     <>
       <div className="map" ref={caja} />
-      <div className={`map-top ${sel || selOtro ? 'con-ficha' : ''}`}>
+      <div className={`map-top ${sel || punto ? 'con-ficha' : ''}`}>
         <Marca />
         <Picker
           className="float"
@@ -489,9 +756,9 @@ export default function Mapa() {
           placeholder="Ir a un sitio"
           value={id ?? ''}
           onChange={(v) => go('mapa', `sitio=${v}`)}
-          options={[...(sitios ?? [])].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')).map((s) => ({ value: s.id, label: s.nombre, sub: s.lugar, radar: s.radar }))}
+          options={opciones}
         />
-        {(sel || selOtro) && (
+        {(sel || punto) && (
           <button className="btn float" onClick={() => go('mapa')}>
             Ver todo
           </button>
@@ -499,19 +766,34 @@ export default function Mapa() {
       </div>
       <div className="map-legend">
         <div className="estados">
+          {nuevos.length > 0 && (
+            <span className="destacado" title={`Manchas despiertas que no están en ningún catálogo y que el modelo lee como basural. Sin verificar${conUso ? `. Otras ${conUso} quedan afuera porque OpenStreetMap ya las explica con otro uso` : ''}`}>
+              <span className="dot nuevo" />
+              Posible basural nuevo
+              <b className="num">{num(nuevos.length)}</b>
+            </span>
+          )}
           {(['despierto', 'quieto', 'no_alcanza'] as const).map((r) => (
             <span key={r}>
               <span className={`dot ${r}`} />
               {RADAR[r]}
+              <b className="num">{num(cuenta[r])}</b>
             </span>
           ))}
+          {catalogo && (
+            <span title="Basurales del catálogo (OpenStreetMap, Climate TRACE, EPA LMOP, NASA EMIT) donde todavía no procesamos pasadas de NISAR">
+              <span className="dot sin_dato" />
+              Sin dato de radar
+              <b className="num">{num(sinDato)}</b>
+            </span>
+          )}
         </div>
         <button
           className="capa"
           role="switch"
           aria-checked={verIndice}
           onClick={() => setVerIndice((v) => !v)}
-          title={`${indice.que}. ${indice.pares} comparaciones de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}`}
+          title={`${indice.que}. En el AMBA, el índice completo (${indice.pares} comparaciones de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}). En los otros frames, las manchas donde el índice supera el umbral`}
         >
           <span>Índice de insomnio</span>
           <i />
@@ -521,14 +803,15 @@ export default function Mapa() {
             <div />
             <span>0,3</span>
             <span>1</span>
+            {frames && frames.length > 1 && <small>Línea punteada: cada frame de NISAR procesado. Fuera del AMBA se pintan las manchas despiertas</small>}
           </div>
         )}
-        {otros.length > 0 && (
+        {frames && frames.length > 1 && (
           <button className="otros-frames" onClick={verOtros} title="Alejar el mapa hasta ver todos los frames procesados">
-            <b>
-              {num(otros.length)} basurales en otros {new Set(otros.map((v) => v.frame)).size} frames
-            </b>
-            <span>Polígonos del catálogo, sin verificar</span>
+            <b>Ver los {frames.length} frames de NISAR</b>
+            <span>
+              {num(otros.length + (sitios?.length ?? 0))} basurales medidos en {new Set(frames.map((f) => f.pais)).size} países
+            </span>
           </button>
         )}
       </div>
@@ -539,7 +822,7 @@ export default function Mapa() {
           </>
         )}
         Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap
-        {otros.length > 0 && ' · Otros frames: catálogo de basurales (OpenStreetMap vía Overture Maps, EPA LMOP)'} · Imágenes:{' '}
+        {catalogo && ' · Catálogo de basurales: © OpenStreetMap vía Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT'} · Imágenes:{' '}
         <a href="https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api" target="_blank" rel="noreferrer">
           NASA GIBS
         </a>{' '}
@@ -548,7 +831,8 @@ export default function Mapa() {
           ESA Copernicus, vía Planetary Computer
         </a>
       </div>
-      {selOtro && <FichaCatalogo v={selOtro} aviso={veredictos?.aviso} />}
+      {selOtro && (selOtro.tipo === 'mancha' ? <FichaNuevo v={selOtro} lugar={lugarDe(selOtro.frame)} aviso={veredictos?.aviso} /> : <FichaCatalogo v={selOtro} lugar={lugarDe(selOtro.frame)} aviso={veredictos?.aviso} />)}
+      {selCat && <FichaSinDato s={selCat} />}
       {sel && (
         <Ficha
           s={sel}

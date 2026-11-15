@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { LecturaModelo, Radar, Registro, Sitio } from '../data/types'
 
 export const RADAR: Record<Radar, string> = { despierto: 'Despierto', quieto: 'Quieto', no_alcanza: 'No alcanza' }
@@ -26,7 +26,10 @@ export function veredicto(s: Sitio) {
   return RADAR[s.radar]
 }
 
-export function Dot({ radar }: { radar: Radar }) {
+/** Radar de un sitio, o `nuevo` (mancha que no está en ningún catálogo) o `sin_dato` (catálogo sin NISAR procesado). */
+export type Marca = Radar | 'nuevo' | 'sin_dato'
+
+export function Dot({ radar }: { radar: Marca }) {
   return <span className={`dot ${radar}`} />
 }
 
@@ -132,14 +135,31 @@ export interface Opcion<T extends string> {
   value: T
   label: string
   sub?: string
-  radar?: Radar
+  radar?: Marca
+  /** título bajo el que se agrupa en la lista (por ejemplo, el país). Las opciones tienen que venir ordenadas por grupo */
+  grupo?: string
 }
 
-/** Custom dropdown, instead of the browser's select. */
+/** Desplegable propio, en vez del selector del navegador. */
+const llano = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+/** Con más opciones que estas, la lista trae un buscador. */
+const BUSCAR_DESDE = 20
+
 export function Picker<T extends string>({ value, onChange, options, placeholder, className = '', label }: { value: T | ''; onChange: (v: T) => void; options: Opcion<T>[]; placeholder?: string; className?: string; label: string }) {
   const [abierto, setAbierto] = useState(false)
+  const [texto, setTexto] = useState('')
   const ref = useRef<HTMLDivElement>(null)
   const sel = options.find((o) => o.value === value)
+  const conBuscador = options.length > BUSCAR_DESDE
+  const visibles = useMemo(() => {
+    const q = llano(texto.trim())
+    return q ? options.filter((o) => llano(`${o.label} ${o.sub ?? ''} ${o.grupo ?? ''}`).includes(q)) : options
+  }, [options, texto])
+  const porGrupo = useMemo(() => {
+    const n = new Map<string, number>()
+    for (const o of visibles) if (o.grupo) n.set(o.grupo, (n.get(o.grupo) ?? 0) + 1)
+    return n
+  }, [visibles])
 
   useEffect(() => {
     if (!abierto) return
@@ -154,12 +174,15 @@ export function Picker<T extends string>({ value, onChange, options, placeholder
         e.preventDefault()
         const items = [...(ref.current?.querySelectorAll<HTMLButtonElement>('[role=option]') ?? [])]
         const i = items.indexOf(document.activeElement as HTMLButtonElement)
-        items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus()
+        // desde el buscador, la flecha baja al primero
+        items[i < 0 ? (e.key === 'ArrowDown' ? 0 : items.length - 1) : (i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus()
       }
     }
     document.addEventListener('pointerdown', afuera)
     document.addEventListener('keydown', tecla, true)
-    ref.current?.querySelector<HTMLButtonElement>('[aria-selected=true]')?.focus()
+    const elegido = ref.current?.querySelector<HTMLButtonElement>('[aria-selected=true]')
+    elegido?.scrollIntoView({ block: 'nearest' })
+    ;(ref.current?.querySelector<HTMLInputElement>('input') ?? elegido)?.focus()
     return () => {
       document.removeEventListener('pointerdown', afuera)
       document.removeEventListener('keydown', tecla, true)
@@ -177,23 +200,32 @@ export function Picker<T extends string>({ value, onChange, options, placeholder
       </button>
       {abierto && (
         <div className="picker-lista" role="listbox" aria-label={label}>
-          {options.map((o) => (
-            <button
-              key={o.value}
-              role="option"
-              aria-selected={o.value === value}
-              onClick={() => {
-                onChange(o.value)
-                setAbierto(false)
-              }}
-            >
-              {o.radar && <Dot radar={o.radar} />}
-              <span>
-                <b>{o.label}</b>
-                {o.sub && <small>{o.sub}</small>}
-              </span>
-            </button>
+          {conBuscador && <input type="search" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Buscar por nombre, ciudad o país" aria-label="Buscar" />}
+          {visibles.map((o, i) => (
+            <Fragment key={o.value}>
+              {o.grupo && o.grupo !== visibles[i - 1]?.grupo && (
+                <div className="picker-grupo" role="presentation">
+                  {o.grupo}
+                  <span className="num">{num(porGrupo.get(o.grupo) ?? 0)}</span>
+                </div>
+              )}
+              <button
+                role="option"
+                aria-selected={o.value === value}
+                onClick={() => {
+                  onChange(o.value)
+                  setAbierto(false)
+                }}
+              >
+                {o.radar && <Dot radar={o.radar} />}
+                <span>
+                  <b>{o.label}</b>
+                  {o.sub && <small>{o.sub}</small>}
+                </span>
+              </button>
+            </Fragment>
           ))}
+          {!visibles.length && <div className="picker-vacio">Ningún sitio con ese texto</div>}
         </div>
       )}
     </div>
