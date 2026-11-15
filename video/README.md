@@ -1,13 +1,13 @@
 # Videos de Dumpsite (Remotion)
 
-Los dos videos que pide la sede Buenos Aires de Space Apps 2026 para la idea B (challenge "Dancing with the SARs"). El proyecto se llamaba Insomnes y después Basurales; **ahora se llama Dumpsite** y su URL es **dumpsite.earth**.
+Los dos videos que pide la sede Buenos Aires de Space Apps 2026 (challenge "Dancing with the SARs"). El proyecto se llamaba Insomnes y después Basurales; **ahora se llama Dumpsite** y su URL es **dumpsite.earth**.
 
 | Video | Composición | Duración | Estado |
 |---|---|---|---|
 | Internacional, en inglés (máximo 30 s) | `DumpsiteIntl` | 29,5 s | **Casi final**: el equipo lo aprobó. Solo faltan los links definitivos. |
 | Local, en castellano (máximo 3 min) | `DumpsiteLocal` | 2:15 | **Versión 1, va a cambiar.** Probablemente se reemplace la voz sintética por una grabada (ver `VOZ-GRABADA.md`). |
 
-Los mp4 de las últimas versiones (`dumpsite-intl-v12.mp4`, `dumpsite-local-v1.mp4`) y los clips de Higgsfield se pasan por WhatsApp: no están en el repo.
+Los mp4 renderizados y el clip de Higgsfield no están en el repo: se rehacen con los comandos de abajo (`out/` está en `.gitignore`).
 
 **Si sos un agente o una persona que sigue con esto, leé primero `CONTEXTO.md`.** Ahí están las decisiones, el feedback del equipo y las trampas técnicas.
 
@@ -39,7 +39,7 @@ Remotion usa un solo `public/` y un solo `node_modules/` para las dos composicio
 ```bash
 cd video
 npm install
-# 1. El clip de IA no está en el repo: copiar clip1-ai.mp4 (WhatsApp) a public/clip1-ai.mp4,
+# 1. El clip de IA no está en el repo: copiar clip1-ai.mp4 a public/clip1-ai.mp4,
 #    o regenerarlo con compartido/higgsfield (ver CONTEXTO.md, "Clip de IA").
 npm run studio            # editor en el navegador, con las dos composiciones
 npm run render:ingles     # out/dumpsite-intl.mp4
