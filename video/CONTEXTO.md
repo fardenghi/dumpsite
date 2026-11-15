@@ -1,189 +1,189 @@
-# Contexto para seguir con los videos de Dumpsite
+# Context for continuing the Dumpsite videos
 
-Este documento junta lo que se aprendió al armar los dos videos: qué se decidió y por qué, qué pidió y corrigió el equipo, de dónde sale cada número y qué trampas técnicas hay. Está pensado para que otra persona u otro agente siga sin repetir errores.
+This document gathers what was learned while building the two videos: what was decided and why, what the team asked for and corrected, where each number comes from and what technical pitfalls there are. It's meant so that another person or agent can continue without repeating mistakes.
 
-## 1. Lo que pide la competencia
+## 1. What the competition asks for
 
-Fuente: `../SPACE-APPS-2026-OFICIAL.md` y la respuesta del Local Lead de Buenos Aires.
+Source: the official Space Apps 2026 rules and the answer from the Buenos Aires Local Lead.
 
-- **No hay pitch en vivo.** Se entregan dos videos y los dos se juzgan con los mismos 5 criterios: Impact, Creativity, Validity, Relevance y Presentation.
-  - **Internacional:** 30 s como máximo, en inglés. Es la demo oficial en spaceappschallenge.org.
-  - **Local:** 3 min como máximo, preferentemente en castellano, para el jurado de la sede.
-- La entrega cierra el **domingo 15/11/2026 a las 23:59**, hora de Buenos Aires.
-- Lo generado con IA se marca en pantalla, por eso la píldora "AI-generated imagery" / "Imagen generada con IA" y la línea de IA en el cierre.
-- Hay que citar todas las fuentes, incluso las abiertas, y NISAR tiene que ser el dato central.
-- No acusar a nadie: se habla de "señal compatible con actividad", nunca de "basural ilegal".
+- **There's no live pitch.** Two videos are submitted and both are judged on the same 5 criteria: Impact, Creativity, Validity, Relevance and Presentation.
+  - **International:** 30 s max, in English. It's the official demo on spaceappschallenge.org.
+  - **Local:** 3 min max, preferably in Spanish, for the venue's jury.
+- Submission closes on **Sunday 15/11/2026 at 23:59**, Buenos Aires time.
+- AI-generated content is marked on screen, hence the "AI-generated imagery" / "Imagen generada con IA" pill and the AI line at the end.
+- All sources have to be cited, even open ones, and NISAR has to be the central data.
+- Don't accuse anyone: talk about a "signal compatible with activity", never an "illegal dump".
 
-## 2. Reglas de contenido que fijó el equipo (no romperlas)
+## 2. Content rules set by the team (don't break them)
 
-Salen del feedback de muchas iteraciones.
+They come from the feedback of many iterations.
 
-**Nombre y links**
-- El proyecto se llama **Dumpsite**; nada de "Insomnes" ni "Basurales" en pantalla.
-- La URL es **dumpsite.earth**. El repo que aparece (`github.com/fardenghi/dumpsite`) es provisorio.
-- Los links están en `compartido/data.ts` (`RESULTADOS.url` y `RESULTADOS.repo`). Cuando estén los definitivos, se cambian ahí y se re-renderizan los dos videos.
+**Name and links**
+- The project is called **Dumpsite**; no "Insomnes" or "Basurales" on screen.
+- The URL is **dumpsite.earth**. The repo shown (`github.com/fardenghi/dumpsite`) is provisional.
+- The links are in `compartido/data.ts` (`RESULTADOS.url` and `RESULTADOS.repo`). When the final ones are ready, change them there and re-render both videos.
 
-**El modelo**
-- El modelo es **LightGBM**, no ResNet-50, ni una CNN, ni una red neuronal. Nada de eso puede aparecer.
-- Se presenta como terminado y "entrenado con miles de basurales mapeados".
-- Lo que marca se dice **"clasificado como basural por el modelo"** ("classified as dump by the model"). **Nunca "confirmado".**
-- **Sin métricas en pantalla**: ni AUC, ni accuracy, ni porcentajes del modelo. El AUC de 0,794 de la corrida vieja (592 parches) no se muestra.
-- El visual que gustó: pared de basurales del catálogo → caja LightGBM → dos bandejas, "Dump / Something else" en inglés y "Basural / Otra cosa" en castellano.
-  - Los ejemplos son Norte III (basural), El Palomar (aeródromo) y una cantera de Tres de Febrero.
-  - El bloque va centrado en pantalla: un espacio vacío a la izquierda se marcó como error.
+**The model**
+- The model is **LightGBM**, not ResNet-50, a CNN or a neural network. None of those can appear.
+- It's presented as finished and "trained on thousands of mapped dumps".
+- What it flags is described as **"classified as dump by the model"** ("clasificado como basural por el modelo"). **Never "confirmed".**
+- **No metrics on screen**: no AUC, accuracy or model percentages. The 0.794 AUC of the old run (592 patches) isn't shown.
+- The visual that worked: wall of catalog dump sites → LightGBM box → two trays, "Dump / Something else" in English and "Basural / Otra cosa" in Spanish.
+  - The examples are Norte III (dump site), El Palomar (airfield) and a quarry in Tres de Febrero.
+  - The block is centered on screen: an empty space on the left was flagged as a mistake.
 
-**El índice de insomnio**
-- No mostrar el umbral "80 %" (la regla de coherencia < 0,8 × entorno). Se explica en palabras: "cambia más que su entorno en casi todas las pasadas".
+**The insomnia index**
+- Don't show the "80 %" threshold (the coherence < 0.8 × surroundings rule). It's explained in words: "it changes more than its surroundings in almost every pass".
 
-**La voz**
-- **Un solo narrador.** Los estilos de Azure (`express-as`) hacían que pareciera otra persona, así que no se usan.
-- **Sin dos puntos en el texto de la voz**: generan pausas raras. Se reemplazan por comas.
-- Palabras que la voz pronunciaba mal y se corrigieron con alias:
-  - "LightGBM" → "light G B M" en inglés y "lait yi bi em" en castellano;
-  - antes "ResNet 50" sonaba separado.
-- La primera frase tiene que plantear el problema concreto: basurales nuevos que aparecen y crecen más rápido de lo que se los puede mapear, y que casi nunca se registran.
-- Justo después del problema va qué es Dumpsite.
-- "real dumps" no se entendía; se dice "actually dumpsites" o, mejor, se evita.
+**The voice**
+- **A single narrator.** Azure's styles (`express-as`) made it sound like another person, so they're not used.
+- **No colons in the voice text**: they cause odd pauses. They're replaced with commas.
+- Words the voice mispronounced, fixed with aliases:
+  - "LightGBM" → "light G B M" in English and "lait yi bi em" in Spanish;
+  - earlier, "ResNet 50" sounded split.
+- The first sentence has to state the concrete problem: new dump sites appear and grow faster than they can be mapped, and they're almost never registered.
+- Right after the problem comes what Dumpsite is.
+- "real dumps" wasn't understood; say "actually dumpsites" or, better, avoid it.
 
-**Imágenes**
-- La imagen de radar de NISAR va como **una sola imagen**: dos "pasadas" que se veían iguales confundían.
-- El satélite al principio del clip de IA dura **muy poco (≈1 s)**.
-- El clip de IA no tiene "rayo" saliendo del satélite. La basura tiene que verse como basura (bolsas de colores, plásticos), no como tierra, y sin topadoras ni camiones.
+**Images**
+- The NISAR radar image goes as **a single image**: two "passes" that looked the same were confusing.
+- The satellite at the start of the AI clip lasts **very little (≈1 s)**.
+- The AI clip has no "beam" coming out of the satellite. The trash has to look like trash (colored bags, plastics), not dirt, and without bulldozers or trucks.
 
-**Integrantes**
-- Los nombres de los 6 integrantes aparecen abajo a la derecha durante el clip inicial de los dos videos, sin decirlos en voz alta (la guía oficial sugiere presentar al equipo al principio).
-- Arriba de los nombres va el nombre del equipo, **<=> (spaceship)**, un poco más grande (`NOMBRE_EQUIPO`).
-- Están en `EQUIPO` en `compartido/data.ts`, tal como figuran en la página del equipo, y el componente es `Equipo` en `Overlays.tsx`: misma letra y sombra que los subtítulos, más chica y sin caja (así lo pidió el equipo).
+**Team members**
+- The names of the 6 team members appear at the bottom right during the opening clip of both videos, without saying them out loud (the official guide suggests introducing the team at the start).
+- Above the names goes the team name, **<=> (spaceship)**, a bit larger (`NOMBRE_EQUIPO`).
+- They're in `EQUIPO` in `compartido/data.ts`, as listed on the team page, and the component is `Equipo` in `Overlays.tsx`: same font and shadow as the subtitles, smaller and without a box (as the team asked).
 
-**Subtítulos**
-- Blancos con sombra sobre un degradado oscuro (nunca blanco sobre blanco).
-- Aparecen palabra por palabra al ritmo de la voz.
-- En castellano se muestran de a bloques de 1 o 2 renglones (`max={105}`), porque las frases largas tapaban la imagen.
+**Subtitles**
+- White with a shadow over a dark gradient (never white on white).
+- They appear word by word at the pace of the voice.
+- In Spanish they're shown in blocks of 1 or 2 lines (`max={105}`), because the long sentences covered the image.
 
-**Fuentes y placeholders**
-- Cuando se muestran fuentes, se dice cuáles son: nombre, origen y licencia. No hace falta decirlas en voz alta.
-- `MOSTRAR_PLACEHOLDERS = false` en `compartido/data.ts`. Si se activa, los datos provisorios muestran una etiqueta naranja.
+**Sources and placeholders**
+- When sources are shown, say which they are: name, origin and license. They don't need to be said out loud.
+- `MOSTRAR_PLACEHOLDERS = false` in `compartido/data.ts`. If enabled, provisional data shows an orange tag.
 
-## 3. Cifras que aparecen y de dónde salen
+## 3. Figures that appear and where they come from
 
-Ningún número va en pantalla sin fuente.
+No number goes on screen without a source.
 
-| Cifra | Fuente en el repo |
+| Figure | Source in the repo |
 |---|---|
-| ≈ 5.000 basurales a cielo abierto en Argentina (estimación del Ministerio de Ambiente, sin relevamiento formal) | `docs/idea.md` |
-| No hay inventario oficial abierto con coordenadas | ídem |
-| NISAR: una imagen cada 12 días, radar banda L, de día, de noche y a través de las nubes | `docs/idea.md` |
-| Norte III: insomnio 0,86; "inquieto en 8 de 8 pasadas" en la órbita principal | `docs/indice-insomnio.md`, `data/salidas/fichas_80m.json` (en `compartido/datos-reales.json`) |
-| Luján: cerrado el 1/07/2026, quieto en las 15 pasadas, insomnio 0 % | `docs/indice-insomnio.md` |
-| González Catán: insomnio 100 % (1,00) | ídem |
-| 219 manchas candidatas en el AMBA (sin agua de JRC, rutas ni cultivos estacionales) | ídem |
-| 66.981 basurales en el catálogo mundial | `data/catalogos/basurales/basurales_mundo.json` |
-| 29 variables del modelo: 12 radar, 11 ópticas Sentinel-2, 3 de forma, 3 del entorno; 300 árboles de profundidad 3 | `docs/resultados.md` (29 variables) y `herramientas/entrenar.py` (300 árboles, profundidad 3, 7 hojas) |
-| 42 basurales de catálogo activos en el radar, 13 registrados como cerrados que siguen activos (y 7 cerrados y quietos), en 10 regiones | `web/src/data/seed/veredictos.json` |
+| ≈ 5,000 open-air dump sites in Argentina (Ministry of Environment estimate, no formal survey) | `docs/idea.md` |
+| There's no open official inventory with coordinates | same |
+| NISAR: one image every 12 days, L-band radar, day, night and through clouds | `docs/idea.md` |
+| Norte III: insomnia 0.86; "restless in 8 of 8 passes" on the main orbit | `docs/indice-insomnio.md`, `data/salidas/fichas_80m.json` (in `compartido/datos-reales.json`) |
+| Luján: closed on 1/07/2026, quiet in all 15 passes, insomnia 0 % | `docs/indice-insomnio.md` |
+| González Catán: insomnia 100 % (1.00) | same |
+| 219 candidate blobs in the AMBA (without JRC water, roads or seasonal crops) | same |
+| 66,981 dump sites in the world catalog | `data/catalogos/basurales/basurales_mundo.json` |
+| 29 model variables: 12 radar, 11 Sentinel-2 optical, 3 shape, 3 context; 300 trees of depth 3 | `docs/resultados.md` (29 variables) and `motor/entrenar.py` (300 trees, depth 3, 7 leaves) |
+| 42 catalog dump sites active on the radar, 13 registered as closed that are still active (and 7 closed and quiet), in 10 regions | `web/src/data/seed/veredictos.json` |
 
-Las 10 regiones son AMBA, Los Ángeles, Ohio Lake, Maryland Howard, Ciudad de México, Ponce, New Hampshire Hillsborough, New York Richmond, Delhi y Yakarta.
+The 10 regions are AMBA, Los Angeles, Ohio Lake, Maryland Howard, Mexico City, Ponce, New Hampshire Hillsborough, New York Richmond, Delhi and Jakarta.
 
-Cuando haya métricas del modelo entrenado con el catálogo completo, siguen sin ir en pantalla, salvo que el equipo decida otra cosa.
+When there are metrics for the model trained on the full catalog, they still don't go on screen, unless the team decides otherwise.
 
-## 4. Cómo funciona el proyecto
+## 4. How the project works
 
-**La voz manda los tiempos.**
-1. El texto de la voz está en `ingles/guion.json` y `espanol/guion-es.json`. Cada frase tiene un `id` y una o más `partes`, con velocidad, tono, volumen, pausa y alias de pronunciación (`decir`).
-2. `voz_azure.py` o `voz_grabada.py` producen un WAV por frase en `public/voz-en/` o `public/voz-es/`, más un json de tiempos (`voz.json` / `voz-es.json`) con `inicio`, `duracion` y `texto` de cada frase.
-3. Las escenas arrancan cuando arranca su frase. **Si cambia la voz, el video se reacomoda solo.**
+**The voice sets the timing.**
+1. The voice text is in `ingles/guion.json` and `espanol/guion-es.json`. Each sentence has an `id` and one or more `partes`, with rate, pitch, volume, pause and pronunciation aliases (`decir`).
+2. `voz_azure.py` or `voz_grabada.py` produce one WAV per sentence in `public/voz-en/` or `public/voz-es/`, plus a timing json (`voz.json` / `voz-es.json`) with each sentence's `inicio`, `duracion` and `texto`.
+3. Scenes start when their sentence starts. **If the voice changes, the video rearranges itself.**
 
-**Anclas dentro de una frase.**
-- Para que algo aparezca a mitad de una frase, se busca un pedazo del texto y se estima su momento por la proporción de caracteres:
-  - en castellano, `dentro(id, "texto")` en `espanol/Local.tsx`;
-  - en inglés, `inicioDe(id, "texto")` en `ingles/Video.tsx`.
-- **Si se cambia el texto y el ancla ya no existe**, en castellano el elemento aparece al principio de la frase y en inglés Remotion tira "inputRange must be strictly monotonically increasing". Al cambiar el guion, revisar las anclas.
+**Anchors within a sentence.**
+- To make something appear in the middle of a sentence, a piece of the text is looked up and its moment is estimated by the proportion of characters:
+  - in Spanish, `dentro(id, "texto")` in `espanol/Local.tsx`;
+  - in English, `inicioDe(id, "texto")` in `ingles/Video.tsx`.
+- **If the text changes and the anchor no longer exists**, in Spanish the element appears at the start of the sentence and in English Remotion throws "inputRange must be strictly monotonically increasing". When changing the script, check the anchors.
 
-| Archivo | Anclas |
+| File | Anchors |
 |---|---|
-| `espanol/Local.tsx` | "En Argentina" (problema), "NISAR toma" (dumpsite), "Norte Tres" (casos), "Y le sumamos" (datos), "Cientos de" y "Y lo validamos" (modelo), "Dumpsite" (cierre) |
-| `ingles/Video.tsx` | "active dumps" (insomnia), "at the links" (resultados) |
+| `espanol/Local.tsx` | "En Argentina" (problem), "NISAR toma" (dumpsite), "Norte Tres" (cases), "Y le sumamos" (data), "Cientos de" and "Y lo validamos" (model), "Dumpsite" (ending) |
+| `ingles/Video.tsx` | "active dumps" (insomnia), "at the links" (results) |
 
-**Subtítulos.** `Subtitulos` en `compartido/components/Overlays.tsx` toma el texto del json de tiempos y reparte las palabras en proporción a los caracteres. Con voz humana es una aproximación razonable; si alguna frase queda desfasada, se puede partir en dos frases en el guion.
+**Subtitles.** `Subtitulos` in `compartido/components/Overlays.tsx` takes the text from the timing json and spreads the words in proportion to the characters. With a human voice it's a reasonable approximation; if some sentence ends up off, it can be split into two sentences in the script.
 
-**Composiciones.** Están en `compartido/Root.tsx`, a 1920 × 1080 y 30 fps. La duración total de cada video sale de `duracion_video` del json de tiempos: el fin de la voz más `cola_s`, que es la placa final.
+**Compositions.** They're in `compartido/Root.tsx`, at 1920 × 1080 and 30 fps. The total length of each video comes from `duracion_video` in the timing json: the end of the voice plus `cola_s`, which is the end card.
 
-## 5. Video internacional (inglés, 29,5 s), casi final
+## 5. International video (English, 29.5 s), almost final
 
-Voz `en-US-AndrewMultilingualNeural`, velocidad +20 a +27 %.
+Voice `en-US-AndrewMultilingualNeural`, rate +20 to +27 %.
 
-| Frase | Texto | Escena |
+| Sentence | Text | Scene |
 |---|---|---|
-| intro | "New dumps appear and grow faster than anyone can map them, and most are never registered." | Clip de IA (satélite ~1 s → nubes → basural), píldora "AI-generated imagery" |
-| nisar | "So we built Dumpsite, a platform that tracks dump sites with NASA's NISAR radar, which images Earth every twelve days." | Pulso de radar, título Dumpsite, imagen de coherencia NISAR sobre Norte III |
-| insomnia | "Radar coherence tells how alike two passes look, and active dumps never stop changing, so we turn that restlessness into our Insomnia score." | Serie Sentinel-2, pasadas con ojo y barras, mapa del índice en el AMBA |
-| red | "Then our LightGBM model, trained on thousands of mapped dumps, classifies each one as a dump or not." | Pared del catálogo con contador a 66.981, caja LightGBM centrada y bandejas Dump / Something else |
-| resultados | "It's all implemented and open, at the links on screen." | Navegador con la web, 42 y 13, links |
+| intro | "New dumps appear and grow faster than anyone can map them, and most are never registered." | AI clip (satellite ~1 s → clouds → dump site), "AI-generated imagery" pill |
+| nisar | "So we built Dumpsite, a platform that tracks dump sites with NASA's NISAR radar, which images Earth every twelve days." | Radar pulse, Dumpsite title, NISAR coherence image over Norte III |
+| insomnia | "Radar coherence tells how alike two passes look, and active dumps never stop changing, so we turn that restlessness into our Insomnia score." | Sentinel-2 series, passes with an eye and bars, index map of the AMBA |
+| red | "Then our LightGBM model, trained on thousands of mapped dumps, classifies each one as a dump or not." | Catalog wall with a counter up to 66,981, centered LightGBM box and Dump / Something else trays |
+| resultados | "It's all implemented and open, at the links on screen." | Browser with the web, 42 and 13, links |
 
-Lo único pendiente son los links definitivos.
+The only thing pending is the final links.
 
-## 6. Video local (castellano, 2:15), versión 1
+## 6. Local video (Spanish, 2:15), version 1
 
-Voz sintética `es-AR-TomasNeural`, con el guion en `espanol/guion-es.json`. Lo que se ve, escena por escena, está en `espanol/guion-local.docx`, que se regenera con `compartido/scripts/guion_docx.js`.
+Synthetic voice `es-AR-TomasNeural`, with the script in `espanol/guion-es.json`. What's shown, scene by scene, is in `espanol/guion-local.docx`, which is regenerated with `compartido/scripts/guion_docx.js`.
 
-| # | Escena (componente en `Local.tsx`) | Frases | Qué se ve |
+| # | Scene (component in `Local.tsx`) | Sentences | What's shown |
 |---|---|---|---|
-| 1 | Clip de IA + `Problema` | problema | Clip de IA y después el basural en cámara lenta con ≈5.000 y 0 inventarios |
-| 2 | `Pulso` + `DumpsiteNisar` | dumpsite | Sentinel-2 con pin, título Dumpsite, radar NISAR con chips (12 días, día y noche, nubes, banda L) |
-| 3 | `Insomnio` | cambia, coherencia, mapa | Serie S2 de 6 fechas, coherencia por pasada ("8 de 8", 0,86), mapa del AMBA con 219 manchas |
-| 4 | `Casos` | casos | Capturas de la web: Luján (0 %), Norte III (86 %), González Catán (100 %) |
-| 5 | `Datos` | datos | 28 recortes del catálogo, contador 66.981, fuentes, ejemplos de lo que se parece |
-| 6 | `Modelo` | modelo | 29 variables, caja LightGBM con árboles ×300, bandejas, validación dejando una ciudad afuera |
-| 7 | `Resultados` | resultados | 42 y 13, chips de las 10 regiones, "sin verificar en terreno" |
-| 8 | `Web` | web | Recorrido: mapa del índice → ficha de Norte III → lista de sitios → modelo |
-| 9 | `Cierre` | cierre | Tabla de fuentes con licencias, declaración de IA, links y placa DUMPSITE |
+| 1 | AI clip + `Problema` | problema | AI clip and then the dump site in slow motion with ≈5,000 and 0 inventories |
+| 2 | `Pulso` + `DumpsiteNisar` | dumpsite | Sentinel-2 with a pin, Dumpsite title, NISAR radar with chips (12 days, day and night, clouds, L band) |
+| 3 | `Insomnio` | cambia, coherencia, mapa | 6-date S2 series, coherence per pass ("8 of 8", 0.86), AMBA map with 219 blobs |
+| 4 | `Casos` | casos | Web screenshots: Luján (0 %), Norte III (86 %), González Catán (100 %) |
+| 5 | `Datos` | datos | 28 catalog crops, 66,981 counter, sources, examples of look-alikes |
+| 6 | `Modelo` | modelo | 29 variables, LightGBM box with ×300 trees, trays, validation leaving one city out |
+| 7 | `Resultados` | resultados | 42 and 13, chips of the 10 regions, "not verified on the ground" |
+| 8 | `Web` | web | Tour: index map → Norte III card → site list → model |
+| 9 | `Cierre` | cierre | Table of sources with licenses, AI statement, links and DUMPSITE end card |
 
-Lo más probable es que cambie:
-- **La voz.** Alguien del equipo la graba; ver `VOZ-GRABADA.md`. Si se mantienen los 11 ids de frase, el video se adapta solo.
-- **El texto**, a partir del docx que se mandó para refinar. Al cambiarlo hay que regenerar la voz y revisar las anclas de la sección 4.
-- **Las capturas de la web**, si la web cambia. Las actuales (`public/web/es-*.png`) se sacaron de `main` con la marca cambiada a Dumpsite en local; en `main` la web todavía dice "Basurales".
-- **La página Modelo de la web**: más abajo todavía menciona ResNet como "lo que sigue". En el video se muestra solo la parte de arriba (`es-modelo.png`). Si se corrige la web, conviene recapturar.
+What's most likely to change:
+- **The voice.** Someone on the team records it; see `VOZ-GRABADA.md`. If the 11 sentence ids are kept, the video adapts on its own.
+- **The text**, based on the docx that was sent for refining. When it changes, regenerate the voice and check the anchors in section 4.
+- **The web screenshots**, if the web changes. The current ones (`public/web/es-*.png`) were taken from `main` with the brand changed to Dumpsite locally; on `main` the web still says "Basurales".
+- **The web's Model page**: further down it still mentions ResNet as "what's next". The video only shows the top part (`es-modelo.png`). If the web is fixed, it's worth retaking it.
 
-## 7. Herramientas y trampas técnicas
+## 7. Tools and technical pitfalls
 
 ### Remotion
-- Versión 4.0.543, con React 18.3.1.
-  - El audio va con `Html5Audio`.
-  - Los videos van con `OffthreadVideo` y `playbackRate`.
-  - El clip de IA dura 4,733 s: en castellano se reproduce a velocidad 1 (`CLIP_IA` en `Local.tsx`) y en inglés se acelera con `playbackRate={4.733 / durTotal}`.
-- `Easing.quint` no existe: usar `Easing.poly(5)`.
-- Las fuentes son locales (`public/fonts/*.woff2`, cargadas con `@remotion/fonts` en `theme.ts`). Bajar Google Fonts al renderizar daba timeout.
-- Para revisar sin renderizar todo:
+- Version 4.0.543, with React 18.3.1.
+  - Audio goes with `Html5Audio`.
+  - Videos go with `OffthreadVideo` and `playbackRate`.
+  - The AI clip lasts 4.733 s: in Spanish it plays at speed 1 (`CLIP_IA` in `Local.tsx`) and in English it's sped up with `playbackRate={4.733 / durTotal}`.
+- `Easing.quint` doesn't exist: use `Easing.poly(5)`.
+- The fonts are local (`public/fonts/*.woff2`, loaded with `@remotion/fonts` in `theme.ts`). Downloading Google Fonts while rendering timed out.
+- To review without rendering everything:
   - `npx remotion still DumpsiteLocal out/x.png --frame=2700 --scale=0.4`;
-  - para una hoja de contacto, extraer cuadros del mp4 con ffmpeg y juntarlos con `-vf tile=4x6`.
-- El render completo del video local tarda varios minutos.
+  - for a contact sheet, extract frames from the mp4 with ffmpeg and join them with `-vf tile=4x6`.
+- The full render of the local video takes several minutes.
 
-### Azure AI Speech (voz sintética)
-- Se usa la API REST con SSML: `prosody` (rate, pitch, volume), `<sub alias>` para la pronunciación y `xml:lang` según el idioma del guion.
-- Formato de salida `riff-48khz-16bit-mono-pcm`. Se recorta el silencio del principio y del final de cada toma.
-- La clave va en `video/.env.local` (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`). El script nunca la imprime.
-- Voces probadas: `en-US-AndrewMultilingualNeural` para inglés y `es-AR-TomasNeural` para castellano.
+### Azure AI Speech (synthetic voice)
+- The REST API is used with SSML: `prosody` (rate, pitch, volume), `<sub alias>` for pronunciation and `xml:lang` according to the script's language.
+- Output format `riff-48khz-16bit-mono-pcm`. The silence at the start and end of each take is trimmed.
+- The key goes in `video/.env.local` (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`). The script never prints it.
+- Voices tried: `en-US-AndrewMultilingualNeural` for English and `es-AR-TomasNeural` for Spanish.
 
-### Higgsfield (clip de IA)
-- API, no MCP: SDK de Python `higgsfield-client` (`subscribe`, `upload_file`), con la clave `HF_KEY=key-id:key-secret` en `video/.env.local`.
-- Modelo Seedance 2.5:
-  - `bytedance/seedance-2.5/image-to-video` recibe `image_url` y no acepta `aspect_ratio`;
-  - `.../text-to-video` sí acepta `aspect_ratio`.
-- El borrador a 480p (`draft: true`) cuesta unos USD 0,12 por segundo.
+### Higgsfield (AI clip)
+- API, not MCP: the `higgsfield-client` Python SDK (`subscribe`, `upload_file`), with the key `HF_KEY=key-id:key-secret` in `video/.env.local`.
+- Seedance 2.5 model:
+  - `bytedance/seedance-2.5/image-to-video` takes `image_url` and doesn't accept `aspect_ratio`;
+  - `.../text-to-video` does accept `aspect_ratio`.
+- The 480p draft (`draft: true`) costs about USD 0.12 per second.
 
-**Historia del clip:**
-1. `descenso.py` (text-to-video, 5 s) salió feo: la basura parecía tierra y había topadoras.
-2. `satelite.py` (image-to-video, 10 s) arranca en un render oficial de NISAR (`nisar-primer-cuadro.jpg`) y baja hasta un basural. Es el clip que se usa: `salidas/satelite-draft-203402.mp4`, que se pasa por WhatsApp.
-3. `montar_clip.sh` lo corta y lo re-temporiza a 4,73 s (satélite 1 s, nubes 1 s, basural 2,7 s) y lo deja en `public/clip1-ai.mp4`.
+**History of the clip:**
+1. `descenso.py` (text-to-video, 5 s) came out ugly: the trash looked like dirt and there were bulldozers.
+2. `satelite.py` (image-to-video, 10 s) starts at an official NISAR render (`nisar-primer-cuadro.jpg`) and descends to a dump site. It's the clip in use: `salidas/satelite-draft-203402.mp4`, shared outside the repo.
+3. `montar_clip.sh` cuts it and retimes it to 4.73 s (satellite 1 s, clouds 1 s, dump site 2.7 s) and leaves it in `public/clip1-ai.mp4`.
 
-- El equipo pidió **no tocar Higgsfield sin que lo pidan**: cada corrida cuesta plata. Mostrar el prompt y esperar el OK antes de mandar.
-- Para el video en castellano se reusa el mismo clip.
+- The team asked **not to touch Higgsfield unless asked**: each run costs money. Show the prompt and wait for the OK before sending.
+- The Spanish video reuses the same clip.
 
-### Capturas de la web
-- Se hacen con puppeteer-core y el chrome-headless-shell que trae Remotion, sirviendo la web con `vite preview`.
-- En Ubuntu hace falta `--no-sandbox`: AppArmor bloquea el sandbox de Chrome. `--virtual-time-budget` se colgaba; por eso se usan esperas reales (el mapa de MapLibre tarda unos 10 s).
-- Las capturas en inglés (`public/web/mapa.png`, `inicio.png`, `sitios.png`, `modelo.png`) salieron de la rama `web-ingles`, que tiene la web traducida y el cambio de nombre a Dumpsite.
+### Web screenshots
+- They're taken with puppeteer-core and the chrome-headless-shell that ships with Remotion, serving the web with `vite preview`.
+- On Ubuntu `--no-sandbox` is needed: AppArmor blocks Chrome's sandbox. `--virtual-time-budget` hung; that's why real waits are used (the MapLibre map takes about 10 s).
+- The English screenshots (`public/web/mapa.png`, `inicio.png`, `sitios.png`, `modelo.png`) came from the `web-ingles` branch, which has the translated web and the rename to Dumpsite.
 
-## 8. Pendientes
-- Links definitivos (dominio y repo) en `compartido/data.ts`, y re-render de los dos videos.
-- Voz grabada y texto final del video en castellano.
-- Corregir la página Modelo de la web (la mención a ResNet) y la marca en `main`.
+## 8. Pending
+- Final links (domain and repo) in `compartido/data.ts`, and re-render of both videos.
+- Recorded voice and final text of the Spanish video.
+- Fix the web's Model page (the ResNet mention) and the brand on `main`.
