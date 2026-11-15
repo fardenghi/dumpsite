@@ -531,7 +531,7 @@ export const DumpsiteLocal: React.FC = () => {
   return (
     <AbsoluteFill style={{background: C.bg}}>
       {S("ia", () => (
-        <AbsoluteFill><OffthreadVideo src={staticFile("clip1-ai.mp4")} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} /><AvisoIA texto="Imagen generada con IA" /><Equipo titulo="Equipo · NASA Space Apps 2026" dur={CLIP_IA} /></AbsoluteFill>
+        <AbsoluteFill><OffthreadVideo src={staticFile("clip1-ai.mp4")} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} /><AvisoIA texto="Imagen generada con IA" /><Equipo dur={CLIP_IA} /></AbsoluteFill>
       ))}
       {S("problema", (d) => <Problema dur={d} t2={fr("problema").inicio + dentro("problema", "En Argentina") - CLIP_IA} />)}
       {S("pulso", (d) => <Pulso dur={d} />)}
