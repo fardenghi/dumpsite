@@ -64,6 +64,7 @@ const EN: Record<string, string> = {
   // brand and navigation
   'Basurales que el radar NISAR de la NASA nunca ve quietos.': 'Dump sites that NASA’s NISAR radar never sees at rest.',
   '{0} de {1} despiertos': '{0} of {1} awake',
+  'Código en GitHub': 'Code on GitHub',
   'Lo que nos queda': 'What’s next',
   'Llegamos al límite diario de imágenes de Google: el mapa sigue con Sentinel-2. La vista de Google vuelve hoy a las {0} (tu hora).':
     'We hit the daily limit of Google imagery: the map keeps using Sentinel-2. The Google view comes back today at {0} (your time).',

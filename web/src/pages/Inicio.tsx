@@ -51,6 +51,9 @@ export default function Inicio() {
             <a className="btn" href="#/modelo">
               {t('Cómo se decide')}
             </a>
+            <a className="btn" href="https://github.com/fardenghi/dumpsite" target="_blank" rel="noreferrer">
+              {t('Código en GitHub')}
+            </a>
           </div>
         </div>
 
