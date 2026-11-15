@@ -1,0 +1,556 @@
+{
+ "generado": "2026-11-15T15:33:18",
+ "generado_por": "idea-basurales-nisar/herramientas/flujo.py (desde salidas/metricas.json)",
+ "validado": true,
+ "motivo": "validado en 9 frames",
+ "metricas": {
+  "validacion": "por_frame",
+  "advertencia": null,
+  "umbral": 0.5,
+  "columnas": [
+   "insomnio",
+   "persistencia",
+   "contraste_mediana",
+   "contraste_desvio",
+   "coherencia_media",
+   "tendencia",
+   "eco_db",
+   "eco_contraste",
+   "eco_variacion",
+   "hv_hh",
+   "ndvi_media",
+   "ndvi_variacion",
+   "bsi_media",
+   "ndwi_media",
+   "swir_b11",
+   "swir_b12",
+   "ndvi_contraste",
+   "bsi_contraste",
+   "ndwi_contraste",
+   "swir_b11_contraste",
+   "swir_b12_contraste",
+   "area_ha",
+   "elongacion",
+   "compacidad",
+   "agua_anillo",
+   "urbano_anillo",
+   "cultivo_anillo",
+   "contraste_p10",
+   "eco_var_p90"
+  ],
+  "filas": {
+   "entrenamiento": 592,
+   "prueba_final": 0,
+   "por_clase": {
+    "otro_movil": 553,
+    "basural_activo": 39
+   },
+   "por_frame": {
+    "CDMX": {
+     "otro_movil": 36,
+     "basural_activo": 5
+    },
+    "DELHI": {
+     "otro_movil": 43,
+     "basural_activo": 3
+    },
+    "LOS_ANGELES": {
+     "otro_movil": 87,
+     "basural_activo": 10
+    },
+    "PRI_PONCE": {
+     "otro_movil": 93,
+     "basural_activo": 1
+    },
+    "USA_MD_HOWARD": {
+     "otro_movil": 16,
+     "basural_activo": 4
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "otro_movil": 43,
+     "basural_activo": 1
+    },
+    "USA_NY_RICHMOND": {
+     "otro_movil": 133,
+     "basural_activo": 5
+    },
+    "USA_OH_LAKE": {
+     "otro_movil": 27,
+     "basural_activo": 6
+    },
+    "YAKARTA": {
+     "otro_movil": 75,
+     "basural_activo": 4
+    }
+   }
+  },
+  "fuera_de_particion": {
+   "global": {
+    "n": 592,
+    "n_basural": 39,
+    "n_otro": 553,
+    "auc": 0.794,
+    "auc_ic95": [
+     0.72,
+     0.866
+    ],
+    "precision": 0.29,
+    "precision_ic95": [
+     0.161,
+     0.466
+    ],
+    "recall": 0.231,
+    "recall_ic95": [
+     0.126,
+     0.383
+    ]
+   },
+   "por_particion": {
+    "0": {
+     "n": 138,
+     "n_basural": 5,
+     "n_otro": 133,
+     "auc": 0.753,
+     "auc_ic95": [
+      0.488,
+      0.956
+     ],
+     "precision": 0.143,
+     "precision_ic95": [
+      0.026,
+      0.513
+     ],
+     "recall": 0.2,
+     "recall_ic95": [
+      0.036,
+      0.624
+     ]
+    },
+    "1": {
+     "n": 97,
+     "n_basural": 10,
+     "n_otro": 87,
+     "auc": 0.879,
+     "auc_ic95": [
+      0.777,
+      0.959
+     ],
+     "precision": 0.5,
+     "precision_ic95": [
+      0.237,
+      0.763
+     ],
+     "recall": 0.5,
+     "recall_ic95": [
+      0.237,
+      0.763
+     ]
+    },
+    "2": {
+     "n": 94,
+     "n_basural": 1,
+     "n_otro": 93,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.9,
+      0.989
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "3": {
+     "n": 79,
+     "n_basural": 4,
+     "n_otro": 75,
+     "auc": 0.883,
+     "auc_ic95": [
+      0.623,
+      0.996
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.49
+     ]
+    },
+    "4": {
+     "n": 46,
+     "n_basural": 3,
+     "n_otro": 43,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.858,
+      1.0
+     ],
+     "precision": 0.4,
+     "precision_ic95": [
+      0.118,
+      0.769
+     ],
+     "recall": 0.667,
+     "recall_ic95": [
+      0.208,
+      0.939
+     ]
+    },
+    "5": {
+     "n": 44,
+     "n_basural": 1,
+     "n_otro": 43,
+     "auc": 0.674,
+     "auc_ic95": [
+      0.524,
+      0.813
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.49
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "6": {
+     "n": 41,
+     "n_basural": 5,
+     "n_otro": 36,
+     "auc": 0.778,
+     "auc_ic95": [
+      0.574,
+      0.944
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.562
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.434
+     ]
+    },
+    "7": {
+     "n": 33,
+     "n_basural": 6,
+     "n_otro": 27,
+     "auc": 0.685,
+     "auc_ic95": [
+      0.419,
+      0.966
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.39
+     ]
+    },
+    "8": {
+     "n": 20,
+     "n_basural": 4,
+     "n_otro": 16,
+     "auc": 0.75,
+     "auc_ic95": [
+      0.368,
+      1.0
+     ],
+     "precision": 1.0,
+     "precision_ic95": [
+      0.207,
+      1.0
+     ],
+     "recall": 0.25,
+     "recall_ic95": [
+      0.046,
+      0.699
+     ]
+    }
+   },
+   "por_frame": {
+    "CDMX": {
+     "n": 41,
+     "n_basural": 5,
+     "n_otro": 36,
+     "auc": 0.778,
+     "auc_ic95": [
+      0.574,
+      0.944
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.562
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.434
+     ]
+    },
+    "DELHI": {
+     "n": 46,
+     "n_basural": 3,
+     "n_otro": 43,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.858,
+      1.0
+     ],
+     "precision": 0.4,
+     "precision_ic95": [
+      0.118,
+      0.769
+     ],
+     "recall": 0.667,
+     "recall_ic95": [
+      0.208,
+      0.939
+     ]
+    },
+    "LOS_ANGELES": {
+     "n": 97,
+     "n_basural": 10,
+     "n_otro": 87,
+     "auc": 0.879,
+     "auc_ic95": [
+      0.777,
+      0.959
+     ],
+     "precision": 0.5,
+     "precision_ic95": [
+      0.237,
+      0.763
+     ],
+     "recall": 0.5,
+     "recall_ic95": [
+      0.237,
+      0.763
+     ]
+    },
+    "PRI_PONCE": {
+     "n": 94,
+     "n_basural": 1,
+     "n_otro": 93,
+     "auc": 0.946,
+     "auc_ic95": [
+      0.9,
+      0.989
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.793
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "USA_MD_HOWARD": {
+     "n": 20,
+     "n_basural": 4,
+     "n_otro": 16,
+     "auc": 0.75,
+     "auc_ic95": [
+      0.368,
+      1.0
+     ],
+     "precision": 1.0,
+     "precision_ic95": [
+      0.207,
+      1.0
+     ],
+     "recall": 0.25,
+     "recall_ic95": [
+      0.046,
+      0.699
+     ]
+    },
+    "USA_NH_HILLSBOROUGH": {
+     "n": 44,
+     "n_basural": 1,
+     "n_otro": 43,
+     "auc": 0.674,
+     "auc_ic95": [
+      0.524,
+      0.813
+     ],
+     "precision": 0.0,
+     "precision_ic95": [
+      0.0,
+      0.49
+     ],
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.793
+     ]
+    },
+    "USA_NY_RICHMOND": {
+     "n": 138,
+     "n_basural": 5,
+     "n_otro": 133,
+     "auc": 0.753,
+     "auc_ic95": [
+      0.488,
+      0.956
+     ],
+     "precision": 0.143,
+     "precision_ic95": [
+      0.026,
+      0.513
+     ],
+     "recall": 0.2,
+     "recall_ic95": [
+      0.036,
+      0.624
+     ]
+    },
+    "USA_OH_LAKE": {
+     "n": 33,
+     "n_basural": 6,
+     "n_otro": 27,
+     "auc": 0.685,
+     "auc_ic95": [
+      0.419,
+      0.966
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.39
+     ]
+    },
+    "YAKARTA": {
+     "n": 79,
+     "n_basural": 4,
+     "n_otro": 75,
+     "auc": 0.883,
+     "auc_ic95": [
+      0.623,
+      0.996
+     ],
+     "precision": null,
+     "precision_ic95": null,
+     "recall": 0.0,
+     "recall_ic95": [
+      0.0,
+      0.49
+     ]
+    }
+   }
+  },
+  "importancia": {
+   "bsi_contraste": 1208.08,
+   "eco_db": 618.75,
+   "eco_var_p90": 552.99,
+   "ndwi_media": 455.93,
+   "cultivo_anillo": 434.63,
+   "swir_b11": 393.95,
+   "ndvi_media": 360.79,
+   "hv_hh": 350.27,
+   "ndvi_variacion": 275.73,
+   "urbano_anillo": 275.32,
+   "agua_anillo": 252.78,
+   "compacidad": 237.67,
+   "swir_b11_contraste": 233.99,
+   "contraste_p10": 232.23,
+   "eco_contraste": 225.33,
+   "area_ha": 205.68,
+   "ndvi_contraste": 204.82,
+   "tendencia": 187.94,
+   "elongacion": 175.25,
+   "eco_variacion": 173.18,
+   "contraste_mediana": 149.15,
+   "ndwi_contraste": 139.92,
+   "contraste_desvio": 139.67,
+   "swir_b12_contraste": 121.13,
+   "swir_b12": 96.73,
+   "insomnio": 88.79,
+   "coherencia_media": 74.43,
+   "bsi_media": 71.06,
+   "persistencia": 8.73
+  }
+ },
+ "estado": {
+  "auc": 0.908,
+  "ic95": [
+   0.867,
+   0.946
+  ],
+  "n": 198,
+  "abiertos": 121,
+  "cerrados": 77,
+  "frames": 26,
+  "variables": [
+   "Variación del eco HH en el tiempo, contra el anillo (percentil 90 del predio)",
+   "Variación del eco HV en el tiempo, contra el anillo (percentil 90 del predio)",
+   "Parche de 3×3 píxeles donde más varía el eco HH, contra el anillo",
+   "Cambio neto del eco HH entre el principio y el final de la serie, contra el anillo",
+   "Coherencia del peor parche de 3×3 de cada par, contra el anillo",
+   "Coherencia del parche de 3×3 que es el peor de forma sostenida, contra el anillo",
+   "Ese parche contra la mediana del predio (bajo = una zona chica mucho menos coherente que el resto)",
+   "Mayor zona con coherencia persistentemente baja (ha)",
+   "Esa zona como fracción del predio",
+   "Cuánto se corre el parche menos coherente entre el principio y el final de la serie"
+  ],
+  "validacion": "Se deja un frame afuera por vez: ningún predio se predice con un modelo que vio su frame. Intervalo del 95 % por remuestreo. Etiquetas: el estado del registro, no el insomnio.",
+  "limites": [
+   "casi todo EE. UU. (registro de la EPA)",
+   "el estado es el del registro, no una observación de actividad",
+   "p_abierto no es una probabilidad calibrada",
+   "en el registro los abiertos son más grandes: por eso el modelo no usa el área",
+   "en el AMBA la serie de radar es de cuatro meses y en EE. UU. de un año: la variación del eco no es del todo comparable"
+  ],
+  "prueba_amba": [
+   {
+    "nombre": "Basural de Luján",
+    "estado_registro": "cerrado",
+    "p_abierto": 0.161
+   },
+   {
+    "nombre": "Norte III, el complejo como una sola unidad (BAS-053304 + módulo C + BAS-016796)",
+    "estado_registro": "abierto",
+    "p_abierto": 0.989
+   },
+   {
+    "nombre": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
+    "estado_registro": "abierto",
+    "p_abierto": 0.069
+   },
+   {
+    "nombre": "Norte III, módulo C (BAS-053307)",
+    "estado_registro": "desconocido",
+    "p_abierto": 0.777
+   },
+   {
+    "nombre": "Norte III, sector oeste sin nombre (BAS-016796)",
+    "estado_registro": "desconocido",
+    "p_abierto": 0.957
+   },
+   {
+    "nombre": "González Catán",
+    "estado_registro": "desconocido",
+    "p_abierto": 0.874
+   }
+  ]
+ }
+}
