@@ -1,0 +1,83 @@
+{
+ "voz": "es-AR-TomasNeural",
+ "duracion_video": 134.9,
+ "frases": [
+  {
+   "id": "problema",
+   "archivo": "voz-es/frase-1.wav",
+   "inicio": 0.3,
+   "duracion": 15.13,
+   "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede mapearlos. En Argentina hay unos cinco mil basurales a cielo abierto según el Ministerio de Ambiente, pero esa cifra no sale de un relevamiento formal, y no existe un inventario oficial abierto que diga dónde están ni cuáles siguen activos."
+  },
+  {
+   "id": "dumpsite",
+   "archivo": "voz-es/frase-2.wav",
+   "inicio": 16.13,
+   "duracion": 13.28,
+   "texto": "Por eso construimos Dumpsite, una plataforma que sigue basurales desde el espacio con el radar NISAR, de la NASA y la agencia espacial de India. NISAR toma una imagen de cada punto de la Tierra cada doce días, de día, de noche y a través de las nubes."
+  },
+  {
+   "id": "cambia",
+   "archivo": "voz-es/frase-3.wav",
+   "inicio": 29.86,
+   "duracion": 5.76,
+   "texto": "Un basural activo nunca se ve igual dos veces, llegan camiones, se mueve tierra, se tapa y se vuelve a abrir."
+  },
+  {
+   "id": "coherencia",
+   "archivo": "voz-es/frase-4.wav",
+   "inicio": 36.07,
+   "duracion": 12.83,
+   "texto": "El radar mide eso con la coherencia, que dice qué tan parecidas son dos pasadas sobre el mismo lugar. Si un sitio cambia más que su entorno en casi todas las pasadas, decimos que no duerme. Esa fracción es nuestro índice de insomnio."
+  },
+  {
+   "id": "mapa",
+   "archivo": "voz-es/frase-5.wav",
+   "inicio": 49.35,
+   "duracion": 6.75,
+   "texto": "Lo calculamos píxel por píxel en todo el Gran Buenos Aires, descartando el agua, las rutas y los cultivos que cambian solo por temporada."
+  },
+  {
+   "id": "casos",
+   "archivo": "voz-es/frase-6.wav",
+   "inicio": 56.55,
+   "duracion": 8.96,
+   "texto": "El basural de Luján cerró el primero de julio, y el radar lo ve quieto en las quince pasadas. Norte Tres y González Catán, en cambio, casi nunca duermen."
+  },
+  {
+   "id": "datos",
+   "archivo": "voz-es/frase-7.wav",
+   "inicio": 65.96,
+   "duracion": 17.49,
+   "texto": "Para saber qué es cada mancha, armamos un catálogo de casi sesenta y siete mil basurales de todo el mundo, cruzando OpenStreetMap, Climate TRACE, la agencia ambiental de Estados Unidos y las plumas de metano que detecta EMIT, de la NASA. Y le sumamos ejemplos de lo que se le parece, canteras, aeródromos, campos de golf y parques."
+  },
+  {
+   "id": "modelo",
+   "archivo": "voz-es/frase-8.wav",
+   "inicio": 83.9,
+   "duracion": 21.05,
+   "texto": "Con eso entrenamos un modelo LightGBM. De cada mancha se calculan veintinueve variables del radar y de las imágenes Sentinel-2, vegetación, suelo desnudo, agua, infrarrojo y forma. Cientos de árboles de decisión, cada uno corrigiendo al anterior, clasifican cada mancha como basural u otra cosa. Y lo validamos dejando ciudades enteras afuera del entrenamiento."
+  },
+  {
+   "id": "resultados",
+   "archivo": "voz-es/frase-9.wav",
+   "inicio": 105.4,
+   "duracion": 7.83,
+   "texto": "En diez regiones del mundo, el radar ve activos cuarenta y dos basurales que ya figuraban en los catálogos, y trece de ellos están registrados como cerrados."
+  },
+  {
+   "id": "web",
+   "archivo": "voz-es/frase-10.wav",
+   "inicio": 113.68,
+   "duracion": 8.24,
+   "texto": "Todo esto se puede explorar en la web, el mapa del índice, la ficha de cada sitio con su curva de coherencia, la lista con el registro oficial, y cómo decide el modelo."
+  },
+  {
+   "id": "cierre",
+   "archivo": "voz-es/frase-11.wav",
+   "inicio": 122.37,
+   "duracion": 9.55,
+   "texto": "Usamos solo datos abiertos, y el código, el modelo y los datos están publicados en los links de la pantalla. Dumpsite, los basurales que el radar nunca ve quietos."
+  }
+ ]
+}
