@@ -13,11 +13,13 @@ import type { Imagen, Sitio, Veredicto } from '../data/types'
 import { FRAME_AMBA, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
-// The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
-// of the chosen date, served by Microsoft Planetary Computer. Both work without keys.
-// With VITE_GOOGLE_MAPS_KEY there's also a high-resolution view (Google, under 1 m, no
-// date): it's requested only inside the box of the open site and from ZOOM_GOOGLE, because each
-// tile is billed. Sentinel-2 is still used to compare dates.
+// El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
+// de la fecha elegida, servida por Microsoft Planetary Computer. Las dos andan sin claves.
+// Con VITE_GOOGLE_MAPS_KEY hay además una vista de alta resolución (Google, menos de 1 m, sin
+// fecha): se pide sólo adentro de las cajas de los basurales (abiertos o no) y desde ZOOM_GOOGLE,
+// porque cada tile se cobra. Para comparar fechas se sigue usando Sentinel-2.
+// mosaico Sentinel-2 sin nubes de EOX (10 m): el fondo con zoom, en todo el mapa y no sólo en el sitio abierto
+const MOSAICO = 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg'
 const FONDO = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg'
 const s2 = (i: Imagen) =>
   `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${i.item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`
@@ -38,6 +40,55 @@ const margenAmba = (ancho: number) => (ancho > 860 ? { top: 70, bottom: 90, left
 const ZOOM_GOOGLE = 13
 // the dump sites of the other frames have no outline or images loaded: fly there without zooming in as much
 const ZOOM_OTRO = 9.5
+// radio de la caja donde se piden tiles de Google alrededor de un basural del catálogo, que no trae caja propia
+const RADIO_GOOGLE_KM = 1.5
+
+/** Caja oeste, sur, este, norte de `km` alrededor de un punto. */
+function cajaAlrededor(lat: number, lon: number, km = RADIO_GOOGLE_KM): [number, number, number, number] {
+  const dLat = km / 111.32
+  const dLon = km / (111.32 * Math.cos((lat * Math.PI) / 180))
+  return [lon - dLon, lat - dLat, lon + dLon, lat + dLat]
+}
+
+type Caja = [number, number, number, number]
+
+// Las cajas donde se piden tiles de Google. El protocolo `gtile://` mira cada tile: si no toca ninguna
+// caja devuelve uno transparente sin llamar a Google, así varias cajas sueltas no hacen una fuente por sitio
+// indexadas en una grilla de CELDA grados: con todo el catálogo son decenas de miles y cada tile mira sólo sus celdas
+const CELDA = 0.1
+let cajasGoogle = new Map<string, Caja[]>()
+const celdas = ([o, s, e, n]: Caja) => {
+  const claves: string[] = []
+  for (let i = Math.floor(o / CELDA); i <= Math.floor(e / CELDA); i++) for (let j = Math.floor(s / CELDA); j <= Math.floor(n / CELDA); j++) claves.push(`${i},${j}`)
+  return claves
+}
+function indexar(cajas: Caja[]) {
+  const grilla = new Map<string, Caja[]>()
+  for (const c of cajas) for (const k of celdas(c)) (grilla.get(k) ?? grilla.set(k, []).get(k)!).push(c)
+  return grilla
+}
+let tokenGoogle = ''
+let vacio: Promise<ArrayBuffer> | null = null
+const tileVacio = () =>
+  (vacio ??= new OffscreenCanvas(256, 256).convertToBlob({ type: 'image/png' }).then((b) => b.arrayBuffer()))
+
+/** Caja oeste, sur, este, norte de un tile de Web Mercator. */
+function cajaDelTile(z: number, x: number, y: number): Caja {
+  const n = 2 ** z
+  const lat = (j: number) => (Math.atan(Math.sinh(Math.PI * (1 - (2 * j) / n))) * 180) / Math.PI
+  return [(x / n) * 360 - 180, lat(y + 1), ((x + 1) / n) * 360 - 180, lat(y)]
+}
+
+const tocan = (a: Caja, b: Caja) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+const tocaAlguna = (c: Caja) => celdas(c).some((k) => cajasGoogle.get(k)?.some((b) => tocan(b, c)))
+
+/** Zoom para ver entero un predio de `ha` hectáreas con alta resolución (lo trata como un círculo). */
+function zoomPorArea(ha: number | null | undefined): number {
+  if (!ha || ha <= 0) return 15.5
+  const radio = Math.sqrt((ha * 1e4) / Math.PI) // m
+  // a zoom z, en el ecuador, 600 px cubren 600 * 156543 / 2^z m; se busca que el diámetro ocupe ~300 px
+  return Math.max(ZOOM_GOOGLE + 0.5, Math.min(17, Math.log2((300 * 156543) / (2 * radio * 1.15))))
+}
 type Vista = 'google' | 'sentinel'
 
 /** Sentinel-2 tiles MapLibre requests when opening a site (512 px source: the tile z is the map's minus 1). */
@@ -329,7 +380,6 @@ export default function Mapa() {
   const [imagen, setImagen] = useState<Imagen | null>(null)
   const [vista, setVista] = useState<Vista>(HAY_GOOGLE ? 'google' : 'sentinel')
   const [credito, setCredito] = useState('')
-  const habiaSitio = useRef(false)
 
   useEffect(() => {
     if (sitios) precargar(sitios)
@@ -342,8 +392,14 @@ export default function Mapa() {
       container: caja.current!,
       style: {
         version: 8,
-        sources: { fondo: { type: 'raster', tiles: [FONDO], tileSize: 256, maxzoom: 8 } },
-        layers: [{ id: 'fondo', type: 'raster', source: 'fondo' }],
+        sources: {
+          fondo: { type: 'raster', tiles: [FONDO], tileSize: 256, maxzoom: 8 },
+          mosaico: { type: 'raster', tiles: [MOSAICO], tileSize: 256, minzoom: 7, maxzoom: 15 },
+        },
+        layers: [
+          { id: 'fondo', type: 'raster', source: 'fondo' },
+          { id: 'mosaico', type: 'raster', source: 'mosaico', minzoom: 7, paint: { 'raster-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1] } },
+        ],
       },
       bounds: AMBA,
       fitBoundsOptions: { padding: margenAmba(caja.current!.clientWidth) },
@@ -591,9 +647,9 @@ export default function Mapa() {
   }
   /** Alejar hasta ver todas las regiones. */
   const verOtros = () => {
-    const m = mapa.current
-    if (!m || !otros.length) return
     go('mapa')
+    const m = mapa.current
+    if (!m) return
     m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
   }
 
@@ -611,20 +667,21 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    if (!sel && !punto) {
-      // al cerrar la ficha se vuelve a la vista general; la última imagen queda cargada
-      if (habiaSitio.current && enMapa) m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
-      habiaSitio.current = false
-      return
-    }
-    habiaSitio.current = true
+    // al cerrar la ficha el mapa queda donde está; para alejarse está "Ver todo"
+    if (!sel && !punto) return
     const ancho = m.getContainer().clientWidth
     const margen = ancho > 860 ? { right: 440, top: 80, bottom: 100, left: 60 } : { bottom: 400, top: 80, left: 24, right: 24 }
     if (!sel) {
       // un punto del catálogo o una mancha nueva: no hay recorte guardado, se vuela hasta el punto
-      // (las manchas nuevas tienen contorno desde el zoom 8: se va un poco más cerca para verlo)
-      const zoom = selOtro?.tipo === 'mancha' ? 11 : ZOOM_OTRO
-      m.flyTo({ center: [punto!.lon, punto!.lat], zoom: Math.max(zoom, Math.min(m.getZoom(), 12)), padding: margen, duration: 2200, essential: true })
+      // (las manchas nuevas tienen contorno desde el zoom 8: se va un poco más cerca para verlo).
+      // Con Google se baja hasta ver el predio entero en alta resolución
+      if (HAY_GOOGLE) {
+        setVista('google')
+        m.flyTo({ center: [punto!.lon, punto!.lat], zoom: zoomPorArea(selOtro ? selOtro.area_ha : selCat?.ha), padding: margen, duration: 2600, essential: true })
+      } else {
+        const zoom = selOtro?.tipo === 'mancha' ? 11 : ZOOM_OTRO
+        m.flyTo({ center: [punto!.lon, punto!.lat], zoom: Math.max(zoom, Math.min(m.getZoom(), 12)), padding: margen, duration: 2200, essential: true })
+      }
       return
     }
     setImagen(sel.imagenes[sel.imagenes.length - 1] ?? null)
@@ -656,7 +713,7 @@ export default function Mapa() {
     if (tiles) tiles.setTiles([s2(imagen)])
     else {
       m.addSource('escena', { type: 'raster', tiles: [s2(imagen)], tileSize: 512, minzoom: 8, maxzoom: 14 })
-      m.addLayer({ id: 'escena', type: 'raster', source: 'escena', minzoom: 8, paint: { 'raster-fade-duration': 200 } }, antesDe('recorte', 'indice', 'contorno-relleno'))
+      m.addLayer({ id: 'escena', type: 'raster', source: 'escena', minzoom: 8, paint: { 'raster-fade-duration': 200 } }, antesDe('recorte', 'google', 'indice', 'contorno-relleno'))
     }
     if (!sel.caja) return
     const [o, s, e, n] = sel.caja
@@ -665,7 +722,7 @@ export default function Mapa() {
     if (guardado) guardado.updateImage(recorte)
     else {
       m.addSource('recorte', { type: 'image', ...recorte })
-      m.addLayer({ id: 'recorte', type: 'raster', source: 'recorte', paint: { 'raster-fade-duration': 0 } }, antesDe('indice', 'contorno-relleno'))
+      m.addLayer({ id: 'recorte', type: 'raster', source: 'recorte', paint: { 'raster-fade-duration': 0 } }, antesDe('google', 'indice', 'contorno-relleno'))
     }
   }, [listo, imagen, sel])
 
@@ -676,24 +733,42 @@ export default function Mapa() {
     for (const capa of ['escena', 'recorte']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', sel ? 'visible' : 'none')
   }, [listo, imagen, sel])
 
-  // Google high resolution: only inside the box of the open site and at high zoom
-  const idSel = sel?.id
+  // alta resolución de Google: con zoom alto, adentro de la caja de cualquier basural, sin tener que abrirlo.
+  // Los sitios curados traen su caja; el resto del catálogo y las manchas usan una de RADIO_GOOGLE_KM alrededor del punto
+  const idSel = sel?.id ?? selOtro?.id ?? selCat?.id
+  useEffect(() => {
+    const cajas: Caja[] = (sitios ?? []).map((s) => s.caja ?? cajaAlrededor(s.lat, s.lon))
+    // todo el catálogo (con dato de radar o no) y las manchas nuevas
+    if (catalogo) for (let i = 0; i < catalogo.n; i++) cajas.push(cajaAlrededor(catalogo.lat[i], catalogo.lon[i]))
+    for (const v of [...otros, ...nuevos]) if (v.lat != null && v.lon != null) cajas.push(cajaAlrededor(v.lat, v.lon))
+    cajasGoogle = indexar(cajas)
+    // los tiles que ya salieron vacíos se vuelven a pedir con las cajas nuevas
+    const fuente = mapa.current?.getSource('google') as RasterTileSource | undefined
+    fuente?.setTiles(['gtile://{z}/{x}/{y}'])
+  }, [sitios, catalogo, otros, nuevos])
+
   useEffect(() => {
     const m = mapa.current
-    if (!HAY_GOOGLE || !m || !listo || !sel?.caja) return
-    const limites = sel.caja
+    if (!HAY_GOOGLE || !m || !listo) return
     let vivo = true
-    let token = ''
+    maplibregl.addProtocol('gtile', async ({ url }, abort) => {
+      const [z, x, y] = url.slice('gtile://'.length).split('/').map(Number)
+      if (!tokenGoogle || !tocaAlguna(cajaDelTile(z, x, y))) return { data: await tileVacio() }
+      const r = await fetch(tilesGoogle(tokenGoogle).replace('{z}', String(z)).replace('{x}', String(x)).replace('{y}', String(y)), { signal: abort.signal })
+      if (!r.ok) throw new Error(`Google tile ${r.status}`)
+      return { data: await r.arrayBuffer() }
+    })
     const acreditar = () => {
-      if (!token || m.getZoom() < ZOOM_GOOGLE) return setCredito('')
       const b = m.getBounds()
-      creditoGoogle(token, m.getZoom(), [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]).then((c) => vivo && setCredito(c), () => null)
+      const vista: Caja = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]
+      if (!tokenGoogle || m.getZoom() < ZOOM_GOOGLE || !tocaAlguna(vista)) return setCredito('')
+      creditoGoogle(tokenGoogle, m.getZoom(), vista).then((c) => vivo && setCredito(c), () => null)
     }
     sesionGoogle().then(
       (t) => {
         if (!vivo || mapa.current !== m) return
-        token = t
-        m.addSource('google', { type: 'raster', tiles: [tilesGoogle(t)], tileSize: 256, bounds: limites, minzoom: ZOOM_GOOGLE, maxzoom: 20 })
+        tokenGoogle = t
+        m.addSource('google', { type: 'raster', tiles: ['gtile://{z}/{x}/{y}'], tileSize: 256, minzoom: ZOOM_GOOGLE, maxzoom: 20 })
         m.addLayer({ id: 'google', type: 'raster', source: 'google', minzoom: ZOOM_GOOGLE, paint: { 'raster-fade-duration': 200 } }, m.getLayer('indice') ? 'indice' : m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined)
         m.on('moveend', acreditar)
         acreditar()
@@ -706,13 +781,18 @@ export default function Mapa() {
     return () => {
       vivo = false
       setCredito('')
+      maplibregl.removeProtocol('gtile')
       if (mapa.current !== m) return
       m.off('moveend', acreditar)
       if (m.getLayer('google')) m.removeLayer('google')
       if (m.getSource('google')) m.removeSource('google')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listo, idSel])
+  }, [listo])
+
+  // al cerrar la ficha vuelve la vista de Google, que en el mapa general es la única de alta resolución
+  useEffect(() => {
+    if (HAY_GOOGLE && !idSel) setVista('google')
+  }, [idSel])
 
   // the chosen view: Google covers Sentinel-2 or hides; with Google the outline fill doesn't tint the image
   useEffect(() => {
@@ -720,7 +800,7 @@ export default function Mapa() {
     if (!m || !listo) return
     const aplicar = () => {
       if (m.getLayer('google')) m.setLayoutProperty('google', 'visibility', vista === 'google' ? 'visible' : 'none')
-      if (m.getLayer('contorno-relleno')) m.setPaintProperty('contorno-relleno', 'fill-opacity', ['interpolate', ['linear'], ['zoom'], 9, 0, 10.5, 0.08, ZOOM_GOOGLE + 1, vista === 'google' && idSel ? 0 : 0.08])
+      if (m.getLayer('contorno-relleno')) m.setPaintProperty('contorno-relleno', 'fill-opacity', ['interpolate', ['linear'], ['zoom'], 9, 0, 10.5, 0.08, ZOOM_GOOGLE + 1, vista === 'google' && HAY_GOOGLE ? 0 : 0.08])
     }
     aplicar()
     m.on('styledata', aplicar)
@@ -767,7 +847,7 @@ export default function Mapa() {
           options={opciones}
         />
         {(sel || punto) && (
-          <button className="btn float" onClick={() => go('mapa')}>
+          <button className="btn float" onClick={verOtros}>
             {t('Ver todo')}
           </button>
         )}
@@ -839,6 +919,10 @@ export default function Mapa() {
         · Sentinel-2:{' '}
         <a href="https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a" target="_blank" rel="noreferrer">
           {t('ESA Copernicus, vía Planetary Computer')}
+        </a>{' '}
+        · {t('Mosaico:')}{' '}
+        <a href="https://s2maps.eu" target="_blank" rel="noreferrer">
+          {t('Sentinel-2 cloudless 2024 de EOX (CC BY-NC-SA 4.0)')}
         </a>
       </div>
       {selOtro && (selOtro.tipo === 'mancha' ? <FichaNuevo v={selOtro} lugar={lugarDe(selOtro.frame)} /> : <FichaCatalogo v={selOtro} lugar={lugarDe(selOtro.frame)} />)}

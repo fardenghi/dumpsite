@@ -13,7 +13,7 @@ The map is the background of the whole site and is always visible. The sections 
 
 | Route | What it shows |
 |---|---|
-| `#/mapa` | Arranca en el AMBA. Muestra **todo el catálogo de basurales** (66.981) y los 30 frames de NISAR procesados; ver "Capas del mapa". Al abrir un sitio curado del AMBA: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha. "Ir a un sitio" lista todo lo que tiene dato de radar, agrupado por país y con buscador |
+| `#/mapa` | Arranca en el AMBA. Muestra **todo el catálogo de basurales** (66.981) y los 30 frames de NISAR procesados; ver "Capas del mapa". Al abrir un sitio curado del AMBA: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha. "Ir a un sitio" lista todo lo que tiene dato de radar, agrupado por país y con buscador. Con `VITE_GOOGLE_MAPS_KEY`, desde zoom 13 la imagen de Google aparece sola en la caja de cada basural (la de los recortes en los sitios curados, 1,5 km alrededor del punto en el resto), sin tener que abrirlo; afuera de las cajas no se pide nada a Google |
 | `#/inicio` | Panel "Resumen": cantidad de sitios, ranking de insomnio y el caso Luján |
 | `#/sitios` | Panel con la lista filtrable por frame y por estado del radar, exportable a CSV. Arranca en el AMBA |
 | `#/modelo` | Panel con la regla par por par (con un sitio de ejemplo), el embudo de la grilla a las manchas candidatas, los umbrales calibrados, **el modelo de abierto contra cerrado con sus métricas** (si `modelo.json` las trae) y el clasificador por mancha propuesto, que todavía no tiene métricas |

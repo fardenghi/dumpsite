@@ -7,6 +7,7 @@ const MAX = 4000 // entries; when exceeded, the oldest are deleted
 
 const guardable = (url) =>
   url.hostname === 'gibs.earthdata.nasa.gov' ||
+  url.hostname === 'tiles.maps.eox.at' ||
   (url.hostname === 'planetarycomputer.microsoft.com' && url.pathname.includes('/tiles/')) ||
   (url.origin === self.location.origin && url.pathname.includes('/escenas/'))
 

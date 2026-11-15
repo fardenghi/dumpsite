@@ -96,6 +96,8 @@ const EN: Record<string, string> = {
   ' · Otros frames: catálogo de basurales (OpenStreetMap vía Overture Maps, EPA LMOP)': ' · Other frames: dump-site catalog (OpenStreetMap via Overture Maps, EPA LMOP)',
   'Imágenes:': 'Imagery:',
   'ESA Copernicus, vía Planetary Computer': 'ESA Copernicus, via Planetary Computer',
+  'Mosaico:': 'Mosaic:',
+  'Sentinel-2 cloudless 2024 de EOX (CC BY-NC-SA 4.0)': 'Sentinel-2 cloudless 2024 by EOX (CC BY-NC-SA 4.0)',
   Insomnio: 'Insomnia',
   Superficie: 'Area',
   Coherencia: 'Coherence',
