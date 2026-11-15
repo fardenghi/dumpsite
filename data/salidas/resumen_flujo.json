@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generado": "2026-11-14T22:23:22",
+  "generado": "2026-11-15T15:33:18",
   "generado_por": "herramientas/flujo.py",
   "aviso": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados."
  },
@@ -14,7 +14,27 @@
   "USA_NH_HILLSBOROUGH",
   "USA_NY_RICHMOND",
   "DELHI",
-  "YAKARTA"
+  "YAKARTA",
+  "USA_MI_WAYNE",
+  "USA_PA_BERKS",
+  "USA_TX_DALLAS",
+  "USA_PA_ALLEGHENY",
+  "USA_TX_HARRIS",
+  "USA_CA_SAN_BERNARDINO",
+  "USA_CA_SAN_JOAQUIN",
+  "USA_AZ_MARICOPA",
+  "USA_OH_MAHONING",
+  "USA_MD_FREDERICK",
+  "USA_GA_FORSYTH",
+  "USA_OH_HAMILTON",
+  "USA_IL_ST_CLAIR",
+  "USA_FL_OSCEOLA",
+  "USA_VA_ROCKINGHAM",
+  "USA_CA_TULARE",
+  "USA_SC_GREENVILLE",
+  "USA_CA_LOS_ANGELES",
+  "USA_CA_RIVERSIDE",
+  "USA_IN_FULTON"
  ],
  "entradas": {
   "AMBA": {
@@ -25,7 +45,7 @@
    ],
    "manchas": "salidas/AMBA/manchas.geojson",
    "n_manchas_candidatas": 219,
-   "cruce": "salidas/cruce_manchas_catalogo.parquet",
+   "cruce": "salidas/AMBA/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
    "predicciones": null,
    "nota": null
@@ -40,7 +60,7 @@
    "n_manchas_candidatas": 294,
    "cruce": "salidas/LOS_ANGELES/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "USA_OH_LAKE": {
@@ -53,7 +73,7 @@
    "n_manchas_candidatas": 65,
    "cruce": "salidas/USA_OH_LAKE/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "USA_MD_HOWARD": {
@@ -66,7 +86,7 @@
    "n_manchas_candidatas": 45,
    "cruce": "salidas/USA_MD_HOWARD/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "CDMX": {
@@ -79,7 +99,7 @@
    "n_manchas_candidatas": 276,
    "cruce": "salidas/CDMX/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "PRI_PONCE": {
@@ -92,7 +112,7 @@
    "n_manchas_candidatas": 513,
    "cruce": "salidas/PRI_PONCE/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "USA_NH_HILLSBOROUGH": {
@@ -105,7 +125,7 @@
    "n_manchas_candidatas": 73,
    "cruce": "salidas/USA_NH_HILLSBOROUGH/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "USA_NY_RICHMOND": {
@@ -118,7 +138,7 @@
    "n_manchas_candidatas": 274,
    "cruce": "salidas/USA_NY_RICHMOND/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "DELHI": {
@@ -131,7 +151,7 @@
    "n_manchas_candidatas": 289,
    "cruce": "salidas/DELHI/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/predicciones.parquet",
    "nota": null
   },
   "YAKARTA": {
@@ -144,32 +164,294 @@
    "n_manchas_candidatas": 530,
    "cruce": "salidas/YAKARTA/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
+   "predicciones": "salidas/predicciones.parquet",
+   "nota": null
+  },
+  "USA_MI_WAYNE": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_MI_WAYNE/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_MI_WAYNE/manchas.geojson",
+   "n_manchas_candidatas": 112,
+   "cruce": "salidas/USA_MI_WAYNE/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_PA_BERKS": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_PA_BERKS/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_PA_BERKS/manchas.geojson",
+   "n_manchas_candidatas": 108,
+   "cruce": "salidas/USA_PA_BERKS/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_TX_DALLAS": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_TX_DALLAS/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_TX_DALLAS/manchas.geojson",
+   "n_manchas_candidatas": 59,
+   "cruce": "salidas/USA_TX_DALLAS/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_PA_ALLEGHENY": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_PA_ALLEGHENY/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_PA_ALLEGHENY/manchas.geojson",
+   "n_manchas_candidatas": 50,
+   "cruce": "salidas/USA_PA_ALLEGHENY/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_TX_HARRIS": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_TX_HARRIS/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_TX_HARRIS/manchas.geojson",
+   "n_manchas_candidatas": 301,
+   "cruce": "salidas/USA_TX_HARRIS/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_CA_SAN_BERNARDINO": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_CA_SAN_BERNARDINO/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_CA_SAN_BERNARDINO/manchas.geojson",
+   "n_manchas_candidatas": 149,
+   "cruce": "salidas/USA_CA_SAN_BERNARDINO/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_CA_SAN_JOAQUIN": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_CA_SAN_JOAQUIN/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_CA_SAN_JOAQUIN/manchas.geojson",
+   "n_manchas_candidatas": 132,
+   "cruce": "salidas/USA_CA_SAN_JOAQUIN/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_AZ_MARICOPA": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_AZ_MARICOPA/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_AZ_MARICOPA/manchas.geojson",
+   "n_manchas_candidatas": 99,
+   "cruce": "salidas/USA_AZ_MARICOPA/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_OH_MAHONING": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_OH_MAHONING/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_OH_MAHONING/manchas.geojson",
+   "n_manchas_candidatas": 10,
+   "cruce": "salidas/USA_OH_MAHONING/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_MD_FREDERICK": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_MD_FREDERICK/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_MD_FREDERICK/manchas.geojson",
+   "n_manchas_candidatas": 22,
+   "cruce": "salidas/USA_MD_FREDERICK/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_GA_FORSYTH": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_GA_FORSYTH/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_GA_FORSYTH/manchas.geojson",
+   "n_manchas_candidatas": 8,
+   "cruce": "datos/flujo/USA_GA_FORSYTH/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_OH_HAMILTON": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_OH_HAMILTON/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_OH_HAMILTON/manchas.geojson",
+   "n_manchas_candidatas": 142,
+   "cruce": "salidas/USA_OH_HAMILTON/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_IL_ST_CLAIR": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_IL_ST_CLAIR/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_IL_ST_CLAIR/manchas.geojson",
+   "n_manchas_candidatas": 62,
+   "cruce": "salidas/USA_IL_ST_CLAIR/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_FL_OSCEOLA": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_FL_OSCEOLA/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_FL_OSCEOLA/manchas.geojson",
+   "n_manchas_candidatas": 234,
+   "cruce": "salidas/USA_FL_OSCEOLA/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_VA_ROCKINGHAM": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_VA_ROCKINGHAM/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_VA_ROCKINGHAM/manchas.geojson",
+   "n_manchas_candidatas": 37,
+   "cruce": "salidas/USA_VA_ROCKINGHAM/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_CA_TULARE": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_CA_TULARE/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_CA_TULARE/manchas.geojson",
+   "n_manchas_candidatas": 107,
+   "cruce": "datos/flujo/USA_CA_TULARE/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_SC_GREENVILLE": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_SC_GREENVILLE/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_SC_GREENVILLE/manchas.geojson",
+   "n_manchas_candidatas": 205,
+   "cruce": "salidas/USA_SC_GREENVILLE/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_CA_LOS_ANGELES": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_CA_LOS_ANGELES/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_CA_LOS_ANGELES/manchas.geojson",
+   "n_manchas_candidatas": 9,
+   "cruce": "datos/flujo/USA_CA_LOS_ANGELES/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_CA_RIVERSIDE": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_CA_RIVERSIDE/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_CA_RIVERSIDE/manchas.geojson",
+   "n_manchas_candidatas": 82,
+   "cruce": "salidas/USA_CA_RIVERSIDE/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": null,
+   "nota": null
+  },
+  "USA_IN_FULTON": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/USA_IN_FULTON/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/USA_IN_FULTON/manchas.geojson",
+   "n_manchas_candidatas": 17,
+   "cruce": "datos/flujo/USA_IN_FULTON/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
    "predicciones": null,
    "nota": null
   }
  },
  "modelo": {
-  "hay_metricas": false,
-  "validado": false,
-  "motivo": "no hay salidas/metricas.json (prompt 4)"
+  "hay_metricas": true,
+  "validado": true,
+  "motivo": "validado en 9 frames"
  },
  "total": {
   "complejos_por_veredicto": {
-   "no_alcanza": 186,
-   "activo_conocido": 29,
-   "quieto_radar": 24,
-   "cerrado_despierto": 13,
-   "cerrado_quieto": 7
+   "no_alcanza": 342,
+   "activo_conocido": 80,
+   "quieto_radar": 53,
+   "cerrado_despierto": 20,
+   "cerrado_quieto": 14
   },
   "manchas_por_veredicto": {
-   "sin_clasificar": 2523
+   "descartada": 2149,
+   "sin_clasificar": 2098,
+   "posible_nuevo": 163
   },
-  "activos": 42,
-  "activos_ya_conocidos": 42,
-  "posibles_nuevos": 0,
-  "cerrados_pero_despiertos": 13,
-  "cerrados_y_quietos": 7,
-  "frase": "En los 10 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA), el radar ve despiertos 42 basurales que ya estaban en los catálogos; de ellos, 13 figuran cerrados pero siguen despiertos (sin verificar a mano), y 7 figuran cerrados y salen quietos. (Sin modelo validado: no se cuentan nuevos.)"
+  "activos": 263,
+  "activos_ya_conocidos": 100,
+  "posibles_nuevos": 163,
+  "cerrados_pero_despiertos": 20,
+  "cerrados_y_quietos": 14,
+  "frase": "En los 30 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON), el radar y el modelo encuentran 263 basurales activos: 100 ya estaban en los catálogos y 163 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
  },
  "por_frame": {
   "AMBA": {
@@ -204,14 +486,15 @@
     "cerrado_quieto": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 283
+    "descartada": 226,
+    "posible_nuevo": 57
    },
-   "activos": 11,
+   "activos": 68,
    "activos_ya_conocidos": 11,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 57,
    "cerrados_pero_despiertos": 5,
    "cerrados_y_quietos": 1,
-   "frase": "En los frames procesados, el radar ve 11 basurales activos: 11 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 5 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 68 basurales activos: 11 ya estaban en los catálogos y 57 son posibles nuevos; de los conocidos, 5 figuran cerrados pero siguen despiertos."
   },
   "USA_OH_LAKE": {
    "ciudad": "Painesville, Lake, OH (alrededor de Industrial Rayon Corporation Landfill)",
@@ -225,14 +508,15 @@
     "activo_conocido": 2
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 57
+    "descartada": 52,
+    "posible_nuevo": 5
    },
-   "activos": 6,
+   "activos": 11,
    "activos_ya_conocidos": 6,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 5,
    "cerrados_pero_despiertos": 4,
    "cerrados_y_quietos": 3,
-   "frase": "En los frames procesados, el radar ve 6 basurales activos: 6 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 4 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 11 basurales activos: 6 ya estaban en los catálogos y 5 son posibles nuevos; de los conocidos, 4 figuran cerrados pero siguen despiertos."
   },
   "USA_MD_HOWARD": {
    "ciudad": "Marriottsville, Howard, MD (alrededor de Alpha Ridge Landfill)",
@@ -245,14 +529,15 @@
     "cerrado_despierto": 2
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 41
+    "descartada": 34,
+    "posible_nuevo": 7
    },
-   "activos": 4,
+   "activos": 11,
    "activos_ya_conocidos": 4,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 7,
    "cerrados_pero_despiertos": 2,
    "cerrados_y_quietos": 0,
-   "frase": "En los frames procesados, el radar ve 4 basurales activos: 4 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 2 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 11 basurales activos: 4 ya estaban en los catálogos y 7 son posibles nuevos; de los conocidos, 2 figuran cerrados pero siguen despiertos."
   },
   "CDMX": {
    "ciudad": "Ciudad de México",
@@ -264,14 +549,15 @@
     "quieto_radar": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 270
+    "descartada": 238,
+    "posible_nuevo": 32
    },
-   "activos": 5,
+   "activos": 37,
    "activos_ya_conocidos": 5,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 32,
    "cerrados_pero_despiertos": 0,
    "cerrados_y_quietos": 0,
-   "frase": "En los frames procesados, el radar ve 5 basurales activos: 5 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 37 basurales activos: 5 ya estaban en los catálogos y 32 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
   },
   "PRI_PONCE": {
    "ciudad": "Ponce, Ponce, PR (alrededor de Ponce Landfill)",
@@ -284,14 +570,15 @@
     "activo_conocido": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 512
+    "descartada": 510,
+    "posible_nuevo": 2
    },
-   "activos": 1,
+   "activos": 3,
    "activos_ya_conocidos": 1,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 2,
    "cerrados_pero_despiertos": 0,
    "cerrados_y_quietos": 2,
-   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 3 basurales activos: 1 ya estaban en los catálogos y 2 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
   },
   "USA_NH_HILLSBOROUGH": {
    "ciudad": "Nashua, Hillsborough, NH (alrededor de Four Hills Landfill)",
@@ -303,14 +590,15 @@
     "cerrado_despierto": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 72
+    "descartada": 67,
+    "posible_nuevo": 5
    },
-   "activos": 1,
+   "activos": 6,
    "activos_ya_conocidos": 1,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 5,
    "cerrados_pero_despiertos": 1,
    "cerrados_y_quietos": 0,
-   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 6 basurales activos: 1 ya estaban en los catálogos y 5 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
   },
   "USA_NY_RICHMOND": {
    "ciudad": "Staten Island, Richmond, NY (alrededor de Fresh Kills SLF)",
@@ -322,14 +610,15 @@
     "cerrado_despierto": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 269
+    "descartada": 241,
+    "posible_nuevo": 28
    },
-   "activos": 4,
+   "activos": 32,
    "activos_ya_conocidos": 4,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 28,
    "cerrados_pero_despiertos": 1,
    "cerrados_y_quietos": 0,
-   "frase": "En los frames procesados, el radar ve 4 basurales activos: 4 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 32 basurales activos: 4 ya estaban en los catálogos y 28 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
   },
   "DELHI": {
    "ciudad": "Delhi",
@@ -340,14 +629,15 @@
     "activo_conocido": 3
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 285
+    "descartada": 263,
+    "posible_nuevo": 22
    },
-   "activos": 3,
+   "activos": 25,
    "activos_ya_conocidos": 3,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 22,
    "cerrados_pero_despiertos": 0,
    "cerrados_y_quietos": 0,
-   "frase": "En los frames procesados, el radar ve 3 basurales activos: 3 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 25 basurales activos: 3 ya estaban en los catálogos y 22 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
   },
   "YAKARTA": {
    "ciudad": "Yakarta",
@@ -359,14 +649,393 @@
     "quieto_radar": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 523
+    "descartada": 518,
+    "posible_nuevo": 5
+   },
+   "activos": 9,
+   "activos_ya_conocidos": 4,
+   "posibles_nuevos": 5,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 9 basurales activos: 4 ya estaban en los catálogos y 5 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_MI_WAYNE": {
+   "ciudad": "New Boston, Wayne, MI (alrededor de Carleton Farms Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 10,
+    "quieto_radar": 5,
+    "activo_conocido": 3,
+    "cerrado_quieto": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 109
+   },
+   "activos": 3,
+   "activos_ya_conocidos": 3,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 3 basurales activos: 3 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_PA_BERKS": {
+   "ciudad": "Morgantown, Berks, PA (alrededor de Conestoga LF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 8,
+    "quieto_radar": 1,
+    "activo_conocido": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 107
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 1,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_TX_DALLAS": {
+   "ciudad": "Dallas, Dallas, TX (alrededor de McCommas Bluff Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 5,
+    "activo_conocido": 3
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 57
+   },
+   "activos": 3,
+   "activos_ya_conocidos": 3,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 3 basurales activos: 3 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_PA_ALLEGHENY": {
+   "ciudad": "Monroeville, Allegheny, PA (alrededor de Monroeville LF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 6,
+    "activo_conocido": 5,
+    "quieto_radar": 2
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 45
+   },
+   "activos": 5,
+   "activos_ya_conocidos": 5,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 5 basurales activos: 5 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_TX_HARRIS": {
+   "ciudad": "Humble, Harris, TX (alrededor de Atascocita RDF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "activo_conocido": 17,
+    "no_alcanza": 5
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 284
+   },
+   "activos": 17,
+   "activos_ya_conocidos": 17,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 17 basurales activos: 17 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_CA_SAN_BERNARDINO": {
+   "ciudad": "Rialto, San Bernardino, CA (alrededor de Mid-Valley Sanitary LF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 7,
+    "activo_conocido": 4,
+    "cerrado_despierto": 2,
+    "cerrado_quieto": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 142
+   },
+   "activos": 6,
+   "activos_ya_conocidos": 6,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 2,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 6 basurales activos: 6 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 2 figuran cerrados pero siguen despiertos."
+  },
+  "USA_CA_SAN_JOAQUIN": {
+   "ciudad": "Manteca, San Joaquin, CA (alrededor de Forward Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 4,
+    "activo_conocido": 3,
+    "cerrado_despierto": 2,
+    "quieto_radar": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 127
+   },
+   "activos": 5,
+   "activos_ya_conocidos": 5,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 2,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 5 basurales activos: 5 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 2 figuran cerrados pero siguen despiertos."
+  },
+  "USA_AZ_MARICOPA": {
+   "ciudad": "Surprise, Maricopa, AZ (alrededor de Northwest Regional MSW Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 9,
+    "activo_conocido": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 98
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 1,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_OH_MAHONING": {
+   "ciudad": "Salem, Mahoning, OH (alrededor de CLD Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 9,
+    "quieto_radar": 4,
+    "cerrado_quieto": 1,
+    "activo_conocido": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 9
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 1,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_MD_FREDERICK": {
+   "ciudad": "Frederick, Frederick, MD (alrededor de Reich's Ford Road SLF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 4,
+    "quieto_radar": 3,
+    "cerrado_quieto": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 22
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_GA_FORSYTH": {
+   "ciudad": "Ball Ground, Forsyth, GA (alrededor de Eagle Point Landfill LLC)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 8,
+    "quieto_radar": 3
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 8
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_OH_HAMILTON": {
+   "ciudad": "Cincinnati, Hamilton, OH (alrededor de Rumpke SLF, Inc.)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 23,
+    "quieto_radar": 4,
+    "cerrado_despierto": 1,
+    "activo_conocido": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 139
+   },
+   "activos": 2,
+   "activos_ya_conocidos": 2,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 1,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 2 basurales activos: 2 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
+  },
+  "USA_IL_ST_CLAIR": {
+   "ciudad": "East St. Louis, St. Clair, IL (alrededor de Milam Recycling and Disposal Facility)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 6,
+    "activo_conocido": 3,
+    "cerrado_quieto": 1,
+    "quieto_radar": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 59
+   },
+   "activos": 3,
+   "activos_ya_conocidos": 3,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 3 basurales activos: 3 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_FL_OSCEOLA": {
+   "ciudad": "St. Cloud, Osceola, FL (alrededor de J.E.D. Solid Waste Management Facility)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 12,
+    "activo_conocido": 6,
+    "quieto_radar": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 228
+   },
+   "activos": 6,
+   "activos_ya_conocidos": 6,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 6 basurales activos: 6 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_VA_ROCKINGHAM": {
+   "ciudad": "Harrisonburg, Rockingham, VA (alrededor de Rockingham County Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 4,
+    "quieto_radar": 2
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 37
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_CA_TULARE": {
+   "ciudad": "Visalia, Tulare, CA (alrededor de Visalia Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 10
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 107
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_SC_GREENVILLE": {
+   "ciudad": "Honea Path, Greenville, SC (alrededor de Twin Chimneys Landfill)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 5,
+    "activo_conocido": 3,
+    "cerrado_despierto": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 202
    },
    "activos": 4,
    "activos_ya_conocidos": 4,
    "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 1,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 4 basurales activos: 4 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
+  },
+  "USA_CA_LOS_ANGELES": {
+   "ciudad": "Palmdale, Los Angeles, CA (alrededor de Antelope Valley Recycling and Disposal Facility)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 4,
+    "cerrado_quieto": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 9
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "USA_CA_RIVERSIDE": {
+   "ciudad": "Corona, Riverside, CA (alrededor de El Sobrante SLF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 7,
+    "cerrado_quieto": 1,
+    "quieto_radar": 1,
+    "cerrado_despierto": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 81
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 1,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 1,
+   "cerrados_y_quietos": 1,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 1 figuran cerrados pero siguen despiertos."
+  },
+  "USA_IN_FULTON": {
+   "ciudad": "Argos, Fulton, IN (alrededor de County Line LF)",
+   "pais": "USA",
+   "reservado_prueba": false,
+   "complejos_por_veredicto": {
+    "no_alcanza": 10,
+    "quieto_radar": 1
+   },
+   "manchas_por_veredicto": {
+    "sin_clasificar": 17
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
    "cerrados_pero_despiertos": 0,
    "cerrados_y_quietos": 0,
-   "frase": "En los frames procesados, el radar ve 4 basurales activos: 4 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
   }
  },
  "actividad": {
@@ -484,60 +1153,60 @@
   },
   "USA": {
    "abiertos_que_salen_despiertos": {
-    "k": 8,
-    "n": 11,
-    "tasa": 0.727,
+    "k": 16,
+    "n": 40,
+    "tasa": 0.4,
     "ic95": [
-     0.434,
-     0.903
+     0.263,
+     0.554
     ]
    },
    "abiertos_que_salen_quietos": {
-    "k": 3,
-    "n": 11,
-    "tasa": 0.273,
+    "k": 24,
+    "n": 40,
+    "tasa": 0.6,
     "ic95": [
-     0.097,
-     0.566
+     0.446,
+     0.737
     ]
    },
    "cerrados_que_salen_quietos": {
-    "k": 4,
-    "n": 14,
-    "tasa": 0.286,
+    "k": 10,
+    "n": 26,
+    "tasa": 0.385,
     "ic95": [
-     0.117,
-     0.546
+     0.224,
+     0.575
     ]
    },
    "cerrados_que_salen_despiertos": {
-    "k": 10,
-    "n": 14,
-    "tasa": 0.714,
+    "k": 16,
+    "n": 26,
+    "tasa": 0.615,
     "ic95": [
-     0.454,
-     0.883
+     0.425,
+     0.776
     ]
    },
    "concordancia": {
-    "k": 12,
-    "n": 25,
-    "tasa": 0.48,
+    "k": 26,
+    "n": 66,
+    "tasa": 0.394,
     "ic95": [
-     0.3,
-     0.665
+     0.285,
+     0.515
     ]
    },
    "el_radar_no_alcanza": {
-    "k": 19,
-    "n": 44,
-    "tasa": 0.432,
+    "k": 113,
+    "n": 179,
+    "tasa": 0.631,
     "ic95": [
-     0.297,
-     0.578
+     0.559,
+     0.699
     ]
    }
   }
  },
- "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 58 sitios de estado conocido que el radar midió, 44 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, PRI, USA), no 'en el mundo'."
+ "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 193 sitios de estado conocido que el radar midió, 179 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, PRI, USA), no 'en el mundo'."
 }
