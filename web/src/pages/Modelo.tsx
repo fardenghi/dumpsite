@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Dot, PageHead, Picker, dec, fecha, num, pct, radar } from '../components/ui'
 import { useSitios } from '../data/api'
 import { UMBRAL_BAJO } from '../data/types'
+import { useVeredictos } from '../data/veredictos'
 import { getLang, t } from '../i18n'
 import cal from '../data/seed/calibracion.json'
 import candidatos from '../data/seed/candidatos.json'
@@ -56,12 +57,6 @@ const umbrales = () => [
     nombre: t('Eco mínimo, dB'), valor: ECO_MIN, desde: R.eco_min_db.desde, hasta: R.eco_min_db.hasta, min: -20, max: -8,
     nota: t('Entre lo liso conocido ({0}, {1}) y el relleno con menos eco ({2}, {3})', R.eco_min_db.liso, corto(R.eco_min_db.desde), R.eco_min_db.relleno, corto(R.eco_min_db.hasta)),
   },
-]
-const limites = () => [
-  { que: t('Pasto y monte'), porque: t('Pierden coherencia igual que un relleno') },
-  { que: t('Predios chicos'), porque: t('Menos de {0} píxeles de 80 m', cal.parametros.min_px_sitio) },
-  { que: t('Un año entero'), porque: t('Hay datos del {0} al {1}', fecha(indice.desde), fecha(indice.hasta, true)) },
-  { que: t('Validación independiente'), porque: t('Sólo {0} rellenos y {1} controles', CON.rellenos, CON.controles) },
 ]
 
 // world dump-site catalog the classifier is trained with (data/catalogos/basurales/basurales_mundo.json)
@@ -132,6 +127,7 @@ function Medidor({ nombre, valor, texto, umbral, textoUmbral, min = 0, max = 1, 
 export default function Modelo() {
   const { sitios } = useSitios()
   const [id, setId] = useState('norte-iii')
+  const frames = useVeredictos()?.frames?.length ?? 0
   if (!sitios) return null
   const conFicha = sitios.filter((s) => FICHAS[s.id]).sort((a, b) => b.insomnio - a.insomnio)
   const s = conFicha.find((x) => x.id === id) ?? conFicha[0]
@@ -322,15 +318,12 @@ export default function Modelo() {
       </section>
 
       <section className="panel section">
-        <h3 style={{ marginBottom: 12 }}>{t('Lo que no ve')}</h3>
-        <ul className="limits">
-          {limites().map((l) => (
-            <li key={l.que}>
-              <b>{l.que}</b>
-              <span>{l.porque}</span>
-            </li>
-          ))}
-        </ul>
+        <h3 style={{ marginBottom: 8 }}>{t('Lo que nos queda')}</h3>
+        <p>
+          {frames
+            ? t('Correrlo en el resto del mundo. Por el tiempo del hackathon priorizamos algunas regiones: lo corrimos en {0} frames de NISAR.', frames)
+            : t('Correrlo en el resto del mundo. Por el tiempo del hackathon priorizamos algunas regiones.')}
+        </p>
       </section>
 
       <Fuentes />

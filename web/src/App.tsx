@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
-import { Dot } from './components/ui'
-import { DEMO, useSitios } from './data/api'
+import { Dot, num } from './components/ui'
 import { t, useLang } from './i18n'
 import Inicio from './pages/Inicio'
 import Modelo from './pages/Modelo'
@@ -35,18 +34,14 @@ export function go(page: string, query = '') {
   location.hash = `/${page}${query ? '?' + query : ''}`
 }
 
-export function Marca() {
-  const { sitios } = useSitios()
-  const despiertos = sitios?.filter((s) => s.radar === 'despierto').length
+/** Brand and the awake count. It counts the same sites as the map legend: the curated AMBA ones plus every
+ * catalog polygon with NISAR data from the other frames. Mapa passes the numbers, so both always agree. */
+export function Marca({ despiertos, total, frames }: { despiertos: number; total: number; frames: number }) {
   return (
-    <a
-      className="marca"
-      href="#/mapa"
-      title={DEMO ? t('Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026') : undefined}
-    >
+    <a className="marca" href="#/mapa" title={frames ? t('Datos reales precalculados de NISAR (GUNW) en {0} frames procesados', frames) : undefined}>
       <Dot radar="despierto" />
       <b>Dumpsite</b>
-      {sitios && <span>{t('{0} de {1} despiertos', despiertos ?? 0, sitios.length)}</span>}
+      {total > 0 && <span>{t('{0} de {1} despiertos', num(despiertos), num(total))}</span>}
     </a>
   )
 }

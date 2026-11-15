@@ -830,21 +830,20 @@ export default function Mapa() {
     }
   }, [listo, vista, idSel])
 
-  // "Ir a un sitio": everything with radar data, grouped by country. Argentina first and, within each country,
-  // the possible new ones, then the named ones and at the end the unnamed polygons
+  // "Ir a un sitio": only the awake sites (red on the map), grouped by country. Argentina first and, within each
+  // country, the named ones and at the end the unnamed polygons
   const idioma = getLang()
   const opciones = useMemo(() => {
     type Op = Opcion<string> & { orden: number }
     const paisDe = (frame: string) => nombrePais(porFrame.get(frame)?.pais ?? (frame === FRAME_AMBA ? 'ARG' : frame.split('_')[0]))
     const ops: Op[] = [
-      ...(sitios ?? []).map((s) => ({ value: s.id, label: t(s.nombre), sub: s.lugar, radar: s.radar, grupo: nombrePais(s.pais), orden: 1 })),
-      ...nuevos.map((v) => ({ value: v.id, label: `${t('Posible basural nuevo')} · ${num(Math.round(v.area_ha ?? 0))} ha`, sub: `${lugarDe(v.frame)} · ${v.id}`, radar: 'nuevo' as const, grupo: paisDe(v.frame), orden: 0 })),
-      ...otros.map((v) => ({ value: v.id, label: v.nombre ?? `${t('Polígono sin nombre')} · ${v.id}`, sub: `${lugarDe(v.frame)} · ${veredicto(v.radar ?? 'no_alcanza')}`, radar: v.radar ?? ('no_alcanza' as const), grupo: paisDe(v.frame), orden: v.nombre ? 1 : 2 })),
+      ...(sitios ?? []).filter((s) => s.radar === 'despierto').map((s) => ({ value: s.id, label: t(s.nombre), sub: s.lugar, radar: s.radar, grupo: nombrePais(s.pais), orden: 1 })),
+      ...otros.filter((v) => v.radar === 'despierto').map((v) => ({ value: v.id, label: v.nombre ?? `${t('Polígono sin nombre')} · ${v.id}`, sub: lugarDe(v.frame), radar: 'despierto' as const, grupo: paisDe(v.frame), orden: v.nombre ? 1 : 2 })),
     ]
     const argentina = nombrePais('ARG')
     return ops.sort((a, b) => Number(b.grupo === argentina) - Number(a.grupo === argentina) || a.grupo!.localeCompare(b.grupo!, idioma) || a.orden - b.orden || a.label.localeCompare(b.label, idioma))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sitios, otros, nuevos, porFrame, idioma])
+  }, [sitios, otros, porFrame, idioma])
   const cuenta = useMemo(() => {
     const n = { despierto: 0, quieto: 0, no_alcanza: 0 }
     for (const s of sitios ?? []) n[s.radar]++
@@ -858,7 +857,7 @@ export default function Mapa() {
     <>
       <div className="map" ref={caja} />
       <div className={`map-top ${sel || punto ? 'con-ficha' : ''}`}>
-        <Marca />
+        <Marca despiertos={cuenta.despierto} total={cuenta.despierto + cuenta.quieto + cuenta.no_alcanza} frames={veredictos?.frames?.length ?? 0} />
         <Picker
           className="float"
           label={t('Ir a un sitio')}

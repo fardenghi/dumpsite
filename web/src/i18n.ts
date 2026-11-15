@@ -64,8 +64,12 @@ const EN: Record<string, string> = {
   // brand and navigation
   'Basurales que el radar NISAR de la NASA nunca ve quietos.': 'Dump sites that NASA’s NISAR radar never sees at rest.',
   '{0} de {1} despiertos': '{0} of {1} awake',
-  'Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026':
-    'Real, precomputed data: 15 NISAR pass comparisons (GUNW, 80 m) over Buenos Aires, from 06/25 to 10/12/2026',
+  'Lo que nos queda': 'What’s next',
+  'Correrlo en el resto del mundo. Por el tiempo del hackathon priorizamos algunas regiones: lo corrimos en {0} frames de NISAR.':
+    'Running it on the rest of the world. Given the hackathon’s time, we prioritized a few regions: we ran it on {0} NISAR frames.',
+  'Correrlo en el resto del mundo. Por el tiempo del hackathon priorizamos algunas regiones.':
+    'Running it on the rest of the world. Given the hackathon’s time, we prioritized a few regions.',
+  'Datos reales precalculados de NISAR (GUNW) en {0} frames procesados': 'Real, precomputed NISAR data (GUNW) across {0} processed frames',
   Resumen: 'Overview',
   Sitios: 'Sites',
   Modelo: 'Model',
@@ -205,14 +209,8 @@ const EN: Record<string, string> = {
   'Cientos de árboles de decisión, cada uno corrige al anterior': 'Hundreds of decision trees, each one correcting the previous',
   'Basural u otra cosa': 'Dump site or something else',
   'Clasificado como basural por el modelo: no es una confirmación': 'Classified as a dump site by the model: not a confirmation',
-  'Lo que no ve': 'What it can’t see',
-  'Pasto y monte': 'Grass and scrub',
-  'Pierden coherencia igual que un relleno': 'They lose coherence just like a landfill',
-  'Predios chicos': 'Small sites',
   'Menos de 8 píxeles de 80 m': 'Fewer than 8 pixels of 80 m',
-  'Un año entero': 'A full year',
   'Hay datos de junio a octubre de 2026': 'Data runs from June to October 2026',
-  'Validación independiente': 'Independent validation',
   'Sólo dos rellenos y cinco controles': 'Only two landfills and five controls',
   'todas las pasadas': 'all passes',
 
@@ -257,9 +255,6 @@ const EN: Record<string, string> = {
   'Desde {0}, aparecen manchas en la costa del Roggero': 'From {0} up, patches appear on the Roggero shore',
   'Con {0}, {1} ({2}) queda afuera': 'At {0}, {1} ({2}) is left out',
   'Entre lo liso conocido ({0}, {1}) y el relleno con menos eco ({2}, {3})': 'Between known smooth ground ({0}, {1}) and the landfill with the least echo ({2}, {3})',
-  'Menos de {0} píxeles de 80 m': 'Fewer than {0} pixels of 80 m',
-  'Hay datos del {0} al {1}': 'Data runs from {0} to {1}',
-  'Sólo {0} rellenos y {1} controles': 'Only {0} landfills and {1} controls',
 
   // names of the curated sites
   'Norte III, disposición final': 'Norte III, final disposal',
