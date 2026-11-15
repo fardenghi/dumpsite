@@ -1,30 +1,33 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import type { LecturaModelo, Radar, Registro, Sitio } from '../data/types'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { getLang, locale, t } from '../i18n'
+import type { Radar } from '../data/types'
 
-export const RADAR: Record<Radar, string> = { despierto: 'Despierto', quieto: 'Quieto', no_alcanza: 'No alcanza' }
-export const REGISTRO: Record<Registro, string> = { activo: 'Activo', cerrado: 'Cerrado', sin_registro: 'Sin registro' }
+const RADAR_ES: Record<Radar, string> = { despierto: 'Despierto', quieto: 'Quieto', no_alcanza: 'No alcanza' }
+/** Estado del radar en el idioma elegido. */
+export const radar = (r: Radar) => t(RADAR_ES[r])
 
-const nombres = new Intl.DisplayNames('es', { type: 'region' })
-export const pais = (iso: string) => nombres.of(iso) ?? iso
-
-const nf = new Intl.NumberFormat('es-AR')
-export const num = (n: number) => nf.format(n)
+export const num = (n: number) => new Intl.NumberFormat(locale()).format(n)
 export const pct = (x: number) => `${Math.round(x * 100)} %`
-export const coh = (x: number) => x.toFixed(2).replace('.', ',')
+/** Decimal con coma en castellano y punto en inglés. */
+export const dec = (n: number, d = 2) => {
+  const s = n.toFixed(d).replace('-', '−')
+  return getLang() === 'es' ? s.replace('.', ',') : s
+}
+export const coh = (x: number) => dec(x)
 
-const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
-/** "2026-10-12" -> "12 oct" (with the year if asked). No Date: doesn't depend on the time zone. */
+const MESES: Record<string, string[]> = {
+  es: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+}
+/** "2026-10-12" -> "12 oct" o "Oct 12" (con año si se pide). Sin Date: no depende del huso horario. */
 export function fecha(iso: string, conAnio = false) {
   const [a, m, d] = iso.split('-').map(Number)
-  return `${d} ${MESES[m - 1]}${conAnio ? ` ${a}` : ''}`
+  if (getLang() === 'en') return `${MESES.en[m - 1]} ${d}${conAnio ? `, ${a}` : ''}`
+  return `${d} ${MESES.es[m - 1]}${conAnio ? ` ${a}` : ''}`
 }
 
-/** The cross between what the registry says and what the radar sees. */
-export function veredicto(s: Sitio) {
-  if (s.radar === 'no_alcanza') return 'El radar no alcanza'
-  if (s.registro === 'cerrado') return s.radar === 'despierto' ? 'Cerrado pero despierto' : 'Cerrado y quieto'
-  return RADAR[s.radar]
-}
+/** Lo que ve el radar, nada más: la web no muestra el estado de ningún registro. */
+export const veredicto = (r: Radar) => (r === 'no_alcanza' ? t('El radar no alcanza') : radar(r))
 
 /** Radar de un sitio, o `nuevo` (mancha que no está en ningún catálogo) o `sin_dato` (catálogo sin NISAR procesado). */
 export type Marca = Radar | 'nuevo' | 'sin_dato'
@@ -66,67 +69,6 @@ export function Seg<T extends string>({ value, onChange, options }: { value: T; 
           {o.label}
         </button>
       ))}
-    </div>
-  )
-}
-
-/** Whether the site is in an official registry, and how. */
-export function RegistroTag({ s }: { s: Sitio }) {
-  if (s.registro === 'sin_registro') return <span className="reg no">Sin registro</span>
-  return (
-    <span className="reg">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M5 12.5l4.5 4.5L19 7.5" />
-      </svg>
-      Registrado · {s.registro === 'activo' ? 'activo' : `cerrado${s.cierre ? ` ${fecha(s.cierre, true)}` : ''}`}
-    </span>
-  )
-}
-
-/** The registry status of a catalog polygon, as it comes: if there's no status, none is made up. */
-export function RegistroCatalogo({ registro }: { registro: string | null }) {
-  if (registro === 'abierto' || registro === 'cerrado')
-    return (
-      <span className="reg">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M5 12.5l4.5 4.5L19 7.5" />
-        </svg>
-        Registro · {registro}
-      </span>
-    )
-  return <span className="reg no">{registro === 'contradictorio' ? 'Registro contradictorio' : 'En el catálogo, sin estado'}</span>
-}
-
-/** "compatible con abierto" -> "Compatible con abierto". */
-const mayuscula = (t: string) => t.charAt(0).toUpperCase() + t.slice(1)
-/** Model score, from 0 to 1, with a decimal comma. */
-export const puntaje = (p: number) => p.toFixed(2).replace('.', ',')
-
-/** What the open-versus-closed model says. Always labeled: it's not the registry nor the radar verdict. */
-export function SegunModelo({ m, corto }: { m: LecturaModelo; corto?: boolean }) {
-  const p = typeof m.p_abierto === 'number' ? m.p_abierto : null
-  if (corto)
-    return (
-      <span className="segun-modelo corto" title={m.origen || undefined}>
-        Según el modelo: {m.lectura}
-        {p != null && <span className="num"> · {puntaje(p)}</span>}
-      </span>
-    )
-  return (
-    <div className="segun-modelo">
-      <span className="src">Según el modelo · abierto o cerrado</span>
-      <b>{mayuscula(m.lectura)}</b>
-      {p != null && (
-        <div className="puntaje" role="img" aria-label={`Puntaje de abierto ${puntaje(p)}, de 0 a 1`}>
-          <div className="bar">
-            <div style={{ width: `${Math.round(Math.max(0, Math.min(1, p)) * 100)}%` }} />
-          </div>
-          <span className="num">{puntaje(p)}</span>
-        </div>
-      )}
-      <small>
-        {p != null && 'Puntaje de abierto, de 0 a 1. '}No es el estado del registro ni una probabilidad{m.origen ? `. ${mayuscula(m.origen)}` : ''}
-      </small>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { Dot } from './components/ui'
 import { DEMO, useSitios } from './data/api'
+import { t, useLang } from './i18n'
 import Inicio from './pages/Inicio'
 import Modelo from './pages/Modelo'
 import Sitios from './pages/Sitios'
@@ -41,20 +42,18 @@ export function Marca() {
     <a
       className="marca"
       href="#/mapa"
-      title={DEMO ? 'Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026' : undefined}
+      title={DEMO ? t('Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026') : undefined}
     >
       <Dot radar="despierto" />
-      <b>Basurales</b>
-      {sitios && (
-        <span>
-          {despiertos} de {sitios.length} despiertos
-        </span>
-      )}
+      <b>Dumpsite</b>
+      {sitios && <span>{t('{0} de {1} despiertos', despiertos ?? 0, sitios.length)}</span>}
     </a>
   )
 }
 
 export default function App() {
+  // al cambiar de idioma se redibuja toda la web desde acá
+  useLang()
   const { page } = useRoute()
   const P = PANELES.find((p) => p.id === page)
   // the last panel stays mounted while it closes, so it leaves with a transition
@@ -76,8 +75,8 @@ export default function App() {
         <Mapa />
       </Suspense>
 
-      <section className={`flota ${P ? 'abierta' : ''}`} aria-label={V?.label} aria-hidden={!P} inert={!P}>
-        <a className="btn icon cerrar" href="#/mapa" aria-label="Cerrar panel">
+      <section className={`flota ${P ? 'abierta' : ''}`} aria-label={V ? t(V.label) : undefined} aria-hidden={!P} inert={!P}>
+        <a className="btn icon cerrar" href="#/mapa" aria-label={t('Cerrar panel')}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
             <path d="M5 5l14 14M19 5L5 19" />
           </svg>
@@ -89,14 +88,14 @@ export default function App() {
         )}
       </section>
 
-      <nav className="dock" aria-label="Secciones">
+      <nav className="dock" aria-label={t('Secciones')}>
         <a href="#/mapa" className={!P ? 'on' : ''} aria-current={!P ? 'page' : undefined}>
-          Mapa
+          {t('Mapa')}
         </a>
         {PANELES.map((p) => (
           // tapping the open section closes it: the panel toggles
           <a key={p.id} href={p.id === P?.id ? '#/mapa' : `#/${p.id}`} className={p.id === P?.id ? 'on' : ''} aria-current={p.id === P?.id ? 'page' : undefined}>
-            {p.label}
+            {t(p.label)}
           </a>
         ))}
       </nav>

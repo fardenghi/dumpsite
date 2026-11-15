@@ -1,0 +1,227 @@
+// Idioma de la web: inglés por defecto, castellano a elección (selector propio en la barra de arriba).
+// Los textos se escriben en castellano en el código y se traducen con t('…'): si falta una traducción,
+// se muestra el castellano. {0}, {1}… se reemplazan por los valores que se pasan después.
+// El idioma se puede forzar con ?lang=es o #/mapa?lang=es (lo usan las capturas del video).
+import { useSyncExternalStore } from 'react'
+
+export type Lang = 'en' | 'es'
+export const IDIOMAS: { value: Lang; label: string }[] = [
+  { value: 'en', label: 'English' },
+  { value: 'es', label: 'Español' },
+]
+
+const CLAVE = 'dumpsite-lang'
+
+function inicial(): Lang {
+  const dePedido = new URLSearchParams(location.search).get('lang') ?? new URLSearchParams(location.hash.split('?')[1] ?? '').get('lang')
+  if (dePedido === 'es' || dePedido === 'en') return dePedido
+  try {
+    const guardado = localStorage.getItem(CLAVE)
+    if (guardado === 'es' || guardado === 'en') return guardado
+  } catch {
+    /* sin almacenamiento: queda el de por defecto */
+  }
+  return 'en'
+}
+
+let lang: Lang = inicial()
+document.documentElement.lang = lang
+const subs = new Set<() => void>()
+
+export const getLang = () => lang
+
+export function setLang(l: Lang) {
+  if (l === lang) return
+  lang = l
+  document.documentElement.lang = l
+  try {
+    localStorage.setItem(CLAVE, l)
+  } catch {
+    /* sin almacenamiento: dura hasta recargar */
+  }
+  subs.forEach((f) => f())
+}
+
+/** Hace que el componente se vuelva a dibujar al cambiar de idioma. App lo usa y así se redibuja todo. */
+export function useLang(): Lang {
+  return useSyncExternalStore(
+    (f) => {
+      subs.add(f)
+      return () => subs.delete(f)
+    },
+    getLang,
+  )
+}
+
+export const locale = () => (lang === 'es' ? 'es-AR' : 'en-US')
+
+export function t(es: string, ...vals: (string | number)[]): string {
+  const base = lang === 'en' ? (EN[es] ?? es) : es
+  return vals.length ? base.replace(/\{(\d+)\}/g, (_, i) => String(vals[Number(i)] ?? '')) : base
+}
+
+const EN: Record<string, string> = {
+  // marca y navegación
+  'Basurales que el radar NISAR de la NASA nunca ve quietos.': 'Dump sites that NASA’s NISAR radar never sees at rest.',
+  '{0} de {1} despiertos': '{0} of {1} awake',
+  'Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026':
+    'Real, precomputed data: 15 NISAR pass comparisons (GUNW, 80 m) over Buenos Aires, from 06/25 to 10/12/2026',
+  Resumen: 'Overview',
+  Sitios: 'Sites',
+  Modelo: 'Model',
+  Mapa: 'Map',
+  Secciones: 'Sections',
+  'Cerrar panel': 'Close panel',
+  Cerrar: 'Close',
+  Idioma: 'Language',
+
+  // estados del radar
+  Despierto: 'Awake',
+  Quieto: 'At rest',
+  'No alcanza': 'Out of reach',
+  'El radar no alcanza': 'Radar can’t tell',
+  Despiertos: 'Awake',
+  Quietos: 'At rest',
+  Todos: 'All',
+
+  // mapa
+  'Ir a un sitio': 'Go to a site',
+  'Ver todo': 'See all',
+  'Índice de insomnio': 'Insomnia index',
+  'Alejar el mapa hasta ver todos los frames procesados': 'Zoom out to see every processed frame',
+  '{0} basurales en {1} regiones': '{0} dump sites in {1} regions',
+  'Polígonos del catálogo, sin verificar': 'Catalog polygons, not verified',
+  'Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap':
+    'Index: NISAR GUNW (NASA/ISRO, via ASF DAAC), water from JRC Global Surface Water · Outlines: © OpenStreetMap',
+  ' · Otros frames: catálogo de basurales (OpenStreetMap vía Overture Maps, EPA LMOP)': ' · Other frames: dump-site catalog (OpenStreetMap via Overture Maps, EPA LMOP)',
+  'Imágenes:': 'Imagery:',
+  'ESA Copernicus, vía Planetary Computer': 'ESA Copernicus, via Planetary Computer',
+  Insomnio: 'Insomnia',
+  Superficie: 'Area',
+  Coherencia: 'Coherence',
+  'NISAR, cada 12 días': 'NISAR, every 12 days',
+  Entorno: 'Surroundings',
+  Sitio: 'Site',
+  'Sitio, {0}': 'Site, {0}',
+  Imagen: 'Image',
+  'Google, alta resolución, sin fecha': 'Google, high resolution, undated',
+  'Sentinel-2, 10 m': 'Sentinel-2, 10 m',
+  'Alta resolución': 'High resolution',
+  'Sin imagen Sentinel-2 despejada en el período': 'No cloud-free Sentinel-2 image in this period',
+  'Ver en Google Maps': 'View on Google Maps',
+  'Polígono sin nombre': 'Unnamed polygon',
+  'Señal compatible con actividad, sin verificar en terreno': 'Signal consistent with activity, not verified on the ground',
+  'Coherencia entre pasadas consecutivas': 'Coherence between consecutive passes',
+
+  // lista
+  'Sitios ': 'Sites ',
+  '{0} sitios en {1} regiones de NISAR. Fuera del AMBA son polígonos del catálogo de basurales, sin verificar':
+    '{0} sites in {1} NISAR regions. Outside Buenos Aires they are dump-site catalog polygons, not verified',
+  sitio: 'site',
+  sitios: 'sites',
+  Región: 'Region',
+  'Todas las regiones': 'All regions',
+  Radar: 'Radar',
+  Hectáreas: 'Hectares',
+  'Insomnio: en qué fracción de las pasadas del radar el sitio cambió más que su entorno':
+    'Insomnia: the share of radar passes in which the site changed more than its surroundings',
+  'Ningún sitio con ese filtro': 'No site matches that filter',
+
+  // resumen
+  'Radar NISAR · AMBA · {0} a {1}': 'NISAR radar · Buenos Aires · {0} to {1}',
+  'Los basurales que el radar nunca ve quietos': 'The dump sites the radar never sees at rest',
+  'Donde dos pasadas del radar nunca se parecen, alguien está moviendo el suelo': 'Where two radar passes never look alike, someone is moving the ground',
+  'Ver los sitios': 'See the sites',
+  'Cómo se decide': 'How it decides',
+  'Sitios analizados': 'Sites analyzed',
+  '{0} ha en total': '{0} ha in total',
+  'nunca quietos': 'never at rest',
+  'Manchas sin explicar': 'Unexplained patches',
+  'sin verificar todavía': 'not verified yet',
+  'Regiones de NISAR': 'NISAR regions',
+  'con basurales del catálogo': 'with cataloged dump sites',
+  'NISAR · NASA/ISRO, vía ASF DAAC': 'NISAR · NASA/ISRO, via ASF DAAC',
+  'Agua · JRC Global Surface Water': 'Water · JRC Global Surface Water',
+  'Sentinel-2 · ESA Copernicus, vía Planetary Computer': 'Sentinel-2 · ESA Copernicus, via Planetary Computer',
+  'Polígonos · OpenStreetMap, ODbL': 'Polygons · OpenStreetMap, ODbL',
+  'Catálogo de otras regiones · Overture Maps (OpenStreetMap, ODbL)': 'Catalog of other regions · Overture Maps (OpenStreetMap, ODbL)',
+  'Rellenos en EE. UU. · EPA LMOP': 'US landfills · EPA LMOP',
+
+  // modelo
+  'Insomnio: en qué fracción de las pasadas del radar un lugar cambió más que su entorno':
+    'Insomnia: the share of radar passes in which a place changed more than its surroundings',
+  'La regla, pasada contra pasada': 'The rule, pass against pass',
+  'Cada pasada del radar se compara con la anterior. Está despierta si el sitio (punto) queda debajo del {0} de su entorno (raya)':
+    'Each radar pass is compared with the previous one. It counts as awake if the site (dot) falls below {0} of its surroundings (tick)',
+  'Sitio de ejemplo': 'Example site',
+  'Órbita {0}': 'Orbit {0}',
+  '{0} de {1} despiertas': '{0} of {1} awake',
+  'Comparaciones de la órbita {0}': 'Comparisons for orbit {0}',
+  despierta: 'awake',
+  quieta: 'at rest',
+  '{0} del entorno': '{0} of surroundings',
+  Persistencia: 'Persistence',
+  Eco: 'Echo',
+  'mínimo {0}': 'minimum {0}',
+  'Del AMBA a {0} manchas': 'From Buenos Aires to {0} patches',
+  'La misma regla en toda la grilla, píxel por píxel': 'The same rule across the whole grid, pixel by pixel',
+  'Grilla del AMBA': 'Buenos Aires grid',
+  'Tierra, sin el agua de JRC': 'Land, without JRC water',
+  'Manchas candidatas': 'Candidate patches',
+  '{0} ha · {1} % de la tierra': '{0} ha · {1} % of the land',
+  'En el camino quedan': 'Dropped along the way',
+  'de menos de 10 ha': 'smaller than 10 ha',
+  'lisas: eco menor que −13 dB': 'smooth: echo below −13 dB',
+  'lineales: rutas y arroyos': 'linear: roads and streams',
+  'despiertas sólo por temporada': 'awake only seasonally',
+  'Qué son las {0}': 'What the {0} are',
+  'Relleno según OpenStreetMap': 'Landfill according to OpenStreetMap',
+  'Uso conocido: aeródromos, golf, parques': 'Known use: airfields, golf, parks',
+  'Sin explicar': 'Unexplained',
+  'Las “sin explicar” no están verificadas: no son basurales confirmados': 'The “unexplained” ones are not verified: they are not confirmed dump sites',
+  'Los umbrales': 'The thresholds',
+  'Calibrados con dos rellenos y cinco controles. La franja es el rango válido': 'Calibrated on two landfills and five controls. The band is the valid range',
+  'Sitio / entorno': 'Site / surroundings',
+  'Insomnio mínimo': 'Minimum insomnia',
+  'Eco mínimo, dB': 'Minimum echo, dB',
+  'válido de {0} a {1}': 'valid from {0} to {1}',
+  'Más bajo, Norte III deja de ser persistente. Más alto, aparecen manchas en la costa del Roggero':
+    'Lower, Norte III stops being persistent. Higher, patches appear on the Roggero shore',
+  'Con 0,9 Norte III (0,86) queda afuera': 'At 0.9 Norte III (0.86) is left out',
+  'Entre lo liso conocido (el río, −16,6) y el relleno con menos eco (González Catán, −11,6)':
+    'Between known smooth ground (the river, −16.6) and the landfill with the least echo (González Catán, −11.6)',
+  '¿Basural u otra cosa? El clasificador por mancha': 'Dump site or something else? The per-patch classifier',
+  'El radar dice si un lugar se mueve, no qué es. Para eso, un modelo LightGBM entrenado con un catálogo mundial de basurales':
+    'The radar says whether a place moves, not what it is. For that, a LightGBM model trained on a worldwide dump-site catalog',
+  'Catálogo mundial': 'Worldwide catalog',
+  'basurales mapeados': 'mapped dump sites',
+  'OpenStreetMap, Climate TRACE, EPA LMOP y plumas de metano de NASA EMIT': 'OpenStreetMap, Climate TRACE, EPA LMOP and NASA EMIT methane plumes',
+  'Y lo que se les parece': 'And look-alikes',
+  'canteras, aeródromos': 'quarries, airfields',
+  '29 variables por mancha': '29 features per patch',
+  'radar NISAR, Sentinel-2 (vegetación, suelo desnudo, agua, infrarrojo) y forma': 'NISAR radar, Sentinel-2 (vegetation, bare soil, water, infrared) and shape',
+  'Cientos de árboles de decisión, cada uno corrige al anterior': 'Hundreds of decision trees, each one correcting the previous',
+  'Basural u otra cosa': 'Dump site or something else',
+  'Clasificado como basural por el modelo: no es una confirmación': 'Classified as a dump site by the model: not a confirmation',
+  'Lo que no ve': 'What it can’t see',
+  'Pasto y monte': 'Grass and scrub',
+  'Pierden coherencia igual que un relleno': 'They lose coherence just like a landfill',
+  'Predios chicos': 'Small sites',
+  'Menos de 8 píxeles de 80 m': 'Fewer than 8 pixels of 80 m',
+  'Un año entero': 'A full year',
+  'Hay datos de junio a octubre de 2026': 'Data runs from June to October 2026',
+  'Validación independiente': 'Independent validation',
+  'Sólo dos rellenos y cinco controles': 'Only two landfills and five controls',
+  'todas las pasadas': 'all passes',
+
+  // nombres de los sitios curados
+  'Norte III, disposición final': 'Norte III, final disposal',
+  'Relleno del CEAMSE al noreste de Norte III': 'CEAMSE landfill northeast of Norte III',
+  'Relleno al norte de Norte III': 'Landfill north of Norte III',
+  'Relleno junto a Norte III (oeste)': 'Landfill next to Norte III (west)',
+  'Basural de Ministro Rivadavia': 'Ministro Rivadavia dump site',
+  'Basural Cuartel V': 'Cuartel V dump site',
+  'Mancha al oeste de Luján': 'Patch west of Luján',
+  'Relleno sin nombre (OSM)': 'Unnamed landfill (OSM)',
+  'Basural de Luján': 'Luján dump site',
+}

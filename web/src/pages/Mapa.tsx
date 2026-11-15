@@ -4,13 +4,13 @@ import type { FeatureCollection } from 'geojson'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Marca, go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
-import { Dot, Kpi, Picker, RADAR, RegistroCatalogo, RegistroTag, SegunModelo, fecha, num, pct, puntaje, veredicto, type Opcion } from '../components/ui'
+import { Dot, Kpi, Picker, fecha, num, pct, radar as radarTxt, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
-import { ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
-import type { Imagen, LecturaModelo, Sitio, Veredicto } from '../data/types'
-import { FRAME_AMBA, conRadar, lecturaModelo, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos, veredictoDeSitio } from '../data/veredictos'
+import type { Imagen, Sitio, Veredicto } from '../data/types'
+import { fueraDelAmba, nombreFrame, useVeredictos } from '../data/veredictos'
+import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
 // The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
 // of the chosen date, served by Microsoft Planetary Computer. Both work without keys.
@@ -65,17 +65,17 @@ async function precargar(sitios: Sitio[]) {
   await Promise.all([tanda(), tanda(), tanda()])
 }
 
-function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; modelo: LecturaModelo | null; imagen: Imagen | null; onImagen: (i: Imagen) => void; vista: Vista; onVista: (v: Vista) => void }) {
+function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imagen | null; onImagen: (i: Imagen) => void; vista: Vista; onVista: (v: Vista) => void }) {
   return (
     <aside className="ficha" key={s.id}>
       <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
         <div className="grow">
-          <h2>{s.nombre}</h2>
+          <h2>{t(s.nombre)}</h2>
           <div className="where">
             {s.lugar}
           </div>
         </div>
-        <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
+        <button className="btn icon" onClick={() => go('mapa')} aria-label={t('Cerrar')}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
             <path d="M5 5l14 14M19 5L5 19" />
           </svg>
@@ -85,42 +85,38 @@ function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; mode
       <div className="row" style={{ gap: 8 }}>
         <span className={`tag ${s.radar}`}>
           <Dot radar={s.radar} />
-          {veredicto(s)}
+          {veredicto(s.radar)}
         </span>
-        <RegistroTag s={s} />
       </div>
 
-      {modelo && <SegunModelo m={modelo} />}
-
       <div className="kpis sm grid g2">
-        <Kpi label="Insomnio" value={pct(s.insomnio)} />
-        <Kpi label="Superficie" value={num(s.ha)} unit="ha" />
+        <Kpi label={t('Insomnio')} value={pct(s.insomnio)} />
+        <Kpi label={t('Superficie')} value={num(s.ha)} unit="ha" />
       </div>
 
       <div className="crece">
         <h3>
-          Coherencia <span>NISAR, cada 12 días</span>
+          {t('Coherencia')} <span>{t('NISAR, cada 12 días')}</span>
         </h3>
         <Coherencia
           llenar
           fechas={s.pares.map((p) => p.fecha)}
-          marca={s.cierre ? { fecha: s.cierre, texto: 'cierre' } : undefined}
           series={[
-            { nombre: 'Entorno', color: 'var(--faint)', valores: s.pares.map((p) => p.anillo), tenue: true },
-            { nombre: RADAR[s.radar] === 'No alcanza' ? 'Sitio' : `Sitio, ${RADAR[s.radar].toLowerCase()}`, color: `var(--${s.radar.replace('_', '-')})`, valores: s.pares.map((p) => p.sitio) },
+            { nombre: t('Entorno'), color: 'var(--faint)', valores: s.pares.map((p) => p.anillo), tenue: true },
+            { nombre: s.radar === 'no_alcanza' ? t('Sitio') : t('Sitio, {0}', radarTxt(s.radar).toLowerCase()), color: `var(--${s.radar.replace('_', '-')})`, valores: s.pares.map((p) => p.sitio) },
           ]}
         />
       </div>
 
       <div>
         <h3>
-          Imagen <span>{vista === 'google' ? 'Google, alta resolución, sin fecha' : 'Sentinel-2, 10 m'}</span>
+          {t('Imagen')} <span>{vista === 'google' ? t('Google, alta resolución, sin fecha') : t('Sentinel-2, 10 m')}</span>
         </h3>
         {(HAY_GOOGLE || s.imagenes.length > 0) && (
           <div className="dates">
             {HAY_GOOGLE && (
               <button aria-pressed={vista === 'google'} onClick={() => onVista('google')}>
-                Alta resolución
+                {t('Alta resolución')}
               </button>
             )}
             {s.imagenes.map((i) => (
@@ -130,7 +126,7 @@ function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; mode
             ))}
           </div>
         )}
-        {!s.imagenes.length && <p className="muted small">Sin imagen Sentinel-2 despejada en el período</p>}
+        {!s.imagenes.length && <p className="muted small">{t('Sin imagen Sentinel-2 despejada en el período')}</p>}
       </div>
 
       <div className="row" style={{ justifyContent: 'space-between' }}>
@@ -138,138 +134,26 @@ function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; mode
           {s.lat.toFixed(4)}, {s.lon.toFixed(4)}
         </span>
         <a className="btn sm" href={`https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3`} target="_blank" rel="noreferrer">
-          Ver en Google Maps
+          {t('Ver en Google Maps')}
         </a>
       </div>
     </aside>
   )
 }
 
-const Cerrar = () => (
-  <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-      <path d="M5 5l14 14M19 5L5 19" />
-    </svg>
-  </button>
-)
-
-const Pie = ({ lat, lon }: { lat: number; lon: number }) => (
-  <div className="row" style={{ justifyContent: 'space-between' }}>
-    <span className="coords">
-      {lat.toFixed(4)}, {lon.toFixed(4)}
-    </span>
-    <a className="btn sm" href={`https://www.google.com/maps/@${lat},${lon},900m/data=!3m1!1e3`} target="_blank" rel="noreferrer">
-      Ver en Google Maps
-    </a>
-  </div>
-)
-
-/** Ficha de una mancha despierta que no está en ningún catálogo y que el modelo lee como basural. */
-function FichaNuevo({ v, lugar, aviso }: { v: Veredicto; lugar: string; aviso?: string }) {
-  const p = typeof v.p_basural === 'number' ? v.p_basural : null
-  return (
-    <aside className="ficha" key={v.id}>
-      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
-        <div className="grow">
-          <h2>Posible basural nuevo</h2>
-          <div className="where">
-            {lugar} · {v.id}
-          </div>
-        </div>
-        <Cerrar />
-      </div>
-
-      <div className="row" style={{ gap: 8 }}>
-        <span className="tag nuevo">
-          <Dot radar="nuevo" />
-          {v.veredicto_texto}
-        </span>
-        <span className="reg no">No figura en ningún catálogo</span>
-      </div>
-
-      {p != null && (
-        <div className="segun-modelo">
-          <span className="src">Según el modelo · basural u otra cosa que se mueve</span>
-          <div className="puntaje" role="img" aria-label={`Puntaje de basural ${puntaje(p)}, de 0 a 1`}>
-            <div className="bar">
-              <div style={{ width: `${Math.round(Math.max(0, Math.min(1, p)) * 100)}%` }} />
-            </div>
-            <span className="num">{puntaje(p)}</span>
-          </div>
-          <small>Puntaje de basural, de 0 a 1. No es una probabilidad</small>
-        </div>
-      )}
-
-      <div className="kpis sm grid g2">
-        <Kpi label="Insomnio" value={v.insomnio == null ? '–' : pct(v.insomnio)} />
-        <Kpi label="Superficie" value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
-      </div>
-
-      {v.motivo && <p className="motivo">Radar: {v.motivo}</p>}
-      <p className="note">
-        Mancha que el radar NISAR nunca ve quieta y que no está en OpenStreetMap, Climate TRACE ni la EPA. {aviso ?? 'Señal compatible con actividad, no prueba.'} No está verificado: hay que mirarlo
-        en una imagen antes de nombrarlo
-      </p>
-
-      <span className="grow" />
-      <Pie lat={v.lat as number} lon={v.lon as number} />
-    </aside>
-  )
-}
-
-/** Ficha de un basural del catálogo que no cae en ningún frame de NISAR procesado. */
-function FichaSinDato({ s }: { s: SitioCatalogo }) {
-  return (
-    <aside className="ficha" key={s.id}>
-      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
-        <div className="grow">
-          <h2>{s.nombre ?? 'Basural sin nombre'}</h2>
-          <div className="where">
-            {s.pais ? `${nombrePais(s.pais)} · ` : ''}
-            {s.id}
-          </div>
-        </div>
-        <Cerrar />
-      </div>
-
-      <div className="row" style={{ gap: 8 }}>
-        <span className="tag sin_dato">
-          <Dot radar="sin_dato" />
-          Sin dato de radar
-        </span>
-        <RegistroCatalogo registro={s.estado} />
-      </div>
-
-      <div className="kpis sm grid g2">
-        <Kpi label="Insomnio" value="–" />
-        <Kpi label="Superficie" value={s.ha == null ? '–' : num(s.ha < 10 ? s.ha : Math.round(s.ha))} unit={s.ha == null ? undefined : 'ha'} />
-      </div>
-
-      <p className="note">
-        Está en el catálogo de basurales, pero todavía no procesamos pasadas de NISAR sobre este lugar: no hay índice de insomnio ni veredicto.
-        {s.fuentes.length > 0 && ` Fuente del catálogo: ${s.fuentes.join(', ')}`}
-      </p>
-
-      <span className="grow" />
-      <Pie lat={s.lat} lon={s.lon} />
-    </aside>
-  )
-}
-
-/** Ficha de un polígono del catálogo con dato de radar: lo que trae `veredictos.json`, sin serie ni imágenes. */
-function FichaCatalogo({ v, lugar, aviso }: { v: Veredicto; lugar: string; aviso?: string }) {
+/** Ficha de un polígono del catálogo de otro frame: lo que trae `veredictos.json`, sin serie ni imágenes. */
+function FichaCatalogo({ v }: { v: Veredicto }) {
   const radar = v.radar ?? 'no_alcanza'
-  const modelo = lecturaModelo(v)
   return (
     <aside className="ficha" key={v.id}>
       <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
         <div className="grow">
-          <h2>{v.nombre ?? 'Polígono sin nombre'}</h2>
+          <h2>{v.nombre ?? t('Polígono sin nombre')}</h2>
           <div className="where">
             {lugar} · {v.id}
           </div>
         </div>
-        <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
+        <button className="btn icon" onClick={() => go('mapa')} aria-label={t('Cerrar')}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
             <path d="M5 5l14 14M19 5L5 19" />
           </svg>
@@ -279,20 +163,16 @@ function FichaCatalogo({ v, lugar, aviso }: { v: Veredicto; lugar: string; aviso
       <div className="row" style={{ gap: 8 }}>
         <span className={`tag ${radar}`}>
           <Dot radar={radar} />
-          {v.veredicto_texto}
+          {veredicto(radar)}
         </span>
-        <RegistroCatalogo registro={v.registro} />
       </div>
-
-      {modelo && <SegunModelo m={modelo} />}
 
       <div className="kpis sm grid g2">
-        <Kpi label="Insomnio" value={v.insomnio == null ? '–' : pct(v.insomnio)} />
-        <Kpi label="Superficie" value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
+        <Kpi label={t('Insomnio')} value={v.insomnio == null ? '–' : pct(v.insomnio)} />
+        <Kpi label={t('Superficie')} value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
       </div>
 
-      {v.motivo && <p className="motivo">Radar: {v.motivo}</p>}
-      <p className="note">Polígono del catálogo de basurales, medido con NISAR. {aviso ?? 'Señal compatible con actividad, no prueba.'} No está verificado</p>
+      <p className="note">{t('Señal compatible con actividad, sin verificar en terreno')}</p>
 
       <span className="grow" />
       <div className="row" style={{ justifyContent: 'space-between' }}>
@@ -300,11 +180,16 @@ function FichaCatalogo({ v, lugar, aviso }: { v: Veredicto; lugar: string; aviso
           {(v.lat as number).toFixed(4)}, {(v.lon as number).toFixed(4)}
         </span>
         <a className="btn sm" href={`https://www.google.com/maps/@${v.lat},${v.lon},900m/data=!3m1!1e3`} target="_blank" rel="noreferrer">
-          Ver en Google Maps
+          {t('Ver en Google Maps')}
         </a>
       </div>
     </aside>
   )
+}
+
+/** Selector de idioma propio (no el del navegador): English o Español, sin banderas. */
+function Idioma() {
+  return <Picker className="float idioma" label={t('Idioma')} value={getLang()} onChange={(l: Lang) => setLang(l)} options={IDIOMAS} />
 }
 
 export default function Mapa() {
@@ -324,15 +209,7 @@ export default function Mapa() {
   const enMapa = page === 'mapa'
   const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
-  const selOtro = (!sel && id && (otros.find((v) => v.id === id) ?? nuevos.find((v) => v.id === id))) || null
-  // un basural del catálogo sin dato de radar
-  const selCat = useMemo(() => {
-    const i = sel || selOtro || !catalogo ? -1 : filaCatalogo(catalogo, id)
-    return i >= 0 ? sitioCatalogo(catalogo!, i) : null
-  }, [sel, selOtro, catalogo, id])
-  // el punto elegido cuando no es un sitio curado (esos tienen contorno)
-  const punto = selOtro ? { lat: selOtro.lat as number, lon: selOtro.lon as number, color: selOtro.tipo === 'mancha' ? COLOR_NUEVO : '#ffffff' } : selCat ? { lat: selCat.lat, lon: selCat.lon, color: '#ffffff' } : null
-  const modeloSel = useMemo(() => (sel ? lecturaModelo(veredictoDeSitio(sel, veredictos)) : null), [sel, veredictos])
+  const selOtro = (!sel && id && otros.find((v) => v.id === id)) || null
   const caja = useRef<HTMLDivElement>(null)
   const mapa = useRef<maplibregl.Map | null>(null)
   const [listo, setListo] = useState(false)
@@ -366,6 +243,8 @@ export default function Mapa() {
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
     m.on('load', () => setListo(true))
     mapa.current = m
+    // con ?captura el mapa queda accesible para el script que arma las imágenes del video (video/compartido/scripts/capturas_mapa.mjs)
+    if (new URLSearchParams(location.search).has('captura')) (window as unknown as { mapa?: maplibregl.Map }).mapa = m
     return () => {
       mapa.current = null
       m.remove()
@@ -590,23 +469,38 @@ export default function Mapa() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, puntoSel])
 
-  /** Alejar hasta ver todos los frames procesados. */
+  /** La vista general: el mundo con todas las regiones procesadas (el AMBA y los puntos del catálogo). Sin catálogo, el AMBA. */
+  const general = (): [number, number, number, number] => {
+    if (!otros.length) return AMBA
+    const lons = [AMBA[0], AMBA[2], ...otros.map((v) => v.lon as number)]
+    const lats = [AMBA[1], AMBA[3], ...otros.map((v) => v.lat as number)]
+    return [Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))]
+  }
+  /** Alejar hasta ver todas las regiones. */
   const verOtros = () => {
     const m = mapa.current
-    if (!m) return
-    const lons = [AMBA[0], AMBA[2], ...(frames ?? []).flatMap((f) => [f.bbox[0], f.bbox[2]]), ...otros.map((v) => v.lon as number)]
-    const lats = [AMBA[1], AMBA[3], ...(frames ?? []).flatMap((f) => [f.bbox[1], f.bbox[3]]), ...otros.map((v) => v.lat as number)]
+    if (!m || !otros.length) return
     go('mapa')
-    m.fitBounds([Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))], { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
+    m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
   }
 
-  // when choosing a site: fly there and show its latest image
+  // al entrar, el mapa del mundo con todos los basurales; si se entra directo a un sitio, se va ahí
+  const arranco = useRef(false)
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo || !otros.length || arranco.current) return
+    arranco.current = true
+    if (!id) m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 0 })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listo, otros])
+
+  // al elegir un sitio: volar hasta ahí y mostrar su imagen más reciente
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    if (!sel && !punto) {
-      // al cerrar la ficha se vuelve a la vista del AMBA; la última imagen queda cargada
-      if (habiaSitio.current && enMapa) m.fitBounds(AMBA, { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
+    if (!sel && !selOtro) {
+      // al cerrar la ficha se vuelve a la vista general; la última imagen queda cargada
+      if (habiaSitio.current && enMapa) m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
       habiaSitio.current = false
       return
     }
@@ -752,17 +646,18 @@ export default function Mapa() {
         <Marca />
         <Picker
           className="float"
-          label="Ir a un sitio"
-          placeholder="Ir a un sitio"
+          label={t('Ir a un sitio')}
+          placeholder={t('Ir a un sitio')}
           value={id ?? ''}
           onChange={(v) => go('mapa', `sitio=${v}`)}
-          options={opciones}
+          options={[...(sitios ?? [])].map((s) => ({ value: s.id, label: t(s.nombre), sub: s.lugar, radar: s.radar })).sort((a, b) => a.label.localeCompare(b.label, getLang()))}
         />
         {(sel || punto) && (
           <button className="btn float" onClick={() => go('mapa')}>
-            Ver todo
+            {t('Ver todo')}
           </button>
         )}
+        <Idioma />
       </div>
       <div className="map-legend">
         <div className="estados">
@@ -776,8 +671,7 @@ export default function Mapa() {
           {(['despierto', 'quieto', 'no_alcanza'] as const).map((r) => (
             <span key={r}>
               <span className={`dot ${r}`} />
-              {RADAR[r]}
-              <b className="num">{num(cuenta[r])}</b>
+              {radarTxt(r)}
             </span>
           ))}
           {catalogo && (
@@ -795,23 +689,21 @@ export default function Mapa() {
           onClick={() => setVerIndice((v) => !v)}
           title={`${indice.que}. En el AMBA, el índice completo (${indice.pares} comparaciones de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}). En los otros frames, las manchas donde el índice supera el umbral`}
         >
-          <span>Índice de insomnio</span>
+          <span>{t('Índice de insomnio')}</span>
           <i />
         </button>
         {verIndice && (
           <div className="escala">
             <div />
-            <span>0,3</span>
+            <span>{getLang() === 'es' ? '0,3' : '0.3'}</span>
             <span>1</span>
             {frames && frames.length > 1 && <small>Línea punteada: cada frame de NISAR procesado. Fuera del AMBA se pintan las manchas despiertas</small>}
           </div>
         )}
-        {frames && frames.length > 1 && (
-          <button className="otros-frames" onClick={verOtros} title="Alejar el mapa hasta ver todos los frames procesados">
-            <b>Ver los {frames.length} frames de NISAR</b>
-            <span>
-              {num(otros.length + (sitios?.length ?? 0))} basurales medidos en {new Set(frames.map((f) => f.pais)).size} países
-            </span>
+        {otros.length > 0 && (
+          <button className="otros-frames" onClick={verOtros} title={t('Alejar el mapa hasta ver todos los frames procesados')}>
+            <b>{t('{0} basurales en {1} regiones', num(otros.length + (sitios?.length ?? 0)), new Set(otros.map((v) => v.frame)).size + 1)}</b>
+            <span>{t('Polígonos del catálogo, sin verificar')}</span>
           </button>
         )}
       </div>
@@ -821,22 +713,20 @@ export default function Mapa() {
             <b className="google">Google</b> {credito} ·{' '}
           </>
         )}
-        Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap
-        {catalogo && ' · Catálogo de basurales: © OpenStreetMap vía Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT'} · Imágenes:{' '}
+        {t('Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap')}
+        {otros.length > 0 && t(' · Otros frames: catálogo de basurales (OpenStreetMap vía Overture Maps, EPA LMOP)')} · {t('Imágenes:')}{' '}
         <a href="https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api" target="_blank" rel="noreferrer">
           NASA GIBS
         </a>{' '}
         · Sentinel-2:{' '}
         <a href="https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a" target="_blank" rel="noreferrer">
-          ESA Copernicus, vía Planetary Computer
+          {t('ESA Copernicus, vía Planetary Computer')}
         </a>
       </div>
-      {selOtro && (selOtro.tipo === 'mancha' ? <FichaNuevo v={selOtro} lugar={lugarDe(selOtro.frame)} aviso={veredictos?.aviso} /> : <FichaCatalogo v={selOtro} lugar={lugarDe(selOtro.frame)} aviso={veredictos?.aviso} />)}
-      {selCat && <FichaSinDato s={selCat} />}
+      {selOtro && <FichaCatalogo v={selOtro} />}
       {sel && (
         <Ficha
           s={sel}
-          modelo={modeloSel}
           imagen={imagen}
           vista={vista}
           onVista={setVista}

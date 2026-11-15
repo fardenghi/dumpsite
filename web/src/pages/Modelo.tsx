@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Dot, Kpi, PageHead, Picker, RADAR, fecha, num, pct, puntaje } from '../components/ui'
+import { Dot, PageHead, Picker, dec, fecha, num, pct, radar } from '../components/ui'
 import { useSitios } from '../data/api'
-import type { ModeloEstado } from '../data/types'
-import { MODELO_ESTADO } from '../data/veredictos'
+import { getLang, t } from '../i18n'
 import candidatos from '../data/seed/candidatos.json'
 import fichasJson from '../data/seed/fichas.json'
 import indice from '../data/seed/indice.json'
@@ -48,7 +47,8 @@ const LIMITES = [
   { que: 'Validación independiente', porque: 'Sólo dos rellenos y cinco controles' },
 ]
 
-const dec = (n: number, d = 2) => n.toFixed(d).replace('.', ',').replace('-', '−')
+// catálogo mundial de basurales con el que se entrena el clasificador (data/basurales/basurales_mundo.json)
+const CATALOGO = 66981
 
 /** Each pair of passes: the dash is 80 % of the surroundings' coherence and the dot, the site's. Dot below the dash = awake pair. */
 function Pares({ f }: { f: Ficha }) {
@@ -64,12 +64,10 @@ function Pares({ f }: { f: Ficha }) {
         return (
           <div key={o}>
             <div className="orbita-t">
-              <b>Órbita {o}</b>
-              <span>
-                {pares.filter((p) => p.despierto).length} de {pares.length} despiertas
-              </span>
+              <b>{t('Órbita {0}', o)}</b>
+              <span>{t('{0} de {1} despiertas', pares.filter((p) => p.despierto).length, pares.length)}</span>
             </div>
-            <svg className="chart" width={ancho} height={alto} role="img" aria-label={`Comparaciones de la órbita ${o}`}>
+            <svg className="chart" width={ancho} height={alto} role="img" aria-label={t('Comparaciones de la órbita {0}', o)}>
               <line x1={0} x2={ancho} y1={y(0)} y2={y(0)} stroke="var(--line)" />
               <line x1={0} x2={ancho} y1={y(1)} y2={y(1)} stroke="var(--line)" />
               {pares.map((p, i) => {
@@ -78,7 +76,7 @@ function Pares({ f }: { f: Ficha }) {
                 const color = p.despierto ? 'var(--despierto)' : 'var(--quieto)'
                 return (
                   <g key={p.fecha}>
-                    <title>{`${fecha(p.fecha, true)} · sitio ${dec(p.sitio)} · entorno ${dec(p.anillo)}`}</title>
+                    <title>{`${fecha(p.fecha, true)} · ${t('Sitio')} ${dec(p.sitio)} · ${t('Entorno')} ${dec(p.anillo)}`}</title>
                     <rect x={x - paso / 2} y={0} width={paso} height={alto} fill="transparent" />
                     <line x1={x} x2={x} y1={corte} y2={y(p.sitio)} stroke={color} strokeWidth={1.5} opacity={0.45} />
                     <line x1={x - 7} x2={x + 7} y1={corte} y2={corte} stroke="var(--ink-2)" strokeWidth={1.5} strokeLinecap="round" />
@@ -108,101 +106,9 @@ function Medidor({ nombre, valor, texto, umbral, textoUmbral, min = 0, max = 1, 
         <i style={{ left: pos(umbral) }} />
       </div>
       <div className="medidor-u" style={{ paddingLeft: `min(${pos(umbral)}, calc(100% - 9ch))` }}>
-        mínimo {textoUmbral}
+        {t('mínimo {0}', textoUmbral)}
       </div>
     </div>
-  )
-}
-
-/** The open-versus-closed model, with what `seed/modelo.json` carries in `estado` and nothing else: no favorable rounding, no limit removed. */
-function AbiertoOCerrado({ m, paso }: { m: ModeloEstado; paso: number }) {
-  const ic = Array.isArray(m.ic95) && m.ic95.length === 2 ? m.ic95 : null
-  const prueba = Array.isArray(m.prueba_amba) ? m.prueba_amba : []
-  return (
-    <section className="section" data-modelo-estado>
-      <div className="paso-t">
-        <i>{paso}</i>
-        <div>
-          <h3>Abierto o cerrado, según el modelo</h3>
-          <p>Entrenado con el estado del registro, que no sale del insomnio. El resultado es “compatible con abierto” o “compatible con cerrado”: no es un estado verificado</p>
-        </div>
-      </div>
-      <div className="card">
-        <div className="kpis sm grid g4">
-          <Kpi
-            label={<span title="Área bajo la curva ROC: 0,5 es ordenar al azar y 1 es ordenar perfecto">AUC</span>}
-            value={
-              <>
-                {puntaje(m.auc)}
-                {ic && (
-                  <small className="ic">
-                    IC 95 %: {puntaje(ic[0])} a {puntaje(ic[1])}
-                  </small>
-                )}
-              </>
-            }
-          />
-          <Kpi label="Predios con estado" value={num(m.n)} />
-          <Kpi label="Abiertos y cerrados" value={`${num(m.abiertos)} y ${num(m.cerrados)}`} />
-          <Kpi label="Frames de NISAR" value={num(m.frames)} />
-        </div>
-        <p className="pie">AUC: 0,5 es ordenar al azar y 1 es ordenar perfecto. Validación: {m.validacion}</p>
-
-        {m.variables?.length > 0 && (
-          <div className="modelo-bloque">
-            <h4>Qué mira</h4>
-            <div className="variables">
-              {m.variables.map((v) => (
-                <span className="tag" key={v}>
-                  {v}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {prueba.length > 0 && (
-          <div className="modelo-bloque">
-            <h4>La prueba en el AMBA</h4>
-            <div className="prueba">
-              <div>
-                <span>Predio</span>
-                <span>Según el registro</span>
-                <span>Puntaje de abierto según el modelo, de 0 a 1</span>
-              </div>
-              {prueba.map((x) => (
-                <div key={x.nombre}>
-                  <b style={{ fontWeight: 500 }}>{x.nombre}</b>
-                  <span>{x.estado_registro}</span>
-                  {typeof x.p_abierto === 'number' ? (
-                    <div className="puntaje">
-                      <div className="bar">
-                        <div style={{ width: `${Math.round(Math.max(0, Math.min(1, x.p_abierto)) * 100)}%` }} />
-                      </div>
-                      <span className="num r">{puntaje(x.p_abierto)}</span>
-                    </div>
-                  ) : (
-                    <span className="muted">sin dato</span>
-                  )}
-                </div>
-              ))}
-            </div>
-            <p className="pie">El AMBA no entró al entrenamiento. Un puntaje alto es compatible con abierto y uno bajo, con cerrado</p>
-          </div>
-        )}
-
-        {m.limites?.length > 0 && (
-          <div className="modelo-bloque">
-            <h4>Límites</h4>
-            <ul className="limites-modelo">
-              {m.limites.map((l) => (
-                <li key={l}>{l}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    </section>
   )
 }
 
@@ -220,52 +126,50 @@ export default function Modelo() {
 
   return (
     <div className="pasos">
-      <PageHead title="Modelo" sub="Insomnio: en qué fracción de las pasadas del radar un lugar cambió más que su entorno" />
+      <PageHead title={t('Modelo')} sub={t('Insomnio: en qué fracción de las pasadas del radar un lugar cambió más que su entorno')} />
 
       <section className="section">
         <div className="paso-t">
           <i>1</i>
           <div>
-            <h3>La regla, pasada contra pasada</h3>
-            <p>
-              Cada pasada del radar se compara con la anterior. Está despierta si el sitio (punto) queda debajo del {pct(P.razon)} de su entorno (raya)
-            </p>
+            <h3>{t('La regla, pasada contra pasada')}</h3>
+            <p>{t('Cada pasada del radar se compara con la anterior. Está despierta si el sitio (punto) queda debajo del {0} de su entorno (raya)', pct(P.razon))}</p>
           </div>
         </div>
         <div className="card">
-          <Picker label="Sitio de ejemplo" value={s.id} onChange={setId} options={conFicha.map((x) => ({ value: x.id, label: x.nombre, sub: x.lugar, radar: x.radar }))} />
+          <Picker label={t('Sitio de ejemplo')} value={s.id} onChange={setId} options={conFicha.map((x) => ({ value: x.id, label: t(x.nombre), sub: x.lugar, radar: x.radar }))} />
           <Pares f={f} />
           <div className="legend">
             <span>
               <span className="dot" style={{ background: 'var(--despierto)' }} />
-              despierta
+              {t('despierta')}
             </span>
             <span>
               <span className="dot" style={{ background: '#fff', boxShadow: 'inset 0 0 0 1.5px var(--quieto)' }} />
-              quieta
+              {t('quieta')}
             </span>
             <span>
               <i style={{ background: 'var(--ink-2)' }} />
-              {pct(P.razon)} del entorno
+              {t('{0} del entorno', pct(P.razon))}
             </span>
           </div>
           <div className="medidores">
-            <Medidor nombre="Insomnio" valor={s.insomnio} texto={pct(s.insomnio)} umbral={P.min_insomnio} textoUmbral={pct(P.min_insomnio)} pasa={s.insomnio >= P.min_insomnio} />
+            <Medidor nombre={t('Insomnio')} valor={s.insomnio} texto={pct(s.insomnio)} umbral={P.min_insomnio} textoUmbral={pct(P.min_insomnio)} pasa={s.insomnio >= P.min_insomnio} />
             <Medidor
-              nombre="Persistencia"
+              nombre={t('Persistencia')}
               valor={f.persistencia}
               texto={f.persistencia == null ? '–' : pct(f.persistencia)}
               umbral={P.min_persistencia}
               textoUmbral={pct(P.min_persistencia)}
               pasa={(f.persistencia ?? 0) >= P.min_persistencia}
             />
-            <Medidor nombre="Eco" valor={f.eco_db} texto={f.eco_db == null ? '–' : `${dec(f.eco_db, 1)} dB`} umbral={ECO_MIN} textoUmbral={`${dec(ECO_MIN, 0)} dB`} min={-20} max={0} pasa={(f.eco_db ?? -99) >= ECO_MIN} />
+            <Medidor nombre={t('Eco')} valor={f.eco_db} texto={f.eco_db == null ? '–' : `${dec(f.eco_db, 1)} dB`} umbral={ECO_MIN} textoUmbral={`${dec(ECO_MIN, 0)} dB`} min={-20} max={0} pasa={(f.eco_db ?? -99) >= ECO_MIN} />
           </div>
           <div className={`veredicto ${s.radar}`}>
             <Dot radar={s.radar} />
             <div>
-              <b>{RADAR[s.radar]}</b>
-              <span>{f.motivo.replace('todos los pares', 'todas las pasadas')}</span>
+              <b>{radar(s.radar)}</b>
+              {getLang() === 'es' && <span>{f.motivo.replace('todos los pares', 'todas las pasadas')}</span>}
             </div>
           </div>
         </div>
@@ -275,42 +179,42 @@ export default function Modelo() {
         <div className="paso-t">
           <i>2</i>
           <div>
-            <h3>Del AMBA a {candidatos.length} manchas</h3>
-            <p>La misma regla en toda la grilla, píxel por píxel</p>
+            <h3>{t('Del AMBA a {0} manchas', candidatos.length)}</h3>
+            <p>{t('La misma regla en toda la grilla, píxel por píxel')}</p>
           </div>
         </div>
         <div className="embudo">
           <div>
-            <span>Grilla del AMBA</span>
+            <span>{t('Grilla del AMBA')}</span>
             <div className="embudo-b" style={{ width: '100%' }} />
             <b className="num">{num(GRILLA)} ha</b>
           </div>
           <div>
-            <span>Tierra, sin el agua de JRC</span>
+            <span>{t('Tierra, sin el agua de JRC')}</span>
             <div className="embudo-b" style={{ width: `${(tierra / GRILLA) * 100}%` }} />
             <b className="num">{num(tierra)} ha</b>
           </div>
           <div>
-            <span>Manchas candidatas</span>
+            <span>{t('Manchas candidatas')}</span>
             <div className="embudo-b fin" style={{ width: `${(haCand / GRILLA) * 100}%` }} />
             <b className="num">
-              {num(Math.round(haCand))} ha · {dec((haCand / tierra) * 100, 1)} % de la tierra
+              {t('{0} ha · {1} % de la tierra', num(Math.round(haCand)), dec((haCand / tierra) * 100, 1))}
             </b>
           </div>
         </div>
         <div className="descartes">
-          <span>En el camino quedan</span>
+          <span>{t('En el camino quedan')}</span>
           {DESCARTES.map((d) => (
             <span className="tag" key={d.que}>
-              <b className="num">{d.n}</b> {d.que}
+              <b className="num">{getLang() === 'es' ? d.n : d.n.replace('.', ',')}</b> {t(d.que)}
             </span>
           ))}
         </div>
         <div className="card" style={{ marginTop: 16 }}>
           <div className="section-head" style={{ marginBottom: 12 }}>
-            <h4>Qué son las {candidatos.length}</h4>
+            <h4>{t('Qué son las {0}', candidatos.length)}</h4>
           </div>
-          <div className="apilada" role="img" aria-label={clases.map((c) => `${c.n} ${c.nombre}`).join(', ')}>
+          <div className="apilada" role="img" aria-label={clases.map((c) => `${c.n} ${t(c.nombre)}`).join(', ')}>
             {clases.map((c) => (
               <div key={c.id} style={{ flexGrow: c.n, background: c.color }} />
             ))}
@@ -321,12 +225,12 @@ export default function Modelo() {
                 <b className="num">{c.n}</b>
                 <span>
                   <i style={{ background: c.color }} />
-                  {c.nombre}
+                  {t(c.nombre)}
                 </span>
               </div>
             ))}
           </div>
-          <p className="note" style={{ marginTop: 16 }}>Las “sin explicar” no están verificadas: no son basurales confirmados</p>
+          <p className="note" style={{ marginTop: 16 }}>{t('Las “sin explicar” no están verificadas: no son basurales confirmados')}</p>
         </div>
       </section>
 
@@ -334,17 +238,17 @@ export default function Modelo() {
         <div className="paso-t">
           <i>3</i>
           <div>
-            <h3>Los umbrales</h3>
-            <p>Calibrados con dos rellenos y cinco controles. La franja es el rango válido</p>
+            <h3>{t('Los umbrales')}</h3>
+            <p>{t('Calibrados con dos rellenos y cinco controles. La franja es el rango válido')}</p>
           </div>
         </div>
         <div className="umbrales">
           {UMBRALES.map((u) => {
             const pos = (v: number) => `${((v - u.min) / (u.max - u.min)) * 100}%`
             return (
-              <div key={u.nombre} title={u.nota}>
+              <div key={u.nombre} title={t(u.nota)}>
                 <div className="medidor-t">
-                  <span>{u.nombre}</span>
+                  <span>{t(u.nombre)}</span>
                   <b className="num">{dec(u.valor, Number.isInteger(u.valor) ? 0 : 2)}</b>
                 </div>
                 <div className="rango">
@@ -353,9 +257,7 @@ export default function Modelo() {
                 </div>
                 <div className="rango-e num">
                   <span>{dec(u.min, 1)}</span>
-                  <span>
-                    válido de {dec(u.desde, 3).replace(/0+$/, '').replace(/,$/, '')} a {dec(u.hasta, 3).replace(/0+$/, '').replace(/,$/, '')}
-                  </span>
+                  <span>{t('válido de {0} a {1}', dec(u.desde, 3).replace(/0+$/, '').replace(/[,.]$/, ''), dec(u.hasta, 3).replace(/0+$/, '').replace(/[,.]$/, ''))}</span>
                   <span>{dec(u.max, 1)}</span>
                 </div>
               </div>
@@ -364,47 +266,46 @@ export default function Modelo() {
         </div>
       </section>
 
-      {/* if `modelo.json` doesn't carry `estado`, this section doesn't show up and the page stays as before: no metrics */}
-      {MODELO_ESTADO && <AbiertoOCerrado m={MODELO_ESTADO} paso={4} />}
-
       <section className="section">
         <div className="paso-t">
-          <i>{MODELO_ESTADO ? 5 : 4}</i>
+          <i>4</i>
           <div>
-            <h3>
-              Lo que sigue: decir qué es cada mancha <span className="tag">Propuesta, sin probar</span>
-            </h3>
-            <p>El radar dice si un lugar se mueve, no qué es. {MODELO_ESTADO ? 'Este clasificador por mancha todavía no tiene métricas' : 'Todavía no hay métricas'}</p>
+            <h3>{t('¿Basural u otra cosa? El clasificador por mancha')}</h3>
+            <p>{t('El radar dice si un lugar se mueve, no qué es. Para eso, un modelo LightGBM entrenado con un catálogo mundial de basurales')}</p>
           </div>
         </div>
         <div className="futuro">
           <div className="entradas">
             <div>
-              <span className="src">NISAR · se mueve o no</span>
-              <b>Índice de insomnio</b>
+              <span className="src">{t('Catálogo mundial')}</span>
+              <b>
+                {num(CATALOGO)} {t('basurales mapeados')}
+              </b>
+              <p>{t('OpenStreetMap, Climate TRACE, EPA LMOP y plumas de metano de NASA EMIT')}</p>
             </div>
             <div>
-              <span className="src">Sentinel-2 · qué es</span>
-              <b>ResNet-50 con SSL4EO-S12</b>
-              <p>Basural, cantera, obra o suelo desnudo</p>
+              <span className="src">{t('Y lo que se les parece')}</span>
+              <b>{t('canteras, aeródromos')}</b>
+              <p>{t('29 variables por mancha')}: {t('radar NISAR, Sentinel-2 (vegetación, suelo desnudo, agua, infrarrojo) y forma')}</p>
             </div>
           </div>
           <div className="une" aria-hidden="true" />
           <div className="salida">
-            <span className="src">por mancha</span>
-            <b>Gradient boosting</b>
-            <p>Junta las dos miradas</p>
+            <span className="src">LightGBM</span>
+            <b>{t('Basural u otra cosa')}</b>
+            <p>{t('Cientos de árboles de decisión, cada uno corrige al anterior')}</p>
           </div>
         </div>
+        <p className="note" style={{ marginTop: 16 }}>{t('Clasificado como basural por el modelo: no es una confirmación')}</p>
       </section>
 
       <section className="panel section">
-        <h3 style={{ marginBottom: 12 }}>Lo que no ve</h3>
+        <h3 style={{ marginBottom: 12 }}>{t('Lo que no ve')}</h3>
         <ul className="limits">
           {LIMITES.map((l) => (
             <li key={l.que}>
-              <b>{l.que}</b>
-              <span>{l.porque}</span>
+              <b>{t(l.que)}</b>
+              <span>{t(l.porque)}</span>
             </li>
           ))}
         </ul>

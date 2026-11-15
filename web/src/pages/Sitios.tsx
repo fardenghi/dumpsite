@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react'
-import { Dot, Kpi, PageHead, Picker, RADAR, REGISTRO, RegistroCatalogo, RegistroTag, SegunModelo, Seg, fecha, num, pct, veredicto } from '../components/ui'
+import { Dot, Kpi, PageHead, Picker, Seg, num, pct, radar as radarTxt, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
-import type { LecturaModelo, Radar, Sitio, Veredicto } from '../data/types'
-import { FRAME_AMBA, fueraDelAmba, lecturaModelo, nombreFrame, useVeredictos, veredictoDeSitio } from '../data/veredictos'
+import type { Radar, Sitio, Veredicto } from '../data/types'
+import { FRAME_AMBA, fueraDelAmba, nombreFrame, useVeredictos } from '../data/veredictos'
+import { getLang, t } from '../i18n'
 
 type Orden = 'insomnio' | 'ha' | 'nombre'
 const TODOS = '*'
 
-/** A row of the list: a curated AMBA site or a catalog polygon from another frame. */
+/** Una fila de la lista: un sitio curado del AMBA o un polígono del catálogo de otra región. Sólo lo que ve el radar. */
 interface Fila {
   id: string
   frame: string
@@ -18,40 +19,22 @@ interface Fila {
   ha: number | null
   radar: Radar
   insomnio: number | null
-  veredicto: string
-  /** registry status in words, for the CSV and the narrow view */
-  registro: string
-  cierre?: string
-  modelo: LecturaModelo | null
-  /** the curated site, if the row is from the AMBA: it has its own registry tag */
-  sitio?: Sitio
-  /** the catalog registry status, as it comes, if the row is from another frame */
-  registroCatalogo?: string | null
 }
 
-function filaDeSitio(s: Sitio, modelo: LecturaModelo | null): Fila {
-  return {
-    id: s.id, frame: FRAME_AMBA, nombre: s.nombre, lugar: s.lugar, lat: s.lat, lon: s.lon, ha: s.ha, radar: s.radar, insomnio: s.insomnio,
-    veredicto: veredicto(s), registro: s.registro === 'sin_registro' ? 'sin registro' : REGISTRO[s.registro].toLowerCase(), cierre: s.cierre, modelo, sitio: s,
-  }
-}
+const filaDeSitio = (s: Sitio): Fila => ({ id: s.id, frame: FRAME_AMBA, nombre: t(s.nombre), lugar: s.lugar, lat: s.lat, lon: s.lon, ha: s.ha, radar: s.radar, insomnio: s.insomnio })
 
-function filaDeVeredicto(v: Veredicto): Fila {
-  return {
-    id: v.id, frame: v.frame, nombre: v.nombre ?? 'Polígono sin nombre', lugar: `${nombreFrame(v.frame)} · ${v.id}`, lat: v.lat as number, lon: v.lon as number,
-    ha: v.area_ha, radar: v.radar ?? 'no_alcanza', insomnio: v.insomnio, veredicto: v.veredicto_texto,
-    registro: v.registro === 'abierto' || v.registro === 'cerrado' ? v.registro : v.registro === 'contradictorio' ? 'contradictorio' : 'sin estado',
-    modelo: lecturaModelo(v), registroCatalogo: v.registro,
-  }
-}
+const filaDeVeredicto = (v: Veredicto): Fila => ({
+  id: v.id, frame: v.frame, nombre: v.nombre ?? t('Polígono sin nombre'), lugar: `${nombreFrame(v.frame)} · ${v.id}`,
+  lat: v.lat as number, lon: v.lon as number, ha: v.area_ha, radar: v.radar ?? 'no_alcanza', insomnio: v.insomnio,
+})
 
 function aCsv(filas: Fila[]): string {
-  const cols = ['id', 'frame', 'nombre', 'lugar', 'lat', 'lon', 'hectareas', 'registro', 'cierre', 'radar', 'insomnio', 'veredicto', 'modelo_lectura', 'modelo_puntaje_abierto']
+  const cols = ['id', 'region', 'name', 'place', 'lat', 'lon', 'hectares', 'radar', 'insomnia']
   const celda = (v: string | number | null | undefined) => {
-    const t = v == null ? '' : String(v)
-    return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t
+    const x = v == null ? '' : String(v)
+    return /[",\n]/.test(x) ? `"${x.replace(/"/g, '""')}"` : x
   }
-  const lineas = filas.map((f) => [f.id, f.frame, f.nombre, f.lugar, f.lat, f.lon, f.ha, f.registro, f.cierre, f.radar, f.insomnio, f.veredicto, f.modelo?.lectura, f.modelo?.p_abierto].map(celda).join(','))
+  const lineas = filas.map((f) => [f.id, f.frame, f.nombre, f.lugar, f.lat, f.lon, f.ha, f.radar, f.insomnio].map(celda).join(','))
   return [cols.join(','), ...lineas].join('\n') + '\n'
 }
 
@@ -69,11 +52,7 @@ export default function Sitios() {
   const [radar, setRadar] = useState<Radar | ''>('')
   const [orden, setOrden] = useState<Orden>('insomnio')
 
-  // el AMBA son los sitios curados, con su lectura del modelo si el catálogo tiene ese mismo predio; el resto, el catálogo
-  const todas = useMemo(
-    () => [...(sitios ?? []).map((s) => filaDeSitio(s, lecturaModelo(veredictoDeSitio(s, veredictos)))), ...fueraDelAmba(veredictos).map(filaDeVeredicto)],
-    [sitios, veredictos],
-  )
+  const todas = useMemo(() => [...(sitios ?? []).map(filaDeSitio), ...fueraDelAmba(veredictos).map(filaDeVeredicto)], [sitios, veredictos, getLang()])
   const frames = useMemo(() => {
     const n = new Map<string, number>()
     for (const f of todas) n.set(f.frame, (n.get(f.frame) ?? 0) + 1)
@@ -85,7 +64,7 @@ export default function Sitios() {
     const cmp: Record<Orden, (a: Fila, b: Fila) => number> = {
       insomnio: (a, b) => (b.insomnio ?? -1) - (a.insomnio ?? -1),
       ha: (a, b) => (b.ha ?? -1) - (a.ha ?? -1),
-      nombre: (a, b) => a.nombre.localeCompare(b.nombre, 'es'),
+      nombre: (a, b) => a.nombre.localeCompare(b.nombre, getLang()),
     }
     return delFrame.filter((f) => !radar || f.radar === radar).sort(cmp[orden])
   }, [delFrame, radar, orden])
@@ -97,21 +76,21 @@ export default function Sitios() {
       {children}
     </button>
   )
-  const plural = (n: number) => `${num(n)} ${n === 1 ? 'sitio' : 'sitios'}`
+  const plural = (n: number) => `${num(n)} ${n === 1 ? t('sitio') : t('sitios')}`
 
   return (
     <>
-      <PageHead title="Sitios" sub={frames.length > 1 ? `${num(todas.length)} en ${frames.length} frames de NISAR. Fuera del AMBA son los polígonos del catálogo de basurales, sin verificar` : undefined} />
+      <PageHead title={t('Sitios')} sub={frames.length > 1 ? t('{0} sitios en {1} regiones de NISAR. Fuera del AMBA son polígonos del catálogo de basurales, sin verificar', num(todas.length), frames.length) : undefined} />
 
       <div className="kpis sm grid g4 section">
-        <Kpi label="Sitios" value={num(delFrame.length)} />
+        <Kpi label={t('Sitios')} value={num(delFrame.length)} />
         {(['despierto', 'quieto', 'no_alcanza'] as const).map((r) => (
           <Kpi
             key={r}
             label={
               <>
                 <Dot radar={r} />
-                {RADAR[r]}
+                {radarTxt(r)}
               </>
             }
             value={num(delFrame.filter((f) => f.radar === r).length)}
@@ -122,24 +101,24 @@ export default function Sitios() {
       <div className="filtros" data-filtros>
         {frames.length > 1 && (
           <Picker
-            label="Frame"
+            label={t('Región')}
             value={frame}
             onChange={setFrame}
-            options={[...frames.map(([f, n]) => ({ value: f, label: nombreFrame(f), sub: plural(n) })), { value: TODOS, label: 'Todos los frames', sub: plural(todas.length) }]}
+            options={[...frames.map(([f, n]) => ({ value: f, label: nombreFrame(f), sub: plural(n) })), { value: TODOS, label: t('Todas las regiones'), sub: plural(todas.length) }]}
           />
         )}
         <Seg
           value={radar}
           onChange={setRadar}
           options={[
-            { value: '', label: 'Todos' },
-            { value: 'despierto', label: 'Despiertos' },
-            { value: 'quieto', label: 'Quietos' },
-            { value: 'no_alcanza', label: 'No alcanza' },
+            { value: '', label: t('Todos') },
+            { value: 'despierto', label: t('Despiertos') },
+            { value: 'quieto', label: t('Quietos') },
+            { value: 'no_alcanza', label: t('No alcanza') },
           ]}
         />
         <span className="grow" />
-        <button className="btn sm" onClick={() => descargar('basurales-sitios.csv', aCsv(filas))} disabled={!filas.length}>
+        <button className="btn sm" onClick={() => descargar('dumpsite-sites.csv', aCsv(filas))} disabled={!filas.length}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14" />
           </svg>
@@ -151,15 +130,14 @@ export default function Sitios() {
       {/* una grilla que se acomoda al ancho del panel: nunca hay scroll horizontal */}
       <div className="lista">
         <div className="lista-head">
-          <Col id="nombre">Sitio</Col>
-          <span className="ancho">Registro oficial</span>
-          <span className="ancho">Radar</span>
+          <Col id="nombre">{t('Sitio')}</Col>
+          <span className="ancho">{t('Radar')}</span>
           <Col id="ha" r>
-            Hectáreas
+            {t('Hectáreas')}
           </Col>
-          <span className="r" title="Insomnio: en qué fracción de las pasadas del radar el sitio cambió más que su entorno">
+          <span className="r" title={t('Insomnio: en qué fracción de las pasadas del radar el sitio cambió más que su entorno')}>
             <Col id="insomnio" r>
-              Insomnio
+              {t('Insomnio')}
             </Col>
           </span>
         </div>
@@ -172,20 +150,11 @@ export default function Sitios() {
               </b>
               <span>
                 {f.lugar}
-                <span className="angosto">
-                  {' '}
-                  · {f.veredicto}
-                  {f.registro !== 'sin registro' && f.registro !== 'sin estado' && f.registro !== 'cerrado' && ` · registro: ${f.registro}`}
-                  {f.registro === 'cerrado' && !f.cierre && ' · registro: cerrado'}
-                  {f.cierre && ` · cierre: ${fecha(f.cierre, true)}`}
-                  {f.modelo && ` · según el modelo: ${f.modelo.lectura}`}
-                </span>
+                <span className="angosto"> · {veredicto(f.radar)}</span>
               </span>
             </div>
-            <span className="ancho">{f.sitio ? <RegistroTag s={f.sitio} /> : <RegistroCatalogo registro={f.registroCatalogo ?? null} />}</span>
             <span className="ancho">
-              <span className={`tag ${f.radar}`}>{f.veredicto}</span>
-              {f.modelo && <SegunModelo m={f.modelo} corto />}
+              <span className={`tag ${f.radar}`}>{veredicto(f.radar)}</span>
             </span>
             <span className="num r">{f.ha == null ? '–' : num(Math.round(f.ha))}</span>
             <div className="insomnio">
@@ -196,7 +165,7 @@ export default function Sitios() {
             </div>
           </a>
         ))}
-        {!filas.length && <div className="empty">Ningún sitio con ese filtro</div>}
+        {!filas.length && <div className="empty">{t('Ningún sitio con ese filtro')}</div>}
       </div>
     </>
   )

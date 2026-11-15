@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { fecha } from './ui'
+import { t as tr } from '../i18n'
+import { dec, fecha } from './ui'
 
 export interface Serie {
   nombre: string
@@ -44,12 +45,12 @@ export function Coherencia({ fechas, series, marca, alto: altoFijo = 150, llenar
     <div className={llenar ? 'coh llenar' : 'coh'}>
       <div ref={ref} className="coh-area" style={{ minHeight: altoFijo }}>
       {w > 0 && (
-        <svg className="chart" width={w} height={alto} role="img" aria-label="Coherencia entre pasadas consecutivas">
+        <svg className="chart" width={w} height={alto} role="img" aria-label={tr('Coherencia entre pasadas consecutivas')}>
           {[0, 0.5, 1].map((v) => (
             <g key={v}>
               <line x1={m.l} x2={w - m.r} y1={y(v)} y2={y(v)} stroke="var(--line)" />
               <text x={m.l - 8} y={y(v) + 3.5} textAnchor="end">
-                {v.toFixed(1).replace('.', ',')}
+                {dec(v, 1)}
               </text>
             </g>
           ))}

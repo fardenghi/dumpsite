@@ -214,7 +214,7 @@ select:hover { border-color: var(--green); }
 
 /* ---------- sitios: una grilla que se achica con el panel, sin scroll horizontal */
 .lista { display: flex; flex-direction: column; margin: 0 -14px; }
-.lista-head, .fila { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1.2fr) 76px minmax(120px, 1fr); gap: 24px; align-items: center; padding: 0 14px; }
+.lista-head, .fila { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) 84px minmax(140px, 1.2fr); gap: 24px; align-items: center; padding: 0 14px; }
 .lista-head > span { font-size: 13px; color: var(--muted); }
 .angosto { display: none; }
 .ancho { min-width: 0; }
@@ -323,6 +323,10 @@ select:hover { border-color: var(--green); }
 .map-top > * { pointer-events: auto; }
 .map-top .picker { flex: 0 1 240px; }
 .map-top.con-ficha { right: calc(384px + 2 * var(--gap)); }
+.map-top .picker.idioma { flex: none; margin-left: auto; }
+.picker.idioma .picker-btn { min-width: 132px; }
+.picker.idioma .picker-lista { left: auto; right: 0; min-width: 160px; transform-origin: 80% 0; }
+.picker.idioma .picker-lista button { grid-template-columns: minmax(0, 1fr); }
 /* la barra de abajo no se mueve: con la ficha abierta sólo se corre el zoom */
 @media (min-width: 861px) {
   .app:has(.ficha) .maplibregl-ctrl-bottom-right { right: calc(384px + var(--gap)); }
