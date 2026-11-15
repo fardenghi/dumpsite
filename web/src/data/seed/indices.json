@@ -420,6 +420,34 @@
   "alto": 1433
  },
  {
+  "frame": "USA_CA_SAN_JOAQUIN",
+  "url": "indice/insomnio-usa_ca_san_joaquin.png",
+  "oeste": -122.0562,
+  "sur": 37.136,
+  "este": -121.1262,
+  "norte": 37.9287,
+  "coordinates": [
+   [
+    -122.0562,
+    37.9287
+   ],
+   [
+    -121.1262,
+    37.9287
+   ],
+   [
+    -121.1262,
+    37.136
+   ],
+   [
+    -122.0562,
+    37.136
+   ]
+  ],
+  "ancho": 1181,
+  "alto": 1269
+ },
+ {
   "frame": "USA_CA_TULARE",
   "url": "indice/insomnio-usa_ca_tulare.png",
   "oeste": -120.0038,
