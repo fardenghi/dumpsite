@@ -192,6 +192,202 @@
     -33.9753
    ]
   ],
+  "ancho": 758,
+  "alto": 1159
+ },
+ {
+  "frame": "CDMX",
+  "url": "indice/insomnio-cdmx.png",
+  "oeste": -99.4,
+  "sur": 19.15,
+  "este": -98.8,
+  "norte": 19.75,
+  "coordinates": [
+   [
+    -99.4,
+    19.75
+   ],
+   [
+    -98.8,
+    19.75
+   ],
+   [
+    -98.8,
+    19.15
+   ],
+   [
+    -99.4,
+    19.15
+   ]
+  ],
+  "ancho": 762,
+  "alto": 808
+ },
+ {
+  "frame": "DELHI",
+  "url": "indice/insomnio-delhi.png",
+  "oeste": 76.85,
+  "sur": 28.35,
+  "este": 77.55,
+  "norte": 28.95,
+  "coordinates": [
+   [
+    76.85,
+    28.95
+   ],
+   [
+    77.55,
+    28.95
+   ],
+   [
+    77.55,
+    28.35
+   ],
+   [
+    76.85,
+    28.35
+   ]
+  ],
+  "ancho": 889,
+  "alto": 868
+ },
+ {
+  "frame": "LOS_ANGELES",
+  "url": "indice/insomnio-los_angeles.png",
+  "oeste": -118.7,
+  "sur": 33.7,
+  "este": -117.6,
+  "norte": 34.4,
+  "coordinates": [
+   [
+    -118.7,
+    34.4
+   ],
+   [
+    -117.6,
+    34.4
+   ],
+   [
+    -117.6,
+    33.7
+   ],
+   [
+    -118.7,
+    33.7
+   ]
+  ],
+  "ancho": 1397,
+  "alto": 1073
+ },
+ {
+  "frame": "PRI_PONCE",
+  "url": "indice/insomnio-pri_ponce.png",
+  "oeste": -66.783,
+  "sur": 17.796,
+  "este": -65.883,
+  "norte": 18.696,
+  "coordinates": [
+   [
+    -66.783,
+    18.696
+   ],
+   [
+    -65.883,
+    18.696
+   ],
+   [
+    -65.883,
+    17.796
+   ],
+   [
+    -66.783,
+    17.796
+   ]
+  ],
+  "ancho": 1143,
+  "alto": 1204
+ },
+ {
+  "frame": "USA_AZ_MARICOPA",
+  "url": "indice/insomnio-usa_az_maricopa.png",
+  "oeste": -112.7257,
+  "sur": 33.0277,
+  "este": -112.0636,
+  "norte": 33.7689,
+  "coordinates": [
+   [
+    -112.7257,
+    33.7689
+   ],
+   [
+    -112.0636,
+    33.7689
+   ],
+   [
+    -112.0636,
+    33.0277
+   ],
+   [
+    -112.7257,
+    33.0277
+   ]
+  ],
+  "ancho": 841,
+  "alto": 1128
+ },
+ {
+  "frame": "USA_CA_LOS_ANGELES",
+  "url": "indice/insomnio-usa_ca_los_angeles.png",
+  "oeste": -118.9463,
+  "sur": 34.5207,
+  "este": -118.0585,
+  "norte": 35.0408,
+  "coordinates": [
+   [
+    -118.9463,
+    35.0408
+   ],
+   [
+    -118.0585,
+    35.0408
+   ],
+   [
+    -118.0585,
+    34.5207
+   ],
+   [
+    -118.9463,
+    34.5207
+   ]
+  ],
+  "ancho": 1128,
+  "alto": 805
+ },
+ {
+  "frame": "USA_CA_RIVERSIDE",
+  "url": "indice/insomnio-usa_ca_riverside.png",
+  "oeste": -117.5928,
+  "sur": 33.0412,
+  "este": -117.0465,
+  "norte": 33.9119,
+  "coordinates": [
+   [
+    -117.5928,
+    33.9119
+   ],
+   [
+    -117.0465,
+    33.9119
+   ],
+   [
+    -117.0465,
+    33.0412
+   ],
+   [
+    -117.5928,
+    33.0412
+   ]
+  ],
   "ancho": 694,
   "alto": 1326
  },
