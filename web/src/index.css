@@ -171,6 +171,15 @@ select:hover { border-color: var(--green); }
 .reg { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 12px; border-radius: 999px; font-size: 13px; background: var(--tint); color: var(--green); }
 .reg.no { background: none; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line-2); }
 
+/* ---------- lo que dice el modelo de abierto contra cerrado: siempre rotulado y aparte del radar y del registro */
+.segun-modelo { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; border: 1.5px dashed var(--line-2); }
+.segun-modelo .src { font-family: var(--mono); font-size: 11px; color: var(--green); }
+.segun-modelo b { font-weight: 500; }
+.segun-modelo small { font-size: 12px; color: var(--muted); }
+.segun-modelo .puntaje { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13px; }
+.segun-modelo .puntaje .bar > div { background: var(--green); }
+.segun-modelo.corto { display: block; padding: 0; border: 0; border-radius: 0; font-size: 12px; color: var(--muted); margin-top: 6px; }
+
 /* ---------- resumen: la frase a la izquierda y cuatro cifras a la derecha */
 .resumen { min-height: 100%; display: flex; flex-direction: column; margin-top: -8px; }
 .portada { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: center; padding: 0 0 24px; }
@@ -213,6 +222,9 @@ select:hover { border-color: var(--green); }
 .quien b .dot { margin-top: 7px; }
 .quien > span { display: block; font-size: 13px; color: var(--muted); padding-left: 18px; overflow-wrap: anywhere; }
 .insomnio { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 10px; align-items: center; }
+.filtros { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 16px; }
+.filtros .picker { flex: 0 1 280px; }
+.filtros .grow { flex: 1; }
 
 /* ---------- modelo */
 .paso-t { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; margin-bottom: 14px; }
@@ -282,6 +294,18 @@ select:hover { border-color: var(--green); }
 .limits li b { font-weight: 500; }
 .limits li span { color: var(--muted); font-size: 13px; }
 
+/* modelo de abierto contra cerrado: las cifras, lo que mira y la prueba en el AMBA */
+.kpi .v .ic { display: block; margin: 4px 0 0; white-space: normal; }
+.variables { display: flex; flex-wrap: wrap; gap: 6px; }
+.prueba { display: flex; flex-direction: column; }
+.prueba > div { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(120px, 1fr); gap: 16px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.prueba > div:first-child { border-top: 0; padding-top: 0; font-size: 13px; color: var(--muted); }
+.prueba .puntaje { display: grid; grid-template-columns: minmax(0, 1fr) 36px; gap: 10px; align-items: center; }
+.prueba .puntaje .bar > div { background: var(--green); }
+.limites-modelo { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.modelo-bloque { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+.modelo-bloque h4 { margin-bottom: 10px; }
+
 /* ---------- mapa */
 .map-top { position: absolute; top: var(--gap); left: var(--gap); right: var(--gap); z-index: 7; display: flex; gap: 8px; pointer-events: none; }
 .map-top > * { pointer-events: auto; }
@@ -305,6 +329,11 @@ select:hover { border-color: var(--green); }
 .capa i::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 0.15s var(--ease); }
 .capa[aria-checked='true'] i { background: var(--green); }
 .capa[aria-checked='true'] i::after { transform: translateX(12px); }
+.otros-frames { background: none; border: 0; border-top: 1px solid var(--line); padding: 12px 0 0; cursor: pointer; text-align: left; width: 100%; display: flex; flex-direction: column; gap: 2px; }
+.otros-frames b { font-weight: 500; color: var(--green); }
+.otros-frames:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.otros-frames span { font-size: 12px; color: var(--muted); }
+.ficha .motivo { font-size: 13px; color: var(--ink-2); }
 .escala { display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: -4px; }
 .escala div { flex: 0 0 100%; height: 6px; border-radius: 3px; margin-bottom: 4px; background: linear-gradient(90deg, #641a80, #b73779, #fc8961, #fcfdbf); }
 
@@ -367,6 +396,9 @@ select:hover { border-color: var(--green); }
   .futuro { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .futuro .une { display: none; }
   .limits li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .prueba > div { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 12px; }
+  .prueba > div > :last-child { grid-column: 1 / -1; }
+  .filtros .picker { flex: 1 1 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
