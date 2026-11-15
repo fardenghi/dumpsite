@@ -356,6 +356,7 @@ select:hover { border-color: var(--green); }
 .escala { display: flex; justify-content: space-between; flex-wrap: wrap; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: -4px; }
 .escala div { flex: 0 0 100%; height: 6px; border-radius: 3px; margin-bottom: 4px; background: linear-gradient(90deg, #641a80, #b73779, #fc8961, #fcfdbf); }
 
+.aviso-limite { position: absolute; left: 50%; bottom: calc(var(--gap) + var(--dock) + 12px); transform: translateX(-50%); z-index: 6; width: max-content; max-width: calc(100vw - 2 * var(--gap)); padding: 10px 16px; border-radius: 14px; background: #c62f1f; color: #fff; font-size: 13px; font-weight: 500; line-height: 1.4; text-align: center; box-shadow: var(--shadow); }
 .map-credit { position: absolute; left: var(--gap); bottom: 10px; z-index: 1; max-width: calc(50% - 230px); font-size: 10.5px; line-height: 1.35; color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7); }
 .map-credit a { color: inherit; }
 .map-credit .google { font-weight: 500; font-size: 13px; color: #fff; }

@@ -6,7 +6,7 @@ import { Marca, go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
 import { Dot, Kpi, Picker, dec, fecha, num, pct, radar as radarTxt, veredicto, type Opcion } from '../components/ui'
 import { useSitios } from '../data/api'
-import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
+import { HAY_GOOGLE, creditoGoogle, enLimite, marcarLimite, sesionGoogle, tilesGoogle, useLimiteGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
 import { INDICES, ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
 import { UMBRAL_BAJO, type Imagen, type Sitio, type Veredicto } from '../data/types'
@@ -383,6 +383,7 @@ export default function Mapa() {
   const [imagen, setImagen] = useState<Imagen | null>(null)
   const [vista, setVista] = useState<Vista>(HAY_GOOGLE ? 'google' : 'sentinel')
   const [credito, setCredito] = useState('')
+  const limite = useLimiteGoogle()
 
   useEffect(() => {
     if (sitios) precargar(sitios)
@@ -774,8 +775,13 @@ export default function Mapa() {
     let vivo = true
     maplibregl.addProtocol('gtile', async ({ url }, abort) => {
       const [z, x, y] = url.slice('gtile://'.length).split('/').map(Number)
-      if (!tokenGoogle || !tocaAlguna(cajaDelTile(z, x, y))) return { data: await tileVacio() }
+      if (!tokenGoogle || enLimite() || !tocaAlguna(cajaDelTile(z, x, y))) return { data: await tileVacio() }
       const r = await fetch(tilesGoogle(tokenGoogle).replace('{z}', String(z)).replace('{x}', String(x)).replace('{y}', String(y)), { signal: abort.signal })
+      // daily quota used up: stop asking until it resets; the notice at the bottom says until when
+      if (r.status === 429) {
+        marcarLimite()
+        return { data: await tileVacio() }
+      }
       if (!r.ok) throw new Error(`Google tile ${r.status}`)
       return { data: await r.arrayBuffer() }
     })
@@ -856,6 +862,16 @@ export default function Mapa() {
   return (
     <>
       <div className="map" ref={caja} />
+      {HAY_GOOGLE && limite && (
+        <div className="aviso-limite" role="status">
+          {t(
+            limite.toDateString() === new Date().toDateString()
+              ? 'Llegamos al límite diario de imágenes de Google: el mapa sigue con Sentinel-2. La vista de Google vuelve hoy a las {0} (tu hora).'
+              : 'Llegamos al límite diario de imágenes de Google: el mapa sigue con Sentinel-2. La vista de Google vuelve mañana a las {0} (tu hora).',
+            limite.toLocaleTimeString(idioma === 'es' ? 'es-AR' : 'en-US', { hour: '2-digit', minute: '2-digit' }),
+          )}
+        </div>
+      )}
       <div className={`map-top ${sel || punto ? 'con-ficha' : ''}`}>
         <Marca despiertos={cuenta.despierto} total={cuenta.despierto + cuenta.quieto + cuenta.no_alcanza} frames={veredictos?.frames?.length ?? 0} />
         <Picker
