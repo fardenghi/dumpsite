@@ -25,7 +25,7 @@ flowchart LR
 |---|---|---|
 | ![Card of the Luján dump site](docs/img/lujan-card.png) | ![Model panel](docs/img/model.png) | ![Video frame](docs/img/video.png) |
 
-**Results:** 37 NISAR frames (7 of them in Argentina outside the AMBA) and 1,087 pairs. The radar and the model find 274 active dump sites, 172 of them not in any catalog (not verified). The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/results.md`](docs/results.md) and [`docs/argentina.md`](docs/argentina.md).
+**Results:** 37 NISAR frames (7 of them in Argentina outside the AMBA) and 1,087 pairs. The radar finds 379 of 700 dump sites awake, and the model flags 183 possible new ones not in any catalog (not verified). The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/results.md`](docs/results.md) and [`docs/argentina.md`](docs/argentina.md).
 
 ## Roadmap
 Built in two days, so several pieces are first versions. Next steps, in short:
