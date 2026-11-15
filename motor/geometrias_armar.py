@@ -1,11 +1,11 @@
-"""Arma los archivos de geometrías a partir de lo que bajó `geometrias_extraer.py`.
+"""Builds the geometry files from what `geometrias_extraer.py` downloaded.
 
-Por cada catálogo escribe un GeoJSON y, si el GeoJSON pasa de 50 MB, un GeoParquet en su lugar.
-Cada feature se enlaza al catálogo por `id`. Los sitios sin polígono (los que vienen solo de la
-EPA o de Climate TRACE, y los cerrados de OSM que Overture no tiene) van como punto, con
+For each catalog it writes a GeoJSON and, if the GeoJSON is over 50 MB, a GeoParquet instead.
+Each feature links to the catalog by `id`. Sites without a polygon (those that come only from the
+EPA or Climate TRACE, and the closed OSM ones that Overture doesn't have) go as points, with
 `geometria = "punto"`.
 
-Uso:
+Usage:
     python geometrias_armar.py <dir_descargas> ../data/catalogos/
 """
 
@@ -43,9 +43,9 @@ def main(dir_in, dir_data):
     resumen = {}
     for catalogo, (ruta_cat, base_out) in SALIDAS.items():
         sitios = json.load(open(os.path.join(dir_data, ruta_cat)))["sitios"]
-        # Un sitio de basurales puede estar formado por varios objetos OSM (o un objeto partido en
-        # varias features de Overture): se unen todos en una sola geometría. Antes se quedaba con el
-        # primero y el resto del predio caía en el anillo de control.
+        # A dump site can be made of several OSM objects (or one object split into
+        # several Overture features): they are all merged into one geometry. It used to keep only the
+        # first one, and the rest of the site fell into the control ring.
         geoms = dict(
             c.sql(
                 f"""select id_catalogo,
@@ -77,7 +77,7 @@ def main(dir_in, dir_data):
             open(dest, "w").write(texto)
         else:
             dest = os.path.join(dir_data, base_out + ".parquet")
-            # una feature por línea, con la geometría como texto GeoJSON
+            # one feature per line, with the geometry as GeoJSON text
             tmp = os.path.join(dir_in, f"_{catalogo}.ndjson")
             with open(tmp, "w") as fh:
                 for f in feats:

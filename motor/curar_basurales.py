@@ -1,15 +1,15 @@
-"""Arma el catálogo curado de basurales del mundo en JSON.
+"""Builds the curated world dump-site catalog in JSON.
 
-Une cuatro fuentes abiertas, cruza los sitios por cercanía y marca los que
-"en teoría están cerrados" pero tienen alguna señal de actividad.
+Joins four open sources, matches sites by proximity and flags the ones that
+are "closed in theory" but show some sign of activity.
 
-Fuentes de entrada (bajadas a un directorio, ver `bajar_fuentes()`):
-- OpenStreetMap vía Overpass: `osm_landuse.json` y `osm_closed.json` (opcional `osm_geom.json`).
-- Climate TRACE, subsector solid-waste-disposal: `ct_*.json`.
-- EPA LMOP (EE. UU.): `lmop.xlsx`.
-- NASA EMIT L2B CH4PLM v002 (metadatos de CMR): `emit_p*.json`.
+Input sources (downloaded to a folder, see `bajar_fuentes()`):
+- OpenStreetMap via Overpass: `osm_landuse.json` and `osm_closed.json` (optional `osm_geom.json`).
+- Climate TRACE, solid-waste-disposal subsector: `ct_*.json`.
+- EPA LMOP (USA): `lmop.xlsx`.
+- NASA EMIT L2B CH4PLM v002 (CMR metadata): `emit_p*.json`.
 
-Uso:
+Usage:
     python curar_basurales.py <dir_descargas> ../data/catalogos/basurales
 """
 
@@ -25,8 +25,8 @@ from collections import defaultdict
 from datetime import date
 
 HOY = date(2026, 11, 14)
-RADIO_CRUCE_M = 1000  # dos registros a menos de esto se consideran el mismo sitio
-RADIO_EMIT_M = 1500  # pluma de EMIT a menos de esto del sitio
+RADIO_CRUCE_M = 1000  # two records closer than this are considered the same site
+RADIO_EMIT_M = 1500  # EMIT plume closer than this to the site
 
 FUENTES = {
     "osm": {
@@ -81,7 +81,7 @@ def dist_m(lat1, lon1, lat2, lon2):
 
 
 def area_poligono_m2(coords):
-    """Área geodésica aproximada (proyección equirectangular local) de un anillo [(lat, lon)]."""
+    """Approximate geodesic area (local equirectangular projection) of a ring [(lat, lon)]."""
     if len(coords) < 3:
         return None
     lat0 = math.radians(sum(c[0] for c in coords) / len(coords))
@@ -131,7 +131,7 @@ def leer_osm(dir_in):
             continue
         for e in elementos:
             vistos[(e["type"], e["id"])] = e
-    # Overture Maps (base/land_use, class=landfill): los mismos objetos de OSM ya con polígono.
+    # Overture Maps (base/land_use, class=landfill): the same OSM objects, already with a polygon.
     p = os.path.join(dir_in, "overture_landfill.parquet")
     if os.path.exists(p):
         import duckdb
@@ -263,7 +263,7 @@ def leer_lmop(dir_in):
                 "estado": est,
                 "estado_motivo": f"LMOP 'Current Landfill Status'={r['Current Landfill Status']}",
                 "fecha_apertura": r["Year Landfill Opened"],
-                # LMOP pone el año de cierre previsto también a los abiertos
+                # LMOP also gives the planned closure year to open ones
                 "fecha_cierre": cierre if est == "cerrado" else None,
                 "fecha_cierre_prevista": cierre if est == "abierto" else None,
                 "operador": r["Landfill Operator Organization"] or r["Landfill Owner Organization(s)"],
@@ -281,7 +281,7 @@ def leer_lmop(dir_in):
 
 
 def leer_curados(ruta):
-    """Casos curados a mano (data/catalogos/basurales/casos_curados_argentina.json) con coordenadas."""
+    """Cases curated by hand (data/catalogos/basurales/casos_curados_argentina.json) with coordinates."""
     if not os.path.exists(ruta):
         return []
     sitios = []
@@ -337,7 +337,7 @@ def leer_emit(dir_in):
 
 # ---------------------------------------------------------------- cruce
 def agrupar(registros):
-    """Une registros de distintas fuentes a menos de RADIO_CRUCE_M (enlace simple con grilla)."""
+    """Joins records from different sources within RADIO_CRUCE_M (single linkage with a grid)."""
     celda = RADIO_CRUCE_M / 111000.0
     grilla = defaultdict(list)
     for i, r in enumerate(registros):
@@ -358,7 +358,7 @@ def agrupar(registros):
                     continue
                 a, b = registros[i], registros[j]
                 if dist_m(a["lat"], a["lon"], b["lat"], b["lon"]) <= RADIO_CRUCE_M:
-                    # dos objetos OSM distintos son sitios distintos aunque estén cerca
+                    # two different OSM objects are different sites even if they are close
                     if a["fuente"] == b["fuente"] == "osm":
                         continue
                     padre[raiz(i)] = raiz(j)
@@ -430,7 +430,7 @@ def consolidar(grupo, plumas, indice):
                 {"tipo": "fuentes_en_desacuerdo", "detalle": f"abierto según {sorted(fa)}, cerrado según {sorted(fc)}", "peso": 2}
             )
         else:
-            # misma fuente con registros vecinos: típico de una celda vieja cerrada junto a una nueva activa
+            # same source with neighboring records: typical of an old closed cell next to a new active one
             senales.append(
                 {"tipo": "celda_cerrada_junto_a_celda_activa", "detalle": f"{sorted(fa)[0]} lista registros vecinos abiertos y cerrados (probable ampliación del mismo complejo)", "peso": 0}
             )
@@ -461,7 +461,7 @@ def consolidar(grupo, plumas, indice):
         for s in r.get("senales_documentadas") or []:
             senales.append({"tipo": s["tipo"], "detalle": s["detalle"], "fuente": s.get("fuente"), "peso": 1 if s.get("evidencia") == "debil" else 2})
     for r in por_f.get("epa_lmop", []):
-        # se compara dentro del mismo registro: un grupo puede unir varios rellenos LMOP vecinos
+        # compared within the same record: a group can join several neighboring LMOP landfills
         c = anio(r.get("fecha_cierre"))
         if r["estado"] == "cerrado" and r.get("residuos_anuales_anio") and c and r["residuos_anuales_anio"] > c:
             senales.append(

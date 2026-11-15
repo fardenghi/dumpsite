@@ -1,12 +1,12 @@
-"""Etapa 2 del catálogo de negativos: clasifica, filtra y muestrea los confusores.
+"""Stage 2 of the negatives catalog: classifies, filters and samples the confusers.
 
-Toma los parquet de `negativos_extraer.py`, asigna a cada polígono una clase de
-`../docs/datos.md`, descarta lo que está a menos de 500 m de un basural del catálogo
-y arma dos archivos con el mismo estilo que el catálogo de positivos:
-- `negativos_mundo.json`: muestra balanceada por clase y por celda de 1°, cerca de positivos.
-- `negativos_amba.json`: todos los confusores del AMBA (con tope por clase).
+Takes the parquets from `negativos_extraer.py`, assigns each polygon a class from
+`../docs/datos.md`, discards what is within 500 m of a catalog dump site
+and builds two files in the same style as the positives catalog:
+- `negativos_mundo.json`: sample balanced by class and by 1° cell, near positives.
+- `negativos_amba.json`: all the AMBA confusers (with a cap per class).
 
-Uso:
+Usage:
     python negativos_curar.py <dir_descargas> ../data/catalogos/basurales/basurales_mundo.json ../data/catalogos/negativos
 """
 
@@ -27,7 +27,7 @@ HOY = date(2026, 11, 14)
 DIST_MIN_BASURAL_M = 500
 AMBA = {"lat_min": -35.2, "lat_max": -34.2, "lon_min": -59.5, "lon_max": -57.8}
 TOPE_AMBA_POR_CLASE = 150
-CUPO_POR_CELDA = {"A": 6, "B": 3, "C": 2}  # por clase y por celda de 1°
+CUPO_POR_CELDA = {"A": 6, "B": 3, "C": 2}  # per class and per 1° cell
 
 CLASES = {
     # clase: (prioridad, grupo, rol)
@@ -98,7 +98,7 @@ def clasificar(tipo, clase, tags):
         if clase == "farmland":
             return ("arrozal" if "rice" in t.get("crop", "") else "cultivo"), "media"
         if clase in ("farmyard", "animal_keeping"):
-            # un farmyard no siempre es un feedlot: confianza baja salvo que diga el animal
+            # a farmyard isn't always a feedlot: low confidence unless it names the animal
             return "feedlot", "media" if t.get("animal_keeping") or "cow" in t.get("building", "") else "baja"
         if clase == "aquaculture":
             return "acuicultura", "media"
@@ -189,7 +189,7 @@ def hash_orden(s):
 
 def main(dir_in, ruta_catalogo, dir_out):
     cat = json.load(open(ruta_catalogo))["sitios"]
-    # índice de basurales (todos, con o sin estado) para la distancia mínima
+    # index of dump sites (all of them, with or without status) for the minimum distance
     celda_b = 0.05
     idx = defaultdict(list)
     for s in cat:
@@ -206,7 +206,7 @@ def main(dir_in, ruta_catalogo, dir_out):
                         mejor = (d, i, n, p)
         return mejor
 
-    # país inferido: el del positivo con país más cercano (celda de 1°)
+    # inferred country: that of the nearest positive with a country (1° cell)
     paises = defaultdict(list)
     for s in cat:
         if s.get("pais"):
@@ -226,8 +226,8 @@ def main(dir_in, ruta_catalogo, dir_out):
 
     partes = sorted(glob.glob(os.path.join(dir_in, "neg_parts", "*.parquet")))
     disponibles, excluidos = Counter(), Counter()
-    # Muestreo en streaming: por cada (clase, celda de 1°) y por cada clase del AMBA se guardan solo
-    # los candidatos con hash más chico (con margen x4 para reponer los que se excluyan por cercanía).
+    # Streaming sampling: for each (class, 1° cell) and each AMBA class only the candidates
+    # with the smallest hash are kept (with a x4 margin to replace those excluded for proximity).
     MARGEN = 4
     cand_mundo = defaultdict(list)  # clave -> heap de (-hash, fila)
     cand_amba = defaultdict(list)
@@ -263,7 +263,7 @@ def main(dir_in, ruta_catalogo, dir_out):
     print("polígonos extraídos:", total)
 
     def filtrar(heap, cupo, contar):
-        """Ordena por hash, descarta los cercanos a un basural y se queda con `cupo`."""
+        """Sorts by hash, discards those near a dump site and keeps `cupo`."""
         res = []
         for _, f in sorted(heap, key=lambda x: -x[0]):
             if len(res) >= cupo:
@@ -300,7 +300,7 @@ def main(dir_in, ruta_catalogo, dir_out):
             "url": url,
             "licencia": "ODbL 1.0",
             "confianza": conf,
-            # None = no hay ningún basural del catálogo a menos de ~5 km
+            # None = there is no catalog dump site within ~5 km
             "basural_mas_cercano": {"id": bc[1], "nombre": bc[2], "distancia_borde_m": round(max(0, bc[0] - math.sqrt(area / math.pi)))} if bc else None,
             "etiquetas_osm": t or None,
             "notas": None,

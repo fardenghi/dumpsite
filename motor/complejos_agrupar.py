@@ -1,18 +1,18 @@
-"""Agrupa en "complejos" los basurales del catálogo que están a menos de 1 km entre sí.
+"""Groups into "complexes" the catalog dump sites that are less than 1 km apart.
 
-Para qué: un mismo predio puede figurar varias veces (por ejemplo, Norte III aparece como
-"Complejo Ambiental Norte III" y como "Environmental Complex Norte III C Module"). Si no se agrupan:
-- el anillo de control de una entrada incluye a la otra;
-- el mismo complejo cuenta dos veces y puede caer una parte en entrenamiento y otra en validación.
+Why: the same site can appear several times (for example, Norte III shows up as
+"Complejo Ambiental Norte III" and as "Environmental Complex Norte III C Module"). If they are not grouped:
+- the control ring of one entry includes the other;
+- the same complex counts twice and part of it can fall in training and part in validation.
 
-Cada complejo hereda un estado agregado:
-- `abierto` si alguna entrada está abierta y ninguna cerrada;
-- `cerrado` si alguna está cerrada y ninguna abierta;
-- `contradictorio` si hay entradas abiertas y cerradas, o alguna ya era contradictoria;
-- `desconocido` si ninguna tiene estado.
+Each complex inherits an aggregated status:
+- `abierto` (open) if some entry is open and none is closed;
+- `cerrado` (closed) if some entry is closed and none is open;
+- `contradictorio` (contradictory) if there are open and closed entries, or one was already contradictory;
+- `desconocido` (unknown) if none has a status.
 
-Uso:
-    python complejos_agrupar.py ../data/catalogos/            # escribe data/catalogos/basurales/complejos.json
+Usage:
+    python complejos_agrupar.py ../data/catalogos/            # writes data/catalogos/basurales/complejos.json
 """
 
 from __future__ import annotations
@@ -28,14 +28,14 @@ from shapely.geometry import shape
 from shapely.ops import nearest_points
 
 DIST_M = 1000.0
-# Los polígonos de menos de 1 ha no unen a otros: hay ciudades con cientos de micro basurales mapeados
-# que, encadenados de a menos de 1 km, armaban "complejos" de 10-18 km. Quedan como complejos de un sitio.
+# Polygons under 1 ha don't join others: some cities have hundreds of mapped micro dumps
+# that, chained at less than 1 km, built "complexes" of 10-18 km. They stay as single-site complexes.
 AREA_MIN_UNE_HA = 1.0
 GEOD = Geod(ellps="WGS84")
 
 
 def distancia_m(a, b):
-    """Distancia geodésica entre los puntos más cercanos de dos geometrías (0 si se tocan)."""
+    """Geodesic distance between the closest points of two geometries (0 if they touch)."""
     if a.intersects(b):
         return 0.0
     p, q = nearest_points(a, b)
@@ -60,7 +60,7 @@ def main(dir_data):
     geoms = [shape(f["geometry"]) for f in feats]
     arbol = STRtree(geoms)
 
-    # Unión de componentes conexas (union-find) con aristas entre geometrías a menos de DIST_M.
+    # Union of connected components (union-find) with edges between geometries closer than DIST_M.
     padre = list(range(len(ids)))
 
     def raiz(i):
@@ -72,7 +72,7 @@ def main(dir_data):
     def une(i):
         g = geoms[i]
         if g.geom_type == "Point":
-            return True  # puntos de la EPA o Climate TRACE: suelen ser rellenos grandes
+            return True  # EPA or Climate TRACE points: they are usually large landfills
         return (sitios[ids[i]].get("area_ha") or 0) >= AREA_MIN_UNE_HA
 
     for i, g in enumerate(geoms):

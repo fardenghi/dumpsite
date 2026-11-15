@@ -1,11 +1,11 @@
-"""Baja de Overture Maps los polígonos de los sitios de los catálogos de basurales y de negativos.
+"""Downloads from Overture Maps the polygons of the sites in the dump-site and negative catalogs.
 
-Lee los ids de `data/catalogos/basurales/basurales_mundo.json` (objetos OSM, que se cruzan con el id de
-Overture usando `overture_landfill.parquet`) y de `data/catalogos/negativos/negativos_*.json`
-(`poligono.overture_id`). Baja solo esos polígonos, los simplifica a ~10 m y deja un parquet por
-archivo de Overture en <dir_descargas>/geom_parts/.
+Reads the ids from `data/catalogos/basurales/basurales_mundo.json` (OSM objects, matched to the Overture id
+through `overture_landfill.parquet`) and from `data/catalogos/negativos/negativos_*.json`
+(`poligono.overture_id`). Downloads only those polygons, simplifies them to ~10 m and leaves one parquet per
+Overture file in <dir_descargas>/geom_parts/.
 
-Uso:
+Usage:
     python geometrias_extraer.py <dir_descargas> ../data/catalogos/
 """
 
@@ -21,13 +21,13 @@ import duckdb
 
 RELEASE = "2026-10-21.0"
 RAIZ = f"s3://overturemaps-us-west-2/release/{RELEASE}/theme=base"
-TOLERANCIA_GRADOS = 0.0001  # ~10 m: muy por debajo de la resolución de NISAR (20-80 m)
+TOLERANCIA_GRADOS = 0.0001  # ~10 m: well below the NISAR resolution (20-80 m)
 
 
 def ids_necesarios(dir_in, dir_data):
     """Devuelve filas (overture_id, tipo_overture, catalogo, id_catalogo)."""
     filas = []
-    # basurales: OSM -> Overture vía la extracción de landfills
+    # dump sites: OSM -> Overture through the landfill extraction
     osm_a_bas = {}
     for s in json.load(open(os.path.join(dir_data, "basurales", "basurales_mundo.json")))["sitios"]:
         for f in s.get("fuentes", []):
@@ -40,7 +40,7 @@ def ids_necesarios(dir_in, dir_data):
             clave = f"{tipos[m.group(1)]}/{m.group(2)}"
             if clave in osm_a_bas:
                 filas.append((oid, "land_use", "basurales", osm_a_bas[clave]))
-    # negativos: el id de Overture ya está en el registro
+    # negatives: the Overture id is already in the record
     for nombre in ("negativos_mundo.json", "negativos_amba.json"):
         cat = nombre.replace(".json", "")
         for s in json.load(open(os.path.join(dir_data, "negativos", nombre)))["sitios"]:

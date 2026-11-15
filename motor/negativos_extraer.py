@@ -1,13 +1,13 @@
-"""Etapa 1 del catálogo de negativos: extrae de Overture Maps los polígonos de los confusores.
+"""Stage 1 of the negatives catalog: extracts the confuser polygons from Overture Maps.
 
-Lee `base/land_use`, `base/land`, `base/water` y `base/infrastructure` de la release indicada,
-se queda con las clases de `../docs/datos.md` y con superficie entre 2 y 500 ha, y
-solo en las celdas de 0,25° cercanas a basurales con estado conocido (proxy de "mismos frames
-de NISAR que los positivos"). Guarda un parquet por archivo en <dir_descargas>/neg_parts/.
+Reads `base/land_use`, `base/land`, `base/water` and `base/infrastructure` from the given release,
+keeps the classes of `../docs/datos.md` with an area between 2 and 500 ha, and
+only in the 0.25° cells near dump sites with known status (a proxy for "the same NISAR frames
+as the positives"). Saves one parquet per file in <dir_descargas>/neg_parts/.
 
-Uso:
+Usage:
     python negativos_extraer.py <dir_descargas> ../data/catalogos/basurales/basurales_mundo.json
-Requiere duckdb y acceso anónimo a s3://overturemaps-us-west-2.
+Requires duckdb and anonymous access to s3://overturemaps-us-west-2.
 """
 
 from __future__ import annotations
@@ -22,10 +22,10 @@ import duckdb
 RELEASE = "2026-10-21.0"
 RAIZ = f"s3://overturemaps-us-west-2/release/{RELEASE}/theme=base"
 CELDA = 0.25  # grados
-VECINDAD = 1  # celdas alrededor de cada positivo (~28 km a cada lado en el ecuador)
+VECINDAD = 1  # cells around each positive (~28 km on each side at the equator)
 AREA_MIN_M2, AREA_MAX_M2 = 2e4, 5e6
 
-# (tipo de Overture, condición SQL sobre subtype/class)
+# (Overture type, SQL condition on subtype/class)
 FILTROS = {
     "land_use": """class in ('quarry','salt_pond','construction','greenfield','farmland','farmyard','animal_keeping',
                    'aquaculture','railway','works','industrial','brownfield','airfield','greenhouse_horticulture')""",
@@ -34,7 +34,7 @@ FILTROS = {
                 'sewage','salt_pond','river','canal')""",
     "infrastructure": "class in ('runway','apron','taxiway','airport','parking','plant','recycling','waste_disposal','silo')",
 }
-# columnas de source_tags (OSM) que sirven para refinar la clase
+# source_tags (OSM) columns that help refine the class
 TAGS = ["resource", "industrial", "product", "plant:source", "generator:source", "man_made", "basin", "wetland",
         "crop", "animal_keeping", "landuse", "natural", "water", "amenity", "recycling_type", "parking", "aeroway",
         "power", "craft", "building", "access", "disused"]

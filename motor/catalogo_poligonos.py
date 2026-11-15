@@ -1,12 +1,12 @@
-"""Polígonos de los catálogos (`../data/catalogos/basurales/` y `../data/catalogos/negativos/`) y de las manchas, como shapely, para cruzar.
+"""Polygons of the catalogs (`../data/catalogos/basurales/` and `../data/catalogos/negativos/`) and of the blobs, as shapely, for crossing.
 
-Lo usan `cruce_manchas.py` y `extraer_optico.py`. No calcula nada del radar.
+Used by `cruce_manchas.py` and `extraer_optico.py`. It computes nothing from the radar.
 
-- Basurales: `basurales/geometrias.geojson`, con `complejo` (de `complejos.json`), `estado` y `area_ha`.
-- Negativos: `negativos/geometrias_amba.geojson` y `negativos/geometrias_mundo.parquet` (geometría WKB), los dos,
-  como `fuentes_fijas.py catalogo` (así los ids coinciden con los de `insomnio_catalogo.parquet` de la etapa 4).
-  Con `clase`, `rol` y `prioridad`.
-- Todo se filtra por la caja de trabajo y se puede pasar a la UTM del frame para medir áreas en metros.
+- Dump sites: `basurales/geometrias.geojson`, with `complejo` (from `complejos.json`), `estado` and `area_ha`.
+- Negatives: `negativos/geometrias_amba.geojson` and `negativos/geometrias_mundo.parquet` (WKB geometry), both,
+  like `fuentes_fijas.py catalogo` (so the ids match those of the stage 4 `insomnio_catalogo.parquet`).
+  With `clase`, `rol` and `prioridad`.
+- Everything is filtered by the working box and can be converted to the frame's UTM to measure areas in meters.
 """
 import json
 import os
@@ -17,12 +17,12 @@ from rasterio.warp import transform_geom
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(AQUI, "..", "data", "catalogos")
-# Caja del AMBA en el orden de GeoJSON: [lon_oeste, lat_sur, lon_este, lat_norte] (geo.CAJA va en otro orden).
+# AMBA box in GeoJSON order: [lon_west, lat_south, lon_east, lat_north] (geo.CAJA uses another order).
 BBOX_AMBA = (-59.35, -34.90, -58.25, -34.25)
 
 
 def epsg_utm(lon, lat):
-    """EPSG de la zona UTM WGS84 que contiene el punto (326xx norte, 327xx sur)."""
+    """EPSG of the WGS84 UTM zone that contains the point (326xx north, 327xx south)."""
     zona = int((lon + 180) // 6) + 1
     return (32600 if lat >= 0 else 32700) + zona
 
@@ -37,12 +37,12 @@ def _valida(g):
 
 
 def a_utm(g, epsg):
-    """Geometría shapely en grados -> en la UTM `epsg` (metros)."""
+    """Shapely geometry in degrees -> in UTM `epsg` (meters)."""
     return _valida(shape(transform_geom("EPSG:4326", f"EPSG:{epsg}", shapely.geometry.mapping(g))))
 
 
 def manchas(fc, solo_candidatas=True):
-    """Lista de (props, geometría en grados) de un FeatureCollection de manchas."""
+    """List of (props, geometry in degrees) of a FeatureCollection of blobs."""
     salida = []
     for f in fc["features"]:
         if solo_candidatas and f["properties"].get("descartada"):
@@ -59,7 +59,7 @@ def _toca(bbox):
 
 
 def basurales(bbox):
-    """Basurales cuya geometría toca la caja: lista de dicts con id, catalogo, complejo, estado, area_ha, nombre y geom."""
+    """Dump sites whose geometry touches the box: list of dicts with id, catalogo, complejo, estado, area_ha, nombre and geom."""
     with open(os.path.join(DATA, "basurales", "geometrias.geojson"), encoding="utf-8") as fh:
         feats = json.load(fh)["features"]
     with open(os.path.join(DATA, "basurales", "complejos.json"), encoding="utf-8") as fh:
@@ -70,7 +70,7 @@ def basurales(bbox):
         if not f.get("geometry") or f["geometry"]["type"] not in ("Polygon", "MultiPolygon"):
             continue
         v = f["geometry"]["coordinates"]
-        # descarte rápido por un vértice cualquiera, antes de armar el shapely
+        # quick discard by any vertex, before building the shapely object
         while isinstance(v[0], list):
             v = v[0]
         if not (o - 0.5 <= v[0] <= e + 0.5 and s - 0.5 <= v[1] <= n + 0.5):
@@ -98,7 +98,7 @@ def _mundo():
 
 
 def negativos(bbox, fuente="ambos"):
-    """Negativos cuya geometría toca la caja. `fuente`: "ambos" (por defecto), "amba" o "mundo"."""
+    """Negatives whose geometry touches the box. `fuente`: "ambos" (default), "amba" or "mundo"."""
     toca, salida, filas = _toca(bbox), [], []
     o, s, e, n = bbox
     if fuente in ("ambos", "amba") and BBOX_AMBA[0] < e and o < BBOX_AMBA[2] and BBOX_AMBA[1] < n and s < BBOX_AMBA[3]:
@@ -125,11 +125,11 @@ def negativos(bbox, fuente="ambos"):
 
 
 def catalogo(bbox, fuente_negativos="ambos"):
-    """Basurales y negativos que tocan la caja."""
+    """Dump sites and negatives that touch the box."""
     return basurales(bbox) + negativos(bbox, fuente_negativos)
 
 
 def bbox_de(geoms, margen=0.02):
-    """Caja [o, s, e, n] que contiene todas las geometrías, con un margen en grados."""
+    """Box [w, s, e, n] that contains all the geometries, with a margin in degrees."""
     o, s, e, n = shapely.total_bounds(geoms)
     return (o - margen, s - margen, e + margen, n + margen)
