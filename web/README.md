@@ -13,10 +13,10 @@ El mapa es el fondo de toda la web y queda siempre a la vista. Las secciones son
 
 | Ruta | Qué muestra |
 |---|---|
-| `#/mapa` | El AMBA con el índice de insomnio y los sitios. Al abrir uno: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha |
+| `#/mapa` | El AMBA con el índice de insomnio y los sitios. Al abrir uno: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha. Los basurales del catálogo de los otros frames van como puntos; la leyenda tiene un botón para alejar el mapa hasta verlos todos |
 | `#/inicio` | Panel "Resumen": cantidad de sitios, ranking de insomnio y el caso Luján |
-| `#/sitios` | Panel con la lista filtrable por estado del radar, exportable a CSV |
-| `#/modelo` | Panel con la regla par por par (con un sitio de ejemplo), el embudo de la grilla a las manchas candidatas, los umbrales calibrados y el clasificador propuesto, que todavía no tiene métricas |
+| `#/sitios` | Panel con la lista filtrable por frame y por estado del radar, exportable a CSV. Arranca en el AMBA |
+| `#/modelo` | Panel con la regla par por par (con un sitio de ejemplo), el embudo de la grilla a las manchas candidatas, los umbrales calibrados, **el modelo de abierto contra cerrado con sus métricas** (si `modelo.json` las trae) y el clasificador por mancha propuesto, que todavía no tiene métricas |
 
 ## Datos
 **Son reales y están precalculados.** Los escribe el pipeline del índice de insomnio y no se editan a mano:
@@ -31,6 +31,21 @@ python ../idea-basurales-nisar/herramientas/pipeline_insomnio.py indice
 | `src/data/seed/fichas.json` | Por sitio, lo que no entra en `Sitio`: motivo del veredicto, persistencia, insomnio por órbita, órbita de cada par, eco, objetos de OSM y fuentes del registro. Lo usa el panel Modelo |
 | `src/data/seed/candidatos.json` | Las 219 manchas candidatas con centro, superficie y clase (`relleno_osm`, `uso_conocido`, `sin_explicar`). El panel Modelo muestra el conteo por clase; en el mapa todavía no están. Las "sin explicar" no están verificadas: hablar de "señal compatible con actividad" |
 | `public/indice/insomnio-amba.png` + `src/data/seed/indice.json` | El índice del AMBA como PNG (norte arriba, regular en Web Mercator) y sus límites: `oeste`, `sur`, `este`, `norte` y `coordinates`, las cuatro esquinas en el orden que pide una fuente `image` de MapLibre. `Mapa.tsx` lo carga así y el botón "Índice de insomnio" lo prende y lo apaga |
+
+### Veredictos de todos los frames y modelo de abierto contra cerrado
+Los escribe `python ../idea-basurales-nisar/herramientas/flujo.py --web`. **Los dos archivos son opcionales**: la web los busca con `import.meta.glob` (`src/data/veredictos.ts`) y, si faltan o no traen las claves nuevas, queda como antes.
+
+| Archivo | Qué usa la web |
+|---|---|
+| `src/data/seed/veredictos.json` | `sitios[]`: un polígono del catálogo de basurales por fila, con `frame`, `registro`, `radar`, `insomnio`, `veredicto_texto`, `lat` y `lon`. Los del AMBA no se listan aparte: el AMBA sigue siendo los 12 sitios curados de `sitios.json`. Los de los otros frames son las filas nuevas de la lista y los puntos nuevos del mapa |
+| `sitios[].modelo_estado` (opcional) | `{p_abierto, lectura, origen}`: lo que dice el modelo de abierto contra cerrado de ese polígono. Se muestra en la ficha y en la lista, **rotulado "según el modelo"** y aparte del estado del registro y del veredicto del radar. `p_abierto` va como "puntaje de abierto, de 0 a 1", no como probabilidad |
+| `src/data/seed/modelo.json`, clave `estado` (opcional) | `{auc, ic95, n, abiertos, cerrados, frames, variables, validacion, limites, prueba_amba}`: el panel Modelo lo muestra tal como viene, con los límites y la prueba en el AMBA. Sin `estado`, el panel no muestra el modelo |
+
+- **Ningún número del modelo está escrito en el código**: todo sale de esos dos JSON. Los tipos están en `src/data/types.ts` (`Veredicto`, `LecturaModelo`, `ModeloEstado`).
+- **Cómo se le asigna la lectura del modelo a un sitio curado del AMBA:** `sitios.json` no trae el id del catálogo, así que se busca el polígono del catálogo del frame `AMBA` que está a menos de 0,4 km y mide lo mismo (cociente de superficies de hasta 1,25). Si no hay uno claro, el sitio queda sin lectura (por ejemplo, la mancha al oeste de Luján, que no es un predio). Ver `veredictoDeSitio` en `src/data/veredictos.ts`.
+- **El nombre de cada frame sale de su clave** (`USA_OH_LAKE` → "Lake, OH, USA"): el seed no trae la ciudad.
+- **Fuera del AMBA no hay contorno, serie de coherencia ni imágenes por fecha**: la ficha muestra el veredicto, el registro, el insomnio, la superficie, el motivo y la lectura del modelo, y el mapa se acerca menos (el fondo de Blue Marble llega hasta el zoom 8).
+- **Lenguaje:** "compatible con abierto según el modelo" y "señal compatible con actividad". El estado sólo se muestra cuando lo da el registro; los polígonos sin estado dicen "En el catálogo, sin estado".
 
 Los sitios de otros países que tenía el seed se sacaron: no tienen NISAR procesado. `scripts/contornos.py` quedó sin uso (los contornos los escribe el pipeline). Cómo se calcula cada número: `../idea-basurales-nisar/idea/indice-final.md`.
 
@@ -63,6 +78,7 @@ Los contornos salen del pipeline del índice (polígonos `landuse=landfill` de O
 - Blue Marble (NASA), vía GIBS.
 - Sentinel-2 (ESA Copernicus), vía Microsoft Planetary Computer.
 - OpenStreetMap, ODbL.
+- Catálogo de basurales de los otros frames: polígonos de OpenStreetMap vía Overture Maps (release 2026-10-21.0, ODbL) y estado del registro de U.S. EPA LMOP (2024-09, dominio público). Detalle en `../data/README.md`.
 - Imagen satelital de Google (Map Tiles API), sólo si se configura la clave. Tiene copyright de Google y de sus proveedores: hay que declararla en el formulario de entrega.
 - Tipografías Roboto Slab (Apache 2.0) y DM Sans (OFL). Mapa con MapLibre GL JS (BSD-3).
 - Código: Apache 2.0. Escrito con asistencia de IA (Claude).
