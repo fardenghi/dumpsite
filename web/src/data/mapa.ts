@@ -50,6 +50,19 @@ export interface SitioCatalogo {
   fuentes: string[]
 }
 
+/** El índice de insomnio de un frame como imagen (`herramientas/indice_png_web.py`). */
+export interface IndiceFrame {
+  frame: string
+  /** relativo a la raíz de la web */
+  url: string
+  /** las cuatro esquinas en el orden de una fuente `image` de MapLibre */
+  coordinates: [[number, number], [number, number], [number, number], [number, number]]
+}
+// `seed/indices.json` puede faltar: sin él, fuera del AMBA el índice se ve sólo como manchas
+const indicesJson = import.meta.glob<IndiceFrame[]>('./seed/indices.json', { import: 'default', eager: true })
+/** Los frames, además del AMBA, que tienen el índice completo como imagen. */
+export const INDICES: IndiceFrame[] = Object.values(indicesJson)[0] ?? []
+
 const cache = new Map<string, Promise<unknown>>()
 function pedir<T>(archivo: string): Promise<T | null> {
   if (!cache.has(archivo))

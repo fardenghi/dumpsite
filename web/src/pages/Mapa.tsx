@@ -8,7 +8,7 @@ import { Dot, Kpi, Picker, dec, fecha, num, pct, radar as radarTxt, veredicto, t
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
-import { ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
+import { INDICES, ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
 import { UMBRAL_BAJO, type Imagen, type Sitio, type Veredicto } from '../data/types'
 import { FRAME_AMBA, UMBRAL_NUEVO, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
@@ -554,12 +554,25 @@ export default function Mapa() {
     m.addLayer({ id: 'frames', type: 'line', source: 'frames', paint: { 'line-color': '#fcfdbf', 'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 6, 2], 'line-opacity': 0.95 } })
   }, [listo, sitios, frames])
 
+  // el índice completo de los otros frames, si se exportó (herramientas/indice_png_web.py): una imagen por frame, como la del AMBA
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo || !sitios) return
+    for (const x of INDICES) {
+      const idc = `indice-${x.frame}`
+      if (m.getSource(idc)) continue
+      m.addSource(idc, { type: 'image', url: `${import.meta.env.BASE_URL}${x.url}`, coordinates: x.coordinates })
+      m.addLayer({ id: idc, type: 'raster', source: idc, minzoom: 5, layout: { visibility: 'none' }, paint: { 'raster-opacity': 0.8, 'raster-resampling': 'nearest', 'raster-fade-duration': 0 } }, 'indice')
+    }
+  }, [listo, sitios])
+
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios || !manchas || m.getSource('manchas')) return
-    // el AMBA ya tiene el índice completo como imagen: sus manchas no se pintan, pero sí el contorno de las que son posibles nuevos
-    const prefijo = `MAN-${FRAME_AMBA}-`
-    const fueraDelAmba = ['!=', ['slice', ['get', 'id'], 0, prefijo.length], prefijo] as unknown as maplibregl.FilterSpecification
+    // los frames que tienen el índice completo como imagen (el AMBA y los de seed/indices.json) no pintan sus manchas,
+    // pero sí el contorno de las que son posibles nuevos
+    const conImagen = [FRAME_AMBA, ...INDICES.map((x) => x.frame)].map((f) => `MAN-${f}-`)
+    const fueraDelAmba = ['all', ...conImagen.map((pre) => ['!=', ['slice', ['get', 'id'], 0, pre.length], pre])] as unknown as maplibregl.FilterSpecification
     const debajoDe = m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined
     m.addSource('manchas', { type: 'geojson', data: manchas })
     m.addLayer({ id: 'manchas', type: 'fill', source: 'manchas', filter: fueraDelAmba, paint: { 'fill-color': MAGMA, 'fill-opacity': 0.8, 'fill-antialias': false } }, debajoDe)
@@ -601,7 +614,7 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    for (const capa of ['indice', 'frames', 'frames-relleno', 'manchas', 'manchas-borde']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', verIndice ? 'visible' : 'none')
+    for (const capa of ['indice', ...INDICES.map((x) => `indice-${x.frame}`), 'frames', 'frames-relleno', 'manchas', 'manchas-borde']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', verIndice ? 'visible' : 'none')
   }, [listo, sitios, frames, manchas, verIndice])
 
   // the dump sites of the other frames: one point per catalog polygon, under the AMBA sites
