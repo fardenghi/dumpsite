@@ -1,6 +1,6 @@
-# Basurales · web
+# web/
 
-Los basurales que el radar NISAR nunca ve quietos. Proyecto para el NASA Space Apps Challenge 2026 (challenge "Dancing with the SARs").
+La web de Dumpsite: el mapa del índice de insomnio, la ficha de cada sitio y el panel del modelo. Es un sitio estático (React, Vite y MapLibre) que lee datos precalculados por el motor, sin backend.
 
 ```bash
 npm install
