@@ -26,6 +26,9 @@ export const ESCENAS = {
 export const FRASES = VOZ.frases;
 
 // Mientras sea true, cada dato de ejemplo lleva una etiqueta discreta arriba a la derecha.
+// Integrantes, tal como figuran en la página del equipo en spaceappschallenge.org (aparecen al principio, abajo a la derecha)
+export const EQUIPO = ["Nicolas Priotto", "Agustín Tomás Romero", "Ezequiel Testoni", "Filipo", "Santiago Bassi", "Juan Ignacio Lategana"];
+
 export const MOSTRAR_PLACEHOLDERS = false; // ocultas en el video; lo único que falta reemplazar son las cifras finales (RESULTADOS)
 
 // ---- PLACEHOLDER: cifras de ejemplo pedidas por el equipo hasta tener las reales ----
