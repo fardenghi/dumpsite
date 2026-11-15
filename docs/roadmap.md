@@ -5,7 +5,7 @@ Dumpsite was built in two days. It works end to end, but several pieces are firs
 ## Next weeks: make what exists trustworthy
 - **Review by people.** Have people check, in optical imagery and before naming any site:
   - the 89 optical labels assigned by AI and the 16 "closed but awake" cases ([`results.md`](results.md), [`model.md`](model.md));
-  - the 174 possible new dump sites highlighted on the map, starting with the 5 Argentine blobs outside the AMBA ([`argentina.md`](argentina.md)).
+  - the 183 possible new dump sites highlighted on the map, starting with the 5 Argentine blobs outside the AMBA ([`argentina.md`](argentina.md)).
 - **Known pipeline fixes:**
   - the fallback to frequency B/VV in 3 GCOVs that lack frequency A;
   - the looks metadata of the BETA products;
