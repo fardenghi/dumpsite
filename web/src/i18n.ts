@@ -138,7 +138,7 @@ const EN: Record<string, string> = {
   'Ningún sitio con ese filtro': 'No site matches that filter',
 
   // resumen
-  'Radar NISAR · AMBA · {0} a {1}': 'NISAR radar · Buenos Aires · {0} to {1}',
+  'Radar NISAR · {0} regiones': 'NISAR radar · {0} regions',
   'Los basurales que el radar nunca ve quietos': 'The dump sites the radar never sees at rest',
   'Donde dos pasadas del radar nunca se parecen, alguien está moviendo el suelo': 'Where two radar passes never look alike, someone is moving the ground',
   'Ver los sitios': 'See the sites',
@@ -146,10 +146,10 @@ const EN: Record<string, string> = {
   'Sitios analizados': 'Sites analyzed',
   '{0} ha en total': '{0} ha in total',
   'nunca quietos': 'never at rest',
-  'Manchas sin explicar': 'Unexplained patches',
+  'Posibles basurales nuevos': 'Possible new dump sites',
   'sin verificar todavía': 'not verified yet',
   'Regiones de NISAR': 'NISAR regions',
-  'con basurales del catálogo': 'with cataloged dump sites',
+  'procesadas con NISAR': 'processed with NISAR',
   'NISAR · NASA/ISRO, vía ASF DAAC': 'NISAR · NASA/ISRO, via ASF DAAC',
   'Agua · JRC Global Surface Water': 'Water · JRC Global Surface Water',
   'Sentinel-2 · ESA Copernicus, vía Planetary Computer': 'Sentinel-2 · ESA Copernicus, via Planetary Computer',

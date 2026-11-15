@@ -69,6 +69,18 @@ export function conRadar(v: Veredictos | null, curados: Sitio[]): Veredicto[] {
   return delCatalogo(v).filter((x) => x.frame !== FRAME_AMBA || !curados.some((s) => km(s, x as { lat: number; lon: number }) <= 0.5))
 }
 
+/** The count every screen shows (header, map legend, Sites, Overview): the curated AMBA sites plus the catalog
+ * polygons with NISAR data from every frame, with the low threshold already applied. One function so they always agree. */
+export function conteo(curados: Sitio[], v: Veredictos | null) {
+  const todos = [...curados.map((s) => ({ radar: s.radar, ha: s.ha })), ...conRadar(v, curados).map((x) => ({ radar: x.radar ?? ('no_alcanza' as const), ha: x.area_ha ?? 0 }))]
+  const n = { total: todos.length, despierto: 0, quieto: 0, no_alcanza: 0, ha: 0 }
+  for (const x of todos) {
+    n[x.radar]++
+    n.ha += x.ha
+  }
+  return n
+}
+
 /** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Derived from the key: there's no other source in the seed. */
 export function nombreFrame(frame: string): string {
   const palabras = (t: string[]) => t.map((p) => p.charAt(0) + p.slice(1).toLowerCase()).join(' ')

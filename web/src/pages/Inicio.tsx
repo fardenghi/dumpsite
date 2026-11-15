@@ -1,7 +1,6 @@
-import { fecha, num } from '../components/ui'
-import { resumen, useSitios } from '../data/api'
-import candidatos from '../data/seed/candidatos.json'
-import { fueraDelAmba, useVeredictos } from '../data/veredictos'
+import { num } from '../components/ui'
+import { useSitios } from '../data/api'
+import { conteo, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { t } from '../i18n'
 
 export const FUENTES = [
@@ -30,17 +29,18 @@ export function Fuentes() {
 
 export default function Inicio() {
   const { sitios } = useSitios()
-  const otros = fueraDelAmba(useVeredictos())
+  const veredictos = useVeredictos()
   if (!sitios) return null
-  const r = resumen(sitios)
-  const regiones = new Set(otros.map((v) => v.frame)).size + 1
-  const sinExplicar = candidatos.filter((c) => c.clase === 'sin_explicar').length
+  // the same count as the header, the map legend and Sites: all regions
+  const n = conteo(sitios, veredictos)
+  const regiones = veredictos?.frames?.length ?? 1
+  const nuevos = posiblesNuevos(veredictos).length
 
   return (
     <div className="resumen">
       <div className="portada">
         <div className="portada-txt">
-          <p className="portada-meta">{t('Radar NISAR · AMBA · {0} a {1}', fecha(r.desde), fecha(r.hasta, true))}</p>
+          <p className="portada-meta">{t('Radar NISAR · {0} regiones', num(regiones))}</p>
           <h1>{t('Los basurales que el radar nunca ve quietos')}</h1>
           <p className="portada-sub">{t('Donde dos pasadas del radar nunca se parecen, alguien está moviendo el suelo')}</p>
           <div className="row">
@@ -56,22 +56,22 @@ export default function Inicio() {
         <div className="cifras">
           <div>
             <span>{t('Sitios analizados')}</span>
-            <b className="num">{num(r.sitios)}</b>
-            <small>{t('{0} ha en total', num(r.hectareas))}</small>
+            <b className="num">{num(n.total)}</b>
+            <small>{t('{0} ha en total', num(Math.round(n.ha)))}</small>
           </div>
           <div className="despierto">
             <span>{t('Despiertos')}</span>
-            <b className="num">{num(r.despiertos)}</b>
+            <b className="num">{num(n.despierto)}</b>
             <small>{t('nunca quietos')}</small>
           </div>
           <div>
             <span>{t('Regiones de NISAR')}</span>
             <b className="num">{num(regiones)}</b>
-            <small>{t('con basurales del catálogo')}</small>
+            <small>{t('procesadas con NISAR')}</small>
           </div>
           <div>
-            <span>{t('Manchas sin explicar')}</span>
-            <b className="num">{num(sinExplicar)}</b>
+            <span>{t('Posibles basurales nuevos')}</span>
+            <b className="num">{num(nuevos)}</b>
             <small>{t('sin verificar todavía')}</small>
           </div>
         </div>

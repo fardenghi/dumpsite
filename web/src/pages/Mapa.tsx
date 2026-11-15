@@ -10,7 +10,7 @@ import { HAY_GOOGLE, creditoGoogle, enLimite, marcarLimite, sesionGoogle, tilesG
 import indice from '../data/seed/indice.json'
 import { INDICES, ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
 import { UMBRAL_BAJO, type Imagen, type Sitio, type Veredicto } from '../data/types'
-import { FRAME_AMBA, UMBRAL_NUEVO, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
+import { FRAME_AMBA, UMBRAL_NUEVO, conRadar, conteo, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
 // The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
@@ -850,12 +850,7 @@ export default function Mapa() {
     return ops.sort((a, b) => Number(b.grupo === argentina) - Number(a.grupo === argentina) || a.grupo!.localeCompare(b.grupo!, idioma) || a.orden - b.orden || a.label.localeCompare(b.label, idioma))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sitios, otros, porFrame, idioma])
-  const cuenta = useMemo(() => {
-    const n = { despierto: 0, quieto: 0, no_alcanza: 0 }
-    for (const s of sitios ?? []) n[s.radar]++
-    for (const v of otros) n[v.radar ?? 'no_alcanza']++
-    return n
-  }, [sitios, otros])
+  const cuenta = useMemo(() => conteo(sitios ?? [], veredictos), [sitios, veredictos])
   const sinDato = catalogo ? catalogo.n - (veredictos?.sitios.filter((v) => v.tipo === 'catalogo').length ?? 0) : 0
   const conUso = nuevosConUsoConocido(veredictos)
 
@@ -873,7 +868,7 @@ export default function Mapa() {
         </div>
       )}
       <div className={`map-top ${sel || punto ? 'con-ficha' : ''}`}>
-        <Marca despiertos={cuenta.despierto} total={cuenta.despierto + cuenta.quieto + cuenta.no_alcanza} frames={veredictos?.frames?.length ?? 0} />
+        <Marca despiertos={cuenta.despierto} total={cuenta.total} frames={veredictos?.frames?.length ?? 0} />
         <Picker
           className="float"
           label={t('Ir a un sitio')}
