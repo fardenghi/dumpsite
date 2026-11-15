@@ -1,4 +1,4 @@
-"""Stage 9: joins the cross in both directions and gives a verdict per site (table in `../docs/modelo.md`).
+"""Stage 9: joins the cross in both directions and gives a verdict per site (table in `../docs/model.md`).
 
 From the catalog to the blobs (`insomnio_catalogo.parquet`, one row per catalog polygon) and from the blobs to the
 catalog (`cruce_manchas_catalogo.parquet`, written by prompt 3). The dump-site probability comes from

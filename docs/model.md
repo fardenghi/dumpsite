@@ -17,7 +17,7 @@ There are two models and they answer different questions:
 7. **Activity** (`evaluar_actividad.py`): the radar against the registry, with labels independent of the insomnia.
 8. **Verdict and web** (`veredicto.py`, `flujo.py`).
 
-The intermediate files follow `contratos-datos.md`. Argentina stays **out of training**: the AMBA is kept as the final test.
+The intermediate files follow `data-contracts.md`. Argentina stays **out of training**: the AMBA is kept as the final test.
 
 ## Cross between blobs and catalog
 A blob is assigned to a polygon if the intersection covers **at least 30 % of the smaller area** and measures **at least 5.12 ha** (8 pixels of 80 m). The minimum area prevents a tiny polygon inside a large blob from labeling the whole blob. If a blob touches a dump site and a negative at the same time, it's left out.

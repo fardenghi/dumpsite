@@ -73,12 +73,12 @@ No number goes on screen without a source.
 | ≈ 5,000 open-air dump sites in Argentina (Ministry of Environment estimate, no formal survey) | `docs/idea.md` |
 | There's no open official inventory with coordinates | same |
 | NISAR: one image every 12 days, L-band radar, day, night and through clouds | `docs/idea.md` |
-| Norte III: insomnia 0.86; "restless in 8 of 8 passes" on the main orbit | `docs/indice-insomnio.md`, `data/salidas/fichas_80m.json` (in `compartido/datos-reales.json`) |
-| Luján: closed on 1/07/2026, quiet in all 15 passes, insomnia 0 % | `docs/indice-insomnio.md` |
+| Norte III: insomnia 0.86; "restless in 8 of 8 passes" on the main orbit | `docs/insomnia-index.md`, `data/salidas/fichas_80m.json` (in `compartido/datos-reales.json`) |
+| Luján: closed on 1/07/2026, quiet in all 15 passes, insomnia 0 % | `docs/insomnia-index.md` |
 | González Catán: insomnia 100 % (1.00) | same |
 | 219 candidate blobs in the AMBA (without JRC water, roads or seasonal crops) | same |
 | 66,981 dump sites in the world catalog | `data/catalogos/basurales/basurales_mundo.json` |
-| 29 model variables: 12 radar, 11 Sentinel-2 optical, 3 shape, 3 context; 300 trees of depth 3 | `docs/resultados.md` (29 variables) and `motor/entrenar.py` (300 trees, depth 3, 7 leaves) |
+| 29 model variables: 12 radar, 11 Sentinel-2 optical, 3 shape, 3 context; 300 trees of depth 3 | `docs/results.md` (29 variables) and `motor/entrenar.py` (300 trees, depth 3, 7 leaves) |
 | 42 catalog dump sites active on the radar, 13 registered as closed that are still active (and 7 closed and quiet), in 10 regions | `web/src/data/seed/veredictos.json` |
 
 The 10 regions are AMBA, Los Angeles, Ohio Lake, Maryland Howard, Mexico City, Ponce, New Hampshire Hillsborough, New York Richmond, Delhi and Jakarta.

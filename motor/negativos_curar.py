@@ -1,7 +1,7 @@
 """Stage 2 of the negatives catalog: classifies, filters and samples the confusers.
 
 Takes the parquets from `negativos_extraer.py`, assigns each polygon a class from
-`../docs/datos.md`, discards what is within 500 m of a catalog dump site
+`../docs/data.md`, discards what is within 500 m of a catalog dump site
 and builds two files in the same style as the positives catalog:
 - `negativos_mundo.json`: sample balanced by class and by 1° cell, near positives.
 - `negativos_amba.json`: all the AMBA confusers (with a cap per class).
@@ -318,7 +318,7 @@ def main(dir_in, ruta_catalogo, dir_out):
     meta = {
         "titulo": "Catálogo de negativos: lo que el radar puede confundir con un basural",
         "generado": HOY.isoformat(),
-        "documento": "docs/datos.md",
+        "documento": "docs/data.md",
         "scripts": ["motor/negativos_extraer.py", "motor/negativos_curar.py"],
         "fuentes": FUENTES,
         "clases": {k: {"prioridad": v[0], "grupo": v[1], "rol": v[2]} for k, v in CLASES.items()},

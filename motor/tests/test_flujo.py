@@ -25,7 +25,7 @@ def corrida(tmp_path_factory):
     if not FRAMES and not HAY_INDICE:
         pytest.skip("sin frames de la etapa 4 ni índice del AMBA")
     d = tmp_path_factory.mktemp("flujo")
-    rs, ev = flujo.main(["--destino", str(d), "--md", str(d / "resultados.md")])
+    rs, ev = flujo.main(["--destino", str(d), "--md", str(d / "results.md")])
     with open(d / "veredictos.json", encoding="utf-8") as fh:
         vs = json.load(fh)
     return d, rs, ev, vs

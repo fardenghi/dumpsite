@@ -1,6 +1,6 @@
 """Data contracts: the format of the model's intermediate files, in code.
 
-The long explanation (who writes, who reads and why) is in `../docs/contratos-datos.md`. Here are
+The long explanation (who writes, who reads and why) is in `../docs/data-contracts.md`. Here are
 each file's columns as constants and `validar()`, which fails with a clear message.
 
     import contratos
@@ -420,7 +420,7 @@ def validar(df, nombre):
             errores.append(f"hay {len(rep)} filas con la clave {list(c.clave)} repetida; por ejemplo {rep[list(c.clave)].iloc[0].tolist()}")
     _coherencia(df, n, errores)
     if errores:
-        raise ErrorContrato(f"{c.archivo} no cumple el contrato (ver ../docs/contratos-datos.md):\n  - " + "\n  - ".join(errores))
+        raise ErrorContrato(f"{c.archivo} no cumple el contrato (ver ../docs/data-contracts.md):\n  - " + "\n  - ".join(errores))
     return df
 
 
@@ -455,7 +455,7 @@ def validar_particiones(d, frames=None):
         if sobran:
             errores.append(f"frames que no están en la tabla: {sobran}")
     if errores:
-        raise ErrorContrato("particiones.json no cumple el contrato (ver ../docs/contratos-datos.md):\n  - " + "\n  - ".join(errores))
+        raise ErrorContrato("particiones.json no cumple el contrato (ver ../docs/data-contracts.md):\n  - " + "\n  - ".join(errores))
     return d
 
 

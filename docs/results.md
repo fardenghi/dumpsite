@@ -32,7 +32,7 @@ Does the insomnia agree with the registry? Over the known-status dump sites the 
 | PRI | 0/5 (0 % to 43 %) | 2/2 | 0/2 | 2/7 (29 %) |
 | USA | 16/40 (40 %, 26 % to 55 %) | 10/26 (38 %) | 16/26 (62 %) | 26/66 (39 %) |
 
-**Honest reading:** in the US, 40 % of the open sites and 62 % of the closed ones come out awake. **The insomnia alone doesn't separate open from closed.** Many closed landfills keep moving because of biogas, settlement, construction work or vegetation. That's the reason for the active-front model (`modelo.md`).
+**Honest reading:** in the US, 40 % of the open sites and 62 % of the closed ones come out awake. **The insomnia alone doesn't separate open from closed.** Many closed landfills keep moving because of biogas, settlement, construction work or vegetation. That's the reason for the active-front model (`model.md`).
 
 Bias: of the 193 known-status sites the radar measured, 179 are in the US (they come from the EPA). The matrix is valid for those countries, not "for the world".
 

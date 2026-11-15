@@ -1,7 +1,7 @@
 """Stage 7: binary LightGBM (`basural_activo` versus `otro_movil`) with cross-validation by frame.
 
 Reads `tabla_entrenamiento.parquet` and `particiones.json`; writes `modelo.txt` and `metricas.json` and, if given the
-tables of all the candidate blobs, `predicciones.parquet` (following `../docs/contratos-datos.md`).
+tables of all the candidate blobs, `predicciones.parquet` (following `../docs/data-contracts.md`).
 
     python entrenar.py                                      # reads and writes in ../data/salidas/
     python entrenar.py --datos datos/mock --salida datos/mock/prueba --predecir
@@ -17,7 +17,7 @@ tables of all the candidate blobs, `predicciones.parquet` (following `../docs/co
   in `metricas.json` that **it's not a metric to report**.
 - `n_pares` and `n_orbitas` don't go into the model: they're nearly constant per frame (they say how much data there is, not what the
   blob is) and with frames that only have one class they'd be a way of learning the frame. `--con-cantidad-de-datos` adds them.
-- `contraste_p10` and `eco_var_p90` (stage 4, `../docs/indice-insomnio.md`) go into the model if the table carries them: they look at the
+- `contraste_p10` and `eco_var_p90` (stage 4, `../docs/insomnia-index.md`) go into the model if the table carries them: they look at the
   most active part of the blob, not the median. They're not in the contract (`RADAR_NUEVAS`). `indice_actividad` doesn't go in: it was
   fitted with labels from an AI. `ha_insomnio_90` doesn't either: it's another size measure.
 - `--controles` (prompt 4, part C): with the same partitions, it also trains without the Shape columns, with radar only,

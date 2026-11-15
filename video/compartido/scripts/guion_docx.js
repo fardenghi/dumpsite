@@ -116,7 +116,7 @@ const doc = new Document({
     children: [
       new Paragraph({style: "Title", children: [new TextRun({text: "Dumpsite · Guion del video para el jurado local", font: FONT})]}),
       p(`NASA Space Apps 2026 · Dancing with the SARs · sede Buenos Aires. Duración: ${mmss(voz.duracion_video)} (máximo 3:00). Castellano, un solo narrador con voz sintética (Azure, es-AR-TomasNeural), subtítulos en pantalla.`, {color: "444444"}),
-      p("Versión 1 (14/11/2026). Las cifras salen del repo: docs/idea.md, docs/indice-insomnio.md, data/catalogos/basurales y seed/veredictos.json. Lo que marca el modelo se dice \"clasificado como basural por el modelo\", nunca \"confirmado\". Los tiempos son de la locución actual y cambian si se cambia el texto.", {color: "666666", italics: true, size: 18}),
+      p("Versión 1 (14/11/2026). Las cifras salen del repo: docs/idea.md, docs/insomnia-index.md, data/catalogos/basurales y seed/veredictos.json. Lo que marca el modelo se dice \"clasificado como basural por el modelo\", nunca \"confirmado\". Los tiempos son de la locución actual y cambian si se cambia el texto.", {color: "666666", italics: true, size: 18}),
       new Paragraph({heading: "Heading1", children: [new TextRun({text: "Guion escena por escena", font: FONT})]}),
       new Table({width: {size: TOTAL, type: WidthType.DXA}, columnWidths: W, rows: [encabezado, ...filas]}),
       new Paragraph({heading: "Heading1", children: [new TextRun({text: "Fuentes que se muestran al cierre", font: FONT})]}),

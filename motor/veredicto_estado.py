@@ -154,8 +154,8 @@ def lineas_md(salidas):
           "- **Prueba reservada (AMBA), modelo entrenado sólo con EE. UU.** (`p_abierto`): "
           + "; ".join(f"{p['nombre']}, registro {p['estado']}: {num(p['p_abierto'])}" for p in m["prueba"]) + ".",
           "- **Ojo con la frase del pitch de arriba:** los \"nuevos\" salen de otro modelo, el de \"basural contra otra cosa que se "
-          "mueve\" (`../docs/resultados.md`: AUC 0,79 con 39 basurales, \"no alcanza como veredicto\"), y sólo en los frames que "
+          "mueve\" (`../docs/results.md`: AUC 0,79 con 39 basurales, \"no alcanza como veredicto\"), y sólo en los frames que "
           "tienen `predicciones.parquet`. En los 20 frames agregados las manchas sin catálogo quedan sin clasificar: falta su "
           "óptico y reentrenar ese modelo.",
-          "- Detalle, límites y qué aprende el modelo de abierto contra cerrado: `../docs/modelo.md`.", ""]
+          "- Detalle, límites y qué aprende el modelo de abierto contra cerrado: `../docs/model.md`.", ""]
     return L

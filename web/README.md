@@ -47,7 +47,7 @@ Written by `python ../motor/flujo.py --web`. **Both files are optional**: the we
 - **Outside the AMBA there's no outline, coherence series or images by date**: the card shows the verdict, the registry, the insomnia, the area, the reason and the model reading, and the map zooms in less (the Blue Marble background goes up to zoom 8).
 - **Wording:** "compatible with open according to the model" and "signal compatible with activity". The status is only shown when the registry gives it; polygons without a status say "En el catálogo, sin estado" (in the catalog, no status).
 
-The sites from other countries that the seed had were removed: they have no processed NISAR. `scripts/contornos.py` is no longer used (the outlines are written by the pipeline). How each number is computed: `../docs/indice-insomnio.md`.
+The sites from other countries that the seed had were removed: they have no processed NISAR. `scripts/contornos.py` is no longer used (the outlines are written by the pipeline). How each number is computed: `../docs/insomnia-index.md`.
 
 The whole web reads the data through `src/data/api.ts`. To connect a backend, set `VITE_API_URL` (see `.env.example`) and have it answer `GET /sitios` with the shape of `Sitio` in `src/data/types.ts`.
 

@@ -1,6 +1,6 @@
 # Model data contracts (14/11/2026)
 
-The format of the model's intermediate files, so the stages in `modelo.md` can be written in parallel without waiting for each other. Each stage writes its files and reads the others' **in this format and no other**.
+The format of the model's intermediate files, so the stages in `model.md` can be written in parallel without waiting for each other. Each stage writes its files and reads the others' **in this format and no other**.
 
 - **In code:** `motor/contratos.py` has the same columns as constants and the `validar()` function. If this document and the code disagree, the code wins (and there's a test that warns).
 - **Test data:** `python motor/contratos_mock.py` generates all the files in `motor/datos/mock/`, with made-up values.

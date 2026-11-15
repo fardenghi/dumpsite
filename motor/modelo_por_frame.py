@@ -1,4 +1,4 @@
-"""Prompt 4: the model side with real data, frame by frame (stages 5, 6 and 7 of `../docs/modelo.md`).
+"""Prompt 4: the model side with real data, frame by frame (stages 5, 6 and 7 of `../docs/model.md`).
 
 Stage 4 uploads one folder per frame, `salidas/<FRAME>/`, with `manchas.geojson`, `tabla_radar.parquet` and
 `insomnio_catalogo.parquet`. This script goes through the frames in `../data/catalogos/frames.json` that already have it and, for each

@@ -9,7 +9,7 @@
 
 The frame comes from `../data/catalogos/frames.json` or from `--caja lon_west lat_south lon_east lat_north` (with `--frame NAME`).
 The results are cached per frame in `fijos/<FRAME>/` (not committed: `indice` rebuilds them only if they're missing).
-The AMBA ones are committed, loose in `fijos/`: they're the reference ones of `../docs/indice-insomnio.md` (the land uses, from
+The AMBA ones are committed, loose in `fijos/`: they're the reference ones of `../docs/insomnia-index.md` (the land uses, from
 Nominatim) and with them `indice` needs no network. To rebuild them pass `--pisar`.
 
 Sources:
@@ -484,7 +484,7 @@ def main():
         else:
             fr = geo.frame(nombre, os.path.join(args.salida, nombre.upper()))
         if fr.nombre == "AMBA" and not args.destino and not args.pisar and args.paso not in ("catalogo", "cobertura"):
-            sys.exit("Los archivos de fijos/ del AMBA son los de referencia de ../docs/indice-insomnio.md. Pasá --destino para "
+            sys.exit("Los archivos de fijos/ del AMBA son los de referencia de ../docs/insomnia-index.md. Pasá --destino para "
                      "escribir en otro lado, o --pisar para rehacerlos (los usos pasan de Nominatim a Overture).")
         print(f"== {fr.nombre}: caja {fr.bbox}, EPSG {fr.epsg}")
         if args.paso in ("agua", "todo"):

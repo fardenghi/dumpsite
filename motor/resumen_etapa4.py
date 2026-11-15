@@ -1,4 +1,4 @@
-"""Tables for `../docs/resultados.md`, in Markdown, built from `salidas/<FRAME>/` (computes nothing new).
+"""Tables for `../docs/results.md`, in Markdown, built from `salidas/<FRAME>/` (computes nothing new).
 
     python resumen_etapa4.py            # blobs per frame, and awake / quiet / not enough per status
 

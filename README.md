@@ -2,7 +2,7 @@
 
 **The dump sites the NISAR radar never sees asleep.** A project for the *Dancing with the SARs* challenge of NASA Space Apps 2026.
 
-![Map of the AMBA with the insomnia index](docs/img/mapa.png)
+![Map of the AMBA with the insomnia index](docs/img/map.png)
 
 ## The problem and the idea
 - Argentina has an estimated 5,000 open-air dump sites, and there's no open inventory saying which ones are still active.
@@ -23,9 +23,9 @@ flowchart LR
 
 | Site card | Model panel | Video |
 |---|---|---|
-| ![Card of the Luján dump site](docs/img/ficha-lujan.png) | ![Model panel](docs/img/modelo.png) | ![Video frame](docs/img/video.png) |
+| ![Card of the Luján dump site](docs/img/lujan-card.png) | ![Model panel](docs/img/model.png) | ![Video frame](docs/img/video.png) |
 
-**Results:** 30 NISAR frames and 962 pairs. The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/resultados.md`](docs/resultados.md).
+**Results:** 30 NISAR frames and 962 pairs. The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/results.md`](docs/results.md).
 
 ## Roadmap
 Built in two days, so several pieces are first versions. Next steps, in short:
@@ -65,4 +65,4 @@ cd motor && python -m venv .venv && .venv/bin/pip install -r requirements.txt
 | Agustín Tomas Romero | [@sanrome](https://github.com/sanrome) |
 
 ## Sources and data
-NISAR (NASA/ISRO, via ASF DAAC), Sentinel-2 (Copernicus), OpenStreetMap via Overture, EPA LMOP, Climate TRACE, NASA EMIT and JRC: details and licenses in [`docs/datos.md`](docs/datos.md).
+NISAR (NASA/ISRO, via ASF DAAC), Sentinel-2 (Copernicus), OpenStreetMap via Overture, EPA LMOP, Climate TRACE, NASA EMIT and JRC: details and licenses in [`docs/data.md`](docs/data.md).

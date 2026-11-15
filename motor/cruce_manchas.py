@@ -2,7 +2,7 @@
 
 One row per pair of candidate blob and polygon (dump site or negative) that touch, **without filtering by the 30 %**: the
 reader applies `contratos.CRITERIO_CRUCE` on `frac_area_menor`. Areas are measured in the frame's UTM.
-Besides the contract it carries `inter_ha` (the area of the intersection), for the minimum in `../docs/modelo.md`.
+Besides the contract it carries `inter_ha` (the area of the intersection), for the minimum in `../docs/model.md`.
 
     python cruce_manchas.py                                         # ../data/salidas/manchas.geojson (AMBA)
     python cruce_manchas.py --manchas datos/mock/manchas.geojson --catalogo datos/mock/catalogo_mock.geojson \

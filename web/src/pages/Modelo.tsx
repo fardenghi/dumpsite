@@ -9,7 +9,7 @@ import indice from '../data/seed/indice.json'
 import { Fuentes } from './Inicio'
 
 // Every number on this page comes from the pipeline (seed/*.json) or from
-// docs/indice-insomnio.md. What wasn't measured isn't shown.
+// docs/insomnia-index.md. What wasn't measured isn't shown.
 interface Ficha {
   motivo: string
   persistencia: number | null
@@ -22,7 +22,7 @@ const FICHAS = fichasJson as unknown as Record<string, Ficha>
 const P = indice.parametros
 const ECO_MIN = -13
 
-// the AMBA grid, in hectares (docs/indice-insomnio.md)
+// the AMBA grid, in hectares (docs/insomnia-index.md)
 const GRILLA = 718952
 const AGUA = 97493
 const CLASES = [

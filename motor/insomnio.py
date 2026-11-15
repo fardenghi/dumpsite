@@ -8,7 +8,7 @@ In goes a stack of per-pair coherence (NISAR GUNW) already cropped to a common g
 And per known site: the pair-by-pair series against a ring and a verdict.
 
 The two orbits are computed separately (they have different geometries) and averaged at the end.
-How the thresholds were chosen: `pipeline_insomnio.py calibrar` and `../docs/indice-insomnio.md`.
+How the thresholds were chosen: `pipeline_insomnio.py calibrar` and `../docs/insomnia-index.md`.
 """
 import warnings
 from dataclasses import asdict, dataclass

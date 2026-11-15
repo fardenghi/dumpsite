@@ -40,7 +40,7 @@ From a cloud session there's no SSH: the proxy only lets HTTPS through. Everythi
    - `arranque-prueba.sh` tests downloading, `procesar --remoto` and GCOV;
    - `arranque-pipeline.sh` runs the full pipeline;
    - `arranque-subida.sh` uploads `/opt/salidas` to a single-use upload URL.
-   - `arranque-frames.sh` (prompt 6, 15/11) runs `buscar` and `procesar --remoto` over a list of frames, uploads one tar per frame to its single-use URL (`upload-url-<FRAME>`) and **shuts the VM down when it finishes**. The code goes in a single metadata key (`codigo-tgz-b64`). That's how 18 of the 20 new frames were read (`../../docs/resultados.md`).
+   - `arranque-frames.sh` (prompt 6, 15/11) runs `buscar` and `procesar --remoto` over a list of frames, uploads one tar per frame to its single-use URL (`upload-url-<FRAME>`) and **shuts the VM down when it finishes**. The code goes in a single metadata key (`codigo-tgz-b64`). That's how 18 of the 20 new frames were read (`../../docs/results.md`).
    - `arranque-optico.sh` (15/11) runs `optico_catalogo_frames.py correr` and shuts the VM down. It was used for comparison: the same Sentinel-2 reading took 319 s on the VM and 254 s in a container. **For the optical step the VM doesn't help.**
    It's loaded with `add-metadata --metadata-from-file=startup-script=...` and run with `gcloud compute instances reset`.
 4. **Progress:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
@@ -100,4 +100,4 @@ The first run with all the NISAR data over the AMBA: 15 GUNWs and 20 GCOVs from 
 | `procesar --remoto` | 8 GUNWs from orbit 10 in 20 s, reading ~240 MB per file (~11 % of the file) |
 | `procesar` + `indice` | 8 s at 80 m and ~50 s at 20 m, 35 of 35 files without errors |
 
-That run was the v0 of the index: with an absolute coherence threshold, the river came out as the largest blob and no known landfill passed the threshold. That's where the water mask, the comparison with the surroundings and the calibration in `docs/indice-insomnio.md` came from.
+That run was the v0 of the index: with an absolute coherence threshold, the river came out as the largest blob and no known landfill passed the threshold. That's where the water mask, the comparison with the surroundings and the calibration in `docs/insomnia-index.md` came from.

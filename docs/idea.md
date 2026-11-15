@@ -10,11 +10,11 @@ NISAR passes over the same place every 12 days. Comparing two passes, it measure
 
 Dumpsite looks for the places that are **never seen asleep**:
 
-1. It computes a per-pixel **insomnia index**: the fraction of pairs in which the coherence falls well below that of its surroundings (`indice-insomnio.md`).
+1. It computes a per-pixel **insomnia index**: the fraction of pairs in which the coherence falls well below that of its surroundings (`insomnia-index.md`).
 2. It builds **candidate blobs** and discards water, roads and smooth surfaces.
 3. It **crosses** the blobs with a catalog of 66,981 dump sites around the world and with 64,986 negatives (what the radar confuses with a dump site: airfields, quarries, container yards).
 4. It gives a **verdict per site** against the official registry: "active, already known", "closed but awake", "closed and quiet" or "the radar can't tell".
-5. With an **open-versus-closed model** trained on the EPA registry, it ranks the sites by how compatible they are with an open dump site (`modelo.md`).
+5. With an **open-versus-closed model** trained on the EPA registry, it ranks the sites by how compatible they are with an open dump site (`model.md`).
 
 It all shows up on a website with the index map, a card per site and the model panel.
 

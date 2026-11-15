@@ -75,7 +75,7 @@ SENTIDO_ACTIVIDAD = {"eco_std_rel_p90": 1, "ecohv_std_rel_p90": 1, "eco_std_rel_
                      "frente_coh_fijo": -1, "frente_vs_predio": -1, "parche_bajo_ha": 1, "parche_bajo_frac": 1, "parche_se_mueve": 1,
                      "insomnio_px_max3": 1, "insomnio_px_p95": 1, "parche_insomnio90_ha": 1, "insomnio_parche_se_mueve": 1, "eco_std_en_parche": 1}
 # Complexes that are also measured as a single unit (the union of their polygons), for the AMBA test: in Norte III
-# the "open" status belongs to the complex and got attached to a single polygon (see ../docs/resultados.md). They go into the table with the
+# the "open" status belongs to the complex and got attached to a single polygon (see ../docs/results.md). They go into the table with the
 # complex id; they're not catalog rows and don't go into training.
 UNIDADES = {"AMBA": {"CPX-015400": ["BAS-053304", "BAS-053307", "BAS-016796"]}}
 PRUEBA_AMBA = {"BAS-000007": "Basural de Luján (cerrado el 1/07/2026)", "BAS-053304": "Norte III, polígono con estado abierto",

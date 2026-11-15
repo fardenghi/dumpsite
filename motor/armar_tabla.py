@@ -1,6 +1,6 @@
 """Stage 6: joins the radar, optical and cross data of each blob, labels it and builds the partitions by frame.
 
-Writes `tabla_entrenamiento.parquet` and `particiones.json` following `../docs/contratos-datos.md`.
+Writes `tabla_entrenamiento.parquet` and `particiones.json` following `../docs/data-contracts.md`.
 
     python armar_tabla.py                                  # reads and writes in ../data/salidas/
     python armar_tabla.py --datos datos/mock --salida datos/mock/prueba
@@ -8,13 +8,13 @@ Writes `tabla_entrenamiento.parquet` and `particiones.json` following `../docs/c
 
 Label (stage 6 of the plan):
 - a blob crosses a polygon if the intersection covers at least `--criterio` (0.30) of the smaller area and, if the
-  cross carries `inter_ha`, it also measures at least `--min-inter-ha` (5.12 ha = 8 pixels of 80 m; see `../docs/modelo.md`);
+  cross carries `inter_ha`, it also measures at least `--min-inter-ha` (5.12 ha = 8 pixels of 80 m; see `../docs/model.md`);
 - it crosses only dump sites (any status) → `basural_activo`; only negatives → `otro_movil`;
   both or none → not included;
 - a complex counts once: if several blobs fall on the same complex (or the same negative), the largest one is kept;
 - `id_catalogo` is the polygon with the largest `frac_area_menor`.
 
-Options added with run 2 (see `../docs/resultados.md`):
+Options added with run 2 (see `../docs/results.md`):
 - `--negativos-osm`: adds as `otro_movil` the candidate blobs that stage 4 marked `clase_osm` = `uso_conocido`
   (airfields, golf courses, parks, cemeteries, quarries, plantations, military sites and reserves from OSM via Overture) and
   that **don't touch any catalog dump site** nor have a landfill name (`NOMBRE_DE_RELLENO`: "Freshkills Park"). Only in the frames that aren't the final test (in the AMBA that mark

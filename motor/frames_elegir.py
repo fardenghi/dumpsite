@@ -782,7 +782,7 @@ Fuente: {meta['fuente']}. Catálogos: `data/catalogos/basurales/complejos.json` 
 
 ## Limitaciones
 - El estado conocido es casi todo de la EPA (EE. UU.): de los complejos de 10 ha o más con estado abierto o cerrado del catálogo, la gran mayoría está en EE. UU. La matriz de actividad (etapa 8) se reporta por país por eso.
-- Los negativos se muestrearon cerca de basurales con estado conocido (`../docs/datos.md`): fuera de EE. UU. hay pocos, salvo en el AMBA.
+- Los negativos se muestrearon cerca de basurales con estado conocido (`../docs/data.md`): fuera de EE. UU. hay pocos, salvo en el AMBA.
 - `frame_nisar` de los catálogos todavía no se completó: lo hace la etapa 4 al leer cada frame.
 """
     with open(ruta, "w", encoding="utf-8") as fh:

@@ -1,4 +1,4 @@
-"""Stage 4: blobs and radar extractor, frame by frame (see `../docs/modelo.md`).
+"""Stage 4: blobs and radar extractor, frame by frame (see `../docs/model.md`).
 
 For each frame, with the crops left by `pipeline_insomnio.py procesar`:
   1. computes the per-pixel insomnia and builds the blobs (the same filters as the index: water, shape, echo and 10 ha);
@@ -12,7 +12,7 @@ For each frame, with the crops left by `pipeline_insomnio.py procesar`:
     python extraer_manchas.py --frame todos                   # all those in data/catalogos/frames.json that have crops
     python extraer_manchas.py juntar                          # joins the frames into ../data/salidas/*.geojson and *.parquet
 
-The three files follow `../docs/contratos-datos.md` (validated with `contratos.py`). The ring has no water or
+The three files follow `../docs/data-contracts.md` (validated with `contratos.py`). The ring has no water or
 catalog polygons. Everything comes from `insomnio.py`, without copying the logic: `cocientes`, `por_orbita`,
 `persistencia`, `anillo` and `ficha`.
 
@@ -48,7 +48,7 @@ PARTES = ("manchas.geojson", "tabla_radar.parquet", "insomnio_catalogo.parquet")
 #   eco_var_p90    echo variation over time, per pixel (90th percentile of the site, dB)
 # It's a logistic regression fitted with 53 sites from 9 frames (19 with activity visible in Sentinel-2 and 34 without),
 # with optical labels assigned by AI (`salidas/etiquetas_optico_ia.json`). Leaving one frame out at a time it gives
-# AUC 0.75 (95 % CI: 0.59 to 0.89), versus 0.60 for the site median. The AMBA wasn't used. See ../docs/indice-insomnio.md.
+# AUC 0.75 (95 % CI: 0.59 to 0.89), versus 0.60 for the site median. The AMBA wasn't used. See ../docs/insomnia-index.md.
 ACTIVIDAD = {"intercepto": -0.75, "contraste_p10": (-1.17, 0.483, 0.136), "eco_var_p90": (0.65, 3.046, 0.790)}  # (coefficient, mean, deviation)
 UMBRAL_ACTIVIDAD = 0.45  # the one that maximizes balanced accuracy over the 53 sites
 

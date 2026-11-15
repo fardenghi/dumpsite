@@ -64,7 +64,7 @@ GRUPOS = {"frente": FRENTE, "óptico": OPTICO, "frente + óptico": FRENTE + OPTI
 CANDIDATOS = ("frente", "frente + óptico", "frente + óptico + radar de antes")  # from the simplest to the most complex
 TOLERANCIA = 0.02
 # The "open" status of Norte III belongs to the complex (curated case, with an approximate coordinate) and in the catalog it got
-# attached to `BAS-053304`, a vegetated sector (see ../docs/resultados.md). That's why the test includes, besides the
+# attached to `BAS-053304`, a vegetated sector (see ../docs/results.md). That's why the test includes, besides the
 # individual polygons, the complex `CPX-015400` measured as a single unit (measured by `radar_frente.py`, `UNIDADES`).
 PRUEBA_IDS = {"BAS-000007": "Basural de Luján",
               "CPX-015400": "Norte III, el complejo como una sola unidad (BAS-053304 + módulo C + BAS-016796)",

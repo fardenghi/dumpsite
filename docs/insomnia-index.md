@@ -1,6 +1,6 @@
 # Insomnia index
 
-The index answers **"does it move?"**. What it is that moves is decided by the cross with the catalogs and the model (`modelo.md`).
+The index answers **"does it move?"**. What it is that moves is decided by the cross with the catalogs and the model (`model.md`).
 
 - **Code:** `motor/insomnio.py` (the computation), `motor/geo.py` (grids and projections) and `motor/pipeline_insomnio.py` (reading NISAR, outputs and web).
 - **Data:** NISAR L2 GUNW (coherence) and GCOV (echo), from NASA/ISRO via ASF DAAC, on the 80 m layer. Water from JRC Global Surface Water v1.4.
@@ -87,4 +87,4 @@ A site's insomnia is the median of the **whole** polygon, so it fails in two way
 | `eco_var_p90` | Variation of the echo over time, 90th percentile of the site |
 | `indice_actividad` | Logistic regression with the two above, from 0 to 1. **It's not a probability** |
 
-It was fitted with 53 sites from 9 frames with optical labels assigned by AI. Against the registry (59 sites not used to fit it) it gives an AUC of 0.69, versus 0.50 for the insomnia. It's the idea the active-front model later took over (`modelo.md`).
+It was fitted with 53 sites from 9 frames with optical labels assigned by AI. Against the registry (59 sites not used to fit it) it gives an AUC of 0.69, versus 0.50 for the insomnia. It's the idea the active-front model later took over (`model.md`).

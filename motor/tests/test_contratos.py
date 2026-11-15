@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(AQUI))
 import contratos as ct  # noqa: E402
 import contratos_mock  # noqa: E402
 
-DOC = os.path.join(AQUI, "..", "..", "docs", "contratos-datos.md")
+DOC = os.path.join(AQUI, "..", "..", "docs", "data-contracts.md")
 
 
 @pytest.fixture(scope="module")
@@ -165,5 +165,5 @@ def test_el_documento_nombra_todos_los_archivos_y_columnas():
     for c in ct.CONTRATOS.values():
         assert f"`{c.ruta}`" in doc, c.ruta
         for col in c.columnas:
-            assert f"`{col.nombre}`" in doc, f"{c.archivo}: falta `{col.nombre}` en contratos-datos.md"
+            assert f"`{col.nombre}`" in doc, f"{c.archivo}: falta `{col.nombre}` en data-contracts.md"
     assert f"`{ct.RUTA_PARTICIONES}`" in doc

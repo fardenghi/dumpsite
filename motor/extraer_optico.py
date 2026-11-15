@@ -1,7 +1,7 @@
 """Stage 5: Sentinel-2 L2A optical variables per blob (and per catalog polygon), blob versus ring.
 
 Writes `tabla_optico.parquet` (one row per candidate blob) and, with `--catalogo`, `tabla_optico_catalogo.parquet`
-(one row per catalog polygon that falls in the frame), following `../docs/contratos-datos.md`.
+(one row per catalog polygon that falls in the frame), following `../docs/data-contracts.md`.
 
     python extraer_optico.py                                      # the AMBA: ../data/salidas/manchas.geojson + catalog
     python extraer_optico.py --manchas ../data/salidas/DELHI/manchas.geojson --salida ../data/salidas/DELHI --sin-catalogo

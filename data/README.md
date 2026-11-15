@@ -55,7 +55,7 @@ python curar_basurales.py <dir_descargas> ../data/catalogos/basurales
 ```
 
 ## catalogos/negativos/
-Catalog of **confusers**: what the radar can confuse with a dump site. It's used to train the model with negative cases. It follows the list and rules in `docs/datos.md` and is built by `negativos_extraer.py` and `negativos_curar.py` (in `motor/`).
+Catalog of **confusers**: what the radar can confuse with a dump site. It's used to train the model with negative cases. It follows the list and rules in `docs/data.md` and is built by `negativos_extraer.py` and `negativos_curar.py` (in `motor/`).
 
 | File | What it has |
 |---|---|
@@ -150,7 +150,7 @@ One folder for each of the 30 frames (the AMBA, Los Angeles, Mexico City, Delhi,
 | `tabla_entrenamiento.parquet`, `particiones.json` | Table of labeled blobs and partitions by frame | `armar_tabla.py` |
 | `metricas.json`, `modelo.txt`, `predicciones.parquet` | Per-blob LightGBM model, its metrics and predictions (**not validated**) | `entrenar.py` |
 | `metricas_variantes.json` | Model variants with the optical labels | `modelo_por_frame.py variantes` |
-| `etiquetas_optico_ia.json` | Activity labels for 89 sites assigned by AI looking at Sentinel-2, blind. No person reviewed them | By hand, see `docs/modelo.md` |
+| `etiquetas_optico_ia.json` | Activity labels for 89 sites assigned by AI looking at Sentinel-2, blind. No person reviewed them | By hand, see `docs/model.md` |
 | `optico_estado_conocido.parquet`, `optico_estado_conocido/`, `optico_estado_conocido_resumen.json` | Optical data for the 1,008 known-status dump sites (in 3 parts) | `optico_estado_conocido.py` |
 | `optico_catalogo_frames.parquet` | Optical data for the dump sites of 10 ha or more in the new frames | `optico_catalogo_frames.py` |
 | `radar_frente.parquet`, `radar_frente_evaluacion.json` | Active-front radar variables of each dump site and their evaluation | `radar_frente.py` |

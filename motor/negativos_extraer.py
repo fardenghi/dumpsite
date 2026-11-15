@@ -1,7 +1,7 @@
 """Stage 1 of the negatives catalog: extracts the confuser polygons from Overture Maps.
 
 Reads `base/land_use`, `base/land`, `base/water` and `base/infrastructure` from the given release,
-keeps the classes of `../docs/datos.md` with an area between 2 and 500 ha, and
+keeps the classes of `../docs/data.md` with an area between 2 and 500 ha, and
 only in the 0.25° cells near dump sites with known status (a proxy for "the same NISAR frames
 as the positives"). Saves one parquet per file in <dir_descargas>/neg_parts/.
 

@@ -1,5 +1,5 @@
 // Video for the local Buenos Aires jury: up to 3 minutes, in Spanish, same style as the international one.
-// Figures: docs/idea.md, docs/indice-insomnio.md, data/catalogos/basurales (catalog), web seed/veredictos.json. See guion-es.json.
+// Figures: docs/idea.md, docs/insomnia-index.md, data/catalogos/basurales (catalog), web seed/veredictos.json. See guion-es.json.
 // Each scene starts when its sentence starts in voz-es.json: if the voice changes, the scenes rearrange themselves (see video/VOZ-GRABADA.md).
 import React from "react";
 import {AbsoluteFill, Easing, Html5Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";

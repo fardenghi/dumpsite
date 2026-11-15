@@ -2,7 +2,7 @@
 
 Reads the insomnia over each dump site (`data/catalogos/basurales/geometrias.geojson`) and each negative (`data/catalogos/negativos/`) that falls
 in the frame, whether or not it ended up in a blob, and writes `salidas/insomnio_catalogo.parquet` with the contract in
-`../docs/contratos-datos.md` (section 3). Without this there is no "closed and quiet" for a dump site that formed no blob (Luján).
+`../docs/data-contracts.md` (section 3). Without this there is no "closed and quiet" for a dump site that formed no blob (Luján).
 
 Two modes:
   exacto      with the per-pair crops (`salidas/recortes_80m/`): `insomnio.ficha()` per polygon, the same pair-by-pair
