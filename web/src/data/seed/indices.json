@@ -1,0 +1,58 @@
+[
+ {
+  "frame": "CDMX",
+  "url": "indice/insomnio-cdmx.png",
+  "oeste": -99.4,
+  "sur": 19.15,
+  "este": -98.8,
+  "norte": 19.75,
+  "coordinates": [
+   [
+    -99.4,
+    19.75
+   ],
+   [
+    -98.8,
+    19.75
+   ],
+   [
+    -98.8,
+    19.15
+   ],
+   [
+    -99.4,
+    19.15
+   ]
+  ],
+  "ancho": 762,
+  "alto": 808
+ },
+ {
+  "frame": "YAKARTA",
+  "url": "indice/insomnio-yakarta.png",
+  "oeste": 106.55,
+  "sur": -6.55,
+  "este": 107.2,
+  "norte": -5.95,
+  "coordinates": [
+   [
+    106.55,
+    -5.95
+   ],
+   [
+    107.2,
+    -5.95
+   ],
+   [
+    107.2,
+    -6.55
+   ],
+   [
+    106.55,
+    -6.55
+   ]
+  ],
+  "ancho": 826,
+  "alto": 767
+ }
+]
