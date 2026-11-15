@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from manchas import utm
 
 G = "science/LSAR/GUNW/grids/frequencyA/"
-# nombre: (lat_min, lat_max, lon_min, lon_max) — bounding boxes de OpenStreetMap (Nominatim), salvo donde se indica.
+# name: (lat_min, lat_max, lon_min, lon_max) — OpenStreetMap (Nominatim) bounding boxes, except where noted.
 PREDIOS = {
     "Basural de Luján (OSM landfill; cerrado 1/07/2026)": (-34.5271, -34.5150, -59.1228, -59.1152),
     "CEAMSE González Catán (OSM landfill)": (-34.7921, -34.7791, -58.6738, -58.6498),

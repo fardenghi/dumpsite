@@ -1,21 +1,21 @@
-"""Etapa 4, segunda dirección del cruce: el insomnio sobre CADA polígono del catálogo de un frame.
+"""Stage 4, second direction of the cross: the insomnia over EACH catalog polygon of a frame.
 
-Lee el insomnio sobre cada basural (`data/catalogos/basurales/geometrias.geojson`) y cada negativo (`data/catalogos/negativos/`) que cae
-en el frame, haya quedado o no en una mancha, y escribe `salidas/insomnio_catalogo.parquet` con el contrato de
-`../docs/contratos-datos.md` (sección 3). Sin esto no hay "cerrado y quieto" para un basural que no formó mancha (Luján).
+Reads the insomnia over each dump site (`data/catalogos/basurales/geometrias.geojson`) and each negative (`data/catalogos/negativos/`) that falls
+in the frame, whether or not it ended up in a blob, and writes `salidas/insomnio_catalogo.parquet` with the contract in
+`../docs/contratos-datos.md` (section 3). Without this there is no "closed and quiet" for a dump site that formed no blob (Luján).
 
-Dos modos:
-  exacto      con los recortes por par (`salidas/recortes_80m/`): `insomnio.ficha()` por polígono, la misma serie
-              par a par contra el anillo que usa el pipeline. Reproduce `salidas/fichas_80m.json`.
-  aproximado  sólo con `salidas/indice_80m.npz` (como `cruce_catalogo.py`): mediana del insomnio y de la persistencia
-              por píxel adentro del polígono. Sirve para probar sin los recortes; `motivo` lo dice.
+Two modes:
+  exacto      with the per-pair crops (`salidas/recortes_80m/`): `insomnio.ficha()` per polygon, the same pair-by-pair
+              series against the ring that the pipeline uses. Reproduces `salidas/fichas_80m.json`.
+  aproximado  only with `salidas/indice_80m.npz` (like `cruce_catalogo.py`): median of the per-pixel insomnia and
+              persistence inside the polygon. Useful to test without the crops; `motivo` says so.
 
-    python insomnio_catalogo.py                     # exacto si están los recortes; si no, aproximado
+    python insomnio_catalogo.py                     # exacto if the crops are there; otherwise aproximado
     python insomnio_catalogo.py --modo aproximado
-    python insomnio_catalogo.py --salida /tmp/x     # carpeta de salida (por defecto ../data/salidas)
+    python insomnio_catalogo.py --salida /tmp/x     # output folder (default ../data/salidas)
 
-Por ahora sólo el AMBA: `geo.py` tiene fija la grilla y la zona UTM 21 sur hasta que la etapa 1 la generalice.
-Los recortes: `gs://basurales-514714-salidas/salidas-v3.tgz` (ver README).
+For now only the AMBA: `geo.py` had the grid and UTM zone 21 south fixed until stage 1 generalized it.
+The crops: `gs://basurales-514714-salidas/salidas-v3.tgz` (see README).
 """
 import argparse
 import json
@@ -40,9 +40,9 @@ PASO = 80.0
 MIN_HA = 10.0
 
 
-# ---------------------------------------------------------------- polígonos
+# ---------------------------------------------------------------- polygons
 def anillos_exteriores(geometria):
-    """Anillos exteriores (lon, lat) de un Polygon o MultiPolygon (como `cruce_catalogo.py`: sin agujeros)."""
+    """Exterior rings (lon, lat) of a Polygon or MultiPolygon (like `cruce_catalogo.py`: no holes)."""
     if not geometria:
         return []
     if geometria["type"] == "Polygon":
@@ -59,7 +59,7 @@ def _en_grilla(anillos, xs, ys):
 
 
 def poligonos_del_frame(xs, ys, frame="AMBA"):
-    """Basurales y negativos con polígono cuyo centro cae en la grilla. Una entrada por polígono del catálogo."""
+    """Dump sites and negatives with a polygon whose center falls in the grid. One entry per catalog polygon."""
     with open(os.path.join(DATA, "basurales", "complejos.json"), encoding="utf-8") as fh:
         cx = json.load(fh)
     estado_cx = {c["id"]: c["estado"] for c in cx["complejos"]}
@@ -90,7 +90,7 @@ def poligonos_del_frame(xs, ys, frame="AMBA"):
 
 # ---------------------------------------------------------------- modos
 def cargar_recortes(carpeta_salidas, orbitas=(10, 161)):
-    """Los recortes por par con el mismo lector del pipeline (no se duplica la lógica)."""
+    """The per-pair crops, with the pipeline's own reader (the logic isn't duplicated)."""
     import pipeline_insomnio as pipe
 
     args = types.SimpleNamespace(salida=carpeta_salidas, capa="80m", orbitas=list(orbitas))
@@ -117,7 +117,7 @@ def cargar_indice(ruta):
 
 
 def medir_aproximado(mascara, d, p):
-    """Mediana por píxel (como cruce_catalogo.py) y los mismos umbrales que `insomnio.ficha()`."""
+    """Per-pixel median (like cruce_catalogo.py) and the same thresholds as `insomnio.ficha()`."""
     adentro = mascara & ~d["agua"] & np.isfinite(d["insomnio"])
     n = int(adentro.sum())
     base = {"insomnio": None, "persistencia": None, "eco_db": None, "n_pares": 0, "px": n, "px_anillo": None}
@@ -178,7 +178,7 @@ def main(argv=None):
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--frame", default="AMBA")
     a.add_argument("--modo", choices=("auto", "exacto", "aproximado"), default="auto")
-    a.add_argument("--recortes", default=SALIDAS, help="carpeta que tiene recortes_80m/ (la del pipeline)")
+    a.add_argument("--recortes", default=SALIDAS, help="folder that holds recortes_80m/ (the pipeline's)")
     a.add_argument("--indice", default=os.path.join(SALIDAS, "indice_80m.npz"))
     a.add_argument("--salida", default=SALIDAS)
     a.add_argument("--min-ha", type=float, default=MIN_HA)

@@ -1,14 +1,14 @@
-"""Índice de insomnio, versión final: el cálculo, sin lectura ni escritura de archivos.
+"""Insomnia index, final version: the computation, without reading or writing files.
 
-Entra una pila de coherencia por par (GUNW de NISAR) ya recortada a una grilla común y sale, por píxel:
-  - insomnio absoluto: fracción de pares con coherencia < umbral, normalizada por la separación entre pasadas;
-  - insomnio relativo: fracción de pares con coherencia baja respecto del entorno;
-  - persistencia: el mínimo de esa fracción entre los tres tercios de la serie (todo el período vs. por temporada);
-  - candidatos y manchas, sin agua, sin superficies lisas y sin formas lineales.
-Y por sitio conocido: la serie par a par contra un anillo y un veredicto.
+In goes a stack of per-pair coherence (NISAR GUNW) already cropped to a common grid, and out comes, per pixel:
+  - absolute insomnia: fraction of pairs with coherence < threshold, normalized by the separation between passes;
+  - relative insomnia: fraction of pairs with low coherence relative to the surroundings;
+  - persistence: the minimum of that fraction across the three thirds of the series (whole period vs. seasonal);
+  - candidates and blobs, without water, smooth surfaces or linear shapes.
+And per known site: the pair-by-pair series against a ring and a verdict.
 
-Las dos órbitas se calculan por separado (tienen geometrías distintas) y se promedian al final.
-Cómo se eligieron los umbrales: `pipeline_insomnio.py calibrar` y `../docs/indice-insomnio.md`.
+The two orbits are computed separately (they have different geometries) and averaged at the end.
+How the thresholds were chosen: `pipeline_insomnio.py calibrar` and `../docs/indice-insomnio.md`.
 """
 import warnings
 from dataclasses import asdict, dataclass
@@ -20,24 +20,24 @@ from scipy import ndimage
 
 @dataclass(frozen=True)
 class Parametros:
-    razon: float = 0.80  # un par está "despierto" si la coherencia < razon × la del entorno
-    min_insomnio: float = 0.70  # fracción mínima de pares despiertos para ser candidato o "despierto"
-    min_persistencia: float = 0.50  # fracción mínima de pares despiertos en CADA tercio de la serie
-    max_quieto: float = 0.20  # un sitio es "quieto" si su insomnio no pasa de esto
-    eco_min_db: float = -13.0  # por debajo es superficie lisa: la coherencia baja no dice nada
-    agua_min: float = 10.0  # % de ocurrencia de agua (JRC) a partir del cual la celda es agua
-    borde_agua_m: float = 80.0  # la máscara de agua se ensancha esto, por los píxeles mixtos de la costa
-    radio_entorno_m: float = 2000.0  # radio del entorno de cada píxel
-    anillo_m: float = 1500.0  # ancho del anillo alrededor de un sitio
-    bloque_entorno_m: float = 320.0  # el entorno se calcula sobre bloques de este tamaño
-    suavizado_m: float = 240.0  # mediana espacial antes de comparar con el entorno
-    umbral_abs: float = 0.30  # coherencia por debajo de la cual un par cuenta en el índice absoluto
-    min_ha: float = 10.0  # superficie mínima de una mancha
-    max_elongacion: float = 4.0  # más alargada que esto es lineal (ruta, arroyo)
-    min_nucleo: float = 0.10  # fracción de la mancha que sobrevive a una erosión de 1 píxel; menos es un hilo
-    min_px_sitio: int = 8  # un sitio con menos píxeles de tierra que esto no se puede medir
-    min_coh_anillo: float = 0.30  # si el anillo no llega a esto, el entorno tampoco es coherente
-    min_pares_orbita: int = 3  # pares válidos mínimos para que una órbita cuente en un píxel
+    razon: float = 0.80  # a pair is "awake" if coherence < razon × that of the surroundings
+    min_insomnio: float = 0.70  # minimum fraction of awake pairs to be a candidate or "awake"
+    min_persistencia: float = 0.50  # minimum fraction of awake pairs in EACH third of the series
+    max_quieto: float = 0.20  # a site is "quiet" if its insomnia doesn't exceed this
+    eco_min_db: float = -13.0  # below this it's a smooth surface: low coherence says nothing
+    agua_min: float = 10.0  # % of water occurrence (JRC) from which the cell is water
+    borde_agua_m: float = 80.0  # the water mask is widened by this, because of the mixed coastal pixels
+    radio_entorno_m: float = 2000.0  # radius of each pixel's surroundings
+    anillo_m: float = 1500.0  # width of the ring around a site
+    bloque_entorno_m: float = 320.0  # the surroundings are computed over blocks of this size
+    suavizado_m: float = 240.0  # spatial median before comparing with the surroundings
+    umbral_abs: float = 0.30  # coherence below which a pair counts in the absolute index
+    min_ha: float = 10.0  # minimum blob area
+    max_elongacion: float = 4.0  # more elongated than this is linear (road, stream)
+    min_nucleo: float = 0.10  # fraction of the blob that survives a 1-pixel erosion; less is a thread
+    min_px_sitio: int = 8  # a site with fewer land pixels than this can't be measured
+    min_coh_anillo: float = 0.30  # if the ring doesn't reach this, the surroundings aren't coherent either
+    min_pares_orbita: int = 3  # minimum valid pairs for an orbit to count at a pixel
 
     def dict(self):
         return asdict(self)
@@ -52,10 +52,10 @@ def mascara_agua(ocurrencia, paso, p):
 
 
 def factores_separacion(coh, tierra, orbitas, dias):
-    """Factor por par para llevar la coherencia a la de un par de 12 días de la misma órbita.
+    """Per-pair factor to bring the coherence to that of a 12-day pair of the same orbit.
 
-    Es empírico: mediana sobre tierra de los pares con esa separación / mediana de los pares de 12 días.
-    Los pares de 12 días quedan en 1. Devuelve (factores, medianas por par).
+    It's empirical: median over land of the pairs with that separation / median of the 12-day pairs.
+    The 12-day pairs stay at 1. Returns (factors, medians per pair).
     """
     med = np.array([np.nanmedian(c[tierra]) for c in coh])
     fac = np.ones(len(coh))
@@ -71,7 +71,7 @@ def factores_separacion(coh, tierra, orbitas, dias):
 
 
 def suavizar(c, paso, p):
-    """Mediana espacial de p.suavizado_m de lado (3×3 a 80 m). Los NaN se rellenan con la mediana de la capa."""
+    """Spatial median of p.suavizado_m per side (3×3 at 80 m). NaNs are filled with the layer median."""
     n = max(3, int(round(p.suavizado_m / paso)) | 1)
     malo = ~np.isfinite(c)
     s = ndimage.median_filter(np.where(malo, np.nanmedian(c), c), size=n)
@@ -80,10 +80,10 @@ def suavizar(c, paso, p):
 
 
 def entorno(c, tierra, paso, p):
-    """Coherencia típica alrededor de cada píxel: mediana sobre tierra en un disco de p.radio_entorno_m.
+    """Typical coherence around each pixel: median over land in a disk of p.radio_entorno_m.
 
-    Se calcula en bloques de p.bloque_entorno_m (mediana por bloque y después mediana de los bloques
-    del disco) y se interpola a la grilla. El agua no entra.
+    It's computed in blocks of p.bloque_entorno_m (median per block and then median of the disk's
+    blocks) and interpolated to the grid. Water doesn't count.
     """
     b = max(1, int(round(p.bloque_entorno_m / paso)))
     h, w = c.shape
@@ -100,14 +100,14 @@ def entorno(c, tierra, paso, p):
         ventanas = sliding_window_view(np.pad(g, k, constant_values=np.nan), (2 * k + 1, 2 * k + 1))[..., disco]
         f = np.nanmedian(ventanas, axis=-1)
     f = np.where(np.isfinite(f), f, np.nanmedian(g))
-    # centro del bloque i en píxeles: i*b + (b-1)/2
+    # center of block i in pixels: i*b + (b-1)/2
     fi = (np.arange(h) - (b - 1) / 2) / b
     ci = (np.arange(w) - (b - 1) / 2) / b
     return ndimage.map_coordinates(f, np.meshgrid(fi, ci, indexing="ij"), order=1, mode="nearest").astype(np.float32)
 
 
 def tercios(fechas):
-    """Reparte los pares en tres tramos consecutivos por fecha de la segunda pasada: 0, 1 o 2."""
+    """Splits the pairs into three consecutive segments by date of the second pass: 0, 1 or 2."""
     fechas = np.asarray(fechas)
     orden = np.argsort(fechas, kind="stable")
     t = np.empty(len(fechas), dtype=int)
@@ -116,14 +116,14 @@ def tercios(fechas):
 
 
 def fraccion(despierto, valido):
-    """Fracción de pares despiertos sobre los válidos, a lo largo del eje 0. NaN donde no hay ninguno."""
+    """Fraction of awake pairs over the valid ones, along axis 0. NaN where there are none."""
     n = valido.sum(0)
     with np.errstate(invalid="ignore", divide="ignore"):
         return np.where(n > 0, (despierto & valido).sum(0) / n, np.nan), n
 
 
 def por_orbita(despierto, valido, orbitas, min_pares):
-    """Fracción de pares despiertos en cada órbita y el promedio de las órbitas con pares suficientes."""
+    """Fraction of awake pairs in each orbit and the mean of the orbits with enough pairs."""
     partes = {}
     for o in np.unique(orbitas):
         f, n = fraccion(despierto[orbitas == o], valido[orbitas == o])
@@ -134,9 +134,9 @@ def por_orbita(despierto, valido, orbitas, min_pares):
 
 
 def persistencia(despierto, valido, fechas):
-    """El mínimo, entre los tres tercios de la serie, de la fracción de pares despiertos.
+    """The minimum, across the three thirds of the series, of the fraction of awake pairs.
 
-    Alto: despierto todo el período (compatible con un basural). Bajo con insomnio alto: despierto por temporada.
+    High: awake the whole period (compatible with a dump site). Low with high insomnia: awake seasonally.
     """
     t = tercios(fechas)
     partes = [fraccion(despierto[t == i], valido[t == i])[0] for i in range(3) if (t == i).any()]
@@ -146,7 +146,7 @@ def persistencia(despierto, valido, fechas):
 
 
 def eco_medio(eco, orbitas_eco):
-    """Eco (dB) típico por píxel: mediana en el tiempo de cada órbita y promedio de las órbitas."""
+    """Typical echo (dB) per pixel: median over time of each orbit and mean of the orbits."""
     if eco is None or not len(eco):
         return None
     with warnings.catch_warnings():
@@ -154,9 +154,9 @@ def eco_medio(eco, orbitas_eco):
         return np.nanmean(np.stack([np.nanmedian(eco[orbitas_eco == o], axis=0) for o in np.unique(orbitas_eco)]), axis=0)
 
 
-# ------------------------------------------------------------------ índice por píxel
+# ------------------------------------------------------------------ per-pixel index
 def cocientes(coh, tierra, paso, p):
-    """Coherencia suavizada / coherencia del entorno, por par. Es lo caro del cálculo y no depende de los umbrales."""
+    """Smoothed coherence / surroundings coherence, per pair. It's the expensive part and doesn't depend on the thresholds."""
     salida = np.empty(coh.shape, dtype=np.float32)
     for i, c in enumerate(coh):
         with np.errstate(invalid="ignore", divide="ignore"):
@@ -165,9 +165,9 @@ def cocientes(coh, tierra, paso, p):
 
 
 def calcular(coh, orbitas, dias, fechas, agua, paso, p, eco=None, orbitas_eco=None, cociente=None, eco_db=None):
-    """Capas del índice. coh: (pares, filas, columnas) con NaN donde no hay dato; agua: máscara booleana.
+    """Index layers. coh: (pairs, rows, columns) with NaN where there's no data; agua: boolean mask.
 
-    `cociente` y `eco_db` se pueden pasar ya calculados (para barrer umbrales sin repetir lo caro).
+    `cociente` and `eco_db` can be passed already computed (to sweep thresholds without repeating the expensive part).
     """
     orbitas, dias = np.asarray(orbitas), np.asarray(dias)
     tierra = ~agua
@@ -178,7 +178,7 @@ def calcular(coh, orbitas, dias, fechas, agua, paso, p, eco=None, orbitas_eco=No
         normal = np.clip(coh / fac[:, None, None], 0, 1)
         absoluto, abs_orbita = por_orbita(normal < p.umbral_abs, valido, orbitas, p.min_pares_orbita)
 
-    # El cociente con el entorno no depende del factor de separación: cada par se compara consigo mismo.
+    # The ratio to the surroundings doesn't depend on the separation factor: each pair is compared with itself.
     if cociente is None:
         cociente = cocientes(coh, tierra, paso, p)
     with np.errstate(invalid="ignore"):
@@ -206,11 +206,11 @@ def calcular(coh, orbitas, dias, fechas, agua, paso, p, eco=None, orbitas_eco=No
 
 # ------------------------------------------------------------------ manchas
 def manchas(candidato, capas, paso, p):
-    """Agrupa los candidatos en manchas y mide cada una. Devuelve (lista, etiquetas).
+    """Groups the candidates into blobs and measures each one. Returns (list, labels).
 
-    `forma` es "compacta", "alargada" o "lineal". Las de menos de p.min_ha, las lineales y las lisas (eco medio
-    de la mancha < p.eco_min_db: agua que no está en la máscara, pistas, suelo liso) se informan con `descartada`
-    y no cuentan como candidatas. El eco se mira por mancha y no por píxel porque píxel a píxel es muy ruidoso.
+    `forma` is "compacta", "alargada" or "lineal". Those under p.min_ha, the linear ones and the smooth ones (mean echo
+    of the blob < p.eco_min_db: water not in the mask, runways, smooth soil) are reported with `descartada`
+    and don't count as candidates. The echo is looked at per blob, not per pixel, because pixel by pixel it's very noisy.
     """
     etiquetas, n = ndimage.label(candidato)
     if n == 0:
@@ -256,10 +256,10 @@ def manchas(candidato, capas, paso, p):
 
 # ------------------------------------------------------------------ sitios
 def anillo(mascara, tierra, paso, p, excluir=None):
-    """Anillo de p.anillo_m alrededor de un sitio, sin el sitio, sin agua y sin lo que marque `excluir`.
+    """Ring of p.anillo_m around a site, without the site, without water and without whatever `excluir` marks.
 
-    `excluir` es una máscara con todos los polígonos de los catálogos (basurales y negativos) del frame: así un
-    relleno vecino o un aeródromo, que también pierden coherencia, no bajan la referencia del sitio.
+    `excluir` is a mask with all the catalog polygons (dump sites and negatives) of the frame: that way a
+    neighboring landfill or an airfield, which also lose coherence, don't lower the site's reference.
     """
     n = int(round(p.anillo_m / paso))
     yy, xx = np.mgrid[-n:n + 1, -n:n + 1]
@@ -274,13 +274,13 @@ def anillo(mascara, tierra, paso, p, excluir=None):
 
 
 def ficha(mascara, coh, orbitas, fechas, tierra, paso, p, eco_db=None, excluir=None):
-    """Serie par a par y veredicto de un sitio.
+    """Pair-by-pair series and verdict for a site.
 
-    Por cada par compara la mediana de la coherencia adentro del sitio con la del anillo (sin agua y sin los
-    polígonos de `excluir`, ver `anillo`). El par está despierto si adentro < p.razon × anillo. Veredictos:
-      despierto   insomnio >= p.min_insomnio y persistencia >= p.min_persistencia
-      quieto      insomnio <= p.max_quieto, con un entorno coherente
-      no_alcanza  todo lo demás, con el motivo
+    For each pair it compares the median coherence inside the site with the ring's (without water and without the
+    `excluir` polygons, see `anillo`). The pair is awake if inside < p.razon × ring. Verdicts:
+      despierto   insomnia >= p.min_insomnio and persistence >= p.min_persistencia
+      quieto      insomnia <= p.max_quieto, with coherent surroundings
+      no_alcanza  everything else, with the reason
     """
     adentro = mascara & tierra
     aro = anillo(mascara, tierra, paso, p, excluir)

@@ -1,12 +1,12 @@
-"""Chequeo rápido de la idea "Insomnes": capa de coherencia de un GUNW de NISAR.
+"""Quick check of the "Insomnes" idea: coherence layer of a NISAR GUNW.
 
-Uso:
-    python coherencia_gunw.py <archivo.h5> [carpeta_salida]
+Usage:
+    python coherencia_gunw.py <file.h5> [output_folder]
 
-Hace tres cosas:
-1. Lista los datasets del archivo que tienen "coherence" en el nombre.
-2. Recorta la coherencia alrededor de sitios de interés (coordenadas aproximadas) y calcula estadísticas.
-3. Guarda una figura con el panorama del AMBA y los recortes.
+It does three things:
+1. Lists the file's datasets with "coherence" in the name.
+2. Crops the coherence around sites of interest (approximate coordinates) and computes statistics.
+3. Saves a figure with the AMBA overview and the crops.
 """
 import math
 import os
@@ -19,18 +19,18 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# Sitios: (nombre, lat, lon, descripción). Coordenadas APROXIMADAS, a confirmar con imagen óptica.
+# Sites: (name, lat, lon, description). APPROXIMATE coordinates, to be confirmed with an optical image.
 SITIOS = [
     ("Norte III (CEAMSE)", -34.535, -58.615, "relleno activo: control positivo"),
     ("Basural de Luján", -34.520, -59.110, "cerrado el 1/07/2026 (ubicación estimada)"),
     ("CABA urbano", -34.585, -58.420, "control urbano: coherencia alta esperada"),
     ("Campo rural", -34.750, -59.400, "control rural: variable por cultivos"),
 ]
-VENTANA_M = 3000  # media ventana del recorte, en metros
+VENTANA_M = 3000  # half window of the crop, in meters
 
 
 def utm_desde_latlon(lat, lon, zona, sur):
-    """Proyección UTM (WGS84) sin dependencias externas. Devuelve (este, norte) en metros."""
+    """UTM projection (WGS84) without external dependencies. Returns (easting, northing) in meters."""
     a, f = 6378137.0, 1 / 298.257223563
     k0 = 0.9996
     e2 = f * (2 - f)
@@ -66,7 +66,7 @@ def listar(f):
 
 
 def epsg_de(f, grupo):
-    """Busca el EPSG en el dataset 'projection' del grupo o de sus padres."""
+    """Looks for the EPSG in the 'projection' dataset of the group or its parents."""
     partes = grupo.split("/")
     for i in range(len(partes), 0, -1):
         ruta = "/".join(partes[:i]) + "/projection"
@@ -95,11 +95,11 @@ def main():
         if not coh:
             print("No encontré una capa 2D de coherencia.")
             return
-        # Preferimos la de la interferometría desenrollada (80 m), y si no hay, la primera.
+        # We prefer the one from the unwrapped interferogram (80 m), and if there isn't one, the first.
         coh.sort(key=lambda d: ("unwrapped" not in d[0].lower(), d[1][0] * d[1][1]))
         nombre_coh = coh[0][0]
         grupo = nombre_coh.rsplit("/", 2)[0] if nombre_coh.count("/") > 2 else nombre_coh.rsplit("/", 1)[0]
-        # Coordenadas: buscar xCoordinates/yCoordinates en el grupo más cercano.
+        # Coordinates: look for xCoordinates/yCoordinates in the closest group.
         gx = gy = None
         g = nombre_coh
         while "/" in g and gx is None:
@@ -144,7 +144,7 @@ def main():
                   f"fracción < 0,3 = {(v < 0.3).mean():.2f}  ({desc})")
             resultados.append((nombre, desc, arr))
 
-        # Panorama del AMBA (submuestreado) y recortes.
+        # AMBA overview (subsampled) and crops.
         este0, norte0 = utm_desde_latlon(-34.25, -59.35, zona, sur)
         este1, norte1 = utm_desde_latlon(-34.85, -58.25, zona, sur)
         c0 = max(int((min(este0, este1) - gx[0]) / dx), 0)

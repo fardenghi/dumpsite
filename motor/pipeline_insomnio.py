@@ -1,30 +1,30 @@
-"""Pipeline del índice de insomnio con NISAR, para cualquier frame. Sin `--frame` trabaja sobre el AMBA.
+"""NISAR insomnia index pipeline, for any frame. Without `--frame` it works on the AMBA.
 
-Pasos (se pueden correr sueltos o todos con `todo`):
-  buscar    consulta la API pública de ASF y guarda la lista de GUNW (y GCOV) que cruzan la caja del frame
-  bajar     baja los .h5 con earthaccess (credenciales por variable de entorno), en paralelo
-  procesar  recorta la coherencia (y el backscatter de los GCOV, si hay) a la grilla común del frame, en paralelo.
-            La zona UTM y el hemisferio salen del EPSG de cada producto (dataset `projection`)
-  indice    calcula el índice de insomnio final (insomnio.py), las fichas por sitio, las manchas candidatas
-            y la figura; para el AMBA, también los archivos que lee la web (web/)
-  calibrar  barre los umbrales y dice con cuáles entran los sitios conocidos y no entran los controles (sólo AMBA)
+Steps (they can be run separately or all together with `todo`):
+  buscar    queries the public ASF API and saves the list of GUNWs (and GCOVs) that cross the frame's box
+  bajar     downloads the .h5 files with earthaccess (credentials through environment variables), in parallel
+  procesar  crops the coherence (and the GCOV backscatter, if any) to the frame's common grid, in parallel.
+            The UTM zone and hemisphere come from each product's EPSG (`projection` dataset)
+  indice    computes the final insomnia index (insomnio.py), the per-site records, the candidate blobs
+            and the figure; for the AMBA, also the files the web reads (web/)
+  calibrar  sweeps the thresholds and says with which ones the known sites get in and the controls don't (AMBA only)
 
-Con los recortes ya hechos, un solo comando reproduce todo lo que se informa del AMBA:
+With the crops already made, a single command reproduces everything reported for the AMBA:
   python pipeline_insomnio.py indice
 
-Otro frame, sin bajar los .h5 (lectura remota por ventana; así corre en la VM):
+Another frame, without downloading the .h5 files (remote windowed reading; that's how it runs on the VM):
   python pipeline_insomnio.py todo --frame DELHI --remoto
-  python pipeline_insomnio.py todo --frame todos --remoto          # todos los de data/frames.json, en orden
+  python pipeline_insomnio.py todo --frame todos --remoto          # all those in data/catalogos/frames.json, in order
   python pipeline_insomnio.py todo --frame PRUEBA --caja -118.40 33.90 -118.00 34.20 --remoto
 
-Bajando los .h5 (frame por frame: baja, procesa y borra antes de pasar al siguiente):
+Downloading the .h5 files (frame by frame: downloads, processes and deletes before moving to the next one):
   python pipeline_insomnio.py todo --frame todos --datos /mnt/datos --borrar
 
-Los frames salen de `../data/catalogos/frames.json` (etapa 2) o de `--caja lon_oeste lat_sur lon_este lat_norte`.
-Cada frame que no es el AMBA escribe en `<salida>/<FRAME>/`, baja en `<datos>/<FRAME>/` y cachea sus fuentes
-fijas (agua de JRC, usos de Overture y polígonos de los catálogos) en `fijos/<FRAME>/`.
+The frames come from `../data/catalogos/frames.json` (stage 2) or from `--caja lon_west lat_south lon_east lat_north`.
+Each frame that isn't the AMBA writes to `<salida>/<FRAME>/`, downloads to `<datos>/<FRAME>/` and caches its fixed
+sources (JRC water, Overture land uses and catalog polygons) in `fijos/<FRAME>/`.
 
-Credenciales: EARTHDATA_TOKEN, o EARTHDATA_USERNAME y EARTHDATA_PASSWORD. Nunca en el repo.
+Credentials: EARTHDATA_TOKEN, or EARTHDATA_USERNAME and EARTHDATA_PASSWORD. Never in the repo.
 """
 import argparse
 import concurrent.futures as cf
@@ -59,12 +59,12 @@ CAPAS = {
 }
 
 
-# ---------------------------------------------------------------- grilla común
+# ---------------------------------------------------------------- common grid
 def recortar(ds, xs_src, ys_src, xs_dst, ys_dst, epsg_src=None, epsg_dst=None):
-    """Lleva ds (2D) a la grilla destino por vecino más cercano. Lee sólo la ventana necesaria.
+    """Brings ds (2D) to the destination grid by nearest neighbor. Reads only the needed window.
 
-    Si el producto está en otra zona UTM que la grilla (pasa cuando la caja queda cerca del borde de una zona
-    y dos órbitas caen en zonas distintas), cada celda destino se busca en el producto pasando por lat/lon.
+    If the product is in a different UTM zone than the grid (it happens when the box is near a zone edge
+    and two orbits fall in different zones), each destination cell is looked up in the product via lat/lon.
     """
     dx, dy = xs_src[1] - xs_src[0], ys_src[1] - ys_src[0]
     if epsg_src and epsg_dst and int(epsg_src) != int(epsg_dst):
@@ -95,12 +95,12 @@ def recortar(ds, xs_src, ys_src, xs_dst, ys_dst, epsg_src=None, epsg_dst=None):
 
 # ---------------------------------------------------------------- frames
 def _guardar_frame(args):
-    """Deja en `<salida>/frame.json` el frame con el que se trabajó (caja, EPSG y órbitas)."""
+    """Leaves in `<salida>/frame.json` the frame that was used (box, EPSG and orbits)."""
     _json(os.path.join(args.salida, "frame.json"), args.fr.dict(), indent=1)
 
 
 def _partes(nombre):
-    """(tipo, órbita, frame de NISAR) a partir del nombre de un producto GUNW o GCOV."""
+    """(type, orbit, NISAR frame) from the name of a GUNW or GCOV product."""
     m = re.search(r"_(GUNW|GCOV)_\d{3}_(\d{3})_[AD]_(\d{3})_", nombre)
     return m.group(1), int(m.group(2)), int(m.group(3))
 
@@ -116,19 +116,19 @@ def buscar(args):
         "output": "jsonlite",
         "maxResults": "5000",
     }
-    # Una consulta por tipo: donde hay muchos productos, la respuesta de los dos juntos pasa el tamaño que la API
-    # devuelve y sale un 502 (pasó con USA_TX_HARRIS y USA_CA_SAN_JOAQUIN: 3 MB de GUNW más 4 MB de GCOV).
+    # One query per type: where there are many products, the response for both together exceeds the size the API
+    # returns and gives a 502 (it happened with USA_TX_HARRIS and USA_CA_SAN_JOAQUIN: 3 MB of GUNW plus 4 MB of GCOV).
     resultados = []
     for nivel in ("GUNW", "GCOV"):
         url = API_ASF + "?" + urllib.parse.urlencode({**params, "processingLevel": nivel})
         with urllib.request.urlopen(url, timeout=120) as r:
             resultados += json.load(r)["results"]
     desde, hasta = (fr.desde or "").replace("-", ""), (fr.hasta or "").replace("-", "")
-    solo = {(int(x.split("_")[0]), int(x.split("_")[-1])) for x in fr.frames_nisar}  # (órbita, frame de NISAR) de frames.json
+    solo = {(int(x.split("_")[0]), int(x.split("_")[-1])) for x in fr.frames_nisar}  # (orbit, NISAR frame) from frames.json
     elegidos = {}
     for g in resultados:
         nombre = g["granuleName"]
-        # Sólo productos PR (los UR, de respuesta urgente, duplican fechas) y de las órbitas pedidas.
+        # Only PR products (UR ones, urgent response, duplicate dates) and from the requested orbits.
         if not nombre.startswith("NISAR_L2_PR_") or not g.get("downloadUrl") or (args.orbitas and g.get("path") not in args.orbitas):
             continue
         tipo = g["productType"]
@@ -142,9 +142,9 @@ def buscar(args):
             dias = (g["startTime"][:10].replace("-", ""),) * 2
         if (desde and dias[0] < desde) or (hasta and dias[1] > hasta):
             continue
-        # Una caja puede cruzar dos frames de NISAR de la misma órbita: se guardan los dos y `indice` los junta.
+        # A box can cross two NISAR frames of the same orbit: both are kept and `indice` joins them.
         clave = (tipo, g["path"], frame_nisar) + ((_fecha(dias[0]), _fecha(dias[1])) if tipo == "GUNW" else (_fecha(dias[0]),))
-        # Preferimos frame completo (_F_) y la versión más nueva (sufijo _NNN).
+        # We prefer a full frame (_F_) and the newest version (suffix _NNN).
         rango = ("_F_" in nombre, nombre[-3:])
         if clave not in elegidos or rango > elegidos[clave][0]:
             elegidos[clave] = (rango, g)
@@ -188,7 +188,7 @@ def bajar(args):
 
 # ---------------------------------------------------------------- procesar
 def _epsg(f, grupo):
-    """EPSG de la grilla de un producto: el dataset `projection` del grupo (su valor, o el atributo `epsg_code`)."""
+    """EPSG of a product's grid: the group's `projection` dataset (its value, or the `epsg_code` attribute)."""
     for ruta in (f"{grupo}/projection", f"{grupo.rsplit('/', 1)[0]}/projection"):
         if ruta in f:
             ds = f[ruta]
@@ -200,7 +200,7 @@ def _epsg(f, grupo):
 
 
 def _buscar_capa(f, grupo):
-    """Devuelve (dataset de coherencia, xs, ys, epsg) para la primera polarización disponible del grupo."""
+    """Returns (coherence dataset, xs, ys, epsg) for the first available polarization of the group."""
     base = f"science/LSAR/GUNW/grids/frequencyA/{grupo}"
     for pol in ("HH", "VV", "HV", "VH"):
         ruta = f"{base}/{pol}/coherenceMagnitude"
@@ -210,8 +210,8 @@ def _buscar_capa(f, grupo):
 
 
 def _buscar_eco(f):
-    """Busca el backscatter de un GCOV. Devuelve (co, cruzada, xs, ys, epsg): los datasets de la polarización
-    directa (HHHH o VVVV) y de la cruzada del mismo grupo (HVHV o VHVH, o None si el producto no la trae)."""
+    """Looks for a GCOV's backscatter. Returns (co, cross, xs, ys, epsg): the datasets of the like
+    polarization (HHHH or VVVV) and the cross one of the same group (HVHV or VHVH, or None if the product doesn't carry it)."""
     encontrado = []
 
     import h5py
@@ -234,10 +234,10 @@ _SESION_REMOTA = None
 
 @contextlib.contextmanager
 def _abrir(ruta, remoto, intentos=4):
-    """Abre un .h5 local, o remoto por URL con earthaccess (lee sólo los bloques que se piden).
+    """Opens a local .h5, or a remote one by URL with earthaccess (reads only the requested chunks).
 
-    El login y la apertura remota se reintentan: Earthdata corta conexiones cada tanto. Al salir cierra también
-    el archivo remoto, para soltar su caché de bloques (si no, cada proceso junta cientos de MB).
+    The login and the remote opening are retried: Earthdata drops connections every now and then. On exit it also closes
+    the remote file, to release its chunk cache (otherwise each process piles up hundreds of MB).
     """
     import h5py
 
@@ -252,7 +252,7 @@ def _abrir(ruta, remoto, intentos=4):
 
     for i in range(intentos):
         try:
-            if _SESION_REMOTA is None:  # una vez por proceso
+            if _SESION_REMOTA is None:  # once per process
                 _SESION_REMOTA = earthaccess.login(strategy="environment")
             archivo = earthaccess.open([ruta])[0]
             f = h5py.File(archivo, "r")
@@ -270,8 +270,8 @@ def _abrir(ruta, remoto, intentos=4):
 
 
 def _procesar_uno(tarea):
-    """Recorta un producto a la grilla del frame. Un GUNW da un recorte de coherencia; un GCOV da dos: el eco
-    de la polarización directa (`gcov_*`) y el de la cruzada (`gcovhv_*`), que sirve para el cociente HV/HH."""
+    """Crops a product to the frame's grid. A GUNW gives one coherence crop; a GCOV gives two: the echo
+    of the like polarization (`gcov_*`) and that of the cross one (`gcovhv_*`), used for the HV/HH ratio."""
     ruta, capa, carpeta, remoto, caja, epsg = tarea
     nombre = os.path.basename(ruta).replace(".h5", "")
     fechas = re.findall(r"_(\d{8})T\d{6}", nombre)
@@ -279,10 +279,10 @@ def _procesar_uno(tarea):
     fecha_sec = fechas[2] if len(fechas) > 2 else fechas[0]
 
     def destino(prefijo):
-        # Nombre corto: los nombres de NISAR superan el límite de rutas de Windows.
+        # Short name: NISAR names exceed the Windows path limit.
         return os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{frame_nisar:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz")
 
-    def hecho(prefijo):  # también vale el nombre de los recortes de antes de los frames, sin el frame de NISAR
+    def hecho(prefijo):  # the name of the crops from before frames existed, without the NISAR frame, is also valid
         return os.path.exists(destino(prefijo)) or os.path.exists(os.path.join(carpeta, f"{prefijo}_{orbita:03d}_{fechas[0]}_{fecha_sec}_{capa}.npz"))
 
     principal = destino(tipo.lower())
@@ -299,7 +299,7 @@ def _procesar_uno(tarea):
         valor[~np.isfinite(valor)] = np.nan
         return valor
 
-    intentos = 3 if remoto else 1  # la lectura por URL se corta cada tanto: se reintenta el archivo entero
+    intentos = 3 if remoto else 1  # reading by URL drops every now and then: the whole file is retried
     for i in range(intentos):
         try:
             valores = {}
@@ -316,11 +316,11 @@ def _procesar_uno(tarea):
                     if "gcovhv" in faltan and cruzada is not None:
                         valores["gcovhv"] = en_db(cruzada, xs, ys, epsg_src)
             break
-        except Exception as e:  # un archivo roto no frena a los demás
+        except Exception as e:  # a broken file doesn't stop the others
             if i == intentos - 1:
                 return principal, f"ERROR {type(e).__name__}: {e}"
     for prefijo, valor in valores.items():
-        parcial = destino(prefijo) + ".parcial.npz"  # se escribe aparte y se renombra: un corte no deja un recorte roto
+        parcial = destino(prefijo) + ".parcial.npz"  # written separately and renamed: an interruption doesn't leave a broken crop
         np.savez_compressed(parcial, valor=valor.astype(np.float16), tipo=salidas[prefijo], orbita=orbita, frame_nisar=frame_nisar,
                             fecha_ref=fechas[0], fecha_sec=fecha_sec, producto=nombre, epsg=epsg, epsg_producto=epsg_src)
         os.replace(parcial, destino(prefijo))
@@ -332,7 +332,7 @@ def _procesar_uno(tarea):
 
 
 def _fijar_epsg(args, archivos):
-    """Si el frame vino de `--caja` sin EPSG, la grilla toma la zona UTM del primer GUNW (dataset `projection`)."""
+    """If the frame came from `--caja` without an EPSG, the grid takes the UTM zone of the first GUNW (`projection` dataset)."""
     fr = args.fr
     if fr.epsg_fijo:
         return
@@ -341,7 +341,7 @@ def _fijar_epsg(args, archivos):
         return
     with _abrir(primero, args.remoto) as f:
         epsg = _buscar_capa(f, CAPAS[args.capa][0])[3]
-    geo.zona_de_epsg(epsg)  # falla si no es UTM
+    geo.zona_de_epsg(epsg)  # fails if it isn't UTM
     if epsg != fr.epsg:
         print(f"  La grilla de {fr.nombre} pasa de EPSG {fr.epsg} (centro de la caja) a {epsg} (el del producto)")
     args.fr = dataclasses.replace(fr, epsg=epsg, epsg_fijo=True)
@@ -352,7 +352,7 @@ def procesar(args):
     carpeta = os.path.join(args.salida, f"recortes_{args.capa}")
     os.makedirs(carpeta, exist_ok=True)
     if args.remoto:
-        # Sin bajar nada: lee por URL sólo la ventana del frame (necesita `buscar` antes y credenciales).
+        # Without downloading anything: reads by URL only the frame's window (needs `buscar` first and credentials).
         with open(os.path.join(args.salida, "lista_productos.json"), encoding="utf-8") as fh:
             lista = json.load(fh)
         archivos = [x["url"] for x in lista if x["tipo"] == "GUNW" or not args.solo_gunw]
@@ -369,10 +369,10 @@ def procesar(args):
     print(f"{fr.nombre} (EPSG {fr.epsg}): {len(archivos)} archivos a procesar (capa {args.capa}, {args.procesos} procesos, {modo})")
     errores = 0
     tareas = {a: (a, args.capa, carpeta, args.remoto, fr.caja, fr.epsg) for a in archivos}
-    # Procesos nuevos (spawn) y no copias (fork): la sesión remota y h5py no sobreviven bien a un fork. Cada proceso
-    # se recicla cada pocos archivos, para que no junte memoria. Si el sistema mata un proceso, se sigue con lo que falta.
-    # Sólo desde Python 3.12.4: en la VM, reciclar procesos dejaba colgado el pool (compatible con cpython gh-115634)
-    # (Ubuntu 24.04, Python 3.12.3): `procesar` se quedaba esperando para siempre; sin reciclar, no volvió a pasar.
+    # New processes (spawn), not copies (fork): the remote session and h5py don't survive a fork well. Each process
+    # is recycled every few files, so it doesn't pile up memory. If the system kills a process, it continues with what's left.
+    # Only from Python 3.12.4: on the VM, recycling processes left the pool hanging (consistent with cpython gh-115634)
+    # (Ubuntu 24.04, Python 3.12.3): `procesar` would wait forever; without recycling, it didn't happen again.
     reciclar = {"max_tasks_per_child": 6} if sys.version_info >= (3, 12, 4) else {}
     for vuelta in range(4):
         hechos = set()
@@ -383,7 +383,7 @@ def procesar(args):
                     print(f"  {os.path.basename(destino)}: {estado}", flush=True)
                     errores += estado.startswith("ERROR")
                     if args.borrar and not args.remoto and not estado.startswith("ERROR"):
-                        os.remove(archivo)  # frame por frame: el disco nunca junta los .h5 de más de un frame
+                        os.remove(archivo)  # frame by frame: the disk never holds the .h5 files of more than one frame
             break
         except cf.process.BrokenProcessPool:
             tareas = {a: t for a, t in tareas.items() if a not in hechos}
@@ -394,7 +394,7 @@ def procesar(args):
         print(f"  {errores} archivo(s) con error: se pueden reintentar corriendo `procesar` de nuevo")
 
 
-# ---------------------------------------------------------------- índice
+# ---------------------------------------------------------------- index
 def _fecha(aaaammdd):
     return f"{aaaammdd[:4]}-{aaaammdd[4:6]}-{aaaammdd[6:]}"
 
@@ -413,7 +413,7 @@ def _json(ruta, datos, **kw):
 
 
 def _juntar(piezas):
-    """Junta los recortes de un mismo par o fecha que vienen de frames de NISAR vecinos: manda el que más cubre."""
+    """Joins the crops of the same pair or date that come from neighboring NISAR frames: the one covering most wins."""
     piezas = sorted(piezas, key=lambda v: -np.isfinite(v).sum())
     salida = piezas[0]
     for otra in piezas[1:]:
@@ -422,7 +422,7 @@ def _juntar(piezas):
 
 
 def _fijo(args, archivo, armar):
-    """Ruta de una fuente fija del frame. Si no está cacheada, la arma (con red) y la deja en `fijos/<FRAME>/`."""
+    """Path of a fixed source of the frame. If it's not cached, it builds it (with the network) and leaves it in `fijos/<FRAME>/`."""
     ruta = os.path.join(args.fijos, archivo)
     if not os.path.exists(ruta):
         print(f"Falta {os.path.relpath(ruta)}: lo armo (fuentes_fijas.py)")
@@ -431,9 +431,9 @@ def _fijo(args, archivo, armar):
 
 
 def cargar(args):
-    """Lee una sola vez los recortes, la máscara de agua, los sitios, los usos conocidos y los polígonos de los catálogos.
+    """Reads once the crops, the water mask, the sites, the known land uses and the catalog polygons.
 
-    `args` alcanza con `salida`, `capa` y `orbitas`: sin `fr` se asume el AMBA (así lo llama `insomnio_catalogo.py`).
+    `args` only needs `salida`, `capa` and `orbitas`: without `fr` the AMBA is assumed (that's how `insomnio_catalogo.py` calls it).
     """
     fr = getattr(args, "fr", geo.AMBA)
     if not hasattr(args, "fijos"):
@@ -457,7 +457,7 @@ def cargar(args):
             ref, sec = _fecha(f_ref), _fecha(f_sec)
             coh.append(valor)
             pares.append({"orbita": orbita, "desde": ref, "hasta": sec, "dias": _dias(ref, sec), "producto": piezas[0][1]})
-        elif np.isfinite(valor).mean() >= 0.5:  # hay GCOV que no cubren la caja
+        elif np.isfinite(valor).mean() >= 0.5:  # some GCOVs don't cover the box
             (eco if tipo == "eco_db" else eco_hv).append(valor)
             (orb_eco if tipo == "eco_db" else orb_eco_hv).append(orbita)
     if not coh:
@@ -468,7 +468,7 @@ def cargar(args):
     if ocurrencia.shape != (len(ys), len(xs)):
         sys.exit(f"La máscara de agua mide {ocurrencia.shape} y la grilla de {fr.nombre} {(len(ys), len(xs))}: "
                  f"rehacela con `python fuentes_fijas.py agua --frame {fr.nombre}`.")
-    # Sitios con ficha: los del registro, que hoy son todos del AMBA (`frame` en el registro, por defecto AMBA).
+    # Sites with a record: those in the registry, which today are all in the AMBA (`frame` in the registry, AMBA by default).
     with open(os.path.join(AQUI, "sitios_registro.json"), encoding="utf-8") as fh:
         registro = [s for s in json.load(fh)["sitios"] if s.get("frame", "AMBA") == fr.nombre]
     contornos = {}
@@ -485,13 +485,13 @@ def cargar(args):
     try:
         with open(_fijo(args, "usos_osm.json", lambda: ff.usos(fr, args.fijos)), encoding="utf-8") as fh:
             usos = json.load(fh)["usos"]
-    except Exception as e:  # sin red o sin duckdb: el índice sale igual, sin la clase "uso conocido"
+    except Exception as e:  # offline or without duckdb: the index comes out anyway, without the "known land use" class
         print(f"AVISO: no hay usos conocidos para {fr.nombre} ({type(e).__name__}: {e}). Las manchas salen sin esa clase.")
         usos = []
-    uso_px = np.zeros((len(ys), len(xs)), dtype=np.int16)  # 0 = sin uso conocido; i = usos[i - 1]
+    uso_px = np.zeros((len(ys), len(xs)), dtype=np.int16)  # 0 = no known land use; i = usos[i - 1]
     for i, u in enumerate(usos, start=1):
         uso_px[fr.mascara_poligonos(u["anillos"], xs, ys) & (uso_px == 0)] = i
-    # Polígonos de los catálogos (basurales y negativos) del frame: el anillo de cada sitio los excluye a todos.
+    # Catalog polygons (dump sites and negatives) of the frame: each site's ring excludes all of them.
     try:
         with open(_fijo(args, "catalogo.json", lambda: ff.catalogo(fr, args.fijos)), encoding="utf-8") as fh:
             catalogo = json.load(fh)["poligonos"]
@@ -501,7 +501,7 @@ def cargar(args):
     catalogo_px = np.zeros((len(ys), len(xs)), dtype=bool)
     for c in catalogo:
         catalogo_px |= fr.mascara_poligonos(c["anillos"], xs, ys)
-    # Rellenos conocidos, para decir qué pisa cada mancha: los sitios del registro o, si el frame no tiene, los basurales del catálogo.
+    # Known landfills, to say what each blob overlaps: the registry sites or, if the frame has none, the catalog dump sites.
     sitio_px = np.zeros_like(uso_px)
     rellenos = []
     if registro:
@@ -524,19 +524,19 @@ def cargar(args):
 
 
 def evaluar(ctx, p, cociente=None, eco_db=None):
-    """Corre el índice con los parámetros p. Devuelve capas, manchas clasificadas y fichas."""
+    """Runs the index with parameters p. Returns layers, classified blobs and records."""
     paso = ctx["paso"]
     agua = ins.mascara_agua(ctx["ocurrencia"], paso, p)
     capas = ins.calcular(ctx["coh"], ctx["orbitas"], ctx["dias"], ctx["fechas"], agua, paso, p,
                          eco=ctx["eco"], orbitas_eco=ctx["orbitas_eco"], cociente=cociente, eco_db=eco_db)
     lista, etiquetas = ins.manchas(capas["candidato"], capas, paso, p)
     n = len(lista)
-    # qué pisa cada mancha: un relleno de OSM, un uso conocido o nada
+    # what each blob overlaps: an OSM landfill, a known land use or nothing
     ok = etiquetas > 0
     px = np.bincount(etiquetas[ok], minlength=n + 1)
 
     def mayoritario(ids):
-        """Por mancha, el id más frecuente (sin contar el 0) y la fracción de la mancha que ocupa."""
+        """Per blob, the most frequent id (not counting 0) and the fraction of the blob it covers."""
         sel = ok & (ids > 0)
         pares_ = np.unique(np.column_stack([etiquetas[sel], ids[sel]]), axis=0, return_counts=True)
         mejor = {}
@@ -606,7 +606,7 @@ def _figura(ctx, capas, lista, etiquetas, p, destino):
 
 
 def _png_web(capas, ctx, destino):
-    """PNG RGBA del índice relativo, norte arriba y regular en Web Mercator. Transparente en el agua y donde el índice es bajo."""
+    """RGBA PNG of the relative index, north up and regular in Web Mercator. Transparent over water and where the index is low."""
     import matplotlib
 
     matplotlib.use("Agg")
@@ -621,7 +621,7 @@ def _png_web(capas, ctx, destino):
 
 
 def _escribir_web(ctx, capas, lista, fichas, p, web):
-    """Los archivos que lee la web. `sitios.json` tiene la forma exacta de `Sitio[]` (src/data/types.ts)."""
+    """The files the web reads. `sitios.json` has the exact shape of `Sitio[]` (src/data/types.ts)."""
     seed = os.path.join(web, "src", "data", "seed")
     try:
         with open(os.path.join(seed, "imagenes.json"), encoding="utf-8") as fh:
@@ -635,7 +635,7 @@ def _escribir_web(ctx, capas, lista, fichas, p, web):
             continue
         mayor = max(s["anillos"], key=lambda a: geo.area_y_centro(a)[0])
         lon, lat = np.array([q for a in s["anillos"] for q in a]).T
-        margen = 0.018  # ~1,6 km: el sitio con su anillo
+        margen = 0.018  # ~1.6 km: the site with its ring
         img = imagenes.get(s["id"]) or {}
         escenas = img.get("escenas", []) if isinstance(img, dict) else img
         caja = (img.get("caja") if isinstance(img, dict) else None) or [
@@ -728,7 +728,7 @@ def indice(args):
     _json(os.path.join(args.salida, f"resumen_{capa}.json"), resumen, indent=1)
     _json(os.path.join(args.salida, f"fichas_{capa}.json"), {k: v for k, v in fichas.items()}, indent=1)
     _figura(ctx, capas, lista, etiquetas, p, os.path.join(args.salida, f"indice_{capa}.png"))
-    # La web lee el AMBA: los otros frames no tocan la web.
+    # The web reads the AMBA: the other frames don't touch the web.
     n_web = _escribir_web(ctx, capas, lista, fichas, p, args.web) if args.web and os.path.isdir(args.web) and capa == "80m" and fr.nombre == "AMBA" else 0
 
     print(f"{fr.nombre}: {len(ctx['pares'])} pares GUNW y {len(ctx['orbitas_eco'])} GCOV, órbitas {sorted(set(ctx['orbitas'].tolist()))}, "
@@ -752,12 +752,12 @@ def indice(args):
 
 # ---------------------------------------------------------------- calibrar
 def calibrar(args):
-    """Barre `razon` y `min_insomnio` y marca las combinaciones en las que entran los sitios de calibración y no entran los controles.
+    """Sweeps `razon` and `min_insomnio` and marks the combinations in which the calibration sites get in and the controls don't.
 
-    Criterios (todos a la vez):
-      - los sitios con rol `calibracion` dan veredicto "despierto" y las manchas candidatas cubren al menos el 5 % de cada uno;
-      - el control de la ciudad da "quieto";
-      - las manchas candidatas cubren menos del 5 % de cada control.
+    Criteria (all at once):
+      - the sites with role `calibracion` get the "awake" verdict and the candidate blobs cover at least 5 % of each one;
+      - the city control comes out "quiet";
+      - the candidate blobs cover less than 5 % of each control.
     """
     import dataclasses
 
@@ -789,7 +789,7 @@ def calibrar(args):
     print("        " + "".join(f"{t:>10.1f}" for t in minimos))
     for r in razones:
         print(f"  {r:.3f} " + "".join(f"{('*' if x['cumple'] else ' ') + format(x['tierra_candidata'], '.1%'):>10s}" for x in tabla if x["razon"] == r))
-    # eco: el umbral tiene que quedar entre lo liso conocido y los rellenos conocidos
+    # echo: the threshold has to fall between the known smooth surfaces and the known landfills
     eco_sitio = lambda i: float(np.nanmedian(eco_db[next(s for s in ctx["sitios"] if s["id"] == i)["mascara"]]))  # noqa: E731
     lisos = {i: round(eco_sitio(i), 1) for i in ("control-rio", "lujan-oeste")}
     rellenos = {i: round(eco_sitio(i), 1) for i in positivos}
@@ -804,7 +804,7 @@ def calibrar(args):
 
 # ---------------------------------------------------------------- main
 def preparar(args, nombre):
-    """Copia de los argumentos para un frame: el frame, sus órbitas y sus carpetas propias."""
+    """Copy of the arguments for one frame: the frame, its orbits and its own folders."""
     a = argparse.Namespace(**vars(args))
     nombre = nombre.upper()
     amba = nombre == "AMBA"
@@ -813,7 +813,7 @@ def preparar(args, nombre):
     if args.caja and not amba:
         fr = geo.frame_de_caja(nombre, args.caja)
         guardado = os.path.join(a.salida, "frame.json")
-        if os.path.exists(guardado):  # el EPSG que ya fijó `procesar` con el primer producto
+        if os.path.exists(guardado):  # the EPSG that `procesar` already fixed with the first product
             with open(guardado, encoding="utf-8") as fh:
                 previo = geo.frame_de_dict(json.load(fh))
             if previo.bbox == fr.bbox:
@@ -835,24 +835,24 @@ def preparar(args, nombre):
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("paso", choices=["buscar", "bajar", "procesar", "indice", "calibrar", "todo"])
-    p.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos` (en su orden de prioridad). Por defecto, AMBA")
+    p.add_argument("--frame", nargs="+", default=["AMBA"], help="one or more frames from data/catalogos/frames.json, or `todos` (in priority order). Default: AMBA")
     p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"),
-                   help="caja de un frame que no está en frames.json, en el orden de GeoJSON (va con un solo --frame NOMBRE)")
-    p.add_argument("--epsg", type=int, help="EPSG de la grilla (UTM). Si no se da: el de frames.json o, con --caja, el del primer GUNW")
-    p.add_argument("--datos", default=os.path.join(AQUI, "datos"), help="carpeta de los .h5 (fuera del repo en la VM, por ejemplo /mnt/datos)")
-    p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta de productos chicos (lista, recortes, índice, figuras)")
-    p.add_argument("--fijos", default=FIJOS, help="carpeta de las fuentes fijas: cada frame cachea las suyas en <fijos>/<FRAME>/ (el AMBA, sueltas)")
-    p.add_argument("--web", default=WEB, help="carpeta de la web; `indice` del AMBA a 80 m escribe ahí los datos de la web ('' para no escribir)")
-    p.add_argument("--orbitas", type=int, nargs="+", help="órbitas (path) a usar. Por defecto, las del frame (AMBA: 10 y 161) o todas las que crucen la caja")
-    p.add_argument("--desde", help="AAAA-MM-DD: primera fecha de los productos que toma `buscar` (por defecto, la del frame; '' = sin límite)")
-    p.add_argument("--hasta", help="AAAA-MM-DD: última fecha de los productos que toma `buscar` (por defecto, la del frame; '' = sin límite)")
+                   help="box of a frame that isn't in frames.json, in GeoJSON order (goes with a single --frame NAME)")
+    p.add_argument("--epsg", type=int, help="EPSG of the grid (UTM). If not given: the one in frames.json or, with --caja, the first GUNW's")
+    p.add_argument("--datos", default=os.path.join(AQUI, "datos"), help="folder of the .h5 files (outside the repo on the VM, for example /mnt/datos)")
+    p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="folder of small products (list, crops, index, figures)")
+    p.add_argument("--fijos", default=FIJOS, help="folder of the fixed sources: each frame caches its own in <fijos>/<FRAME>/ (the AMBA's, loose)")
+    p.add_argument("--web", default=WEB, help="web folder; `indice` for the AMBA at 80 m writes the web data there ('' to skip writing)")
+    p.add_argument("--orbitas", type=int, nargs="+", help="orbits (path) to use. Default: the frame's (AMBA: 10 and 161) or all those crossing the box")
+    p.add_argument("--desde", help="YYYY-MM-DD: first date of the products `buscar` takes (default: the frame's; '' = no limit)")
+    p.add_argument("--hasta", help="YYYY-MM-DD: last date of the products `buscar` takes (default: the frame's; '' = no limit)")
     p.add_argument("--capa", choices=list(CAPAS), default="80m")
     p.add_argument("--procesos", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     p.add_argument("--hilos", type=int, default=8, help="descargas en paralelo")
-    p.add_argument("--solo-gunw", action="store_true", help="no bajar ni procesar GCOV")
-    p.add_argument("--remoto", action="store_true", help="procesar leyendo por URL sólo la ventana necesaria, sin bajar los .h5 (necesita credenciales)")
-    p.add_argument("--sin-catalogos", action="store_true", help="el anillo de cada sitio excluye sólo el sitio y el agua, como antes de la etapa 1 (para comparar)")
-    p.add_argument("--borrar", action="store_true", help="borrar cada .h5 local después de recortarlo (para bajar, procesar y borrar frame por frame)")
+    p.add_argument("--solo-gunw", action="store_true", help="don't download or process GCOV")
+    p.add_argument("--remoto", action="store_true", help="process by reading only the needed window by URL, without downloading the .h5 files (needs credentials)")
+    p.add_argument("--sin-catalogos", action="store_true", help="each site's ring excludes only the site and water, as before stage 1 (for comparison)")
+    p.add_argument("--borrar", action="store_true", help="delete each local .h5 after cropping it (to download, process and delete frame by frame)")
     args = p.parse_args()
     nombres = list(geo.frames_conocidos()) if args.frame == ["todos"] else args.frame
     if args.caja and len(nombres) != 1:
@@ -868,7 +868,7 @@ def main():
         except (Exception, SystemExit) as e:
             if len(nombres) == 1:
                 raise
-            fallados.append(nombre)  # un frame que falla no frena a los demás
+            fallados.append(nombre)  # a failing frame doesn't stop the others
             print(f"ERROR en {nombre}: {type(e).__name__}: {e}", flush=True)
     if fallados:
         sys.exit(f"Frames con error: {', '.join(fallados)}")

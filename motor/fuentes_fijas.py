@@ -1,27 +1,27 @@
-"""Baja y prepara las fuentes fijas que usa `pipeline_insomnio.py indice`, para cualquier frame. Con red.
+"""Downloads and prepares the fixed sources used by `pipeline_insomnio.py indice`, for any frame. Needs the network.
 
-  python fuentes_fijas.py agua      [--frame X]   máscara de agua de JRC Global Surface Water sobre la grilla del frame
-  python fuentes_fijas.py usos      [--frame X]   polígonos de usos conocidos (aeródromos, golf, parques, ...) de Overture Maps
-  python fuentes_fijas.py catalogo  [--frame X]   polígonos de `data/catalogos/basurales/` y `data/catalogos/negativos/` que caen en el frame (sin red)
-  python fuentes_fijas.py cobertura [--frame X]   fracción urbana y de cultivo de ESA WorldCover (contexto del modelo, etapa 4)
-  python fuentes_fijas.py todo      [--frame X]   las cuatro cosas
-  python fuentes_fijas.py sitios                  contornos de OpenStreetMap de los sitios de sitios_registro.json (sólo AMBA)
+  python fuentes_fijas.py agua      [--frame X]   JRC Global Surface Water mask over the frame's grid
+  python fuentes_fijas.py usos      [--frame X]   polygons of known land uses (airfields, golf, parks, ...) from Overture Maps
+  python fuentes_fijas.py catalogo  [--frame X]   polygons of `data/catalogos/basurales/` and `data/catalogos/negativos/` that fall in the frame (offline)
+  python fuentes_fijas.py cobertura [--frame X]   urban and cropland fraction from ESA WorldCover (model context, stage 4)
+  python fuentes_fijas.py todo      [--frame X]   the four things
+  python fuentes_fijas.py sitios                  OpenStreetMap outlines of the sites in sitios_registro.json (AMBA only)
 
-El frame sale de `../data/catalogos/frames.json` o de `--caja lon_oeste lat_sur lon_este lat_norte` (con `--frame NOMBRE`).
-Los resultados quedan cacheados por frame en `fijos/<FRAME>/` (no se suben: `indice` los rehace solo si faltan).
-Los del AMBA sí van al repo, sueltos en `fijos/`: son los de referencia de `../docs/indice-insomnio.md` (los usos, de
-Nominatim) y con ellos `indice` no necesita red. Para rehacerlos hay que pasar `--pisar`.
+The frame comes from `../data/catalogos/frames.json` or from `--caja lon_west lat_south lon_east lat_north` (with `--frame NAME`).
+The results are cached per frame in `fijos/<FRAME>/` (not committed: `indice` rebuilds them only if they're missing).
+The AMBA ones are committed, loose in `fijos/`: they're the reference ones of `../docs/indice-insomnio.md` (the land uses, from
+Nominatim) and with them `indice` needs no network. To rebuild them pass `--pisar`.
 
-Fuentes:
-- JRC Global Surface Water v1.4 (1984-2021), capa `occurrence`. Pekel, Cottam, Gorelick y Belward (2016),
-  Nature 540, 418-422, doi:10.1038/nature20584. Datos del EC JRC / Google, uso libre con cita.
+Sources:
+- JRC Global Surface Water v1.4 (1984-2021), `occurrence` layer. Pekel, Cottam, Gorelick and Belward (2016),
+  Nature 540, 418-422, doi:10.1038/nature20584. Data from EC JRC / Google, free use with citation.
   https://global-surface-water.appspot.com/download
-- Overture Maps, release 2026-10-21.0, tema `base` (`land_use`, `land`, `infrastructure`). Son datos de
-  © colaboradores de OpenStreetMap, licencia ODbL 1.0. https://docs.overturemaps.org/
-- © colaboradores de OpenStreetMap, licencia ODbL 1.0. Geometrías por la API de OSM y por Nominatim (sitios y usos del AMBA).
+- Overture Maps, release 2026-10-21.0, `base` theme (`land_use`, `land`, `infrastructure`). The data is
+  © OpenStreetMap contributors, ODbL 1.0 license. https://docs.overturemaps.org/
+- © OpenStreetMap contributors, ODbL 1.0 license. Geometries via the OSM API and Nominatim (AMBA sites and land uses).
 - ESA WorldCover 10 m 2021 v200. Zanaga et al. (2022), doi:10.5281/zenodo.7254221. © ESA WorldCover project,
-  licencia CC BY 4.0. https://esa-worldcover.org/
-- Catálogos de `data/` (ver `../data/README.md`): Overture/OSM (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP y NASA EMIT.
+  CC BY 4.0 license. https://esa-worldcover.org/
+- Catalogs in `data/` (see `../data/README.md`): Overture/OSM (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP and NASA EMIT.
 """
 import argparse
 import json
@@ -45,19 +45,19 @@ FIJOS = os.path.join(AQUI, "fijos")
 DATA = os.path.join(RAIZ, "data", "catalogos")
 AGENTE = {"User-Agent": "insomnes-contornos/0.1"}
 JRC = "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_{}v1_4_2021.tif"
-JRC_PASO, JRC_LADO = 0.00025, 40000  # tamaño de píxel en grados y píxeles por lado de un tile de 10° × 10°
-JRC_NORTE, JRC_OESTE = 80.0, -180.0  # esquina noroeste del mosaico mundial (los tiles se nombran por su esquina noroeste)
+JRC_PASO, JRC_LADO = 0.00025, 40000  # pixel size in degrees and pixels per side of a 10° × 10° tile
+JRC_NORTE, JRC_OESTE = 80.0, -180.0  # northwest corner of the world mosaic (tiles are named by their northwest corner)
 WORLDCOVER = "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_{}_Map.tif"
 PASOS = {"80m": 80.0, "20m": 20.0}
 OVERTURE = "2026-10-21.0"
 OVERTURE_RAIZ = f"s3://overturemaps-us-west-2/release/{OVERTURE}/theme=base"
-# Usos conocidos que también dan coherencia baja permanente: (búsqueda en Nominatim, clase OSM, tipo OSM, etiqueta).
+# Known land uses that also give permanently low coherence: (Nominatim search, OSM class, OSM type, label).
 USOS = [("aerodrome", "aeroway", "aerodrome", "aeródromo"), ("golf course", "leisure", "golf_course", "golf"),
         ("park", "leisure", "park", "parque"), ("cemetery", "landuse", "cemetery", "cementerio"),
         ("quarry", "landuse", "quarry", "cantera"), ("forest", "landuse", "forest", "forestación"),
         ("nature reserve", "leisure", "nature_reserve", "reserva")]
-# Los mismos usos en Overture: (capa, condición SQL, etiqueta). El orden importa: si dos se pisan, gana el primero,
-# por eso lo más específico va antes y las reservas (que pueden ser enormes) al final. `militar` es nuevo.
+# The same land uses in Overture: (layer, SQL condition, label). Order matters: if two overlap, the first wins,
+# that's why the most specific go first and the reserves (which can be huge) last. `militar` is new.
 USOS_OVERTURE = [
     ("infrastructure", "subtype = 'airport' AND class LIKE '%airport%'", "aeródromo"),
     ("land_use", "class = 'airfield'", "aeródromo"),
@@ -69,12 +69,12 @@ USOS_OVERTURE = [
     ("land_use", "subtype = 'military' AND class <> 'airfield'", "militar"),
     ("land_use", "subtype = 'protected'", "reserva"),
 ]
-USO_MIN_HA = 2.0  # menos que esto no llega a 4 píxeles de 80 m
-MARGEN_CATALOGO = 0.03  # grados (~3 km): los polígonos de afuera de la caja que entran en el anillo de un sitio del borde
+USO_MIN_HA = 2.0  # less than this doesn't reach 4 pixels of 80 m
+MARGEN_CATALOGO = 0.03  # degrees (~3 km): polygons outside the box that enter the ring of a site on the edge
 
 
 def carpeta(fr, base=None):
-    """Dónde se cachean las fuentes fijas de un frame. El AMBA usa `fijos/` a secas (los archivos de referencia)."""
+    """Where a frame's fixed sources are cached. The AMBA uses plain `fijos/` (the reference files)."""
     base = base or FIJOS
     return base if fr.nombre == "AMBA" else os.path.join(base, fr.nombre)
 
@@ -82,7 +82,7 @@ def carpeta(fr, base=None):
 def pedir(url, pausa=1.2):
     with urllib.request.urlopen(urllib.request.Request(url, headers=AGENTE), timeout=120) as r:
         datos = json.load(r)
-    time.sleep(pausa)  # la política de uso de OSM pide como mucho un pedido por segundo
+    time.sleep(pausa)  # the OSM usage policy asks for at most one request per second
     return datos
 
 
@@ -95,13 +95,13 @@ def _guardar_json(ruta, datos):
 
 # ------------------------------------------------------------------ agua
 def tile_jrc(fila, columna):
-    """Nombre del tile de JRC por su esquina noroeste: `60W_30S`, `120W_40N`, `70E_30N`, `0E_0N`."""
+    """JRC tile name by its northwest corner: `60W_30S`, `120W_40N`, `70E_30N`, `0E_0N`."""
     lon, lat = int(JRC_OESTE) + 10 * columna, int(JRC_NORTE) - 10 * fila
     return f"{abs(lon)}{'W' if lon < 0 else 'E'}_{abs(lat)}{'S' if lat < 0 else 'N'}"
 
 
 def _leer_tile(nombre, tif=None):
-    """Ocurrencia de agua (% de meses, uint8; 255 = sin dato) de un tile, o None si JRC no lo publica (mar abierto)."""
+    """Water occurrence (% of months, uint8; 255 = no data) of a tile, or None if JRC doesn't publish it (open sea)."""
     import tifffile
 
     ruta = tif or os.path.join(tempfile.gettempdir(), os.path.basename(JRC.format(nombre)))
@@ -118,8 +118,8 @@ def _leer_tile(nombre, tif=None):
 
 
 def ocurrencia_jrc(fr, tif=None):
-    """Recorte de la capa `occurrence` de JRC que cubre la caja del frame, con margen. Devuelve (recorte, fila0, columna0)
-    en índices del mosaico mundial. Si la caja cruza tiles, los junta. Un tile que JRC no publica cuenta como agua."""
+    """Crop of the JRC `occurrence` layer covering the frame's box, with a margin. Returns (crop, row0, column0)
+    in world mosaic indices. If the box crosses tiles, it joins them. A tile JRC doesn't publish counts as water."""
     norte, oeste, sur, este = fr.caja
     f0, f1 = int((JRC_NORTE - norte) / JRC_PASO) - 800, int((JRC_NORTE - sur) / JRC_PASO) + 800
     c0, c1 = int((oeste - JRC_OESTE) / JRC_PASO) - 800, int((este - JRC_OESTE) / JRC_PASO) + 800
@@ -142,14 +142,14 @@ def ocurrencia_jrc(fr, tif=None):
 
 
 def agua(fr, capas=("80m", "20m"), destino=None, tif=None):
-    """Máscara de agua de JRC sobre la grilla del frame: `agua_jrc_<capa>.npz` con el % de ocurrencia por celda."""
+    """JRC water mask over the frame's grid: `agua_jrc_<capa>.npz` with the % occurrence per cell."""
     destino = destino or carpeta(fr)
     os.makedirs(destino, exist_ok=True)
     rec, f0, c0, tiles = ocurrencia_jrc(fr, tif)
     for capa in capas:
         paso = PASOS[capa]
         xs, ys = fr.grilla(paso)
-        k = max(1, int(round(paso / 20)))  # submuestreo: la celda de JRC mide unos 25 m
+        k = max(1, int(round(paso / 20)))  # subsampling: the JRC cell is about 25 m
         desvios = (np.arange(k) + 0.5) / k * paso - paso / 2
         suma = np.zeros((len(ys), len(xs)), dtype=np.float32)
         for dy in desvios:
@@ -166,7 +166,7 @@ def agua(fr, capas=("80m", "20m"), destino=None, tif=None):
 
 # ------------------------------------------------------------------ contornos de OSM
 def anillos_osm(objeto):
-    """Anillos exteriores (lon, lat) de un way o de una relación multipolígono, por la API de OSM."""
+    """Exterior rings (lon, lat) of a way or a multipolygon relation, via the OSM API."""
     datos = pedir(f"https://api.openstreetmap.org/api/0.6/{objeto}/full.json")["elements"]
     nodos = {e["id"]: (round(e["lon"], 6), round(e["lat"], 6)) for e in datos if e["type"] == "node"}
     ways = {e["id"]: e["nodes"] for e in datos if e["type"] == "way"}
@@ -177,7 +177,7 @@ def anillos_osm(objeto):
     else:
         tramos = [ways[m["ref"]] for m in principal["members"] if m["type"] == "way" and m.get("role") in ("outer", "")]
     anillos, tramos = [], [list(t) for t in tramos]
-    while tramos:  # une los tramos por las puntas hasta cerrar cada anillo
+    while tramos:  # joins the segments end to end until each ring closes
         actual = tramos.pop(0)
         while actual[0] != actual[-1]:
             for i, t in enumerate(tramos):
@@ -220,15 +220,15 @@ def sitios(args):
 
 # ------------------------------------------------------------------ usos conocidos
 def _exteriores(geometria):
-    """Anillos exteriores (lon, lat) de un Polygon o MultiPolygon de GeoJSON, con 5 decimales (~1 m)."""
+    """Exterior rings (lon, lat) of a GeoJSON Polygon or MultiPolygon, with 5 decimals (~1 m)."""
     partes = [geometria["coordinates"]] if geometria.get("type") == "Polygon" else geometria.get("coordinates", []) if geometria.get("type") == "MultiPolygon" else []
     return [[[round(p[0], 5), round(p[1], 5)] for p in parte[0]] for parte in partes if parte and len(parte[0]) >= 4]
 
 
 def usos(fr, destino=None):
-    """Usos conocidos del frame, de Overture Maps (datos de OSM), exhaustivo en la caja. Necesita `duckdb` y red.
+    """The frame's known land uses, from Overture Maps (OSM data), exhaustive within the box. Needs `duckdb` and the network.
 
-    Mismo formato que el archivo de Nominatim del AMBA: `{"usos": [{"osm", "uso", "nombre", "anillos"}]}`.
+    Same format as the AMBA Nominatim file: `{"usos": [{"osm", "uso", "nombre", "anillos"}]}`.
     """
     import duckdb
 
@@ -269,9 +269,9 @@ def usos(fr, destino=None):
     print(f"{ruta}: {len(salida)} polígonos, {os.path.getsize(ruta) / 1e3:.0f} kB")
 
 
-# ------------------------------------------------------------------ polígonos de los catálogos
+# ------------------------------------------------------------------ catalog polygons
 def _wkb_exteriores(b):
-    """Anillos exteriores (lon, lat) de un Polygon o MultiPolygon en WKB (el GeoParquet de negativos)."""
+    """Exterior rings (lon, lat) of a Polygon or MultiPolygon in WKB (the negatives GeoParquet)."""
     def poligono(pos):
         orden = "<" if b[pos] == 1 else ">"
         tipo, = struct.unpack_from(orden + "I", b, pos + 1)
@@ -302,11 +302,11 @@ def _wkb_exteriores(b):
 
 
 def catalogo(fr, destino=None, data=DATA):
-    """Los polígonos de los catálogos de `data/` que caen en el frame (con un margen de ~3 km), en un archivo chico.
+    """The polygons of the catalogs in `data/` that fall in the frame (with a ~3 km margin), in a small file.
 
-    Sirve para dos cosas: el anillo de cada sitio excluye todos estos polígonos (`insomnio.anillo`), y la VM puede
-    correr sin los 100 MB de `data/`. No necesita red. Entran los basurales con polígono (los que sólo tienen un
-    punto no se pueden rasterizar) y los negativos de `geometrias_amba.geojson` y de `geometrias_mundo.parquet`.
+    It's used for two things: each site's ring excludes all these polygons (`insomnio.anillo`), and the VM can
+    run without the 100 MB of `data/`. It needs no network. It includes the dump sites with a polygon (those with only a
+    point can't be rasterized) and the negatives from `geometrias_amba.geojson` and `geometrias_mundo.parquet`.
     """
     destino = destino or carpeta(fr)
     norte, oeste, sur, este = fr.caja
@@ -363,18 +363,18 @@ def catalogo(fr, destino=None, data=DATA):
     print(f"{ruta}: {n['basurales']} basurales y {n['negativos']} negativos, {os.path.getsize(ruta) / 1e3:.0f} kB")
 
 
-# ------------------------------------------------------------------ cobertura del suelo
+# ------------------------------------------------------------------ land cover
 def tile_worldcover(lat, lon):
-    """Nombre del tile de 3° × 3° de ESA WorldCover que contiene un punto, por su esquina sudoeste: `N33W120`, `S36W060`."""
+    """Name of the 3° × 3° ESA WorldCover tile containing a point, by its southwest corner: `N33W120`, `S36W060`."""
     la, lo = int(np.floor(lat / 3) * 3), int(np.floor(lon / 3) * 3)
     return f"{'S' if la < 0 else 'N'}{abs(la):02d}{'W' if lo < 0 else 'E'}{abs(lo):03d}"
 
 
 def cobertura(fr, destino=None, capa="80m"):
-    """Fracción urbana (clase 50) y de cultivo (clase 40) de cada celda de la grilla, según ESA WorldCover 2021 (10 m).
+    """Urban (class 50) and cropland (class 40) fraction of each grid cell, according to ESA WorldCover 2021 (10 m).
 
-    Escribe `worldcover_<capa>.npz` con `urbano` y `cultivo` en % (uint8). Son las columnas de contexto del modelo
-    (`urbano_anillo`, `cultivo_anillo`). Baja uno o más tiles de ~100 MB a la carpeta temporal.
+    Writes `worldcover_<capa>.npz` with `urbano` and `cultivo` in % (uint8). They're the model's context columns
+    (`urbano_anillo`, `cultivo_anillo`). Downloads one or more ~100 MB tiles to the temp folder.
     """
     import tifffile
 
@@ -382,7 +382,7 @@ def cobertura(fr, destino=None, capa="80m"):
     os.makedirs(destino, exist_ok=True)
     paso = PASOS[capa]
     xs, ys = fr.grilla(paso)
-    k = 4  # 4 × 4 puntos por celda de 80 m: uno cada 20 m
+    k = 4  # 4 × 4 points per 80 m cell: one every 20 m
     desvios = (np.arange(k) + 0.5) / k * paso - paso / 2
     urbano = np.zeros((len(ys), len(xs)), dtype=np.float32)
     cultivo = np.zeros_like(urbano)
@@ -396,12 +396,12 @@ def cobertura(fr, destino=None, capa="80m"):
             try:
                 urllib.request.urlretrieve(WORLDCOVER.format(nombre), ruta + ".parcial")
             except urllib.error.HTTPError as e:
-                if e.code in (403, 404):  # WorldCover no publica tiles de mar abierto
+                if e.code in (403, 404):  # WorldCover doesn't publish open-sea tiles
                     print(f"  WorldCover no publica el tile {nombre}")
                     continue
                 raise
             os.replace(ruta + ".parcial", ruta)
-        tile = tifffile.imread(ruta)  # 36000 × 36000, uint8: la clase de cada píxel de 10 m
+        tile = tifffile.imread(ruta)  # 36000 × 36000, uint8: the class of each 10 m pixel
         lat0 = (-1 if nombre[0] == "S" else 1) * int(nombre[1:3]) + 3  # borde norte
         lon0 = (-1 if nombre[3] == "W" else 1) * int(nombre[4:7])  # borde oeste
         for dy in desvios:
@@ -425,12 +425,12 @@ def cobertura(fr, destino=None, capa="80m"):
 
 
 def usos_nominatim(args):
-    """La versión original, sólo para el AMBA: lo que devuelve la búsqueda de Nominatim. No es exhaustiva."""
+    """The original version, AMBA only: what the Nominatim search returns. It isn't exhaustive."""
     norte, oeste, sur, este = geo.CAJA
     salida, vistos = [], set()
     for consulta, clase, tipo, etiqueta in USOS:
         hallados, excluir = [], []
-        for _ in range(8):  # la búsqueda devuelve de a 50
+        for _ in range(8):  # the search returns 50 at a time
             q = {"q": consulta, "viewbox": f"{oeste},{norte},{este},{sur}", "bounded": 1, "format": "jsonv2", "limit": 50}
             if excluir:
                 q["exclude_place_ids"] = ",".join(map(str, excluir))
@@ -463,14 +463,14 @@ def usos_nominatim(args):
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("paso", choices=["agua", "sitios", "usos", "catalogo", "cobertura", "todo", "usos_nominatim"])
-    p.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos`")
-    p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="caja de un frame que no está en frames.json (va con un solo --frame NOMBRE)")
-    p.add_argument("--epsg", type=int, help="EPSG de la grilla, con --caja (si no, el del frame.json del pipeline o el de la zona UTM del centro)")
-    p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta de salidas del pipeline: ahí busca <FRAME>/frame.json")
-    p.add_argument("--capas", nargs="+", choices=list(PASOS), default=["80m"], help="capas de la máscara de agua (por defecto sólo 80 m)")
-    p.add_argument("--destino", help="carpeta donde escribir (por defecto, fijos/<FRAME>/)")
-    p.add_argument("--pisar", action="store_true", help="permite rehacer los archivos de referencia del AMBA")
-    p.add_argument("--tif", help="tile de JRC ya bajado (si no, lo baja a la carpeta temporal)")
+    p.add_argument("--frame", nargs="+", default=["AMBA"], help="one or more frames from data/catalogos/frames.json, or `todos`")
+    p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="box of a frame that isn't in frames.json (goes with a single --frame NAME)")
+    p.add_argument("--epsg", type=int, help="EPSG of the grid, with --caja (otherwise, the one in the pipeline's frame.json or that of the center's UTM zone)")
+    p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="pipeline output folder: it looks for <FRAME>/frame.json there")
+    p.add_argument("--capas", nargs="+", choices=list(PASOS), default=["80m"], help="layers of the water mask (default: 80 m only)")
+    p.add_argument("--destino", help="folder to write to (default: fijos/<FRAME>/)")
+    p.add_argument("--pisar", action="store_true", help="allows rebuilding the AMBA reference files")
+    p.add_argument("--tif", help="JRC tile already downloaded (otherwise it downloads it to the temp folder)")
     args = p.parse_args()
     os.makedirs(FIJOS, exist_ok=True)
     if args.paso in ("sitios", "usos_nominatim"):

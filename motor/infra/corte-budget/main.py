@@ -1,4 +1,4 @@
-"""Detiene todas las VMs del proyecto cuando el budget llega al 100 % (costo sin créditos >= monto del budget)."""
+"""Stops every VM in the project when the budget reaches 100 % (cost without credits >= budget amount)."""
 import base64
 import json
 import os

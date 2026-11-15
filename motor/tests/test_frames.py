@@ -1,7 +1,7 @@
-"""El pipeline sobre cualquier frame (etapa 1): otras zonas UTM, el hemisferio norte, el anillo que excluye
-los catálogos, los recortes de dos frames de NISAR vecinos y las fuentes fijas por frame. Todo sintético y sin red.
+"""The pipeline over any frame (stage 1): other UTM zones, the northern hemisphere, the ring that excludes
+the catalogs, the crops of two neighboring NISAR frames and the fixed sources per frame. All synthetic and offline.
 
-Correr desde `motor/`:  python -m pytest tests -q
+Run from `motor/`:  python -m pytest tests -q
 """
 import argparse
 import json
@@ -19,13 +19,13 @@ import insomnio as ins  # noqa: E402
 import pipeline_insomnio as pl  # noqa: E402
 
 P = ins.Parametros()
-LA = geo.frame_de_caja("LA", [-118.75, 33.85, -117.75, 34.50], epsg=32611)  # Los Ángeles, zona 11 norte
+LA = geo.frame_de_caja("LA", [-118.75, 33.85, -117.75, 34.50], epsg=32611)  # Los Angeles, zone 11 north
 
 
 # ------------------------------------------------------------------ geo
-@pytest.mark.parametrize("lat, lon, epsg, x, y", [  # valores de pyproj 3.7 (PROJ), al milímetro
+@pytest.mark.parametrize("lat, lon, epsg, x, y", [  # values from pyproj 3.7 (PROJ), to the millimeter
     (-34.6037, -58.3816, 32721, 373317.502, 6170036.171),  # Obelisco, zona 21 sur
-    (19.4270, -99.1677, 32614, 482395.083, 2148083.725),  # Ciudad de México, zona 14 norte
+    (19.4270, -99.1677, 32614, 482395.083, 2148083.725),  # Mexico City, zone 14 north
 ])
 def test_utm_en_los_dos_hemisferios(lat, lon, epsg, x, y):
     assert geo.utm(lat, lon, epsg) == pytest.approx((x, y), abs=0.01)
@@ -33,11 +33,11 @@ def test_utm_en_los_dos_hemisferios(lat, lon, epsg, x, y):
 
 
 def test_el_norte_no_lleva_falso_norte():
-    # El mismo punto en la zona norte y en la sur difiere en los 10.000 km del falso norte, y nada más.
+    # The same point in the north and south zone differs by the 10,000 km of the false northing, and nothing else.
     xn, yn = geo.utm(34.05, -118.25, 32611)
     xs, ys = geo.utm(34.05, -118.25, 32711)
     assert xn == pytest.approx(xs) and ys - yn == pytest.approx(10000000)
-    assert 3.7e6 < yn < 3.8e6  # unos 3.770 km al norte del ecuador
+    assert 3.7e6 < yn < 3.8e6  # about 3,770 km north of the equator
 
 
 def test_zona_y_epsg():
@@ -45,7 +45,7 @@ def test_zona_y_epsg():
     assert geo.epsg_de(-34.6, -58.4) == 32721 and geo.epsg_de(34.05, -118.25) == 32611
     assert geo.epsg_de(28.6, 77.2) == 32643 and geo.epsg_de(-6.2, 106.8) == 32748
     with pytest.raises(ValueError):
-        geo.zona_de_epsg(3413)  # polar: no se usa
+        geo.zona_de_epsg(3413)  # polar: not used
 
 
 def test_sin_parametros_sigue_siendo_el_amba():
@@ -54,12 +54,12 @@ def test_sin_parametros_sigue_siendo_el_amba():
     xa, ya = geo.AMBA.grilla(80.0)
     assert np.array_equal(xs, xa) and np.array_equal(ys, ya)
     assert geo.frame("amba") is geo.AMBA and geo.AMBA.hemisferio == "S"
-    assert geo.AMBA.bbox == [-59.35, -34.90, -58.25, -34.25]  # el orden de frames.json
+    assert geo.AMBA.bbox == [-59.35, -34.90, -58.25, -34.25]  # the frames.json order
 
 
 def test_grilla_y_mascara_en_el_norte():
     xs, ys = LA.grilla(80.0)
-    assert xs[0] % 80 == 40 and ys[0] % 80 == 40  # centros alineados como los GUNW
+    assert xs[0] % 80 == 40 and ys[0] % 80 == 40  # centers aligned like the GUNWs
     assert ys[0] > ys[-1] and xs[0] < xs[-1]  # de norte a sur y de oeste a este
     lat, lon = LA.latlon(xs[len(xs) // 2], ys[len(ys) // 2])
     assert LA.contiene(lat, lon)
@@ -80,20 +80,20 @@ def test_frame_de_frames_json(tmp_path):
     fr = geo.frame("delhi", ruta=str(ruta))
     assert fr.caja == (28.95, 76.8, 28.3, 77.6) and fr.epsg == 32643 and fr.orbitas == (55, 156) and fr.epsg_fijo
     assert (fr.desde, fr.hasta, fr.hemisferio) == ("2026-01-10", "2026-11-01", "N")
-    assert list(geo.frames_conocidos(str(ruta))) == ["DELHI", "AMBA"]  # el AMBA está siempre
+    assert list(geo.frames_conocidos(str(ruta))) == ["DELHI", "AMBA"]  # the AMBA is always there
     with pytest.raises(KeyError):
         geo.frame("LAGOS", ruta=str(ruta))
     sin_epsg = geo.frame_de_caja("X", [-99.4, 19.1, -98.8, 19.8])
-    assert sin_epsg.epsg == 32614 and not sin_epsg.epsg_fijo  # el del centro, hasta que `procesar` lea el del producto
+    assert sin_epsg.epsg == 32614 and not sin_epsg.epsg_fijo  # the center's, until `procesar` reads the product's
 
 
 # ------------------------------------------------------------------ anillo
 def test_el_anillo_excluye_los_catalogos():
-    """Un relleno rodeado de otros rellenos: con el anillo viejo no se despierta, porque se compara con sus vecinos."""
+    """A landfill surrounded by other landfills: with the old ring it doesn't wake up, because it's compared with its neighbors."""
     paso, forma = 80.0, (120, 120)
     sitio = np.zeros(forma, dtype=bool)
     sitio[50:70, 50:70] = True
-    vecinos = np.zeros(forma, dtype=bool)  # el resto del complejo: ocupa casi todo el anillo de 1,5 km
+    vecinos = np.zeros(forma, dtype=bool)  # the rest of the complex: it takes up almost the whole 1.5 km ring
     vecinos[35:85, 35:85] = True
     vecinos &= ~sitio
     tierra = np.ones(forma, dtype=bool)
@@ -105,34 +105,34 @@ def test_el_anillo_excluye_los_catalogos():
     viejo = ins.anillo(sitio, tierra, paso, P)
     nuevo = ins.anillo(sitio, tierra, paso, P, excluir=catalogos)
     assert (viejo & vecinos).mean() > 0.5 * viejo.mean() and not (nuevo & catalogos).any() and nuevo.sum() < viejo.sum()
-    assert np.array_equal(ins.anillo(sitio, tierra, paso, P, excluir=None), viejo)  # sin catálogos, como antes
+    assert np.array_equal(ins.anillo(sitio, tierra, paso, P, excluir=None), viejo)  # without catalogs, as before
 
     f_viejo = ins.ficha(sitio, coh, orbitas, fechas, tierra, paso, P)
     f_nuevo = ins.ficha(sitio, coh, orbitas, fechas, tierra, paso, P, excluir=catalogos)
-    assert f_viejo["radar"] != "despierto" and f_viejo["insomnio"] == 0.0  # se parece a sus vecinos, que le llenan el anillo
+    assert f_viejo["radar"] != "despierto" and f_viejo["insomnio"] == 0.0  # it looks like its neighbors, which fill its ring
     assert f_nuevo["radar"] == "despierto" and f_nuevo["insomnio"] == 1.0
     assert f_nuevo["px_anillo"] < f_viejo["px_anillo"]
 
-    todo = np.ones(forma, dtype=bool)  # si no queda anillo, no se inventa un veredicto
+    todo = np.ones(forma, dtype=bool)  # if no ring is left, no verdict is made up
     f = ins.ficha(sitio, coh, orbitas, fechas, tierra, paso, P, excluir=todo)
     assert f["radar"] == "no_alcanza" and "anillo" in f["motivo"]
 
 
 # ------------------------------------------------------------------ recortes
 def test_recortar_entre_zonas_utm():
-    """Un producto en la zona 10 norte llevado a una grilla de la zona 11 norte (caja pegada al borde de zona)."""
+    """A product in zone 10 north brought to a grid in zone 11 north (box right at the zone edge)."""
     fr = geo.frame_de_caja("BORDE", [-120.2, 35.0, -119.8, 35.3], epsg=32611)
     xs_dst, ys_dst = fr.grilla(80.0)
-    x0, y0 = geo.utm(35.35, -120.25, 32610)  # el producto cubre la caja con margen, en SU zona
+    x0, y0 = geo.utm(35.35, -120.25, 32610)  # the product covers the box with a margin, in ITS zone
     xs_src = np.floor(x0 / 80) * 80 + 40 + 80 * np.arange(700)
     ys_src = np.floor(y0 / 80) * 80 + 40 - 80 * np.arange(700)
     lat_src, lon_src = geo.latlon(xs_src[None, :], ys_src[:, None], 32610)
-    valor = (lat_src - 35.0).astype(np.float32)  # un campo suave: la latitud
+    valor = (lat_src - 35.0).astype(np.float32)  # a smooth field: the latitude
     salida = pl.recortar(valor, xs_src, ys_src, xs_dst, ys_dst, 32610, 32611)
     lat_dst, _ = fr.latlon(xs_dst[None, :], ys_dst[:, None])
     assert np.isfinite(salida).mean() > 0.99
-    assert np.nanmax(np.abs(salida - (lat_dst - 35.0))) < 80 / 111000  # cada celda toma un píxel a menos de 80 m
-    # Con la misma zona es el recorte de siempre: elige el píxel exacto.
+    assert np.nanmax(np.abs(salida - (lat_dst - 35.0))) < 80 / 111000  # each cell takes a pixel within 80 m
+    # With the same zone it's the usual crop: it picks the exact pixel.
     misma = pl.recortar(valor, xs_src, ys_src, xs_src[100:200], ys_src[300:350], 32610, 32610)
     assert np.array_equal(misma, valor[300:350, 100:200])
     assert np.array_equal(pl.recortar(valor, xs_src, ys_src, xs_src[100:200], ys_src[300:350]), misma)
@@ -141,7 +141,7 @@ def test_recortar_entre_zonas_utm():
 def test_juntar_dos_frames_de_nisar():
     a = np.full((4, 6), np.nan, dtype=np.float32)
     b = a.copy()
-    a[:, :4], b[:, 3:] = 0.2, 0.9  # se pisan en una columna: manda el que más cubre
+    a[:, :4], b[:, 3:] = 0.2, 0.9  # they overlap in one column: the one that covers more wins
     j = pl._juntar([b, a])
     assert np.isfinite(j).all() and (j[:, :4] == np.float32(0.2)).all() and (j[:, 4:] == np.float32(0.9)).all()
 
@@ -153,7 +153,7 @@ def test_partes_del_nombre():
 
 
 def _gunw_de_mentira(ruta, epsg, lat, lon, valor):
-    """Un GUNW mínimo, con la misma estructura que los de NISAR: coherencia de 80 m, coordenadas y `projection`."""
+    """A minimal GUNW, with the same structure as NISAR's: 80 m coherence, coordinates and `projection`."""
     import h5py
 
     x, y = geo.utm(lat, lon, epsg)
@@ -168,8 +168,8 @@ def _gunw_de_mentira(ruta, epsg, lat, lon, valor):
 
 
 def test_procesar_e_indice_en_el_norte(tmp_path):
-    """De punta a punta con productos sintéticos del hemisferio norte: `procesar` toma el EPSG del producto
-    (dataset `projection`) y `indice` corre con las fuentes fijas del frame."""
+    """End to end with synthetic northern hemisphere products: `procesar` takes the EPSG from the product
+    (`projection` dataset) and `indice` runs with the frame's fixed sources."""
     pytest.importorskip("h5py")
     datos, salida = tmp_path / "datos" / "NORTE", tmp_path / "salidas"
     datos.mkdir(parents=True)
@@ -183,14 +183,14 @@ def test_procesar_e_indice_en_el_norte(tmp_path):
                            remoto=False, borrar=True, sin_catalogos=False, fijos=str(tmp_path / "fijos"))
     arg = pl.preparar(a, "NORTE")
     assert arg.fr.epsg == 32611 and not arg.fr.epsg_fijo and arg.salida.endswith("NORTE")
-    fijos = tmp_path / "fijos" / "NORTE"  # las fuentes fijas del frame, de mentira y sin red
+    fijos = tmp_path / "fijos" / "NORTE"  # the frame's fixed sources, fake and offline
     assert arg.fijos == str(fijos)
     pl.procesar(arg)
     assert arg.fr.epsg_fijo and arg.fr.hemisferio == "N"
     assert json.load(open(salida / "NORTE" / "frame.json"))["epsg"] == 32611
     recortes = sorted(os.listdir(salida / "NORTE" / "recortes_80m"))
     assert len(recortes) == 6 and recortes[0] == "gunw_034_018_20260628_20260710_80m.npz"
-    assert not list(datos.iterdir())  # --borrar: cada .h5 se borra después de recortarlo
+    assert not list(datos.iterdir())  # --borrar: each .h5 is deleted after cropping it
     xs, ys = arg.fr.grilla(80.0)
     with np.load(salida / "NORTE" / "recortes_80m" / recortes[0]) as d:
         assert d["valor"].shape == (len(ys), len(xs)) and np.isfinite(d["valor"]).all() and int(d["epsg_producto"]) == 32611
@@ -210,7 +210,7 @@ def test_procesar_e_indice_en_el_norte(tmp_path):
 
 # ------------------------------------------------------------------ fuentes fijas
 def test_tiles_de_jrc():
-    assert ff.tile_jrc(11, 12) == "60W_30S"  # el del AMBA
+    assert ff.tile_jrc(11, 12) == "60W_30S"  # the AMBA's
     assert ff.tile_jrc(4, 6) == "120W_40N" and ff.tile_jrc(5, 25) == "70E_30N" and ff.tile_jrc(8, 18) == "0E_0N"
     assert ff.carpeta(geo.AMBA) == ff.FIJOS and ff.carpeta(LA) == os.path.join(ff.FIJOS, "LA")
 
@@ -224,14 +224,14 @@ def test_wkb_a_anillos():
 
     exterior = [(-58.5, -34.6), (-58.4, -34.6), (-58.4, -34.5), (-58.5, -34.5), (-58.5, -34.6)]
     agujero = [(-58.46, -34.56), (-58.44, -34.56), (-58.44, -34.54), (-58.46, -34.56)]
-    assert ff._wkb_exteriores(poligono(exterior, agujero)) == [[list(p) for p in exterior]]  # sólo el exterior
+    assert ff._wkb_exteriores(poligono(exterior, agujero)) == [[list(p) for p in exterior]]  # only the exterior
     otro = [(x + 1, y) for x, y in exterior]
     multi = struct.pack("<BII", 1, 6, 2) + poligono(exterior) + poligono(otro)
     assert ff._wkb_exteriores(multi) == [[list(p) for p in exterior], [list(p) for p in otro]]
 
 
 def test_catalogo_del_frame(tmp_path):
-    """Sólo entran los polígonos que tocan la caja (con su margen); los puntos, no."""
+    """Only polygons that touch the box (with its margin) are included; points aren't."""
     cuadrado = lambda lon, lat: {"type": "Polygon", "coordinates": [[[lon, lat], [lon + .01, lat], [lon + .01, lat + .01], [lon, lat + .01], [lon, lat]]]}  # noqa: E731
     (tmp_path / "basurales").mkdir()
     (tmp_path / "negativos").mkdir()

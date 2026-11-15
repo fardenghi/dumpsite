@@ -1,6 +1,6 @@
-"""Caso sintético: cada tipo de superficie tiene que caer donde corresponde.
+"""Synthetic case: each surface type has to land where it belongs.
 
-Correr desde `motor/`:  python -m pytest tests -q
+Run from `motor/`:  python -m pytest tests -q
 """
 import os
 import sys
@@ -14,19 +14,19 @@ import insomnio as ins  # noqa: E402
 
 PASO = 80.0
 P = ins.Parametros()
-# 15 pares como los reales: dos órbitas, un par de 24 días y uno de 36.
+# 15 pairs like the real ones: two orbits, one 24-day pair and one 36-day pair.
 ORBITAS = np.array([10] * 8 + [161] * 7)
 DIAS = np.array([12, 12, 24, 12, 12, 12, 12, 12, 12, 12, 36, 12, 12, 12, 12])
 FECHAS = np.array(["2026-07-08", "2026-07-20", "2026-08-13", "2026-08-25", "2026-09-06", "2026-09-18", "2026-09-30", "2026-10-12",
                    "2026-07-07", "2026-07-19", "2026-08-24", "2026-09-05", "2026-09-17", "2026-09-29", "2026-10-11"])
-ZONAS = {  # (filas, columnas) en una escena de 200 × 200 píxeles de 80 m
+ZONAS = {  # (rows, columns) in a scene of 200 × 200 pixels of 80 m
     "ciudad": (slice(20, 50), slice(20, 50)),
     "basural": (slice(90, 105), slice(90, 105)),  # 15 × 15 px = 144 ha
     "agua": (slice(140, 180), slice(20, 60)),
     "campo": (slice(20, 60), slice(130, 180)),
     "ruta": (slice(120, 122), slice(70, 190)),
-    "tosquera": (slice(150, 160), slice(120, 130)),  # agua que no está en la máscara
-    "basurita": (slice(60, 62), slice(100, 102)),  # 4 px: más chico que lo que se puede medir
+    "tosquera": (slice(150, 160), slice(120, 130)),  # water that isn't in the mask
+    "basurita": (slice(60, 62), slice(100, 102)),  # 4 px: smaller than what can be measured
 }
 
 
@@ -43,8 +43,8 @@ def escena():
         c[ZONAS["ruta"]] = 0.25
         c[ZONAS["agua"]] = 0.10
         c[ZONAS["tosquera"]] = 0.10
-        c[ZONAS["campo"]] = 0.20 if t[i] == 0 else 0.70  # arado sólo en el primer tercio
-        c *= {12: 1.0, 24: 0.85, 36: 0.75}[int(DIAS[i])]  # más días, menos coherencia en toda la escena
+        c[ZONAS["campo"]] = 0.20 if t[i] == 0 else 0.70  # plowing only in the first third
+        c *= {12: 1.0, 24: 0.85, 36: 0.75}[int(DIAS[i])]  # more days, less coherence across the whole scene
         coh[i] = np.clip(c + rng.normal(0, 0.05, forma), 0.01, 1)
     eco = np.full((6, *forma), -8.0, dtype=np.float32)
     eco[:, ZONAS["agua"][0], ZONAS["agua"][1]] = -18
@@ -76,7 +76,7 @@ def test_factor_de_separacion(escena):
 def test_ciudad_quieta(escena):
     c = escena["capas"]
     assert np.nanmean(c["insomnio"][ZONAS["ciudad"]]) < 0.05
-    assert np.nanmean(c["insomnio_abs"][ZONAS["ciudad"]]) < 0.05  # el par de 36 días no la despierta
+    assert np.nanmean(c["insomnio_abs"][ZONAS["ciudad"]]) < 0.05  # the 36-day pair doesn't wake it up
     assert not c["candidato"][ZONAS["ciudad"]].any()
     assert _ficha(escena, "ciudad")["radar"] == "quieto"
 
@@ -94,7 +94,7 @@ def test_agua_afuera(escena):
     c = escena["capas"]
     assert not c["candidato"][ZONAS["agua"]].any()
     assert np.isnan(c["insomnio"][ZONAS["agua"]]).all()
-    en_tosquera = {int(e) for e in np.unique(escena["etiquetas"][ZONAS["tosquera"]]) if e}  # no está en la máscara: la saca el eco
+    en_tosquera = {int(e) for e in np.unique(escena["etiquetas"][ZONAS["tosquera"]]) if e}  # not in the mask: the echo removes it
     assert en_tosquera and all(m["descartada"] == "lisa" for m in escena["manchas"] if m["etiqueta"] in en_tosquera)
     assert _ficha(escena, "agua")["radar"] == "no_alcanza"
     assert _ficha(escena, "tosquera")["radar"] == "no_alcanza"
@@ -109,7 +109,7 @@ def test_campo_estacional(escena):
 
 def test_manchas(escena):
     buenas = [m for m in escena["manchas"] if not m["descartada"]]
-    assert len(buenas) == 1  # sólo el basural
+    assert len(buenas) == 1  # only the dump site
     f, c = buenas[0]["fila"], buenas[0]["columna"]
     assert 90 <= f <= 105 and 90 <= c <= 105 and buenas[0]["forma"] == "compacta"
     en_ruta = {int(e) for e in np.unique(escena["etiquetas"][ZONAS["ruta"]]) if e}
@@ -126,4 +126,4 @@ def test_geo_ida_y_vuelta():
     assert geo.latlon(x, y) == pytest.approx((-34.6037, -58.3816), abs=1e-6)
     xs, ys = geo.grilla(80.0)
     m = geo.mascara_poligonos([geo.caja_a_anillo((-34.59, -34.575, -58.43, -58.41))], xs, ys)
-    assert m.sum() * 0.64 == pytest.approx(1.665 * 1.834 * 100, rel=0.05)  # ha de la caja
+    assert m.sum() * 0.64 == pytest.approx(1.665 * 1.834 * 100, rel=0.05)  # ha of the box

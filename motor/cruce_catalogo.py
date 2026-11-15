@@ -1,18 +1,18 @@
-"""Cruza un índice de insomnio ya calculado con los catálogos de `data/`: basurales (positivos) y confusores (negativos).
+"""Crosses an already computed insomnia index with the catalogs in `data/`: dump sites (positives) and confusers (negatives).
 
-Es una prueba independiente de la calibración: los catálogos no se usaron para elegir los umbrales. Pero no es una
-validación fuerte: en la grilla del AMBA hay pocos basurales que se puedan medir a 80 m.
+It is a test independent of the calibration: the catalogs were not used to pick the thresholds. But it is not a
+strong validation: the AMBA grid has few dump sites that can be measured at 80 m.
 
-    python cruce_catalogo.py                       # el índice de referencia, ../data/salidas/indice_80m.npz
+    python cruce_catalogo.py                       # the reference index, ../data/salidas/indice_80m.npz
     python cruce_catalogo.py --indice otra.npz --min-ha 5
 
-- Positivos: los basurales de `basurales/geometrias.geojson` que caen en la grilla, agrupados por complejo
-  (`basurales/complejos.json`), así Norte III cuenta una vez. Los complejos cerrados no son positivos: se informan
-  aparte, porque se espera que estén quietos (Luján).
-- Negativos: los polígonos de `negativos/geometrias_amba.geojson`.
-- Por polígono, sobre los píxeles de tierra: la mediana del insomnio relativo y la fracción de píxeles candidatos.
-  Polígonos sin agujeros (se usa el anillo exterior); los de menos de `--min-ha` no entran.
-- AUC: probabilidad de que un positivo tenga más insomnio mediano que un negativo (empates cuentan 1/2).
+- Positives: the dump sites of `basurales/geometrias.geojson` that fall in the grid, grouped by complex
+  (`basurales/complejos.json`), so Norte III counts once. Closed complexes are not positives: they are reported
+  separately, because they are expected to be quiet (Luján).
+- Negatives: the polygons of `negativos/geometrias_amba.geojson`.
+- Per polygon, over land pixels: the median relative insomnia and the fraction of candidate pixels.
+  Polygons without holes (the exterior ring is used); those under `--min-ha` are left out.
+- AUC: probability that a positive has a higher median insomnia than a negative (ties count 1/2).
 """
 import argparse
 import json
@@ -60,8 +60,8 @@ def auc(pos, neg):
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--indice", default=os.path.join(AQUI, "..", "data", "salidas", "indice_80m.npz"))
-    a.add_argument("--min-ha", type=float, default=10.0, help="superficie mínima de un polígono (o complejo) para entrar")
-    a.add_argument("--json", help="si se da, guarda acá el detalle")
+    a.add_argument("--min-ha", type=float, default=10.0, help="minimum area of a polygon (or complex) to be included")
+    a.add_argument("--json", help="if given, saves the detail here")
     args = a.parse_args()
 
     with np.load(args.indice) as z:

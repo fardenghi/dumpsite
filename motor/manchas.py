@@ -1,13 +1,13 @@
-"""Busca manchas de coherencia baja en un GUNW y las clasifica por forma. Es la prueba de la primera hora.
+"""Finds low-coherence blobs in a GUNW and classifies them by shape. It is the first-hour test.
 
-Uso: python manchas.py <archivo GUNW .h5> [--frame AMBA | --caja lon_oeste lat_sur lon_este lat_norte]
+Usage: python manchas.py <GUNW .h5 file> [--frame AMBA | --caja lon_west lat_south lon_east lat_north]
 
-Por cada mancha da: superficie, centro (lat/lon), coherencia media y elongación
-(1 = compacta; valores altos = alargada, típica de autopistas, vías y ríos).
+For each blob it gives: area, center (lat/lon), mean coherence and elongation
+(1 = compact; high values = elongated, typical of highways, railways and rivers).
 
-La zona UTM y el hemisferio salen del producto (dataset `projection`), así que sirve para cualquier frame.
-Sin `--frame` ni `--caja` mira el AMBA. Las manchas del índice final no salen de acá: salen de
-`insomnio.manchas()`, que usa todos los pares (`pipeline_insomnio.py indice`).
+The UTM zone and hemisphere come from the product (`projection` dataset), so it works for any frame.
+Without `--frame` or `--caja` it looks at the AMBA. The final index blobs don't come from here: they come from
+`insomnio.manchas()`, which uses all the pairs (`pipeline_insomnio.py indice`).
 """
 import argparse
 import math
@@ -27,15 +27,15 @@ G = "science/LSAR/GUNW/grids/frequencyA/unwrappedInterferogram/"
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("gunw", help="archivo GUNW .h5")
-    p.add_argument("--frame", default="AMBA", help="frame de data/frames.json (por defecto, AMBA)")
-    p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="caja a mirar, en el orden de GeoJSON")
+    p.add_argument("--frame", default="AMBA", help="frame from data/catalogos/frames.json (default: AMBA)")
+    p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="box to look at, in GeoJSON order")
     args = p.parse_args()
     fr = geo.frame_de_caja("CAJA", args.caja) if args.caja else geo.frame(args.frame)
     norte, oeste, sur, este = fr.caja
     with h5py.File(args.gunw, "r") as f:
         pol = next(q for q in ("HH", "VV", "HV", "VH") if f"{G}{q}/coherenceMagnitude" in f)
         proyeccion = f[G + "projection"]
-        epsg = int(np.asarray(proyeccion.attrs.get("epsg_code", proyeccion[()])).ravel()[0])  # la zona UTM del producto
+        epsg = int(np.asarray(proyeccion.attrs.get("epsg_code", proyeccion[()])).ravel()[0])  # the product's UTM zone
         xs, ys = f[G + "xCoordinates"][()], f[G + "yCoordinates"][()]
         paso = float(abs(xs[1] - xs[0]))
         x0, y0 = geo.utm(norte, oeste, epsg)
