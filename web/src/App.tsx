@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { Dot, num } from './components/ui'
 import { t, useLang } from './i18n'
@@ -49,7 +50,10 @@ export function Marca({ despiertos, total, frames }: { despiertos: number; total
 export default function App() {
   // switching language redraws the whole web from here
   useLang()
-  const { page } = useRoute()
+  const { page, query } = useRoute()
+  // Vercel Web Analytics (no cookies, no IPs stored). The web routes by hash, which Vercel doesn't see on its own:
+  // each section, and each site opened on the map, is reported as its own path
+  const sitio = query.get('sitio')
   const P = PANELES.find((p) => p.id === page)
   // the last panel stays mounted while it closes, so it leaves with a transition
   const [ultimo, setUltimo] = useState(P)
@@ -66,6 +70,7 @@ export default function App() {
 
   return (
     <div className={`app ${P ? 'con-panel' : ''}`}>
+      <Analytics route={sitio ? `/${page}/[sitio]` : `/${page}`} path={sitio ? `/${page}/${sitio}` : `/${page}`} />
       <Suspense fallback={<div className="map" />}>
         <Mapa />
       </Suspense>
