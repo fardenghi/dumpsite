@@ -1,226 +1,198 @@
 [
  {
-  "frame": "CDMX",
-  "url": "indice/insomnio-cdmx.png",
-  "oeste": -99.4,
-  "sur": 19.15,
-  "este": -98.8,
-  "norte": 19.75,
+  "frame": "ARG_CASILDA",
+  "url": "indice/insomnio-arg_casilda.png",
+  "oeste": -62.0544,
+  "sur": -33.9545,
+  "este": -61.0782,
+  "norte": -33.0141,
   "coordinates": [
    [
-    -99.4,
-    19.75
+    -62.0544,
+    -33.0141
    ],
    [
-    -98.8,
-    19.75
+    -61.0782,
+    -33.0141
    ],
    [
-    -98.8,
-    19.15
+    -61.0782,
+    -33.9545
    ],
    [
-    -99.4,
-    19.15
+    -62.0544,
+    -33.9545
    ]
   ],
-  "ancho": 762,
-  "alto": 808
+  "ancho": 1240,
+  "alto": 1432
  },
  {
-  "frame": "DELHI",
-  "url": "indice/insomnio-delhi.png",
-  "oeste": 76.85,
-  "sur": 28.35,
-  "este": 77.55,
-  "norte": 28.95,
+  "frame": "ARG_CORDOBA",
+  "url": "indice/insomnio-arg_cordoba.png",
+  "oeste": -64.3926,
+  "sur": -31.6033,
+  "este": -64.0499,
+  "norte": -31.0001,
   "coordinates": [
    [
-    76.85,
-    28.95
+    -64.3926,
+    -31.0001
    ],
    [
-    77.55,
-    28.95
+    -64.0499,
+    -31.0001
    ],
    [
-    77.55,
-    28.35
+    -64.0499,
+    -31.6033
    ],
    [
-    76.85,
-    28.35
+    -64.3926,
+    -31.6033
    ]
   ],
-  "ancho": 889,
-  "alto": 868
+  "ancho": 435,
+  "alto": 896
  },
  {
-  "frame": "LOS_ANGELES",
-  "url": "indice/insomnio-los_angeles.png",
-  "oeste": -118.7,
-  "sur": 33.7,
-  "este": -117.6,
-  "norte": 34.4,
+  "frame": "ARG_JUNIN",
+  "url": "indice/insomnio-arg_junin.png",
+  "oeste": -60.2757,
+  "sur": -34.9744,
+  "este": -59.9679,
+  "norte": -34.2268,
   "coordinates": [
    [
-    -118.7,
-    34.4
+    -60.2757,
+    -34.2268
    ],
    [
-    -117.6,
-    34.4
+    -59.9679,
+    -34.2268
    ],
    [
-    -117.6,
-    33.7
+    -59.9679,
+    -34.9744
    ],
    [
-    -118.7,
-    33.7
+    -60.2757,
+    -34.9744
    ]
   ],
-  "ancho": 1397,
-  "alto": 1073
+  "ancho": 391,
+  "alto": 1154
  },
  {
-  "frame": "PRI_PONCE",
-  "url": "indice/insomnio-pri_ponce.png",
-  "oeste": -66.783,
-  "sur": 17.796,
-  "este": -65.883,
-  "norte": 18.696,
+  "frame": "ARG_MAR_DEL_PLATA",
+  "url": "indice/insomnio-arg_mar_del_plata.png",
+  "oeste": -57.7165,
+  "sur": -38.1236,
+  "este": -57.5642,
+  "norte": -38.0117,
   "coordinates": [
    [
-    -66.783,
-    18.696
+    -57.7165,
+    -38.0117
    ],
    [
-    -65.883,
-    18.696
+    -57.5642,
+    -38.0117
    ],
    [
-    -65.883,
-    17.796
+    -57.5642,
+    -38.1236
    ],
    [
-    -66.783,
-    17.796
+    -57.7165,
+    -38.1236
    ]
   ],
-  "ancho": 1143,
-  "alto": 1204
+  "ancho": 200,
+  "alto": 187
  },
  {
-  "frame": "USA_AZ_MARICOPA",
-  "url": "indice/insomnio-usa_az_maricopa.png",
-  "oeste": -112.7257,
-  "sur": 33.0277,
-  "este": -112.0636,
-  "norte": 33.7689,
+  "frame": "ARG_ROSARIO",
+  "url": "indice/insomnio-arg_rosario.png",
+  "oeste": -60.9923,
+  "sur": -33.0345,
+  "este": -60.697,
+  "norte": -32.6327,
   "coordinates": [
    [
-    -112.7257,
-    33.7689
+    -60.9923,
+    -32.6327
    ],
    [
-    -112.0636,
-    33.7689
+    -60.697,
+    -32.6327
    ],
    [
-    -112.0636,
-    33.0277
+    -60.697,
+    -33.0345
    ],
    [
-    -112.7257,
-    33.0277
+    -60.9923,
+    -33.0345
    ]
   ],
-  "ancho": 841,
-  "alto": 1128
+  "ancho": 375,
+  "alto": 607
  },
  {
-  "frame": "USA_CA_LOS_ANGELES",
-  "url": "indice/insomnio-usa_ca_los_angeles.png",
-  "oeste": -118.9463,
-  "sur": 34.5207,
-  "este": -118.0585,
-  "norte": 35.0408,
+  "frame": "ARG_SANTA_FE",
+  "url": "indice/insomnio-arg_santa_fe.png",
+  "oeste": -60.9784,
+  "sur": -31.8315,
+  "este": -60.3577,
+  "norte": -31.5456,
   "coordinates": [
    [
-    -118.9463,
-    35.0408
+    -60.9784,
+    -31.5456
    ],
    [
-    -118.0585,
-    35.0408
+    -60.3577,
+    -31.5456
    ],
    [
-    -118.0585,
-    34.5207
+    -60.3577,
+    -31.8315
    ],
    [
-    -118.9463,
-    34.5207
+    -60.9784,
+    -31.8315
    ]
   ],
-  "ancho": 1128,
-  "alto": 805
+  "ancho": 788,
+  "alto": 427
  },
  {
-  "frame": "USA_CA_RIVERSIDE",
-  "url": "indice/insomnio-usa_ca_riverside.png",
-  "oeste": -117.5928,
-  "sur": 33.0412,
-  "este": -117.0465,
-  "norte": 33.9119,
+  "frame": "ARG_SAN_NICOLAS",
+  "url": "indice/insomnio-arg_san_nicolas.png",
+  "oeste": -60.6038,
+  "sur": -33.9753,
+  "este": -60.007,
+  "norte": -33.2152,
   "coordinates": [
    [
-    -117.5928,
-    33.9119
+    -60.6038,
+    -33.2152
    ],
    [
-    -117.0465,
-    33.9119
+    -60.007,
+    -33.2152
    ],
    [
-    -117.0465,
-    33.0412
+    -60.007,
+    -33.9753
    ],
    [
-    -117.5928,
-    33.0412
+    -60.6038,
+    -33.9753
    ]
   ],
-  "ancho": 694,
-  "alto": 1326
- },
- {
-  "frame": "YAKARTA",
-  "url": "indice/insomnio-yakarta.png",
-  "oeste": 106.55,
-  "sur": -6.55,
-  "este": 107.2,
-  "norte": -5.95,
-  "coordinates": [
-   [
-    106.55,
-    -5.95
-   ],
-   [
-    107.2,
-    -5.95
-   ],
-   [
-    107.2,
-    -6.55
-   ],
-   [
-    106.55,
-    -6.55
-   ]
-  ],
-  "ancho": 826,
-  "alto": 767
+  "ancho": 758,
+  "alto": 1159
  }
 ]

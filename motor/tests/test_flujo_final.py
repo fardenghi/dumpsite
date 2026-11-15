@@ -35,11 +35,17 @@ FICHAS = {"BAS-053307": "norte-iii", "BAS-053304": "norte-iii-disposicion", "BAS
 # ---------------------------------------------------------------- frames
 def test_frames_json_cumple_el_contrato_y_no_se_superponen():
     d = ct.leer(os.path.join(DATA, "frames.json"))
-    agregado = d["criterio"].eq("abiertos") if "criterio" in d else d["frame"].isna()  # the ones added by `--agregar` (prompt 6)
-    assert 8 <= (~agregado).sum() <= 12
-    # The added ones come after the original ones, in priority order, and all have open sites and 15 pairs or more.
-    assert list(d["prioridad"]) == sorted(d["prioridad"]) and not agregado[: (~agregado).sum()].any()
+    agregado = d["criterio"].eq("abiertos") if "criterio" in d else d["frame"].isna()  # los que sumó `--agregar` (prompt 6)
+    argentina = d["criterio"].eq("argentina") if "criterio" in d else d["frame"].isna()  # `frames_argentina.py` (prompt 7)
+    antes = ~agregado & ~argentina
+    assert 8 <= antes.sum() <= 12
+    # Los agregados van después de los de antes, en orden de prioridad, y todos tienen abiertos y 15 pares o más.
+    assert list(d["prioridad"]) == sorted(d["prioridad"]) and antes[: antes.sum()].all()
     assert all(n["abierto"] >= 1 for n in d.loc[agregado, "n_sitios_10ha"]) and (d.loc[agregado, "n_gunw"] >= 15).all()
+    # Los de Argentina van al final, son sólo para predecir y también tienen 15 pares o más.
+    assert not argentina.any() or argentina[-argentina.sum():].all()
+    assert (d.loc[argentina, "pais"] == "ARG").all() and d.loc[argentina, "reservado_prueba"].all()
+    assert (d.loc[argentina, "n_gunw"] >= 15).all()
     assert d.loc[d["pais"] == "ARG", "reservado_prueba"].all() and not d.loc[d["pais"] != "ARG", "reservado_prueba"].any()
     assert (d["pais"] != "USA").sum() >= 3, "no sólo EE. UU."
     cajas = list(d["bbox"])

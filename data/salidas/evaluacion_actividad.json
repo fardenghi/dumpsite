@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generado": "2026-11-15T20:18:29",
+  "generado": "2026-11-15T21:04:55",
   "generado_por": "herramientas/flujo.py (evaluar_actividad.evaluar)",
   "frames": [
    "AMBA",
@@ -32,7 +32,14 @@
    "USA_SC_GREENVILLE",
    "USA_CA_LOS_ANGELES",
    "USA_CA_RIVERSIDE",
-   "USA_IN_FULTON"
+   "USA_IN_FULTON",
+   "ARG_ROSARIO",
+   "ARG_CORDOBA",
+   "ARG_SAN_NICOLAS",
+   "ARG_MAR_DEL_PLATA",
+   "ARG_SANTA_FE",
+   "ARG_CASILDA",
+   "ARG_JUNIN"
   ],
   "modo_insomnio": {
    "AMBA": [
@@ -123,6 +130,27 @@
     "exacto"
    ],
    "USA_IN_FULTON": [
+    "exacto"
+   ],
+   "ARG_ROSARIO": [
+    "exacto"
+   ],
+   "ARG_CORDOBA": [
+    "exacto"
+   ],
+   "ARG_SAN_NICOLAS": [
+    "exacto"
+   ],
+   "ARG_MAR_DEL_PLATA": [
+    "exacto"
+   ],
+   "ARG_SANTA_FE": [
+    "exacto"
+   ],
+   "ARG_CASILDA": [
+    "exacto"
+   ],
+   "ARG_JUNIN": [
     "exacto"
    ]
   },

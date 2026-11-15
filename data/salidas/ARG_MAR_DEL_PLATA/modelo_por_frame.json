@@ -1,0 +1,39 @@
+{
+ "generado_por": "herramientas/modelo_por_frame.py",
+ "cruce": {
+  "manchas_sha1": "07c7fe6580df37c3f975335b18231aa8b04eb397",
+  "archivos": [
+   "cruce_manchas_catalogo.parquet"
+  ],
+  "manchas_candidatas": 6,
+  "poligonos_en_la_caja": 4,
+  "pares": 2,
+  "manchas_que_pasan_el_criterio": 1,
+  "con_basurales": 1,
+  "con_negativos": 0
+ },
+ "optico": {
+  "manchas_sha1": "07c7fe6580df37c3f975335b18231aa8b04eb397",
+  "archivos": [
+   "tabla_optico.parquet",
+   "tabla_optico_catalogo.parquet"
+  ],
+  "desde": "2026-06-19",
+  "hasta": "2026-10-17",
+  "max_nube": 70.0,
+  "escenas": 27,
+  "fechas_disponibles": 16,
+  "segundos": 11,
+  "fuente": "Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer",
+  "tabla_optico": {
+   "filas": 6,
+   "con_escenas": 6,
+   "escenas_mediana": 8.0
+  },
+  "tabla_optico_catalogo": {
+   "filas": 4,
+   "con_escenas": 4,
+   "escenas_mediana": 8.0
+  }
+ }
+}

@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generado": "2026-11-15T20:18:29",
+  "generado": "2026-11-15T21:04:55",
   "generado_por": "herramientas/flujo.py",
   "aviso": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados."
  },
@@ -34,7 +34,14 @@
   "USA_SC_GREENVILLE",
   "USA_CA_LOS_ANGELES",
   "USA_CA_RIVERSIDE",
-  "USA_IN_FULTON"
+  "USA_IN_FULTON",
+  "ARG_ROSARIO",
+  "ARG_CORDOBA",
+  "ARG_SAN_NICOLAS",
+  "ARG_MAR_DEL_PLATA",
+  "ARG_SANTA_FE",
+  "ARG_CASILDA",
+  "ARG_JUNIN"
  ],
  "entradas": {
   "AMBA": {
@@ -426,6 +433,97 @@
    "cruce_origen": "calculado_por_flujo",
    "predicciones": null,
    "nota": null
+  },
+  "ARG_ROSARIO": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_ROSARIO/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_ROSARIO/manchas.geojson",
+   "n_manchas_candidatas": 34,
+   "cruce": "datos/flujo/ARG_ROSARIO/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": "salidas/ARG_ROSARIO/predicciones.parquet",
+   "nota": null
+  },
+  "ARG_CORDOBA": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_CORDOBA/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_CORDOBA/manchas.geojson",
+   "n_manchas_candidatas": 36,
+   "cruce": "datos/flujo/ARG_CORDOBA/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": "salidas/ARG_CORDOBA/predicciones.parquet",
+   "nota": null
+  },
+  "ARG_SAN_NICOLAS": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_SAN_NICOLAS/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_SAN_NICOLAS/manchas.geojson",
+   "n_manchas_candidatas": 12,
+   "cruce": "datos/flujo/ARG_SAN_NICOLAS/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": "salidas/ARG_SAN_NICOLAS/predicciones.parquet",
+   "nota": null
+  },
+  "ARG_MAR_DEL_PLATA": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_MAR_DEL_PLATA/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_MAR_DEL_PLATA/manchas.geojson",
+   "n_manchas_candidatas": 6,
+   "cruce": "salidas/ARG_MAR_DEL_PLATA/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": "salidas/ARG_MAR_DEL_PLATA/predicciones.parquet",
+   "nota": null
+  },
+  "ARG_SANTA_FE": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_SANTA_FE/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_SANTA_FE/manchas.geojson",
+   "n_manchas_candidatas": 40,
+   "cruce": "salidas/ARG_SANTA_FE/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "prompt_4",
+   "predicciones": "salidas/ARG_SANTA_FE/predicciones.parquet",
+   "nota": null
+  },
+  "ARG_CASILDA": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_CASILDA/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_CASILDA/manchas.geojson",
+   "n_manchas_candidatas": 17,
+   "cruce": "datos/flujo/ARG_CASILDA/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": "salidas/ARG_CASILDA/predicciones.parquet",
+   "nota": null
+  },
+  "ARG_JUNIN": {
+   "procesado": true,
+   "insomnio_catalogo": "salidas/ARG_JUNIN/insomnio_catalogo.parquet",
+   "modo_insomnio": [
+    "exacto"
+   ],
+   "manchas": "salidas/ARG_JUNIN/manchas.geojson",
+   "n_manchas_candidatas": 6,
+   "cruce": "datos/flujo/ARG_JUNIN/cruce_manchas_catalogo.parquet",
+   "cruce_origen": "calculado_por_flujo",
+   "predicciones": "salidas/ARG_JUNIN/predicciones.parquet",
+   "nota": null
   }
  },
  "modelo": {
@@ -435,23 +533,23 @@
  },
  "total": {
   "complejos_por_veredicto": {
-   "no_alcanza": 342,
-   "activo_conocido": 80,
-   "quieto_radar": 53,
+   "no_alcanza": 413,
+   "activo_conocido": 82,
+   "quieto_radar": 73,
    "cerrado_despierto": 20,
    "cerrado_quieto": 14
   },
   "manchas_por_veredicto": {
-   "descartada": 2355,
+   "descartada": 2500,
    "sin_clasificar": 1887,
-   "posible_nuevo": 168
+   "posible_nuevo": 172
   },
-  "activos": 268,
-  "activos_ya_conocidos": 100,
-  "posibles_nuevos": 168,
+  "activos": 274,
+  "activos_ya_conocidos": 102,
+  "posibles_nuevos": 172,
   "cerrados_pero_despiertos": 20,
   "cerrados_y_quietos": 14,
-  "frase": "En los 30 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON), el radar y el modelo encuentran 268 basurales activos: 100 ya estaban en los catálogos y 168 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
+  "frase": "En los 37 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON, ARG_ROSARIO, ARG_CORDOBA, ARG_SAN_NICOLAS, ARG_MAR_DEL_PLATA, ARG_SANTA_FE, ARG_CASILDA, ARG_JUNIN), el radar y el modelo encuentran 274 basurales activos: 102 ya estaban en los catálogos y 172 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
  },
  "por_frame": {
   "AMBA": {
@@ -1037,6 +1135,136 @@
    "cerrados_pero_despiertos": 0,
    "cerrados_y_quietos": 0,
    "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_ROSARIO": {
+   "ciudad": "Rosario (alrededor de Relleno Sanitario de Pérez)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "no_alcanza": 37,
+    "quieto_radar": 7
+   },
+   "manchas_por_veredicto": {
+    "descartada": 34
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_CORDOBA": {
+   "ciudad": "Córdoba (alrededor de Bower)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "no_alcanza": 13,
+    "quieto_radar": 3
+   },
+   "manchas_por_veredicto": {
+    "descartada": 35,
+    "posible_nuevo": 1
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 1,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 0 ya estaban en los catálogos y 1 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_SAN_NICOLAS": {
+   "ciudad": "San Nicolás y Pergamino (alrededor de Planta de Tratamiento de Residuos)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "no_alcanza": 14,
+    "quieto_radar": 3
+   },
+   "manchas_por_veredicto": {
+    "descartada": 11,
+    "posible_nuevo": 1
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 1,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 0 ya estaban en los catálogos y 1 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_MAR_DEL_PLATA": {
+   "ciudad": "Mar del Plata (alrededor de Predio)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "activo_conocido": 1,
+    "quieto_radar": 1
+   },
+   "manchas_por_veredicto": {
+    "descartada": 4,
+    "posible_nuevo": 1
+   },
+   "activos": 2,
+   "activos_ya_conocidos": 1,
+   "posibles_nuevos": 1,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 2 basurales activos: 1 ya estaban en los catálogos y 1 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_SANTA_FE": {
+   "ciudad": "Santa Fe y Paraná (alrededor de Relleno Sanitario Santa Fe)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "no_alcanza": 3,
+    "quieto_radar": 2
+   },
+   "manchas_por_veredicto": {
+    "descartada": 39
+   },
+   "activos": 0,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 0 basurales activos: 0 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_CASILDA": {
+   "ciudad": "Casilda y Venado Tuerto (alrededor de Basural)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "no_alcanza": 4,
+    "quieto_radar": 2,
+    "activo_conocido": 1
+   },
+   "manchas_por_veredicto": {
+    "descartada": 17
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 1,
+   "posibles_nuevos": 0,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 1 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+  },
+  "ARG_JUNIN": {
+   "ciudad": "Junín y Chacabuco (alrededor de Planta RSU)",
+   "pais": "ARG",
+   "reservado_prueba": true,
+   "complejos_por_veredicto": {
+    "quieto_radar": 2
+   },
+   "manchas_por_veredicto": {
+    "descartada": 5,
+    "posible_nuevo": 1
+   },
+   "activos": 1,
+   "activos_ya_conocidos": 0,
+   "posibles_nuevos": 1,
+   "cerrados_pero_despiertos": 0,
+   "cerrados_y_quietos": 0,
+   "frase": "En los frames procesados, el radar ve 1 basurales activos: 0 ya estaban en los catálogos y 1 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
   }
  },
  "actividad": {

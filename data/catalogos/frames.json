@@ -38,6 +38,14 @@
      "motivo": "sólo 11 pares GUNW PR (hacen falta 15)"
     }
    ]
+  },
+  "argentina": {
+   "generado": "2026-11-15",
+   "generado_por": "herramientas/frames_argentina.py agregar",
+   "n": 7,
+   "criterio": "celdas de 1° de Argentina (contorno de Natural Earth 1:10m, no el campo `pais`) con más sitios del catálogo de 10 ha o más, sin contar los de la caja del AMBA; caja achicada a esos sitios más 5 km; al menos 15 pares GUNW PR. Sólo para predecir: reservado_prueba = true, no se entrena con ellos",
+   "aviso": "ningún sitio de estas celdas tiene estado conocido (todos `desconocido`): no sirven para evaluar abiertos contra cerrados",
+   "celdas_descartadas": []
   }
  },
  "frames": [
@@ -1863,6 +1871,377 @@
     "abierto": 2,
     "cerrado": 2
    }
+  },
+  {
+   "frame": "ARG_ROSARIO",
+   "orbita": [
+    89,
+    111
+   ],
+   "ciudad": "Rosario (alrededor de Relleno Sanitario de Pérez)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32720,
+   "bbox": [
+    -60.9923,
+    -33.0345,
+    -60.697,
+    -32.6327
+   ],
+   "n_gunw": 17,
+   "fecha_inicio": "2026-06-20",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 10
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "089_A_161",
+    "111_D_105"
+   ],
+   "prioridad": 30,
+   "puntaje": 10.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "089_A_161": 9,
+    "111_D_105": 8
+   },
+   "cobertura": {
+    "089_A_161": 1.0,
+    "111_D_105": 1.0
+   },
+   "criterio": "argentina",
+   "celda": [
+    -61,
+    -33
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 8
+   },
+   "n_sitios_total_celda": 50
+  },
+  {
+   "frame": "ARG_CORDOBA",
+   "orbita": [
+    17,
+    140
+   ],
+   "ciudad": "Córdoba (alrededor de Bower)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32720,
+   "bbox": [
+    -64.3926,
+    -31.6033,
+    -64.0499,
+    -31.0001
+   ],
+   "n_gunw": 22,
+   "fecha_inicio": "2025-11-11",
+   "fecha_fin": "2026-10-21",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 5
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "017_A_162",
+    "140_D_104"
+   ],
+   "prioridad": 31,
+   "puntaje": 5.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "017_A_162": 12,
+    "140_D_104": 10
+   },
+   "cobertura": {
+    "017_A_162": 1.0,
+    "140_D_104": 1.0
+   },
+   "criterio": "argentina",
+   "celda": [
+    -65,
+    -32
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 5
+   },
+   "n_sitios_total_celda": 32
+  },
+  {
+   "frame": "ARG_SAN_NICOLAS",
+   "orbita": [
+    89,
+    111
+   ],
+   "ciudad": "San Nicolás y Pergamino (alrededor de Planta de Tratamiento de Residuos)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32720,
+   "bbox": [
+    -60.6038,
+    -33.9753,
+    -60.007,
+    -33.2152
+   ],
+   "n_gunw": 17,
+   "fecha_inicio": "2026-06-20",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 4
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "089_A_161",
+    "111_D_105"
+   ],
+   "prioridad": 32,
+   "puntaje": 4.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "089_A_161": 9,
+    "111_D_105": 8
+   },
+   "cobertura": {
+    "089_A_161": 1.0,
+    "111_D_105": 1.0
+   },
+   "criterio": "argentina",
+   "celda": [
+    -61,
+    -34
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 4
+   },
+   "n_sitios_total_celda": 44
+  },
+  {
+   "frame": "ARG_MAR_DEL_PLATA",
+   "orbita": [
+    82,
+    161
+   ],
+   "ciudad": "Mar del Plata (alrededor de Predio)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32721,
+   "bbox": [
+    -57.7165,
+    -38.1236,
+    -57.5642,
+    -38.0117
+   ],
+   "n_gunw": 17,
+   "fecha_inicio": "2026-06-19",
+   "fecha_fin": "2026-10-17",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 2
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "082_D_108",
+    "161_A_158"
+   ],
+   "prioridad": 33,
+   "puntaje": 2.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "082_D_108": 9,
+    "161_A_158": 8
+   },
+   "cobertura": {
+    "082_D_108": 1.0,
+    "161_A_158": 0.92
+   },
+   "criterio": "argentina",
+   "celda": [
+    -58,
+    -39
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 3
+   },
+   "n_sitios_total_celda": 4
+  },
+  {
+   "frame": "ARG_SANTA_FE",
+   "orbita": [
+    89,
+    111
+   ],
+   "ciudad": "Santa Fe y Paraná (alrededor de Relleno Sanitario Santa Fe)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32720,
+   "bbox": [
+    -60.9784,
+    -31.8315,
+    -60.3577,
+    -31.5456
+   ],
+   "n_gunw": 18,
+   "fecha_inicio": "2025-11-04",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 4
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "089_A_162",
+    "111_D_104"
+   ],
+   "prioridad": 34,
+   "puntaje": 4.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "089_A_162": 10,
+    "111_D_104": 8
+   },
+   "cobertura": {
+    "089_A_162": 1.0,
+    "111_D_104": 1.0
+   },
+   "criterio": "argentina",
+   "celda": [
+    -61,
+    -32
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 3
+   },
+   "n_sitios_total_celda": 7
+  },
+  {
+   "frame": "ARG_CASILDA",
+   "orbita": [
+    89,
+    111
+   ],
+   "ciudad": "Casilda y Venado Tuerto (alrededor de Basural)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32720,
+   "bbox": [
+    -62.0544,
+    -33.9545,
+    -61.0782,
+    -33.0141
+   ],
+   "n_gunw": 17,
+   "fecha_inicio": "2026-06-20",
+   "fecha_fin": "2026-10-19",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 3
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "089_A_161",
+    "111_D_105"
+   ],
+   "prioridad": 35,
+   "puntaje": 3.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "089_A_161": 9,
+    "111_D_105": 8
+   },
+   "cobertura": {
+    "089_A_161": 1.0,
+    "111_D_105": 1.0
+   },
+   "criterio": "argentina",
+   "celda": [
+    -62,
+    -34
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 3
+   },
+   "n_sitios_total_celda": 8
+  },
+  {
+   "frame": "ARG_JUNIN",
+   "orbita": [
+    10,
+    89
+   ],
+   "ciudad": "Junín y Chacabuco (alrededor de Planta RSU)",
+   "pais": "ARG",
+   "hemisferio": "S",
+   "epsg": 32720,
+   "bbox": [
+    -60.2757,
+    -34.9744,
+    -59.9679,
+    -34.2268
+   ],
+   "n_gunw": 17,
+   "fecha_inicio": "2026-06-20",
+   "fecha_fin": "2026-10-18",
+   "n_basurales_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 2
+   },
+   "n_negativos": {},
+   "reservado_prueba": true,
+   "frames_nisar": [
+    "089_A_160",
+    "010_D_106"
+   ],
+   "prioridad": 36,
+   "puntaje": 2.0,
+   "n_negativos_a_10ha": 0,
+   "n_gunw_por_track": {
+    "089_A_160": 9,
+    "010_D_106": 8
+   },
+   "cobertura": {
+    "089_A_160": 1.0,
+    "010_D_106": 1.0
+   },
+   "criterio": "argentina",
+   "celda": [
+    -61,
+    -35
+   ],
+   "n_sitios_10ha": {
+    "abierto": 0,
+    "cerrado": 0,
+    "desconocido": 3
+   },
+   "n_sitios_total_celda": 3
   }
  ]
 }
