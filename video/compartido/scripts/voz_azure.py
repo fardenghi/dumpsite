@@ -1,13 +1,13 @@
-"""Genera la voz en off con Azure AI Speech, con emoción por frase (estilos mstts:express-as).
+"""Generates the voice-over with Azure AI Speech, with emotion per sentence (mstts:express-as styles).
 
-Lee un guion (por defecto ingles/guion.json) (frases -> partes con estilo, intensidad, velocidad y tono), sintetiza una toma por
-frase, las ubica una detrás de otra con los huecos del guion y escribe public/<audio>/frase-N.wav y
-el json de tiempos (inicio y duración de cada frase). Las escenas del video se sincronizan con esos tiempos.
-La clave se lee de video/.env.local (AZURE_SPEECH_KEY, AZURE_SPEECH_REGION) y nunca se imprime.
+Reads a script (default ingles/guion.json) (sentences -> parts with style, intensity, rate and pitch), synthesizes one take per
+sentence, places them one after another with the script's gaps and writes public/<audio>/frase-N.wav and
+the timing json (start and duration of each sentence). The video scenes sync to those timings.
+The key is read from video/.env.local (AZURE_SPEECH_KEY, AZURE_SPEECH_REGION) and is never printed.
 
-Uso (desde video/):
-  inglés:   python3 -I compartido/scripts/voz_azure.py
-  español:  python3 -I compartido/scripts/voz_azure.py --guion espanol/guion-es.json --salida espanol/voz-es.json --audio voz-es --max 180
+Usage (from video/):
+  English:  python3 -I compartido/scripts/voz_azure.py
+  Spanish:  python3 -I compartido/scripts/voz_azure.py --guion espanol/guion-es.json --salida espanol/voz-es.json --audio voz-es --max 180
 """
 import http.client
 import json
@@ -18,9 +18,9 @@ import urllib.request
 import wave
 from xml.sax.saxutils import escape
 
-VIDEO = pathlib.Path(__file__).resolve().parents[2]   # la carpeta video/
-MAX_VIDEO_S = 29.8   # el límite de Space Apps es 30 s
-COLA_FINAL_S = 1.6   # lo que dura la placa final después de la última palabra
+VIDEO = pathlib.Path(__file__).resolve().parents[2]   # the video/ folder
+MAX_VIDEO_S = 29.8   # the Space Apps limit is 30 s
+COLA_FINAL_S = 1.6   # how long the end card lasts after the last word
 
 
 def leer_env():
@@ -35,13 +35,13 @@ def leer_env():
 def ssml_de(voz, frase, idioma="en-US"):
     cuerpo = ""
     for p in frase["partes"]:
-        # "decir": cómo se pronuncia una palabra, p. ej. {"ResNet-50": "resnet fifty"} (SSML <sub alias>)
+        # "decir": how a word is pronounced, e.g. {"ResNet-50": "resnet fifty"} (SSML <sub alias>)
         cuerpo_texto = escape(p["texto"])
         for palabra, alias in p.get("decir", {}).items():
             cuerpo_texto = cuerpo_texto.replace(escape(palabra), f'<sub alias="{escape(alias)}">{escape(palabra)}</sub>')
         prosodia = (f'<prosody rate="{p.get("velocidad", "+0%")}" pitch="{p.get("tono", "+0%")}" volume="{p.get("volumen", "+0%")}">'
                     f'{cuerpo_texto}</prosody>')
-        # Estilo opcional: mismo narrador; sólo se usa si el guion lo pide explícitamente.
+        # Optional style: same narrator; only used if the script asks for it explicitly.
         cuerpo += (f'<mstts:express-as style="{p["estilo"]}" styledegree="{p.get("grado", 1)}">{prosodia}</mstts:express-as>'
                    if p.get("estilo") else prosodia)
         if p.get("pausa_ms"):
@@ -69,7 +69,7 @@ def sintetizar(env, ssml, destino):
 
 
 def recortar_silencio(destino, umbral=400, colchon_s=0.09):
-    """Saca el silencio del principio y del final de la toma; deja un colchón corto."""
+    """Trims the silence at the start and end of the take; leaves a short cushion."""
     import array
     with wave.open(str(destino)) as w:
         params, fr = w.getparams(), w.getframerate()

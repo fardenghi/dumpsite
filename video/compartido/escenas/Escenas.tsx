@@ -7,7 +7,7 @@ import {MapaAmba, caminoPoligono, cajaNorte3EnAmba} from "../components/Mapa";
 
 export const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
 export const n3 = DATOS.norte3;
-// Sólo la órbita 10: una pasada cada 12 días (la 161 pasa un día antes y confundía las fechas).
+// Only orbit 10: one pass every 12 days (161 passes a day earlier and confused the dates).
 export const pasadas = (n3.pares as Par[]).filter((p) => p.orbita === 10).sort((a, b) => a.fecha.localeCompare(b.fecha));
 export const serie = DATOS.serie_s2 as {imagenes: {fecha: string; archivo: string}[]; poligono: number[][]};
 export const entreno = DATOS.entreno as {total_catalogo: number; muestras: {archivo: string; pais: string}[]};
@@ -46,7 +46,7 @@ export const EscenaIA: React.FC<{durTotal: number}> = ({durTotal}) => {
   const aviso = interpolate(f, [fin - 12, fin - 2], [1, 0], clamp);
   return (
     <AbsoluteFill style={{background: C.bg}}>
-      {/* Clip de Higgsfield ya montado (satélite 1 s, nubes 1 s, basural 2,7 s = 4,73 s), ajustado al tramo. */}
+      {/* Higgsfield clip already edited (satellite 1 s, clouds 1 s, dump site 2.7 s = 4.73 s), fitted to the segment. */}
       <OffthreadVideo src={staticFile("clip1-ai.mp4")} playbackRate={4.733 / durTotal} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
       <AbsoluteFill style={{background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)"}} />
       <div style={{opacity: aviso}}><AvisoIA /></div>
@@ -55,7 +55,7 @@ export const EscenaIA: React.FC<{durTotal: number}> = ({durTotal}) => {
   );
 };
 
-/* ======================= Transición: pulso de radar que revela el satélite ======================= */
+/* ======================= Transition: radar pulse that reveals the satellite ======================= */
 export const Transicion: React.FC<{dur: number}> = ({dur}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -86,7 +86,7 @@ export const EscenaNisar: React.FC<{dur: number}> = ({dur}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const n = dur * fps;
-  const r0 = Math.round(n * 0.42); // cuando la voz llega a "NASA's NISAR radar"
+  const r0 = Math.round(n * 0.42); // when the voice reaches "NASA's NISAR radar"
   const escalaS2 = interpolate(f, [0, r0], [1.08, 1.0], clamp);
   const radar = interpolate(f, [r0, r0 + 18], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
   const escalaR = interpolate(f, [r0, n], [14 / 6, 1.1], {...clamp, easing: Easing.out(Easing.cubic)});
@@ -138,7 +138,7 @@ export const EscenaInsomnia: React.FC<{dur: number; inicioParte2: number}> = ({d
   const t2 = inicioParte2 * fps; // "So first, our Insomnia score..."
   const zIni = n - 78;
 
-  // Parte A: el mismo basural en seis fechas (Sentinel-2 real), una tras otra
+  // Part A: the same dump site on six dates (real Sentinel-2), one after another
   const aIni = 18;
   const porImagen = Math.max(8, Math.floor((t2 - aIni - 6) / serie.imagenes.length));
   const idx = Math.min(serie.imagenes.length - 1, Math.max(0, Math.floor((f - aIni) / porImagen)));
@@ -146,7 +146,7 @@ export const EscenaInsomnia: React.FC<{dur: number; inicioParte2: number}> = ({d
   const fundido = interpolate(local, [0, 5], [0, 1], clamp);
   const partA = interpolate(f, [aIni - 4, aIni + 6, t2 - 6, t2 + 4], [0, 1, 1, 0], clamp);
 
-  // Parte B: una pasada de radar cada 12 días y el puntaje
+  // Part B: one radar pass every 12 days and the score
   const bIni = t2 + 2;
   const paso = 5;
   const visibles = Math.floor(interpolate(f, [bIni + 10, bIni + 10 + paso * pasadas.length], [0, pasadas.length], clamp));
@@ -154,7 +154,7 @@ export const EscenaInsomnia: React.FC<{dur: number; inicioParte2: number}> = ({d
   const puntaje = spring({frame: f - (bIni + 10 + paso * pasadas.length + 6), fps, config: {damping: 14}});
   const partB = interpolate(f, [t2, t2 + 8, zIni - 6, zIni + 4], [0, 1, 1, 0], clamp);
 
-  // Parte C: el mismo cálculo en todo Buenos Aires
+  // Part C: the same computation over all of Buenos Aires
   const c = cajaNorte3EnAmba();
   const ease = Easing.inOut(Easing.cubic);
   const vista = {cx: interpolate(f, [zIni, zIni + 44], [c.cx, 0.55], {...clamp, easing: ease}), cy: interpolate(f, [zIni, zIni + 44], [c.cy, 0.5], {...clamp, easing: ease}),
@@ -191,7 +191,7 @@ export const EscenaInsomnia: React.FC<{dur: number; inicioParte2: number}> = ({d
         </div>
       </AbsoluteFill>
 
-      {/* B · coherencia, pasada tras pasada (valores reales del sitio y su entorno) */}
+      {/* B · coherence, pass after pass (real values of the site and its surroundings) */}
       <AbsoluteFill style={{opacity: partB}}>
         <div style={{position: "absolute", left: 0, right: 0, top: 170, textAlign: "center", fontFamily: F.sans, color: "#fff", textShadow: "0 2px 8px #000"}}>
           <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 60}}>Radar coherence = how alike two passes look</div>
@@ -252,8 +252,8 @@ export const EscenaInsomnia: React.FC<{dur: number; inicioParte2: number}> = ({d
   );
 };
 
-/* ======================= 4 · Modelo: LightGBM entrenado con miles de basurales mapeados ======================= */
-// De cada imagen se calculan variables (vegetación, suelo desnudo, agua, infrarrojo, radar): eso es lo que aprende el modelo.
+/* ======================= 4 · Model: LightGBM trained on thousands of mapped dump sites ======================= */
+// Variables are computed from each image (vegetation, bare soil, water, infrared, radar): that's what the model learns.
 const VARIABLES = ["vegetation · NDVI", "bare soil · BSI", "water · NDWI", "infrared · SWIR", "radar coherence"];
 
 export const Arbol: React.FC<{v: number; color: string; activo: boolean}> = ({v, color, activo}) => (
@@ -271,14 +271,14 @@ export const EscenaRed: React.FC<{dur: number; inicioParte2: number}> = ({dur, i
   const {fps} = useVideoConfig();
   const n = dur * fps;
   const t2 = inicioParte2 * fps;
-  // A · el muro de basurales mapeados (imágenes reales del catálogo del equipo)
+  // A · the wall of mapped dump sites (real images from the team's catalog)
   const muro = interpolate(f, [14, 22, t2 - 12, t2], [0, 1, 1, 0], clamp);
   const colapso = interpolate(f, [t2 - 16, t2], [0, 1], {...clamp, easing: Easing.in(Easing.cubic)});
   const cuenta = Math.round(entreno.total_catalogo * interpolate(f, [20, t2 - 20], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)}));
   const ch = 132;
   const cols = 7;
   const x0 = 960 - (cols * (ch + 10)) / 2;
-  // B · el modelo: imágenes → variables → árboles → clasificador
+  // B · the model: images → variables → trees → classifier
   const modelo = interpolate(f, [t2 - 12, t2 + 2], [0, 1], clamp);
   // bloque centrado: caja (640) + espacio (70) + salidas (540) = 1250 px
   const cajaW = 640, cajaY = 330, cajaH = 330;
@@ -311,7 +311,7 @@ export const EscenaRed: React.FC<{dur: number; inicioParte2: number}> = ({dur, i
       </AbsoluteFill>
 
       <AbsoluteFill style={{opacity: modelo}}>
-        {/* la caja del modelo */}
+        {/* the model box */}
         <div style={{position: "absolute", left: cajaX, top: cajaY, width: cajaW, height: cajaH, borderRadius: 22, border: "2px solid rgba(191,239,255,0.55)",
           background: "linear-gradient(160deg, rgba(95,192,220,0.16), rgba(10,20,30,0.85))", boxShadow: "0 0 50px rgba(95,192,220,0.25)"}}>
           <div style={{position: "absolute", left: 24, top: 16, fontFamily: F.display, fontWeight: 700, fontSize: 52, color: "#fff"}}>LightGBM</div>
@@ -333,7 +333,7 @@ export const EscenaRed: React.FC<{dur: number; inicioParte2: number}> = ({dur, i
             <span style={{fontFamily: F.mono, fontSize: 22, color: "#fff", marginLeft: 8}}>… × 300</span>
           </div>
         </div>
-        {/* el clasificador: dos salidas */}
+        {/* the classifier: two outputs */}
         {[{t: "Dump", c: C.glow, y: 300}, {t: "Something else", c: C.radar, y: 520}].map((s) => (
           <div key={s.t} style={{position: "absolute", left: salX, top: s.y, width: 540, height: 190, borderRadius: 16, border: `2px dashed ${s.c}`,
             background: "rgba(5,8,12,0.4)"}}>
@@ -346,7 +346,7 @@ export const EscenaRed: React.FC<{dur: number; inicioParte2: number}> = ({dur, i
         </svg>
       </AbsoluteFill>
 
-      {/* ejemplos: entran al modelo y caen en su salida */}
+      {/* examples: they enter the model and land in their output */}
       {EJEMPLOS_CNN.map((e, k) => {
         const inicio = t0 + k * intervalo;
         const entra = spring({frame: f - inicio, fps, config: {damping: 16}});
@@ -383,7 +383,7 @@ export const EscenaRed: React.FC<{dur: number; inicioParte2: number}> = ({dur, i
   );
 };
 
-/* ======================= 5 · Dumpsite: resultados sobre la web ======================= */
+/* ======================= 5 · Dumpsite: results on the web ======================= */
 export const Navegador: React.FC<{src: string; f: number}> = ({src, f}) => {
   const {fps} = useVideoConfig();
   const entra = spring({frame: f, fps, config: {damping: 18}});

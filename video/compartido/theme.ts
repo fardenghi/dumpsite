@@ -1,7 +1,7 @@
 import {loadFont} from "@remotion/fonts";
 import {staticFile} from "remotion";
 
-// Tipografías locales (public/fonts, copiadas de @fontsource): el render no depende de internet.
+// Local fonts (public/fonts, copied from @fontsource): rendering doesn't depend on the internet.
 const FUENTES: [string, string, string][] = [
   ["IBM Plex Sans", "400", "ibm-plex-sans-latin-400-normal.woff2"],
   ["IBM Plex Sans", "500", "ibm-plex-sans-latin-500-normal.woff2"],
@@ -21,7 +21,7 @@ export const F = {
   display: `"Barlow Condensed", "Arial Narrow", sans-serif`,
 };
 
-// Radar nocturno: fondo casi negro, ámbar para lo que "no duerme", cian para lo estable.
+// Night radar: near-black background, amber for what "doesn't sleep", cyan for what's stable.
 export const C = {
   bg: "#05080c",
   ink: "#e7ebf1",

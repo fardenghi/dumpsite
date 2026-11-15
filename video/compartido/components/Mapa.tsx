@@ -4,7 +4,7 @@ import {ANCHO, ALTO, DATOS} from "../data";
 
 const mercY = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 180 / 2));
 
-// Caja [oeste, sur, este, norte] -> coordenadas normalizadas 0..1 de la caja del AMBA.
+// Box [west, south, east, north] -> normalized 0..1 coordinates within the AMBA box.
 export const normAmba = (lon: number, lat: number): [number, number] => {
   const [w, s, e, n] = DATOS.caja_amba as number[];
   return [(lon - w) / (e - w), (mercY(n) - mercY(lat)) / (mercY(n) - mercY(s))];
@@ -17,12 +17,12 @@ export const cajaNorte3EnAmba = () => {
   return {x0, y0, x1, y1, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, ancho: x1 - x0};
 };
 
-// Proporción real de la caja del AMBA (2800 x 2010 px en Web Mercator).
+// Real aspect ratio of the AMBA box (2800 x 2010 px in Web Mercator).
 const RELACION = 2010 / 2800;
 
 export type Vista = {cx: number; cy: number; zoom: number};
 
-// zoom = 1 muestra el AMBA entero a lo ancho del cuadro.
+// zoom = 1 shows the whole AMBA across the width of the frame.
 export const MapaAmba: React.FC<{vista: Vista; indice?: number; s2?: number; children?: (px: (x: number, y: number) => [number, number], escala: number) => React.ReactNode}> =
   ({vista, indice = 1, s2 = 1, children}) => {
     const w = ANCHO * vista.zoom;

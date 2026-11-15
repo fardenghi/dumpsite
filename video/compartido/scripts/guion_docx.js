@@ -1,6 +1,6 @@
 // Genera espanol/guion-local.docx desde espanol/guion-es.json y espanol/voz-es.json.
-// Uso (desde video/):  npm i --no-save docx && node compartido/scripts/guion_docx.js espanol/guion-local.docx
-// Si cambia lo que se ve en pantalla, actualizar la lista ESCENAS de abajo.
+// Usage (from video/):  npm i --no-save docx && node compartido/scripts/guion_docx.js espanol/guion-local.docx
+// If what's shown on screen changes, update the ESCENAS list below.
 const fs = require("fs");
 const path = require("path");
 const {Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, ShadingType, PageOrientation, AlignmentType, LevelFormat, BorderStyle} = require("docx");
@@ -14,7 +14,7 @@ const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart
 const rango = (a, b) => `${mmss(a)} – ${mmss(b)}`;
 const ini = (id) => t(id).inicio;
 
-// Escenas: [título, tiempo, ids de voz, lo que se ve en pantalla]
+// Scenes: [title, time, voice ids, what's shown on screen]
 const ESCENAS = [
   ["1. El problema", rango(0, ini("dumpsite")), ["problema"], [
     "Clip generado con IA (Higgsfield): del espacio, a través de las nubes, hasta un basural. Píldora \"Imagen generada con IA\" visible todo el clip.",
@@ -78,7 +78,7 @@ const FUENTES = [
 ];
 
 const FONT = "Arial";
-const W = [1300, 1900, 5300, 5300]; // landscape A4 útil ≈ 13800 DXA
+const W = [1300, 1900, 5300, 5300]; // usable landscape A4 ≈ 13800 DXA
 const TOTAL = W.reduce((a, b) => a + b, 0);
 const borde = {style: BorderStyle.SINGLE, size: 4, color: "BFC7D1"};
 const bordes = {top: borde, bottom: borde, left: borde, right: borde};

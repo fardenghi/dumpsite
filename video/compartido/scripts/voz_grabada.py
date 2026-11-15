@@ -1,23 +1,23 @@
-"""Usa una voz grabada por una persona en vez de la voz sintética de Azure (pensado para el video en castellano).
+"""Uses a voice recorded by a person instead of the Azure synthetic voice (meant for the Spanish video).
 
-Hace lo mismo que voz_azure.py pero sin sintetizar: toma las grabaciones, las pasa a WAV 48 kHz mono, les
-recorta el silencio del principio y del final, las ubica una detrás de otra con los huecos del guion y escribe
-public/<audio>/frase-N.wav y el json de tiempos (por defecto espanol/voz-es.json). Las escenas del video y los
-subtítulos se sincronizan solos con ese json: no hace falta tocar Local.tsx si los ids de las frases no cambian.
+It does the same as voz_azure.py but without synthesizing: takes the recordings, converts them to 48 kHz mono WAV,
+trims the silence at the start and end, places them one after another with the script's gaps and writes
+public/<audio>/frase-N.wav and the timing json (default espanol/voz-es.json). The video scenes and the
+subtitles sync themselves with that json: Local.tsx doesn't need changes if the sentence ids don't change.
 
-Dos formas de pasar la grabación (ver video/VOZ-GRABADA.md):
+Two ways to pass the recording (see video/VOZ-GRABADA.md):
 
-  A. Un archivo por frase, con el id de la frase como nombre (problema.wav, dumpsite.m4a, ...), en una carpeta:
+  A. One file per sentence, named with the sentence id (problema.wav, dumpsite.m4a, ...), in a folder:
        python3 -I compartido/scripts/voz_grabada.py --carpeta ~/grabacion
 
-  B. Una sola toma con los cortes marcados en Audacity (Edición > Etiquetas > Exportar etiquetas: un .txt con
-     "inicio<TAB>fin<TAB>id" por línea, en segundos):
+  B. A single take with the cuts marked in Audacity (Edit > Labels > Export Labels: a .txt with
+     "start<TAB>end<TAB>id" per line, in seconds):
        python3 -I compartido/scripts/voz_grabada.py --toma toma.wav --cortes etiquetas.txt
-     Con --tiempos-originales se respeta el ritmo de la toma (cada frase empieza donde empieza en la grabación)
-     en vez de usar los huecos del guion.
+     With --tiempos-originales the pace of the take is kept (each sentence starts where it starts in the recording)
+     instead of using the script's gaps.
 
-El texto de los subtítulos sale del guion (espanol/guion-es.json): si la persona dijo algo distinto, corregir
-primero el "texto" de esa frase en el guion. Necesita ffmpeg y ffprobe en el PATH.
+The subtitle text comes from the script (espanol/guion-es.json): if the person said something different, first fix
+that sentence's "texto" in the script. Needs ffmpeg and ffprobe on the PATH.
 """
 import argparse
 import json
@@ -26,7 +26,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from voz_azure import recortar_silencio  # noqa: E402  (misma función que usa la voz sintética)
+from voz_azure import recortar_silencio  # noqa: E402  (same function the synthetic voice uses)
 
 VIDEO = pathlib.Path(__file__).resolve().parents[2]
 EXTENSIONES = [".wav", ".mp3", ".m4a", ".ogg", ".opus", ".flac", ".aac", ".webm"]
@@ -38,7 +38,7 @@ def a_wav(origen, destino, desde=None, hasta=None):
         cmd += ["-ss", f"{desde:.3f}"]
     if hasta is not None:
         cmd += ["-to", f"{hasta:.3f}"]
-    # loudnorm empareja el volumen entre frases grabadas en momentos distintos
+    # loudnorm evens out the volume between sentences recorded at different times
     cmd += ["-i", str(origen), "-ac", "1", "-ar", "48000", "-sample_fmt", "s16", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", str(destino)]
     subprocess.run(cmd, check=True)
 
@@ -56,14 +56,14 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--guion", default="espanol/guion-es.json")
     ap.add_argument("--salida", default="espanol/voz-es.json")
-    ap.add_argument("--audio", default="voz-es", help="carpeta dentro de public/ (se borran los .wav viejos)")
-    ap.add_argument("--max", type=float, default=180.0, help="duración máxima del video en segundos (local: 3 min)")
-    ap.add_argument("--carpeta", help="forma A: carpeta con un archivo por frase, nombrado con el id")
-    ap.add_argument("--toma", help="forma B: grabación única")
+    ap.add_argument("--audio", default="voz-es", help="folder inside public/ (old .wav files are deleted)")
+    ap.add_argument("--max", type=float, default=180.0, help="maximum video duration in seconds (local: 3 min)")
+    ap.add_argument("--carpeta", help="option A: folder with one file per sentence, named with the id")
+    ap.add_argument("--toma", help="option B: single recording")
     ap.add_argument("--cortes", help="forma B: etiquetas de Audacity (inicio, fin, id)")
-    ap.add_argument("--tiempos-originales", action="store_true", help="forma B: respetar las pausas de la toma")
-    ap.add_argument("--umbral", type=int, default=400, help="nivel bajo el cual se considera silencio (subir si hay ruido de fondo)")
-    ap.add_argument("--sin-recorte", action="store_true", help="no recortar silencios")
+    ap.add_argument("--tiempos-originales", action="store_true", help="option B: keep the pauses of the take")
+    ap.add_argument("--umbral", type=int, default=400, help="level below which it counts as silence (raise it if there's background noise)")
+    ap.add_argument("--sin-recorte", action="store_true", help="don't trim silences")
     args = ap.parse_args()
     if bool(args.carpeta) == bool(args.toma) or (args.toma and not args.cortes):
         ap.error("usar --carpeta, o --toma junto con --cortes")
@@ -73,7 +73,7 @@ def main():
     salida = VIDEO / "public" / args.audio
     salida.mkdir(parents=True, exist_ok=True)
 
-    # 1. ubicar la grabación de cada frase
+    # 1. find the recording of each sentence
     fuentes = {}
     if args.carpeta:
         carpeta = pathlib.Path(args.carpeta).expanduser()
@@ -93,7 +93,7 @@ def main():
     for viejo in salida.glob("*.wav"):
         viejo.unlink()
 
-    # 2. convertir, recortar y ubicar en el tiempo
+    # 2. convert, trim and place in time
     h = guion["huecos_s"]
     t = h["antes_de_la_primera"]
     t0_toma = min(v[1] for v in fuentes.values()) if args.tiempos_originales else None

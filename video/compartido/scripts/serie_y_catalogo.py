@@ -1,11 +1,11 @@
-"""Arma dos assets que preparar_assets.py no hace (y que ese script conserva al reescribir datos-reales.json).
+"""Builds two assets that preparar_assets.py doesn't (and that script keeps them when it rewrites datos-reales.json).
 
-1. public/s2serie/: 6 fechas reales de Sentinel-2 L2A sobre Norte III (jun-oct 2026), desde los tiles de
-   Microsoft Planetary Computer, y la clave "serie_s2" de compartido/datos-reales.json con el polígono.
-2. public/entreno/: 28 recortes de basurales del catálogo mundial (uno por país, de 40 ha o más), desde
-   Sentinel-2 cloudless 2021 de EOX, y la clave "entreno" con el total del catálogo (66.981 sitios).
+1. public/s2serie/: 6 real Sentinel-2 L2A dates over Norte III (Jun-Oct 2026), from the
+   Microsoft Planetary Computer tiles, and the "serie_s2" key of compartido/datos-reales.json with the polygon.
+2. public/entreno/: 28 crops of dump sites from the world catalog (one per country, 40 ha or more), from
+   EOX Sentinel-2 cloudless 2021, and the "entreno" key with the catalog total (66,981 sites).
 
-Uso (desde video/):  python3 -I compartido/scripts/serie_y_catalogo.py [--solo serie|catalogo]
+Usage (from video/):  python3 -I compartido/scripts/serie_y_catalogo.py [--solo serie|catalogo]
 """
 import argparse
 import io
@@ -24,7 +24,7 @@ PUB = VIDEO / "public"
 DATOS = VIDEO / "compartido" / "datos-reales.json"
 CACHE = VIDEO / ".cache-tiles"
 
-# Escenas elegidas a mano entre las de menos nubes del STAC de Planetary Computer (fecha, % nubes, item)
+# Scenes picked by hand among the least cloudy in the Planetary Computer STAC (date, % clouds, item)
 ESCENAS_S2 = [
     ["2026-06-26", 1.1, "S2C_MSIL2A_20260626T134701_R024_T21HUB_20260626T200121"],
     ["2026-08-07", 0.1, "S2A_MSIL2A_20260807T135131_R024_T21HUB_20260807T233312"],
@@ -117,7 +117,7 @@ def catalogo():
             for dx in (-1, 0, 1):
                 for dy in (-1, 0, 1):
                     big.paste(tile(z, tx + dx, ty + dy), ((dx + 1) * 256, (dy + 1) * 256))
-        except Exception as e:  # tile faltante: se saltea ese país
+        except Exception as e:  # missing tile: that country is skipped
             print("salteo", s["pais"], e)
             continue
         cx, cy = gx - (tx - 1) * 256, gy - (ty - 1) * 256

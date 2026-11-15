@@ -5,9 +5,9 @@ import {C, F} from "../theme";
 
 const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
 
-/* Subtítulos integrados: sin caja, palabra por palabra al ritmo de la voz, con sombra suave. */
+/* Built-in subtitles: no box, word by word at the pace of the voice, with a soft shadow. */
 type FraseSub = {inicio: number; duracion: number; texto: string};
-// Parte una frase larga en bloques de hasta `max` caracteres, cortando preferentemente después de una coma o un punto.
+// Splits a long sentence into blocks of up to `max` characters, preferably cutting after a comma or a period.
 const bloques = (texto: string, max: number) => {
   const palabras = texto.split(" ");
   const out: string[][] = [[]];
@@ -35,7 +35,7 @@ export const Subtitulos: React.FC<{frases?: FraseSub[]; max?: number}> = ({frase
   if (i < 0) return null;
   const fr = FRASES[i];
   const total = fr.texto.length;
-  // qué bloque se está diciendo ahora: el último cuyo comienzo ya pasó
+  // which block is being said now: the last one whose start has passed
   const partes = bloques(fr.texto, max);
   let desde = 0, elegido = 0, inicioBloque = 0;
   partes.forEach((b, k) => {
@@ -48,14 +48,14 @@ export const Subtitulos: React.FC<{frases?: FraseSub[]; max?: number}> = ({frase
   const salida = interpolate(t, [fr.inicio + fr.duracion + 0.25, fr.inicio + fr.duracion + 0.6], [1, 0], clamp);
   return (
     <AbsoluteFill style={{justifyContent: "flex-end", alignItems: "center", paddingBottom: 92, pointerEvents: "none"}}>
-      {/* degradado suave detrás del texto: se lee sobre fondos claros (la web) sin parecer una caja */}
+      {/* soft gradient behind the text: readable over light backgrounds (the web) without looking like a box */}
       <div style={{position: "absolute", left: 0, right: 0, bottom: 0, height: 330, opacity: salida,
         background: "linear-gradient(to top, rgba(5,8,12,0.88) 0%, rgba(5,8,12,0.6) 45%, rgba(5,8,12,0) 100%)"}} />
       <div style={{position: "relative", maxWidth: 1560, textAlign: "center", fontFamily: F.sans, fontWeight: 600, fontSize: 46, lineHeight: 1.25,
         letterSpacing: 0.2, color: "#fff", opacity: salida,
         textShadow: "0 2px 3px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.65), 0 0 60px rgba(0,0,0,0.45)"}}>
         {palabras.map((p, k) => {
-          // cada palabra aparece cuando la voz llega a ella (proporcional a los caracteres)
+          // each word appears when the voice reaches it (proportional to the characters)
           const tPalabra = fr.inicio + (acumulado / total) * fr.duracion;
           acumulado += p.length + 1;
           const v = interpolate(t, [tPalabra - 0.05, tPalabra + 0.15], [0, 1], clamp);
@@ -69,7 +69,7 @@ export const Subtitulos: React.FC<{frases?: FraseSub[]; max?: number}> = ({frase
   );
 };
 
-/* Aviso de contenido generado con IA: visible todo el clip, discreto y prolijo. */
+/* AI-generated content notice: visible during the whole clip, discreet and tidy. */
 export const AvisoIA: React.FC<{texto?: string}> = ({texto = "AI-generated imagery"}) => (
   <div style={{position: "absolute", right: 40, bottom: 40, display: "flex", alignItems: "center", gap: 10,
     padding: "9px 16px 9px 12px", borderRadius: 999, background: "rgba(8,12,18,0.42)", backdropFilter: "blur(10px)",
@@ -82,14 +82,14 @@ export const AvisoIA: React.FC<{texto?: string}> = ({texto = "AI-generated image
   </div>
 );
 
-/* Integrantes del equipo: abajo a la derecha, arriba del aviso de IA y por encima de la zona de subtítulos.
-   La guía oficial sugiere presentar al equipo al principio del video. No se dicen en voz alta. */
+/* Team members: bottom right, above the AI notice and above the subtitle area.
+   The official guide suggests introducing the team at the start of the video. They aren't said out loud. */
 export const Equipo: React.FC<{dur: number}> = ({dur}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const n = dur * fps;
   const v = interpolate(f, [8, 20, n - 12, n - 2], [0, 1, 1, 0], clamp);
-  // misma letra y sombra que los subtítulos, más chica y sin caja
+  // same font and shadow as the subtitles, smaller and without a box
   return (
     <div style={{position: "absolute", right: 44, bottom: 330, opacity: v, transform: `translateY(${(1 - Math.min(1, f / 20)) * 8}px)`,
       textAlign: "right", fontFamily: F.sans, fontWeight: 600, fontSize: 27, lineHeight: 1.3, letterSpacing: 0.2, color: "#fff",
@@ -100,7 +100,7 @@ export const Equipo: React.FC<{dur: number}> = ({dur}) => {
   );
 };
 
-/* Créditos de la imagen en pantalla, como ficha técnica chiquita. */
+/* Credits for the image on screen, like a tiny spec sheet. */
 export const Creditos: React.FC<{items: [string, string][]; opacidad?: number}> = ({items, opacidad = 1}) => (
   <div style={{position: "absolute", left: 40, bottom: 34, display: "flex", gap: 22, opacity: opacidad, fontFamily: F.mono, fontSize: 15,
     color: "rgba(231,235,241,0.78)", textShadow: "0 1px 3px rgba(0,0,0,0.9)"}}>
@@ -120,7 +120,7 @@ export const Placeholder: React.FC<{texto: string}> = ({texto}) => {
   );
 };
 
-/* Título de sección: entra grande al centro y se acomoda arriba a la izquierda. */
+/* Section title: comes in large at the center and settles at the top left. */
 export const TituloSeccion: React.FC<{numero?: string; titulo: string; bajada?: string; salida?: number}> = ({numero, titulo, bajada, salida = 26}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -151,7 +151,7 @@ export const TituloSeccion: React.FC<{numero?: string; titulo: string; bajada?: 
   );
 };
 
-/* Pin de ubicación que cae con rebote y deja un pulso. */
+/* Location pin that drops with a bounce and leaves a pulse. */
 export const PinUbicacion: React.FC<{x: number; y: number; texto: string; delay?: number}> = ({x, y, texto, delay = 0}) => {
   const frame = useCurrentFrame() - delay;
   const {fps} = useVideoConfig();

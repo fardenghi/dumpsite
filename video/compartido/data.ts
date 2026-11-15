@@ -1,6 +1,6 @@
-// Todo lo editable del video está acá.
-// - datos-reales.json: salidas del pipeline (scripts/preparar_assets.py).
-// - guion.json + voz.json: guion con emoción por frase y los tiempos reales de la voz (scripts/voz_azure.py).
+// Everything editable in the video is here.
+// - datos-reales.json: pipeline outputs (scripts/preparar_assets.py).
+// - guion.json + voz.json: script with emotion per sentence and the real voice timings (scripts/voz_azure.py).
 import reales from "./datos-reales.json";
 import voz from "../ingles/voz.json";
 
@@ -10,10 +10,10 @@ export const ALTO = 1080;
 
 type Frase = {id: string; archivo: string; inicio: number; duracion: number; texto: string};
 export const VOZ = voz as {voz: string; duracion_video: number; frases: Frase[]};
-export const DURACION_S = VOZ.duracion_video; // < 30 s (límite de Space Apps)
+export const DURACION_S = VOZ.duracion_video; // < 30 s (Space Apps limit)
 const f = (id: string) => VOZ.frases.find((x) => x.id === id)!;
 
-// Escenas sincronizadas con la voz: cada una arranca cuando empieza su frase.
+// Scenes synced with the voice: each one starts when its sentence starts.
 const finIntro = f("intro").inicio + f("intro").duracion + 0.35;
 export const ESCENAS = {
   ia: {desde: 0, hasta: finIntro},
@@ -25,28 +25,28 @@ export const ESCENAS = {
 };
 export const FRASES = VOZ.frases;
 
-// Mientras sea true, cada dato de ejemplo lleva una etiqueta discreta arriba a la derecha.
-// Integrantes, tal como figuran en la página del equipo en spaceappschallenge.org (aparecen al principio, abajo a la derecha)
+// While true, each example figure carries a discreet tag at the top right.
+// Team members, as listed on the team page at spaceappschallenge.org (they appear at the start, bottom right)
 export const NOMBRE_EQUIPO = "<=> (spaceship)";
 export const EQUIPO = ["Nicolas Priotto", "Agustín Tomás Romero", "Ezequiel Testoni", "Filipo Ardenghi", "Santiago Bassi", "Juan Ignacio Lategana"];
 
-export const MOSTRAR_PLACEHOLDERS = false; // ocultas en el video; lo único que falta reemplazar son las cifras finales (RESULTADOS)
+export const MOSTRAR_PLACEHOLDERS = false; // hidden in the video; the only thing left to replace is the final figures (RESULTADOS)
 
-// ---- PLACEHOLDER: cifras de ejemplo pedidas por el equipo hasta tener las reales ----
-// (La web hoy muestra datos reales del AMBA: 12 sitios analizados, 6 despiertos, 4 despiertos sin registro.)
+// ---- PLACEHOLDER: example figures requested by the team until the real ones are in ----
+// (The web currently shows real AMBA data: 12 sites analyzed, 6 awake, 4 awake without a record.)
 export const RESULTADOS = {
-  // Reales: web/src/data/seed/veredictos.json (flujo.py, 10 regiones). Índice de insomnio cruzado con catálogos, no del modelo.
-  encontrados: 42, // basurales de catálogos que el radar ve activos
-  sinRegistro: 13, // de ellos, figuran cerrados pero siguen activos (sin verificar a mano)
+  // Real: web/src/data/seed/veredictos.json (flujo.py, 10 regions). Insomnia index crossed with catalogs, not from the model.
+  encontrados: 42, // catalog dump sites that the radar sees as active
+  sinRegistro: 13, // of those, listed as closed but still active (not checked by hand)
   registro: 0,
   region: "Buenos Aires, Argentina",
-  url: "dumpsite.earth", // PLACEHOLDER hasta tener el deploy
-  repo: "github.com/fardenghi/dumpsite", // PLACEHOLDER: confirmar el repo público
+  url: "dumpsite.earth", // PLACEHOLDER until there's a deploy
+  repo: "github.com/fardenghi/dumpsite", // PLACEHOLDER: confirm the public repo
 }
 
-// ---- PLACEHOLDER: salida de la CNN por recorte (la clase OSM de cada recorte sí es real) ----
+// ---- PLACEHOLDER: CNN output per crop (the OSM class of each crop is real) ----
 export const EJEMPLOS_CNN = [
-  // Salida del clasificador (LightGBM): "classified as a dump by the model", nunca "confirmado".
+  // Classifier output (LightGBM): "classified as a dump by the model", never "confirmed".
   {id: "norte3-disp", clase: "Dump", detalle: "classified by the model", basural: true},
   {id: "el-palomar", clase: "Something else", detalle: "an airfield", basural: false},
   {id: "tres-febrero", clase: "Something else", detalle: "a quarry", basural: false},

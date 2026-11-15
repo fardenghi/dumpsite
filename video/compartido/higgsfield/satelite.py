@@ -1,9 +1,9 @@
-"""Clip 1 v2: arranca en el satélite NISAR (render oficial como primer cuadro) y baja hasta un basural.
+"""Clip 1 v2: starts at the NISAR satellite (official render as the first frame) and descends to a dump site.
 
-Seedance 2.5 image-to-video, borrador 480p (draft), 10 s (se acelera en Remotion), sin audio. La credencial sale de video/.env.local (HF_KEY).
-Uso (desde video/compartido/higgsfield, con un venv que tenga higgsfield-client, python-dotenv y pillow):
+Seedance 2.5 image-to-video, 480p draft, 10 s (sped up in Remotion), no audio. The credential comes from video/.env.local (HF_KEY).
+Usage (from video/compartido/higgsfield, with a venv that has higgsfield-client, python-dotenv and pillow):
     python -u satelite.py
-Después: ./montar_clip.sh salidas/satelite-draft-HHMMSS.mp4  (deja public/clip1-ai.mp4)
+Then: ./montar_clip.sh salidas/satelite-draft-HHMMSS.mp4  (leaves public/clip1-ai.mp4)
 """
 import json
 import os
@@ -19,7 +19,7 @@ load_dotenv(HERE.parents[1] / ".env.local")  # video/.env.local
 import higgsfield_client  # noqa: E402
 
 MODEL = "bytedance/seedance-2.5/image-to-video"
-RENDER = HERE / "nisar-primer-cuadro.jpg"  # render oficial de NISAR (NASA/JPL-Caltech) usado como primer cuadro
+RENDER = HERE / "nisar-primer-cuadro.jpg"  # official NISAR render (NASA/JPL-Caltech) used as the first frame
 
 PROMPT = (
     "Cinematic, slow and smooth continuous shot that starts exactly on this image: the NISAR satellite in orbit above Earth, "

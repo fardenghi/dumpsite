@@ -1,12 +1,12 @@
-"""Prepara los assets reales del video en public/.
+"""Prepares the video's real assets in public/.
 
-Todo sale de archivos del repo (salidas del pipeline y seed de la web) más imagen Sentinel-2 sin nubes
-de EOX (s2maps.eu, "Sentinel-2 cloudless 2021 by EOX IT Services GmbH, contains modified Copernicus
-Sentinel data 2021", CC BY-NC-SA 4.0). No se inventa ningún dato: lo que todavía no existe queda como
-placeholder en compartido/data.ts. La serie de Sentinel-2 y los recortes del catálogo los arma
-compartido/scripts/serie_y_catalogo.py (este script conserva esas claves). El clip de IA no se toca acá.
+Everything comes from repo files (pipeline outputs and the web seed) plus cloud-free Sentinel-2 imagery
+from EOX (s2maps.eu, "Sentinel-2 cloudless 2021 by EOX IT Services GmbH, contains modified Copernicus
+Sentinel data 2021", CC BY-NC-SA 4.0). No data is made up: what doesn't exist yet stays as a
+placeholder in compartido/data.ts. The Sentinel-2 series and the catalog crops are built by
+compartido/scripts/serie_y_catalogo.py (this script keeps those keys). The AI clip isn't touched here.
 
-Uso (desde video/):  python3 -I compartido/scripts/preparar_assets.py
+Usage (from video/):  python3 -I compartido/scripts/preparar_assets.py
 """
 import io
 import json
@@ -17,7 +17,7 @@ import urllib.request
 
 from PIL import Image, ImageDraw
 
-VIDEO = pathlib.Path(__file__).resolve().parents[2]   # la carpeta video/
+VIDEO = pathlib.Path(__file__).resolve().parents[2]   # the video/ folder
 REPO = VIDEO.parent
 SALIDAS = REPO / "data" / "salidas"
 MOTOR = REPO / "motor"
@@ -47,7 +47,7 @@ def tile_img(z, x, y):
 
 
 def mosaic_bbox(w, s, e, n, z):
-    """Mosaico Web Mercator recortado exacto a la caja (oeste, sur, este, norte)."""
+    """Web Mercator mosaic cropped exactly to the box (west, south, east, north)."""
     x0, y0 = lonlat_to_global_px(w, n, z)
     x1, y1 = lonlat_to_global_px(e, s, z)
     tx0, ty0, tx1, ty1 = int(x0 // 256), int(y0 // 256), int(x1 // 256), int(y1 // 256)
@@ -65,7 +65,7 @@ def caja_centro(lat, lon, km):
 
 
 def to_norm(lon, lat, caja):
-    """Coordenadas normalizadas 0..1 dentro de una caja Web Mercator (x a la derecha, y hacia abajo)."""
+    """Normalized 0..1 coordinates within a Web Mercator box (x to the right, y downward)."""
     w, s, e, n = caja
     return (lon - w) / (e - w), (merc_y(n) - merc_y(lat)) / (merc_y(n) - merc_y(s))
 
@@ -74,13 +74,13 @@ def main():
     indice = json.loads((SEED / "indice.json").read_text())
     amba = (indice["oeste"], indice["sur"], indice["este"], indice["norte"])
 
-    # 1. Índice real (PNG de la web) y Sentinel-2 del AMBA con la misma caja y proporción
+    # 1. Real index (the web's PNG) and AMBA Sentinel-2 with the same box and aspect ratio
     shutil.copy(REPO / "web" / "public" / indice["url"], PUB / "insomnio-amba.png")
     s2 = mosaic_bbox(*amba, z=12).resize((2800, 2010), Image.LANCZOS)
     s2.save(PUB / "s2-amba.jpg", quality=88)
     print("s2-amba.jpg", s2.size)
 
-    # 2. Norte III: recorte de 6 km a z15 con su polígono de OSM
+    # 2. Norte III: 6 km crop at z15 with its OSM polygon
     contornos = json.loads((SEED / "contornos.json").read_text())
     anillo = contornos["norte-iii"]["coordinates"][0]
     lat_c = sum(p[1] for p in anillo) / len(anillo)
@@ -90,7 +90,7 @@ def main():
     n3.save(PUB / "s2-norte3.jpg", quality=88)
     print("s2-norte3.jpg", n3.size)
 
-    # 3. Recortes de las cuatro manchas candidatas para el clip de la CNN (2,24 km, como la entrada de la red)
+    # 3. Crops of the four candidate blobs for the CNN clip (2.24 km, like the network's input)
     candidatos = json.loads((SEED / "candidatos.json").read_text())
     elegidos = [
         ("norte3-disp", -34.5440, -58.6069),
@@ -107,19 +107,19 @@ def main():
         chips.append({"id": nombre, "lat": c["lat"], "lon": c["lon"], "ha": c["ha"], "insomnio": c["insomnio"],
                       "clase_osm": c["clase"], "que_osm": c["que"], "x": round(x, 5), "y": round(y, 5)})
 
-    # 4. Mundo (z3) para el zoom hacia atrás del clip 5
+    # 4. World (z3) for the zoom-out of clip 5
     mundo = Image.new("RGB", (2048, 2048))
     for tx in range(8):
         for ty in range(8):
             mundo.paste(tile_img(3, tx, ty), (tx * 256, ty * 256))
     mundo.save(PUB / "s2-mundo.jpg", quality=85)
 
-    # 5. Datos del pipeline para animar
+    # 5. Pipeline data to animate
     fichas = json.loads((SALIDAS / "fichas_80m.json").read_text())
     resumen = json.loads((SALIDAS / "resumen_80m.json").read_text())
     f = fichas["norte-iii"]
     pares = sorted(f["pares"], key=lambda p: (p["orbita"], p["fecha"]))
-    # Conservar lo que se armó con pasos aparte (serie Sentinel-2 por fecha y mosaico de entrenamiento).
+    # Keep what was built in separate steps (Sentinel-2 series by date and training mosaic).
     previo_path = VIDEO / "compartido" / "datos-reales.json"
     previo = json.loads(previo_path.read_text()) if previo_path.exists() else {}
     data = {
@@ -143,8 +143,8 @@ def main():
     (VIDEO / "compartido" / "datos-reales.json").write_text(json.dumps(data, ensure_ascii=False, indent=1))
     print("datos-reales.json:", len(pares), "pares de Norte III,", len(candidatos), "candidatos")
 
-    # 5b. Lo que ve NISAR: coherencia media real de las 15 comparaciones de pasadas (GUNW, 80 m),
-    # recortada a la misma zona de 6 km. Claro = el suelo no cambió entre pasadas; oscuro = cambió.
+    # 5b. What NISAR sees: real mean coherence of the 15 pass comparisons (GUNW, 80 m),
+    # cropped to the same 6 km area. Light = the ground didn't change between passes; dark = it changed.
     import sys
     import numpy as np
     sys.path.insert(0, str(MOTOR))
@@ -158,7 +158,7 @@ def main():
     rec = coh[filas.min():filas.max() + 1, cols.min():cols.max() + 1]
     rec = np.nan_to_num(rec, nan=0.0)
     v = np.clip((rec - 0.25) / (0.9 - 0.25), 0, 1)
-    # rampa: casi negro -> azul radar -> blanco frío
+    # ramp: near black -> radar blue -> cold white
     paleta = np.array([[4, 8, 14], [20, 52, 78], [64, 150, 190], [190, 230, 240], [250, 252, 255]], dtype=float)
     pos = v * (len(paleta) - 1)
     i0 = np.floor(pos).astype(int).clip(0, len(paleta) - 2)
@@ -169,7 +169,7 @@ def main():
     y0, y1 = ys[filas.min()] + 40, ys[filas.max()] - 40
     pol_utm = [utm(la, lo) for lo, la in anillo]
     data["norte3"]["poligono_nisar"] = [[round((x - x0) / (x1 - x0), 5), round((y0 - y) / (y0 - y1), 5)] for x, y in pol_utm]
-    # Versión amplia (14 km) y suavizada, para mostrar "lo que ve el radar" sin el aspecto pixelado.
+    # Wide (14 km) smoothed version, to show "what the radar sees" without the pixelated look.
     from PIL import ImageFilter
     lado2 = 14000.0
     cols2 = np.where((xs >= cx - lado2 / 2) & (xs <= cx + lado2 / 2))[0]

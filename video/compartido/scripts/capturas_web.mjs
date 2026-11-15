@@ -1,10 +1,10 @@
-// Capturas de la web (en castellano) para el video local: public/web/es-*.png, 1920 × 1080.
+// Screenshots of the web (in Spanish) for the local video: public/web/es-*.png, 1920 × 1080.
 // Uso (desde video/):
-//   1. Servir la web:  cd ../web && npm run build && npx vite preview --port 4174 --strictPort
+//   1. Serve the web:  cd ../web && npm run build && npx vite preview --port 4174 --strictPort
 //   2. npm i --no-save puppeteer-core
 //   3. node compartido/scripts/capturas_web.mjs <ruta a chrome o chrome-headless-shell> public/web
-// Remotion trae chrome-headless-shell en node_modules/.remotion/. En Ubuntu hace falta --no-sandbox (AppArmor).
-// Las capturas en inglés (mapa, inicio, sitios, modelo) salieron de la rama web-ingles con este mismo método.
+// Remotion ships chrome-headless-shell in node_modules/.remotion/. On Ubuntu it needs --no-sandbox (AppArmor).
+// The English screenshots (map, home, sites, model) came from the web-ingles branch with this same method.
 import puppeteer from "puppeteer-core";
 const [,, chrome, out] = process.argv;
 const b = await puppeteer.launch({executablePath: chrome, args: ["--no-sandbox", "--hide-scrollbars"], defaultViewport: {width: 1920, height: 1080}});

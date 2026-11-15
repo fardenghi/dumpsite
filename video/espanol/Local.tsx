@@ -1,6 +1,6 @@
-// Video para el jurado local de Buenos Aires: hasta 3 minutos, en castellano, mismo estilo que el internacional.
-// Cifras: docs/idea.md, docs/indice-insomnio.md, data/catalogos/basurales (catálogo), web seed/veredictos.json. Ver guion-es.json.
-// Cada escena arranca cuando arranca su frase en voz-es.json: si cambia la voz, las escenas se reacomodan solas (ver video/VOZ-GRABADA.md).
+// Video for the local Buenos Aires jury: up to 3 minutes, in Spanish, same style as the international one.
+// Figures: docs/idea.md, docs/indice-insomnio.md, data/catalogos/basurales (catalog), web seed/veredictos.json. See guion-es.json.
+// Each scene starts when its sentence starts in voz-es.json: if the voice changes, the scenes rearrange themselves (see video/VOZ-GRABADA.md).
 import React from "react";
 import {AbsoluteFill, Easing, Html5Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {ALTO, ANCHO, DATOS, FPS, RESULTADOS, fechaCorta} from "../compartido/data";
@@ -14,7 +14,7 @@ type Frase = {id: string; archivo: string; inicio: number; duracion: number; tex
 const VOZ_ES = voz as {duracion_video: number; frases: Frase[]};
 export const DURACION_LOCAL = VOZ_ES.duracion_video;
 const fr = (id: string) => VOZ_ES.frases.find((x) => x.id === id)!;
-// segundos desde el inicio de la frase en que empieza un fragmento (proporcional a los caracteres)
+// seconds from the start of the sentence at which a fragment starts (proportional to the characters)
 const dentro = (id: string, desde: string) => {
   const x = fr(id);
   return Math.max(0, (x.texto.indexOf(desde) / x.texto.length) * x.duracion);
@@ -40,7 +40,7 @@ const Grande: React.FC<{valor: string; color: string; texto: string; nota?: stri
   </div>
 );
 
-/* 1 · Problema (sobre el final del clip de IA, en cámara lenta) */
+/* 1 · Problem (over the end of the AI clip, in slow motion) */
 const Problema: React.FC<{dur: number; t2: number}> = ({dur, t2}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -60,7 +60,7 @@ const Problema: React.FC<{dur: number; t2: number}> = ({dur, t2}) => {
   );
 };
 
-/* Transición: pulso de radar que revela la imagen satelital */
+/* Transition: radar pulse that reveals the satellite image */
 const Pulso: React.FC<{dur: number}> = ({dur}) => {
   const f = useCurrentFrame();
   const p = interpolate(f, [0, s(dur)], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
@@ -211,7 +211,7 @@ const Insomnio: React.FC<{dur: number; tB: number; tC: number}> = ({dur, tB, tC}
   );
 };
 
-/* 4 · Casos reales en la web: Luján, Norte III, González Catán */
+/* 4 · Real cases on the web: Luján, Norte III, González Catán */
 const Casos: React.FC<{dur: number; t2: number}> = ({dur, t2}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -245,7 +245,7 @@ const Casos: React.FC<{dur: number; t2: number}> = ({dur, t2}) => {
   );
 };
 
-/* 5 · Datos: catálogo mundial y lo que se le parece */
+/* 5 · Data: world catalog and what looks like it */
 const Datos: React.FC<{dur: number; t2: number}> = ({dur, t2}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -361,7 +361,7 @@ const Modelo: React.FC<{dur: number; t2: number; t3: number}> = ({dur, t2, t3}) 
           ) : null;
         })}
       </AbsoluteFill>
-      {/* validación por ciudad */}
+      {/* validation by city */}
       <div style={{position: "absolute", left: 0, right: 0, top: 660, textAlign: "center", opacity: val}}>
         <Texto size={34}>Validación: se deja <b style={{color: C.glow}}>una ciudad entera afuera</b> y se predice esa</Texto>
         <div style={{display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 10, marginTop: 14}}>
@@ -378,7 +378,7 @@ const Modelo: React.FC<{dur: number; t2: number; t3: number}> = ({dur, t2, t3}) 
   );
 };
 
-/* 7 · Resultados reales (índice cruzado con catálogos) */
+/* 7 · Real results (index crossed with catalogs) */
 const REGIONES = ["Buenos Aires", "Los Ángeles", "Ciudad de México", "Delhi", "Yakarta", "Ponce", "Ohio", "Maryland", "New Hampshire", "Nueva York"];
 const Resultados: React.FC<{dur: number}> = () => {
   const f = useCurrentFrame();
@@ -402,7 +402,7 @@ const Resultados: React.FC<{dur: number}> = () => {
   );
 };
 
-/* 8 · Recorrido por la web */
+/* 8 · Tour of the web */
 const Web: React.FC<{dur: number}> = ({dur}) => {
   const f = useCurrentFrame();
   const n = dur * FPS;
@@ -504,7 +504,7 @@ const Cierre: React.FC<{dur: number; tLema: number}> = ({dur, tLema}) => {
   );
 };
 
-/* Composición */
+/* Composition */
 export const DumpsiteLocal: React.FC = () => {
   const t = (id: string) => fr(id).inicio;
   const tramos: [string, number, number][] = [

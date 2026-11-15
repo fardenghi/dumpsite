@@ -1,12 +1,12 @@
-"""Primer intento (descartado): Higgsfield Seedance 2.5 text-to-video, descenso desde el espacio hasta un basural.
+"""First attempt (discarded): Higgsfield Seedance 2.5 text-to-video, descent from space to a dump site.
 
-Se descartó porque el basural parecía tierra y aparecían topadoras. El clip que se usa sale de satelite.py.
+It was discarded because the dump looked like dirt and bulldozers showed up. The clip in use comes from satelite.py.
 
-Uso:
-    python descenso.py            # borrador 480p (draft), unos USD 0,59 por 5 s
-    python descenso.py --720p     # generación normal a 720p (precio no publicado en la doc)
+Usage:
+    python descenso.py            # 480p draft, about USD 0.59 per 5 s
+    python descenso.py --720p     # normal 720p generation (price not published in the docs)
 
-La credencial se lee de video/.env.local (HF_KEY=key-id:key-secret). El script nunca la imprime.
+The credential is read from video/.env.local (HF_KEY=key-id:key-secret). The script never prints it.
 """
 import argparse
 import json
@@ -40,7 +40,7 @@ PROMPT = (
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--720p", dest="hd", action="store_true", help="generación normal a 720p en vez de borrador")
+    parser.add_argument("--720p", dest="hd", action="store_true", help="normal 720p generation instead of a draft")
     args = parser.parse_args()
 
     if not os.getenv("HF_KEY"):
@@ -57,7 +57,7 @@ def main() -> int:
     if args.hd:
         arguments["resolution"] = "720p"
     else:
-        arguments["draft"] = True  # 480p, para revisar antes de pagar 1080p
+        arguments["draft"] = True  # 480p, to review before paying for 1080p
 
     def on_enqueue(request_id: str) -> None:
         print(f"Pedido encolado: {request_id}", flush=True)
@@ -71,7 +71,7 @@ def main() -> int:
     except higgsfield_client.CredentialsMissedError:
         print("Credencial ausente o mal formada en .env.local.", file=sys.stderr)
         return 2
-    except Exception as e:  # errores HTTP: clave inválida, sin saldo, parámetros
+    except Exception as e:  # HTTP errors: invalid key, no balance, parameters
         print(f"La API rechazó el pedido: {type(e).__name__}: {e}", file=sys.stderr)
         return 1
 

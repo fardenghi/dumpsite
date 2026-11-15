@@ -9,7 +9,7 @@ const s = (seg: number) => Math.round(seg * FPS);
 const tramo = (e: {desde: number; hasta: number}) => ({from: s(e.desde), durationInFrames: Math.max(1, s(e.hasta) - s(e.desde))});
 const dur = (e: {desde: number; hasta: number}) => e.hasta - e.desde;
 
-// Segundos (desde el inicio de la frase) en que empieza una parte, proporcional a los caracteres.
+// Seconds (from the start of the sentence) at which a part starts, proportional to the characters.
 const inicioDe = (id: string, desde: string) => {
   const fr = FRASES.find((x) => x.id === id)!;
   return (fr.texto.indexOf(desde) / fr.texto.length) * fr.duracion;
