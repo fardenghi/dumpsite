@@ -47,12 +47,17 @@ export function fueraDelAmba(v: Veredictos | null): Veredicto[] {
 /** Las manchas despiertas que no están en ningún catálogo y que el modelo lee como basural: lo que el sistema busca.
  * Quedan afuera las que OpenStreetMap ya explica con otro uso (un aeródromo, una reserva, una cantera). */
 export function posiblesNuevos(v: Veredictos | null): Veredicto[] {
-  return (v?.sitios ?? []).filter((x) => x.tipo === 'mancha' && x.veredicto === 'posible_nuevo' && !x.que && typeof x.lat === 'number' && typeof x.lon === 'number')
+  return (v?.sitios ?? []).filter((x) => esNuevo(x) && !x.que && typeof x.lat === 'number' && typeof x.lon === 'number')
 }
+
+/** Puntaje mínimo del clasificador de "basural contra otra cosa" para destacar una mancha como posible basural nuevo.
+ * El flujo corta en 0,5 (`veredicto = posible_nuevo`); el equipo lo bajó a 0,4 el 15/11 para la web. */
+export const UMBRAL_NUEVO = 0.4
+const esNuevo = (x: Veredicto) => x.tipo === 'mancha' && typeof x.p_basural === 'number' && x.p_basural >= UMBRAL_NUEVO
 
 /** Las manchas que el flujo marca como posible basural nuevo pero OpenStreetMap explica con otro uso. */
 export function nuevosConUsoConocido(v: Veredictos | null): number {
-  return (v?.sitios ?? []).filter((x) => x.tipo === 'mancha' && x.veredicto === 'posible_nuevo' && !!x.que).length
+  return (v?.sitios ?? []).filter((x) => esNuevo(x) && !!x.que).length
 }
 
 /** Los polígonos del catálogo con dato de radar que el mapa dibuja como punto: los de los otros frames y los del AMBA

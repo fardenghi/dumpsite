@@ -10,7 +10,7 @@ import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/go
 import indice from '../data/seed/indice.json'
 import { ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
 import { UMBRAL_BAJO, type Imagen, type Sitio, type Veredicto } from '../data/types'
-import { FRAME_AMBA, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
+import { FRAME_AMBA, UMBRAL_NUEVO, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
 // El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
@@ -31,7 +31,7 @@ const COLOR_NUEVO = '#ffd21f'
 const COLOR_SIN_DATO = '#9db4e8'
 // el índice de insomnio fuera del AMBA: las manchas, con la misma paleta que el PNG del AMBA (magma, de 0,3 a 1)
 const MAGMA = ['interpolate', ['linear'], ['get', 'i'], 0.3, '#641a80', 0.55, '#b73779', 0.8, '#fc8961', 1, '#fcfdbf'] as unknown as maplibregl.ExpressionSpecification
-const ES_NUEVO = ['all', ['==', ['get', 'v'], 'posible_nuevo'], ['==', ['get', 'q'], 0]] as unknown as maplibregl.FilterSpecification
+const ES_NUEVO = ['all', ['>=', ['coalesce', ['get', 'p'], 0], UMBRAL_NUEVO], ['==', ['get', 'q'], 0]] as unknown as maplibregl.FilterSpecification
 // las capas que se pueden tocar, de más a menos importante: si hay varias debajo del cursor gana la primera
 const TOCABLES = ['punto', 'aro', 'contorno-relleno', 'nuevos', 'otros', 'catalogo']
 // la vista de partida es el AMBA entero: la grilla del índice de insomnio
@@ -548,18 +548,23 @@ export default function Mapa() {
       }),
     }
     m.addSource('frames', { type: 'geojson', data: cajas })
-    m.addLayer({ id: 'frames', type: 'line', source: 'frames', paint: { 'line-color': '#fc8961', 'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1, 6, 1.5], 'line-opacity': 0.9, 'line-dasharray': [3, 2] } }, m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined)
+    // de lejos una región mide pocos píxeles y sus manchas no se ven: el recuadro va lleno y arriba de los puntos, y se aclara
+    // al acercarse, cuando ya se ven las manchas. No se puede tocar: los clics siguen llegando a los puntos de abajo
+    m.addLayer({ id: 'frames-relleno', type: 'fill', source: 'frames', paint: { 'fill-color': '#fc8961', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.85, 5, 0.6, 6.5, 0.15, 8, 0] } })
+    m.addLayer({ id: 'frames', type: 'line', source: 'frames', paint: { 'line-color': '#fcfdbf', 'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 6, 2], 'line-opacity': 0.95 } })
   }, [listo, sitios, frames])
 
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios || !manchas || m.getSource('manchas')) return
-    const fueraDelAmba: FeatureCollection = { ...manchas, features: manchas.features.filter((f) => !String(f.properties?.id).startsWith(`MAN-${FRAME_AMBA}-`)) }
-    const debajoDe = ['frames', 'contorno-relleno'].find((c) => m.getLayer(c))
-    m.addSource('manchas', { type: 'geojson', data: fueraDelAmba })
-    m.addLayer({ id: 'manchas', type: 'fill', source: 'manchas', paint: { 'fill-color': MAGMA, 'fill-opacity': 0.8, 'fill-antialias': false } }, debajoDe)
+    // el AMBA ya tiene el índice completo como imagen: sus manchas no se pintan, pero sí el contorno de las que son posibles nuevos
+    const prefijo = `MAN-${FRAME_AMBA}-`
+    const fueraDelAmba = ['!=', ['slice', ['get', 'id'], 0, prefijo.length], prefijo] as unknown as maplibregl.FilterSpecification
+    const debajoDe = m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined
+    m.addSource('manchas', { type: 'geojson', data: manchas })
+    m.addLayer({ id: 'manchas', type: 'fill', source: 'manchas', filter: fueraDelAmba, paint: { 'fill-color': MAGMA, 'fill-opacity': 0.8, 'fill-antialias': false } }, debajoDe)
     // de lejos una mancha mide menos que un píxel de pantalla: sin esta línea el índice no se vería hasta acercarse
-    m.addLayer({ id: 'manchas-borde', type: 'line', source: 'manchas', maxzoom: 9, paint: { 'line-color': MAGMA, 'line-width': 1.2, 'line-opacity': 0.9 } }, debajoDe)
+    m.addLayer({ id: 'manchas-borde', type: 'line', source: 'manchas', maxzoom: 9, filter: fueraDelAmba, paint: { 'line-color': MAGMA, 'line-width': 1.2, 'line-opacity': 0.9 } }, debajoDe)
     // el contorno de los posibles basurales nuevos queda siempre, con el índice prendido o apagado
     m.addLayer({ id: 'nuevo-contorno', type: 'line', source: 'manchas', minzoom: 8, filter: ES_NUEVO, layout: { 'line-join': 'round' }, paint: { 'line-color': COLOR_NUEVO, 'line-width': 2.5 } }, ['nuevos-halo', 'halo'].find((c) => m.getLayer(c)))
     m.addLayer({ id: 'nuevo-relleno', type: 'fill', source: 'manchas', minzoom: 8, filter: ES_NUEVO, paint: { 'fill-color': COLOR_NUEVO, 'fill-opacity': 0.12 } }, 'nuevo-contorno')
@@ -596,7 +601,7 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    for (const capa of ['indice', 'frames', 'manchas', 'manchas-borde']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', verIndice ? 'visible' : 'none')
+    for (const capa of ['indice', 'frames', 'frames-relleno', 'manchas', 'manchas-borde']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', verIndice ? 'visible' : 'none')
   }, [listo, sitios, frames, manchas, verIndice])
 
   // the dump sites of the other frames: one point per catalog polygon, under the AMBA sites
@@ -898,7 +903,7 @@ export default function Mapa() {
             <div />
             <span>{getLang() === 'es' ? '0,3' : '0.3'}</span>
             <span>1</span>
-            {frames && frames.length > 1 && <small>{t('Línea punteada: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas')}</small>}
+            {frames && frames.length > 1 && <small>{t('Recuadro: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas: acercate a un recuadro para verlas')}</small>}
           </div>
         )}
         {otros.length > 0 && (

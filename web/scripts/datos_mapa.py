@@ -110,7 +110,10 @@ def geometria(g):
 
 def manchas():
     crudo = leer(RAIZ, "idea-basurales-nisar", "salidas", "manchas.geojson")
-    veredicto = {v["id"]: v["veredicto"] for v in leer(WEB, "src", "data", "seed", "veredictos.json")["sitios"] if v["tipo"] == "mancha"}
+    del_flujo = {v["id"]: v for v in leer(WEB, "src", "data", "seed", "veredictos.json")["sitios"] if v["tipo"] == "mancha"}
+    veredicto = {i: v["veredicto"] for i, v in del_flujo.items()}
+    # p: puntaje del clasificador de "basural contra otra cosa", si el flujo lo calculó; la web decide con qué umbral destacar
+    puntaje = {i: round(v["p_basural"], 3) for i, v in del_flujo.items() if v.get("p_basural") is not None}
     features = []
     for f in crudo["features"]:
         p = f["properties"]
@@ -118,7 +121,8 @@ def manchas():
             "type": "Feature",
             "geometry": geometria(f["geometry"]),
             # v: el veredicto de flujo.py; las manchas chicas que el flujo no lista quedan como descartadas
-            "properties": {"id": p["id_mancha"], "i": p["insomnio"], "v": veredicto.get(p["id_mancha"], "descartada"), "q": 1 if p.get("que") else 0},
+            "properties": {"id": p["id_mancha"], "i": p["insomnio"], "v": veredicto.get(p["id_mancha"], "descartada"), "q": 1 if p.get("que") else 0,
+                           **({"p": puntaje[p["id_mancha"]]} if p["id_mancha"] in puntaje else {})},
         })
     escribir("manchas.geojson", {
         "type": "FeatureCollection",

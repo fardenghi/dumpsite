@@ -43,14 +43,14 @@ python3 scripts/datos_mapa.py
 |---|---|---|
 | `public/datos/catalogo.json` (2,7 MB) | `../data/basurales/basurales_mundo.json` | Los 66.981 basurales del catálogo, en columnas. Los que no caen en un frame procesado van como puntos chicos celestes, **"Sin dato de radar"**: la ficha muestra nombre, país, superficie y fuente, y dice que no hay índice (sin el estado de ningún registro, como el resto de la web) |
 | `public/datos/manchas.geojson` (6,3 MB) | `../idea-basurales-nisar/salidas/manchas.geojson` + `seed/veredictos.json` | Las 20.589 manchas despiertas de los 30 frames, simplificadas a un píxel de 80 m. Con "Índice de insomnio" prendido se pintan por insomnio con la paleta del PNG del AMBA |
-| `public/datos/frames.json` | `../data/frames.json` | La caja de cada frame (línea punteada, con el índice prendido), su ciudad y su país |
+| `public/datos/frames.json` | `../data/frames.json` | La caja de cada frame (recuadro lleno de lejos, que se aclara al acercarse; con el índice prendido), su ciudad y su país |
 
 El mismo script escribe `src/data/seed/calibracion.json` desde `../idea-basurales-nisar/salidas/resumen_80m.json` y `calibracion_80m.json`: superficies de la grilla, descartes del embudo, umbrales elegidos y su rango válido. **El panel Modelo ya no tiene números escritos en el código**: los lee de ahí.
 
 - **Colores:** coral, verde agua y blanco son el veredicto del radar (despierto, quieto, no alcanza). **Amarillo es "posible basural nuevo"**: una mancha despierta que no está en ningún catálogo y que el modelo lee como basural (`veredicto = posible_nuevo` en `veredictos.json`). Va arriba de todo, con halo, y desde el zoom 8 con su contorno. Celeste es el catálogo sin dato de radar.
-- **De los 163 "posibles nuevos" del flujo se destacan 131.** Los otros 32 caen sobre algo que OpenStreetMap ya explica (aeródromos, reservas, canteras, golf: por ejemplo el aeropuerto de Los Ángeles) y no se pintan de amarillo. La regla está en `posiblesNuevos` (`src/data/veredictos.ts`). Ninguno está verificado.
+- **Se destacan 174 manchas: las que tienen puntaje de basural de 0,4 o más** (`UMBRAL_NUEVO` en `src/data/veredictos.ts`; el flujo corta en 0,5 y da 168, el equipo lo bajó el 15/11). Otras 40 con ese puntaje caen sobre algo que OpenStreetMap ya explica (aeródromos, reservas, canteras, golf: por ejemplo el aeropuerto de Los Ángeles) y no se pintan de amarillo. La regla está en `posiblesNuevos` (`src/data/veredictos.ts`). Ninguno está verificado.
 - **El índice completo, píxel por píxel, sólo está para el AMBA** (`public/indice/insomnio-amba.png`). De los otros 29 frames el repo tiene las manchas (el índice por encima del umbral, vectorizado), no la grilla: para tener la imagen completa hay que exportar un PNG por frame desde la máquina donde están los GUNW.
-- En el AMBA no hay modelo de "basural contra otra cosa", así que no hay posibles nuevos: sus manchas sin catálogo quedan sin clasificar.
+- Desde la corrida del 15/11 a la tarde el AMBA también tiene predicción del clasificador: 7 de los 174 están ahí.
 
 ### Umbral bajo (decisión del equipo, 15/11)
 Los sitios que el pipeline deja en "no alcanza" (predio chico, superficie lisa o señal intermedia) **se muestran como despiertos si su insomnio medido es mayor que 0,2**, el techo de "quieto" del índice. Es una regla de la web, no del pipeline: `conUmbralBajo` en `src/data/types.ts` se aplica al cargar `sitios.json` y `veredictos.json`, que no se tocan, y deja la marca `umbral_bajo`. La ficha y el panel Modelo lo dicen ("Despierto con el umbral bajo").

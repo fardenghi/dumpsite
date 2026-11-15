@@ -238,7 +238,8 @@ const EN: Record<string, string> = {
   'Basurales del catálogo donde todavía no procesamos pasadas de NISAR': 'Catalog dump sites where we have not processed NISAR passes yet',
   'En el AMBA, el índice completo ({0} comparaciones de NISAR, del {1} al {2}). En las otras regiones, las manchas donde el índice supera el umbral':
     'In Greater Buenos Aires, the full index ({0} NISAR comparisons, {1} to {2}). In the other regions, the patches where the index exceeds the threshold',
-  'Línea punteada: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas': 'Dashed line: each region processed with NISAR. Outside Greater Buenos Aires, the awake patches are painted',
+  'Recuadro: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas: acercate a un recuadro para verlas':
+    'Box: each region processed with NISAR. Outside Greater Buenos Aires, the awake patches are painted: zoom into a box to see them',
   ' · Catálogo de basurales: © OpenStreetMap vía Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT': ' · Dump-site catalog: © OpenStreetMap via Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT',
   'Buscar por nombre, ciudad o país': 'Search by name, city or country',
   'Buscar': 'Search',
