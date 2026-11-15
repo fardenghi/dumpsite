@@ -223,7 +223,7 @@ const EN: Record<string, string> = {
   'Mancha que el radar NISAR nunca ve quieta y que no está en ninguno de los catálogos de basurales. Señal compatible con actividad, sin verificar en terreno':
     'A patch the NISAR radar never sees at rest and that is in none of the dump-site catalogs. Signal consistent with activity, not verified on the ground',
   'Basural sin nombre': 'Unnamed dump site',
-  'Sin dato de radar': 'No radar data',
+  'Sin dato de radar': 'Not processed yet',
   'Está en el catálogo de basurales, pero todavía no procesamos pasadas de NISAR sobre este lugar: no hay índice de insomnio':
     'It is in the dump-site catalog, but we have not processed NISAR passes over this place yet: there is no insomnia index',
   'Fuente del catálogo: {0}': 'Catalog source: {0}',
