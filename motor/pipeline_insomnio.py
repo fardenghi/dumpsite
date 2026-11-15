@@ -112,14 +112,17 @@ def buscar(args):
     norte, oeste, sur, este = fr.caja
     params = {
         "dataset": "NISAR",
-        "processingLevel": "GUNW,GCOV",
         "intersectsWith": f"POLYGON(({oeste} {norte},{este} {norte},{este} {sur},{oeste} {sur},{oeste} {norte}))",
         "output": "jsonlite",
         "maxResults": "5000",
     }
-    url = API_ASF + "?" + urllib.parse.urlencode(params)
-    with urllib.request.urlopen(url, timeout=120) as r:
-        resultados = json.load(r)["results"]
+    # Una consulta por tipo: donde hay muchos productos, la respuesta de los dos juntos pasa el tamaño que la API
+    # devuelve y sale un 502 (pasó con USA_TX_HARRIS y USA_CA_SAN_JOAQUIN: 3 MB de GUNW más 4 MB de GCOV).
+    resultados = []
+    for nivel in ("GUNW", "GCOV"):
+        url = API_ASF + "?" + urllib.parse.urlencode({**params, "processingLevel": nivel})
+        with urllib.request.urlopen(url, timeout=120) as r:
+            resultados += json.load(r)["results"]
     desde, hasta = (fr.desde or "").replace("-", ""), (fr.hasta or "").replace("-", "")
     solo = {(int(x.split("_")[0]), int(x.split("_")[-1])) for x in fr.frames_nisar}  # (órbita, frame de NISAR) de frames.json
     elegidos = {}
@@ -368,7 +371,9 @@ def procesar(args):
     tareas = {a: (a, args.capa, carpeta, args.remoto, fr.caja, fr.epsg) for a in archivos}
     # Procesos nuevos (spawn) y no copias (fork): la sesión remota y h5py no sobreviven bien a un fork. Cada proceso
     # se recicla cada pocos archivos, para que no junte memoria. Si el sistema mata un proceso, se sigue con lo que falta.
-    reciclar = {"max_tasks_per_child": 6} if sys.version_info >= (3, 11) else {}
+    # Sólo desde Python 3.12.4: en la VM, reciclar procesos dejaba colgado el pool (compatible con cpython gh-115634)
+    # (Ubuntu 24.04, Python 3.12.3): `procesar` se quedaba esperando para siempre; sin reciclar, no volvió a pasar.
+    reciclar = {"max_tasks_per_child": 6} if sys.version_info >= (3, 12, 4) else {}
     for vuelta in range(4):
         hechos = set()
         try:
