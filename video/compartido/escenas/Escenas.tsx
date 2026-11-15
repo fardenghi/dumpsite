@@ -2,7 +2,7 @@ import React from "react";
 import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {ANCHO, ALTO, DATOS, EJEMPLOS_CNN, Par, RESULTADOS, fechaCorta} from "../data";
 import {C, F} from "../theme";
-import {AvisoIA, Creditos, PinUbicacion, Placeholder, TituloSeccion} from "../components/Overlays";
+import {AvisoIA, Creditos, Equipo, PinUbicacion, Placeholder, TituloSeccion} from "../components/Overlays";
 import {MapaAmba, caminoPoligono, cajaNorte3EnAmba} from "../components/Mapa";
 
 export const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
@@ -50,6 +50,7 @@ export const EscenaIA: React.FC<{durTotal: number}> = ({durTotal}) => {
       <OffthreadVideo src={staticFile("clip1-ai.mp4")} playbackRate={4.733 / durTotal} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
       <AbsoluteFill style={{background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)"}} />
       <div style={{opacity: aviso}}><AvisoIA /></div>
+      <Equipo titulo="Team · NASA Space Apps 2026" dur={durTotal} />
     </AbsoluteFill>
   );
 };
