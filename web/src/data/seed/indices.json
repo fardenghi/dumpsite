@@ -896,6 +896,34 @@
   "alto": 1463
  },
  {
+  "frame": "USA_TX_HARRIS",
+  "url": "indice/insomnio-usa_tx_harris.png",
+  "oeste": -95.7759,
+  "sur": 29.3347,
+  "este": -95.0043,
+  "norte": 30.011,
+  "coordinates": [
+   [
+    -95.7759,
+    30.011
+   ],
+   [
+    -95.0043,
+    30.011
+   ],
+   [
+    -95.0043,
+    29.3347
+   ],
+   [
+    -95.7759,
+    29.3347
+   ]
+  ],
+  "ancho": 980,
+  "alto": 989
+ },
+ {
   "frame": "USA_VA_ROCKINGHAM",
   "url": "indice/insomnio-usa_va_rockingham.png",
   "oeste": -78.9536,
