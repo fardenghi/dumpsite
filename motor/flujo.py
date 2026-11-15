@@ -49,6 +49,7 @@ sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 import evaluar_actividad as ea  # noqa: E402
 import veredicto as ve  # noqa: E402
+import veredicto_estado as vest  # noqa: E402  (el modelo de abierto contra cerrado, al lado de la regla; no cambia veredictos)
 
 FUENTES_TODAS = ("epa_lmop", "curado_manual", "osm")
 FUENTES_SIN_OSM = ("epa_lmop", "curado_manual")
@@ -349,6 +350,7 @@ def main(argv=None):
     vs, por_frame, ic, entradas, modelo = correr(args.frame, args.salidas)
     if ic is None:
         sys.exit("Ningún frame tiene insomnio_catalogo.parquet todavía.")
+    vest.anotar(vs, args.salidas)  # suma `modelo_estado` a cada polígono de basural, si `modelo_estado.py` ya corrió
     frames = list(por_frame)
     ahora = dt.datetime.now().isoformat(timespec="seconds")
     total = ve.resumen(vs)
@@ -392,9 +394,9 @@ def main(argv=None):
                     "actividad": {p: d["metricas"] for p, d in ev["por_pais"].items()}, "sesgo": sesgo}
     _json(resumen_json, os.path.join(args.destino, "resumen_flujo.json"))
     if args.web:
-        escribir_web(vs, total, frames, modelo, ahora)
+        escribir_web(vs, total, frames, modelo, ahora, estado=vest.bloque_web(args.salidas))
     if args.md:
-        escribir_md(args.md, resumen_json, eval_json, vs)
+        escribir_md(args.md, resumen_json, eval_json, vs, extra=vest.lineas_md(args.salidas))
 
     for fr, r in por_frame.items():
         print(f"{fr:20s} {r['complejos_por_veredicto']}  manchas: {r['manchas_por_veredicto']}")
@@ -410,8 +412,9 @@ def _sin_metricas(modelo):
 
 
 # ---------------------------------------------------------------- web y markdown
-def escribir_web(vs, total, frames, modelo, ahora, carpeta=WEB_SEED):
-    """Archivos nuevos en el seed de la web; no toca los que ya están."""
+def escribir_web(vs, total, frames, modelo, ahora, carpeta=WEB_SEED, estado=None):
+    """Archivos nuevos en el seed de la web; no toca los que ya están. `estado` es el bloque del modelo de abierto
+    contra cerrado (`veredicto_estado.bloque_web`): va en la clave `estado` de `modelo.json`."""
     claves = ("tipo", "id", "frame", "nombre", "complejo", "area_ha", "registro", "radar", "insomnio", "persistencia",
               "p_basural", "veredicto", "veredicto_texto", "motivo", "lat", "lon", "que")
     cat = sitios_catalogo()
@@ -422,16 +425,19 @@ def escribir_web(vs, total, frames, modelo, ahora, carpeta=WEB_SEED):
         f = {k: v.get(k) for k in claves}
         if v["tipo"] == "catalogo" and v["id"] in cat:
             f["lat"], f["lon"] = cat[v["id"]]["lat"], cat[v["id"]]["lon"]
+        if v.get("modelo_estado"):
+            f["modelo_estado"] = v["modelo_estado"]
         filas.append(f)
     _json({"generado": ahora, "generado_por": "idea-basurales-nisar/herramientas/flujo.py", "frames": frames,
            "aviso": "Señal compatible con actividad, no prueba.", "resumen": total, "sitios": filas},
           os.path.join(carpeta, "veredictos.json"))
-    if modelo.get("hay_metricas"):
-        m = modelo["metricas"]
+    if modelo.get("hay_metricas") or estado:
+        m = modelo.get("metricas") or {}
         _json({"generado": ahora, "generado_por": "idea-basurales-nisar/herramientas/flujo.py (desde salidas/metricas.json)",
                "validado": modelo["validado"], "motivo": modelo["motivo"],
                "metricas": {k: m.get(k) for k in ("validacion", "advertencia", "umbral", "columnas", "filas",
-                                                  "fuera_de_particion", "importancia")}},
+                                                  "fuera_de_particion", "importancia")} if m else None,
+               **({"estado": estado} if estado else {})},
               os.path.join(carpeta, "modelo.json"))
 
 
@@ -441,7 +447,7 @@ def _tasa(t):
     return f"{t['k']}/{t['n']} ({t['tasa']:.0%}, IC95 {t['ic95'][0]:.0%}–{t['ic95'][1]:.0%})"
 
 
-def escribir_md(ruta, rs, ev, vs):
+def escribir_md(ruta, rs, ev, vs, extra=None):
     L = ["# Resultados del flujo (etapas 8 y 9)", "",
          f"Generado por `herramientas/flujo.py` el {rs['meta']['generado']} (`python flujo.py --web` desde `herramientas/`). "
          "No editar a mano: se rehace con cada frame nuevo. Salidas: `salidas/veredictos.json`, "
@@ -503,6 +509,7 @@ def escribir_md(ruta, rs, ev, vs):
           f"- **Sesgo:** {ev['meta']['sesgo']}",
           f"- **FIRMS:** {ev['meta']['firms']}.", ""]
 
+    L += list(extra or [])
     L += ["## Casos para mirar a mano", "",
           "Antes de que un caso llegue al pitch hay que descartar lo obvio. Los chequeos automáticos usan sólo el catálogo "
           "(nombres de OSM, Overture y la EPA; captura de biogás de LMOP; sitios Superfund; vecinos despiertos). Lo que dice "
@@ -522,8 +529,12 @@ def escribir_md(ruta, rs, ev, vs):
           "(`catalogo` o `mancha`), `id` (`BAS-…` o `MAN-<frame>-<n>`), `frame`, `nombre`, `complejo`, `area_ha`, `registro` "
           "(`abierto`, `cerrado`, `desconocido`, `no_figura`), `radar` (`despierto`, `quieto`, `no_alcanza`), `insomnio`, "
           "`persistencia`, `p_basural` (null sin modelo), `veredicto` (clave), `veredicto_texto` (para mostrar), `motivo`, "
-          "`lat`, `lon` y `que` (lo que dice OSM de una mancha). Sin modelo validado no van las manchas `sin_clasificar`.",
-          "- `modelo.json`: sólo cuando exista `salidas/metricas.json`; `validado` dice si se puede mostrar como resultado.",
+          "`lat`, `lon` y `que` (lo que dice OSM de una mancha). Sin modelo validado no van las manchas `sin_clasificar`. "
+          "Los polígonos de basural traen además `modelo_estado`: `{p_abierto, lectura, origen}`, del modelo de abierto contra "
+          "cerrado (`modelo_estado.py`); no cambia el veredicto.",
+          "- `modelo.json`: sólo cuando exista `salidas/metricas.json`; `validado` dice si se puede mostrar como resultado. "
+          "La clave `estado` trae el modelo de abierto contra cerrado: `{auc, ic95, n, abiertos, cerrados, frames, variables, "
+          "validacion, limites, prueba_amba}`.",
           "- Las claves de `veredicto`: " + ", ".join(f"`{k}` ({t})" for k, t in ve.TEXTOS.items()) + ".", "",
           "## Fuentes", "",
           "- NISAR L2 GUNW (NASA/ISRO, vía ASF DAAC): insomnio por polígono (`insomnio_catalogo.parquet`, etapa 4).",
