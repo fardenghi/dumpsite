@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import type { Radar, Registro, Sitio } from '../data/types'
+import type { LecturaModelo, Radar, Registro, Sitio } from '../data/types'
 
 export const RADAR: Record<Radar, string> = { despierto: 'Despierto', quieto: 'Quieto', no_alcanza: 'No alcanza' }
 export const REGISTRO: Record<Registro, string> = { activo: 'Activo', cerrado: 'Cerrado', sin_registro: 'Sin registro' }
@@ -77,6 +77,54 @@ export function RegistroTag({ s }: { s: Sitio }) {
       </svg>
       Registrado · {s.registro === 'activo' ? 'activo' : `cerrado${s.cierre ? ` ${fecha(s.cierre, true)}` : ''}`}
     </span>
+  )
+}
+
+/** El estado del registro de un polígono del catálogo, tal como viene: sin estado no se inventa uno. */
+export function RegistroCatalogo({ registro }: { registro: string | null }) {
+  if (registro === 'abierto' || registro === 'cerrado')
+    return (
+      <span className="reg">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M5 12.5l4.5 4.5L19 7.5" />
+        </svg>
+        Registro · {registro}
+      </span>
+    )
+  return <span className="reg no">{registro === 'contradictorio' ? 'Registro contradictorio' : 'En el catálogo, sin estado'}</span>
+}
+
+/** "compatible con abierto" -> "Compatible con abierto". */
+const mayuscula = (t: string) => t.charAt(0).toUpperCase() + t.slice(1)
+/** Puntaje del modelo, de 0 a 1, con coma. */
+export const puntaje = (p: number) => p.toFixed(2).replace('.', ',')
+
+/** Lo que dice el modelo de abierto contra cerrado. Va siempre rotulado: no es el registro ni el veredicto del radar. */
+export function SegunModelo({ m, corto }: { m: LecturaModelo; corto?: boolean }) {
+  const p = typeof m.p_abierto === 'number' ? m.p_abierto : null
+  if (corto)
+    return (
+      <span className="segun-modelo corto" title={m.origen || undefined}>
+        Según el modelo: {m.lectura}
+        {p != null && <span className="num"> · {puntaje(p)}</span>}
+      </span>
+    )
+  return (
+    <div className="segun-modelo">
+      <span className="src">Según el modelo · abierto o cerrado</span>
+      <b>{mayuscula(m.lectura)}</b>
+      {p != null && (
+        <div className="puntaje" role="img" aria-label={`Puntaje de abierto ${puntaje(p)}, de 0 a 1`}>
+          <div className="bar">
+            <div style={{ width: `${Math.round(Math.max(0, Math.min(1, p)) * 100)}%` }} />
+          </div>
+          <span className="num">{puntaje(p)}</span>
+        </div>
+      )}
+      <small>
+        {p != null && 'Puntaje de abierto, de 0 a 1. '}No es el estado del registro ni una probabilidad{m.origen ? `. ${mayuscula(m.origen)}` : ''}
+      </small>
+    </div>
   )
 }
 
