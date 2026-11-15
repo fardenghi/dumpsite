@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Dot, PageHead, Picker, RADAR, fecha, num, pct } from '../components/ui'
+import { Dot, Kpi, PageHead, Picker, RADAR, fecha, num, pct, puntaje } from '../components/ui'
 import { useSitios } from '../data/api'
+import type { ModeloEstado } from '../data/types'
+import { MODELO_ESTADO } from '../data/veredictos'
 import candidatos from '../data/seed/candidatos.json'
 import fichasJson from '../data/seed/fichas.json'
 import indice from '../data/seed/indice.json'
@@ -109,6 +111,98 @@ function Medidor({ nombre, valor, texto, umbral, textoUmbral, min = 0, max = 1, 
         mínimo {textoUmbral}
       </div>
     </div>
+  )
+}
+
+/** El modelo de abierto contra cerrado, con lo que trae `seed/modelo.json` en `estado` y nada más: ni se redondea a favor ni se saca un límite. */
+function AbiertoOCerrado({ m, paso }: { m: ModeloEstado; paso: number }) {
+  const ic = Array.isArray(m.ic95) && m.ic95.length === 2 ? m.ic95 : null
+  const prueba = Array.isArray(m.prueba_amba) ? m.prueba_amba : []
+  return (
+    <section className="section" data-modelo-estado>
+      <div className="paso-t">
+        <i>{paso}</i>
+        <div>
+          <h3>Abierto o cerrado, según el modelo</h3>
+          <p>Entrenado con el estado del registro, que no sale del insomnio. El resultado es “compatible con abierto” o “compatible con cerrado”: no es un estado verificado</p>
+        </div>
+      </div>
+      <div className="card">
+        <div className="kpis sm grid g4">
+          <Kpi
+            label={<span title="Área bajo la curva ROC: 0,5 es ordenar al azar y 1 es ordenar perfecto">AUC</span>}
+            value={
+              <>
+                {puntaje(m.auc)}
+                {ic && (
+                  <small className="ic">
+                    IC 95 %: {puntaje(ic[0])} a {puntaje(ic[1])}
+                  </small>
+                )}
+              </>
+            }
+          />
+          <Kpi label="Predios con estado" value={num(m.n)} />
+          <Kpi label="Abiertos y cerrados" value={`${num(m.abiertos)} y ${num(m.cerrados)}`} />
+          <Kpi label="Frames de NISAR" value={num(m.frames)} />
+        </div>
+        <p className="pie">AUC: 0,5 es ordenar al azar y 1 es ordenar perfecto. Validación: {m.validacion}</p>
+
+        {m.variables?.length > 0 && (
+          <div className="modelo-bloque">
+            <h4>Qué mira</h4>
+            <div className="variables">
+              {m.variables.map((v) => (
+                <span className="tag" key={v}>
+                  {v}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {prueba.length > 0 && (
+          <div className="modelo-bloque">
+            <h4>La prueba en el AMBA</h4>
+            <div className="prueba">
+              <div>
+                <span>Predio</span>
+                <span>Según el registro</span>
+                <span>Puntaje de abierto según el modelo, de 0 a 1</span>
+              </div>
+              {prueba.map((x) => (
+                <div key={x.nombre}>
+                  <b style={{ fontWeight: 500 }}>{x.nombre}</b>
+                  <span>{x.estado_registro}</span>
+                  {typeof x.p_abierto === 'number' ? (
+                    <div className="puntaje">
+                      <div className="bar">
+                        <div style={{ width: `${Math.round(Math.max(0, Math.min(1, x.p_abierto)) * 100)}%` }} />
+                      </div>
+                      <span className="num r">{puntaje(x.p_abierto)}</span>
+                    </div>
+                  ) : (
+                    <span className="muted">sin dato</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="pie">El AMBA no entró al entrenamiento. Un puntaje alto es compatible con abierto y uno bajo, con cerrado</p>
+          </div>
+        )}
+
+        {m.limites?.length > 0 && (
+          <div className="modelo-bloque">
+            <h4>Límites</h4>
+            <ul className="limites-modelo">
+              {m.limites.map((l) => (
+                <li key={l}>{l}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 
@@ -270,14 +364,17 @@ export default function Modelo() {
         </div>
       </section>
 
+      {/* si `modelo.json` no trae `estado`, esta sección no aparece y la página queda como antes: sin métricas */}
+      {MODELO_ESTADO && <AbiertoOCerrado m={MODELO_ESTADO} paso={4} />}
+
       <section className="section">
         <div className="paso-t">
-          <i>4</i>
+          <i>{MODELO_ESTADO ? 5 : 4}</i>
           <div>
             <h3>
               Lo que sigue: decir qué es cada mancha <span className="tag">Propuesta, sin probar</span>
             </h3>
-            <p>El radar dice si un lugar se mueve, no qué es. Todavía no hay métricas</p>
+            <p>El radar dice si un lugar se mueve, no qué es. {MODELO_ESTADO ? 'Este clasificador por mancha todavía no tiene métricas' : 'Todavía no hay métricas'}</p>
           </div>
         </div>
         <div className="futuro">
