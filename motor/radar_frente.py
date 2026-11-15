@@ -74,6 +74,10 @@ COMBINA = ["insomnio_parche_se_mueve", "eco_std_en_parche"]
 SENTIDO_ACTIVIDAD = {"eco_std_rel_p90": 1, "ecohv_std_rel_p90": 1, "eco_std_rel_max3": 1, "eco_cambio_rel_p90": 1, "frente_coh_3x3": -1,
                      "frente_coh_fijo": -1, "frente_vs_predio": -1, "parche_bajo_ha": 1, "parche_bajo_frac": 1, "parche_se_mueve": 1,
                      "insomnio_px_max3": 1, "insomnio_px_p95": 1, "parche_insomnio90_ha": 1, "insomnio_parche_se_mueve": 1, "eco_std_en_parche": 1}
+# Complejos que además se miden como una sola unidad (la unión de sus polígonos), para la prueba del AMBA: en Norte III
+# el estado "abierto" es del complejo y quedó pegado a un solo polígono (ver idea/norte-iii.md). Van a la tabla con el
+# id del complejo; no son filas del catálogo y no entran al entrenamiento.
+UNIDADES = {"AMBA": {"CPX-015400": ["BAS-053304", "BAS-053307", "BAS-016796"]}}
 PRUEBA_AMBA = {"BAS-000007": "Basural de Luján (cerrado el 1/07/2026)", "BAS-053304": "Norte III, polígono con estado abierto",
                "BAS-053307": "Norte III, módulo C (sin estado)", "BAS-000001": "González Catán (sin estado)"}
 
@@ -205,6 +209,11 @@ def medir_frame(a, p):
         if not mascara.any():
             continue
         filas.append({"id_catalogo": s["id"], "frame": fr.nombre, "area_ha": float(s["area_ha"]), **medir(mascara, ctx, agua, p)})
+    for unidad, ids in UNIDADES.get(fr.nombre, {}).items():
+        partes = [s for s in ctx["catalogo"] if s["id"] in ids]
+        if len(partes) == len(ids):
+            mascara = fr.mascara_poligonos([an for s in partes for an in s["anillos"]], xs, ys)
+            filas.append({"id_catalogo": unidad, "frame": fr.nombre, "area_ha": float(sum(s["area_ha"] for s in partes)), **medir(mascara, ctx, agua, p)})
     return filas
 
 
