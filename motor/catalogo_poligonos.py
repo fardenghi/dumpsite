@@ -16,7 +16,7 @@ from shapely.geometry import box, shape
 from rasterio.warp import transform_geom
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(AQUI, "..", "..", "data")
+DATA = os.path.join(AQUI, "..", "data", "catalogos")
 # Caja del AMBA en el orden de GeoJSON: [lon_oeste, lat_sur, lon_este, lat_norte] (geo.CAJA va en otro orden).
 BBOX_AMBA = (-59.35, -34.90, -58.25, -34.25)
 

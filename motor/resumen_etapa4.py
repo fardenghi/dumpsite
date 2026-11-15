@@ -13,8 +13,8 @@ import sys
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-SALIDAS = os.path.join(AQUI, "..", "salidas")
-FRAMES = os.path.join(AQUI, "..", "..", "data", "frames.json")
+SALIDAS = os.path.join(AQUI, "..", "data", "salidas")
+FRAMES = os.path.join(AQUI, "..", "data", "catalogos", "frames.json")
 RADAR = ("despierto", "quieto", "no_alcanza")
 ESTADOS = (("abierto", ("abierto",)), ("cerrado", ("cerrado",)), ("sin estado", ("desconocido", "contradictorio")))
 

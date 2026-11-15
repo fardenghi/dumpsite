@@ -34,7 +34,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 import contratos as ct  # noqa: E402
 
-SALIDA = os.path.join(AQUI, "..", "datos", "mock")
+SALIDA = os.path.join(AQUI, "datos", "mock")
 AVISO = "DATOS FALSOS generados por herramientas/contratos_mock.py. No son resultados."
 
 # bbox = [lon_oeste, lat_sur, lon_este, lat_norte]. Órbitas y fechas inventadas, salvo las del AMBA.

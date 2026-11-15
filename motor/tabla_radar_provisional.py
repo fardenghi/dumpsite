@@ -86,9 +86,9 @@ def armar(indice, manchas_geojson, p=None):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--indice", default=os.path.join(AQUI, "..", "salidas", "indice_80m.npz"))
-    a.add_argument("--manchas", default=os.path.join(AQUI, "..", "salidas", "manchas.geojson"))
-    a.add_argument("--salida", default=os.path.join(AQUI, "..", "datos", "amba_provisional"))
+    a.add_argument("--indice", default=os.path.join(AQUI, "..", "data", "salidas", "indice_80m.npz"))
+    a.add_argument("--manchas", default=os.path.join(AQUI, "..", "data", "salidas", "manchas.geojson"))
+    a.add_argument("--salida", default=os.path.join(AQUI, "datos", "amba_provisional"))
     args = a.parse_args()
     df = armar(args.indice, args.manchas)
     destino = contratos.guardar(df, "tabla_radar", args.salida)

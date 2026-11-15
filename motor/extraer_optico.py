@@ -306,8 +306,8 @@ def extraer(objetivos, escenas, excluir_deg, hilos=16, min_valido=0.6, max_fecha
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--manchas", default=os.path.join(AQUI, "..", "salidas", "manchas.geojson"))
-    a.add_argument("--salida", default=os.path.join(AQUI, "..", "salidas"))
+    a.add_argument("--manchas", default=os.path.join(AQUI, "..", "data", "salidas", "manchas.geojson"))
+    a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--desde", default="2026-06-25")
     a.add_argument("--hasta", default="2026-10-12")
     a.add_argument("--max-nube", type=float, default=20.0, help="%% de nubes de la escena entera, para buscar")

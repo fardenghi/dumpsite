@@ -15,7 +15,7 @@ HERR = os.path.dirname(AQUI)
 sys.path.insert(0, HERR)
 import flujo  # noqa: E402
 
-SALIDAS = os.path.join(HERR, "..", "salidas")
+SALIDAS = os.path.join(HERR, "..", "data", "salidas")
 FRAMES = sorted(os.path.basename(os.path.dirname(p)) for p in glob.glob(os.path.join(SALIDAS, "*", "insomnio_catalogo.parquet")))
 HAY_INDICE = os.path.exists(os.path.join(SALIDAS, "indice_80m.npz"))
 

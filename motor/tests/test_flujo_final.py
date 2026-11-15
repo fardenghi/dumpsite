@@ -22,8 +22,8 @@ import frames_elegir as fe  # noqa: E402
 import insomnio_catalogo as icat  # noqa: E402
 import veredicto as ve  # noqa: E402
 
-SALIDAS = os.path.join(HERR, "..", "salidas")
-DATA = os.path.join(HERR, "..", "..", "data")
+SALIDAS = os.path.join(HERR, "..", "data", "salidas")
+DATA = os.path.join(HERR, "..", "data", "catalogos")
 HAY_INDICE = os.path.exists(os.path.join(SALIDAS, "indice_80m.npz"))
 HAY_RECORTES = os.path.isdir(os.path.join(SALIDAS, "recortes_80m"))
 

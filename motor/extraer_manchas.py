@@ -40,7 +40,7 @@ import geo  # noqa: E402
 import insomnio as ins  # noqa: E402
 import pipeline_insomnio as pl  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
+RAIZ = os.path.dirname(AQUI)
 PARTES = ("manchas.geojson", "tabla_radar.parquet", "insomnio_catalogo.parquet")
 
 # Índice de actividad (experimental, sin validar): combina dos mediciones de la parte más activa del predio.
@@ -436,7 +436,7 @@ def main():
     q = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     q.add_argument("paso", nargs="?", choices=["extraer", "juntar"], default="extraer")
     q.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos`")
-    q.add_argument("--salida", default=os.path.join(IDEA, "salidas"), help="carpeta del pipeline: los recortes de un frame están en <salida>/<FRAME>/ (los del AMBA, en <salida>/)")
+    q.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta del pipeline: los recortes de un frame están en <salida>/<FRAME>/ (los del AMBA, en <salida>/)")
     q.add_argument("--destino", help="carpeta donde escribir: cada frame en <destino>/<FRAME>/ y `juntar` en <destino>/ (por defecto, --salida)")
     q.add_argument("--fijos", default=pl.FIJOS, help="carpeta de las fuentes fijas (ver pipeline_insomnio.py)")
     q.add_argument("--capa", choices=list(pl.CAPAS), default="80m")

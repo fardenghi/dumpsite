@@ -57,9 +57,9 @@ import modelo_estado as me  # noqa: E402
 import pipeline_insomnio as pl  # noqa: E402
 import radar_frente as rf  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
-SALIDAS = os.path.join(IDEA, "salidas")
-DATOS = os.path.join(IDEA, "datos", "prueba_resolucion")
+RAIZ = os.path.dirname(AQUI)
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
+DATOS = os.path.join(AQUI, "datos", "prueba_resolucion")
 SALIDA_JSON = os.path.join(SALIDAS, "prueba_resolucion.json")
 MARGEN_PX80 = 2  # celdas de 80 m de margen alrededor del polígono más el anillo
 ECO = rf.NUEVAS[:4]

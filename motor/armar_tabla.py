@@ -190,13 +190,13 @@ def armar(radar, optico, cruce, frames, criterio=contratos.CRITERIO_CRUCE, min_i
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--datos", default=os.path.join(AQUI, "..", "salidas"), help="carpeta con los parquets de entrada")
+    a.add_argument("--datos", default=os.path.join(AQUI, "..", "data", "salidas"), help="carpeta con los parquets de entrada")
     a.add_argument("--radar")
     a.add_argument("--optico")
     a.add_argument("--cruce")
     a.add_argument("--frames", help="frames.json (por defecto ../../data/frames.json, o el de --datos si existe)")
     a.add_argument("--cnn", help="parquet con id_mancha y cnn_p_basural (opcional)")
-    a.add_argument("--salida", default=os.path.join(AQUI, "..", "salidas"))
+    a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--criterio", type=float, default=contratos.CRITERIO_CRUCE)
     a.add_argument("--min-inter-ha", type=float, default=MIN_INTER_HA)
     a.add_argument("--umbral-insomnio", type=float, default=0.70,
@@ -212,7 +212,7 @@ def main():
     optico = contratos.leer(args.optico or contratos.ruta("tabla_optico", args.datos))
     cruce = contratos.leer(args.cruce or contratos.ruta("cruce_manchas_catalogo", args.datos))
     frames_json = args.frames or next((c for c in (os.path.join(args.datos, "frames.json"),
-                                                   os.path.join(AQUI, "..", "..", "data", "frames.json")) if os.path.exists(c)), None)
+                                                   os.path.join(AQUI, "..", "data", "catalogos", "frames.json")) if os.path.exists(c)), None)
     frames = leer_frames(frames_json)
     extra = pd.read_parquet(args.cnn)[["id_mancha", "cnn_p_basural"]] if args.cnn else None
 

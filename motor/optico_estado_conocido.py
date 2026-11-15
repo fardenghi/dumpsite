@@ -39,10 +39,10 @@ sys.path.insert(0, AQUI)
 import catalogo_poligonos as cp  # noqa: E402
 import extraer_optico as eo  # noqa: E402
 
-DATA = os.path.join(AQUI, "..", "..", "data")
-CELDAS = os.path.join(AQUI, "..", "datos", "optico_estado", "celdas")
-PARTES = os.path.join(AQUI, "..", "salidas", "optico_estado_conocido")
-SALIDA = os.path.join(AQUI, "..", "salidas", "optico_estado_conocido.parquet")
+DATA = os.path.join(AQUI, "..", "data", "catalogos")
+CELDAS = os.path.join(AQUI, "datos", "optico_estado", "celdas")
+PARTES = os.path.join(AQUI, "..", "data", "salidas", "optico_estado_conocido")
+SALIDA = os.path.join(AQUI, "..", "data", "salidas", "optico_estado_conocido.parquet")
 PERIODO = ("2025-10-21", "2026-10-21")
 ESTADOS = ("abierto", "cerrado")
 MIN_HA = 10.0

@@ -38,9 +38,9 @@ import numpy as np
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-IDEA = os.path.dirname(AQUI)
-DATA = os.path.join(os.path.dirname(IDEA), "data")
-SALIDAS = os.path.join(IDEA, "salidas")
+RAIZ = os.path.dirname(AQUI)
+DATA = os.path.join(RAIZ, "data", "catalogos")
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
 sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 
@@ -237,7 +237,7 @@ def main(argv=None):
         "generado": dt.datetime.now().isoformat(timespec="seconds"), "generado_por": "herramientas/veredicto.py",
         "entradas": {"insomnio_catalogo": True, "cruce_manchas_catalogo": cruce is not None, "manchas": manchas is not None,
                      "predicciones": pred is not None},
-        "carpeta": os.path.relpath(args.carpeta, IDEA), "umbral_p_basural": args.umbral, "criterio_cruce": contratos.CRITERIO_CRUCE,
+        "carpeta": os.path.relpath(args.carpeta, RAIZ), "umbral_p_basural": args.umbral, "criterio_cruce": contratos.CRITERIO_CRUCE,
         "modo_insomnio": sorted(ic["modo"].unique().tolist()) if "modo" in ic else None,
         "advertencia": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'.",
     }

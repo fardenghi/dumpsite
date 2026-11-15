@@ -24,7 +24,7 @@ import numpy as np
 from scipy.stats import rankdata
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(AQUI, "..", "..", "data")
+DATA = os.path.join(AQUI, "..", "data", "catalogos")
 sys.path.insert(0, AQUI)
 import geo  # noqa: E402
 from geo import CAJA  # noqa: E402
@@ -59,7 +59,7 @@ def auc(pos, neg):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--indice", default=os.path.join(AQUI, "..", "salidas", "indice_80m.npz"))
+    a.add_argument("--indice", default=os.path.join(AQUI, "..", "data", "salidas", "indice_80m.npz"))
     a.add_argument("--min-ha", type=float, default=10.0, help="superficie mínima de un polígono (o complejo) para entrar")
     a.add_argument("--json", help="si se da, guarda acá el detalle")
     args = a.parse_args()

@@ -28,9 +28,9 @@ import numpy as np
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-IDEA = os.path.dirname(AQUI)
-DATA = os.path.join(os.path.dirname(IDEA), "data")
-SALIDAS = os.path.join(IDEA, "salidas")
+RAIZ = os.path.dirname(AQUI)
+DATA = os.path.join(RAIZ, "data", "catalogos")
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
 sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 import geo  # noqa: E402

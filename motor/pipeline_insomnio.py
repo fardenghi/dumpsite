@@ -49,9 +49,9 @@ import fuentes_fijas as ff  # noqa: E402
 import geo  # noqa: E402
 import insomnio as ins  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
+RAIZ = os.path.dirname(AQUI)
 FIJOS = os.path.join(AQUI, "fijos")
-WEB = os.path.join(os.path.dirname(IDEA), "insomnes-web")
+WEB = os.path.join(RAIZ, "web")
 API_ASF = "https://api.daac.asf.alaska.edu/services/search/param"
 CAPAS = {
     "80m": ("unwrappedInterferogram", 80.0),
@@ -839,8 +839,8 @@ def main():
     p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"),
                    help="caja de un frame que no está en frames.json, en el orden de GeoJSON (va con un solo --frame NOMBRE)")
     p.add_argument("--epsg", type=int, help="EPSG de la grilla (UTM). Si no se da: el de frames.json o, con --caja, el del primer GUNW")
-    p.add_argument("--datos", default=os.path.join(IDEA, "datos"), help="carpeta de los .h5 (fuera del repo en la VM, por ejemplo /mnt/datos)")
-    p.add_argument("--salida", default=os.path.join(IDEA, "salidas"), help="carpeta de productos chicos (lista, recortes, índice, figuras)")
+    p.add_argument("--datos", default=os.path.join(AQUI, "datos"), help="carpeta de los .h5 (fuera del repo en la VM, por ejemplo /mnt/datos)")
+    p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta de productos chicos (lista, recortes, índice, figuras)")
     p.add_argument("--fijos", default=FIJOS, help="carpeta de las fuentes fijas: cada frame cachea las suyas en <fijos>/<FRAME>/ (el AMBA, sueltas)")
     p.add_argument("--web", default=WEB, help="carpeta de insomnes-web; `indice` del AMBA a 80 m escribe ahí los datos de la web ('' para no escribir)")
     p.add_argument("--orbitas", type=int, nargs="+", help="órbitas (path) a usar. Por defecto, las del frame (AMBA: 10 y 161) o todas las que crucen la caja")

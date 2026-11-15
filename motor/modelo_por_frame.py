@@ -51,11 +51,11 @@ import catalogo_poligonos as cp  # noqa: E402
 import contratos  # noqa: E402
 import cruce_manchas as cm  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
-SALIDAS = os.path.join(IDEA, "salidas")
-FRAMES_JSON = os.path.join(IDEA, "..", "data", "frames.json")
-DATOS_MODELO = os.path.join(IDEA, "datos", "modelo")
-AMBA_PROVISIONAL = os.path.join(IDEA, "datos", "amba_provisional")
+RAIZ = os.path.dirname(AQUI)
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
+FRAMES_JSON = os.path.join(RAIZ, "data", "catalogos", "frames.json")
+DATOS_MODELO = os.path.join(AQUI, "datos", "modelo")
+AMBA_PROVISIONAL = os.path.join(AQUI, "datos", "amba_provisional")
 ESTADO = "modelo_por_frame.json"
 JUNTOS = ("cruce_manchas_catalogo", "tabla_optico", "tabla_optico_catalogo")
 NUBES = (20.0, 40.0, 70.0)  # % de nubes de la escena entera: se afloja si no alcanzan las fechas
@@ -212,7 +212,7 @@ def juntar(base=SALIDAS, frames=None, avisar=print):
         df = pd.concat(partes, ignore_index=True)
         destino = contratos.guardar(df, nombre, base)
         escritos[nombre] = df
-        avisar(f"{os.path.relpath(destino, IDEA)}: {len(df)} filas de {df['frame'].nunique()} frames "
+        avisar(f"{os.path.relpath(destino, RAIZ)}: {len(df)} filas de {df['frame'].nunique()} frames "
                f"({', '.join(f'{f} {n}' for f, n in df['frame'].value_counts().sort_index().items())})")
     return escritos
 
@@ -236,7 +236,7 @@ def radar_de_todos(base=SALIDAS, destino=DATOS_MODELO, avisar=print):
     df = pd.concat(partes, ignore_index=True)
     os.makedirs(destino, exist_ok=True)
     ruta = contratos.guardar(df, "tabla_radar", destino)
-    avisar(f"{os.path.relpath(ruta, IDEA)}: {len(df)} manchas candidatas de {df['frame'].nunique()} frames (no se sube)")
+    avisar(f"{os.path.relpath(ruta, RAIZ)}: {len(df)} manchas candidatas de {df['frame'].nunique()} frames (no se sube)")
     for a in avisos:
         avisar("AVISO: " + a)
     return ruta, avisos
@@ -275,11 +275,11 @@ def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_s
     pred = contratos.ruta("predicciones", base)
     if validado or publicar_sin_validar:
         shutil.copyfile(contratos.ruta("predicciones", DATOS_MODELO), pred)
-        avisar(f"{os.path.relpath(pred, IDEA)}: publicado" + ("" if validado else " SIN VALIDAR (--publicar-sin-validar)"))
+        avisar(f"{os.path.relpath(pred, RAIZ)}: publicado" + ("" if validado else " SIN VALIDAR (--publicar-sin-validar)"))
     else:
         if os.path.exists(pred):
             os.remove(pred)
-        avisar(f"MODELO SIN VALIDAR: predicciones.parquet queda en {os.path.relpath(DATOS_MODELO, IDEA)}/ y no en salidas/ "
+        avisar(f"MODELO SIN VALIDAR: predicciones.parquet queda en {os.path.relpath(DATOS_MODELO, RAIZ)}/ y no en salidas/ "
                "(el veredicto deja las manchas sin catálogo como `sin_clasificar`). Ver metricas.json.")
     return validado
 

@@ -26,9 +26,9 @@ import shapely
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
-IDEA = os.path.dirname(AQUI)
-SALIDAS = os.path.join(IDEA, "salidas")
-TRABAJO = os.path.join(IDEA, "datos", "optico_frames", "trabajo.json")
+RAIZ = os.path.dirname(AQUI)
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
+TRABAJO = os.path.join(AQUI, "datos", "optico_frames", "trabajo.json")
 SALIDA = os.path.join(SALIDAS, "optico_catalogo_frames.parquet")
 PERIODO = ("2025-10-21", "2026-10-21")  # el de `optico_estado_conocido.py`
 MIN_HA = 10.0
@@ -46,7 +46,7 @@ def ya_medidos():
 def preparar(destino):
     import catalogo_poligonos as cp
 
-    with open(os.path.join(IDEA, "..", "data", "frames.json"), encoding="utf-8") as fh:
+    with open(os.path.join(RAIZ, "data", "catalogos", "frames.json"), encoding="utf-8") as fh:
         frames = json.load(fh)["frames"]
     hechos, trabajo = ya_medidos(), {}
     for f in frames:

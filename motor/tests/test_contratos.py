@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(AQUI))
 import contratos as ct  # noqa: E402
 import contratos_mock  # noqa: E402
 
-DOC = os.path.join(AQUI, "..", "..", "idea", "contratos-datos.md")
+DOC = os.path.join(AQUI, "..", "..", "docs", "contratos-datos.md")
 
 
 @pytest.fixture(scope="module")

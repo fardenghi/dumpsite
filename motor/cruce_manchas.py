@@ -107,11 +107,11 @@ def cruzar_por_frame(ms, fc, cargar):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--manchas", default=os.path.join(AQUI, "..", "salidas", "manchas.geojson"))
+    a.add_argument("--manchas", default=os.path.join(AQUI, "..", "data", "salidas", "manchas.geojson"))
     a.add_argument("--catalogo", help="GeoJSON de polígonos en vez de ../data/ (el mock)")
     a.add_argument("--negativos", default="ambos", choices=("ambos", "amba", "mundo"))
     a.add_argument("--todas", action="store_true", help="cruzar también las manchas descartadas")
-    a.add_argument("--salida", default=os.path.join(AQUI, "..", "salidas"))
+    a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     args = a.parse_args()
 
     with open(args.manchas, encoding="utf-8") as fh:

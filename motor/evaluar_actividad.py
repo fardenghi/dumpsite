@@ -23,8 +23,8 @@ from collections import defaultdict
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-IDEA = os.path.dirname(AQUI)
-SALIDAS = os.path.join(IDEA, "salidas")
+RAIZ = os.path.dirname(AQUI)
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
 sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 
@@ -134,7 +134,7 @@ def main(argv=None):
     modo = sorted(ic["modo"].unique().tolist()) if "modo" in ic else None
     meta = {
         "generado": dt.datetime.now().isoformat(timespec="seconds"), "generado_por": "herramientas/evaluar_actividad.py",
-        "entradas": [os.path.relpath(args.estado_conocido, IDEA), os.path.relpath(args.insomnio_catalogo, IDEA)],
+        "entradas": [os.path.relpath(args.estado_conocido, RAIZ), os.path.relpath(args.insomnio_catalogo, RAIZ)],
         "fuentes_del_estado": args.fuentes, "min_ha": args.min_ha, "modo_insomnio": modo,
         "lectura": ("Filas: estado del registro. Columnas: lo que dice el radar sobre el polígono (insomnio.ficha). "
                     "Las tasas se calculan sobre los que el radar pudo decidir; ic95 es el intervalo de Wilson."),

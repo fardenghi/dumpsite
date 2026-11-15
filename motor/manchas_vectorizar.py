@@ -82,10 +82,10 @@ def armar(indice, frame, epsg, p=None):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--indice", default=os.path.join(AQUI, "..", "salidas", "indice_80m.npz"))
+    a.add_argument("--indice", default=os.path.join(AQUI, "..", "data", "salidas", "indice_80m.npz"))
     a.add_argument("--frame", default="AMBA")
     a.add_argument("--epsg", type=int, default=32721, help="EPSG de la grilla del índice (el AMBA es UTM 21 sur)")
-    a.add_argument("--salida", default=os.path.join(AQUI, "..", "salidas"))
+    a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     args = a.parse_args()
     fc = armar(args.indice, args.frame, args.epsg)
     os.makedirs(args.salida, exist_ok=True)

@@ -40,9 +40,9 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 import geo  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
+RAIZ = os.path.dirname(AQUI)
 FIJOS = os.path.join(AQUI, "fijos")
-DATA = os.path.join(IDEA, "..", "data")
+DATA = os.path.join(RAIZ, "data", "catalogos")
 AGENTE = {"User-Agent": "insomnes-contornos/0.1"}
 JRC = "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_{}v1_4_2021.tif"
 JRC_PASO, JRC_LADO = 0.00025, 40000  # tamaño de píxel en grados y píxeles por lado de un tile de 10° × 10°
@@ -466,7 +466,7 @@ def main():
     p.add_argument("--frame", nargs="+", default=["AMBA"], help="uno o más frames de data/frames.json, o `todos`")
     p.add_argument("--caja", type=float, nargs=4, metavar=("LON_O", "LAT_S", "LON_E", "LAT_N"), help="caja de un frame que no está en frames.json (va con un solo --frame NOMBRE)")
     p.add_argument("--epsg", type=int, help="EPSG de la grilla, con --caja (si no, el del frame.json del pipeline o el de la zona UTM del centro)")
-    p.add_argument("--salida", default=os.path.join(IDEA, "salidas"), help="carpeta de salidas del pipeline: ahí busca <FRAME>/frame.json")
+    p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta de salidas del pipeline: ahí busca <FRAME>/frame.json")
     p.add_argument("--capas", nargs="+", choices=list(PASOS), default=["80m"], help="capas de la máscara de agua (por defecto sólo 80 m)")
     p.add_argument("--destino", help="carpeta donde escribir (por defecto, fijos/<FRAME>/)")
     p.add_argument("--pisar", action="store_true", help="permite rehacer los archivos de referencia del AMBA")

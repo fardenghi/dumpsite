@@ -335,10 +335,10 @@ def correr(t, partes, humo=False, todas=None, reservar=False, con_controles=Fals
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--datos", default=os.path.join(AQUI, "..", "salidas"))
+    a.add_argument("--datos", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--tabla")
     a.add_argument("--particiones")
-    a.add_argument("--salida", default=os.path.join(AQUI, "..", "salidas"))
+    a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--humo", action="store_true", help="permitir un solo frame (prueba de que corre; no reportar)")
     a.add_argument("--predecir", action="store_true",
                    help="escribir predicciones.parquet para todas las manchas candidatas (tabla_radar + tabla_optico de --datos)")
@@ -363,7 +363,7 @@ def main():
 
     if todas is not None:  # un frame de las predicciones que no está en las particiones (sin filas etiquetadas) va con el modelo final
         reservados = set(partes.get("prueba_final", []))
-        frames_json = os.path.join(AQUI, "..", "..", "data", "frames.json")
+        frames_json = os.path.join(AQUI, "..", "data", "catalogos", "frames.json")
         if os.path.exists(frames_json):
             with open(frames_json, encoding="utf-8") as fh:
                 reservados |= {f["frame"] for f in json.load(fh)["frames"] if f.get("reservado_prueba")}

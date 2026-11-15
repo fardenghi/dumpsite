@@ -59,8 +59,8 @@ import geo  # noqa: E402
 import insomnio as ins  # noqa: E402
 import pipeline_insomnio as pl  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
-SALIDAS = os.path.join(IDEA, "salidas")
+RAIZ = os.path.dirname(AQUI)
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
 TABLA = os.path.join(SALIDAS, "radar_frente.parquet")
 EVALUACION = os.path.join(SALIDAS, "radar_frente_evaluacion.json")
 MIN_HA = 10.0

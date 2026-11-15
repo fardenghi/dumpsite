@@ -39,12 +39,11 @@ import numpy as np
 import pandas as pd
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-IDEA = os.path.dirname(AQUI)
-RAIZ = os.path.dirname(IDEA)
-DATA = os.path.join(RAIZ, "data")
-SALIDAS = os.path.join(IDEA, "salidas")
-CACHE = os.path.join(IDEA, "datos", "flujo")
-WEB_SEED = os.path.join(RAIZ, "insomnes-web", "src", "data", "seed")
+RAIZ = os.path.dirname(AQUI)
+DATA = os.path.join(RAIZ, "data", "catalogos")
+SALIDAS = os.path.join(RAIZ, "data", "salidas")
+CACHE = os.path.join(AQUI, "datos", "flujo")
+WEB_SEED = os.path.join(RAIZ, "web", "src", "data", "seed")
 sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 import evaluar_actividad as ea  # noqa: E402
@@ -57,7 +56,7 @@ VECINO_KM = 1.5  # el anillo de control mide 1,5 km
 
 
 def _rel(p):
-    return None if p is None else os.path.relpath(p, IDEA)
+    return None if p is None else os.path.relpath(p, RAIZ)
 
 
 def _json(obj, ruta):
@@ -344,7 +343,7 @@ def main(argv=None):
     a.add_argument("--destino", default=SALIDAS, help="dónde escribir veredictos, evaluación y resumen")
     a.add_argument("--estado-conocido", default=os.path.join(SALIDAS, "estado_conocido.json"))
     a.add_argument("--web", action="store_true", help="escribir también ../insomnes-web/src/data/seed/veredictos.json")
-    a.add_argument("--md", default=os.path.join(IDEA, "idea", "resultados-flujo.md"), help="'' para no escribirlo")
+    a.add_argument("--md", default=os.path.join(AQUI, "datos", "resultados-flujo.md"), help="'' para no escribirlo")
     args = a.parse_args(argv)
 
     vs, por_frame, ic, entradas, modelo = correr(args.frame, args.salidas)

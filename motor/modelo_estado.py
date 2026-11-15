@@ -48,7 +48,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-SALIDAS = os.path.join(AQUI, "..", "salidas")
+SALIDAS = os.path.join(AQUI, "..", "data", "salidas")
 MIN_HA = 10.0
 PRUEBA = ("AMBA",)  # reservado: no entra al entrenamiento ni a la validación
 RADAR = ["insomnio", "persistencia", "eco_db", "contraste_p10", "eco_var_p90", "frac_insomnio_90", "hv_hh"]
@@ -227,7 +227,7 @@ def main():
     acierta = {"abiertos": [int(((p_base > UMBRAL) & (y == 1)).sum()), int(y.sum())], "cerrados": [int(((p_base <= UMBRAL) & (y == 0)).sum()), int((y == 0).sum())]}
     seca = e["frame"].isin(ZONA_SECA).values
     por_zona = [{"zona": z, "n": int(m.sum()), "auc": round(float(roc_auc_score(y[m], p_base[m])), 3)} for z, m in (("California y Arizona", seca), ("resto", ~seca))]
-    with open(os.path.join(AQUI, "..", "..", "data", "frames.json"), encoding="utf-8") as fh:
+    with open(os.path.join(AQUI, "..", "data", "catalogos", "frames.json"), encoding="utf-8") as fh:
         agregados = {f["frame"] for f in json.load(fh)["frames"] if f.get("criterio") == "abiertos"}
     viejos = ~e["frame"].isin(agregados)
     por_tanda = [{"frames": z, "n": int(m.sum()), "abiertos": int(y[m].sum()), "auc": round(float(roc_auc_score(y[m], p_base[m])), 3)}

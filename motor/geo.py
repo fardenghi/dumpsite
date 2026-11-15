@@ -21,7 +21,7 @@ import numpy as np
 # Caja del AMBA (lat_norte, lon_oeste, lat_sur, lon_este). Incluye Luján.
 CAJA = (-34.25, -59.35, -34.90, -58.25)
 EPSG = 32721  # UTM 21 sur, la de los GUNW del AMBA
-FRAMES_JSON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "data", "frames.json")
+FRAMES_JSON = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "catalogos", "frames.json")
 
 _A, _F, _K0 = 6378137.0, 1 / 298.257223563, 0.9996
 _E2 = _F * (2 - _F)

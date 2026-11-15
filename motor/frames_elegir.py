@@ -40,8 +40,8 @@ import urllib.request
 import numpy as np
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-IDEA = os.path.dirname(AQUI)
-DATA = os.path.join(os.path.dirname(IDEA), "data")
+RAIZ = os.path.dirname(AQUI)
+DATA = os.path.join(RAIZ, "data", "catalogos")
 sys.path.insert(0, AQUI)
 import geo  # noqa: E402
 
@@ -589,9 +589,9 @@ def main():
     a.add_argument("--agregar", type=int, metavar="N",
                    help="no vuelve a elegir: deja los frames de frames.json como están y suma N por cantidad de abiertos (ver el encabezado)")
     a.add_argument("--salida", default=os.path.join(DATA, "frames.json"))
-    a.add_argument("--md", default=os.path.join(IDEA, "idea", "frames-elegidos.md"))
+    a.add_argument("--md", default=os.path.join(AQUI, "datos", "frames-elegidos.md"))
     a.add_argument("--todos", help="si se da, guarda acá todas las áreas evaluadas (JSON)")
-    a.add_argument("--estado-conocido", default=os.path.join(IDEA, "salidas", "estado_conocido.json"),
+    a.add_argument("--estado-conocido", default=os.path.join(RAIZ, "data", "salidas", "estado_conocido.json"),
                    help="basurales de estado conocido de cada frame elegido (lo leen las etapas 8 y 9)")
     args = a.parse_args()
     if args.agregar:
