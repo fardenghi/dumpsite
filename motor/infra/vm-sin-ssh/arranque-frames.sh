@@ -3,7 +3,7 @@
 # Por cada frame sube un tar con sus recortes a una URL de subida de un solo uso, y al final apaga la VM.
 #
 # Metadatos que lee (los carga quien tiene permisos, desde su máquina; ver ../README.md):
-#   codigo-tgz-b64     tar.gz en base64 con idea-basurales-nisar/herramientas/*.py y data/frames.json
+#   codigo-tgz-b64     tar.gz en base64 con motor/*.py y data/catalogos/frames.json
 #   frames-p6          nombres de los frames, separados por espacios, en el orden en que se procesan
 #   upload-url-<FRAME> URL de subida resumible de GCS para el tar de ese frame
 #   earthdata-token    token de Earthdata de quien corre (se borra al terminar)
@@ -17,7 +17,7 @@ T=$(md tanda-p6 || echo 1)
 [ -f /opt/p6-hecho-$T ] && { echo "INSOMNIO: p6 tanda $T ya corrió"; exit 0; }
 export HOME=/root USER=root DEBIAN_FRONTEND=noninteractive
 log() { echo "INSOMNIO: $*"; }
-D=/opt/insomnio6; rm -rf $D/data $D/idea-basurales-nisar/herramientas; mkdir -p $D; cd $D
+D=/opt/insomnio6; rm -rf $D/data $D/motor; mkdir -p $D; cd $D
 md codigo-tgz-b64 | base64 -d | tar xz || { log "p6 no pude desarmar el código"; exit 1; }
 PY=/opt/insomnio/.venv/bin/python
 $PY -c "import h5py, earthaccess, scipy" 2>/dev/null || {
@@ -27,8 +27,8 @@ $PY -c "import h5py, earthaccess, scipy" 2>/dev/null || {
 }
 export EARTHDATA_TOKEN=$(md earthdata-token)
 N=$(md procesos-p6 || echo 16)
-S=$D/idea-basurales-nisar/salidas
-P="$PY $D/idea-basurales-nisar/herramientas/pipeline_insomnio.py"
+S=$D/data/salidas
+P="$PY $D/motor/pipeline_insomnio.py"
 log "p6 tanda $T inicio $(date -u +%FT%TZ): $(nproc) vCPU, $N procesos, token de ${#EARTHDATA_TOKEN} caracteres, frames: $(md frames-p6)"
 t0=$(date +%s)
 for F in $(md frames-p6); do

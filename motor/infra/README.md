@@ -14,7 +14,7 @@ Una sola VM de CPU con mucha RAM, cerca de donde están los datos. Sin GPU ni Ku
 
 **Por qué 12 vCPU y no 16:** la cuota global de la cuenta es `CPUS_ALL_REGIONS = 12` y no se puede subir. `n2-highmem-12` no existe, así que es una N2 a medida con el máximo de memoria (8 GB por vCPU). Los 200 GB de disco vienen de la cuota `SSD_TOTAL_GB = 250` en us-west1.
 
-**Tiempos medidos** (detalle en `../idea/corrida-completa-vm.md`): bajar los 35 archivos (100 GB) tarda 531 s; procesar e índice tardan 8 s a 80 m y ~50 s a 20 m.
+**Tiempos medidos** (detalle en `infra/README.md`): bajar los 35 archivos (100 GB) tarda 531 s; procesar e índice tardan 8 s a 80 m y ~50 s a 20 m.
 
 ## Por qué us-west1
 - Los datos de NISAR están en NASA Earthdata Cloud, en **AWS us-west-2 (Oregón)**. Las regiones más cercanas son **GCP us-west1 (Oregón)** y **Azure West US 2 (Washington)**.
@@ -40,11 +40,11 @@ Desde una sesión de Claude Code en la nube no hay SSH: el proxy sólo deja pasa
    - `arranque-prueba.sh` prueba bajar, `procesar --remoto` y GCOV;
    - `arranque-pipeline.sh` corre el pipeline completo;
    - `arranque-subida.sh` sube `/opt/salidas` a una URL de subida de un solo uso.
-   - `arranque-frames.sh` (prompt 6, 15/11) corre `buscar` y `procesar --remoto` sobre una lista de frames, sube un tar por frame a su URL de un solo uso (`upload-url-<FRAME>`) y **apaga la VM al terminar**. El código va en un solo metadato (`codigo-tgz-b64`). Así se leyeron 18 de los 20 frames nuevos (`../idea/etapa4-manchas.md`).
+   - `arranque-frames.sh` (prompt 6, 15/11) corre `buscar` y `procesar --remoto` sobre una lista de frames, sube un tar por frame a su URL de un solo uso (`upload-url-<FRAME>`) y **apaga la VM al terminar**. El código va en un solo metadato (`codigo-tgz-b64`). Así se leyeron 18 de los 20 frames nuevos (`../../docs/resultados.md`).
    - `arranque-optico.sh` (15/11) corre `optico_catalogo_frames.py correr` y apaga la VM. Se usó para comparar: la misma lectura de Sentinel-2 tardó 319 s en la VM y 254 s en un contenedor. **Para el óptico la VM no ayuda.**
    Se carga con `add-metadata --metadata-from-file=startup-script=...` y se ejecuta con `gcloud compute instances reset`.
 4. **Avance:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
-5. **Resultados:** la VM no tiene permisos de GCP. Quien tiene permisos crea una sesión de subida resumible en el bucket `gs://basurales-514714-salidas` y pasa la URL en el metadato `upload-url`. El tar completo de `salidas/`, con los recortes de 20 m, quedó en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB). Los productos chicos están en `../salidas/`.
+5. **Resultados:** la VM no tiene permisos de GCP. Quien tiene permisos crea una sesión de subida resumible en el bucket `gs://basurales-514714-salidas` y pasa la URL en el metadato `upload-url`. El tar completo de `salidas/`, con los recortes de 20 m, quedó en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB). Los productos chicos están en `../data/salidas/`.
 
 **gcloud en Claude Code en la nube:** el entorno define `CLOUDSDK_AUTH_ACCESS_TOKEN` con un valor de relleno para el proxy. Si no hay una credencial de Google cargada en el entorno, hay que correr `env -u CLOUDSDK_AUTH_ACCESS_TOKEN gcloud ...` después de `gcloud auth login --no-launch-browser`. La política de la organización (`iam.disableServiceAccountKeyCreation`) no deja crear claves de cuentas de servicio; en lugar de claves se usa la personificación de `claude-vm` (`auth/impersonate_service_account`).
 
@@ -55,22 +55,22 @@ gcloud compute instances start insomnio-vm --zone=us-west1-b
 ```bash
 gcloud compute ssh insomnio-vm --zone=us-west1-b
 ```
-Para clonar el repo privado adentro de la VM hace falta un token de GitHub o una llave SSH de quien lo clona. Después se prepara con `bash nasa-space-apps-context/idea-basurales-nisar/infra/setup-vm.sh` (los `.h5` ya están en `/mnt/datos`, así que `bajar` no vuelve a bajarlos):
+Para clonar el repo privado adentro de la VM hace falta un token de GitHub o una llave SSH de quien lo clona. Después se prepara con `bash dumpsite/motor/infra/setup-vm.sh` (los `.h5` ya están en `/mnt/datos`, así que `bajar` no vuelve a bajarlos):
 ```bash
 export EARTHDATA_TOKEN='...'
 ```
 ```bash
-python herramientas/pipeline_insomnio.py todo --datos /mnt/datos --salida salidas --orbitas 10 161 --capa 80m
+python motor/pipeline_insomnio.py todo --datos /mnt/datos --salida data/salidas --orbitas 10 161 --capa 80m
 ```
 **Sin bajar los .h5** (lectura remota por ventana; probada, ~240 MB por GUNW):
 ```bash
-python herramientas/pipeline_insomnio.py buscar --salida salidas && python herramientas/pipeline_insomnio.py procesar --remoto --salida salidas --capa 80m && python herramientas/pipeline_insomnio.py indice --salida salidas --capa 80m
+python motor/pipeline_insomnio.py buscar --salida data/salidas && python motor/pipeline_insomnio.py procesar --remoto --salida data/salidas --capa 80m && python motor/pipeline_insomnio.py indice --salida data/salidas --capa 80m
 ```
 **Otros frames** (etapa 4; los frames salen de `data/frames.json`). Cada uno escribe en `salidas/<FRAME>/`:
 ```bash
-python herramientas/pipeline_insomnio.py todo --frame todos --remoto --salida salidas
+python motor/pipeline_insomnio.py todo --frame todos --remoto --salida data/salidas
 ```
-Si la lectura remota anda mal, bajando: `todo --frame todos --datos /mnt/datos --borrar` baja, recorta y borra cada `.h5`, frame por frame, así el disco de 200 GB nunca junta más de un frame. Detalle en `../herramientas/README.md`.
+Si la lectura remota anda mal, bajando: `todo --frame todos --datos /mnt/datos --borrar` baja, recorta y borra cada `.h5`, frame por frame, así el disco de 200 GB nunca junta más de un frame. Detalle en `../README.md`.
 
 Usen `tmux` para que no se corte si se cae el SSH (`tmux new -s nisar`; para volver, `tmux attach -t nisar`).
 
