@@ -70,16 +70,16 @@ Ningún número va en pantalla sin fuente.
 
 | Cifra | Fuente en el repo |
 |---|---|
-| ≈ 5.000 basurales a cielo abierto en Argentina (estimación del Ministerio de Ambiente, sin relevamiento formal) | `idea-basurales-nisar/context/README.md` |
+| ≈ 5.000 basurales a cielo abierto en Argentina (estimación del Ministerio de Ambiente, sin relevamiento formal) | `docs/idea.md` |
 | No hay inventario oficial abierto con coordenadas | ídem |
-| NISAR: una imagen cada 12 días, radar banda L, de día, de noche y a través de las nubes | `context/README.md` |
-| Norte III: insomnio 0,86; "inquieto en 8 de 8 pasadas" en la órbita principal | `idea/indice-final.md`, `salidas/fichas_80m.json` (en `compartido/datos-reales.json`) |
-| Luján: cerrado el 1/07/2026, quieto en las 15 pasadas, insomnio 0 % | `idea/indice-final.md` |
+| NISAR: una imagen cada 12 días, radar banda L, de día, de noche y a través de las nubes | `docs/idea.md` |
+| Norte III: insomnio 0,86; "inquieto en 8 de 8 pasadas" en la órbita principal | `docs/indice-insomnio.md`, `data/salidas/fichas_80m.json` (en `compartido/datos-reales.json`) |
+| Luján: cerrado el 1/07/2026, quieto en las 15 pasadas, insomnio 0 % | `docs/indice-insomnio.md` |
 | González Catán: insomnio 100 % (1,00) | ídem |
 | 219 manchas candidatas en el AMBA (sin agua de JRC, rutas ni cultivos estacionales) | ídem |
-| 66.981 basurales en el catálogo mundial | `data/basurales/basurales_mundo.json` |
-| 29 variables del modelo: 12 radar, 11 ópticas Sentinel-2, 3 de forma, 3 del entorno; 300 árboles de profundidad 3 | `idea-basurales-nisar/idea/resultados-modelo.md` (29 variables) y `herramientas/entrenar.py` (300 árboles, profundidad 3, 7 hojas) |
-| 42 basurales de catálogo activos en el radar, 13 registrados como cerrados que siguen activos (y 7 cerrados y quietos), en 10 regiones | `insomnes-web/src/data/seed/veredictos.json` |
+| 66.981 basurales en el catálogo mundial | `data/catalogos/basurales/basurales_mundo.json` |
+| 29 variables del modelo: 12 radar, 11 ópticas Sentinel-2, 3 de forma, 3 del entorno; 300 árboles de profundidad 3 | `docs/resultados.md` (29 variables) y `herramientas/entrenar.py` (300 árboles, profundidad 3, 7 hojas) |
+| 42 basurales de catálogo activos en el radar, 13 registrados como cerrados que siguen activos (y 7 cerrados y quietos), en 10 regiones | `web/src/data/seed/veredictos.json` |
 
 Las 10 regiones son AMBA, Los Ángeles, Ohio Lake, Maryland Howard, Ciudad de México, Ponce, New Hampshire Hillsborough, New York Richmond, Delhi y Yakarta.
 

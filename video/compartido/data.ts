@@ -35,7 +35,7 @@ export const MOSTRAR_PLACEHOLDERS = false; // ocultas en el video; lo único que
 // ---- PLACEHOLDER: cifras de ejemplo pedidas por el equipo hasta tener las reales ----
 // (La web hoy muestra datos reales del AMBA: 12 sitios analizados, 6 despiertos, 4 despiertos sin registro.)
 export const RESULTADOS = {
-  // Reales: insomnes-web/src/data/seed/veredictos.json (flujo.py, 10 regiones). Índice de insomnio cruzado con catálogos, no del modelo.
+  // Reales: web/src/data/seed/veredictos.json (flujo.py, 10 regiones). Índice de insomnio cruzado con catálogos, no del modelo.
   encontrados: 42, // basurales de catálogos que el radar ve activos
   sinRegistro: 13, // de ellos, figuran cerrados pero siguen activos (sin verificar a mano)
   registro: 0,

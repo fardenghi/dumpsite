@@ -1,5 +1,5 @@
 // Video para el jurado local de Buenos Aires: hasta 3 minutos, en castellano, mismo estilo que el internacional.
-// Cifras: idea-basurales-nisar/context/README.md, idea/indice-final.md, data/basurales (catálogo), insomnes-web seed/veredictos.json. Ver guion-es.json.
+// Cifras: docs/idea.md, docs/indice-insomnio.md, data/catalogos/basurales (catálogo), web seed/veredictos.json. Ver guion-es.json.
 // Cada escena arranca cuando arranca su frase en voz-es.json: si cambia la voz, las escenas se reacomodan solas (ver video/VOZ-GRABADA.md).
 import React from "react";
 import {AbsoluteFill, Easing, Html5Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";

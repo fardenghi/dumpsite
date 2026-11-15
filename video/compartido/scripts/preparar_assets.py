@@ -19,8 +19,9 @@ from PIL import Image, ImageDraw
 
 VIDEO = pathlib.Path(__file__).resolve().parents[2]   # la carpeta video/
 REPO = VIDEO.parent
-IDEA = REPO / "idea-basurales-nisar"
-SEED = REPO / "insomnes-web" / "src" / "data" / "seed"
+SALIDAS = REPO / "data" / "salidas"
+MOTOR = REPO / "motor"
+SEED = REPO / "web" / "src" / "data" / "seed"
 PUB = VIDEO / "public"
 PUB.mkdir(exist_ok=True)
 
@@ -74,7 +75,7 @@ def main():
     amba = (indice["oeste"], indice["sur"], indice["este"], indice["norte"])
 
     # 1. Índice real (PNG de la web) y Sentinel-2 del AMBA con la misma caja y proporción
-    shutil.copy(REPO / "insomnes-web" / "public" / indice["url"], PUB / "insomnio-amba.png")
+    shutil.copy(REPO / "web" / "public" / indice["url"], PUB / "insomnio-amba.png")
     s2 = mosaic_bbox(*amba, z=12).resize((2800, 2010), Image.LANCZOS)
     s2.save(PUB / "s2-amba.jpg", quality=88)
     print("s2-amba.jpg", s2.size)
@@ -114,15 +115,15 @@ def main():
     mundo.save(PUB / "s2-mundo.jpg", quality=85)
 
     # 5. Datos del pipeline para animar
-    fichas = json.loads((IDEA / "salidas" / "fichas_80m.json").read_text())
-    resumen = json.loads((IDEA / "salidas" / "resumen_80m.json").read_text())
+    fichas = json.loads((SALIDAS / "fichas_80m.json").read_text())
+    resumen = json.loads((SALIDAS / "resumen_80m.json").read_text())
     f = fichas["norte-iii"]
     pares = sorted(f["pares"], key=lambda p: (p["orbita"], p["fecha"]))
     # Conservar lo que se armó con pasos aparte (serie Sentinel-2 por fecha y mosaico de entrenamiento).
     previo_path = VIDEO / "compartido" / "datos-reales.json"
     previo = json.loads(previo_path.read_text()) if previo_path.exists() else {}
     data = {
-        "fuente": "salidas/fichas_80m.json, salidas/resumen_80m.json, insomnes-web/src/data/seed",
+        "fuente": "data/salidas/fichas_80m.json, data/salidas/resumen_80m.json, web/src/data/seed",
         "norte3": {
             "insomnio": f["insomnio"], "persistencia": f["persistencia"], "radar": f["radar"],
             "insomnio_orbita": f["insomnio_orbita"], "pares": pares,
@@ -146,9 +147,9 @@ def main():
     # recortada a la misma zona de 6 km. Claro = el suelo no cambió entre pasadas; oscuro = cambió.
     import sys
     import numpy as np
-    sys.path.insert(0, str(IDEA / "herramientas"))
+    sys.path.insert(0, str(MOTOR))
     from geo import utm  # noqa: E402
-    z = np.load(IDEA / "salidas" / "indice_80m.npz")
+    z = np.load(SALIDAS / "indice_80m.npz")
     coh, xs, ys = z["coherencia_media"].astype("float32"), z["xs"], z["ys"]
     cx, cy = utm(lat_c, lon_c)
     lado = 6000.0

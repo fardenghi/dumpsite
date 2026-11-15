@@ -72,7 +72,7 @@ def serie():
         print(archivo, f"{nubes} % nubes")
     caja = [lon - dlon, lat - dlat, lon + dlon, lat + dlat]
     w, s, e, n = caja
-    contornos = json.loads((REPO / "insomnes-web" / "src" / "data" / "seed" / "contornos.json").read_text())
+    contornos = json.loads((REPO / "web" / "src" / "data" / "seed" / "contornos.json").read_text())
     poligono = [[round((lo - w) / (e - w), 5), round((mer(n) - mer(la)) / (mer(n) - mer(s)), 5)]
                 for lo, la in contornos["norte-iii"]["coordinates"][0]]
     d = json.loads(DATOS.read_text())
@@ -126,7 +126,7 @@ def catalogo():
         out.append({"archivo": archivo, "pais": s.get("pais"), "nombre": s.get("nombre"), "ha": round(s.get("area_ha") or 0)})
     d = json.loads(DATOS.read_text())
     d["entreno"] = {"total_catalogo": len(sitios), "muestras": out,
-                    "fuente": "data/basurales/basurales_mundo.json (OSM/Overture, Climate TRACE, EPA LMOP, ...)"}
+                    "fuente": "data/catalogos/basurales/basurales_mundo.json (OSM/Overture, Climate TRACE, EPA LMOP, ...)"}
     DATOS.write_text(json.dumps(d, ensure_ascii=False, indent=1))
     print(len(out), "recortes")
 

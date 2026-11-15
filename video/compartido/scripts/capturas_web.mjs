@@ -1,6 +1,6 @@
 // Capturas de la web (en castellano) para el video local: public/web/es-*.png, 1920 × 1080.
 // Uso (desde video/):
-//   1. Servir la web:  cd ../insomnes-web && npm run build && npx vite preview --port 4174 --strictPort
+//   1. Servir la web:  cd ../web && npm run build && npx vite preview --port 4174 --strictPort
 //   2. npm i --no-save puppeteer-core
 //   3. node compartido/scripts/capturas_web.mjs <ruta a chrome o chrome-headless-shell> public/web
 // Remotion trae chrome-headless-shell en node_modules/.remotion/. En Ubuntu hace falta --no-sandbox (AppArmor).
