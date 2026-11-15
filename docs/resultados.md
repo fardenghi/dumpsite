@@ -1,63 +1,63 @@
-# Resultados
+# Results
 
-**Lenguaje:** "señal compatible con actividad" y "quieto según el radar". Nada de esto es una acusación.
+**Wording:** "signal compatible with activity" and "quiet according to the radar". None of this is an accusation.
 
-## Los 30 frames
-El pipeline corrió sobre **30 frames de NISAR, con 962 pares GUNW** en la capa de 80 m:
+## The 30 frames
+The pipeline ran over **30 NISAR frames, with 962 GUNW pairs** on the 80 m layer:
 
-- **10 frames elegidos primero** por cantidad de basurales con estado conocido y de negativos: AMBA, Los Ángeles, CDMX, Delhi, Yakarta, Ponce (Puerto Rico) y cuatro condados de EE. UU.
-- **20 frames de EE. UU. agregados** por cantidad de basurales abiertos.
+- **10 frames chosen first** by number of known-status dump sites and negatives: AMBA, Los Angeles, Mexico City, Delhi, Jakarta, Ponce (Puerto Rico) and four US counties.
+- **20 US frames added** by number of open dump sites.
 
-| Frames | Pares | Manchas | Candidatas | En un basural del catálogo | Uso conocido (OSM) | Sin explicar | ha candidatas |
+| Frames | Pairs | Blobs | Candidates | On a catalog dump site | Known land use (OSM) | Unexplained | Candidate ha |
 |---|---|---|---|---|---|---|---|
-| Los 10 primeros | 333 | 22.874 | 2.578 | 41 | 639 | 1.898 | 84.382 |
-| Los 20 agregados | 629 | 46.703 | 1.945 | 56 | 492 | 1.397 | 48.370 |
+| The first 10 | 333 | 22,874 | 2,578 | 41 | 639 | 1,898 | 84,382 |
+| The 20 added | 629 | 46,703 | 1,945 | 56 | 492 | 1,397 | 48,370 |
 
-Una mancha es **candidata** si tiene insomnio de 0,70 o más, persistencia de 0,50 o más, no es agua ni lineal, tiene eco de −13 dB o más y mide 10 ha o más. Los umbrales se calibraron **sólo en el AMBA** y no se tocaron por frame. El detalle por frame está en `data/salidas/<FRAME>/` y lo resume `motor/resumen_etapa4.py`.
+A blob is a **candidate** if it has an insomnia of 0.70 or more, a persistence of 0.50 or more, isn't water or linear, has an echo of −13 dB or more and measures 10 ha or more. The thresholds were calibrated **only in the AMBA** and weren't touched per frame. The per-frame detail is in `data/salidas/<FRAME>/` and `motor/resumen_etapa4.py` summarizes it.
 
-## Veredicto por sitio
-`motor/flujo.py` junta el cruce en las dos direcciones (manchas sobre catálogo y catálogo sobre manchas) y da un veredicto por polígono del catálogo y por mancha sin catálogo. Está en `data/salidas/veredictos.json` y es lo que muestra la web.
+## Verdict per site
+`motor/flujo.py` joins the cross in both directions (blobs over catalog and catalog over blobs) and gives a verdict per catalog polygon and per blob without a catalog. It's in `data/salidas/veredictos.json` and it's what the web shows.
 
-**Controles del AMBA:**
-- **González Catán:** sin registro, despierto, insomnio 1,0. Veredicto: activo, ya conocido.
-- **Norte III:** abierto, despierto, insomnio 1,0. Veredicto: activo, ya conocido.
-- **Basural de Luján:** cerrado, quieto, insomnio 0,0. Veredicto: **cerrado y quieto**.
+**AMBA controls:**
+- **González Catán:** not listed, awake, insomnia 1.0. Verdict: active, already known.
+- **Norte III:** open, awake, insomnia 1.0. Verdict: active, already known.
+- **Luján dump site:** closed, quiet, insomnia 0.0. Verdict: **closed and quiet**.
 
-## Matriz de actividad
-¿El insomnio coincide con el registro? Sobre los basurales con estado conocido que el radar pudo medir, con intervalos de Wilson al 95 %:
+## Activity matrix
+Does the insomnia agree with the registry? Over the known-status dump sites the radar could measure, with 95 % Wilson intervals:
 
-| País | Abiertos despiertos | Cerrados quietos | Cerrados despiertos | Concordancia |
+| Country | Open and awake | Closed and quiet | Closed and awake | Agreement |
 |---|---|---|---|---|
 | ARG | 1/1 | 1/1 | 0/1 | 2/2 |
-| PRI | 0/5 (0 % a 43 %) | 2/2 | 0/2 | 2/7 (29 %) |
-| USA | 16/40 (40 %, 26 % a 55 %) | 10/26 (38 %) | 16/26 (62 %) | 26/66 (39 %) |
+| PRI | 0/5 (0 % to 43 %) | 2/2 | 0/2 | 2/7 (29 %) |
+| USA | 16/40 (40 %, 26 % to 55 %) | 10/26 (38 %) | 16/26 (62 %) | 26/66 (39 %) |
 
-**Lectura honesta:** en EE. UU. salen despiertos el 40 % de los abiertos y el 62 % de los cerrados. **El insomnio solo no separa abiertos de cerrados.** Muchos rellenos cerrados siguen moviéndose por el biogás, el asentamiento, las obras o la vegetación. Esa es la razón del modelo del frente activo (`modelo.md`).
+**Honest reading:** in the US, 40 % of the open sites and 62 % of the closed ones come out awake. **The insomnia alone doesn't separate open from closed.** Many closed landfills keep moving because of biogas, settlement, construction work or vegetation. That's the reason for the active-front model (`modelo.md`).
 
-Sesgo: de los 193 sitios de estado conocido que el radar midió, 179 son de EE. UU. (salen de la EPA). La matriz vale para esos países, no "para el mundo".
+Bias: of the 193 known-status sites the radar measured, 179 are in the US (they come from the EPA). The matrix is valid for those countries, not "for the world".
 
-## Regla contra modelo
-Sobre los mismos 198 basurales de 10 ha o más con estado (26 frames, sin el AMBA):
+## Rule versus model
+Over the same 198 dump sites of 10 ha or more with a status (26 frames, without the AMBA):
 
-| | Decide | Coincide con el registro |
+| | Decides | Agrees with the registry |
 |---|---|---|
-| Regla del insomnio | 73 de 198 (37 %) | 28 de 73 (38 %) |
-| **Modelo del frente** (umbral 0,5) | 198 de 198 | **170 de 198 (86 %)** |
+| Insomnia rule | 73 of 198 (37 %) | 28 of 73 (38 %) |
+| **Front model** (0.5 threshold) | 198 of 198 | **170 of 198 (86 %)** |
 
-Aplicado a los 148 basurales de 10 ha o más **sin estado** de los 30 frames, el modelo marca 56 con `p_abierto` mayor que 0,5. Están en `data/salidas/predicciones_estado.parquet`. **No están verificados.**
+Applied to the 148 dump sites of 10 ha or more **without a status** in the 30 frames, the model flags 56 with `p_abierto` above 0.5. They're in `data/salidas/predicciones_estado.parquet`. **They're not verified.**
 
-## Casos para mirar a mano
-- **Cerrados pero despiertos: 16**, todos en EE. UU. Por ejemplo: Operating Industries (Los Ángeles, cerrado en 1984), Palos Verdes (1980), Norris Farms (Maryland, 1986) y Tri-Cities (California, 2012). En casi todos **no se descarta** una explicación obvia: muchos tienen captura de biogás según LMOP (pozos y cañerías mueven el suelo) o una planta de reciclaje en el predio. Antes de nombrar uno hay que mirarlo en óptico.
-- **Abiertos pero quietos: 29.** La explicación más común es que el frente de descarga (1 a 3 ha) es más chico de lo que mueve la mediana de un predio grande, o que el registro de la EPA (2024) quedó desactualizado.
+## Cases to check by hand
+- **Closed but awake: 16**, all in the US. For example: Operating Industries (Los Angeles, closed in 1984), Palos Verdes (1980), Norris Farms (Maryland, 1986) and Tri-Cities (California, 2012). In almost all of them an obvious explanation **can't be ruled out**: many have biogas capture according to LMOP (wells and pipes move the ground) or a recycling plant on the site. Before naming one, it has to be checked in optical imagery.
+- **Open but quiet: 29.** The most common explanation is that the tipping front (1 to 3 ha) is too small to move the median of a large site, or that the EPA registry (2024) is outdated.
 
 ## Norte III
-El modelo de radar daba "cerrado" al polígono de Norte III con estado "abierto". La etiqueta estaba en el polígono equivocado: `BAS-053304` es un sector cubierto de vegetación, y tanto el radar como el óptico ubican el cambio en otro polígono del mismo complejo, `BAS-016796`. Medido como complejo, el modelo da 0,99.
+The radar model said "closed" for the Norte III polygon carrying the "open" status. The label was on the wrong polygon: `BAS-053304` is a vegetated sector, and both the radar and the optical data place the change in another polygon of the same complex, `BAS-016796`. Measured as a complex, the model gives 0.99.
 
-## Óptico
-- **AMBA, con medias sobre el polígono:** el óptico **no separa** un relleno sanitario de un aeródromo con pasto. Los rellenos grandes del AMBA están casi todos tapados con vegetación, y el frente activo es una parte chica del predio.
-- **1.008 basurales de estado conocido** (`motor/optico_estado_conocido.py`): la regla "menos verde que su entorno" (NDVI del predio menos el del anillo, menor que −0,15) marca **313 de 578 abiertos (54 %) y 71 de 369 cerrados (19 %)**, con un AUC de 0,77. El umbral se fijó antes y no se ajustó.
+## Optical
+- **AMBA, with means over the polygon:** the optical data **doesn't separate** a sanitary landfill from a grass airfield. The large AMBA landfills are almost all covered with vegetation, and the active front is a small part of the site.
+- **1,008 known-status dump sites** (`motor/optico_estado_conocido.py`): the "less green than its surroundings" rule (site NDVI minus ring NDVI, below −0.15) flags **313 of 578 open (54 %) and 71 of 369 closed (19 %)**, with an AUC of 0.77. The threshold was fixed beforehand and not tuned.
 
-## Lo que no hay que decir
-- Que el radar "detecta el cierre" en general. Se pueden mostrar casos puntuales, como Luján, con su contexto.
-- Que las manchas sin explicar son basurales. Ninguna está verificada.
-- Que `p_abierto` o `p_basural` son probabilidades calibradas.
+## What shouldn't be said
+- That the radar "detects the closure" in general. Specific cases, like Luján, can be shown with their context.
+- That the unexplained blobs are dump sites. None is verified.
+- That `p_abierto` or `p_basural` are calibrated probabilities.
