@@ -8,3 +8,7 @@ public/clip1-ai.mp4
 compartido/higgsfield/salidas/
 compartido/higgsfield/.venv/
 __pycache__/
+# Tomas de voz crudas y limpias (pesadas): en el repo quedan sólo los cortes y los guiones; la voz final está en public/voz-es
+grabacion/*.wav
+grabacion/*.mp4
+grabacion/*.m4a

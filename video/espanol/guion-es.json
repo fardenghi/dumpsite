@@ -1,8 +1,8 @@
 {
- "_nota": "Video para el jurado local (hasta 3 min, en castellano). Un solo narrador, sin estilos. Todas las cifras salen del repo: context/README.md (5.000 basurales, Ministerio de Ambiente), indice-final.md (Luján, Norte III, González Catán, 219 manchas), data/basurales (66.981 sitios), veredictos.json (42 / 13 / 7, 10 regiones). Lo que marca el modelo es 'clasificado como basural por el modelo', nunca confirmado.",
- "voz": "es-AR-TomasNeural",
+ "_nota": "Video para el jurado local (hasta 3 min, en castellano), con voz grabada (toma: video/grabacion/toma-v2.mp4, limpia: toma-v2-limpia.wav, cortes: cortes-v3.txt; 'catalogo' y 'lema' salen de la regrabación toma-v3-retomas.mp4 / toma-v3-limpia.wav). El texto de cada frase es lo que se dijo en la toma: los subtítulos salen de acá. hueco_antes_s alarga la pausa antes de una frase (cambios de tema/escena); si no está, se usa huecos_s.entre_frases. Lo que marca el modelo es 'clasificado como basural por el modelo', nunca confirmado. Versiones anteriores en video/grabacion/.",
+ "voz": "grabada",
  "idioma": "es-AR",
- "cola_s": 3.0,
+ "cola_s": 6.0,
  "huecos_s": {
   "antes_de_la_primera": 0.3,
   "entre_frases": 0.45,
@@ -13,15 +13,7 @@
    "id": "problema",
    "partes": [
     {
-     "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede mapearlos.",
-     "velocidad": "+8%",
-     "tono": "+2%",
-     "volumen": "+6%",
-     "pausa_ms": 200
-    },
-    {
-     "texto": "En Argentina hay unos cinco mil basurales a cielo abierto según el Ministerio de Ambiente, pero esa cifra no sale de un relevamiento formal, y no existe un inventario oficial abierto que diga dónde están ni cuáles siguen activos.",
-     "velocidad": "+10%"
+     "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede identificarlos. En Argentina hay unos cinco mil basurales a cielo abierto, según el Ministerio de Ambiente, pero esa cifra no sale de un relevamiento formal, y no existe un inventario oficial abierto que diga dónde están ni cuáles siguen activos."
     }
    ]
   },
@@ -29,15 +21,7 @@
    "id": "dumpsite",
    "partes": [
     {
-     "texto": "Por eso construimos Dumpsite, una plataforma que sigue basurales desde el espacio con el radar NISAR, de la NASA y la agencia espacial de India.",
-     "velocidad": "+10%",
-     "tono": "+3%",
-     "volumen": "+4%",
-     "pausa_ms": 150
-    },
-    {
-     "texto": "NISAR toma una imagen de cada punto de la Tierra cada doce días, de día, de noche y a través de las nubes.",
-     "velocidad": "+10%"
+     "texto": "Por eso construimos Dumpsite, una plataforma que sigue basurales desde el espacio con el radar NISAR. Este radar vuelve a pasar por cada punto de la Tierra cada doce días, y ve de día, de noche y a través de las nubes."
     }
    ]
   },
@@ -45,24 +29,24 @@
    "id": "cambia",
    "partes": [
     {
-     "texto": "Un basural activo nunca se ve igual dos veces, llegan camiones, se mueve tierra, se tapa y se vuelve a abrir.",
-     "velocidad": "+10%",
-     "tono": "+1%"
+     "texto": "Un basural activo nunca se ve igual dos veces: llegan camiones, se mueve tierra, se tapa y se vuelve a abrir."
     }
-   ]
+   ],
+   "hueco_antes_s": 0.7
   },
   {
    "id": "coherencia",
    "partes": [
     {
-     "texto": "El radar mide eso con la coherencia, que dice qué tan parecidas son dos pasadas sobre el mismo lugar.",
-     "velocidad": "+10%",
-     "pausa_ms": 120
-    },
+     "texto": "El radar mide eso con la coherencia, que dice cuánto se parece un lugar entre dos pasadas."
+    }
+   ]
+  },
+  {
+   "id": "insomnio",
+   "partes": [
     {
-     "texto": "Si un sitio cambia más que su entorno en casi todas las pasadas, decimos que no duerme. Esa fracción es nuestro índice de insomnio.",
-     "velocidad": "+10%",
-     "tono": "+2%"
+     "texto": "Cada vez que el radar vuelve a pasar, nos fijamos si un lugar cambió más de lo que tiene alrededor. El índice de insomnio es cuántas veces pasó eso."
     }
    ]
   },
@@ -70,96 +54,123 @@
    "id": "mapa",
    "partes": [
     {
-     "texto": "Lo calculamos píxel por píxel en todo el Gran Buenos Aires, descartando el agua, las rutas y los cultivos que cambian solo por temporada.",
-     "velocidad": "+10%"
+     "texto": "Lo calculamos en todo el Gran Buenos Aires, dejando afuera el agua, las rutas y los cultivos, que cambian por otros motivos."
     }
    ]
   },
   {
-   "id": "casos",
+   "id": "lujan",
    "partes": [
     {
-     "texto": "El basural de Luján cerró el primero de julio, y el radar lo ve quieto en las quince pasadas.",
-     "velocidad": "+8%",
-     "tono": "+2%",
-     "pausa_ms": 150
-    },
+     "texto": "Por ejemplo, acá vemos el basural de Luján, que cerró el primero de julio, y el radar lo ve quieto en las quince comparaciones."
+    }
+   ],
+   "hueco_antes_s": 0.6
+  },
+  {
+   "id": "norte3",
+   "partes": [
     {
-     "texto": "Norte Tres y González Catán, en cambio, casi nunca duermen.",
-     "velocidad": "+8%",
-     "tono": "+3%"
+     "texto": "En cambio, Norte Tres y González Catán cambian en casi todas."
     }
    ]
   },
   {
-   "id": "datos",
+   "id": "catalogo",
    "partes": [
     {
-     "texto": "Para saber qué es cada mancha, armamos un catálogo de casi sesenta y siete mil basurales de todo el mundo, cruzando OpenStreetMap, Climate TRACE, la agencia ambiental de Estados Unidos y las plumas de metano que detecta EMIT, de la NASA.",
-     "velocidad": "+10%",
-     "pausa_ms": 120
-    },
-    {
-     "texto": "Y le sumamos ejemplos de lo que se le parece, canteras, aeródromos, campos de golf y parques.",
-     "velocidad": "+10%"
+     "texto": "Pero el radar nos dice si un punto en el mapa cambia en el tiempo, no qué es. Para eso armamos un catálogo de casi sesenta y siete mil basurales en todo el mundo, cruzando OpenStreetMap, Climate TRACE, la agencia ambiental de Estados Unidos y las plumas de metano que detecta EMIT. Y le sumamos lugares que también cambian seguido, como canteras y aeródromos."
     }
-   ]
+   ],
+   "hueco_antes_s": 0.9
   },
   {
    "id": "modelo",
    "partes": [
     {
-     "texto": "Con eso entrenamos un modelo LightGBM. De cada mancha se calculan veintinueve variables del radar y de las imágenes Sentinel-2, vegetación, suelo desnudo, agua, infrarrojo y forma.",
-     "velocidad": "+10%",
-     "pausa_ms": 120,
-     "decir": {
-      "LightGBM": "lait yi bi em"
-     }
-    },
-    {
-     "texto": "Cientos de árboles de decisión, cada uno corrigiendo al anterior, clasifican cada mancha como basural u otra cosa. Y lo validamos dejando ciudades enteras afuera del entrenamiento.",
-     "velocidad": "+10%"
+     "texto": "Con eso entrenamos el modelo LightGBM: son cientos de árboles de decisión, cada uno corrigiendo al anterior. De cada mancha se toman veintinueve variables del radar y de las imágenes de Sentinel-2, como vegetación, suelo desnudo, agua y forma, y la clasifica como un basural o como otra cosa."
     }
-   ]
+   ],
+   "hueco_antes_s": 0.6
   },
   {
-   "id": "resultados",
+   "id": "argentina",
    "partes": [
     {
-     "texto": "En diez regiones del mundo, el radar ve activos cuarenta y dos basurales que ya figuraban en los catálogos, y trece de ellos están registrados como cerrados.",
-     "velocidad": "+8%",
-     "tono": "+3%",
-     "volumen": "+6%"
+     "texto": "Después lo corrimos por toda la Argentina. El modelo encontró unos siete mil lugares que clasifica como basural, dos mil más de lo que estima el Ministerio de Ambiente, y que hoy no figuran en ningún registro."
     }
-   ]
+   ],
+   "hueco_antes_s": 0.9
   },
   {
    "id": "web",
    "partes": [
     {
-     "texto": "Todo esto se puede explorar en la web, el mapa del índice, la ficha de cada sitio con su curva de coherencia, la lista con el registro oficial, y cómo decide el modelo.",
-     "velocidad": "+10%",
-     "tono": "+2%"
+     "texto": "Todo esto se puede ver en nuestra web. Cuando entrás, te encontrás con un mapa del mundo, donde están marcados los basurales en los que el radar detecta movimiento."
+    }
+   ],
+   "hueco_antes_s": 0.9
+  },
+  {
+   "id": "ficha",
+   "partes": [
+    {
+     "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar, lo que dice el registro oficial y lo que fue viendo el radar cada vez que pasó por ahí."
+    }
+   ],
+   "hueco_antes_s": 0.6
+  },
+  {
+   "id": "lujan_web",
+   "partes": [
+    {
+     "texto": "En Luján las dos cosas coinciden, porque figura cerrado desde julio y el radar lo ve quieto."
     }
    ]
+  },
+  {
+   "id": "norte3_web",
+   "partes": [
+    {
+     "texto": "Con Norte Tres pasa lo contrario, porque el radar lo encuentra distinto en casi todas las pasadas."
+    }
+   ]
+  },
+  {
+   "id": "lista",
+   "partes": [
+    {
+     "texto": "Además, armamos una lista con todos los sitios, que se puede descargar para comparar lo que dicen los registros con lo que ve el radar."
+    }
+   ],
+   "hueco_antes_s": 0.6
   },
   {
    "id": "cierre",
    "partes": [
     {
-     "texto": "Usamos solo datos abiertos, y el código, el modelo y los datos están publicados en los links de la pantalla.",
-     "velocidad": "+8%",
-     "tono": "+3%",
-     "volumen": "+6%",
-     "pausa_ms": 200
-    },
-    {
-     "texto": "Dumpsite, los basurales que el radar nunca ve quietos.",
-     "velocidad": "+4%",
-     "tono": "+4%",
-     "volumen": "+8%"
+     "texto": "Usamos solo datos abiertos, y el código, el modelo y los datos están en los links en pantalla."
     }
-   ]
+   ],
+   "hueco_antes_s": 0.9
+  },
+  {
+   "id": "lema",
+   "partes": [
+    {
+     "texto": "Dumpsite. Un basural se puede cerrar en los papeles, pero desde el espacio se ve si verdaderamente sigue despierto."
+    }
+   ],
+   "hueco_antes_s": 0.9
+  },
+  {
+   "id": "equipo",
+   "partes": [
+    {
+     "texto": "Nosotros somos Spaceship. Muchas gracias."
+    }
+   ],
+   "hueco_antes_s": 0.8
   }
  ]
 }

@@ -10,8 +10,9 @@ Two ways to pass the recording (see video/VOZ-GRABADA.md):
   A. One file per sentence, named with the sentence id (problema.wav, dumpsite.m4a, ...), in a folder:
        python3 -I compartido/scripts/voz_grabada.py --carpeta ~/grabacion
 
-  B. A single take with the cuts marked in Audacity (Edit > Labels > Export Labels: a .txt with
-     "start<TAB>end<TAB>id" per line, in seconds):
+  B. Una sola toma con los cortes marcados en Audacity (Edición > Etiquetas > Exportar etiquetas: un .txt con
+     "inicio<TAB>fin<TAB>id" por línea, en segundos). Una cuarta columna opcional indica otra toma (ruta relativa al
+     .txt) para esa frase, por ejemplo una frase regrabada aparte:
        python3 -I compartido/scripts/voz_grabada.py --toma toma.wav --cortes etiquetas.txt
      With --tiempos-originales the pace of the take is kept (each sentence starts where it starts in the recording)
      instead of using the script's gaps.
@@ -32,14 +33,17 @@ VIDEO = pathlib.Path(__file__).resolve().parents[2]
 EXTENSIONES = [".wav", ".mp3", ".m4a", ".ogg", ".opus", ".flac", ".aac", ".webm"]
 
 
-def a_wav(origen, destino, desde=None, hasta=None):
+def a_wav(origen, destino, desde=None, hasta=None, normalizar=True):
     cmd = ["ffmpeg", "-loglevel", "error", "-y"]
     if desde is not None:
         cmd += ["-ss", f"{desde:.3f}"]
     if hasta is not None:
         cmd += ["-to", f"{hasta:.3f}"]
-    # loudnorm evens out the volume between sentences recorded at different times
-    cmd += ["-i", str(origen), "-ac", "1", "-ar", "48000", "-sample_fmt", "s16", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", str(destino)]
+    # loudnorm empareja el volumen entre frases grabadas en momentos distintos
+    cmd += ["-i", str(origen), "-ac", "1", "-ar", "48000", "-sample_fmt", "s16"]
+    if normalizar:
+        cmd += ["-af", "loudnorm=I=-16:TP=-1.5:LRA=11"]
+    cmd += [str(destino)]
     subprocess.run(cmd, check=True)
 
 
@@ -48,7 +52,9 @@ def leer_cortes(path):
     for linea in pathlib.Path(path).read_text().splitlines():
         partes = linea.strip().split("\t")
         if len(partes) >= 3 and partes[0]:
-            cortes[partes[2].strip()] = (float(partes[0].replace(",", ".")), float(partes[1].replace(",", ".")))
+            # cuarta columna opcional: otra toma (ruta relativa al archivo de cortes), para reemplazar frases regrabadas
+            otra = (pathlib.Path(path).parent / partes[3].strip()) if len(partes) >= 4 and partes[3].strip() else None
+            cortes[partes[2].strip()] = (float(partes[0].replace(",", ".")), float(partes[1].replace(",", ".")), otra)
     return cortes
 
 
@@ -61,9 +67,10 @@ def main():
     ap.add_argument("--carpeta", help="option A: folder with one file per sentence, named with the id")
     ap.add_argument("--toma", help="option B: single recording")
     ap.add_argument("--cortes", help="forma B: etiquetas de Audacity (inicio, fin, id)")
-    ap.add_argument("--tiempos-originales", action="store_true", help="option B: keep the pauses of the take")
-    ap.add_argument("--umbral", type=int, default=400, help="level below which it counts as silence (raise it if there's background noise)")
-    ap.add_argument("--sin-recorte", action="store_true", help="don't trim silences")
+    ap.add_argument("--tiempos-originales", action="store_true", help="forma B: respetar las pausas de la toma")
+    ap.add_argument("--umbral", type=int, default=400, help="nivel bajo el cual se considera silencio (subir si hay ruido de fondo)")
+    ap.add_argument("--sin-recorte", action="store_true", help="no recortar silencios")
+    ap.add_argument("--sin-normalizar", action="store_true", help="no aplicar loudnorm por frase (la toma ya viene nivelada, ver limpiar_toma.sh)")
     args = ap.parse_args()
     if bool(args.carpeta) == bool(args.toma) or (args.toma and not args.cortes):
         ap.error("usar --carpeta, o --toma junto con --cortes")
@@ -85,7 +92,8 @@ def main():
         cortes = leer_cortes(args.cortes)
         for i in ids:
             if i in cortes:
-                fuentes[i] = (pathlib.Path(args.toma).expanduser(), *cortes[i])
+                desde, hasta, otra = cortes[i]
+                fuentes[i] = (otra or pathlib.Path(args.toma).expanduser(), desde, hasta)
     faltan = [i for i in ids if i not in fuentes]
     if faltan:
         sys.exit(f"Faltan grabaciones para: {', '.join(faltan)}. Los ids válidos son: {', '.join(ids)}")
@@ -101,13 +109,15 @@ def main():
     for n, f in enumerate(guion["frases"], start=1):
         origen, desde, hasta = fuentes[f["id"]]
         destino = salida / f"frase-{n}.wav"
-        a_wav(origen, destino, desde, hasta)
+        a_wav(origen, destino, desde, hasta, normalizar=not args.sin_normalizar)
         dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(destino)],
                                    capture_output=True, text=True, check=True).stdout)
         if not args.sin_recorte:
             dur = recortar_silencio(destino, umbral=args.umbral)
         if args.tiempos_originales:
             t = h["antes_de_la_primera"] + (desde - t0_toma)
+        elif n > 1 and "hueco_antes_s" in f:
+            t += f["hueco_antes_s"] - h["entre_frases"]  # pausa propia de esta frase (p. ej. un cambio de tema)
         elif n == 2:
             t += h["antes_de_la_2"] - h["entre_frases"]
         texto = " ".join(p["texto"] for p in f["partes"])

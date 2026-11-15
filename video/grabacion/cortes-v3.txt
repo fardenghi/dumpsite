@@ -1,0 +1,19 @@
+1.28	16.25	problema
+18.42	29.40	dumpsite
+31.79	38.12	cambia
+38.44	43.24	coherencia
+43.74	51.10	insomnio
+51.20	56.99	mapa
+57.35	63.78	lujan
+64.31	67.86	norte3
+0.70	19.83	catalogo	toma-v3-limpia.wav
+90.12	107.85	modelo
+111.70	121.92	argentina
+123.19	131.36	web
+134.96	144.12	ficha
+144.50	149.61	lujan_web
+149.89	154.07	norte3_web
+154.31	160.12	lista
+160.67	165.54	cierre
+27.13	33.32	lema	toma-v3-limpia.wav
+176.65	178.92	equipo

@@ -1,0 +1,157 @@
+{
+ "_nota": "Video para el jurado local (hasta 3 min, en castellano), con voz grabada (toma: video/grabacion/toma-v1.mp4, cortes: video/grabacion/cortes-v1.txt). El texto de cada frase es lo que se dijo en la toma: los subtítulos salen de acá. Lo que marca el modelo es 'clasificado como basural por el modelo', nunca confirmado. La versión anterior (voz sintética, 11 frases) está en video/grabacion/guion-es.sintetico.json.",
+ "voz": "grabada",
+ "idioma": "es-AR",
+ "cola_s": 3.0,
+ "huecos_s": {
+  "antes_de_la_primera": 0.3,
+  "entre_frases": 0.45,
+  "antes_de_la_2": 0.7
+ },
+ "frases": [
+  {
+   "id": "problema",
+   "partes": [
+    {
+     "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede identificarlos. En Argentina hay unos cinco mil basurales a cielo abierto según el Ministerio de Ambiente, pero esa cifra no sale de un relevamiento formal, y no existe un inventario oficial abierto que diga dónde están ni cuáles siguen activos."
+    }
+   ]
+  },
+  {
+   "id": "dumpsite",
+   "partes": [
+    {
+     "texto": "Por eso construimos Dumpsite, una plataforma que sigue basurales desde el espacio con el radar NISAR. Este radar vuelve a pasar por cada punto de la Tierra cada doce días, y ve de día, de noche y a través de las nubes."
+    }
+   ]
+  },
+  {
+   "id": "cambia",
+   "partes": [
+    {
+     "texto": "Un basural activo nunca se ve igual dos veces: llegan camiones, se mueve tierra, se tapa y se vuelve a abrir."
+    }
+   ]
+  },
+  {
+   "id": "coherencia",
+   "partes": [
+    {
+     "texto": "El radar mide eso con la coherencia, que dice cuánto se parece un lugar entre dos pasadas."
+    }
+   ]
+  },
+  {
+   "id": "insomnio",
+   "partes": [
+    {
+     "texto": "Cada vez que el radar vuelve a pasar, nos fijamos si un lugar cambió más que lo que tiene alrededor. El índice de insomnio es cuántas veces pasó eso."
+    }
+   ]
+  },
+  {
+   "id": "mapa",
+   "partes": [
+    {
+     "texto": "Lo calculamos en todo el Gran Buenos Aires, dejando afuera el agua, las rutas y los cultivos, que cambian por otros motivos."
+    }
+   ]
+  },
+  {
+   "id": "lujan",
+   "partes": [
+    {
+     "texto": "Por ejemplo, acá vemos el basural de Luján, que cerró el primero de julio, y el radar lo ve quieto en las quince comparaciones."
+    }
+   ]
+  },
+  {
+   "id": "norte3",
+   "partes": [
+    {
+     "texto": "En cambio, Norte Tres y González Catán cambian en casi todas."
+    }
+   ]
+  },
+  {
+   "id": "catalogo",
+   "partes": [
+    {
+     "texto": "Pero el radar dice que algo se mueve, no qué es. Por eso armamos un catálogo de casi sesenta y siete mil basurales de todo el mundo, cruzando OpenStreetMap, Climate TRACE, la agencia ambiental de Estados Unidos y las plumas de metano que detecta EMIT. Y le sumamos lugares que también cambian seguido, como canteras y aeródromos."
+    }
+   ]
+  },
+  {
+   "id": "modelo",
+   "partes": [
+    {
+     "texto": "Con eso entrenamos un modelo LightGBM: son cientos de árboles de decisión, cada uno corrigiendo al anterior. De cada mancha toma veintinueve variables del radar y de las imágenes Sentinel-2, como vegetación, suelo desnudo, agua y forma, y la clasifica como basural u otra cosa."
+    }
+   ]
+  },
+  {
+   "id": "argentina",
+   "partes": [
+    {
+     "texto": "Después lo corrimos por toda la Argentina. El modelo encontró unos siete mil lugares que clasifica como basural: unos dos mil más que los cinco mil que estima el Ministerio de Ambiente, y que hoy no figuran en ningún registro."
+    }
+   ]
+  },
+  {
+   "id": "web",
+   "partes": [
+    {
+     "texto": "Todo esto se puede ver en nuestra web. Cuando entrás te encontrás con un mapa de Buenos Aires donde están marcados los basurales en los que el radar detecta movimiento."
+    }
+   ]
+  },
+  {
+   "id": "ficha",
+   "partes": [
+    {
+     "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar, lo que dice el registro oficial y lo que fue viendo el radar cada vez que pasó por ahí."
+    }
+   ]
+  },
+  {
+   "id": "lujan_web",
+   "partes": [
+    {
+     "texto": "En Luján las dos cosas coinciden, porque figura cerrado desde julio y el radar lo ve quieto."
+    }
+   ]
+  },
+  {
+   "id": "norte3_web",
+   "partes": [
+    {
+     "texto": "Con Norte Tres pasa lo contrario, porque el radar lo encuentra distinto en casi todas las pasadas."
+    }
+   ]
+  },
+  {
+   "id": "lista",
+   "partes": [
+    {
+     "texto": "Además armamos una lista con todos los sitios, que se puede descargar para comparar lo que dicen los registros con lo que ve el radar."
+    }
+   ]
+  },
+  {
+   "id": "cierre",
+   "partes": [
+    {
+     "texto": "Usamos solo datos abiertos, y el código, el modelo y los datos están en los links en pantalla."
+    }
+   ]
+  },
+  {
+   "id": "lema",
+   "partes": [
+    {
+     "texto": "Dumpsite: un basural se puede cerrar en los papeles, pero desde el espacio se ve si verdaderamente sigue despierto."
+    }
+   ]
+  }
+ ]
+}
