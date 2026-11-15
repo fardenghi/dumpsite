@@ -27,6 +27,14 @@ flowchart LR
 
 **Results:** 30 NISAR frames and 962 pairs. The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/resultados.md`](docs/resultados.md).
 
+## Roadmap
+Built in two days, so several pieces are first versions. Next steps, in short:
+- **Trust what exists:** human review of the AI labels and flagged cases, calibration outside Buenos Aires, reproducible runs and a public deploy.
+- **Better model:** longer NISAR series, small sites, less US bias in the training labels and calibrated scores.
+- **Operational tool:** automatic monitoring every 12 days, alerts when a closed site wakes up, and field validation with authorities.
+
+Full roadmap in [`docs/roadmap.md`](docs/roadmap.md).
+
 ## Repo structure
 | Folder | What's in it |
 |---|---|
