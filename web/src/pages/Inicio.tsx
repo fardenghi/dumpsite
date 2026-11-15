@@ -8,6 +8,8 @@ export const FUENTES = [
   { nombre: 'Blue Marble · NASA GIBS', url: 'https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api' },
   { nombre: 'Sentinel-2 · ESA Copernicus, vía Planetary Computer', url: 'https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a' },
   { nombre: 'Polígonos · OpenStreetMap, ODbL', url: 'https://www.openstreetmap.org/copyright' },
+  { nombre: 'Catálogo de otros frames · Overture Maps (OpenStreetMap, ODbL)', url: 'https://docs.overturemaps.org/' },
+  { nombre: 'Estado del registro en EE. UU. · EPA LMOP', url: 'https://www.epa.gov/lmop' },
 ]
 
 export function Fuentes() {
