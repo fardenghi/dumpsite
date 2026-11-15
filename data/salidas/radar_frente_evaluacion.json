@@ -1,0 +1,541 @@
+{
+ "generado_por": "herramientas/radar_frente.py evaluar",
+ "muestras": {
+  "n": 141,
+  "abiertos": 98,
+  "cerrados": 43,
+  "frames": [
+   "USA_AZ_MARICOPA",
+   "USA_CA_LOS_ANGELES",
+   "USA_CA_RIVERSIDE",
+   "USA_CA_SAN_BERNARDINO",
+   "USA_CA_SAN_JOAQUIN",
+   "USA_CA_TULARE",
+   "USA_FL_OSCEOLA",
+   "USA_GA_FORSYTH",
+   "USA_IL_ST_CLAIR",
+   "USA_IN_FULTON",
+   "USA_MD_FREDERICK",
+   "USA_MI_WAYNE",
+   "USA_OH_HAMILTON",
+   "USA_OH_MAHONING",
+   "USA_PA_ALLEGHENY",
+   "USA_PA_BERKS",
+   "USA_SC_GREENVILLE",
+   "USA_TX_DALLAS",
+   "USA_TX_HARRIS",
+   "USA_VA_ROCKINGHAM"
+  ]
+ },
+ "validacion": "regresión logística como en modelo_estado.py; un frame afuera por vez; IC 95 % por remuestreo",
+ "auc": {
+  "(a) radar actual (7)": {
+   "auc": 0.74,
+   "ic95": [
+    0.646,
+    0.83
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.768
+  },
+  "(b) frente (10)": {
+   "auc": 0.887,
+   "ic95": [
+    0.826,
+    0.94
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.88
+  },
+  "(c) radar actual + frente": {
+   "auc": 0.861,
+   "ic95": [
+    0.787,
+    0.925
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.874
+  },
+  "óptico (8)": {
+   "auc": 0.839,
+   "ic95": [
+    0.74,
+    0.925
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.835
+  },
+  "óptico + radar actual": {
+   "auc": 0.824,
+   "ic95": [
+    0.72,
+    0.913
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.83
+  },
+  "óptico + frente": {
+   "auc": 0.888,
+   "ic95": [
+    0.825,
+    0.942
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.869
+  },
+  "sólo área": {
+   "auc": 0.79,
+   "ic95": [
+    0.706,
+    0.866
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.793
+  },
+  "radar actual + área": {
+   "auc": 0.806,
+   "ic95": [
+    0.728,
+    0.876
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.814
+  },
+  "frente + área": {
+   "auc": 0.884,
+   "ic95": [
+    0.823,
+    0.937
+   ],
+   "n": 141,
+   "abiertos": 98,
+   "auc_5_grupos_de_frames": 0.878
+  }
+ },
+ "variables_nuevas": [
+  {
+   "variable": "eco_std_rel_max3",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.825,
+   "n": 141,
+   "mediana_abiertos": 1.253,
+   "mediana_cerrados": 0.574,
+   "correlacion_con_log_area": 0.5,
+   "auc_por_tercil_de_area": [
+    0.66,
+    0.85,
+    0.84
+   ],
+   "coeficiente_b": 0.19,
+   "coincide_con_actividad": true
+  },
+  {
+   "variable": "frente_vs_predio",
+   "si_midiera_actividad": "más bajo = más abierto",
+   "auc_en_ese_sentido": 0.823,
+   "n": 139,
+   "mediana_abiertos": 0.576,
+   "mediana_cerrados": 0.775,
+   "correlacion_con_log_area": -0.7,
+   "auc_por_tercil_de_area": [
+    0.53,
+    0.86,
+    0.85
+   ],
+   "coeficiente_b": -1.08,
+   "coincide_con_actividad": true
+  },
+  {
+   "variable": "eco_std_rel_p90",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.799,
+   "n": 141,
+   "mediana_abiertos": 1.116,
+   "mediana_cerrados": 0.63,
+   "correlacion_con_log_area": 0.18,
+   "auc_por_tercil_de_area": [
+    0.72,
+    0.85,
+    0.88
+   ],
+   "coeficiente_b": 0.63,
+   "coincide_con_actividad": true
+  },
+  {
+   "variable": "eco_cambio_rel_p90",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.768,
+   "n": 138,
+   "mediana_abiertos": 3.564,
+   "mediana_cerrados": 2.482,
+   "correlacion_con_log_area": 0.28,
+   "auc_por_tercil_de_area": [
+    0.7,
+    0.76,
+    0.95
+   ],
+   "coeficiente_b": 0.16,
+   "coincide_con_actividad": true
+  },
+  {
+   "variable": "ecohv_std_rel_p90",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.737,
+   "n": 141,
+   "mediana_abiertos": 0.903,
+   "mediana_cerrados": 0.618,
+   "correlacion_con_log_area": 0.18,
+   "auc_por_tercil_de_area": [
+    0.66,
+    0.74,
+    0.85
+   ],
+   "coeficiente_b": -0.11,
+   "coincide_con_actividad": false
+  },
+  {
+   "variable": "frente_coh_3x3",
+   "si_midiera_actividad": "más bajo = más abierto",
+   "auc_en_ese_sentido": 0.699,
+   "n": 139,
+   "mediana_abiertos": 0.421,
+   "mediana_cerrados": 0.514,
+   "correlacion_con_log_area": -0.56,
+   "auc_por_tercil_de_area": [
+    0.39,
+    0.84,
+    0.75
+   ],
+   "coeficiente_b": -0.63,
+   "coincide_con_actividad": true
+  },
+  {
+   "variable": "frente_coh_fijo",
+   "si_midiera_actividad": "más bajo = más abierto",
+   "auc_en_ese_sentido": 0.654,
+   "n": 139,
+   "mediana_abiertos": 0.499,
+   "mediana_cerrados": 0.579,
+   "correlacion_con_log_area": -0.5,
+   "auc_por_tercil_de_area": [
+    0.35,
+    0.81,
+    0.65
+   ],
+   "coeficiente_b": 0.06,
+   "coincide_con_actividad": false
+  },
+  {
+   "variable": "parche_se_mueve",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.646,
+   "n": 139,
+   "mediana_abiertos": 0.134,
+   "mediana_cerrados": 0.026,
+   "correlacion_con_log_area": 0.03,
+   "auc_por_tercil_de_area": [
+    0.74,
+    0.46,
+    0.54
+   ],
+   "coeficiente_b": 0.55,
+   "coincide_con_actividad": true
+  },
+  {
+   "variable": "parche_bajo_frac",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.357,
+   "n": 139,
+   "mediana_abiertos": 0.08,
+   "mediana_cerrados": 0.26,
+   "correlacion_con_log_area": -0.24,
+   "auc_por_tercil_de_area": [
+    0.29,
+    0.51,
+    0.45
+   ],
+   "coeficiente_b": -0.95,
+   "coincide_con_actividad": false
+  },
+  {
+   "variable": "parche_bajo_ha",
+   "si_midiera_actividad": "más alto = más abierto",
+   "auc_en_ese_sentido": 0.531,
+   "n": 139,
+   "mediana_abiertos": 7.04,
+   "mediana_cerrados": 9.6,
+   "correlacion_con_log_area": 0.39,
+   "auc_por_tercil_de_area": [
+    0.31,
+    0.52,
+    0.44
+   ],
+   "coeficiente_b": -0.03,
+   "coincide_con_actividad": false
+  }
+ ],
+ "auc_por_tercil_de_area": [
+  {
+   "tercil": "chicos",
+   "n": 47,
+   "abiertos": 18,
+   "(a) radar actual (7)": 0.592,
+   "(b) frente (10)": 0.684
+  },
+  {
+   "tercil": "medianos",
+   "n": 47,
+   "abiertos": 36,
+   "(a) radar actual (7)": 0.813,
+   "(b) frente (10)": 0.932
+  },
+  {
+   "tercil": "grandes",
+   "n": 47,
+   "abiertos": 44,
+   "(a) radar actual (7)": 0.917,
+   "(b) frente (10)": 0.962
+  }
+ ],
+ "prueba_amba": [
+  {
+   "id_catalogo": "BAS-000001",
+   "predio": "González Catán (sin estado)",
+   "estado": "desconocido",
+   "p_abierto_radar_actual": 0.444,
+   "p_abierto_frente": 0.795,
+   "p_abierto_los_dos": 0.726,
+   "eco_std_rel_p90": 0.694,
+   "ecohv_std_rel_p90": 0.802,
+   "eco_std_rel_max3": 0.707,
+   "eco_cambio_rel_p90": 2.644,
+   "frente_coh_3x3": 0.276,
+   "frente_coh_fijo": 0.281,
+   "frente_vs_predio": 0.448,
+   "parche_bajo_ha": 56.96,
+   "parche_bajo_frac": 0.369,
+   "parche_se_mueve": 0.064,
+   "insomnio_px_max3": 1.0,
+   "insomnio_px_p95": 1.0,
+   "parche_insomnio90_ha": 43.52,
+   "insomnio_parche_se_mueve": 0.432,
+   "eco_std_en_parche": 0.223
+  },
+  {
+   "id_catalogo": "BAS-000007",
+   "predio": "Basural de Luján (cerrado el 1/07/2026)",
+   "estado": "cerrado",
+   "p_abierto_radar_actual": 0.528,
+   "p_abierto_frente": 0.251,
+   "p_abierto_los_dos": 0.285,
+   "eco_std_rel_p90": 0.419,
+   "ecohv_std_rel_p90": 0.689,
+   "eco_std_rel_max3": 0.434,
+   "eco_cambio_rel_p90": 2.615,
+   "frente_coh_3x3": 0.888,
+   "frente_coh_fijo": 0.944,
+   "frente_vs_predio": 0.859,
+   "parche_bajo_ha": 0.0,
+   "parche_bajo_frac": 0.0,
+   "parche_se_mueve": 0.337,
+   "insomnio_px_max3": 0.256,
+   "insomnio_px_p95": 0.333,
+   "parche_insomnio90_ha": 0.0,
+   "insomnio_parche_se_mueve": 0.812,
+   "eco_std_en_parche": -0.038
+  },
+  {
+   "id_catalogo": "BAS-053304",
+   "predio": "Norte III, polígono con estado abierto",
+   "estado": "abierto",
+   "p_abierto_radar_actual": 0.296,
+   "p_abierto_frente": 0.087,
+   "p_abierto_los_dos": 0.118,
+   "eco_std_rel_p90": 0.738,
+   "ecohv_std_rel_p90": 0.65,
+   "eco_std_rel_max3": 0.736,
+   "eco_cambio_rel_p90": 2.794,
+   "frente_coh_3x3": 0.294,
+   "frente_coh_fijo": 0.363,
+   "frente_vs_predio": 0.788,
+   "parche_bajo_ha": 59.52,
+   "parche_bajo_frac": 0.853,
+   "parche_se_mueve": 0.406,
+   "insomnio_px_max3": 1.0,
+   "insomnio_px_p95": 1.0,
+   "parche_insomnio90_ha": 53.76,
+   "insomnio_parche_se_mueve": 0.729,
+   "eco_std_en_parche": 0.167
+  },
+  {
+   "id_catalogo": "BAS-053307",
+   "predio": "Norte III, módulo C (sin estado)",
+   "estado": "desconocido",
+   "p_abierto_radar_actual": 0.834,
+   "p_abierto_frente": 0.426,
+   "p_abierto_los_dos": 0.941,
+   "eco_std_rel_p90": 0.723,
+   "ecohv_std_rel_p90": 0.646,
+   "eco_std_rel_max3": 0.805,
+   "eco_cambio_rel_p90": 2.672,
+   "frente_coh_3x3": 0.235,
+   "frente_coh_fijo": 0.253,
+   "frente_vs_predio": 0.432,
+   "parche_bajo_ha": 181.76,
+   "parche_bajo_frac": 0.693,
+   "parche_se_mueve": 0.0,
+   "insomnio_px_max3": 1.0,
+   "insomnio_px_p95": 1.0,
+   "parche_insomnio90_ha": 19.84,
+   "insomnio_parche_se_mueve": 0.312,
+   "eco_std_en_parche": 0.805
+  }
+ ],
+ "insomnio_maximo": {
+  "solas": [
+   {
+    "variable": "insomnio_px_max3",
+    "auc": 0.509,
+    "ic95": [
+     0.394,
+     0.628
+    ],
+    "n": 139,
+    "abiertos": 97,
+    "sentido": "AUC de más alto = más abierto",
+    "mediana_abiertos": 0.833,
+    "mediana_cerrados": 0.829
+   },
+   {
+    "variable": "insomnio_px_p95",
+    "auc": 0.429,
+    "ic95": [
+     0.314,
+     0.551
+    ],
+    "n": 139,
+    "abiertos": 97,
+    "sentido": "AUC de más alto = más abierto",
+    "mediana_abiertos": 0.84,
+    "mediana_cerrados": 0.901
+   },
+   {
+    "variable": "parche_insomnio90_ha",
+    "auc": 0.498,
+    "ic95": [
+     0.385,
+     0.617
+    ],
+    "n": 139,
+    "abiertos": 97,
+    "sentido": "AUC de más alto = más abierto",
+    "mediana_abiertos": 1.28,
+    "mediana_cerrados": 1.28
+   },
+   {
+    "variable": "insomnio_parche_se_mueve",
+    "auc": 0.475,
+    "ic95": [
+     0.375,
+     0.583
+    ],
+    "n": 139,
+    "abiertos": 97,
+    "sentido": "AUC de más alto = más abierto",
+    "mediana_abiertos": 0.209,
+    "mediana_cerrados": 0.212
+   },
+   {
+    "variable": "eco_std_en_parche",
+    "auc": 0.808,
+    "ic95": [
+     0.734,
+     0.873
+    ],
+    "n": 139,
+    "abiertos": 97,
+    "sentido": "AUC de más alto = más abierto",
+    "mediana_abiertos": 0.856,
+    "mediana_cerrados": 0.174
+   }
+  ],
+  "predios_con_maximo_3x3_mayor_0.9": {
+   "abiertos": [
+    25,
+    98
+   ],
+   "cerrados": [
+    16,
+    43
+   ]
+  },
+  "combinaciones": {
+   "máximo + se mueve + producto": {
+    "auc": 0.372,
+    "ic95": [
+     0.255,
+     0.491
+    ],
+    "n": 141,
+    "abiertos": 98
+   },
+   "máximo + eco en el parche + producto": {
+    "auc": 0.789,
+    "ic95": [
+     0.713,
+     0.857
+    ],
+    "n": 141,
+    "abiertos": 98
+   },
+   "las tres del máximo": {
+    "auc": 0.48,
+    "ic95": [
+     0.377,
+     0.586
+    ],
+    "n": 141,
+    "abiertos": 98
+   },
+   "frente + máximo + combinaciones": {
+    "auc": 0.88,
+    "ic95": [
+     0.818,
+     0.935
+    ],
+    "n": 141,
+    "abiertos": 98
+   }
+  },
+  "entre_los_de_maximo_alto": {
+   "insomnio_parche_se_mueve": {
+    "auc": 0.487,
+    "ic95": [
+     0.292,
+     0.675
+    ],
+    "n": 41,
+    "abiertos": 25,
+    "sentido": "AUC de más alto = más abierto, sólo predios con insomnio_px_max3 >= 0,9"
+   },
+   "eco_std_en_parche": {
+    "auc": 0.958,
+    "ic95": [
+     0.892,
+     1.0
+    ],
+    "n": 41,
+    "abiertos": 25,
+    "sentido": "AUC de más alto = más abierto, sólo predios con insomnio_px_max3 >= 0,9"
+   }
+  }
+ }
+}
