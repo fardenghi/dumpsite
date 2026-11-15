@@ -47,6 +47,47 @@ PERIODO = ("2025-10-21", "2026-10-21")
 ESTADOS = ("abierto", "cerrado")
 MIN_HA = 10.0
 UMBRAL_NDVI = -0.15  # fijado antes de esta corrida (ver el encabezado); acá no se ajusta
+# Los 10 frames que existían cuando se fijó el umbral. Lo que cae fuera de ellos es la prueba independiente.
+FRAMES_DEL_UMBRAL = ("AMBA", "LOS_ANGELES", "USA_OH_LAKE", "USA_MD_HOWARD", "CDMX", "PRI_PONCE", "USA_NH_HILLSBOROUGH",
+                     "USA_NY_RICHMOND", "DELHI", "YAKARTA")
+
+# `extraer_optico.py` pide un permiso de lectura (token) nuevo en cada llamada y, si una lectura falla, la saltea con
+# un aviso. Con muchas celdas a la vez el servicio de permisos contesta "429 Too Many Requests" y las escenas se
+# pierden en silencio: el basural queda con menos escenas o con ninguna. Por eso acá, sin tocar ese archivo:
+#   - se usa UN solo permiso para toda la corrida;
+#   - cada lectura se reintenta antes de darla por perdida, y las perdidas se cuentan;
+#   - una celda con algún basural sin escenas no se guarda (queda pendiente), salvo con `--aceptar-vacias`.
+LECTURAS_PERDIDAS = []
+
+
+class _Firma(eo.Firma):
+    def __call__(self, href):
+        for i in range(6):
+            try:
+                return super().__call__(href)
+            except Exception:
+                if i == 5:
+                    raise
+                time.sleep(3 * (i + 1))
+
+
+_FIRMA = _Firma()
+eo.Firma = lambda: _FIRMA
+_leer_ventana = eo.leer_ventana
+
+
+def _leer_con_reintento(*a, **k):
+    for i in range(4):
+        try:
+            return _leer_ventana(*a, **k)
+        except Exception:
+            if i == 3:
+                LECTURAS_PERDIDAS.append(1)
+                raise
+            time.sleep(2 * (i + 1))
+
+
+eo.leer_ventana = _leer_con_reintento
 
 
 def sitios():
@@ -67,7 +108,7 @@ def sitios():
         if s and s["estado"] in ESTADOS and (s.get("area_ha") or 0) >= MIN_HA:
             c = g.centroid
             filas.append({"id_catalogo": s["id"], "nombre": s.get("nombre"), "pais": s.get("pais"), "estado": s["estado"],
-                          "area_ha": s["area_ha"], "fecha_cierre": s.get("fecha_cierre"), "lon": round(c.x, 5), "lat": round(c.y, 5),
+                          "area_ha": s["area_ha"], "fecha_cierre": None if s.get("fecha_cierre") is None else str(s["fecha_cierre"]), "lon": round(c.x, 5), "lat": round(c.y, 5),
                           "fuentes_estado": ",".join(sorted({str(e.get("fuente") if isinstance(e, dict) else e)
                                                              for e in (s.get("estados_por_fuente") or [])})) or None,
                           "celda": f"{math.floor(c.x):+04d}_{math.floor(c.y):+03d}", "geom": g})
@@ -86,7 +127,7 @@ def buscar(caja, intentos=4):
             time.sleep(5 * (i + 1))
 
 
-def correr(parte, total, hilos, a_la_vez):
+def correr(parte, total, hilos, a_la_vez, aceptar_vacias=False):
     from concurrent.futures import ThreadPoolExecutor, as_completed
     df, todas = sitios()
     arbol = shapely.STRtree(todas)
@@ -105,6 +146,9 @@ def correr(parte, total, hilos, a_la_vez):
         escenas = buscar(caja)
         excluir = [todas[i] for i in arbol.query(shapely.box(*caja))]
         res = eo.extraer(obj, escenas, excluir, hilos=hilos, max_fechas=10, periodo=PERIODO, avisar=lambda m: None)
+        vacios = sum(r["n_escenas"] == 0 for r in res)
+        if vacios and not aceptar_vacias:
+            raise RuntimeError(f"{vacios} de {len(obj)} basurales quedaron sin escenas")
         pd.DataFrame([{"id_catalogo": o["clave"], **r} for o, r in zip(obj, res)]).to_parquet(camino(celda), index=False)
         return len(obj), len(escenas)
 
@@ -125,8 +169,11 @@ def correr(parte, total, hilos, a_la_vez):
         destino = os.path.join(PARTES, f"parte_{parte}de{total}.parquet")
         pd.concat(hechas).to_parquet(destino, index=False)
         print(f"{destino}: {sum(len(h) for h in hechas)} basurales")
+    if LECTURAS_PERDIDAS:
+        print(f"OJO: {len(LECTURAS_PERDIDAS)} lecturas de escena se perdieron después de 4 intentos: hay basurales con menos escenas.")
     if fallas:
-        print(f"Quedaron {len(fallas)} celdas sin medir: volvé a correr el mismo comando. {fallas}")
+        print(f"Quedaron {len(fallas)} celdas sin medir: volvé a correr el mismo comando. Si siguen quedando las mismas, es que no "
+              f"tienen escenas sin nubes: corré una última vez con --aceptar-vacias. {fallas}")
     return 1 if fallas else 0
 
 
@@ -168,7 +215,7 @@ def resumen():
     t = pd.read_parquet(SALIDA)
     t = t[(t.n_escenas > 0) & t.ndvi_contraste.notna()]
     with open(os.path.join(DATA, "frames.json"), encoding="utf-8") as fh:
-        cajas = [f["bbox"] for f in json.load(fh)["frames"]]
+        cajas = [f["bbox"] for f in json.load(fh)["frames"] if f["frame"] in FRAMES_DEL_UMBRAL]
     t["en_frame"] = [any(b[0] <= x <= b[2] and b[1] <= y <= b[3] for b in cajas) for x, y in zip(t.lon, t.lat)]
 
     def fila(nombre, d):
@@ -181,8 +228,8 @@ def resumen():
                 "ndvi_contraste_mediana": [round(float(x.ndvi_contraste.median()), 3) if len(x) else None for x in (a, c)],
                 "auc": None if v is None else round(v, 3)}
 
-    filas = [fila("todos", t), fila("fuera de los frames ya procesados (no se usaron para fijar el umbral)", t[~t.en_frame]),
-             fila("en los frames ya procesados", t[t.en_frame])]
+    filas = [fila("todos", t), fila("fuera de los 10 frames con que se fijó el umbral (prueba independiente)", t[~t.en_frame]),
+             fila("en los 10 frames con que se fijó el umbral", t[t.en_frame])]
     filas += [fila(f"país {p}", d) for p, d in t.groupby(t.pais.fillna("sin país")) if len(d) >= 10]
     filas += [fila(f"cerrados con fecha de cierre {txt}", pd.concat([t[t.estado == "abierto"], t[(t.estado == "cerrado") & m]]))
               for txt, m in (("hasta 2015", t.fecha_cierre.astype(str).str[:4].str.isdigit() & (t.fecha_cierre.astype(str).str[:4] <= "2015")),
@@ -206,6 +253,7 @@ def main():
     c.add_argument("--parte", default="1/1", help="i/n: esta compu hace la parte i de n (por defecto, todo)")
     c.add_argument("--hilos", type=int, default=8, help="lecturas en paralelo por celda")
     c.add_argument("--celdas-a-la-vez", type=int, default=6)
+    c.add_argument("--aceptar-vacias", action="store_true", help="guardar también las celdas con basurales sin ninguna escena")
     sub.add_parser("juntar")
     sub.add_parser("resumen")
     args = a.parse_args()
@@ -213,7 +261,7 @@ def main():
         i, n = (int(x) for x in args.parte.split("/"))
         if not 1 <= i <= n:
             raise SystemExit("--parte va como i/n, con 1 <= i <= n")
-        return correr(i, n, args.hilos, args.celdas_a_la_vez)
+        return correr(i, n, args.hilos, args.celdas_a_la_vez, args.aceptar_vacias)
     if args.orden == "juntar":
         juntar()
     else:
