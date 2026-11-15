@@ -1,7 +1,7 @@
-"""El modelo de abierto contra cerrado al lado de los veredictos (`veredicto_estado.py`) y la regla con que se elige
-el modelo principal (`modelo_estado.elegir_principal`). Todo sintético y sin red.
+"""The open-versus-closed model next to the verdicts (`veredicto_estado.py`) and the rule used to pick
+the main model (`modelo_estado.elegir_principal`). All synthetic and offline.
 
-Correr desde `motor/`:  python -m pytest tests -q
+Run from `motor/`:  python -m pytest tests -q
 """
 import json
 import os
@@ -33,7 +33,7 @@ def _salidas(tmp_path):
 def test_anotar_suma_el_modelo_sin_tocar_el_veredicto(tmp_path):
     vs = [{"tipo": "catalogo", "id": "BAS-000001", "frame": "F1", "veredicto": "quieto_radar"},
           {"tipo": "catalogo", "id": "BAS-000003", "frame": "F2", "veredicto": "no_alcanza"},
-          {"tipo": "catalogo", "id": "BAS-000009", "frame": "F1", "veredicto": "no_alcanza"},  # chico: no está en las predicciones
+          {"tipo": "catalogo", "id": "BAS-000009", "frame": "F1", "veredicto": "no_alcanza"},  # small: not in the predictions
           {"tipo": "mancha", "id": "MAN-F1-0001", "frame": "F1", "veredicto": "sin_clasificar"}]
     assert vest.anotar(vs, _salidas(tmp_path)) == 1
     assert vs[0]["modelo_estado"] == {"p_abierto": 0.9, "lectura": "compatible con abierto", "origen": "validación: modelo entrenado sin su frame"}

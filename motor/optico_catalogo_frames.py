@@ -1,18 +1,18 @@
-"""Óptico de Sentinel-2 de los basurales de 10 ha o más de los frames que todavía no lo tienen medido.
+"""Sentinel-2 optical data for the dump sites of 10 ha or more in the frames that don't have it measured yet.
 
-Completa lo que falta para el modelo de abierto contra cerrado (`modelo_estado.py`): los basurales de los frames
-que no están ni en `salidas/optico_estado_conocido/` (prompt 7, sólo los de estado conocido) ni en
-`salidas/tabla_optico_catalogo.parquet` (prompt 4, los 10 frames de antes). Mide lo mismo y de la misma forma que
-`optico_estado_conocido.py`: usa `extraer_optico.extraer()` sin modificarlo, con el mismo período y anillo.
+Fills in what the open-versus-closed model (`modelo_estado.py`) is missing: the dump sites of the frames
+that are neither in `salidas/optico_estado_conocido/` (prompt 7, only the known-status ones) nor in
+`salidas/tabla_optico_catalogo.parquet` (prompt 4, the original 10 frames). It measures the same thing in the same way as
+`optico_estado_conocido.py`: it uses `extraer_optico.extraer()` unmodified, with the same period and ring.
 
-    python optico_catalogo_frames.py preparar                      # arma datos/optico_frames/trabajo.json (sin red)
-    python optico_catalogo_frames.py correr                        # lee Sentinel-2 y escribe ../data/salidas/optico_catalogo_frames.parquet
+    python optico_catalogo_frames.py preparar                      # builds datos/optico_frames/trabajo.json (offline)
+    python optico_catalogo_frames.py correr                        # reads Sentinel-2 and writes ../data/salidas/optico_catalogo_frames.parquet
     python optico_catalogo_frames.py correr --trabajo t.json --salida s.parquet --hilos 16
 
-`preparar` y `correr` van separados para poder correr la lectura en otra máquina (la VM) sin llevar los catálogos:
-el trabajo trae cada polígono a medir y los polígonos de los catálogos que tiene cerca (para sacarlos del anillo).
+`preparar` and `correr` are separate so the reading can run on another machine (the VM) without the catalogs:
+the job carries each polygon to measure and the nearby catalog polygons (to remove them from the ring).
 
-Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer. Catálogo: ver `../data/README.md`.
+Data: Copernicus Sentinel-2 L2A (ESA), via Microsoft Planetary Computer. Catalog: see `../data/README.md`.
 """
 import argparse
 import glob
@@ -30,9 +30,9 @@ RAIZ = os.path.dirname(AQUI)
 SALIDAS = os.path.join(RAIZ, "data", "salidas")
 TRABAJO = os.path.join(AQUI, "datos", "optico_frames", "trabajo.json")
 SALIDA = os.path.join(SALIDAS, "optico_catalogo_frames.parquet")
-PERIODO = ("2025-10-21", "2026-10-21")  # el de `optico_estado_conocido.py`
+PERIODO = ("2025-10-21", "2026-10-21")  # the one from `optico_estado_conocido.py`
 MIN_HA = 10.0
-CERCA = 0.03  # grados: lo que se guarda alrededor de cada polígono para sacarlo de su anillo (1,5 km)
+CERCA = 0.03  # degrees: what is kept around each polygon to remove it from its ring (1.5 km)
 
 
 def ya_medidos():
@@ -82,7 +82,7 @@ def correr(trabajo, salida, hilos):
         obj = [{"tipo": "catalogo", "clave": o["id_catalogo"], "catalogo": "basurales", "frame": frame, "geom": shapely.from_wkt(o["wkt"])} for o in w["objetivos"]]
         excluir = [shapely.from_wkt(x) for x in w["excluir"]]
         caja = cp.bbox_de([o["geom"] for o in obj], margen=CERCA)
-        for i in range(4):  # el buscador de Planetary Computer a veces se cuelga
+        for i in range(4):  # the Planetary Computer search sometimes hangs
             try:
                 escenas = eo.buscar_escenas(caja, *periodo, 20.0)
                 break

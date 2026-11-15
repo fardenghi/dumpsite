@@ -1,45 +1,45 @@
-"""Variables de radar del frente activo de un basural, y si con ellas el radar distingue abierto de cerrado.
+"""Radar variables of a dump site's active front, and whether with them the radar tells open from closed.
 
-Por qué: el insomnio de `insomnio_catalogo.parquet` es la mediana del predio entero contra su anillo, y un relleno
-abierto tiene un frente de descarga chico (1 % del polígono) en medio de celdas ya tapadas. Acá se mide, con las
-series por píxel de los mismos recortes de 80 m, la parte del predio que más cambia.
+Why: the insomnia in `insomnio_catalogo.parquet` is the median of the whole site against its ring, and an open
+landfill has a small tipping front (1 % of the polygon) among cells already covered. Here, with the
+per-pixel series of the same 80 m crops, we measure the part of the site that changes most.
 
-    python radar_frente.py medir                          # los frames con recortes en ../data/salidas/<FRAME>/recortes_80m
-    python radar_frente.py medir --recortes /otra/carpeta # además, recortes leídos a otra carpeta (AMBA: <carpeta>/recortes_80m)
-    python radar_frente.py evaluar                        # compara con las 7 variables de radar de `modelo_estado.py`
+    python radar_frente.py medir                          # the frames with crops in ../data/salidas/<FRAME>/recortes_80m
+    python radar_frente.py medir --recortes /otra/carpeta # also crops read into another folder (AMBA: <carpeta>/recortes_80m)
+    python radar_frente.py evaluar                        # compares with the 7 radar variables of `modelo_estado.py`
 
-`medir` escribe `../data/salidas/radar_frente.parquet` (una fila por basural de 10 ha o más y frame). `evaluar` escribe
-`../data/salidas/radar_frente_evaluacion.json`. No modifica nada de lo que ya está: lee los recortes con
-`pipeline_insomnio.cargar()` y usa `insomnio.anillo()` (el mismo anillo de 1,5 km, sin agua ni polígonos de los catálogos).
+`medir` writes `../data/salidas/radar_frente.parquet` (one row per dump site of 10 ha or more and frame). `evaluar` writes
+`../data/salidas/radar_frente_evaluacion.json`. It modifies nothing existing: it reads the crops with
+`pipeline_insomnio.cargar()` and uses `insomnio.anillo()` (the same 1.5 km ring, without water or catalog polygons).
 
-Las variables (todas contra el anillo del predio, para que el clima y la estación se cancelen):
-  Eco (GCOV, dB), por píxel y dentro de cada órbita:
-    eco_std_rel_p90     desvío temporal del eco HH, percentil 90 del predio, menos la mediana del anillo
-    ecohv_std_rel_p90   lo mismo con el eco cruzado HV
-    eco_std_rel_max3    el parche de 3×3 píxeles con más desvío temporal del eco HH, menos la mediana del anillo
-    eco_cambio_rel_p90  cambio neto del eco HH entre el primer y el último tercio de la serie, menos el del anillo
-                        (valor absoluto, percentil 90 del predio): una superficie que quedó distinta, no una que oscila
-  Coherencia (GUNW), cociente con la mediana del anillo en cada par:
-    frente_coh_3x3      el peor parche de 3×3 de cada par (puede ser otro en cada par), mediana entre pares
-    frente_coh_fijo     el parche de 3×3 que es el peor de forma sostenida (mínimo de la mediana entre pares)
-    frente_vs_predio    frente_coh_fijo sobre la mediana del predio: 1 = el predio es parejo; bajo = hay una zona
-                        chica mucho menos coherente que el resto (lo que se espera de un frente en un predio tapado)
-    parche_bajo_ha      mayor zona conexa con al menos 70 % de los pares por debajo de 0,8 × el anillo (ha)
-    parche_bajo_frac    esa zona como fracción del predio
-    parche_se_mueve     distancia entre el peor parche del primer tercio de la serie y el del último, sobre la raíz
-                        del área del predio
-  Insomnio por píxel (fracción de pares en que el píxel queda por debajo de 0,8 × la mediana del anillo: la misma
-  regla de `insomnio.py`, pero píxel por píxel en vez de con la mediana del predio):
-    insomnio_px_max3    el parche de 3×3 con más insomnio del predio
-    insomnio_px_p95     percentil 95 del insomnio por píxel del predio
-    parche_insomnio90_ha  mayor zona conexa con insomnio por píxel de 0,9 o más (ha)
-    insomnio_parche_se_mueve  distancia entre el parche de más insomnio del primer tercio y el del último (sobre la raíz del área)
-    eco_std_en_parche   desvío temporal del eco HH, menos el del anillo, en el parche de más insomnio: ¿el lugar que
-                        nunca es coherente es además un lugar donde el eco cambia?
+The variables (all against the site's ring, so weather and season cancel out):
+  Echo (GCOV, dB), per pixel and within each orbit:
+    eco_std_rel_p90     temporal deviation of the HH echo, 90th percentile of the site, minus the ring median
+    ecohv_std_rel_p90   the same with the HV cross-polarized echo
+    eco_std_rel_max3    the 3×3 pixel patch with the largest temporal deviation of the HH echo, minus the ring median
+    eco_cambio_rel_p90  net change of the HH echo between the first and last third of the series, minus the ring's
+                        (absolute value, 90th percentile of the site): a surface that ended up different, not one that oscillates
+  Coherence (GUNW), ratio to the ring median in each pair:
+    frente_coh_3x3      the worst 3×3 patch of each pair (it can be a different one in each pair), median across pairs
+    frente_coh_fijo     the 3×3 patch that is consistently the worst (minimum of the median across pairs)
+    frente_vs_predio    frente_coh_fijo over the site median: 1 = the site is even; low = there's a small
+                        area much less coherent than the rest (what's expected of a front in a covered site)
+    parche_bajo_ha      largest connected area with at least 70 % of the pairs below 0.8 × the ring (ha)
+    parche_bajo_frac    that area as a fraction of the site
+    parche_se_mueve     distance between the worst patch of the first third of the series and that of the last, over the
+                        square root of the site's area
+  Per-pixel insomnia (fraction of pairs in which the pixel falls below 0.8 × the ring median: the same
+  rule as `insomnio.py`, but pixel by pixel instead of with the site median):
+    insomnio_px_max3    the 3×3 patch with the most insomnia in the site
+    insomnio_px_p95     95th percentile of the site's per-pixel insomnia
+    parche_insomnio90_ha  largest connected area with per-pixel insomnia of 0.9 or more (ha)
+    insomnio_parche_se_mueve  distance between the patch with the most insomnia in the first third and in the last (over the square root of the area)
+    eco_std_en_parche   temporal deviation of the HH echo, minus the ring's, in the patch with the most insomnia: is the place that
+                        is never coherent also a place where the echo changes?
 
-Los umbrales (0,8 y 70 %) son los de `insomnio.Parametros`, sin tocar. Las variables se decidieron antes de mirar el AMBA.
+The thresholds (0.8 and 70 %) are those of `insomnio.Parametros`, untouched. The variables were decided before looking at the AMBA.
 
-Datos: NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC. Agua: JRC Global Surface Water v1.4. Catálogo: `../data/README.md`.
+Data: NISAR L2 GUNW and GCOV (NASA/ISRO), via ASF DAAC. Water: JRC Global Surface Water v1.4. Catalog: `../data/README.md`.
 """
 import argparse
 import glob
@@ -64,19 +64,19 @@ SALIDAS = os.path.join(RAIZ, "data", "salidas")
 TABLA = os.path.join(SALIDAS, "radar_frente.parquet")
 EVALUACION = os.path.join(SALIDAS, "radar_frente_evaluacion.json")
 MIN_HA = 10.0
-ECO_SIN_SENAL_DB = -40.0  # por debajo de esto el GCOV no trae señal (hay predios con −75 dB en algunas fechas)
+ECO_SIN_SENAL_DB = -40.0  # below this GCOV carries no signal (some sites have −75 dB on some dates)
 NUEVAS = ["eco_std_rel_p90", "ecohv_std_rel_p90", "eco_std_rel_max3", "eco_cambio_rel_p90", "frente_coh_3x3", "frente_coh_fijo",
           "frente_vs_predio", "parche_bajo_ha", "parche_bajo_frac", "parche_se_mueve"]
-# Pedido aparte: el insomnio máximo adentro del polígono, por píxel, y sus dos combinaciones.
+# Separate request: the maximum insomnia inside the polygon, per pixel, and its two combinations.
 MAXIMO = ["insomnio_px_max3", "insomnio_px_p95", "parche_insomnio90_ha"]
 COMBINA = ["insomnio_parche_se_mueve", "eco_std_en_parche"]
-# Sentido que tendría cada variable si midiera actividad (+1: más alto = más abierto). Se fija acá, antes de evaluar.
+# Direction each variable would have if it measured activity (+1: higher = more open). Fixed here, before evaluating.
 SENTIDO_ACTIVIDAD = {"eco_std_rel_p90": 1, "ecohv_std_rel_p90": 1, "eco_std_rel_max3": 1, "eco_cambio_rel_p90": 1, "frente_coh_3x3": -1,
                      "frente_coh_fijo": -1, "frente_vs_predio": -1, "parche_bajo_ha": 1, "parche_bajo_frac": 1, "parche_se_mueve": 1,
                      "insomnio_px_max3": 1, "insomnio_px_p95": 1, "parche_insomnio90_ha": 1, "insomnio_parche_se_mueve": 1, "eco_std_en_parche": 1}
-# Complejos que además se miden como una sola unidad (la unión de sus polígonos), para la prueba del AMBA: en Norte III
-# el estado "abierto" es del complejo y quedó pegado a un solo polígono (ver ../docs/resultados.md). Van a la tabla con el
-# id del complejo; no son filas del catálogo y no entran al entrenamiento.
+# Complexes that are also measured as a single unit (the union of their polygons), for the AMBA test: in Norte III
+# the "open" status belongs to the complex and got attached to a single polygon (see ../docs/resultados.md). They go into the table with the
+# complex id; they're not catalog rows and don't go into training.
 UNIDADES = {"AMBA": {"CPX-015400": ["BAS-053304", "BAS-053307", "BAS-016796"]}}
 PRUEBA_AMBA = {"BAS-000007": "Basural de Luján (cerrado el 1/07/2026)", "BAS-053304": "Norte III, polígono con estado abierto",
                "BAS-053307": "Norte III, módulo C (sin estado)", "BAS-000001": "González Catán (sin estado)"}
@@ -84,7 +84,7 @@ PRUEBA_AMBA = {"BAS-000007": "Basural de Luján (cerrado el 1/07/2026)", "BAS-05
 
 # ------------------------------------------------------------------ medir
 def media3(capa, adentro, min_px=5):
-    """Media de 3×3 de `capa` (2D o una pila 3D) contando sólo píxeles del predio con dato; NaN donde hay menos de `min_px`."""
+    """3×3 mean of `capa` (2D or a 3D stack) counting only site pixels with data; NaN where there are fewer than `min_px`."""
     ok = np.isfinite(capa) & adentro
     tam = (1, 3, 3) if capa.ndim == 3 else (3, 3)
     suma = ndimage.uniform_filter(np.where(ok, capa, 0.0).astype(np.float64), size=tam, mode="constant") * 9
@@ -96,13 +96,13 @@ def media3(capa, adentro, min_px=5):
 
 
 def _std_por_orbita(pila, orbitas):
-    """Desvío temporal por píxel dentro de cada órbita (cada una mira con otra geometría), promediado entre órbitas."""
+    """Per-pixel temporal deviation within each orbit (each one looks with another geometry), averaged across orbits."""
     partes = [np.nanstd(pila[orbitas == o], axis=0) for o in np.unique(orbitas) if (orbitas == o).sum() >= 3]
     return np.nanmean(np.stack(partes), axis=0) if partes else None
 
 
 def _cambio_por_orbita(pila, orbitas):
-    """Último tercio menos primer tercio de la serie, por píxel y por órbita (las fechas de cada órbita vienen en orden)."""
+    """Last third minus first third of the series, per pixel and per orbit (each orbit's dates come in order)."""
     partes = []
     for o in np.unique(orbitas):
         serie = pila[orbitas == o]
@@ -113,7 +113,7 @@ def _cambio_por_orbita(pila, orbitas):
 
 
 def medir(mascara, ctx, agua, p):
-    """Las variables del frente de un predio. `ctx` es el de `pipeline_insomnio.cargar()`."""
+    """A site's front variables. `ctx` is the one from `pipeline_insomnio.cargar()`."""
     paso = ctx["paso"]
     v = em._ventana(mascara, int(round(p.anillo_m / paso)) + 1)
     m, tierra = mascara[v], ~agua[v]
@@ -131,7 +131,7 @@ def medir(mascara, ctx, agua, p):
             if pila is None:
                 continue
             pila = pila[(slice(None),) + v]
-            pila = np.where(pila < ECO_SIN_SENAL_DB, np.nan, pila)  # sin señal: no es un cambio de la superficie
+            pila = np.where(pila < ECO_SIN_SENAL_DB, np.nan, pila)  # no signal: it's not a surface change
             std = _std_por_orbita(pila, np.asarray(orbitas))
             if std is None or not np.isfinite(std[adentro]).any() or not np.isfinite(std[aro]).any():
                 continue
@@ -144,7 +144,7 @@ def medir(mascara, ctx, agua, p):
                 cambios = [np.abs(c - np.nanmedian(c[aro])) for c in _cambio_por_orbita(pila, np.asarray(orbitas)) if np.isfinite(c[aro]).any()]
                 if cambios:
                     fila["eco_cambio_rel_p90"] = float(np.nanpercentile(np.nanmean(np.stack(cambios), axis=0)[adentro], 90))
-        # ---- coherencia: cociente con la mediana del anillo, par a par
+        # ---- coherence: ratio to the ring median, pair by pair
         coh = ctx["coh"][(slice(None),) + v]
         m_aro = np.nanmedian(coh[:, aro], axis=1)
         valido = np.isfinite(m_aro) & (m_aro > 0) & (np.isfinite(coh[:, adentro]).mean(axis=1) >= 0.5)
@@ -167,7 +167,7 @@ def medir(mascara, ctx, agua, p):
         mayor = max(np.bincount(etq.ravel())[1:], default=0)
         fila["parche_bajo_ha"] = float(mayor * paso * paso / 1e4)
         fila["parche_bajo_frac"] = float(mayor / adentro.sum())
-        # El insomnio máximo adentro del polígono, por píxel.
+        # The maximum insomnia inside the polygon, per pixel.
         bajo3 = media3(bajo, adentro)
         if np.isfinite(bajo3).any():
             fila["insomnio_px_max3"] = float(np.nanmax(bajo3))
@@ -259,14 +259,14 @@ def cmd_evaluar(args):
     for nombre, cols in grupos.items():
         preds[nombre] = me.fuera_de_frame(me.logistica, e[cols].values, y, g)
         auc[nombre] = me.auc_ic(y, preds[nombre])
-        # Control: 5 grupos de frames en vez de un frame por vez. Dejando un frame afuera, la proporción de abiertos
-        # del entrenamiento cambia al revés que la del frame que se predice, y eso le resta AUC a los modelos flojos.
+        # Control: 5 groups of frames instead of one frame at a time. Leaving one frame out, the share of open sites
+        # in training moves opposite to that of the predicted frame, and that takes AUC away from weak models.
         p5 = np.full(len(y), np.nan)
         for tr, te in GroupKFold(n_splits=5).split(e[cols].values, y, g):
             p5[te] = me.logistica().fit(e[cols].values[tr], y[tr]).predict_proba(e[cols].values[te])[:, 1]
         auc[nombre]["auc_5_grupos_de_frames"] = round(float(roc_auc_score(y, p5)), 3)
         print(f"  {nombre:28s} AUC {auc[nombre]['auc']:.3f} {auc[nombre]['ic95']}   (con 5 grupos de frames: {auc[nombre]['auc_5_grupos_de_frames']:.3f})")
-    # (d) cada variable nueva sola, en el sentido que tendría si midiera actividad
+    # (d) each new variable alone, in the direction it would have if it measured activity
     solas = []
     for c in NUEVAS:
         ok = e[c].notna().values
@@ -274,8 +274,8 @@ def cmd_evaluar(args):
         solas.append({"variable": c, "si_midiera_actividad": "más alto = más abierto" if SENTIDO_ACTIVIDAD[c] > 0 else "más bajo = más abierto",
                       "auc_en_ese_sentido": round(float(a), 3), "n": int(ok.sum()),
                       "mediana_abiertos": round(float(e.loc[e["y"] == 1, c].median()), 3), "mediana_cerrados": round(float(e.loc[e["y"] == 0, c].median()), 3)})
-    # Control por tamaño de cada variable: un máximo o un mínimo sobre más píxeles sale más extremo sólo por azar, y en
-    # el registro los abiertos son más grandes. Correlación con el logaritmo del área y AUC adentro de cada tercil de área.
+    # Size control for each variable: a maximum or minimum over more pixels comes out more extreme just by chance, and in
+    # the registry the open ones are larger. Correlation with the log of the area and AUC within each area tercile.
     terc = pd.qcut(e["area_ha"], 3, labels=False).values
     for s_ in solas:
         c = s_["variable"]
@@ -283,7 +283,7 @@ def cmd_evaluar(args):
         s_["correlacion_con_log_area"] = round(float(np.corrcoef(e.loc[ok, c], e.loc[ok, "log_ha"])[0, 1]), 2)
         s_["auc_por_tercil_de_area"] = [round(float(roc_auc_score(y[ok & (terc == t)], SENTIDO_ACTIVIDAD[c] * e.loc[ok & (terc == t), c].values)), 2)
                                         if 0 < y[ok & (terc == t)].sum() < (ok & (terc == t)).sum() else None for t in range(3)]
-    # qué aprende el modelo (b): coeficiente estandarizado y si coincide con el sentido de la actividad
+    # what model (b) learns: standardized coefficient and whether it matches the direction of activity
     m = me.logistica().fit(e[NUEVAS].values, y)
     for s, coef in zip(solas, m[-1].coef_[0]):
         s["coeficiente_b"] = round(float(coef), 2)
@@ -294,7 +294,7 @@ def cmd_evaluar(args):
         print(f"  {s['variable']:20s} {s['auc_en_ese_sentido']:.3f}  medianas abiertos/cerrados {s['mediana_abiertos']:.3f} / {s['mediana_cerrados']:.3f}  "
               f"coef en (b) {s['coeficiente_b']:+.2f} ({'actividad' if s['coincide_con_actividad'] else 'al revés'}); "
               f"r con log área {s['correlacion_con_log_area']:+.2f}; por tercil {s['auc_por_tercil_de_area']}")
-    # El insomnio máximo adentro del polígono: cada variable sola y combinada con "el parche se mueve" y con el eco.
+    # The maximum insomnia inside the polygon: each variable alone and combined with "the patch moves" and with the echo.
     maximo = []
     for c in MAXIMO + COMBINA:
         ok = e[c].notna().values
@@ -311,7 +311,7 @@ def cmd_evaluar(args):
     for nombre, cols in combos.items():
         preds[nombre] = me.fuera_de_frame(me.logistica, e[cols].values, y, g)
         auc_combos[nombre] = me.auc_ic(y, preds[nombre])
-    # Sólo entre los predios con un máximo alto: ¿el movimiento del parche o el eco separan ahí?
+    # Only among the sites with a high maximum: do the patch movement or the echo separate there?
     entre_altos = {}
     for c in COMBINA:
         ok = (alto & e[c].notna()).values
@@ -324,7 +324,7 @@ def cmd_evaluar(args):
     for nombre, v_ in auc_combos.items():
         print(f"  {nombre:40s} AUC {v_['auc']:.3f} {v_['ic95']}")
     print("  entre los de máximo alto:", {k: (v_["auc"], v_["ic95"], v_["n"], v_["abiertos"]) for k, v_ in entre_altos.items()})
-    # control por tamaño
+    # size control
     terciles = pd.qcut(e["area_ha"], 3, labels=["chicos", "medianos", "grandes"])
     por_area = []
     for t in terciles.cat.categories:
@@ -333,7 +333,7 @@ def cmd_evaluar(args):
                          **{k: (round(float(roc_auc_score(y[s], preds[k][s])), 3) if 0 < y[s].sum() < s.sum() else None)
                             for k in ("(a) radar actual (7)", "(b) frente (10)")}})
     print("Por tercil de área:", por_area)
-    # prueba en el AMBA con el modelo (b) y con el (a), entrenados con todos los de estado conocido
+    # AMBA test with model (b) and with (a), trained with all the known-status sites
     prueba = []
     amba = d[d["id_catalogo"].isin(PRUEBA_AMBA)]
     if len(amba):
@@ -362,8 +362,8 @@ def cmd_evaluar(args):
 def main():
     q = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     q.add_argument("orden", choices=["medir", "evaluar"])
-    q.add_argument("--frame", nargs="+", help="frames a medir (por defecto, todos los de data/frames.json que tengan recortes)")
-    q.add_argument("--recortes", nargs="+", help="otras carpetas de salida del pipeline donde buscar recortes, además de ../data/salidas")
+    q.add_argument("--frame", nargs="+", help="frames to measure (default: all those in data/catalogos/frames.json that have crops)")
+    q.add_argument("--recortes", nargs="+", help="other pipeline output folders to look for crops in, besides ../data/salidas")
     q.add_argument("--tabla", default=TABLA)
     q.add_argument("--evaluacion", default=EVALUACION)
     args = q.parse_args()

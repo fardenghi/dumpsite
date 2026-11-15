@@ -1,25 +1,25 @@
-"""Óptico de Sentinel-2 de TODOS los basurales de estado conocido del catálogo, estén o no en un frame de NISAR.
+"""Sentinel-2 optical data for ALL the known-status dump sites in the catalog, whether or not they are in a NISAR frame.
 
-Pregunta: ¿"menos verde que el entorno" separa los basurales abiertos de los cerrados? En los 10 frames procesados
-separó 19 de 24 abiertos y 4 de 35 cerrados (umbral de −0,15 en `ndvi_contraste`, elegido con 5 frames). Acá se mide
-con todos los del catálogo: los de estado `abierto` o `cerrado`, de 10 ha o más y con polígono (unos 1.000).
+Question: does "less green than its surroundings" separate open dump sites from closed ones? In the 10 processed frames
+it separated 19 of 24 open and 4 of 35 closed (threshold of −0.15 on `ndvi_contraste`, picked with 5 frames). Here it is measured
+with every one in the catalog: those with status `abierto` or `cerrado`, of 10 ha or more and with a polygon (about 1,000).
 
-No usa NISAR ni la VM: lee ventanas de Sentinel-2 L2A con `extraer_optico.py` (sin modificarlo). Se puede partir
-entre varias compus y cortar y seguir: cada celda de 1° se guarda en `datos/optico_estado/celdas/` (no se sube).
+It uses neither NISAR nor the VM: it reads Sentinel-2 L2A windows with `extraer_optico.py` (unmodified). It can be split
+across several computers and stopped and resumed: each 1° cell is saved in `datos/optico_estado/celdas/` (not committed).
 
-    python optico_estado_conocido.py correr --parte 1/3     # un tercio de las celdas; las otras compus, 2/3 y 3/3
-    python optico_estado_conocido.py juntar                 # arma ../data/salidas/optico_estado_conocido.parquet con lo que haya
-    python optico_estado_conocido.py resumen                # abiertos contra cerrados, en total y por país
+    python optico_estado_conocido.py correr --parte 1/3     # a third of the cells; the other computers, 2/3 and 3/3
+    python optico_estado_conocido.py juntar                 # builds ../data/salidas/optico_estado_conocido.parquet with whatever is there
+    python optico_estado_conocido.py resumen                # open versus closed, in total and by country
 
-`correr` deja al final su parte en `../data/salidas/optico_estado_conocido/parte_<i>de<n>.parquet` (chico: se sube).
-`juntar` lee todas las partes subidas más las celdas locales.
+At the end `correr` leaves its part in `../data/salidas/optico_estado_conocido/parte_<i>de<n>.parquet` (small: committed).
+`juntar` reads all the committed parts plus the local cells.
 
-- Período: del 21/10/2025 al 21/10/2026 (el año de NISAR de los frames), hasta 10 fechas repartidas en el año.
-- Anillo de 1,5 km sin agua y sin los demás polígonos de los catálogos, igual que en `extraer_optico.py`.
-- El estado es el del registro (`data/catalogos/basurales/`: EPA LMOP, OSM y casos curados). Puede estar desactualizado.
-- **El umbral no se toca acá:** `resumen` reporta el de −0,15 ya fijado, y además el AUC, que no depende del umbral.
+- Period: from 21/10/2025 to 21/10/2026 (the NISAR year of the frames), up to 10 dates spread over the year.
+- 1.5 km ring without water and without the other catalog polygons, same as in `extraer_optico.py`.
+- The status is the registry's (`data/catalogos/basurales/`: EPA LMOP, OSM and curated cases). It may be outdated.
+- **The threshold isn't touched here:** `resumen` reports the already fixed −0.15, plus the AUC, which doesn't depend on the threshold.
 
-Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer. Catálogo: ver `../data/README.md`.
+Data: Copernicus Sentinel-2 L2A (ESA), via Microsoft Planetary Computer. Catalog: see `../data/README.md`.
 """
 import argparse
 import glob
@@ -46,17 +46,17 @@ SALIDA = os.path.join(AQUI, "..", "data", "salidas", "optico_estado_conocido.par
 PERIODO = ("2025-10-21", "2026-10-21")
 ESTADOS = ("abierto", "cerrado")
 MIN_HA = 10.0
-UMBRAL_NDVI = -0.15  # fijado antes de esta corrida (ver el encabezado); acá no se ajusta
-# Los 10 frames que existían cuando se fijó el umbral. Lo que cae fuera de ellos es la prueba independiente.
+UMBRAL_NDVI = -0.15  # fixed before this run (see the header); not adjusted here
+# The 10 frames that existed when the threshold was fixed. What falls outside them is the independent test.
 FRAMES_DEL_UMBRAL = ("AMBA", "LOS_ANGELES", "USA_OH_LAKE", "USA_MD_HOWARD", "CDMX", "PRI_PONCE", "USA_NH_HILLSBOROUGH",
                      "USA_NY_RICHMOND", "DELHI", "YAKARTA")
 
-# `extraer_optico.py` pide un permiso de lectura (token) nuevo en cada llamada y, si una lectura falla, la saltea con
-# un aviso. Con muchas celdas a la vez el servicio de permisos contesta "429 Too Many Requests" y las escenas se
-# pierden en silencio: el basural queda con menos escenas o con ninguna. Por eso acá, sin tocar ese archivo:
-#   - se usa UN solo permiso para toda la corrida;
-#   - cada lectura se reintenta antes de darla por perdida, y las perdidas se cuentan;
-#   - una celda con algún basural sin escenas no se guarda (queda pendiente), salvo con `--aceptar-vacias`.
+# `extraer_optico.py` requests a new read permission (token) on every call and, if a read fails, skips it with
+# a warning. With many cells at once the permission service answers "429 Too Many Requests" and the scenes get
+# lost silently: the dump site ends up with fewer scenes or none. That's why here, without touching that file:
+#   - ONE single permission is used for the whole run;
+#   - each read is retried before giving it up, and the lost ones are counted;
+#   - a cell with some dump site without scenes isn't saved (stays pending), unless `--aceptar-vacias` is given.
 LECTURAS_PERDIDAS = []
 
 
@@ -91,7 +91,7 @@ eo.leer_ventana = _leer_con_reintento
 
 
 def sitios():
-    """Los basurales a medir (DataFrame con geom) y todas las geometrías de los catálogos, para sacarlas del anillo."""
+    """The dump sites to measure (DataFrame with geom) and all the catalog geometries, to remove them from the ring."""
     with open(os.path.join(DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
         ficha = {s["id"]: s for s in json.load(fh)["sitios"]}
     with open(os.path.join(DATA, "basurales", "geometrias.geojson"), encoding="utf-8") as fh:
@@ -120,7 +120,7 @@ def buscar(caja, intentos=4):
     for i in range(intentos):
         try:
             return eo.buscar_escenas(caja, *PERIODO, 20.0)
-        except Exception as e:  # el buscador de Planetary Computer a veces se cuelga: se reintenta
+        except Exception as e:  # the Planetary Computer search sometimes hangs: it's retried
             if i == intentos - 1:
                 raise
             print(f"    el buscador falló ({type(e).__name__}); reintento {i + 1}", flush=True)
@@ -153,7 +153,7 @@ def correr(parte, total, hilos, a_la_vez, aceptar_vacias=False):
         return len(obj), len(escenas)
 
     t0, fallas = time.time(), []
-    with ThreadPoolExecutor(max_workers=a_la_vez) as ex:  # varias celdas a la vez: lo lento es la red
+    with ThreadPoolExecutor(max_workers=a_la_vez) as ex:  # several cells at once: the slow part is the network
         futuros = {ex.submit(una, c): c for c in faltan}
         for n, f in enumerate(as_completed(futuros), 1):
             celda = futuros[f]
@@ -191,7 +191,7 @@ def juntar():
 
 
 def auc(pos, neg):
-    """Probabilidad de que un valor de `pos` sea MENOR que uno de `neg` (empates cuentan 1/2)."""
+    """Probability that a value of `pos` is LOWER than one of `neg` (ties count 1/2)."""
     from scipy.stats import rankdata
     pos, neg = np.asarray(pos, float), np.asarray(neg, float)
     pos, neg = pos[np.isfinite(pos)], neg[np.isfinite(neg)]
@@ -250,10 +250,10 @@ def main():
     a = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = a.add_subparsers(dest="orden", required=True)
     c = sub.add_parser("correr")
-    c.add_argument("--parte", default="1/1", help="i/n: esta compu hace la parte i de n (por defecto, todo)")
-    c.add_argument("--hilos", type=int, default=8, help="lecturas en paralelo por celda")
+    c.add_argument("--parte", default="1/1", help="i/n: this computer does part i of n (default: everything)")
+    c.add_argument("--hilos", type=int, default=8, help="parallel reads per cell")
     c.add_argument("--celdas-a-la-vez", type=int, default=6)
-    c.add_argument("--aceptar-vacias", action="store_true", help="guardar también las celdas con basurales sin ninguna escena")
+    c.add_argument("--aceptar-vacias", action="store_true", help="also save cells with dump sites that have no scenes")
     sub.add_parser("juntar")
     sub.add_parser("resumen")
     args = a.parse_args()

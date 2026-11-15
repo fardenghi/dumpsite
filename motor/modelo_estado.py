@@ -1,35 +1,35 @@
-"""Modelo de abierto contra cerrado sobre los basurales de estado conocido, y qué aprende.
+"""Open-versus-closed model over the known-status dump sites, and what it learns.
 
-Pregunta: con lo que miden el radar (NISAR) y el óptico (Sentinel-2) sobre un predio, ¿se puede decir si el registro
-lo da abierto o cerrado? Las etiquetas son las del registro (`estado` del catálogo: EPA LMOP, OSM y casos curados),
-**no** salen del insomnio. Se entrena con los basurales de 10 ha o más de los frames procesados, menos el AMBA, que
-queda como prueba. Después se predice a los que no tienen estado.
+Question: with what the radar (NISAR) and the optical data (Sentinel-2) measure over a site, can we tell whether the
+registry lists it as open or closed? The labels are the registry's (`estado` in the catalog: EPA LMOP, OSM and curated
+cases), they do **not** come from the insomnia. It trains on the dump sites of 10 ha or more in the processed frames,
+except the AMBA, which is kept as a test. Then it predicts the ones without a status.
 
-    python modelo_estado.py            # escribe ../data/salidas/modelo_estado.json y ../data/salidas/predicciones_estado.parquet
+    python modelo_estado.py            # writes ../data/salidas/modelo_estado.json and ../data/salidas/predicciones_estado.parquet
 
-Tres familias de variables por predio:
-- **frente** (10): las de `radar_frente.py`, que miran la parte del predio que más cambia (variación del eco por píxel,
-  el peor parche de coherencia). Salen de `../data/salidas/radar_frente.parquet`.
-- **óptico** (8): Sentinel-2, predio contra anillo.
-- **radar de antes** (7): las del predio entero (insomnio, persistencia, eco…), de `../data/salidas/insomnio_catalogo.parquet`.
+Three families of variables per site:
+- **front** (10): those of `radar_frente.py`, which look at the part of the site that changes most (per-pixel echo
+  variation, the worst coherence patch). They come from `../data/salidas/radar_frente.parquet`.
+- **optical** (8): Sentinel-2, site versus ring.
+- **previous radar** (7): those of the whole site (insomnia, persistence, echo…), from `../data/salidas/insomnio_catalogo.parquet`.
 
-**Cómo se elige el modelo principal (fijado acá, antes de mirar el AMBA):** de `CANDIDATOS`, que van del más simple
-al más complejo, el primero cuyo AUC (regresión logística, un frame afuera por vez) no quede a más de `TOLERANCIA`
-del mejor de los tres. Ninguno usa el área del predio: en el registro los abiertos son más grandes y eso no es actividad.
+**How the main model is chosen (fixed here, before looking at the AMBA):** from `CANDIDATOS`, which go from the simplest
+to the most complex, the first one whose AUC (logistic regression, leaving one frame out at a time) is within `TOLERANCIA`
+of the best of the three. None uses the site's area: in the registry the open ones are larger and that isn't activity.
 
-Qué reporta:
-- AUC dejando un frame afuera por vez (ningún predio se predice con un modelo que vio su frame), con IC 95 % por
-  remuestreo, y un control con 5 grupos de frames (dejando un solo frame afuera, la proporción de abiertos del
-  entrenamiento se mueve al revés que la del frame predicho y eso le resta AUC a los modelos flojos).
-- Líneas de base de una sola variable.
-- Qué aprende el principal: coeficientes estandarizados, AUC de cada variable sola, cuánto baja el AUC al desordenar
-  cada variable, y el AUC adentro de cada tercil de área (control por tamaño).
-- La prueba reservada del AMBA, con cada candidato.
+What it reports:
+- AUC leaving one frame out at a time (no site is predicted by a model that saw its frame), with a 95 % CI by
+  resampling, and a control with 5 groups of frames (leaving out a single frame, the share of open sites in
+  training moves opposite to that of the predicted frame, and that takes AUC away from weak models).
+- Single-variable baselines.
+- What the main model learns: standardized coefficients, AUC of each variable alone, how much the AUC drops when
+  shuffling each variable, and the AUC within each area tercile (size control).
+- The reserved AMBA test, with each candidate.
 
-Entradas: `../data/salidas/insomnio_catalogo.parquet`, `../data/salidas/radar_frente.parquet` y el óptico de
-`../data/salidas/optico_estado_conocido/` (prompt 7), `../data/salidas/tabla_optico_catalogo.parquet` (prompt 4) y
-`../data/salidas/optico_catalogo_frames.parquet`. No es una probabilidad calibrada y el estado del registro puede estar
-desactualizado.
+Inputs: `../data/salidas/insomnio_catalogo.parquet`, `../data/salidas/radar_frente.parquet` and the optical data from
+`../data/salidas/optico_estado_conocido/` (prompt 7), `../data/salidas/tabla_optico_catalogo.parquet` (prompt 4) and
+`../data/salidas/optico_catalogo_frames.parquet`. It's not a calibrated probability and the registry status may be
+outdated.
 """
 import glob
 import json
@@ -50,10 +50,10 @@ from sklearn.preprocessing import StandardScaler
 AQUI = os.path.dirname(os.path.abspath(__file__))
 SALIDAS = os.path.join(AQUI, "..", "data", "salidas")
 MIN_HA = 10.0
-PRUEBA = ("AMBA",)  # reservado: no entra al entrenamiento ni a la validación
+PRUEBA = ("AMBA",)  # reserved: it goes into neither training nor validation
 RADAR = ["insomnio", "persistencia", "eco_db", "contraste_p10", "eco_var_p90", "frac_insomnio_90", "hv_hh"]
 OPTICO = ["ndvi_contraste", "bsi_contraste", "ndwi_contraste", "swir_b11_contraste", "swir_b12_contraste", "ndvi_media", "ndvi_variacion", "bsi_media"]
-# Las mismas que `radar_frente.NUEVAS` (se repiten acá para no cargar el pipeline entero al entrenar).
+# The same as `radar_frente.NUEVAS` (repeated here to avoid loading the whole pipeline when training).
 FRENTE = ["eco_std_rel_p90", "ecohv_std_rel_p90", "eco_std_rel_max3", "eco_cambio_rel_p90", "frente_coh_3x3", "frente_coh_fijo",
           "frente_vs_predio", "parche_bajo_ha", "parche_bajo_frac", "parche_se_mueve"]
 AREA = ["log_ha"]
@@ -61,27 +61,27 @@ GRUPOS = {"frente": FRENTE, "óptico": OPTICO, "frente + óptico": FRENTE + OPTI
           "radar de antes": RADAR, "frente + radar de antes": FRENTE + RADAR, "óptico + radar de antes": OPTICO + RADAR,
           "frente + óptico + radar de antes": FRENTE + OPTICO + RADAR,
           "sólo área": AREA, "frente + área": FRENTE + AREA, "frente + óptico + área": FRENTE + OPTICO + AREA}
-CANDIDATOS = ("frente", "frente + óptico", "frente + óptico + radar de antes")  # del más simple al más complejo
+CANDIDATOS = ("frente", "frente + óptico", "frente + óptico + radar de antes")  # from the simplest to the most complex
 TOLERANCIA = 0.02
-# El estado "abierto" de Norte III es del complejo (caso curado, con coordenada aproximada) y en el catálogo quedó pegado
-# a `BAS-053304`, un sector cubierto de vegetación (ver ../docs/resultados.md). Por eso la prueba trae, además de los
-# polígonos sueltos, el complejo `CPX-015400` medido como una sola unidad (lo mide `radar_frente.py`, `UNIDADES`).
+# The "open" status of Norte III belongs to the complex (curated case, with an approximate coordinate) and in the catalog it got
+# attached to `BAS-053304`, a vegetated sector (see ../docs/resultados.md). That's why the test includes, besides the
+# individual polygons, the complex `CPX-015400` measured as a single unit (measured by `radar_frente.py`, `UNIDADES`).
 PRUEBA_IDS = {"BAS-000007": "Basural de Luján",
               "CPX-015400": "Norte III, el complejo como una sola unidad (BAS-053304 + módulo C + BAS-016796)",
               "BAS-053304": "Norte III, polígono BAS-053304 (lleva el estado «abierto», que es del complejo)",
               "BAS-053307": "Norte III, módulo C (BAS-053307)", "BAS-016796": "Norte III, sector oeste sin nombre (BAS-016796)",
               "BAS-000001": "González Catán"}
-ESTADO_UNIDADES = {"CPX-015400": "abierto"}  # el del complejo, del caso curado AR-NORTE-III
+ESTADO_UNIDADES = {"CPX-015400": "abierto"}  # the complex's, from the curated case AR-NORTE-III
 UMBRAL = 0.5
 SEMILLA = 0
 ZONA_SECA = ("LOS_ANGELES", "USA_CA_SAN_BERNARDINO", "USA_CA_SAN_JOAQUIN", "USA_AZ_MARICOPA", "USA_CA_TULARE", "USA_CA_LOS_ANGELES", "USA_CA_RIVERSIDE")
 
 
 def cargar():
-    """Una fila por basural de 10 ha o más de los frames, con radar, frente, óptico (el primero que haya) y la etiqueta."""
+    """One row per dump site of 10 ha or more in the frames, with radar, front, optical (the first available) and the label."""
     r = pd.read_parquet(os.path.join(SALIDAS, "insomnio_catalogo.parquet"))
     r = r[(r["catalogo"] == "basurales") & (r["area_ha"] >= MIN_HA)].drop_duplicates("id_catalogo").reset_index(drop=True)
-    r["eco_db"] = r["eco_db"].clip(lower=-30)  # hay predios sin eco (−75 dB): se acotan para que no dominen
+    r["eco_db"] = r["eco_db"].clip(lower=-30)  # some sites have no echo (−75 dB): they're clipped so they don't dominate
     r["frac_insomnio_90"] = r["ha_insomnio_90"] / r["area_ha"]
     r["log_ha"] = np.log10(r["area_ha"])
     fuentes = [("prompt 7", a) for a in sorted(glob.glob(os.path.join(SALIDAS, "optico_estado_conocido", "parte_*.parquet")))]
@@ -114,7 +114,7 @@ def arboles():
 
 
 def fuera_de_frame(modelo, X, y, g):
-    """Predicción de cada fila con un modelo entrenado sin su frame."""
+    """Prediction for each row with a model trained without its frame."""
     p = np.full(len(y), np.nan)
     for tr, te in LeaveOneGroupOut().split(X, y, g):
         m = modelo()
@@ -124,7 +124,7 @@ def fuera_de_frame(modelo, X, y, g):
 
 
 def en_5_grupos(modelo, X, y, g):
-    """Control: 5 grupos de frames en vez de un frame por vez."""
+    """Control: 5 groups of frames instead of one frame at a time."""
     p = np.full(len(y), np.nan)
     for tr, te in GroupKFold(n_splits=5).split(X, y, g):
         p[te] = modelo().fit(X[tr], y[tr]).predict_proba(X[te])[:, 1]
@@ -144,13 +144,13 @@ def auc_ic(y, p, n=2000):
 
 
 def elegir_principal(auc):
-    """El primer candidato (del más simple al más complejo) a no más de `TOLERANCIA` del mejor de los candidatos."""
+    """The first candidate (from the simplest to the most complex) within `TOLERANCIA` of the best candidate."""
     mejor = max(auc[c]["auc"] for c in CANDIDATOS)
     return next(c for c in CANDIDATOS if auc[c]["auc"] >= mejor - TOLERANCIA)
 
 
 def que_aprende(e, cols, p_base):
-    """Coeficientes, AUC por variable, importancia por desorden (dejando un frame afuera) y control por área."""
+    """Coefficients, AUC per variable, permutation importance (leaving one frame out) and area control."""
     X, y, g = e[cols].values, e["y"].values, e["frame"].values
     m = logistica().fit(X, y)
     coef = dict(zip(cols, m[-1].coef_[0]))
@@ -161,7 +161,7 @@ def que_aprende(e, cols, p_base):
         ok = np.isfinite(v)
         sola = roc_auc_score(y[ok], v[ok]) if 0 < y[ok].sum() < ok.sum() else np.nan
         caidas = []
-        for _ in range(20):  # se desordena la variable sólo en el frame que se predice
+        for _ in range(20):  # the variable is shuffled only in the frame being predicted
             p = np.full(len(y), np.nan)
             for tr, te in LeaveOneGroupOut().split(X, y, g):
                 Xt = X[te].copy()
@@ -193,7 +193,7 @@ def lectura(p):
 def main():
     warnings.filterwarnings("ignore")
     d = cargar()
-    e = d[d["y"].notna() & ~d["frame"].isin(PRUEBA)].reset_index(drop=True)  # entrenamiento y validación
+    e = d[d["y"].notna() & ~d["frame"].isin(PRUEBA)].reset_index(drop=True)  # training and validation
     sin_frente = e[FRENTE].isna().all(axis=1)
     if sin_frente.any():
         print(f"OJO: {int(sin_frente.sum())} predios con estado no tienen variables del frente (frames sin recortes medidos: "
@@ -234,7 +234,7 @@ def main():
                  for z, m in (("los 10 de antes", viejos.values), ("los 20 agregados", ~viejos.values)) if 0 < y[m].sum() < m.sum()]
     print(f"Con umbral {UMBRAL}: abiertos {acierta['abiertos']}, cerrados {acierta['cerrados']}; por zona: {por_zona}; por tanda: {por_tanda}")
 
-    # Modelo final con todos los de estado conocido: predice a los que no tienen estado y a los del AMBA.
+    # Final model with all the known-status sites: it predicts the ones without status and the AMBA ones.
     cols = GRUPOS[principal]
     final = logistica().fit(e[cols].values, y)
     con_dato = ~d[FRENTE].isna().all(axis=1) if set(FRENTE) <= set(cols) else pd.Series(True, index=d.index)
@@ -249,9 +249,9 @@ def main():
                    "indice_actividad", "ndvi_contraste", "eco_std_rel_p90", "frente_vs_predio", "parche_bajo_frac"]
     d[salida_cols].sort_values(["frame", "p_abierto"], ascending=[True, False]).to_parquet(os.path.join(SALIDAS, "predicciones_estado.parquet"), index=False)
 
-    # La prueba reservada (AMBA), con cada candidato: muestra qué parte del modelo acierta o falla ahí.
+    # The reserved test (AMBA), with each candidate: it shows which part of the model gets it right or wrong there.
     prueba = d[d["id_catalogo"].isin(PRUEBA_IDS) & d["frame"].isin(PRUEBA)]
-    # Los complejos medidos como unidad: sólo tienen variables del frente (no hay óptico ni radar de antes de la unión).
+    # Complexes measured as a unit: they only have front variables (there's no optical or previous radar for the union).
     ruta_frente = os.path.join(SALIDAS, "radar_frente.parquet")
     if os.path.exists(ruta_frente):
         u = pd.read_parquet(ruta_frente)

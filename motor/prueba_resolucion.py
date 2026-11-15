@@ -1,39 +1,39 @@
-"""Prueba de resolución: ¿mejora el modelo del frente (`radar_frente.py`) si se mide a 20 m en vez de 80 m?
+"""Resolution test: does the front model (`radar_frente.py`) improve if measured at 20 m instead of 80 m?
 
-Tres variantes, cada una por separado contra las 10 variables de 80 m de `../data/salidas/radar_frente.parquet`:
-  1. eco_80m_promediado  el eco (GCOV) promediado en potencia lineal sobre cada celda de 80 m (todos los píxeles nativos
-                         que caen adentro: 8×8 si el GCOV viene a 10 m, 4×4 si viene a 20 m), en vez del vecino más
-                         cercano de `pipeline_insomnio.recortar`
-  2. eco_20m             el eco en una grilla de 20 m, por vecino más cercano (como haría `--capa 20m`)
-  3. coherencia_20m      la coherencia de la capa `wrappedInterferogram` (20 m), la de `--capa 20m`
-Y las filas de control, fijadas acá antes de mirar ningún resultado:
-  replica_80m               las 10 variables de 80 m recalculadas con las ventanas de esta prueba (vecino más cercano):
-                            mide cuánto se aparta este camino de lectura del de la tabla original
-  todo_20m                  eco y coherencia a 20 m juntos (variantes 2 y 3 a la vez)
-  eco_20m_promediado        eco a 20 m promediando los píxeles nativos (sólo cambia donde el GCOV viene a 10 m)
-  eco_80m_sin_frecuencia_B  la serie de 80 m sin las fechas en que el GCOV no trae la frecuencia A y `_buscar_eco` cae en la B
+Three variants, each one separately against the 10 variables at 80 m of `../data/salidas/radar_frente.parquet`:
+  1. eco_80m_promediado  the echo (GCOV) averaged in linear power over each 80 m cell (all the native pixels
+                         that fall inside: 8×8 if the GCOV comes at 10 m, 4×4 if it comes at 20 m), instead of the nearest
+                         neighbor of `pipeline_insomnio.recortar`
+  2. eco_20m             the echo on a 20 m grid, by nearest neighbor (as `--capa 20m` would do)
+  3. coherencia_20m      the coherence of the `wrappedInterferogram` layer (20 m), the one of `--capa 20m`
+And the control rows, fixed here before looking at any result:
+  replica_80m               the 10 variables at 80 m recomputed with this test's windows (nearest neighbor):
+                            measures how much this reading path departs from the original table's
+  todo_20m                  echo and coherence at 20 m together (variants 2 and 3 at once)
+  eco_20m_promediado        echo at 20 m averaging the native pixels (only changes where the GCOV comes at 10 m)
+  eco_80m_sin_frecuencia_B  the 80 m series without the dates on which the GCOV lacks frequency A and `_buscar_eco` falls back to B
 
-En cada variante se reemplazan sólo las variables que cambian (las 4 de eco o las 6 de coherencia); las demás son
-las de 80 m de la tabla original. Las variables se calculan con `radar_frente.medir`, sin tocarla: a 20 m el parche
-de 3×3 píxeles mide 60 m de lado y no 240 m. No se eligen variables ni umbrales mirando el resultado.
+In each variant only the variables that change are replaced (the 4 echo ones or the 6 coherence ones); the rest are
+the 80 m ones of the original table. The variables are computed with `radar_frente.medir`, untouched: at 20 m the 3×3
+pixel patch is 60 m per side, not 240 m. No variables or thresholds are chosen by looking at the result.
 
-Agregado (también fijado antes de evaluar), a 80 m, a 80 m promediado y a 20 m:
-  - dos estadísticos más de la variación temporal del eco, en lugar del desvío: el coeficiente de variación en
-    potencia lineal y el rango entre los percentiles 10 y 90 (robusto a fechas con interferencia);
-  - `coh_y_eco_*`: por píxel, fracción de pares en que pierde coherencia y además le cambia el eco entre esas dos fechas;
-  - qué se lee hoy (dataset, frecuencia, espaciado y looks) y si el eco del anillo salta entre productos BETA y PROVISIONAL.
+Addendum (also fixed before evaluating), at 80 m, at 80 m averaged and at 20 m:
+  - two more statistics of the echo's temporal variation, instead of the deviation: the coefficient of variation in
+    linear power and the range between the 10th and 90th percentiles (robust to dates with interference);
+  - `coh_y_eco_*`: per pixel, fraction of pairs in which it loses coherence and its echo also changes between those two dates;
+  - what is read today (dataset, frequency, spacing and looks) and whether the ring echo jumps between BETA and PROVISIONAL products.
 
-No relee frames enteros: lee por URL, de cada producto, una ventana por predio (polígono + anillo de 1,5 km + margen).
+It doesn't reread whole frames: it reads by URL, from each product, one window per site (polygon + 1.5 km ring + margin).
 
-    python prueba_resolucion.py preparar   # fuentes fijas de cada frame (agua de JRC a 80 m y polígonos de los catálogos)
-    python prueba_resolucion.py leer       # ventanas por URL; se puede cortar y repetir: lo leído no se vuelve a leer
-    python prueba_resolucion.py medir      # las variables de cada variante, por predio (una tabla por frame en datos/)
-    python prueba_resolucion.py evaluar    # AUC, terciles, diferencias pareadas -> ../data/salidas/prueba_resolucion.json
+    python prueba_resolucion.py preparar   # fixed sources of each frame (JRC water at 80 m and catalog polygons)
+    python prueba_resolucion.py leer       # windows by URL; can be stopped and repeated: what's been read isn't read again
+    python prueba_resolucion.py medir      # the variables of each variant, per site (one table per frame in datos/)
+    python prueba_resolucion.py evaluar    # AUC, terciles, paired differences -> ../data/salidas/prueba_resolucion.json
 
-En contenedores de Claude Code en la nube: `env -u FSSPEC_GCS timeout -k 10 900 python prueba_resolucion.py leer`,
-repetido hasta que diga que no falta nada. Credenciales: EARTHDATA_TOKEN por variable de entorno, nunca en el repo.
+In cloud containers: `env -u FSSPEC_GCS timeout -k 10 900 python prueba_resolucion.py leer`,
+repeated until it says nothing is missing. Credentials: EARTHDATA_TOKEN as an environment variable, never in the repo.
 
-Datos: NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC. Agua: JRC Global Surface Water v1.4. Catálogo: `../data/README.md`.
+Data: NISAR L2 GUNW and GCOV (NASA/ISRO), via ASF DAAC. Water: JRC Global Surface Water v1.4. Catalog: `../data/README.md`.
 """
 import argparse
 import glob
@@ -61,10 +61,10 @@ RAIZ = os.path.dirname(AQUI)
 SALIDAS = os.path.join(RAIZ, "data", "salidas")
 DATOS = os.path.join(AQUI, "datos", "prueba_resolucion")
 SALIDA_JSON = os.path.join(SALIDAS, "prueba_resolucion.json")
-MARGEN_PX80 = 2  # celdas de 80 m de margen alrededor del polígono más el anillo
+MARGEN_PX80 = 2  # 80 m cells of margin around the polygon plus the ring
 ECO = rf.NUEVAS[:4]
 COH = rf.NUEVAS[4:]
-# Qué columnas salen de qué medición. "base" es la tabla original de 80 m.
+# Which columns come from which measurement. "base" is the original 80 m table.
 VARIANTES = {
     "replica_80m": {"eco": "rep80", "coh": "rep80", "que": "control: las 10 a 80 m, releídas por ventana (vecino más cercano)"},
     "eco_80m_promediado": {"eco": "prom80", "coh": "base", "que": "1. eco promediado en potencia lineal sobre la celda de 80 m"},
@@ -81,7 +81,7 @@ MEDICIONES_QUE = {"rep80": "80 m, vecino más cercano", "prom80": "80 m, eco pro
 
 # ------------------------------------------------------------------ predios y ventanas
 def predios():
-    """Los predios de la evaluación de `radar_frente.py` en los frames con `criterio = abiertos`: mismas filas, mismo orden."""
+    """The sites of the `radar_frente.py` evaluation in the frames with `criterio = abiertos`: same rows, same order."""
     with open(geo.FRAMES_JSON, encoding="utf-8") as fh:
         abiertos = {str(d["frame"]).upper() for d in json.load(fh)["frames"] if d.get("criterio") == "abiertos"}
     f = pd.read_parquet(rf.TABLA)
@@ -97,7 +97,7 @@ def args_frame(nombre):
 
 
 def _fino(centros, paso_fino=20.0, paso=80.0):
-    """Centros de los píxeles de 20 m que caen en cada celda de 80 m (4 por celda), en el mismo sentido que `centros`."""
+    """Centers of the 20 m pixels that fall in each 80 m cell (4 per cell), in the same direction as `centros`."""
     k = int(round(paso / paso_fino))
     signo = 1.0 if centros[1] > centros[0] else -1.0
     desvios = signo * ((np.arange(k) + 0.5) * paso_fino - paso / 2)
@@ -105,8 +105,8 @@ def _fino(centros, paso_fino=20.0, paso=80.0):
 
 
 def ventanas_frame(nombre, ids):
-    """Para cada predio del frame: su ventana en la grilla de 80 m del frame y todo lo fijo (máscaras, agua, catálogo)
-    a 80 m y a 20 m. La ventana de 20 m son exactamente los 4×4 píxeles de cada celda de 80 m."""
+    """For each site in the frame: its window in the frame's 80 m grid and everything fixed (masks, water, catalog)
+    at 80 m and at 20 m. The 20 m window is exactly the 4×4 pixels of each 80 m cell."""
     a = args_frame(nombre)
     fr, p = a.fr, ins.Parametros()
     xs, ys = fr.grilla(80.0)
@@ -128,7 +128,7 @@ def ventanas_frame(nombre, ids):
         v = em._ventana(mascara, int(round(p.anillo_m / 80.0)) + 1 + MARGEN_PX80)
         x80, y80 = xs[v[1]], ys[v[0]]
         x20, y20 = _fino(x80), _fino(y80)
-        # A 20 m: el polígono y los de los catálogos se rasterizan de nuevo; el agua es la de 80 m repetida.
+        # At 20 m: the polygon and the catalog ones are rasterized again; the water is the 80 m one repeated.
         lat_v, lon_v = fr.latlon(np.array([x20.min(), x20.max()]), np.array([y20.min(), y20.max()]))
         cat20 = np.zeros((len(y20), len(x20)), dtype=bool)
         for c, (o, e_, s_, n) in zip(catalogo, cajas):
@@ -154,7 +154,7 @@ def cmd_preparar(args):
 
 # ------------------------------------------------------------------ leer
 class _Contador:
-    """Envuelve un dataset de h5py para saber qué ventana pidió `recortar` y cuánto pesan sus bloques comprimidos."""
+    """Wraps an h5py dataset to know which window `recortar` asked for and how much its compressed chunks weigh."""
 
     def __init__(self, ds):
         self.ds, self.bytes, self.px, self.bloques = ds, 0, 0, set()
@@ -165,7 +165,7 @@ class _Contador:
         bf, bc = self.ds.chunks
         for f in range(sf.start // bf, (sf.stop - 1) // bf + 1):
             for c in range(sc.start // bc, (sc.stop - 1) // bc + 1):
-                if (f, c) not in self.bloques:  # un bloque ya leído queda en la caché del archivo
+                if (f, c) not in self.bloques:  # a chunk already read stays in the file's cache
                     self.bloques.add((f, c))
                     try:
                         self.bytes += int(self.ds.id.get_chunk_info_by_coord((f * bf, c * bc)).size)
@@ -175,8 +175,8 @@ class _Contador:
 
 
 def _promedio(lin, k):
-    """Media en potencia lineal de los k×k píxeles de cada celda, en dB. Los píxeles sin señal (por debajo de
-    `radar_frente.ECO_SIN_SENAL_DB`) no entran; hace falta al menos la mitad de la celda con dato."""
+    """Mean in linear power of the k×k pixels of each cell, in dB. Pixels without signal (below
+    `radar_frente.ECO_SIN_SENAL_DB`) don't count; at least half the cell needs data."""
     lin = np.where(np.isfinite(lin) & (lin > 10.0 ** (rf.ECO_SIN_SENAL_DB / 10.0)), lin.astype(np.float64), np.nan)
     f, c = lin.shape[0] // k, lin.shape[1] // k
     bloques = lin.reshape(f, k, c, k).transpose(0, 2, 1, 3).reshape(f, c, k * k)
@@ -190,7 +190,7 @@ def _promedio(lin, k):
 
 
 def _escalar(f, ruta):
-    """Un dato suelto del producto (texto o número), o None si no lo trae."""
+    """A single value from the product (text or number), or None if it doesn't carry it."""
     if ruta not in f:
         return None
     v = f[ruta][()]
@@ -203,7 +203,7 @@ def _escalar(f, ruta):
 
 
 def _que_se_lee(f, x, capas, vs):
-    """Qué dataset eligió el pipeline, con qué espaciado y cuántos looks, y la madurez del producto. Va a los metadatos."""
+    """Which dataset the pipeline picked, with what spacing and how many looks, and the product's maturity. Goes to the metadata."""
     ident = "science/LSAR/identification"
     m = {"madurez": "BETA" if "_BETA_" in x["url"] else "PROVISIONAL" if "_PROVISIONAL_" in x["url"] else "otra",
          "compositeReleaseId": _escalar(f, f"{ident}/compositeReleaseId"), "productVersion": _escalar(f, f"{ident}/productVersion"),
@@ -221,7 +221,7 @@ def _que_se_lee(f, x, capas, vs):
         cal = "science/LSAR/GCOV/metadata/calibrationInformation/frequencyA"
         m["rfiLikelihood_A"] = {pol: _escalar(f, f"{cal}/{pol}/rfiLikelihood") for pol in ("HH", "HV")}
         m["rfiMitigationApplied"] = _escalar(f, "science/LSAR/GCOV/metadata/processingInformation/parameters/rfiMitigationApplied")
-        # Looks: el raster `numberOfLooks` del grupo elegido, en la ventana del primer predio que tenga dato.
+        # Looks: the `numberOfLooks` raster of the chosen group, in the window of the first site with data.
         ds, xs, ys, epsg_src = capas["eco20"]
         looks = f[ds.name.rsplit("/", 1)[0] + "/numberOfLooks"]
         for v in vs.values():
@@ -240,7 +240,7 @@ def _corto(x):
 
 
 def _leer_uno(tarea):
-    """Lee de un producto las ventanas de todos los predios de su frame y las guarda en un solo .npz."""
+    """Reads from a product the windows of all the sites in its frame and saves them in a single .npz."""
     nombre_frame, x, destino = tarea
     if os.path.exists(destino):
         return destino, "ya estaba"
@@ -259,7 +259,7 @@ def _leer_uno(tarea):
                 capas = {"coh20": pl._buscar_capa(f, pl.CAPAS["20m"][0]), "coh80": pl._buscar_capa(f, pl.CAPAS["80m"][0])}
             else:
                 co, cruzada, xs, ys, epsg_src = pl._buscar_eco(f)
-                # nativo: para promediar; 20 y 80: el vecino más cercano de `recortar`, como hace el pipeline
+                # native: to average; 20 and 80: the nearest neighbor of `recortar`, as the pipeline does
                 capas = {k: (co, xs, ys, epsg_src) for k in ("econativo", "eco20", "eco80")}
                 if cruzada is not None:
                     capas.update({k: (cruzada, xs, ys, epsg_src) for k in ("ecohvnativo", "ecohv20", "ecohv80")})
@@ -272,15 +272,15 @@ def _leer_uno(tarea):
                 for i, v in vs.items():
                     fr = v["fr"]
                     if clave.endswith("nativo"):
-                        # Ventana en el espaciado nativo del GCOV (10 o 20 m según el modo) y, de ahí, la media en potencia
-                        # lineal de cada celda de 80 m y de cada celda de 20 m. La ventana nativa no se guarda.
+                        # Window at the GCOV's native spacing (10 or 20 m depending on the mode) and, from there, the mean in linear
+                        # power of each 80 m cell and each 20 m cell. The native window isn't saved.
                         fino = abs(float(xs[1] - xs[0]))
                         nativo = pl.recortar(cuenta, xs, ys, _fino(v["x80"], fino), _fino(v["y80"], fino), epsg_src, fr.epsg)
                         k = max(1, int(round(80.0 / fino)))
                         datos[f"{i}|{clave[:-6]}80p"] = _promedio(nativo, k).astype(np.float16)
                         if fino <= 20.0:
                             datos[f"{i}|{clave[:-6]}20p"] = _promedio(nativo, k // 4).astype(np.float16)
-                        else:  # hay GCOV cuya frecuencia A viene a 80 m (modo de 5 MHz): a 20 m no hay nada que promediar
+                        else:  # some GCOVs have frequency A at 80 m (5 MHz mode): at 20 m there's nothing to average
                             lin = pl.recortar(cuenta, xs, ys, v["x20"], v["y20"], epsg_src, fr.epsg)
                             datos[f"{i}|{clave[:-6]}20p"] = _promedio(lin, 1).astype(np.float16)
                         continue
@@ -288,7 +288,7 @@ def _leer_uno(tarea):
                     valor = pl.recortar(cuenta, xs, ys, xd, yd, epsg_src, fr.epsg)
                     if clave.startswith("coh"):
                         valor[(valor <= 0) | (valor > 1)] = np.nan
-                    else:  # a dB, como `_procesar_uno`
+                    else:  # to dB, like `_procesar_uno`
                         with np.errstate(divide="ignore", invalid="ignore"):
                             valor = (10 * np.log10(valor)).astype(np.float32)
                         valor[~np.isfinite(valor)] = np.nan
@@ -299,12 +299,12 @@ def _leer_uno(tarea):
         np.savez_compressed(parcial, meta=json.dumps(meta, default=float), **datos)
         os.replace(parcial, destino)
         return destino, f"ok {time.time() - t0:.0f} s"
-    except Exception as ex:  # un producto roto no frena a los demás; se reintenta en la próxima tanda
+    except Exception as ex:  # a broken product doesn't stop the others; it's retried in the next batch
         return destino, f"ERROR {type(ex).__name__}: {ex}"
 
 
 def _iniciar_proceso():
-    """Cada proceso muere si muere el que lo lanzó (así `timeout` no deja procesos sueltos) y carga los predios una vez."""
+    """Each process dies if the one that launched it dies (so `timeout` leaves no loose processes) and loads the sites once."""
     import ctypes
     import signal
 
@@ -344,29 +344,29 @@ def cmd_leer(args):
 
 # ------------------------------------------------------------------ medir
 CLAVES = ("coh80", "coh20", "eco20", "ecohv20", "eco20p", "ecohv20p", "eco80", "ecohv80", "eco80p", "ecohv80p")
-# Agregado (decidido antes de evaluar): otros dos estadísticos de la variación temporal del eco y la coincidencia por par.
+# Addendum (decided before evaluating): two other statistics of the echo's temporal variation and the per-pair coincidence.
 ESTADISTICOS = {"cv": "coeficiente de variación en potencia lineal", "rango": "rango entre los percentiles 10 y 90 del eco en dB"}
 EXTRA_ECO = {s: [f"eco_{s}_rel_p90", f"ecohv_{s}_rel_p90", f"eco_{s}_rel_max3"] for s in ESTADISTICOS}
-STD_ECO = ["eco_std_rel_p90", "ecohv_std_rel_p90", "eco_std_rel_max3"]  # las tres que se reemplazan
+STD_ECO = ["eco_std_rel_p90", "ecohv_std_rel_p90", "eco_std_rel_max3"]  # the three that get replaced
 COINCIDE = ["coh_y_eco_rel_max3", "coh_y_eco_rel_p90"]
 MADUREZ = ["mad_n_beta", "mad_n_prov", "mad_intercalado", "mad_salto_db", "mad_frontera_db", "mad_paso_tipico_db"]
-PERCENTIL_CAMBIO = 90  # "le cambia el eco": el cambio entre las dos fechas supera el percentil 90 del cambio del anillo en ese par
+PERCENTIL_CAMBIO = 90  # "its echo changes": the change between the two dates exceeds the 90th percentile of the ring's change in that pair
 
 
 def cargar_frame(nombre):
-    """Los productos leídos de un frame: [(metadatos, ruta del .npz)]."""
+    """The products read for a frame: [(metadata, .npz path)]."""
     productos = []
     for ruta in sorted(glob.glob(os.path.join(DATOS, nombre, "*.npz"))):
         if not ruta.endswith(".parcial.npz"):
             with np.load(ruta) as d:
-                productos.append((json.loads(str(d["meta"])), ruta))  # las ventanas se cargan después, de a un predio
+                productos.append((json.loads(str(d["meta"])), ruta))  # the windows are loaded later, one site at a time
     return productos
 
 
 def cobertura_frame(fr, productos):
-    """Fracción del frame que cubre el eco de cada (órbita, fecha), con el polígono del producto (`boundingPolygon`).
-    Es la regla de `pipeline_insomnio.cargar` (un GCOV que cubre menos de la mitad del frame no entra), que ahí se
-    mide con los píxeles con dato del recorte entero y acá, sin el recorte, con la huella del producto."""
+    """Fraction of the frame covered by the echo of each (orbit, date), with the product's polygon (`boundingPolygon`).
+    It's the rule of `pipeline_insomnio.cargar` (a GCOV covering less than half the frame doesn't count), which there is
+    measured with the pixels with data of the whole crop and here, without the crop, with the product's footprint."""
     xs, ys = fr.grilla(80.0)
     xs, ys = xs[::10], ys[::10]
     cubre = {}
@@ -379,12 +379,12 @@ def cobertura_frame(fr, productos):
 
 
 def _pilas(productos, i, cubre, sin_b=False):
-    """Las series de un predio, agrupadas y ordenadas como en `pipeline_insomnio.cargar`: las piezas de frames de NISAR
-    vecinos del mismo par o fecha se juntan (manda la que más cubre) y un eco que cubre menos de la mitad del frame no entra."""
+    """A site's series, grouped and sorted as in `pipeline_insomnio.cargar`: the pieces of neighboring NISAR frames
+    for the same pair or date are joined (the one covering most wins) and an echo covering less than half the frame doesn't count."""
     grupos, madurez = {}, {}
     for m, ruta in productos:
         if sin_b and m["tipo"] == "GCOV" and "frequencyB" in m["que_se_lee"]["datasets"]["eco80"]["ruta"]:
-            continue  # GCOV sin frecuencia A: `_buscar_eco` cae en la B (y en VV)
+            continue  # GCOV without frequency A: `_buscar_eco` falls back to B (and VV)
         with np.load(ruta) as d:
             for clave in CLAVES:
                 if f"{i}|{clave}" in d.files:
@@ -405,8 +405,8 @@ def _pilas(productos, i, cubre, sin_b=False):
 
 
 def _percentil(serie, q):
-    """Percentil q a lo largo del tiempo, por píxel, ignorando los NaN (como `np.nanpercentile`, pero rápido)."""
-    orden = np.sort(serie, axis=0)  # los NaN quedan al final
+    """Percentile q over time, per pixel, ignoring NaNs (like `np.nanpercentile`, but fast)."""
+    orden = np.sort(serie, axis=0)  # NaNs end up last
     n = np.isfinite(serie).sum(0)
     pos = np.clip(q / 100.0 * (n - 1), 0, None)
     abajo, arriba = np.floor(pos).astype(int), np.ceil(pos).astype(int)
@@ -418,8 +418,8 @@ def _percentil(serie, q):
 
 
 def _estadisticos(pila_db, orbitas):
-    """Por píxel y adentro de cada órbita (3 fechas o más), promediado entre órbitas: el coeficiente de variación en
-    potencia lineal y el rango entre los percentiles 10 y 90 en dB."""
+    """Per pixel and within each orbit (3 dates or more), averaged across orbits: the coefficient of variation in
+    linear power and the range between the 10th and 90th percentiles in dB."""
     partes = {k: [] for k in ESTADISTICOS}
     for o in np.unique(orbitas):
         serie = pila_db[orbitas == o]
@@ -431,8 +431,8 @@ def _estadisticos(pila_db, orbitas):
 
 
 def medir_extra(mascara, agua, catalogo_px, paso, coh, eco, eco_hv, p, con_madurez=False):
-    """Lo que no está en `radar_frente.medir`, con el mismo predio y el mismo anillo: los otros dos estadísticos de la
-    variación del eco, la coincidencia por par (pierde coherencia y además le cambia el eco) y el salto por madurez."""
+    """What isn't in `radar_frente.medir`, with the same site and the same ring: the two other statistics of the
+    echo variation, the per-pair coincidence (loses coherence and its echo also changes) and the maturity jump."""
     v = em._ventana(mascara, int(round(p.anillo_m / paso)) + 1)
     m, tierra = mascara[v], ~agua[v]
     adentro = m & tierra
@@ -461,7 +461,7 @@ def medir_extra(mascara, agua, catalogo_px, paso, coh, eco, eco_hv, p, con_madur
                 if clave == "eco":
                     m3 = rf.media3(mapa, adentro)
                     fila[f"eco_{nombre}_rel_max3"] = float(np.nanmax(m3) - ref) if np.isfinite(m3).any() else np.nan
-        # ---- coincidencia: por píxel, fracción de pares en que pierde coherencia y además le cambia el eco entre esas dos fechas
+        # ---- coincidence: per pixel, fraction of pairs in which it loses coherence and its echo also changes between those two dates
         if "eco" in pilas and coh["v"]:
             c = np.stack(coh["v"])[(slice(None),) + v]
             m_aro = np.nanmedian(c[:, aro], axis=1)
@@ -486,17 +486,17 @@ def medir_extra(mascara, agua, catalogo_px, paso, coh, eco, eco_hv, p, con_madur
                     m3 = rf.media3(frac, adentro)
                     fila["coh_y_eco_rel_max3"] = float(np.nanmax(m3) - ref) if np.isfinite(m3).any() else np.nan
                     fila["coh_y_eco_rel_p90"] = float(np.nanpercentile(frac[adentro], 90) - ref)
-        # ---- madurez: ¿el eco medio del anillo salta entre los productos BETA y los PROVISIONAL?
+        # ---- maturity: does the ring's mean echo jump between the BETA and PROVISIONAL products?
         if con_madurez and "eco" in pilas:
             fila.update({k: np.nan for k in MADUREZ})
             lin = 10.0 ** (pilas["eco"][:, aro].astype(np.float64) / 10.0)
-            medio = 10 * np.log10(np.nanmean(lin, axis=1))  # eco medio del anillo por fecha, en dB
+            medio = 10 * np.log10(np.nanmean(lin, axis=1))  # ring mean echo per date, in dB
             orb, mad, fec = np.asarray(eco["orbitas"]), np.asarray(eco["madurez"]), np.asarray(eco["ref"])
             fila["mad_n_beta"], fila["mad_n_prov"] = int((mad == "BETA").sum()), int((mad == "PROVISIONAL").sum())
             saltos, fronteras, pasos, intercalado = [], [], [], False
             for o in np.unique(orb):
                 s_ = orb == o
-                x, g, f = medio[s_], mad[s_], fec[s_]  # ya vienen ordenadas por fecha
+                x, g, f = medio[s_], mad[s_], fec[s_]  # they already come sorted by date
                 ok = np.isfinite(x)
                 x, g, f = x[ok], g[ok], f[ok]
                 pasos += [abs(b - a) for a, b, ga, gb in zip(x[:-1], x[1:], g[:-1], g[1:]) if ga == gb]
@@ -516,7 +516,7 @@ def medir_extra(mascara, agua, catalogo_px, paso, coh, eco, eco_hv, p, con_madur
 
 
 def medir_predio(v, s, p):
-    """Las variables del frente de un predio con cada medición (rep80, prom80, m20 y prom20) y las del agregado."""
+    """A site's front variables with each measurement (rep80, prom80, m20 and prom20) and the addendum ones."""
     def ctx(paso, coh, k):
         eco, eco_hv = s["eco" + k], s["ecohv" + k]
         return {"paso": paso, "catalogo_px": v["cat80"] if paso == 80.0 else v["cat20"],
@@ -535,7 +535,7 @@ def medir_predio(v, s, p):
 
 
 def _medir_frame(nombre):
-    """Mide los predios de un frame y deja la tabla del frame en `datos/` (si ya está, no se repite)."""
+    """Measures a frame's sites and leaves the frame's table in `datos/` (if it's already there, it's not repeated)."""
     warnings.filterwarnings("ignore")
     destino = os.path.join(DATOS, f"variables_{nombre}.parquet")
     if os.path.exists(destino):
@@ -551,7 +551,7 @@ def _medir_frame(nombre):
             print(f"  {nombre} {i}: sin ventanas de coherencia, no se mide", flush=True)
             continue
         medidas = medir_predio(vs[i], s, p)
-        # Variante del agregado: la serie de 80 m sin las fechas en que el eco sale de la frecuencia B. Donde no hay, es la réplica.
+        # Addendum variant: the 80 m series without the dates on which the echo comes from frequency B. Where there are none, it's the replica.
         if any(m["tipo"] == "GCOV" and "frequencyB" in m["que_se_lee"]["datasets"]["eco80"]["ruta"] for m, _ in productos):
             sb = _pilas(productos, i, cubre, sin_b=True)
             ctx = {"paso": 80.0, "catalogo_px": vs[i]["cat80"], "coh": np.stack(sb["coh80"]["v"]), "fechas": np.array(sb["coh80"]["fechas"]),
@@ -574,7 +574,7 @@ def cmd_medir(args):
 
     warnings.filterwarnings("ignore")
     nombres = [n for n in sorted(predios()["frame"].unique()) if not args.frame or n in [f.upper() for f in args.frame]]
-    for vuelta in range(3):  # si el sistema mata un proceso, se sigue con los frames que faltan
+    for vuelta in range(3):  # if the system kills a process, it continues with the remaining frames
         try:
             with cf.ProcessPoolExecutor(min(args.procesos, 4), mp_context=multiprocessing.get_context("spawn")) as ex:
                 rutas = list(ex.map(_medir_frame, nombres))
@@ -590,7 +590,7 @@ def cmd_medir(args):
 
 # ------------------------------------------------------------------ evaluar
 def _auc(y, p):
-    """AUC por rangos (empates promediados): da lo mismo que `roc_auc_score`, mucho más rápido para remuestrear."""
+    """AUC by ranks (ties averaged): gives the same as `roc_auc_score`, much faster for resampling."""
     from scipy.stats import rankdata
 
     n1 = y.sum()
@@ -601,7 +601,7 @@ def _auc(y, p):
 
 
 def _pareado(y, pa, pb, filtro=None):
-    """AUC de b menos AUC de a, remuestreando los mismos predios para los dos. IC 95 % por percentiles."""
+    """AUC of b minus AUC of a, resampling the same sites for both. 95 % CI by percentiles."""
     idx = np.arange(len(y)) if filtro is None else np.nonzero(filtro)[0]
     rng, vals = np.random.default_rng(me.SEMILLA), []
     for _ in range(N_REMUESTREO):
@@ -615,7 +615,7 @@ def _pareado(y, pa, pb, filtro=None):
 
 
 def _metas():
-    """Los metadatos que anotó cada producto al leerse."""
+    """The metadata each product recorded when it was read."""
     salida = []
     for ruta in sorted(glob.glob(os.path.join(DATOS, "*", "*.npz"))):
         if not ruta.endswith(".parcial.npz"):
@@ -625,7 +625,7 @@ def _metas():
 
 
 def _costo(metas):
-    """Tiempo y peso de la lectura por capa, sumados de lo que anotó cada producto al leerse."""
+    """Reading time and size per layer, summed from what each product recorded when it was read."""
     tot = {}
     productos = {"GUNW": 0, "GCOV": 0}
     abrir = {"GUNW": 0.0, "GCOV": 0.0}
@@ -647,7 +647,7 @@ def _costo(metas):
 
 
 def _resumen_lectura(metas):
-    """Qué lee hoy el pipeline: dataset, espaciado, looks y madurez, contados sobre todos los productos leídos."""
+    """What the pipeline reads today: dataset, spacing, looks and maturity, counted over all the products read."""
     from collections import Counter
 
     def cuenta(valores):
@@ -739,7 +739,7 @@ def cmd_evaluar(args):
         r["diferencia_con_80m"] = {"total": _pareado(y, p_base, pred),
                                    **{c: _pareado(y, p_base, pred, (terc == c).values) for c in terc.cat.categories}}
         r["diferencia_con_80m_5_grupos"] = _pareado(y, p5_base, p5)
-        # Cada variable reemplazada, sola y en el sentido de la actividad: 80 m contra la variante, mismos predios.
+        # Each replaced variable, alone and in the direction of activity: 80 m versus the variant, same sites.
         solas = {}
         for c, col in zip(rf.NUEVAS, X.T):
             origen = v["eco"] if c in ECO else v["coh"]
@@ -758,7 +758,7 @@ def cmd_evaluar(args):
         print(f"  {nombre:24s} AUC {r['auc']:.3f} {r['ic95']}  5 grupos {r['auc_5_grupos_de_frames']:.3f}  "
               f"terciles {[r['por_tercil'][c]['auc'] for c in terc.cat.categories]}  "
               f"dif {d['total']['diferencia']:+.3f} {d['total']['ic95']}  dif terciles {[(d[c]['diferencia'], d[c]['ic95']) for c in terc.cat.categories]}")
-    # Control de la lectura: cuántas fechas y pares entraron en cada predio contra la tabla original.
+    # Reading control: how many dates and pairs went into each site versus the original table.
     rep = tablas["rep80"]
     salida["control_replica"] = {
         "predios_con_otro_n_pares": int((rep["n_pares"].values != e["n_pares_frente"].values).sum()),
@@ -766,7 +766,7 @@ def cmd_evaluar(args):
         "correlacion_con_la_tabla_original": {c: round(float(pd.Series(rep[c].values).corr(pd.Series(tablas["base"][c].values))), 4) for c in rf.NUEVAS},
         "diferencia_absoluta_mediana": {c: round(float(np.nanmedian(np.abs(rep[c].values - tablas["base"][c].values))), 4) for c in rf.NUEVAS}}
     print("  control de la réplica:", salida["control_replica"])
-    # ---- agregado 3: otros dos estadísticos de la variación temporal del eco, en lugar del desvío
+    # ---- addendum 3: two other statistics of the echo's temporal variation, instead of the deviation
     salida["estadisticos_del_eco"] = {}
     for m_, etiqueta in MEDICIONES_QUE.items():
         X0 = np.column_stack([tablas[m_][ECO].values, tablas["base"][COH].values])
@@ -789,7 +789,7 @@ def cmd_evaluar(args):
             print(f"  eco {s_:5s} @ {m_:6s} AUC {r['auc']:.3f} {r['ic95']}  contra el desvío a esa resolución {bloque[s_]['diferencia_con_el_desvio_a_esta_resolucion']['total']}  "
                   f"solas {[(k, v_['auc'], v_['auc_del_desvio']) for k, v_ in solas.items()]}")
         salida["estadisticos_del_eco"][m_] = bloque
-    # ---- agregado 5: pares en que el píxel pierde coherencia y además le cambia el eco
+    # ---- addendum 5: pairs in which the pixel loses coherence and its echo also changes
     salida["coherencia_y_eco"] = {"definicion": f"por píxel, fracción de pares en que la coherencia queda por debajo de {ins.Parametros().razon} × la mediana del "
                                                 f"anillo y además el cambio del eco HH entre las dos fechas del par (menos el del anillo) supera el percentil "
                                                 f"{PERCENTIL_CAMBIO} del anillo en ese par; se resume como el parche de 3×3 con más fracción y el percentil 90 "
@@ -807,7 +807,7 @@ def cmd_evaluar(args):
                                                                        "por_tercil": {c: r["por_tercil"][c]["auc"] for c in terc.cat.categories},
                                                                        "diferencia_con_80m": dif(p_base, pred)}}
         print(f"  coh y eco @ {m_:6s} solas {[(k, v_['auc'], v_['ic95']) for k, v_ in solas.items()]}  frente + 2: AUC {r['auc']:.3f}  dif {dif(p_base, pred)['total']}")
-    # ---- agregado 4: madurez (BETA y PROVISIONAL) y salto del eco medio del anillo
+    # ---- addendum 4: maturity (BETA and PROVISIONAL) and jump in the ring's mean echo
     mad = tablas["rep80"][MADUREZ].copy()
     mad["frame"] = g
     con = mad["mad_salto_db"].notna()
@@ -837,8 +837,8 @@ def cmd_evaluar(args):
 def main():
     q = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     q.add_argument("orden", choices=["preparar", "leer", "medir", "evaluar"])
-    q.add_argument("--frame", nargs="+", help="sólo estos frames (para `leer` y `medir`)")
-    q.add_argument("--variables", default=os.path.join(DATOS, "variables.parquet"), help="tabla intermedia de `medir` (no se sube)")
+    q.add_argument("--frame", nargs="+", help="only these frames (for `leer` and `medir`)")
+    q.add_argument("--variables", default=os.path.join(DATOS, "variables.parquet"), help="intermediate table from `medir` (not committed)")
     q.add_argument("--procesos", type=int, default=12)
     q.add_argument("--salida", default=SALIDA_JSON)
     args = q.parse_args()
