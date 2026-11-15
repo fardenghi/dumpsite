@@ -145,7 +145,7 @@ const EN: Record<string, string> = {
   'Cómo se decide': 'How it decides',
   'Sitios analizados': 'Sites analyzed',
   '{0} ha en total': '{0} ha in total',
-  'nunca quietos': 'never at rest',
+  'insomnio mayor que {0}': 'insomnia above {0}',
   'Posibles basurales nuevos': 'Possible new dump sites',
   'sin verificar todavía': 'not verified yet',
   'Regiones de NISAR': 'NISAR regions',

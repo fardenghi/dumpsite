@@ -1,5 +1,6 @@
-import { num } from '../components/ui'
+import { dec, num } from '../components/ui'
 import { useSitios } from '../data/api'
+import { UMBRAL_BAJO } from '../data/types'
 import { conteo, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { t } from '../i18n'
 
@@ -62,7 +63,7 @@ export default function Inicio() {
           <div className="despierto">
             <span>{t('Despiertos')}</span>
             <b className="num">{num(n.despierto)}</b>
-            <small>{t('nunca quietos')}</small>
+            <small>{t('insomnio mayor que {0}', dec(UMBRAL_BAJO, 1))}</small>
           </div>
           <div>
             <span>{t('Regiones de NISAR')}</span>
