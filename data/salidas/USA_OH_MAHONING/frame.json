@@ -1,0 +1,24 @@
+{
+ "frame": "USA_OH_MAHONING",
+ "orbita": [
+  18,
+  26
+ ],
+ "ciudad": "Salem, Mahoning, OH (alrededor de CLD Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32617,
+ "epsg_fijo": true,
+ "bbox": [
+  -80.9807,
+  40.0977,
+  -80.1075,
+  40.9988
+ ],
+ "fecha_inicio": "2025-10-30",
+ "fecha_fin": "2026-10-14",
+ "frames_nisar": [
+  "018_A_022",
+  "026_D_068"
+ ]
+}

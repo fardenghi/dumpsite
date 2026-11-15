@@ -1,0 +1,24 @@
+{
+ "frame": "USA_FL_OSCEOLA",
+ "orbita": [
+  47,
+  98
+ ],
+ "ciudad": "St. Cloud, Osceola, FL (alrededor de J.E.D. Solid Waste Management Facility)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32617,
+ "epsg_fijo": true,
+ "bbox": [
+  -81.9038,
+  27.9739,
+  -81.02,
+  28.8455
+ ],
+ "fecha_inicio": "2025-10-24",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "098_D_074",
+  "047_A_016"
+ ]
+}

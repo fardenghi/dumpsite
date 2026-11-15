@@ -1,0 +1,24 @@
+{
+ "frame": "USA_CA_SAN_BERNARDINO",
+ "orbita": [
+  13,
+  106
+ ],
+ "ciudad": "Rialto, San Bernardino, CA (alrededor de Mid-Valley Sanitary LF)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32611,
+ "epsg_fijo": true,
+ "bbox": [
+  -117.4863,
+  33.9553,
+  -116.9601,
+  34.8865
+ ],
+ "fecha_inicio": "2025-11-23",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "013_D_071",
+  "106_A_019"
+ ]
+}

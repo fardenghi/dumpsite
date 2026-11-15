@@ -1,0 +1,24 @@
+{
+ "frame": "USA_MD_FREDERICK",
+ "orbita": [
+  162,
+  170
+ ],
+ "ciudad": "Frederick, Frederick, MD (alrededor de Reich's Ford Road SLF)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32618,
+ "epsg_fijo": true,
+ "bbox": [
+  -77.8817,
+  38.9864,
+  -77.2808,
+  40.0168
+ ],
+ "fecha_inicio": "2025-10-28",
+ "fecha_fin": "2026-10-11",
+ "frames_nisar": [
+  "162_A_022",
+  "170_D_069"
+ ]
+}

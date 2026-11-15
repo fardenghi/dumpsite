@@ -1,0 +1,24 @@
+{
+ "frame": "USA_CA_TULARE",
+ "orbita": [
+  34,
+  114
+ ],
+ "ciudad": "Visalia, Tulare, CA (alrededor de Visalia Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32611,
+ "epsg_fijo": true,
+ "bbox": [
+  -120.0038,
+  35.9687,
+  -119.0421,
+  36.9906
+ ],
+ "fecha_inicio": "2025-11-24",
+ "fecha_fin": "2026-10-20",
+ "frames_nisar": [
+  "034_A_020",
+  "114_D_070"
+ ]
+}

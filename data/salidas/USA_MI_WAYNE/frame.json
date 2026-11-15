@@ -1,0 +1,24 @@
+{
+ "frame": "USA_MI_WAYNE",
+ "orbita": [
+  55,
+  119
+ ],
+ "ciudad": "New Boston, Wayne, MI (alrededor de Carleton Farms Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32617,
+ "epsg_fijo": true,
+ "bbox": [
+  -84.0427,
+  42.0427,
+  -83.145,
+  43.0281
+ ],
+ "fecha_inicio": "2026-03-06",
+ "fecha_fin": "2026-10-20",
+ "frames_nisar": [
+  "119_A_023",
+  "055_D_067"
+ ]
+}

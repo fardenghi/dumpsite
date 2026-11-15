@@ -1,0 +1,24 @@
+{
+ "frame": "USA_PA_ALLEGHENY",
+ "orbita": [
+  26,
+  90
+ ],
+ "ciudad": "Monroeville, Allegheny, PA (alrededor de Monroeville LF)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32617,
+ "epsg_fijo": true,
+ "bbox": [
+  -80.0551,
+  40.082,
+  -79.0689,
+  40.5417
+ ],
+ "fecha_inicio": "2025-11-04",
+ "fecha_fin": "2026-10-18",
+ "frames_nisar": [
+  "090_A_022",
+  "026_D_068"
+ ]
+}

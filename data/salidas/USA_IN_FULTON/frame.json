@@ -1,0 +1,22 @@
+{
+ "frame": "USA_IN_FULTON",
+ "orbita": [
+  156
+ ],
+ "ciudad": "Argos, Fulton, IN (alrededor de County Line LF)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32616,
+ "epsg_fijo": true,
+ "bbox": [
+  -86.9732,
+  41.1125,
+  -85.9441,
+  41.8583
+ ],
+ "fecha_inicio": "2025-10-28",
+ "fecha_fin": "2026-10-11",
+ "frames_nisar": [
+  "156_D_068"
+ ]
+}

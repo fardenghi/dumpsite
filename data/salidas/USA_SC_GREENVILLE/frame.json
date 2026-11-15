@@ -1,0 +1,24 @@
+{
+ "frame": "USA_SC_GREENVILLE",
+ "orbita": [
+  26,
+  119
+ ],
+ "ciudad": "Honea Path, Greenville, SC (alrededor de Twin Chimneys Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32617,
+ "epsg_fijo": true,
+ "bbox": [
+  -83.0067,
+  34.1536,
+  -82.0108,
+  35.0475
+ ],
+ "fecha_inicio": "2025-11-06",
+ "fecha_fin": "2026-10-20",
+ "frames_nisar": [
+  "119_A_019",
+  "026_D_071"
+ ]
+}

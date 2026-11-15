@@ -1,0 +1,24 @@
+{
+ "frame": "USA_VA_ROCKINGHAM",
+ "orbita": [
+  90,
+  98
+ ],
+ "ciudad": "Harrisonburg, Rockingham, VA (alrededor de Rockingham County Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32617,
+ "epsg_fijo": true,
+ "bbox": [
+  -78.9536,
+  37.9745,
+  -77.9722,
+  38.8934
+ ],
+ "fecha_inicio": "2025-10-24",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "098_D_069",
+  "090_A_021"
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "frame": "USA_OH_HAMILTON",
+ "orbita": [
+  47,
+  119
+ ],
+ "ciudad": "Cincinnati, Hamilton, OH (alrededor de Rumpke SLF, Inc.)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32616,
+ "epsg_fijo": true,
+ "bbox": [
+  -84.8968,
+  39.1368,
+  -84.0994,
+  39.9056
+ ],
+ "fecha_inicio": "2025-11-06",
+ "fecha_fin": "2026-10-20",
+ "frames_nisar": [
+  "119_A_022",
+  "047_A_021"
+ ]
+}

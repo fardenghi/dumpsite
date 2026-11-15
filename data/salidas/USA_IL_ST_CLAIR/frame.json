@@ -1,0 +1,24 @@
+{
+ "frame": "USA_IL_ST_CLAIR",
+ "orbita": [
+  4,
+  12
+ ],
+ "ciudad": "East St. Louis, St. Clair, IL (alrededor de Milam Recycling and Disposal Facility)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32615,
+ "epsg_fijo": true,
+ "bbox": [
+  -90.985,
+  38.1241,
+  -89.953,
+  38.8757
+ ],
+ "fecha_inicio": "2025-10-29",
+ "fecha_fin": "2026-10-13",
+ "frames_nisar": [
+  "012_D_069",
+  "004_A_021"
+ ]
+}

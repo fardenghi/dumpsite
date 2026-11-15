@@ -1,0 +1,24 @@
+{
+ "frame": "USA_TX_DALLAS",
+ "orbita": [
+  62,
+  113
+ ],
+ "ciudad": "Dallas, Dallas, TX (alrededor de McCommas Bluff Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32614,
+ "epsg_fijo": true,
+ "bbox": [
+  -97.0088,
+  32.0386,
+  -96.3628,
+  33.0105
+ ],
+ "fecha_inicio": "2025-10-25",
+ "fecha_fin": "2026-10-20",
+ "frames_nisar": [
+  "113_D_072",
+  "062_A_018"
+ ]
+}

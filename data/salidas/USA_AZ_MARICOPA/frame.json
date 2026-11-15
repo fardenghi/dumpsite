@@ -1,0 +1,24 @@
+{
+ "frame": "USA_AZ_MARICOPA",
+ "orbita": [
+  56,
+  77
+ ],
+ "ciudad": "Surprise, Maricopa, AZ (alrededor de Northwest Regional MSW Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32612,
+ "epsg_fijo": true,
+ "bbox": [
+  -112.7257,
+  33.0277,
+  -112.0636,
+  33.7689
+ ],
+ "fecha_inicio": "2025-11-03",
+ "fecha_fin": "2026-10-17",
+ "frames_nisar": [
+  "077_A_018",
+  "056_D_072"
+ ]
+}

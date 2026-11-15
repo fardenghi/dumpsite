@@ -1,0 +1,24 @@
+{
+ "frame": "USA_CA_SAN_JOAQUIN",
+ "orbita": [
+  42,
+  135
+ ],
+ "ciudad": "Manteca, San Joaquin, CA (alrededor de Forward Landfill)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32610,
+ "epsg_fijo": true,
+ "bbox": [
+  -122.0562,
+  37.136,
+  -121.1262,
+  37.9287
+ ],
+ "fecha_inicio": "2025-11-01",
+ "fecha_fin": "2026-10-21",
+ "frames_nisar": [
+  "042_D_070",
+  "135_A_020"
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "frame": "USA_CA_LOS_ANGELES",
+ "orbita": [
+  13,
+  34
+ ],
+ "ciudad": "Palmdale, Los Angeles, CA (alrededor de Antelope Valley Recycling and Disposal Facility)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32611,
+ "epsg_fijo": true,
+ "bbox": [
+  -118.9463,
+  34.5207,
+  -118.0585,
+  35.0408
+ ],
+ "fecha_inicio": "2025-11-23",
+ "fecha_fin": "2026-10-14",
+ "frames_nisar": [
+  "034_A_019",
+  "013_D_071"
+ ]
+}

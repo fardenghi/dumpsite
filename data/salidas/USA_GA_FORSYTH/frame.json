@@ -1,0 +1,24 @@
+{
+ "frame": "USA_GA_FORSYTH",
+ "orbita": [
+  127,
+  148
+ ],
+ "ciudad": "Ball Ground, Forsyth, GA (alrededor de Eagle Point Landfill LLC)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32616,
+ "epsg_fijo": true,
+ "bbox": [
+  -84.9975,
+  34.0911,
+  -84.1788,
+  34.7284
+ ],
+ "fecha_inicio": "2025-10-26",
+ "fecha_fin": "2026-10-21",
+ "frames_nisar": [
+  "148_A_019",
+  "127_D_071"
+ ]
+}

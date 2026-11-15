@@ -1,0 +1,24 @@
+{
+ "frame": "USA_PA_BERKS",
+ "orbita": [
+  61,
+  170
+ ],
+ "ciudad": "Morgantown, Berks, PA (alrededor de Conestoga LF)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32618,
+ "epsg_fijo": true,
+ "bbox": [
+  -76.0123,
+  40.0616,
+  -75.1556,
+  40.9038
+ ],
+ "fecha_inicio": "2025-10-29",
+ "fecha_fin": "2026-10-16",
+ "frames_nisar": [
+  "170_D_068",
+  "061_A_022"
+ ]
+}

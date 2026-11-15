@@ -1,0 +1,24 @@
+{
+ "frame": "USA_CA_RIVERSIDE",
+ "orbita": [
+  34,
+  85
+ ],
+ "ciudad": "Corona, Riverside, CA (alrededor de El Sobrante SLF)",
+ "pais": "USA",
+ "hemisferio": "N",
+ "epsg": 32611,
+ "epsg_fijo": true,
+ "bbox": [
+  -117.5928,
+  33.0412,
+  -117.0465,
+  33.9119
+ ],
+ "fecha_inicio": "2025-10-23",
+ "fecha_fin": "2026-10-18",
+ "frames_nisar": [
+  "085_D_072",
+  "034_A_018"
+ ]
+}
