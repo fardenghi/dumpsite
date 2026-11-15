@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Dot, PageHead, Picker, dec, fecha, num, pct, radar } from '../components/ui'
 import { useSitios } from '../data/api'
 import { UMBRAL_BAJO } from '../data/types'
-import { useVeredictos } from '../data/veredictos'
+import { N_VARIABLES, useVeredictos } from '../data/veredictos'
 import { getLang, t } from '../i18n'
 import cal from '../data/seed/calibracion.json'
 import candidatos from '../data/seed/candidatos.json'
@@ -304,7 +304,10 @@ export default function Modelo() {
             <div>
               <span className="src">{t('Y lo que se les parece')}</span>
               <b>{t('canteras, aeródromos')}</b>
-              <p>{t('29 variables por mancha')}: {t('radar NISAR, Sentinel-2 (vegetación, suelo desnudo, agua, infrarrojo) y forma')}</p>
+              <p>
+                {N_VARIABLES ? `${t('{0} variables por mancha', N_VARIABLES)}: ` : ''}
+                {t('radar NISAR, Sentinel-2 (vegetación, suelo desnudo, agua, infrarrojo) y forma')}
+              </p>
             </div>
           </div>
           <div className="une" aria-hidden="true" />

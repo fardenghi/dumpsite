@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Dot, Kpi, PageHead, Picker, Seg, num, pct, radar as radarTxt, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
 import type { Radar, Sitio, Veredicto } from '../data/types'
-import { FRAME_AMBA, fueraDelAmba, nombreFrame, useVeredictos } from '../data/veredictos'
+import { FRAME_AMBA, conRadar, nombreFrame, useVeredictos } from '../data/veredictos'
 import { getLang, t } from '../i18n'
 
 type Orden = 'insomnio' | 'ha' | 'nombre'
@@ -48,11 +48,11 @@ function descargar(nombre: string, texto: string) {
 export default function Sitios() {
   const { sitios } = useSitios()
   const veredictos = useVeredictos()
-  const [frame, setFrame] = useState(FRAME_AMBA)
+  const [frame, setFrame] = useState(TODOS)
   const [radar, setRadar] = useState<Radar | ''>('')
   const [orden, setOrden] = useState<Orden>('insomnio')
 
-  const todas = useMemo(() => [...(sitios ?? []).map(filaDeSitio), ...fueraDelAmba(veredictos).map(filaDeVeredicto)], [sitios, veredictos, getLang()])
+  const todas = useMemo(() => [...(sitios ?? []).map(filaDeSitio), ...conRadar(veredictos, sitios ?? []).map(filaDeVeredicto)], [sitios, veredictos, getLang()])
   const frames = useMemo(() => {
     const n = new Map<string, number>()
     for (const f of todas) n.set(f.frame, (n.get(f.frame) ?? 0) + 1)

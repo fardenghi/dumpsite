@@ -25,6 +25,7 @@
  "ancho": 1400,
  "alto": 1005,
  "que": "Índice de insomnio relativo (0 a 1), paleta magma; transparente por debajo de 0,3 y en el agua",
+ "transparente_bajo": 0.3,
  "pares": 15,
  "desde": "2026-06-25",
  "hasta": "2026-10-12",

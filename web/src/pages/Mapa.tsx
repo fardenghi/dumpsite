@@ -150,7 +150,7 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
 
       <div className="crece">
         <h3>
-          {t('Coherencia')} <span>{t('NISAR, cada 12 días')}</span>
+          {t('Coherencia')} <span>{t('NISAR, {0} comparaciones', s.pares.length)}</span>
         </h3>
         <Coherencia
           llenar
@@ -921,7 +921,7 @@ export default function Mapa() {
           role="switch"
           aria-checked={verIndice}
           onClick={() => setVerIndice((v) => !v)}
-          title={t('Índice de insomnio relativo, de 0 a 1; transparente por debajo de 0,3 y en el agua. En el AMBA, {0} comparaciones de NISAR, del {1} al {2}. Donde no hay imagen del índice se pintan las manchas despiertas', indice.pares, fecha(indice.desde, true), fecha(indice.hasta, true))}
+          title={t('Índice de insomnio relativo, de 0 a 1; transparente por debajo de {3} y en el agua. En el AMBA, {0} comparaciones de NISAR, del {1} al {2}. Donde no hay imagen del índice se pintan las manchas despiertas', indice.pares, fecha(indice.desde, true), fecha(indice.hasta, true), dec(indice.transparente_bajo, 1))}
         >
           <span>{t('Índice de insomnio')}</span>
           <i />

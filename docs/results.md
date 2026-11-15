@@ -19,7 +19,7 @@ A blob is a **candidate** if it has an insomnia of 0.70 or more, a persistence o
 ## Verdict per site
 `motor/flujo.py` joins the cross in both directions (blobs over catalog and catalog over blobs) and gives a verdict per catalog polygon and per blob without a catalog. It's in `data/salidas/veredictos.json` and it's what the web shows.
 
-**Across the 37 frames, the radar and the model find 274 active dump sites: 102 were already in the catalogs and 172 are new (possible new dump sites, not verified). Of the known ones, 20 are listed as closed but are still awake.** The web highlights the blobs with a dump-site score of 0.4 or more (174), a threshold the team lowered from 0.5 for the map.
+**Across the 37 frames, the radar and the model find 274 active dump sites: 102 were already in the catalogs and 172 are new (possible new dump sites, not verified). Of the known ones, 20 are listed as closed but are still awake.** The web highlights the blobs with a dump-site score of 0.4 or more, a threshold the team lowered from 0.5 for the map: 223 blobs, of which it shows 183 and leaves out 40 that OpenStreetMap already explains with another use.
 
 **AMBA controls:**
 - **González Catán:** not listed, awake, insomnia 1.0. Verdict: active, already known.

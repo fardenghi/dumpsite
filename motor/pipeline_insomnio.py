@@ -605,6 +605,10 @@ def _figura(ctx, capas, lista, etiquetas, p, destino):
     plt.close(fig)
 
 
+# Below this insomnia the web PNG is fully transparent (written to indice.json so the web legend reads it)
+INDICE_TRANSPARENTE_BAJO = 0.3
+
+
 def _png_web(capas, ctx, destino):
     """RGBA PNG of the relative index, north up and regular in Web Mercator. Transparent over water and where the index is low."""
     import matplotlib
@@ -614,7 +618,7 @@ def _png_web(capas, ctx, destino):
 
     img, limites = geo.a_mercator(capas["insomnio"], ctx["xs"], ctx["ys"], caja=ctx["fr"].caja, epsg=ctx["fr"].epsg)
     rgba = plt.get_cmap("magma")(np.clip(np.nan_to_num(img), 0, 1))
-    rgba[..., 3] = np.where(np.isfinite(img), np.clip((img - 0.3) / 0.4, 0, 1) * 0.85, 0)
+    rgba[..., 3] = np.where(np.isfinite(img), np.clip((img - INDICE_TRANSPARENTE_BAJO) / 0.4, 0, 1) * 0.85, 0)
     os.makedirs(os.path.dirname(destino), exist_ok=True)
     plt.imsave(destino, rgba)
     return limites, img.shape
@@ -670,7 +674,8 @@ def _escribir_web(ctx, capas, lista, fichas, p, web):
     _json(os.path.join(seed, "indice.json"), {
         "url": "indice/insomnio-amba.png", "oeste": o, "sur": s_, "este": e, "norte": n,
         "coordinates": [[o, n], [e, n], [e, s_], [o, s_]], "ancho": forma[1], "alto": forma[0],
-        "que": "Índice de insomnio relativo (0 a 1), paleta magma; transparente por debajo de 0,3 y en el agua",
+        "que": f"Índice de insomnio relativo (0 a 1), paleta magma; transparente por debajo de {INDICE_TRANSPARENTE_BAJO:g} y en el agua".replace(".", ","),
+        "transparente_bajo": INDICE_TRANSPARENTE_BAJO,
         "pares": len(ctx["pares"]), "desde": min(x["desde"] for x in ctx["pares"]), "hasta": max(x["hasta"] for x in ctx["pares"]),
         "parametros": {"razon": p.razon, "min_insomnio": p.min_insomnio, "min_persistencia": p.min_persistencia},
         "fuentes": ["NISAR GUNW (NASA/ISRO), vía ASF DAAC", "JRC Global Surface Water v1.4 (máscara de agua)"],

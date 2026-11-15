@@ -109,7 +109,7 @@ const EN: Record<string, string> = {
   Insomnio: 'Insomnia',
   Superficie: 'Area',
   Coherencia: 'Coherence',
-  'NISAR, cada 12 días': 'NISAR, every 12 days',
+  'NISAR, {0} comparaciones': 'NISAR, {0} comparisons',
   Entorno: 'Surroundings',
   Sitio: 'Site',
   'Sitio, {0}': 'Site, {0}',
@@ -180,8 +180,6 @@ const EN: Record<string, string> = {
   'Manchas candidatas': 'Candidate patches',
   '{0} ha · {1} % de la tierra': '{0} ha · {1} % of the land',
   'En el camino quedan': 'Dropped along the way',
-  'de menos de 10 ha': 'smaller than 10 ha',
-  'lisas: eco menor que −13 dB': 'smooth: echo below −13 dB',
   'lineales: rutas y arroyos': 'linear: roads and streams',
   'despiertas sólo por temporada': 'awake only seasonally',
   'Qué son las {0}': 'What the {0} are',
@@ -197,9 +195,6 @@ const EN: Record<string, string> = {
   'válido de {0} a {1}': 'valid from {0} to {1}',
   'Más bajo, Norte III deja de ser persistente. Más alto, aparecen manchas en la costa del Roggero':
     'Lower, Norte III stops being persistent. Higher, patches appear on the Roggero shore',
-  'Con 0,9 Norte III (0,86) queda afuera': 'At 0.9 Norte III (0.86) is left out',
-  'Entre lo liso conocido (el río, −16,6) y el relleno con menos eco (González Catán, −11,6)':
-    'Between known smooth ground (the river, −16.6) and the landfill with the least echo (González Catán, −11.6)',
   '¿Basural u otra cosa? El clasificador por mancha': 'Dump site or something else? The per-patch classifier',
   'El radar dice si un lugar se mueve, no qué es. Para eso, un modelo LightGBM entrenado con un catálogo mundial de basurales':
     'The radar says whether a place moves, not what it is. For that, a LightGBM model trained on a worldwide dump-site catalog',
@@ -208,13 +203,11 @@ const EN: Record<string, string> = {
   'OpenStreetMap, Climate TRACE, EPA LMOP y plumas de metano de NASA EMIT': 'OpenStreetMap, Climate TRACE, EPA LMOP and NASA EMIT methane plumes',
   'Y lo que se les parece': 'And look-alikes',
   'canteras, aeródromos': 'quarries, airfields',
-  '29 variables por mancha': '29 features per patch',
+  '{0} variables por mancha': '{0} features per patch',
   'radar NISAR, Sentinel-2 (vegetación, suelo desnudo, agua, infrarrojo) y forma': 'NISAR radar, Sentinel-2 (vegetation, bare soil, water, infrared) and shape',
   'Cientos de árboles de decisión, cada uno corrige al anterior': 'Hundreds of decision trees, each one correcting the previous',
   'Basural u otra cosa': 'Dump site or something else',
   'Clasificado como basural por el modelo: no es una confirmación': 'Classified as a dump site by the model: not a confirmation',
-  'Menos de 8 píxeles de 80 m': 'Fewer than 8 pixels of 80 m',
-  'Hay datos de junio a octubre de 2026': 'Data runs from June to October 2026',
   'Sólo dos rellenos y cinco controles': 'Only two landfills and five controls',
   'todas las pasadas': 'all passes',
 
@@ -241,8 +234,8 @@ const EN: Record<string, string> = {
   'En el AMBA, el índice completo ({0} comparaciones de NISAR, del {1} al {2}). En las otras regiones, las manchas donde el índice supera el umbral':
     'In Greater Buenos Aires, the full index ({0} NISAR comparisons, {1} to {2}). In the other regions, the patches where the index exceeds the threshold',
   'Recuadro: cada región procesada con NISAR. Acercate a un recuadro para ver el índice': 'Box: each region processed with NISAR. Zoom into a box to see the index',
-  'Índice de insomnio relativo, de 0 a 1; transparente por debajo de 0,3 y en el agua. En el AMBA, {0} comparaciones de NISAR, del {1} al {2}. Donde no hay imagen del índice se pintan las manchas despiertas':
-    'Relative insomnia index, from 0 to 1; transparent below 0.3 and over water. In Greater Buenos Aires, {0} NISAR comparisons, {1} to {2}. Where there is no index image, the awake patches are painted',
+  'Índice de insomnio relativo, de 0 a 1; transparente por debajo de {3} y en el agua. En el AMBA, {0} comparaciones de NISAR, del {1} al {2}. Donde no hay imagen del índice se pintan las manchas despiertas':
+    'Relative insomnia index, from 0 to 1; transparent below {3} and over water. In Greater Buenos Aires, {0} NISAR comparisons, {1} to {2}. Where there is no index image, the awake patches are painted',
   ' · Catálogo de basurales: © OpenStreetMap vía Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT': ' · Dump-site catalog: © OpenStreetMap via Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT',
   'Buscar por nombre, ciudad o país': 'Search by name, city or country',
   'Buscar': 'Search',

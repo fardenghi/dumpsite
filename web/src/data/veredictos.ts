@@ -5,10 +5,13 @@ import { useEffect, useState } from 'react'
 import { conUmbralBajo, type LecturaModelo, type ModeloEstado, type Sitio, type Veredicto, type Veredictos } from './types'
 
 const cargaVeredictos = import.meta.glob<Veredictos>('./seed/veredictos.json', { import: 'default' })
-const modeloJson = import.meta.glob<{ estado?: ModeloEstado | null }>('./seed/modelo.json', { import: 'default', eager: true })
+const modeloJson = import.meta.glob<{ estado?: ModeloEstado | null; metricas?: { columnas?: string[] } }>('./seed/modelo.json', { import: 'default', eager: true })
 
 /** Metrics of the open-versus-closed model, or null if `modelo.json` isn't there or doesn't carry `estado`. */
 export const MODELO_ESTADO: ModeloEstado | null = Object.values(modeloJson)[0]?.estado ?? null
+
+/** How many features per blob the dump-site classifier uses, or null if `modelo.json` doesn't say. */
+export const N_VARIABLES: number | null = Object.values(modeloJson)[0]?.metricas?.columnas?.length ?? null
 
 /** The frame of the 12 curated sites in `seed/sitios.json`: the map and the list start there. */
 export const FRAME_AMBA = 'AMBA'
