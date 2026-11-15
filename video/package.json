@@ -1,0 +1,26 @@
+{
+  "name": "dumpsite-video",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render:ingles": "remotion render DumpsiteIntl out/dumpsite-intl.mp4",
+    "render:espanol": "remotion render DumpsiteLocal out/dumpsite-local.mp4",
+    "still:espanol": "remotion still DumpsiteLocal out/frame.png --frame=900",
+    "check": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@remotion/cli": "^4.0.543",
+    "@remotion/fonts": "^4.0.543",
+    "@remotion/google-fonts": "^4.0.543",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.543"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,10 @@
+node_modules/
+out/
+.cache-tiles/
+.env*
+!.env.example
+# Clip generado con Higgsfield: se pasa por fuera del repo (ver README.md, "Clip de IA")
+public/clip1-ai.mp4
+compartido/higgsfield/salidas/
+compartido/higgsfield/.venv/
+__pycache__/
