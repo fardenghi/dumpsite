@@ -1,53 +1,53 @@
 # Dumpsite
 
-**Los basurales que el radar NISAR nunca ve quietos.** Proyecto para el challenge *Dancing with the SARs* de NASA Space Apps 2026.
+**The dump sites the NISAR radar never sees asleep.** A project for the *Dancing with the SARs* challenge of NASA Space Apps 2026.
 
-![Mapa del AMBA con el índice de insomnio](docs/img/mapa.png)
+![Map of the AMBA with the insomnia index](docs/img/mapa.png)
 
-## El problema y la idea
-- En Argentina se estiman unos 5.000 basurales a cielo abierto y no hay un inventario abierto que diga cuáles siguen activos.
-- NISAR pasa cada 12 días. Un basural activo pierde **coherencia** en todas las pasadas, porque lo remueven todos los días. Una ciudad o un campo, no.
-- Dumpsite mide cuántas veces un lugar "no durmió" (el **índice de insomnio**), lo cruza con 66.981 basurales del mundo y da un veredicto contra el registro oficial.
-- **Caso Luján:** cerrado el 1/07/2026, el radar lo ve **quieto en los 15 pares**. Norte III, el relleno activo del AMBA, sale despierto.
+## The problem and the idea
+- Argentina has an estimated 5,000 open-air dump sites, and there's no open inventory saying which ones are still active.
+- NISAR passes every 12 days. An active dump site loses **coherence** in every pass, because it gets moved around every day. A city or a field doesn't.
+- Dumpsite measures how often a place "didn't sleep" (the **insomnia index**), crosses it with 66,981 dump sites around the world and gives a verdict against the official registry.
+- **The Luján case:** closed on 1 July 2026, the radar sees it **quiet in all 15 pairs**. Norte III, the AMBA's active landfill, comes out awake.
 
-## Cómo funciona
+## How it works
 ```mermaid
 flowchart LR
-    A[NISAR GUNW y GCOV] --> B[Coherencia par a par]
-    B --> C[Índice de insomnio]
-    C --> D[Manchas candidatas]
-    D --> E[Cruce con catálogos de basurales y negativos]
-    E --> F[Clasificador abierto / cerrado]
+    A[NISAR GUNW and GCOV] --> B[Pair-by-pair coherence]
+    B --> C[Insomnia index]
+    C --> D[Candidate blobs]
+    D --> E[Cross with dump-site and negative catalogs]
+    E --> F[Open / closed classifier]
     F --> G[Web]
 ```
 
-| Ficha de un sitio | Panel del modelo | Video |
+| Site card | Model panel | Video |
 |---|---|---|
-| ![Ficha del basural de Luján](docs/img/ficha-lujan.png) | ![Panel del modelo](docs/img/modelo.png) | ![Frame del video](docs/img/video.png) |
+| ![Card of the Luján dump site](docs/img/ficha-lujan.png) | ![Model panel](docs/img/modelo.png) | ![Video frame](docs/img/video.png) |
 
-**Resultados:** 30 frames de NISAR y 962 pares. El modelo de abierto contra cerrado, que usa sólo radar, da **AUC 0,91** en frames que no vio. Detalle y límites en [`docs/resultados.md`](docs/resultados.md).
+**Results:** 30 NISAR frames and 962 pairs. The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/resultados.md`](docs/resultados.md).
 
-## Estructura del repo
-| Carpeta | Qué hay |
+## Repo structure
+| Folder | What's in it |
 |---|---|
-| [`docs/`](docs/README.md) | La idea, el índice, el modelo, los resultados y los datos |
-| [`web/`](web/README.md) | La web: mapa, fichas y panel del modelo (React, Vite, MapLibre) |
-| [`motor/`](motor/README.md) | El pipeline de NISAR, los modelos, los tests y la infra de la VM (Python) |
-| [`video/`](video/README.md) | Los dos videos de la entrega (Remotion) |
-| [`data/`](data/README.md) | Catálogos de basurales y negativos, y las salidas del motor |
+| [`docs/`](docs/README.md) | The idea, the index, the model, the results and the data |
+| [`web/`](web/README.md) | The web: map, site cards and model panel (React, Vite, MapLibre) |
+| [`motor/`](motor/README.md) | The NISAR pipeline, the models, the tests and the VM infra (Python) |
+| [`video/`](video/README.md) | The two submission videos (Remotion) |
+| [`data/`](data/README.md) | Dump-site and negative catalogs, and the engine's outputs |
 
-## Cómo correrlo
+## How to run it
 ```bash
 # web
 cd web && npm install && npm run dev
 
-# motor
+# engine
 cd motor && python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python -m pytest tests -q
 ```
 
-## Equipo
-| Nombre | GitHub |
+## Team
+| Name | GitHub |
 |---|---|
 | Nicolás Priotto | [@nicopriotto](https://github.com/nicopriotto) |
 | Santiago Bassi | [@santiagoBassi](https://github.com/santiagoBassi) |
@@ -56,5 +56,5 @@ cd motor && python -m venv .venv && .venv/bin/pip install -r requirements.txt
 | Filipo Ardenghi | [@fardenghi](https://github.com/fardenghi) |
 | Agustín Tomas Romero | [@sanrome](https://github.com/sanrome) |
 
-## Fuentes y datos
-NISAR (NASA/ISRO, vía ASF DAAC), Sentinel-2 (Copernicus), OpenStreetMap vía Overture, EPA LMOP, Climate TRACE, NASA EMIT y JRC: el detalle y las licencias están en [`docs/datos.md`](docs/datos.md).
+## Sources and data
+NISAR (NASA/ISRO, via ASF DAAC), Sentinel-2 (Copernicus), OpenStreetMap via Overture, EPA LMOP, Climate TRACE, NASA EMIT and JRC: details and licenses in [`docs/datos.md`](docs/datos.md).
