@@ -1,0 +1,15 @@
+{
+ "generado_por": "herramientas/modelo_por_frame.py",
+ "cruce": {
+  "manchas_sha1": "a3eb6b8680b57a426d874e8e2230c165c0222e06",
+  "archivos": [
+   "cruce_manchas_catalogo.parquet"
+  ],
+  "manchas_candidatas": 10,
+  "poligonos_en_la_caja": 65,
+  "pares": 1,
+  "manchas_que_pasan_el_criterio": 1,
+  "con_basurales": 1,
+  "con_negativos": 0
+ }
+}
