@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generado": "2026-11-14T22:23:22",
+  "generado": "2026-11-15T15:33:18",
   "generado_por": "herramientas/flujo.py (evaluar_actividad.evaluar)",
   "frames": [
    "AMBA",
@@ -12,7 +12,27 @@
    "USA_NH_HILLSBOROUGH",
    "USA_NY_RICHMOND",
    "DELHI",
-   "YAKARTA"
+   "YAKARTA",
+   "USA_MI_WAYNE",
+   "USA_PA_BERKS",
+   "USA_TX_DALLAS",
+   "USA_PA_ALLEGHENY",
+   "USA_TX_HARRIS",
+   "USA_CA_SAN_BERNARDINO",
+   "USA_CA_SAN_JOAQUIN",
+   "USA_AZ_MARICOPA",
+   "USA_OH_MAHONING",
+   "USA_MD_FREDERICK",
+   "USA_GA_FORSYTH",
+   "USA_OH_HAMILTON",
+   "USA_IL_ST_CLAIR",
+   "USA_FL_OSCEOLA",
+   "USA_VA_ROCKINGHAM",
+   "USA_CA_TULARE",
+   "USA_SC_GREENVILLE",
+   "USA_CA_LOS_ANGELES",
+   "USA_CA_RIVERSIDE",
+   "USA_IN_FULTON"
   ],
   "modo_insomnio": {
    "AMBA": [
@@ -44,6 +64,66 @@
    ],
    "YAKARTA": [
     "exacto"
+   ],
+   "USA_MI_WAYNE": [
+    "exacto"
+   ],
+   "USA_PA_BERKS": [
+    "exacto"
+   ],
+   "USA_TX_DALLAS": [
+    "exacto"
+   ],
+   "USA_PA_ALLEGHENY": [
+    "exacto"
+   ],
+   "USA_TX_HARRIS": [
+    "exacto"
+   ],
+   "USA_CA_SAN_BERNARDINO": [
+    "exacto"
+   ],
+   "USA_CA_SAN_JOAQUIN": [
+    "exacto"
+   ],
+   "USA_AZ_MARICOPA": [
+    "exacto"
+   ],
+   "USA_OH_MAHONING": [
+    "exacto"
+   ],
+   "USA_MD_FREDERICK": [
+    "exacto"
+   ],
+   "USA_GA_FORSYTH": [
+    "exacto"
+   ],
+   "USA_OH_HAMILTON": [
+    "exacto"
+   ],
+   "USA_IL_ST_CLAIR": [
+    "exacto"
+   ],
+   "USA_FL_OSCEOLA": [
+    "exacto"
+   ],
+   "USA_VA_ROCKINGHAM": [
+    "exacto"
+   ],
+   "USA_CA_TULARE": [
+    "exacto"
+   ],
+   "USA_SC_GREENVILLE": [
+    "exacto"
+   ],
+   "USA_CA_LOS_ANGELES": [
+    "exacto"
+   ],
+   "USA_CA_RIVERSIDE": [
+    "exacto"
+   ],
+   "USA_IN_FULTON": [
+    "exacto"
    ]
   },
   "fuentes_del_estado": [
@@ -53,76 +133,76 @@
   ],
   "min_ha": 10.0,
   "lectura": "Filas: estado del registro. Columnas: lo que dice el radar sobre el polígono. Las tasas se calculan sobre los que el radar pudo decidir; ic95 es el intervalo de Wilson.",
-  "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 58 sitios de estado conocido que el radar midió, 44 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, PRI, USA), no 'en el mundo'.",
+  "sesgo": "El estado conocido sale casi todo de la EPA (EE. UU.): de los 193 sitios de estado conocido que el radar midió, 179 son de EE. UU. La matriz vale para los países donde hay sitios (ARG, PRI, USA), no 'en el mundo'.",
   "aviso": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados.",
   "firms": "no se consultó: falta la variable de entorno FIRMS_MAP_KEY"
  },
  "total": {
   "matriz": {
    "abierto": {
-    "despierto": 9,
-    "quieto": 8,
-    "no_alcanza": 7
+    "despierto": 17,
+    "quieto": 29,
+    "no_alcanza": 72
    },
    "cerrado": {
-    "despierto": 10,
-    "quieto": 7,
-    "no_alcanza": 17
+    "despierto": 16,
+    "quieto": 13,
+    "no_alcanza": 46
    }
   },
   "metricas": {
    "abiertos_que_salen_despiertos": {
-    "k": 9,
-    "n": 17,
-    "tasa": 0.529,
+    "k": 17,
+    "n": 46,
+    "tasa": 0.37,
     "ic95": [
-     0.31,
-     0.738
+     0.245,
+     0.514
     ]
    },
    "abiertos_que_salen_quietos": {
-    "k": 8,
-    "n": 17,
-    "tasa": 0.471,
+    "k": 29,
+    "n": 46,
+    "tasa": 0.63,
     "ic95": [
-     0.262,
-     0.69
+     0.486,
+     0.755
     ]
    },
    "cerrados_que_salen_quietos": {
-    "k": 7,
-    "n": 17,
-    "tasa": 0.412,
+    "k": 13,
+    "n": 29,
+    "tasa": 0.448,
     "ic95": [
-     0.216,
-     0.64
+     0.284,
+     0.625
     ]
    },
    "cerrados_que_salen_despiertos": {
-    "k": 10,
-    "n": 17,
-    "tasa": 0.588,
+    "k": 16,
+    "n": 29,
+    "tasa": 0.552,
     "ic95": [
-     0.36,
-     0.784
+     0.375,
+     0.716
     ]
    },
    "concordancia": {
-    "k": 16,
-    "n": 34,
-    "tasa": 0.471,
+    "k": 30,
+    "n": 75,
+    "tasa": 0.4,
     "ic95": [
-     0.315,
-     0.633
+     0.297,
+     0.513
     ]
    },
    "el_radar_no_alcanza": {
-    "k": 24,
-    "n": 58,
-    "tasa": 0.414,
+    "k": 118,
+    "n": 193,
+    "tasa": 0.611,
     "ic95": [
-     0.296,
-     0.542
+     0.541,
+     0.677
     ]
    }
   }
@@ -271,80 +351,80 @@
   "USA": {
    "matriz": {
     "abierto": {
-     "despierto": 8,
-     "quieto": 3,
-     "no_alcanza": 5
+     "despierto": 16,
+     "quieto": 24,
+     "no_alcanza": 70
     },
     "cerrado": {
-     "despierto": 10,
-     "quieto": 4,
-     "no_alcanza": 14
+     "despierto": 16,
+     "quieto": 10,
+     "no_alcanza": 43
     }
    },
    "metricas": {
     "abiertos_que_salen_despiertos": {
-     "k": 8,
-     "n": 11,
-     "tasa": 0.727,
+     "k": 16,
+     "n": 40,
+     "tasa": 0.4,
      "ic95": [
-      0.434,
-      0.903
+      0.263,
+      0.554
      ]
     },
     "abiertos_que_salen_quietos": {
-     "k": 3,
-     "n": 11,
-     "tasa": 0.273,
+     "k": 24,
+     "n": 40,
+     "tasa": 0.6,
      "ic95": [
-      0.097,
-      0.566
+      0.446,
+      0.737
      ]
     },
     "cerrados_que_salen_quietos": {
-     "k": 4,
-     "n": 14,
-     "tasa": 0.286,
+     "k": 10,
+     "n": 26,
+     "tasa": 0.385,
      "ic95": [
-      0.117,
-      0.546
+      0.224,
+      0.575
      ]
     },
     "cerrados_que_salen_despiertos": {
-     "k": 10,
-     "n": 14,
-     "tasa": 0.714,
+     "k": 16,
+     "n": 26,
+     "tasa": 0.615,
      "ic95": [
-      0.454,
-      0.883
+      0.425,
+      0.776
      ]
     },
     "concordancia": {
-     "k": 12,
-     "n": 25,
-     "tasa": 0.48,
+     "k": 26,
+     "n": 66,
+     "tasa": 0.394,
      "ic95": [
-      0.3,
-      0.665
+      0.285,
+      0.515
      ]
     },
     "el_radar_no_alcanza": {
-     "k": 19,
-     "n": 44,
-     "tasa": 0.432,
+     "k": 113,
+     "n": 179,
+     "tasa": 0.631,
      "ic95": [
-      0.297,
-      0.578
+      0.559,
+      0.699
      ]
     }
    }
   }
  },
  "chicos_menos_de_min_ha": {
-  "USA": 32,
+  "USA": 56,
   "PRI": 3
  },
  "sin_poligono_o_fuera_de_grilla": {
-  "USA": 29,
+  "USA": 70,
   "PRI": 3,
   "IND": 1
  },
@@ -511,6 +591,103 @@
     "radar": "despierto",
     "insomnio": 0.98,
     "coincide": false
+   },
+   {
+    "frame": "USA_CA_SAN_BERNARDINO",
+    "pais": "USA",
+    "id_catalogo": "BAS-065534",
+    "nombre": "Highgrove SLF",
+    "complejo": "CPX-058184",
+    "area_ha": 51.99,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "fecha_cierre": 1998,
+    "radar": "despierto",
+    "insomnio": 0.92,
+    "coincide": false
+   },
+   {
+    "frame": "USA_CA_SAN_BERNARDINO",
+    "pais": "USA",
+    "id_catalogo": "BAS-066811",
+    "nombre": "Yucaipa Refuse Disposal Site",
+    "complejo": "CPX-059377",
+    "area_ha": 17.27,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1980,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "coincide": false
+   },
+   {
+    "frame": "USA_CA_SAN_JOAQUIN",
+    "pais": "USA",
+    "id_catalogo": "BAS-066609",
+    "nombre": "Tri-Cities Landfill",
+    "complejo": "CPX-059184",
+    "area_ha": 48.97,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2012,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "coincide": false
+   },
+   {
+    "frame": "USA_CA_SAN_JOAQUIN",
+    "pais": "USA",
+    "id_catalogo": "BAS-066533",
+    "nombre": "Sunnyvale LF",
+    "complejo": "CPX-059114",
+    "area_ha": 42.19,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1993,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-064779",
+    "nombre": "Bobmeyer Road MSW Landfill",
+    "complejo": "CPX-057472",
+    "area_ha": 35.02,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1987,
+    "radar": "despierto",
+    "insomnio": 0.89,
+    "coincide": false
+   },
+   {
+    "frame": "USA_SC_GREENVILLE",
+    "pais": "USA",
+    "id_catalogo": "BAS-066128",
+    "nombre": "Palmetto Landfill",
+    "complejo": "CPX-058733",
+    "area_ha": 88.64,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2016,
+    "radar": "despierto",
+    "insomnio": 0.79,
+    "coincide": false
    }
   ],
   "abiertos_pero_quietos": [
@@ -640,6 +817,342 @@
     "fecha_cierre": null,
     "radar": "quieto",
     "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MI_WAYNE",
+    "pais": "USA",
+    "id_catalogo": "BAS-064893",
+    "nombre": "Carleton Farms Landfill",
+    "complejo": "CPX-057578",
+    "area_ha": 263.64,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MI_WAYNE",
+    "pais": "USA",
+    "id_catalogo": "BAS-064994",
+    "nombre": "Citizens Disposal Landfill",
+    "complejo": "CPX-057676",
+    "area_ha": 132.35,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.16,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MI_WAYNE",
+    "pais": "USA",
+    "id_catalogo": "BAS-064660",
+    "nombre": "Arbor Hills Landfill",
+    "complejo": "CPX-057366",
+    "area_ha": 131.8,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.03,
+    "coincide": false
+   },
+   {
+    "frame": "USA_PA_BERKS",
+    "pais": "USA",
+    "id_catalogo": "BAS-064991",
+    "nombre": "Chrin Brothers LF",
+    "complejo": "CPX-057673",
+    "area_ha": 53.7,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.2,
+    "coincide": false
+   },
+   {
+    "frame": "USA_TX_DALLAS",
+    "pais": "USA",
+    "id_catalogo": "BAS-066444",
+    "nombre": "Skyline LF",
+    "complejo": "CPX-059030",
+    "area_ha": 245.13,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.12,
+    "coincide": false
+   },
+   {
+    "frame": "USA_CA_SAN_JOAQUIN",
+    "pais": "USA",
+    "id_catalogo": "BAS-066812",
+    "nombre": "Zanker Road (Nine Par) SLF",
+    "complejo": "CPX-059378",
+    "area_ha": 17.85,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.13,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_MAHONING",
+    "pais": "USA",
+    "id_catalogo": "BAS-066431",
+    "nombre": "Short Creek Sanitary Landfill",
+    "complejo": "CPX-059017",
+    "area_ha": 107.15,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_MAHONING",
+    "pais": "USA",
+    "id_catalogo": "BAS-065604",
+    "nombre": "J.J. Brunner LF",
+    "complejo": "CPX-058248",
+    "area_ha": 37.83,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MD_FREDERICK",
+    "pais": "USA",
+    "id_catalogo": "BAS-066270",
+    "nombre": "Reich's Ford Road SLF",
+    "complejo": "CPX-058865",
+    "area_ha": 196.32,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_MD_FREDERICK",
+    "pais": "USA",
+    "id_catalogo": "BAS-065955",
+    "nombre": "Mountain View Reclamation Landfill",
+    "complejo": "CPX-058577",
+    "area_ha": 148.59,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_GA_FORSYTH",
+    "pais": "USA",
+    "id_catalogo": "BAS-065259",
+    "nombre": "Eagle Point Landfill LLC",
+    "complejo": "CPX-057923",
+    "area_ha": 160.6,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_GA_FORSYTH",
+    "pais": "USA",
+    "id_catalogo": "BAS-064708",
+    "nombre": "Bartow County MSWLF",
+    "complejo": "CPX-057410",
+    "area_ha": 98.94,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.03,
+    "coincide": false
+   },
+   {
+    "frame": "USA_GA_FORSYTH",
+    "pais": "USA",
+    "id_catalogo": "BAS-065962",
+    "nombre": "Murray County Landfill",
+    "complejo": "CPX-058583",
+    "area_ha": 80.0,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.11,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-065995",
+    "nombre": "New Paris Pike LF",
+    "complejo": "CPX-058614",
+    "area_ha": 116.15,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-064784",
+    "nombre": "Bond Road Landfill",
+    "complejo": "CPX-057477",
+    "area_ha": 43.92,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-066517",
+    "nombre": "Stony Hollow Landfill Inc.",
+    "complejo": "CPX-059099",
+    "area_ha": 14.59,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_VA_ROCKINGHAM",
+    "pais": "USA",
+    "id_catalogo": "BAS-066304",
+    "nombre": "Rockingham County Landfill",
+    "complejo": "CPX-058898",
+    "area_ha": 88.74,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.15,
+    "coincide": false
+   },
+   {
+    "frame": "USA_VA_ROCKINGHAM",
+    "pais": "USA",
+    "id_catalogo": "BAS-064712",
+    "nombre": "Battle Creek Landfill",
+    "complejo": "CPX-057413",
+    "area_ha": 30.67,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.03,
+    "coincide": false
+   },
+   {
+    "frame": "USA_SC_GREENVILLE",
+    "pais": "USA",
+    "id_catalogo": "BAS-066636",
+    "nombre": "Twin Chimneys Landfill",
+    "complejo": "CPX-059209",
+    "area_ha": 196.98,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_CA_RIVERSIDE",
+    "pais": "USA",
+    "id_catalogo": "BAS-065297",
+    "nombre": "El Sobrante SLF",
+    "complejo": "CPX-057958",
+    "area_ha": 397.28,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "coincide": false
+   },
+   {
+    "frame": "USA_IN_FULTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-066217",
+    "nombre": "Prairie View RDF",
+    "complejo": "CPX-058814",
+    "area_ha": 118.82,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.13,
     "coincide": false
    }
   ]
@@ -1575,6 +2088,2170 @@
    "radar": "despierto",
    "insomnio": 0.98,
    "coincide": false
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064893",
+   "nombre": "Carleton Farms Landfill",
+   "complejo": "CPX-057578",
+   "area_ha": 263.64,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066294",
+   "nombre": "Riverview Land Preserve",
+   "complejo": "CPX-058888",
+   "area_ha": 157.96,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.47,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064994",
+   "nombre": "Citizens Disposal Landfill",
+   "complejo": "CPX-057676",
+   "area_ha": 132.35,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.16,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064660",
+   "nombre": "Arbor Hills Landfill",
+   "complejo": "CPX-057366",
+   "area_ha": 131.8,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.03,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065261",
+   "nombre": "Eagle Valley RDF",
+   "complejo": "CPX-057925",
+   "area_ha": 81.52,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.5,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066386",
+   "nombre": "Sauk Trail Hills Landfill",
+   "complejo": "CPX-028007",
+   "area_ha": 67.19,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.45,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066066",
+   "nombre": "Oakland Heights Development Landfill",
+   "complejo": "CPX-028305",
+   "area_ha": 66.53,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.37,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066678",
+   "nombre": "Venice Park Recycling & Disposal Facility",
+   "complejo": "CPX-059251",
+   "area_ha": 65.54,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.11,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MI_WAYNE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066720",
+   "nombre": "Wayne Disposal LF",
+   "complejo": "CPX-000135",
+   "area_ha": 20.32,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065134",
+   "nombre": "Conestoga LF",
+   "complejo": "CPX-057807",
+   "area_ha": 190.1,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.23,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-066306",
+   "nombre": "Rolling Hills LF",
+   "complejo": "CPX-058900",
+   "area_ha": 105.25,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.23,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065706",
+   "nombre": "Lanchester LF",
+   "complejo": "CPX-058338",
+   "area_ha": 79.04,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.28,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-064747",
+   "nombre": "Bethlehem Landfill",
+   "complejo": "CPX-057444",
+   "area_ha": 72.38,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.46,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065433",
+   "nombre": "Grand Central SLF",
+   "complejo": "CPX-058085",
+   "area_ha": 61.89,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.57,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-066186",
+   "nombre": "Pioneer Crossing LF",
+   "complejo": "CPX-058787",
+   "area_ha": 58.65,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.81,
+   "coincide": true
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-064991",
+   "nombre": "Chrin Brothers LF",
+   "complejo": "CPX-057673",
+   "area_ha": 53.7,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.2,
+   "coincide": false
+  },
+  {
+   "frame": "USA_PA_BERKS",
+   "pais": "USA",
+   "id_catalogo": "BAS-066745",
+   "nombre": "Western Berks Community Landfill & Recycling Center",
+   "complejo": "CPX-059315",
+   "area_ha": 12.22,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2023,
+   "radar": "no_alcanza",
+   "insomnio": 0.53,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065850",
+   "nombre": "McCommas Bluff Landfill",
+   "complejo": "CPX-058476",
+   "area_ha": 425.06,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.61,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "pais": "USA",
+   "id_catalogo": "BAS-066444",
+   "nombre": "Skyline LF",
+   "complejo": "CPX-059030",
+   "area_ha": 245.13,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.12,
+   "coincide": false
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "pais": "USA",
+   "id_catalogo": "BAS-064861",
+   "nombre": "C.M. Hinton Jr Regional Landfill",
+   "complejo": "CPX-057549",
+   "area_ha": 124.0,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.72,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065567",
+   "nombre": "Hunter Ferrell Landfill",
+   "complejo": "CPX-057709",
+   "area_ha": 64.07,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.47,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065012",
+   "nombre": "City of Corsicana LF",
+   "complejo": "CPX-013853",
+   "area_ha": 54.7,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.52,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_DALLAS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065254",
+   "nombre": "ECD Landfill",
+   "complejo": "CPX-057919",
+   "area_ha": 48.99,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.17,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-065934",
+   "nombre": "Monroeville LF",
+   "complejo": "CPX-058556",
+   "area_ha": 99.08,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.4,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-066748",
+   "nombre": "Westmoreland Waste SLF LLC",
+   "complejo": "CPX-059318",
+   "area_ha": 79.48,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.21,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-065454",
+   "nombre": "Greenridge Reclamation Landfill",
+   "complejo": "CPX-058105",
+   "area_ha": 67.9,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.41,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-066466",
+   "nombre": "South Hills Landfill",
+   "complejo": "CPX-059051",
+   "area_ha": 61.15,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.64,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-065320",
+   "nombre": "Evergreen Landfill",
+   "complejo": "CPX-057977",
+   "area_ha": 60.32,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.46,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-065652",
+   "nombre": "Kelly Run SLF",
+   "complejo": "CPX-058291",
+   "area_ha": 59.88,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.45,
+   "coincide": null
+  },
+  {
+   "frame": "USA_PA_ALLEGHENY",
+   "pais": "USA",
+   "id_catalogo": "BAS-066666",
+   "nombre": "Valley LF",
+   "complejo": "CPX-059239",
+   "area_ha": 54.36,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.53,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "pais": "USA",
+   "id_catalogo": "BAS-064671",
+   "nombre": "Atascocita RDF",
+   "complejo": "CPX-057377",
+   "area_ha": 227.04,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.55,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065847",
+   "nombre": "McCarty Road LF",
+   "complejo": "CPX-013856",
+   "area_ha": 168.9,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.68,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065107",
+   "nombre": "Coastal Plains RDF",
+   "complejo": "CPX-057782",
+   "area_ha": 80.06,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.58,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "pais": "USA",
+   "id_catalogo": "BAS-066758",
+   "nombre": "Whispering Pines LF",
+   "complejo": "CPX-059328",
+   "area_ha": 72.92,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.91,
+   "coincide": true
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065354",
+   "nombre": "Fort Bend Regional Landfill",
+   "complejo": "CPX-058010",
+   "area_ha": 52.0,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.35,
+   "coincide": null
+  },
+  {
+   "frame": "USA_TX_HARRIS",
+   "pais": "USA",
+   "id_catalogo": "BAS-065402",
+   "nombre": "Galveston County LF",
+   "complejo": "CPX-013859",
+   "area_ha": 17.96,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.55,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-065887",
+   "nombre": "Mid-Valley Sanitary LF",
+   "complejo": "CPX-058512",
+   "area_ha": 167.27,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": true
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-066682",
+   "nombre": "Victorville Sanitary Landfill",
+   "complejo": "CPX-059255",
+   "area_ha": 69.82,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.15,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-066369",
+   "nombre": "San Timoteo Solid Waste Disposal Site",
+   "complejo": "CPX-058961",
+   "area_ha": 66.62,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.64,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-064705",
+   "nombre": "Barstow Sanitary Landfill",
+   "complejo": "CPX-057407",
+   "area_ha": 61.36,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-065534",
+   "nombre": "Highgrove SLF",
+   "complejo": "CPX-058184",
+   "area_ha": 51.99,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 1998,
+   "radar": "despierto",
+   "insomnio": 0.92,
+   "coincide": false
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-065121",
+   "nombre": "Colton Sanitary Landfill",
+   "complejo": "CPX-037458",
+   "area_ha": 39.27,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2014,
+   "radar": "no_alcanza",
+   "insomnio": 0.96,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-064875",
+   "nombre": "California Street LF",
+   "complejo": "CPX-057561",
+   "area_ha": 34.62,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.94,
+   "coincide": true
+  },
+  {
+   "frame": "USA_CA_SAN_BERNARDINO",
+   "pais": "USA",
+   "id_catalogo": "BAS-066811",
+   "nombre": "Yucaipa Refuse Disposal Site",
+   "complejo": "CPX-059377",
+   "area_ha": 17.27,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1980,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": false
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-066675",
+   "nombre": "Vasco Road SLF",
+   "complejo": "CPX-059248",
+   "area_ha": 126.31,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-066001",
+   "nombre": "Newby Island SLF Phases I, II, & III",
+   "complejo": "CPX-058619",
+   "area_ha": 118.99,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": true
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-065464",
+   "nombre": "Guadalupe Rubbish Disposal Facility",
+   "complejo": "CPX-058115",
+   "area_ha": 114.69,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.33,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-065674",
+   "nombre": "Kirby Canyon Recycling & Disposal Facility",
+   "complejo": "CPX-058308",
+   "area_ha": 54.07,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.44,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-066609",
+   "nombre": "Tri-Cities Landfill",
+   "complejo": "CPX-059184",
+   "area_ha": 48.97,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2012,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": false
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-066533",
+   "nombre": "Sunnyvale LF",
+   "complejo": "CPX-059114",
+   "area_ha": 42.19,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "despierto",
+   "insomnio": 0.96,
+   "coincide": false
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-065145",
+   "nombre": "Corral Hollow LF",
+   "complejo": "CPX-057818",
+   "area_ha": 22.58,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1995,
+   "radar": "no_alcanza",
+   "insomnio": 0.76,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_SAN_JOAQUIN",
+   "pais": "USA",
+   "id_catalogo": "BAS-066812",
+   "nombre": "Zanker Road (Nine Par) SLF",
+   "complejo": "CPX-059378",
+   "area_ha": 17.85,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.13,
+   "coincide": false
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066055",
+   "nombre": "Northwest Regional MSW Landfill",
+   "complejo": "CPX-058667",
+   "area_ha": 437.76,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.1,
+   "coincide": null
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-064855",
+   "nombre": "Butterfield Station Landfill",
+   "complejo": "CPX-057543",
+   "area_ha": 390.29,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066443",
+   "nombre": "Skunk Creek Landfill",
+   "complejo": "CPX-059029",
+   "area_ha": 252.36,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2005,
+   "radar": "no_alcanza",
+   "insomnio": 0.6,
+   "coincide": null
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066507",
+   "nombre": "State Route 85 Landfill",
+   "complejo": "CPX-059090",
+   "area_ha": 197.04,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-065026",
+   "nombre": "City of Glendale Municipal Landfill",
+   "complejo": "CPX-057706",
+   "area_ha": 147.56,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066487",
+   "nombre": "Southwest Regional Landfill",
+   "complejo": "CPX-059071",
+   "area_ha": 111.84,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_AZ_MARICOPA",
+   "pais": "USA",
+   "id_catalogo": "BAS-064589",
+   "nombre": "27th Avenue Landfill",
+   "complejo": "CPX-057302",
+   "area_ha": 56.51,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1995,
+   "radar": "no_alcanza",
+   "insomnio": 0.77,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "pais": "USA",
+   "id_catalogo": "BAS-064864",
+   "nombre": "CLD Landfill",
+   "complejo": "CPX-057551",
+   "area_ha": 115.84,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2009,
+   "radar": "quieto",
+   "insomnio": 0.16,
+   "coincide": true
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "pais": "USA",
+   "id_catalogo": "BAS-064662",
+   "nombre": "Arden LF",
+   "complejo": "CPX-057368",
+   "area_ha": 109.97,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.22,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "pais": "USA",
+   "id_catalogo": "BAS-066431",
+   "nombre": "Short Creek Sanitary Landfill",
+   "complejo": "CPX-059017",
+   "area_ha": 107.15,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "pais": "USA",
+   "id_catalogo": "BAS-064657",
+   "nombre": "Apex Sanitary Landfill",
+   "complejo": "CPX-057363",
+   "area_ha": 75.9,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.32,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "pais": "USA",
+   "id_catalogo": "BAS-065604",
+   "nombre": "J.J. Brunner LF",
+   "complejo": "CPX-058248",
+   "area_ha": 37.83,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_MAHONING",
+   "pais": "USA",
+   "id_catalogo": "BAS-065814",
+   "nombre": "Mahoning LF",
+   "complejo": "CPX-058444",
+   "area_ha": 27.37,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.29,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "pais": "USA",
+   "id_catalogo": "BAS-066270",
+   "nombre": "Reich's Ford Road SLF",
+   "complejo": "CPX-058865",
+   "area_ha": 196.32,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "pais": "USA",
+   "id_catalogo": "BAS-065955",
+   "nombre": "Mountain View Reclamation Landfill",
+   "complejo": "CPX-058577",
+   "area_ha": 148.59,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "pais": "USA",
+   "id_catalogo": "BAS-065789",
+   "nombre": "Loudoun County SLF",
+   "complejo": "CPX-058419",
+   "area_ha": 136.25,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 1.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "pais": "USA",
+   "id_catalogo": "BAS-064774",
+   "nombre": "Blue Ridge Landfill",
+   "complejo": "CPX-057468",
+   "area_ha": 88.76,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.2,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "pais": "USA",
+   "id_catalogo": "BAS-065368",
+   "nombre": "Forty West SLF",
+   "complejo": "CPX-058024",
+   "area_ha": 71.92,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.69,
+   "coincide": null
+  },
+  {
+   "frame": "USA_MD_FREDERICK",
+   "pais": "USA",
+   "id_catalogo": "BAS-066273",
+   "nombre": "Resh Road II SLF",
+   "complejo": "CPX-058868",
+   "area_ha": 19.56,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 2000,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "USA_GA_FORSYTH",
+   "pais": "USA",
+   "id_catalogo": "BAS-065259",
+   "nombre": "Eagle Point Landfill LLC",
+   "complejo": "CPX-057923",
+   "area_ha": 160.6,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_GA_FORSYTH",
+   "pais": "USA",
+   "id_catalogo": "BAS-066175",
+   "nombre": "Pine Bluff Landfill",
+   "complejo": "CPX-058777",
+   "area_ha": 151.73,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.57,
+   "coincide": null
+  },
+  {
+   "frame": "USA_GA_FORSYTH",
+   "pais": "USA",
+   "id_catalogo": "BAS-064708",
+   "nombre": "Bartow County MSWLF",
+   "complejo": "CPX-057410",
+   "area_ha": 98.94,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.03,
+   "coincide": false
+  },
+  {
+   "frame": "USA_GA_FORSYTH",
+   "pais": "USA",
+   "id_catalogo": "BAS-065962",
+   "nombre": "Murray County Landfill",
+   "complejo": "CPX-058583",
+   "area_ha": 80.0,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.11,
+   "coincide": false
+  },
+  {
+   "frame": "USA_GA_FORSYTH",
+   "pais": "USA",
+   "id_catalogo": "BAS-066081",
+   "nombre": "Old Dixie Highway MSW Landfill",
+   "complejo": "CPX-058690",
+   "area_ha": 43.19,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.54,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-066328",
+   "nombre": "Rumpke SLF, Inc.",
+   "complejo": "CPX-058922",
+   "area_ha": 300.93,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.57,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065995",
+   "nombre": "New Paris Pike LF",
+   "complejo": "CPX-058614",
+   "area_ha": 116.15,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065256",
+   "nombre": "ELDA RDF",
+   "complejo": "CPX-040064",
+   "area_ha": 74.71,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop",
+    "osm"
+   ],
+   "fecha_cierre": 1998,
+   "radar": "no_alcanza",
+   "insomnio": 0.22,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-064784",
+   "nombre": "Bond Road Landfill",
+   "complejo": "CPX-057477",
+   "area_ha": 43.92,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-066033",
+   "nombre": "North Sanitary Landfill",
+   "complejo": "CPX-058646",
+   "area_ha": 38.02,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1994,
+   "radar": "no_alcanza",
+   "insomnio": 0.39,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-064779",
+   "nombre": "Bobmeyer Road MSW Landfill",
+   "complejo": "CPX-057472",
+   "area_ha": 35.02,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1987,
+   "radar": "despierto",
+   "insomnio": 0.89,
+   "coincide": false
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065892",
+   "nombre": "Middletown City LF",
+   "complejo": "CPX-058516",
+   "area_ha": 31.91,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1990,
+   "radar": "no_alcanza",
+   "insomnio": 0.62,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-064754",
+   "nombre": "Bigfoot Run Landfill",
+   "complejo": "CPX-057451",
+   "area_ha": 29.99,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1999,
+   "radar": "no_alcanza",
+   "insomnio": 0.51,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-048277",
+   "nombre": "Powell Road Landfill",
+   "complejo": "CPX-042239",
+   "area_ha": 16.91,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.19,
+   "coincide": null
+  },
+  {
+   "frame": "USA_OH_HAMILTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-066517",
+   "nombre": "Stony Hollow Landfill Inc.",
+   "complejo": "CPX-059099",
+   "area_ha": 14.59,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-065898",
+   "nombre": "Milam Recycling and Disposal Facility",
+   "complejo": "CPX-058521",
+   "area_ha": 126.33,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.05,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-064947",
+   "nombre": "Champ Landfill",
+   "complejo": "CPX-057631",
+   "area_ha": 122.92,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.63,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-064814",
+   "nombre": "Bridgeton Landfill",
+   "complejo": "CPX-057506",
+   "area_ha": 88.55,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2004,
+   "radar": "no_alcanza",
+   "insomnio": 0.34,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-066324",
+   "nombre": "Roxana LF",
+   "complejo": "CPX-058918",
+   "area_ha": 78.92,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.39,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-066063",
+   "nombre": "Oak Ridge Landfill",
+   "complejo": "CPX-058674",
+   "area_ha": 50.05,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2011,
+   "radar": "no_alcanza",
+   "insomnio": 0.69,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-065579",
+   "nombre": "IESI Timber Ridge Landfill",
+   "complejo": "CPX-058225",
+   "area_ha": 30.5,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.45,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IL_ST_CLAIR",
+   "pais": "USA",
+   "id_catalogo": "BAS-046635",
+   "nombre": "Interstate Disposal Systems Inc. Sanitary Landfill",
+   "complejo": "CPX-040867",
+   "area_ha": 17.67,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": "1993-10-08",
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-065603",
+   "nombre": "J.E.D. Solid Waste Management Facility",
+   "complejo": "CPX-058247",
+   "area_ha": 207.18,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.92,
+   "coincide": true
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066104",
+   "nombre": "Osceola Landfill",
+   "complejo": "CPX-058711",
+   "area_ha": 179.15,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.9,
+   "coincide": true
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-065693",
+   "nombre": "Lake County Central Phase I Landfill",
+   "complejo": "CPX-058327",
+   "area_ha": 108.3,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2023,
+   "radar": "no_alcanza",
+   "insomnio": 0.88,
+   "coincide": null
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066023",
+   "nombre": "North Central Landfill",
+   "complejo": "CPX-014108",
+   "area_ha": 72.14,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.76,
+   "coincide": null
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066180",
+   "nombre": "Pine Ridge Recycling & Disposal",
+   "complejo": "CPX-058781",
+   "area_ha": 56.9,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1999,
+   "radar": "no_alcanza",
+   "insomnio": 0.65,
+   "coincide": null
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066097",
+   "nombre": "Orange County SLF",
+   "complejo": "CPX-042040",
+   "area_ha": 48.86,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.78,
+   "coincide": null
+  },
+  {
+   "frame": "USA_FL_OSCEOLA",
+   "pais": "USA",
+   "id_catalogo": "BAS-066350",
+   "nombre": "Saint Cloud City LF Class I",
+   "complejo": "CPX-058943",
+   "area_ha": 17.63,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2003,
+   "radar": "no_alcanza",
+   "insomnio": 0.45,
+   "coincide": null
+  },
+  {
+   "frame": "USA_VA_ROCKINGHAM",
+   "pais": "USA",
+   "id_catalogo": "BAS-066304",
+   "nombre": "Rockingham County Landfill",
+   "complejo": "CPX-058898",
+   "area_ha": 88.74,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.15,
+   "coincide": false
+  },
+  {
+   "frame": "USA_VA_ROCKINGHAM",
+   "pais": "USA",
+   "id_catalogo": "BAS-065600",
+   "nombre": "Ivy Material Utilization Center",
+   "complejo": "CPX-058244",
+   "area_ha": 60.8,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2001,
+   "radar": "no_alcanza",
+   "insomnio": 0.32,
+   "coincide": null
+  },
+  {
+   "frame": "USA_VA_ROCKINGHAM",
+   "pais": "USA",
+   "id_catalogo": "BAS-066424",
+   "nombre": "Shenandoah County LF",
+   "complejo": "CPX-059011",
+   "area_ha": 53.49,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.1,
+   "coincide": null
+  },
+  {
+   "frame": "USA_VA_ROCKINGHAM",
+   "pais": "USA",
+   "id_catalogo": "BAS-064712",
+   "nombre": "Battle Creek Landfill",
+   "complejo": "CPX-057413",
+   "area_ha": 30.67,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.03,
+   "coincide": false
+  },
+  {
+   "frame": "USA_VA_ROCKINGHAM",
+   "pais": "USA",
+   "id_catalogo": "BAS-066095",
+   "nombre": "Orange County Landfill",
+   "complejo": "CPX-058703",
+   "area_ha": 26.68,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.5,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066687",
+   "nombre": "Visalia Landfill",
+   "complejo": "CPX-059260",
+   "area_ha": 252.67,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.31,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066797",
+   "nombre": "Woodville Landfill",
+   "complejo": "CPX-059364",
+   "area_ha": 153.56,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.15,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065024",
+   "nombre": "City of Fresno Landfill",
+   "complejo": "CPX-057704",
+   "area_ha": 52.92,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1987,
+   "radar": "no_alcanza",
+   "insomnio": 0.85,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066558",
+   "nombre": "Teapot Dome Landfill",
+   "complejo": "CPX-059135",
+   "area_ha": 51.96,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2023,
+   "radar": "no_alcanza",
+   "insomnio": 0.05,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064954",
+   "nombre": "Chateau Fresno LF",
+   "complejo": "CPX-057637",
+   "area_ha": 30.38,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1996,
+   "radar": "no_alcanza",
+   "insomnio": 0.89,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065009",
+   "nombre": "City of Clovis LF",
+   "complejo": "CPX-057691",
+   "area_ha": 30.04,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.21,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-064976",
+   "nombre": "Chestnut Avenue SLF",
+   "complejo": "CPX-057658",
+   "area_ha": 17.84,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "no_alcanza",
+   "insomnio": 0.91,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_TULARE",
+   "pais": "USA",
+   "id_catalogo": "BAS-048051",
+   "nombre": "Orosi Landfill",
+   "complejo": "CPX-042062",
+   "area_ha": 13.62,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.82,
+   "coincide": null
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066636",
+   "nombre": "Twin Chimneys Landfill",
+   "complejo": "CPX-059209",
+   "area_ha": 196.98,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066728",
+   "nombre": "Wellford LF",
+   "complejo": "CPX-059298",
+   "area_ha": 132.75,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.42,
+   "coincide": null
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066128",
+   "nombre": "Palmetto Landfill",
+   "complejo": "CPX-058733",
+   "area_ha": 88.64,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2016,
+   "radar": "despierto",
+   "insomnio": 0.79,
+   "coincide": false
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066403",
+   "nombre": "Seneca MSWLF",
+   "complejo": "CPX-058993",
+   "area_ha": 40.11,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1998,
+   "radar": "no_alcanza",
+   "insomnio": 0.43,
+   "coincide": null
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066165",
+   "nombre": "Pickens County Landfill",
+   "complejo": "CPX-058768",
+   "area_ha": 33.84,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1998,
+   "radar": "no_alcanza",
+   "insomnio": 0.66,
+   "coincide": null
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065457",
+   "nombre": "Greenwood County Landfills",
+   "complejo": "CPX-058108",
+   "area_ha": 21.35,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "despierto",
+   "insomnio": 0.8,
+   "coincide": true
+  },
+  {
+   "frame": "USA_SC_GREENVILLE",
+   "pais": "USA",
+   "id_catalogo": "BAS-066506",
+   "nombre": "Starr Sanitary Landfill",
+   "complejo": "CPX-059089",
+   "area_ha": 16.91,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1993,
+   "radar": "no_alcanza",
+   "insomnio": 0.28,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-064652",
+   "nombre": "Antelope Valley Recycling and Disposal Facility",
+   "complejo": "CPX-057359",
+   "area_ha": 83.27,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.85,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-065705",
+   "nombre": "Lancaster Landfill",
+   "complejo": "CPX-058337",
+   "area_ha": 61.64,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.06,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-065926",
+   "nombre": "Mojave-Rosamond SLF",
+   "complejo": "CPX-058548",
+   "area_ha": 17.16,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_LOS_ANGELES",
+   "pais": "USA",
+   "id_catalogo": "BAS-065735",
+   "nombre": "Lebec SLF",
+   "complejo": "CPX-058365",
+   "area_ha": 15.21,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1991,
+   "radar": "quieto",
+   "insomnio": 0.19,
+   "coincide": true
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065297",
+   "nombre": "El Sobrante SLF",
+   "complejo": "CPX-057958",
+   "area_ha": 397.28,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": false
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "pais": "USA",
+   "id_catalogo": "BAS-048710",
+   "nombre": "San Marcos Landfill (Closed)",
+   "complejo": "CPX-042594",
+   "area_ha": 56.93,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "osm"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.0,
+   "coincide": true
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065236",
+   "nombre": "Double Butte Disposal Site",
+   "complejo": "CPX-057903",
+   "area_ha": 40.53,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1994,
+   "radar": "no_alcanza",
+   "insomnio": 0.71,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065721",
+   "nombre": "Las Pulgas LF",
+   "complejo": "CPX-058351",
+   "area_ha": 30.9,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.17,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065142",
+   "nombre": "Corona Disposal Site",
+   "complejo": "CPX-057815",
+   "area_ha": 27.07,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1986,
+   "radar": "no_alcanza",
+   "insomnio": 1.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_CA_RIVERSIDE",
+   "pais": "USA",
+   "id_catalogo": "BAS-065864",
+   "nombre": "Mead Valley Disposal Site",
+   "complejo": "CPX-058490",
+   "area_ha": 24.57,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 1997,
+   "radar": "no_alcanza",
+   "insomnio": 0.68,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IN_FULTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065154",
+   "nombre": "County Line LF",
+   "complejo": "CPX-057827",
+   "area_ha": 145.23,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.2,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IN_FULTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-066217",
+   "nombre": "Prairie View RDF",
+   "complejo": "CPX-058814",
+   "area_ha": 118.82,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "quieto",
+   "insomnio": 0.13,
+   "coincide": false
+  },
+  {
+   "frame": "USA_IN_FULTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065349",
+   "nombre": "Forest Lawn Landfill",
+   "complejo": "CPX-058005",
+   "area_ha": 91.74,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2017,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IN_FULTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065301",
+   "nombre": "Elkhart County Landfill",
+   "complejo": "CPX-057928",
+   "area_ha": 68.85,
+   "registro": "abierto",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": null,
+   "radar": "no_alcanza",
+   "insomnio": 0.0,
+   "coincide": null
+  },
+  {
+   "frame": "USA_IN_FULTON",
+   "pais": "USA",
+   "id_catalogo": "BAS-065217",
+   "nombre": "Deercroft RDF",
+   "complejo": "CPX-057884",
+   "area_ha": 52.82,
+   "registro": "cerrado",
+   "fuentes_estado": [
+    "epa_lmop"
+   ],
+   "fecha_cierre": 2002,
+   "radar": "no_alcanza",
+   "insomnio": 0.07,
+   "coincide": null
   }
  ],
  "sin_cerrados_osm": {
@@ -1585,69 +4262,69 @@
   "total": {
    "matriz": {
     "abierto": {
-     "despierto": 9,
-     "quieto": 8,
-     "no_alcanza": 7
+     "despierto": 17,
+     "quieto": 29,
+     "no_alcanza": 72
     },
     "cerrado": {
-     "despierto": 8,
-     "quieto": 6,
-     "no_alcanza": 13
+     "despierto": 14,
+     "quieto": 10,
+     "no_alcanza": 40
     }
    },
    "metricas": {
     "abiertos_que_salen_despiertos": {
-     "k": 9,
-     "n": 17,
-     "tasa": 0.529,
+     "k": 17,
+     "n": 46,
+     "tasa": 0.37,
      "ic95": [
-      0.31,
-      0.738
+      0.245,
+      0.514
      ]
     },
     "abiertos_que_salen_quietos": {
-     "k": 8,
-     "n": 17,
-     "tasa": 0.471,
+     "k": 29,
+     "n": 46,
+     "tasa": 0.63,
      "ic95": [
-      0.262,
-      0.69
+      0.486,
+      0.755
      ]
     },
     "cerrados_que_salen_quietos": {
-     "k": 6,
-     "n": 14,
-     "tasa": 0.429,
+     "k": 10,
+     "n": 24,
+     "tasa": 0.417,
      "ic95": [
-      0.214,
-      0.674
+      0.245,
+      0.612
      ]
     },
     "cerrados_que_salen_despiertos": {
-     "k": 8,
-     "n": 14,
-     "tasa": 0.571,
+     "k": 14,
+     "n": 24,
+     "tasa": 0.583,
      "ic95": [
-      0.326,
-      0.786
+      0.388,
+      0.755
      ]
     },
     "concordancia": {
-     "k": 15,
-     "n": 31,
-     "tasa": 0.484,
+     "k": 27,
+     "n": 70,
+     "tasa": 0.386,
      "ic95": [
-      0.32,
-      0.652
+      0.28,
+      0.503
      ]
     },
     "el_radar_no_alcanza": {
-     "k": 20,
-     "n": 51,
-     "tasa": 0.392,
+     "k": 112,
+     "n": 182,
+     "tasa": 0.615,
      "ic95": [
-      0.27,
-      0.529
+      0.543,
+      0.683
      ]
     }
    }
@@ -1796,69 +4473,69 @@
    "USA": {
     "matriz": {
      "abierto": {
-      "despierto": 8,
-      "quieto": 3,
-      "no_alcanza": 5
+      "despierto": 16,
+      "quieto": 24,
+      "no_alcanza": 70
      },
      "cerrado": {
-      "despierto": 8,
-      "quieto": 3,
-      "no_alcanza": 10
+      "despierto": 14,
+      "quieto": 7,
+      "no_alcanza": 37
      }
     },
     "metricas": {
      "abiertos_que_salen_despiertos": {
-      "k": 8,
-      "n": 11,
-      "tasa": 0.727,
+      "k": 16,
+      "n": 40,
+      "tasa": 0.4,
       "ic95": [
-       0.434,
-       0.903
+       0.263,
+       0.554
       ]
      },
      "abiertos_que_salen_quietos": {
-      "k": 3,
-      "n": 11,
-      "tasa": 0.273,
+      "k": 24,
+      "n": 40,
+      "tasa": 0.6,
       "ic95": [
-       0.097,
-       0.566
+       0.446,
+       0.737
       ]
      },
      "cerrados_que_salen_quietos": {
-      "k": 3,
-      "n": 11,
-      "tasa": 0.273,
+      "k": 7,
+      "n": 21,
+      "tasa": 0.333,
       "ic95": [
-       0.097,
-       0.566
+       0.172,
+       0.546
       ]
      },
      "cerrados_que_salen_despiertos": {
-      "k": 8,
-      "n": 11,
-      "tasa": 0.727,
+      "k": 14,
+      "n": 21,
+      "tasa": 0.667,
       "ic95": [
-       0.434,
-       0.903
+       0.454,
+       0.828
       ]
      },
      "concordancia": {
-      "k": 11,
-      "n": 22,
-      "tasa": 0.5,
+      "k": 23,
+      "n": 61,
+      "tasa": 0.377,
       "ic95": [
-       0.307,
-       0.693
+       0.266,
+       0.503
       ]
      },
      "el_radar_no_alcanza": {
-      "k": 15,
-      "n": 37,
-      "tasa": 0.405,
+      "k": 107,
+      "n": 168,
+      "tasa": 0.637,
       "ic95": [
-       0.263,
-       0.565
+       0.562,
+       0.706
       ]
      }
     }
@@ -2109,6 +4786,167 @@
     "resultado": "hay una explicación obvia sin descartar"
    },
    {
+    "frame": "USA_CA_SAN_BERNARDINO",
+    "pais": "USA",
+    "id_catalogo": "BAS-066811",
+    "nombre": "Yucaipa Refuse Disposal Site",
+    "complejo": "CPX-059377",
+    "area_ha": 17.27,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1980,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "lat": 34.04793,
+    "lon": -117.058951,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_CA_SAN_JOAQUIN",
+    "pais": "USA",
+    "id_catalogo": "BAS-066609",
+    "nombre": "Tri-Cities Landfill",
+    "complejo": "CPX-059184",
+    "area_ha": 48.97,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2012,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "lat": 37.492512,
+    "lon": -121.992996,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "no se descarta",
+      "detalle": "el nombre lo sugiere: Tri-Cities Recycling"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_CA_SAN_JOAQUIN",
+    "pais": "USA",
+    "id_catalogo": "BAS-066533",
+    "nombre": "Sunnyvale LF",
+    "complejo": "CPX-059114",
+    "area_ha": 42.19,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1993,
+    "radar": "despierto",
+    "insomnio": 0.96,
+    "lat": 37.418229,
+    "lon": -122.010834,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_CA_SAN_BERNARDINO",
+    "pais": "USA",
+    "id_catalogo": "BAS-065534",
+    "nombre": "Highgrove SLF",
+    "complejo": "CPX-058184",
+    "area_ha": 51.99,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop",
+     "osm"
+    ],
+    "fecha_cierre": 1998,
+    "radar": "despierto",
+    "insomnio": 0.92,
+    "lat": 34.006346,
+    "lon": -117.285456,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
     "frame": "USA_OH_LAKE",
     "pais": "USA",
     "id_catalogo": "BAS-065187",
@@ -2124,6 +4962,46 @@
     "insomnio": 0.89,
     "lat": 41.379224,
     "lon": -81.472817,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "sin indicio en el nombre",
+      "detalle": "los nombres del catálogo no la mencionan; falta mirar óptico"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-064779",
+    "nombre": "Bobmeyer Road MSW Landfill",
+    "complejo": "CPX-057472",
+    "area_ha": 35.02,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 1987,
+    "radar": "despierto",
+    "insomnio": 0.89,
+    "lat": 39.359758,
+    "lon": -84.528144,
     "chequeos": [
      {
       "chequeo": "celda vecina activa",
@@ -2229,6 +5107,46 @@
     "resultado": "hay una explicación obvia sin descartar"
    },
    {
+    "frame": "USA_SC_GREENVILLE",
+    "pais": "USA",
+    "id_catalogo": "BAS-066128",
+    "nombre": "Palmetto Landfill",
+    "complejo": "CPX-058733",
+    "area_ha": 88.64,
+    "registro": "cerrado",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": 2016,
+    "radar": "despierto",
+    "insomnio": 0.79,
+    "lat": 34.932043,
+    "lon": -82.075045,
+    "chequeos": [
+     {
+      "chequeo": "celda vecina activa",
+      "resultado": "descartado",
+      "detalle": "ningún otro basural despierto del mismo complejo ni a menos de 1.5 km"
+     },
+     {
+      "chequeo": "planta de transferencia o reciclaje en el predio",
+      "resultado": "no se descarta",
+      "detalle": "el nombre lo sugiere: Palmetto Landfill And Recycling Center"
+     },
+     {
+      "chequeo": "planta o pozos de biogás",
+      "resultado": "no se descarta",
+      "detalle": "LMOP: captura de biogás = Yes (pozos, cañerías y mantenimiento mueven el suelo)"
+     },
+     {
+      "chequeo": "obras de cierre o remediación",
+      "resultado": "sin dato",
+      "detalle": "no hay dato de obras en el registro"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
     "frame": "USA_MD_HOWARD",
     "pais": "USA",
     "id_catalogo": "BAS-065416",
@@ -2271,6 +5189,36 @@
   ],
   "abiertos_pero_quietos": [
    {
+    "frame": "USA_PA_BERKS",
+    "pais": "USA",
+    "id_catalogo": "BAS-064991",
+    "nombre": "Chrin Brothers LF",
+    "complejo": "CPX-057673",
+    "area_ha": 53.7,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.2,
+    "lat": 40.665819,
+    "lon": -75.226283,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 53.7 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
     "frame": "USA_MD_HOWARD",
     "pais": "USA",
     "id_catalogo": "BAS-065281",
@@ -2291,6 +5239,156 @@
       "chequeo": "frente de descarga más chico que el píxel",
       "resultado": "no se descarta",
       "detalle": "el polígono mide 143.26 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MI_WAYNE",
+    "pais": "USA",
+    "id_catalogo": "BAS-064994",
+    "nombre": "Citizens Disposal Landfill",
+    "complejo": "CPX-057676",
+    "area_ha": 132.35,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.16,
+    "lat": 42.911877,
+    "lon": -83.722262,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 132.35 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_VA_ROCKINGHAM",
+    "pais": "USA",
+    "id_catalogo": "BAS-066304",
+    "nombre": "Rockingham County Landfill",
+    "complejo": "CPX-058898",
+    "area_ha": 88.74,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.15,
+    "lat": 38.397766,
+    "lon": -78.883579,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 88.74 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_CA_SAN_JOAQUIN",
+    "pais": "USA",
+    "id_catalogo": "BAS-066812",
+    "nombre": "Zanker Road (Nine Par) SLF",
+    "complejo": "CPX-059378",
+    "area_ha": 17.85,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.13,
+    "lat": 37.434654,
+    "lon": -121.954891,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 17.85 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_IN_FULTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-066217",
+    "nombre": "Prairie View RDF",
+    "complejo": "CPX-058814",
+    "area_ha": 118.82,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.13,
+    "lat": 41.499811,
+    "lon": -86.171453,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 118.82 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_TX_DALLAS",
+    "pais": "USA",
+    "id_catalogo": "BAS-066444",
+    "nombre": "Skyline LF",
+    "complejo": "CPX-059030",
+    "area_ha": 245.13,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.12,
+    "lat": 32.549088,
+    "lon": -96.678618,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 245.13 ha; un frente activo de 1 a 3 ha no mueve la mediana"
      },
      {
       "chequeo": "registro desactualizado",
@@ -2331,6 +5429,36 @@
     "resultado": "hay una explicación obvia sin descartar"
    },
    {
+    "frame": "USA_GA_FORSYTH",
+    "pais": "USA",
+    "id_catalogo": "BAS-065962",
+    "nombre": "Murray County Landfill",
+    "complejo": "CPX-058583",
+    "area_ha": 80.0,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.11,
+    "lat": 34.680489,
+    "lon": -84.731656,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 80.0 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
     "frame": "USA_MD_HOWARD",
     "pais": "USA",
     "id_catalogo": "BAS-065494",
@@ -2351,6 +5479,96 @@
       "chequeo": "frente de descarga más chico que el píxel",
       "resultado": "no se descarta",
       "detalle": "el polígono mide 56.53 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MI_WAYNE",
+    "pais": "USA",
+    "id_catalogo": "BAS-064660",
+    "nombre": "Arbor Hills Landfill",
+    "complejo": "CPX-057366",
+    "area_ha": 131.8,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.03,
+    "lat": 42.40507,
+    "lon": -83.556321,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 131.8 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_GA_FORSYTH",
+    "pais": "USA",
+    "id_catalogo": "BAS-064708",
+    "nombre": "Bartow County MSWLF",
+    "complejo": "CPX-057410",
+    "area_ha": 98.94,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.03,
+    "lat": 34.143277,
+    "lon": -84.762647,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 98.94 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_VA_ROCKINGHAM",
+    "pais": "USA",
+    "id_catalogo": "BAS-064712",
+    "nombre": "Battle Creek Landfill",
+    "complejo": "CPX-057413",
+    "area_ha": 30.67,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.03,
+    "lat": 38.62226,
+    "lon": -78.586354,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 30.67 ha; un frente activo de 1 a 3 ha no mueve la mediana"
      },
      {
       "chequeo": "registro desactualizado",
@@ -2501,6 +5719,336 @@
       "chequeo": "frente de descarga más chico que el píxel",
       "resultado": "no se descarta",
       "detalle": "el polígono mide 20.13 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MI_WAYNE",
+    "pais": "USA",
+    "id_catalogo": "BAS-064893",
+    "nombre": "Carleton Farms Landfill",
+    "complejo": "CPX-057578",
+    "area_ha": 263.64,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 42.094274,
+    "lon": -83.43007,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 263.64 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_MAHONING",
+    "pais": "USA",
+    "id_catalogo": "BAS-066431",
+    "nombre": "Short Creek Sanitary Landfill",
+    "complejo": "CPX-059017",
+    "area_ha": 107.15,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 40.14863,
+    "lon": -80.641192,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 107.15 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_MAHONING",
+    "pais": "USA",
+    "id_catalogo": "BAS-065604",
+    "nombre": "J.J. Brunner LF",
+    "complejo": "CPX-058248",
+    "area_ha": 37.83,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 40.721551,
+    "lon": -80.170837,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 37.83 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MD_FREDERICK",
+    "pais": "USA",
+    "id_catalogo": "BAS-066270",
+    "nombre": "Reich's Ford Road SLF",
+    "complejo": "CPX-058865",
+    "area_ha": 196.32,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 39.373125,
+    "lon": -77.351508,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 196.32 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_MD_FREDERICK",
+    "pais": "USA",
+    "id_catalogo": "BAS-065955",
+    "nombre": "Mountain View Reclamation Landfill",
+    "complejo": "CPX-058577",
+    "area_ha": 148.59,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 39.794107,
+    "lon": -77.803064,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 148.59 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_GA_FORSYTH",
+    "pais": "USA",
+    "id_catalogo": "BAS-065259",
+    "nombre": "Eagle Point Landfill LLC",
+    "complejo": "CPX-057923",
+    "area_ha": 160.6,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 34.325083,
+    "lon": -84.240853,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 160.6 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-065995",
+    "nombre": "New Paris Pike LF",
+    "complejo": "CPX-058614",
+    "area_ha": 116.15,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 39.852749,
+    "lon": -84.831394,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 116.15 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-064784",
+    "nombre": "Bond Road Landfill",
+    "complejo": "CPX-057477",
+    "area_ha": 43.92,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 39.206214,
+    "lon": -84.817794,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 43.92 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_OH_HAMILTON",
+    "pais": "USA",
+    "id_catalogo": "BAS-066517",
+    "nombre": "Stony Hollow Landfill Inc.",
+    "complejo": "CPX-059099",
+    "area_ha": 14.59,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 39.715412,
+    "lon": -84.249033,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 14.59 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_SC_GREENVILLE",
+    "pais": "USA",
+    "id_catalogo": "BAS-066636",
+    "nombre": "Twin Chimneys Landfill",
+    "complejo": "CPX-059209",
+    "area_ha": 196.98,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 34.538156,
+    "lon": -82.310992,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 196.98 ha; un frente activo de 1 a 3 ha no mueve la mediana"
+     },
+     {
+      "chequeo": "registro desactualizado",
+      "resultado": "no se descarta",
+      "detalle": "el estado de la EPA (LMOP) es de 2024-09; pudo cerrar después"
+     }
+    ],
+    "resultado": "hay una explicación obvia sin descartar"
+   },
+   {
+    "frame": "USA_CA_RIVERSIDE",
+    "pais": "USA",
+    "id_catalogo": "BAS-065297",
+    "nombre": "El Sobrante SLF",
+    "complejo": "CPX-057958",
+    "area_ha": 397.28,
+    "registro": "abierto",
+    "fuentes_estado": [
+     "epa_lmop"
+    ],
+    "fecha_cierre": null,
+    "radar": "quieto",
+    "insomnio": 0.0,
+    "lat": 33.798032,
+    "lon": -117.468913,
+    "chequeos": [
+     {
+      "chequeo": "frente de descarga más chico que el píxel",
+      "resultado": "no se descarta",
+      "detalle": "el polígono mide 397.28 ha; un frente activo de 1 a 3 ha no mueve la mediana"
      },
      {
       "chequeo": "registro desactualizado",
