@@ -21,8 +21,8 @@ import numpy as np
 import geo
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-SALIDAS = os.path.join(AQUI, "..", "salidas")
-WEB = os.path.join(AQUI, "..", "..", "insomnes-web")
+SALIDAS = os.path.join(AQUI, "..", "data", "salidas")
+WEB = os.path.join(AQUI, "..", "web")
 PX_POR_GRADO = 1270  # como el PNG del AMBA: 1400 px para 1,1° de ancho
 NIVELES = 64  # tonos de la paleta
 

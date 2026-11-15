@@ -11,7 +11,7 @@ from pathlib import Path
 from shapely.geometry import shape, Point
 from shapely.prepared import prep
 
-RAIZ = Path(__file__).resolve().parents[2]
+RAIZ = Path(__file__).resolve().parents[1]
 
 CATEGORIAS = [  # (categoría, regex sobre el nombre en minúsculas), en orden de prioridad
     ("No es RSU (minería, nuclear, autos, industrial, humedal)",
@@ -43,7 +43,7 @@ def main(ne0, ne1, salida):
     otros = [prep(shape(f["geometry"])) for f in paises if f["properties"]["ADM0_A3"] != "ARG"]
     provs = [(f["properties"]["name"], prep(shape(f["geometry"]).buffer(0.02)))
              for f in json.load(open(ne1))["features"] if f["properties"]["adm0_a3"] == "ARG"]
-    mundo = json.load(open(RAIZ / "data/basurales/basurales_mundo.json"))
+    mundo = json.load(open(RAIZ / "data/catalogos/basurales/basurales_mundo.json"))
     filas = []
     for s in mundo["sitios"]:
         if s.get("pais") not in (None, "ARG"):

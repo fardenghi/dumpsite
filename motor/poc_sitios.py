@@ -44,8 +44,8 @@ sys.path.insert(0, AQUI)
 import geo  # noqa: E402
 import insomnio as ins  # noqa: E402
 
-IDEA = os.path.dirname(AQUI)
-DATA = os.path.join(IDEA, "..", "data", "basurales")
+RAIZ = os.path.dirname(AQUI)
+DATA = os.path.join(RAIZ, "data", "catalogos", "basurales")
 API_ASF = "https://api.daac.asf.alaska.edu/services/search/param"
 GRUPO = "science/LSAR/GUNW/grids/frequencyA/unwrappedInterferogram"  # la capa de 80 m, la calibrada
 PASO = 80.0
@@ -155,7 +155,7 @@ def buscar(args):
 # ------------------------------------------------------------------ leer
 def _credenciales():
     """Carga `.env` de la carpeta de la idea (si existe) al entorno, sin mostrar nada."""
-    ruta = os.path.join(IDEA, ".env")
+    ruta = os.path.join(AQUI, ".env")
     if os.path.exists(ruta):
         with open(ruta, encoding="utf-8") as fh:
             for linea in fh:
@@ -171,7 +171,7 @@ def _login():
     hay_env = os.environ.get("EARTHDATA_TOKEN") or (os.environ.get("EARTHDATA_USERNAME") and os.environ.get("EARTHDATA_PASSWORD"))
     if not hay_env and not os.path.exists(os.path.expanduser("~/.netrc")):
         sys.exit("Faltan las credenciales de Earthdata: definí EARTHDATA_TOKEN (o usuario y contraseña) en el entorno, "
-                 f"en {os.path.relpath(os.path.join(IDEA, '.env'))} o en ~/.netrc. Ver el encabezado de este script.")
+                 f"en {os.path.relpath(os.path.join(AQUI, '.env'))} o en ~/.netrc. Ver el encabezado de este script.")
     auth = earthaccess.login(strategy="environment" if hay_env else "netrc")
     if not auth.authenticated:
         sys.exit("Earthdata rechazó las credenciales.")
@@ -381,7 +381,7 @@ def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("paso", choices=["buscar", "leer", "ficha", "todo"])
     a.add_argument("--sitios", nargs="+", default=SITIOS_DEFECTO, help="ids del catálogo (BAS-...)")
-    a.add_argument("--salida", default=os.path.join(IDEA, "salidas", "poc_sitios"))
+    a.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas", "poc_sitios"))
     a.add_argument("--datos", default="", help="carpeta con los .h5 ya bajados; si no se da, se lee por URL")
     a.add_argument("--max-pares", type=int, default=0, help="como mucho esta cantidad de pares por órbita, los más recientes (0 = todos)")
     a.add_argument("--hilos", type=int, default=6)

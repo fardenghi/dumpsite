@@ -20,7 +20,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 
-SALIDAS = os.path.join(AQUI, "..", "salidas")
+SALIDAS = os.path.join(AQUI, "..", "data", "salidas")
 
 
 def predecir(frame, booster, cols, base=SALIDAS):

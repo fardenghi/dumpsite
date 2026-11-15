@@ -13,6 +13,8 @@ motor/datos/*
 data/salidas/recortes_*/
 data/salidas/*/recortes_*/
 data/salidas/*/indice_*.npz
+# La figura de control de cada frame pesa ~1,5 MB: el índice que va a la web es web/public/indice/
+data/salidas/*/indice_*.png
 data/salidas/indice_20m.npz
 # Fuentes fijas de los otros frames (agua, usos, catálogo, cobertura): el pipeline las rehace solo si faltan
 motor/fijos/*/
