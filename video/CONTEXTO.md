@@ -50,6 +50,10 @@ Salen del feedback de muchas iteraciones.
 - El satélite al principio del clip de IA dura **muy poco (≈1 s)**.
 - El clip de IA no tiene "rayo" saliendo del satélite. La basura tiene que verse como basura (bolsas de colores, plásticos), no como tierra, y sin topadoras ni camiones.
 
+**Integrantes**
+- Los nombres de los 6 integrantes aparecen abajo a la derecha durante el clip inicial de los dos videos, sin decirlos en voz alta (la guía oficial sugiere presentar al equipo al principio).
+- Están en `EQUIPO` en `compartido/data.ts`, tal como figuran en la página del equipo, y el componente es `Equipo` en `Overlays.tsx`.
+
 **Subtítulos**
 - Blancos con sombra sobre un degradado oscuro (nunca blanco sobre blanco).
 - Aparecen palabra por palabra al ritmo de la voz.
