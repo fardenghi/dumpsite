@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generado": "2026-11-15T15:33:18",
+  "generado": "2026-11-15T20:18:29",
   "generado_por": "herramientas/flujo.py",
   "aviso": "Señal compatible con actividad, no prueba. Lo quieto es 'quieto según el radar'. Acotado a los frames procesados."
  },
@@ -47,7 +47,7 @@
    "n_manchas_candidatas": 219,
    "cruce": "salidas/AMBA/cruce_manchas_catalogo.parquet",
    "cruce_origen": "prompt_4",
-   "predicciones": null,
+   "predicciones": "salidas/AMBA/predicciones.parquet",
    "nota": null
   },
   "LOS_ANGELES": {
@@ -442,16 +442,16 @@
    "cerrado_quieto": 14
   },
   "manchas_por_veredicto": {
-   "descartada": 2149,
-   "sin_clasificar": 2098,
-   "posible_nuevo": 163
+   "descartada": 2355,
+   "sin_clasificar": 1887,
+   "posible_nuevo": 168
   },
-  "activos": 263,
+  "activos": 268,
   "activos_ya_conocidos": 100,
-  "posibles_nuevos": 163,
+  "posibles_nuevos": 168,
   "cerrados_pero_despiertos": 20,
   "cerrados_y_quietos": 14,
-  "frase": "En los 30 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON), el radar y el modelo encuentran 263 basurales activos: 100 ya estaban en los catálogos y 163 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
+  "frase": "En los 30 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON), el radar y el modelo encuentran 268 basurales activos: 100 ya estaban en los catálogos y 168 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
  },
  "por_frame": {
   "AMBA": {
@@ -465,14 +465,15 @@
     "quieto_radar": 1
    },
    "manchas_por_veredicto": {
-    "sin_clasificar": 211
+    "descartada": 206,
+    "posible_nuevo": 5
    },
-   "activos": 3,
+   "activos": 8,
    "activos_ya_conocidos": 3,
-   "posibles_nuevos": 0,
+   "posibles_nuevos": 5,
    "cerrados_pero_despiertos": 0,
    "cerrados_y_quietos": 1,
-   "frase": "En los frames procesados, el radar ve 3 basurales activos: 3 ya estaban en los catálogos y 0 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
+   "frase": "En los frames procesados, el radar ve 8 basurales activos: 3 ya estaban en los catálogos y 5 son posibles nuevos; de los conocidos, 0 figuran cerrados pero siguen despiertos."
   },
   "LOS_ANGELES": {
    "ciudad": "Los Ángeles",

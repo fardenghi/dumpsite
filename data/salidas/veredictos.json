@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generado": "2026-11-15T15:33:18",
+  "generado": "2026-11-15T20:18:29",
   "generado_por": "herramientas/flujo.py",
   "frames": [
    "AMBA",
@@ -52,16 +52,16 @@
    "cerrado_quieto": 14
   },
   "manchas_por_veredicto": {
-   "descartada": 2149,
-   "sin_clasificar": 2098,
-   "posible_nuevo": 163
+   "descartada": 2355,
+   "sin_clasificar": 1887,
+   "posible_nuevo": 168
   },
-  "activos": 263,
+  "activos": 268,
   "activos_ya_conocidos": 100,
-  "posibles_nuevos": 163,
+  "posibles_nuevos": 168,
   "cerrados_pero_despiertos": 20,
   "cerrados_y_quietos": 14,
-  "frase": "En los 30 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON), el radar y el modelo encuentran 263 basurales activos: 100 ya estaban en los catálogos y 163 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
+  "frase": "En los 30 frames procesados (AMBA, LOS_ANGELES, USA_OH_LAKE, USA_MD_HOWARD, CDMX, PRI_PONCE, USA_NH_HILLSBOROUGH, USA_NY_RICHMOND, DELHI, YAKARTA, USA_MI_WAYNE, USA_PA_BERKS, USA_TX_DALLAS, USA_PA_ALLEGHENY, USA_TX_HARRIS, USA_CA_SAN_BERNARDINO, USA_CA_SAN_JOAQUIN, USA_AZ_MARICOPA, USA_OH_MAHONING, USA_MD_FREDERICK, USA_GA_FORSYTH, USA_OH_HAMILTON, USA_IL_ST_CLAIR, USA_FL_OSCEOLA, USA_VA_ROCKINGHAM, USA_CA_TULARE, USA_SC_GREENVILLE, USA_CA_LOS_ANGELES, USA_CA_RIVERSIDE, USA_IN_FULTON), el radar y el modelo encuentran 268 basurales activos: 100 ya estaban en los catálogos y 168 son nuevos; y de los conocidos, 20 figuran cerrados pero siguen despiertos."
  },
  "veredictos": [
   {
@@ -80,10 +80,10 @@
     "MAN-AMBA-0040",
     "MAN-AMBA-0100"
    ],
-   "p_basural": null,
+   "p_basural": 0.07690946622476709,
    "veredicto": "activo_conocido",
    "veredicto_texto": "Activo, ya conocido",
-   "motivo": "mancha despierta encima (MAN-AMBA-0040, MAN-AMBA-0100)",
+   "motivo": "mancha despierta encima (MAN-AMBA-0040, MAN-AMBA-0100); el modelo duda (p_basural 0.08)",
    "modelo_estado": {
     "p_abierto": 0.874,
     "lectura": "compatible con abierto",
@@ -151,7 +151,7 @@
    "manchas": [
     "MAN-AMBA-0109"
    ],
-   "p_basural": null,
+   "p_basural": 0.0006489239547476501,
    "veredicto": "no_alcanza",
    "veredicto_texto": "El radar no alcanza",
    "motivo": "el polígono mide menos de 10 ha",
@@ -245,10 +245,10 @@
    "manchas": [
     "MAN-AMBA-0006"
    ],
-   "p_basural": null,
+   "p_basural": 0.00856352025405835,
    "veredicto": "activo_conocido",
    "veredicto_texto": "Activo, ya conocido",
-   "motivo": "mancha despierta encima (MAN-AMBA-0006)",
+   "motivo": "mancha despierta encima (MAN-AMBA-0006); el modelo duda (p_basural 0.01)",
    "modelo_estado": {
     "p_abierto": 0.016,
     "lectura": "compatible con cerrado",
@@ -293,10 +293,10 @@
    "manchas": [
     "MAN-AMBA-0006"
    ],
-   "p_basural": null,
+   "p_basural": 0.00856352025405835,
    "veredicto": "activo_conocido",
    "veredicto_texto": "Activo, ya conocido",
-   "motivo": "mancha despierta encima (MAN-AMBA-0006)",
+   "motivo": "mancha despierta encima (MAN-AMBA-0006); el modelo duda (p_basural 0.01)",
    "modelo_estado": {
     "p_abierto": 0.028,
     "lectura": "compatible con cerrado",
@@ -318,7 +318,7 @@
    "manchas": [
     "MAN-AMBA-0019"
    ],
-   "p_basural": null,
+   "p_basural": 0.7669095565781374,
    "veredicto": "activo_conocido",
    "veredicto_texto": "Activo, ya conocido",
    "motivo": "mancha despierta encima (MAN-AMBA-0019)",
@@ -458,10 +458,10 @@
    "manchas": [
     "MAN-AMBA-0011"
    ],
-   "p_basural": null,
+   "p_basural": 0.002886928739318604,
    "veredicto": "activo_conocido",
    "veredicto_texto": "Activo, ya conocido",
-   "motivo": "mancha despierta encima (MAN-AMBA-0011)",
+   "motivo": "mancha despierta encima (MAN-AMBA-0011); el modelo duda (p_basural 0.00)",
    "modelo_estado": {
     "p_abierto": 0.069,
     "lectura": "compatible con cerrado",
@@ -484,10 +484,10 @@
     "MAN-AMBA-0101",
     "MAN-AMBA-0183"
    ],
-   "p_basural": null,
+   "p_basural": 0.34661267308823485,
    "veredicto": "activo_conocido",
    "veredicto_texto": "Activo, ya conocido",
-   "motivo": "mancha despierta encima (MAN-AMBA-0101, MAN-AMBA-0183)",
+   "motivo": "mancha despierta encima (MAN-AMBA-0101, MAN-AMBA-0183); el modelo duda (p_basural 0.35)",
    "modelo_estado": {
     "p_abierto": 0.777,
     "lectura": "compatible con abierto",
@@ -509,10 +509,10 @@
    "manchas": [
     "MAN-AMBA-0002"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000931 aeropuerto, NEG-AMBA-000930 aeropuerto, NEG-AMBA-001181 vegetacion_densa)",
+   "p_basural": 0.0029082470421759083,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-000931 aeropuerto, NEG-AMBA-000930 aeropuerto, NEG-AMBA-001181 vegetacion_densa)",
    "lat": -34.60468,
    "lon": -58.60899,
    "que": "aeródromo: Aeropuerto El Palomar",
@@ -533,10 +533,10 @@
    "manchas": [
     "MAN-AMBA-0003"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0013320860857545629,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.7642,
    "lon": -58.46239,
    "que": null,
@@ -557,10 +557,10 @@
    "manchas": [
     "MAN-AMBA-0005"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000928 aeropuerto)",
+   "p_basural": 0.000664237853878138,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-000928 aeropuerto)",
    "lat": -34.67629,
    "lon": -58.64269,
    "que": "aeródromo: Aeropuerto de Morón",
@@ -581,10 +581,10 @@
    "manchas": [
     "MAN-AMBA-0007"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.014214035105265026,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.57728,
    "lon": -58.62769,
    "que": null,
@@ -605,10 +605,10 @@
    "manchas": [
     "MAN-AMBA-0008"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0023365323452389673,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.7825,
    "lon": -58.44635,
    "que": null,
@@ -629,10 +629,10 @@
    "manchas": [
     "MAN-AMBA-0009"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.006197122026050271,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.84185,
    "lon": -58.43198,
    "que": null,
@@ -653,10 +653,10 @@
    "manchas": [
     "MAN-AMBA-0010"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000941 aeropuerto, NEG-AMBA-000138 cantera, NEG-006504 cantera)",
+   "p_basural": 0.004579358355657381,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-000941 aeropuerto, NEG-AMBA-000138 cantera, NEG-006504 cantera)",
    "lat": -34.45377,
    "lon": -58.58853,
    "que": "aeródromo: Aeropuerto Internacional de San Fernando",
@@ -677,10 +677,10 @@
    "manchas": [
     "MAN-AMBA-0013"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001046 estacionamiento_playa)",
+   "p_basural": 0.00038529030293071116,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-001046 estacionamiento_playa)",
    "lat": -34.60808,
    "lon": -58.5416,
    "que": null,
@@ -701,10 +701,10 @@
    "manchas": [
     "MAN-AMBA-0021"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0021368260018561785,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.57166,
    "lon": -58.666,
    "que": null,
@@ -725,10 +725,10 @@
    "manchas": [
     "MAN-AMBA-0022"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0044068140681397805,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.42552,
    "lon": -58.67462,
    "que": null,
@@ -749,10 +749,10 @@
    "manchas": [
     "MAN-AMBA-0024"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.014286832435124103,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.66828,
    "lon": -58.3323,
    "que": null,
@@ -773,10 +773,10 @@
    "manchas": [
     "MAN-AMBA-0028"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0008170028025752899,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.48219,
    "lon": -58.51788,
    "que": null,
@@ -797,10 +797,10 @@
    "manchas": [
     "MAN-AMBA-0029"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.013610870561216295,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.53851,
    "lon": -58.67361,
    "que": null,
@@ -821,10 +821,10 @@
    "manchas": [
     "MAN-AMBA-0030"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001258 chatarreria_desguace)",
+   "p_basural": 0.6792318767791176,
+   "veredicto": "posible_nuevo",
+   "veredicto_texto": "Posible basural activo nuevo",
+   "motivo": "no está en el catálogo de basurales; p_basural 0.68 (toca un negativo del catálogo: NEG-AMBA-001258 chatarreria_desguace)",
    "lat": -34.69435,
    "lon": -58.46031,
    "que": null,
@@ -845,10 +845,10 @@
    "manchas": [
     "MAN-AMBA-0031"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.04005088314972975,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.87405,
    "lon": -58.45729,
    "que": null,
@@ -869,10 +869,10 @@
    "manchas": [
     "MAN-AMBA-0032"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0028319501956952384,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.47164,
    "lon": -58.73022,
    "que": "reserva: Reserva Natural Urbana La Juanita",
@@ -893,10 +893,10 @@
    "manchas": [
     "MAN-AMBA-0033"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.05817122891319391,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06)",
    "lat": -34.74327,
    "lon": -58.55732,
    "que": null,
@@ -917,10 +917,10 @@
    "manchas": [
     "MAN-AMBA-0034"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.009230382908949565,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.3564,
    "lon": -58.73003,
    "que": null,
@@ -941,10 +941,10 @@
    "manchas": [
     "MAN-AMBA-0035"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.011123402966939203,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.71419,
    "lon": -58.6441,
    "que": null,
@@ -965,10 +965,10 @@
    "manchas": [
     "MAN-AMBA-0037"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.14568490536406767,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.15)",
    "lat": -34.42386,
    "lon": -58.84888,
    "que": null,
@@ -989,10 +989,10 @@
    "manchas": [
     "MAN-AMBA-0038"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001064 estacionamiento_playa, NEG-AMBA-001066 estacionamiento_playa)",
+   "p_basural": 0.00562636342685164,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-001064 estacionamiento_playa, NEG-AMBA-001066 estacionamiento_playa)",
    "lat": -34.58127,
    "lon": -58.3906,
    "que": null,
@@ -1013,10 +1013,10 @@
    "manchas": [
     "MAN-AMBA-0039"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0024330040852838545,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.73282,
    "lon": -58.59586,
    "que": "reserva: Reserva Natural Gregorio de Laferrère",
@@ -1037,10 +1037,10 @@
    "manchas": [
     "MAN-AMBA-0041"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.15420169415574728,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.15)",
    "lat": -34.31848,
    "lon": -58.74965,
    "que": null,
@@ -1061,10 +1061,10 @@
    "manchas": [
     "MAN-AMBA-0042"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0004923150030980084,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.71729,
    "lon": -58.4793,
    "que": null,
@@ -1085,10 +1085,10 @@
    "manchas": [
     "MAN-AMBA-0043"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0031422827130681025,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.62585,
    "lon": -58.61277,
    "que": "reserva: Reserva natural El Palomar",
@@ -1109,10 +1109,10 @@
    "manchas": [
     "MAN-AMBA-0046"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.48893139097982863,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.49)",
    "lat": -34.3953,
    "lon": -58.67954,
    "que": null,
@@ -1133,10 +1133,10 @@
    "manchas": [
     "MAN-AMBA-0047"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.05015744097256437,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.49346,
    "lon": -58.53827,
    "que": null,
@@ -1157,10 +1157,10 @@
    "manchas": [
     "MAN-AMBA-0048"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001100 puerto_playa_contenedores, NEG-057971 puerto_playa_contenedores)",
+   "p_basural": 0.1406862141033781,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.14) (toca un negativo del catálogo: NEG-AMBA-001100 puerto_playa_contenedores, NEG-057971 puerto_playa_contenedores)",
    "lat": -34.64099,
    "lon": -58.34817,
    "que": null,
@@ -1181,10 +1181,10 @@
    "manchas": [
     "MAN-AMBA-0050"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.02507046879064153,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.76931,
    "lon": -58.50149,
    "que": null,
@@ -1205,10 +1205,10 @@
    "manchas": [
     "MAN-AMBA-0052"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.004380587386275745,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.72418,
    "lon": -58.61893,
    "que": null,
@@ -1229,10 +1229,10 @@
    "manchas": [
     "MAN-AMBA-0054"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.07387501248074435,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.07)",
    "lat": -34.76092,
    "lon": -58.84595,
    "que": null,
@@ -1253,10 +1253,10 @@
    "manchas": [
     "MAN-AMBA-0055"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.001136852499860559,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.5683,
    "lon": -58.58293,
    "que": null,
@@ -1277,10 +1277,10 @@
    "manchas": [
     "MAN-AMBA-0060"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.005930705914439586,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.62204,
    "lon": -58.35026,
    "que": null,
@@ -1301,10 +1301,10 @@
    "manchas": [
     "MAN-AMBA-0061"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.23885055879207281,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.24)",
    "lat": -34.76977,
    "lon": -58.68479,
    "que": null,
@@ -1325,10 +1325,10 @@
    "manchas": [
     "MAN-AMBA-0067"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0018942694423110973,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.55898,
    "lon": -58.43735,
    "que": "golf: Campo de Golf Juan Bautista Segura",
@@ -1349,10 +1349,10 @@
    "manchas": [
     "MAN-AMBA-0068"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0015145023752757114,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.7049,
    "lon": -58.65637,
    "que": null,
@@ -1373,10 +1373,10 @@
    "manchas": [
     "MAN-AMBA-0071"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000872 obra)",
+   "p_basural": 0.2920386782644167,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.29) (toca un negativo del catálogo: NEG-AMBA-000872 obra)",
    "lat": -34.42557,
    "lon": -58.63782,
    "que": null,
@@ -1397,10 +1397,10 @@
    "manchas": [
     "MAN-AMBA-0072"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.020021878281755487,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.55704,
    "lon": -58.64496,
    "que": null,
@@ -1421,10 +1421,10 @@
    "manchas": [
     "MAN-AMBA-0073"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.1460565704239189,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.15)",
    "lat": -34.89084,
    "lon": -58.52106,
    "que": null,
@@ -1445,10 +1445,10 @@
    "manchas": [
     "MAN-AMBA-0076"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.039568544023224864,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.52724,
    "lon": -58.65636,
    "que": null,
@@ -1469,10 +1469,10 @@
    "manchas": [
     "MAN-AMBA-0078"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.060929435733374816,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06)",
    "lat": -34.43625,
    "lon": -58.63922,
    "que": null,
@@ -1493,10 +1493,10 @@
    "manchas": [
     "MAN-AMBA-0081"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.1459231611184122,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.15)",
    "lat": -34.48776,
    "lon": -58.81898,
    "que": null,
@@ -1517,10 +1517,10 @@
    "manchas": [
     "MAN-AMBA-0083"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000673 laguna_chica)",
+   "p_basural": 0.04646629222167214,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05) (toca un negativo del catálogo: NEG-AMBA-000673 laguna_chica)",
    "lat": -34.42757,
    "lon": -58.6466,
    "que": null,
@@ -1541,10 +1541,10 @@
    "manchas": [
     "MAN-AMBA-0085"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.005239206799793886,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.72229,
    "lon": -58.73105,
    "que": null,
@@ -1565,10 +1565,10 @@
    "manchas": [
     "MAN-AMBA-0086"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.046241371713201265,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.71224,
    "lon": -58.7554,
    "que": null,
@@ -1589,10 +1589,10 @@
    "manchas": [
     "MAN-AMBA-0088"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.015128929646766796,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.32236,
    "lon": -58.77421,
    "que": null,
@@ -1613,10 +1613,10 @@
    "manchas": [
     "MAN-AMBA-0091"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000560 humedal)",
+   "p_basural": 0.09726958422388156,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.10) (toca un negativo del catálogo: NEG-AMBA-000560 humedal)",
    "lat": -34.4618,
    "lon": -58.58947,
    "que": null,
@@ -1637,10 +1637,10 @@
    "manchas": [
     "MAN-AMBA-0092"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0514081382518207,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.73113,
    "lon": -58.54951,
    "que": null,
@@ -1661,10 +1661,10 @@
    "manchas": [
     "MAN-AMBA-0097"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.004472663284532373,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.60225,
    "lon": -58.67651,
    "que": null,
@@ -1685,10 +1685,10 @@
    "manchas": [
     "MAN-AMBA-0098"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.01312897898442897,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.26308,
    "lon": -58.86018,
    "que": null,
@@ -1709,10 +1709,10 @@
    "manchas": [
     "MAN-AMBA-0103"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000150 cultivo)",
+   "p_basural": 0.04791140061746057,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05) (toca un negativo del catálogo: NEG-AMBA-000150 cultivo)",
    "lat": -34.88213,
    "lon": -58.51581,
    "que": null,
@@ -1733,10 +1733,10 @@
    "manchas": [
     "MAN-AMBA-0104"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.00024178338676094738,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.56099,
    "lon": -58.53487,
    "que": "golf: Golf Club San Andrés",
@@ -1757,10 +1757,10 @@
    "manchas": [
     "MAN-AMBA-0105"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.04762161895332981,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.31361,
    "lon": -58.94736,
    "que": null,
@@ -1781,10 +1781,10 @@
    "manchas": [
     "MAN-AMBA-0106"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001038 estacionamiento_playa)",
+   "p_basural": 0.003112644201639444,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-001038 estacionamiento_playa)",
    "lat": -34.64323,
    "lon": -58.38423,
    "que": null,
@@ -1805,10 +1805,10 @@
    "manchas": [
     "MAN-AMBA-0107"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0014460887202567899,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.48837,
    "lon": -58.52974,
    "que": "golf: Jockey Club Argentino",
@@ -1829,10 +1829,10 @@
    "manchas": [
     "MAN-AMBA-0108"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.04427767898579505,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.82125,
    "lon": -58.33387,
    "que": null,
@@ -1853,10 +1853,10 @@
    "manchas": [
     "MAN-AMBA-0110"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0003082878163984763,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.59221,
    "lon": -58.46034,
    "que": "cementerio: Cementerio de la Chacarita",
@@ -1877,10 +1877,10 @@
    "manchas": [
     "MAN-AMBA-0112"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.006926872414148853,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.8712,
    "lon": -58.39772,
    "que": null,
@@ -1901,10 +1901,10 @@
    "manchas": [
     "MAN-AMBA-0115"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000046 agua_permanente)",
+   "p_basural": 0.0009580748750232428,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-000046 agua_permanente)",
    "lat": -34.47296,
    "lon": -58.61111,
    "que": "golf: Pacheco Golf",
@@ -1925,10 +1925,10 @@
    "manchas": [
     "MAN-AMBA-0117"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000555 humedal)",
+   "p_basural": 0.0037007967716430317,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-000555 humedal)",
    "lat": -34.53942,
    "lon": -58.44597,
    "que": "reserva: Reserva Ecológica Ciudad Universitaria - Costanera Norte",
@@ -1949,10 +1949,10 @@
    "manchas": [
     "MAN-AMBA-0118"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.009459362156479613,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.37207,
    "lon": -59.01479,
    "que": null,
@@ -1973,10 +1973,10 @@
    "manchas": [
     "MAN-AMBA-0119"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.005325688829129076,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.29727,
    "lon": -58.74482,
    "que": null,
@@ -1997,10 +1997,10 @@
    "manchas": [
     "MAN-AMBA-0120"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.00021903135440002372,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.80067,
    "lon": -58.57148,
    "que": null,
@@ -2021,10 +2021,10 @@
    "manchas": [
     "MAN-AMBA-0121"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.021652292862739685,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.30586,
    "lon": -58.95392,
    "que": null,
@@ -2045,10 +2045,10 @@
    "manchas": [
     "MAN-AMBA-0123"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.009735512349720126,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.79963,
    "lon": -58.49424,
    "que": null,
@@ -2069,10 +2069,10 @@
    "manchas": [
     "MAN-AMBA-0124"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.011458763433717604,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.52433,
    "lon": -58.5863,
    "que": null,
@@ -2093,10 +2093,10 @@
    "manchas": [
     "MAN-AMBA-0125"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.040946685580393626,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.42637,
    "lon": -58.91382,
    "que": null,
@@ -2117,10 +2117,10 @@
    "manchas": [
     "MAN-AMBA-0132"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.051920126016108036,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.36843,
    "lon": -58.80018,
    "que": null,
@@ -2141,10 +2141,10 @@
    "manchas": [
     "MAN-AMBA-0133"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.001474744209767233,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.85559,
    "lon": -58.41111,
    "que": null,
@@ -2165,10 +2165,10 @@
    "manchas": [
     "MAN-AMBA-0134"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.003943939601345542,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.68159,
    "lon": -58.30346,
    "que": null,
@@ -2189,10 +2189,10 @@
    "manchas": [
     "MAN-AMBA-0136"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.003353632020812098,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.36577,
    "lon": -58.86429,
    "que": null,
@@ -2213,10 +2213,10 @@
    "manchas": [
     "MAN-AMBA-0137"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.013954397145474928,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.56613,
    "lon": -58.42577,
    "que": null,
@@ -2237,10 +2237,10 @@
    "manchas": [
     "MAN-AMBA-0138"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.013293052710064823,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.2662,
    "lon": -58.7973,
    "que": null,
@@ -2261,10 +2261,10 @@
    "manchas": [
     "MAN-AMBA-0139"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.042891661115795905,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.74417,
    "lon": -58.66498,
    "que": null,
@@ -2285,10 +2285,10 @@
    "manchas": [
     "MAN-AMBA-0141"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.058661941800271775,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06)",
    "lat": -34.51204,
    "lon": -58.95137,
    "que": null,
@@ -2309,10 +2309,10 @@
    "manchas": [
     "MAN-AMBA-0142"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.014232037619094041,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.67164,
    "lon": -58.43624,
    "que": null,
@@ -2333,10 +2333,10 @@
    "manchas": [
     "MAN-AMBA-0143"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.12977034581321872,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.13)",
    "lat": -34.5144,
    "lon": -58.87737,
    "que": null,
@@ -2357,10 +2357,10 @@
    "manchas": [
     "MAN-AMBA-0144"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.04588448454937789,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.69934,
    "lon": -58.25536,
    "que": null,
@@ -2381,10 +2381,10 @@
    "manchas": [
     "MAN-AMBA-0145"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000924 aeropuerto)",
+   "p_basural": 0.00797514631825799,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-000924 aeropuerto)",
    "lat": -34.72814,
    "lon": -58.50216,
    "que": "aeródromo: Centro Universitario de Aviación",
@@ -2405,10 +2405,10 @@
    "manchas": [
     "MAN-AMBA-0147"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.7155509370363056,
+   "veredicto": "posible_nuevo",
+   "veredicto_texto": "Posible basural activo nuevo",
+   "motivo": "no está en el catálogo de basurales; p_basural 0.72",
    "lat": -34.45663,
    "lon": -58.71322,
    "que": null,
@@ -2429,10 +2429,10 @@
    "manchas": [
     "MAN-AMBA-0149"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0008750742068784902,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.6142,
    "lon": -58.66494,
    "que": null,
@@ -2453,10 +2453,10 @@
    "manchas": [
     "MAN-AMBA-0151"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.007166755028266694,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.37883,
    "lon": -58.50527,
    "que": null,
@@ -2477,10 +2477,10 @@
    "manchas": [
     "MAN-AMBA-0152"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.018308423912862918,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.5194,
    "lon": -58.64044,
    "que": null,
@@ -2501,10 +2501,10 @@
    "manchas": [
     "MAN-AMBA-0153"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001236 vegetacion_densa)",
+   "p_basural": 0.023873089163384778,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02) (toca un negativo del catálogo: NEG-AMBA-001236 vegetacion_densa)",
    "lat": -34.38197,
    "lon": -58.72633,
    "que": null,
@@ -2525,10 +2525,10 @@
    "manchas": [
     "MAN-AMBA-0155"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.002797792915662864,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.48058,
    "lon": -58.59752,
    "que": null,
@@ -2549,10 +2549,10 @@
    "manchas": [
     "MAN-AMBA-0156"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000936 aeropuerto, NEG-AMBA-000935 aeropuerto)",
+   "p_basural": 0.009753758157064724,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-000936 aeropuerto, NEG-AMBA-000935 aeropuerto)",
    "lat": -34.55981,
    "lon": -58.786,
    "que": "aeródromo: Aeropuerto Mariano Moreno - VII Brigada Aérea",
@@ -2573,10 +2573,10 @@
    "manchas": [
     "MAN-AMBA-0158"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0027826165373511236,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.35393,
    "lon": -58.77404,
    "que": null,
@@ -2597,10 +2597,10 @@
    "manchas": [
     "MAN-AMBA-0161"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0011278670723968622,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.70053,
    "lon": -58.55504,
    "que": null,
@@ -2621,10 +2621,10 @@
    "manchas": [
     "MAN-AMBA-0162"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000789 obra)",
+   "p_basural": 0.011770140246812418,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-000789 obra)",
    "lat": -34.87385,
    "lon": -58.36322,
    "que": null,
@@ -2645,10 +2645,10 @@
    "manchas": [
     "MAN-AMBA-0163"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000823 obra)",
+   "p_basural": 0.007011752278035823,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-000823 obra)",
    "lat": -34.66777,
    "lon": -58.45898,
    "que": null,
@@ -2669,10 +2669,10 @@
    "manchas": [
     "MAN-AMBA-0164"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0003473703442840594,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.54769,
    "lon": -59.23052,
    "que": null,
@@ -2693,10 +2693,10 @@
    "manchas": [
     "MAN-AMBA-0165"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0006265815918213754,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.28903,
    "lon": -58.76091,
    "que": null,
@@ -2717,10 +2717,10 @@
    "manchas": [
     "MAN-AMBA-0168"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-001049 estacionamiento_playa)",
+   "p_basural": 0.2016523391053853,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.20) (toca un negativo del catálogo: NEG-AMBA-001049 estacionamiento_playa)",
    "lat": -34.60328,
    "lon": -58.58039,
    "que": null,
@@ -2741,10 +2741,10 @@
    "manchas": [
     "MAN-AMBA-0169"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.010693308380689713,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.44338,
    "lon": -58.60767,
    "que": "golf: San Patricio Golf",
@@ -2765,10 +2765,10 @@
    "manchas": [
     "MAN-AMBA-0170"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.002608544367040622,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.83401,
    "lon": -58.48087,
    "que": null,
@@ -2789,10 +2789,10 @@
    "manchas": [
     "MAN-AMBA-0172"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.027982976886996906,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.45926,
    "lon": -58.72097,
    "que": null,
@@ -2813,10 +2813,10 @@
    "manchas": [
     "MAN-AMBA-0174"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.08011339491254342,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.08)",
    "lat": -34.56678,
    "lon": -58.93251,
    "que": null,
@@ -2837,10 +2837,10 @@
    "manchas": [
     "MAN-AMBA-0175"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0010514606950901477,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.85834,
    "lon": -58.28436,
    "que": null,
@@ -2861,10 +2861,10 @@
    "manchas": [
     "MAN-AMBA-0176"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.03864994087467315,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.57231,
    "lon": -59.16727,
    "que": null,
@@ -2885,10 +2885,10 @@
    "manchas": [
     "MAN-AMBA-0178"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.01782920068813953,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.53257,
    "lon": -58.60281,
    "que": null,
@@ -2909,10 +2909,10 @@
    "manchas": [
     "MAN-AMBA-0179"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0023066370599035017,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.44766,
    "lon": -58.62409,
    "que": null,
@@ -2933,10 +2933,10 @@
    "manchas": [
     "MAN-AMBA-0180"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0002602884644598692,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.66149,
    "lon": -58.86857,
    "que": "reserva: Reserva natural Los Robles",
@@ -2957,10 +2957,10 @@
    "manchas": [
     "MAN-AMBA-0181"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.08604127298859551,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.09)",
    "lat": -34.52172,
    "lon": -58.6066,
    "que": null,
@@ -2981,10 +2981,10 @@
    "manchas": [
     "MAN-AMBA-0186"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.2806922086733115,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.28)",
    "lat": -34.86224,
    "lon": -58.68594,
    "que": null,
@@ -3005,10 +3005,10 @@
    "manchas": [
     "MAN-AMBA-0188"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.026664668649171972,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.67217,
    "lon": -58.80222,
    "que": null,
@@ -3029,10 +3029,10 @@
    "manchas": [
     "MAN-AMBA-0191"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.007745783402291873,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.34123,
    "lon": -58.50947,
    "que": null,
@@ -3053,10 +3053,10 @@
    "manchas": [
     "MAN-AMBA-0195"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.09842038420292093,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.10)",
    "lat": -34.87064,
    "lon": -58.59529,
    "que": null,
@@ -3077,10 +3077,10 @@
    "manchas": [
     "MAN-AMBA-0196"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.1736879580335657,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.17)",
    "lat": -34.25887,
    "lon": -58.95003,
    "que": null,
@@ -3101,10 +3101,10 @@
    "manchas": [
     "MAN-AMBA-0197"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.04312168547693341,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.78689,
    "lon": -58.54053,
    "que": null,
@@ -3125,10 +3125,10 @@
    "manchas": [
     "MAN-AMBA-0198"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0012512498374287818,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.40878,
    "lon": -58.98838,
    "que": null,
@@ -3149,10 +3149,10 @@
    "manchas": [
     "MAN-AMBA-0199"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.002989490791408706,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.59935,
    "lon": -58.78904,
    "que": null,
@@ -3173,10 +3173,10 @@
    "manchas": [
     "MAN-AMBA-0201"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.031856034975251295,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.87745,
    "lon": -58.59608,
    "que": null,
@@ -3197,10 +3197,10 @@
    "manchas": [
     "MAN-AMBA-0203"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0010741916416135055,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.33083,
    "lon": -58.51861,
    "que": null,
@@ -3221,10 +3221,10 @@
    "manchas": [
     "MAN-AMBA-0207"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0037583474065763164,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.75254,
    "lon": -58.79442,
    "que": null,
@@ -3245,10 +3245,10 @@
    "manchas": [
     "MAN-AMBA-0208"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0017254175221728394,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.52755,
    "lon": -59.15894,
    "que": null,
@@ -3269,10 +3269,10 @@
    "manchas": [
     "MAN-AMBA-0211"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.02903653477324241,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.54934,
    "lon": -58.77871,
    "que": null,
@@ -3293,10 +3293,10 @@
    "manchas": [
     "MAN-AMBA-0212"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0054347282676230355,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.55106,
    "lon": -58.6203,
    "que": null,
@@ -3317,10 +3317,10 @@
    "manchas": [
     "MAN-AMBA-0219"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.008889561512475526,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.85965,
    "lon": -58.47453,
    "que": null,
@@ -3341,10 +3341,10 @@
    "manchas": [
     "MAN-AMBA-0220"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.015660734477892953,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.4013,
    "lon": -59.05881,
    "que": null,
@@ -3365,10 +3365,10 @@
    "manchas": [
     "MAN-AMBA-0221"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.06115704973681464,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06)",
    "lat": -34.85899,
    "lon": -58.48689,
    "que": null,
@@ -3389,10 +3389,10 @@
    "manchas": [
     "MAN-AMBA-0226"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0017170161694648083,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.39871,
    "lon": -58.96731,
    "que": null,
@@ -3413,10 +3413,10 @@
    "manchas": [
     "MAN-AMBA-0231"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.005187442636409702,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.81546,
    "lon": -59.29868,
    "que": null,
@@ -3437,10 +3437,10 @@
    "manchas": [
     "MAN-AMBA-0232"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.004614285796230042,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.66486,
    "lon": -58.56823,
    "que": null,
@@ -3461,10 +3461,10 @@
    "manchas": [
     "MAN-AMBA-0233"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.021992999619618137,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.38119,
    "lon": -58.84204,
    "que": null,
@@ -3485,10 +3485,10 @@
    "manchas": [
     "MAN-AMBA-0234"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.025136119544876472,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.73534,
    "lon": -58.65423,
    "que": null,
@@ -3509,10 +3509,10 @@
    "manchas": [
     "MAN-AMBA-0236"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0009730182797307867,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.74917,
    "lon": -58.26546,
    "que": null,
@@ -3533,10 +3533,10 @@
    "manchas": [
     "MAN-AMBA-0238"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.03426715986291017,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.66074,
    "lon": -58.45953,
    "que": null,
@@ -3557,10 +3557,10 @@
    "manchas": [
     "MAN-AMBA-0240"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.021801440364360852,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.71665,
    "lon": -58.51289,
    "que": null,
@@ -3581,10 +3581,10 @@
    "manchas": [
     "MAN-AMBA-0241"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0016132845068730993,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.33373,
    "lon": -58.61877,
    "que": null,
@@ -3605,10 +3605,10 @@
    "manchas": [
     "MAN-AMBA-0242"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0008071770875193619,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.83169,
    "lon": -58.64158,
    "que": null,
@@ -3629,10 +3629,10 @@
    "manchas": [
     "MAN-AMBA-0245"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.04278559938635637,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.8267,
    "lon": -58.29533,
    "que": null,
@@ -3653,10 +3653,10 @@
    "manchas": [
     "MAN-AMBA-0246"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.00233185497540856,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.77865,
    "lon": -58.43381,
    "que": null,
@@ -3677,10 +3677,10 @@
    "manchas": [
     "MAN-AMBA-0247"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0010191031045709157,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.36789,
    "lon": -59.20612,
    "que": null,
@@ -3701,10 +3701,10 @@
    "manchas": [
     "MAN-AMBA-0248"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000845 obra)",
+   "p_basural": 0.008245580688483401,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-000845 obra)",
    "lat": -34.57877,
    "lon": -58.67961,
    "que": null,
@@ -3725,10 +3725,10 @@
    "manchas": [
     "MAN-AMBA-0249"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.014945151802234977,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.38578,
    "lon": -58.65722,
    "que": null,
@@ -3749,10 +3749,10 @@
    "manchas": [
     "MAN-AMBA-0250"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.03511018987273012,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.67942,
    "lon": -58.79858,
    "que": null,
@@ -3773,10 +3773,10 @@
    "manchas": [
     "MAN-AMBA-0251"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.004968001400033802,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.61201,
    "lon": -58.65582,
    "que": null,
@@ -3797,10 +3797,10 @@
    "manchas": [
     "MAN-AMBA-0253"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.7747519305904764,
+   "veredicto": "posible_nuevo",
+   "veredicto_texto": "Posible basural activo nuevo",
+   "motivo": "no está en el catálogo de basurales; p_basural 0.77",
    "lat": -34.66105,
    "lon": -58.33789,
    "que": null,
@@ -3821,10 +3821,10 @@
    "manchas": [
     "MAN-AMBA-0254"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0006068251503457326,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.61006,
    "lon": -59.23293,
    "que": null,
@@ -3845,10 +3845,10 @@
    "manchas": [
     "MAN-AMBA-0257"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0004714910697405449,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.2838,
    "lon": -58.75893,
    "que": null,
@@ -3869,10 +3869,10 @@
    "manchas": [
     "MAN-AMBA-0261"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.01226613474033542,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.2983,
    "lon": -58.97444,
    "que": null,
@@ -3893,10 +3893,10 @@
    "manchas": [
     "MAN-AMBA-0262"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.001442892945415191,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.681,
    "lon": -58.4564,
    "que": "golf: Golf Club José Jurado",
@@ -3917,10 +3917,10 @@
    "manchas": [
     "MAN-AMBA-0263"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.7541718920970955,
+   "veredicto": "posible_nuevo",
+   "veredicto_texto": "Posible basural activo nuevo",
+   "motivo": "no está en el catálogo de basurales; p_basural 0.75",
    "lat": -34.51204,
    "lon": -58.69928,
    "que": null,
@@ -3941,10 +3941,10 @@
    "manchas": [
     "MAN-AMBA-0265"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.02691259919135584,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.36857,
    "lon": -58.72485,
    "que": null,
@@ -3965,10 +3965,10 @@
    "manchas": [
     "MAN-AMBA-0266"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0003661675506507527,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.59882,
    "lon": -58.36075,
    "que": "reserva: Reserva Ecológica Costanera Sur",
@@ -3989,10 +3989,10 @@
    "manchas": [
     "MAN-AMBA-0267"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000784 obra)",
+   "p_basural": 0.05553215480217226,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06) (toca un negativo del catálogo: NEG-AMBA-000784 obra)",
    "lat": -34.88825,
    "lon": -58.48321,
    "que": null,
@@ -4013,10 +4013,10 @@
    "manchas": [
     "MAN-AMBA-0270"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.01821390570719026,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.37951,
    "lon": -59.21563,
    "que": null,
@@ -4037,10 +4037,10 @@
    "manchas": [
     "MAN-AMBA-0271"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.036295726629425484,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.04)",
    "lat": -34.76161,
    "lon": -58.50867,
    "que": null,
@@ -4061,10 +4061,10 @@
    "manchas": [
     "MAN-AMBA-0275"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.010976652558827732,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.87387,
    "lon": -58.49592,
    "que": "golf: El Sosiego",
@@ -4085,10 +4085,10 @@
    "manchas": [
     "MAN-AMBA-0282"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.02671591846422972,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.4925,
    "lon": -58.79627,
    "que": null,
@@ -4109,10 +4109,10 @@
    "manchas": [
     "MAN-AMBA-0283"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0005703401283034606,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.82963,
    "lon": -58.36576,
    "que": null,
@@ -4133,10 +4133,10 @@
    "manchas": [
     "MAN-AMBA-0284"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.07363901431033737,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.07)",
    "lat": -34.58847,
    "lon": -58.81312,
    "que": null,
@@ -4157,10 +4157,10 @@
    "manchas": [
     "MAN-AMBA-0286"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000668 laguna_chica)",
+   "p_basural": 0.064170280448182,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06) (toca un negativo del catálogo: NEG-AMBA-000668 laguna_chica)",
    "lat": -34.42571,
    "lon": -58.77204,
    "que": null,
@@ -4181,10 +4181,10 @@
    "manchas": [
     "MAN-AMBA-0287"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.013310331447423275,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.77461,
    "lon": -58.5051,
    "que": null,
@@ -4205,10 +4205,10 @@
    "manchas": [
     "MAN-AMBA-0290"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0007249628989031823,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.27584,
    "lon": -58.77402,
    "que": null,
@@ -4229,10 +4229,10 @@
    "manchas": [
     "MAN-AMBA-0291"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.08785224271586362,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.09)",
    "lat": -34.8541,
    "lon": -58.47038,
    "que": null,
@@ -4253,10 +4253,10 @@
    "manchas": [
     "MAN-AMBA-0292"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.022587957201475814,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.58088,
    "lon": -58.67108,
    "que": null,
@@ -4277,10 +4277,10 @@
    "manchas": [
     "MAN-AMBA-0296"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.003237462177349222,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.69958,
    "lon": -58.45225,
    "que": null,
@@ -4301,10 +4301,10 @@
    "manchas": [
     "MAN-AMBA-0297"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-057972 puerto_playa_contenedores, NEG-AMBA-001103 puerto_playa_contenedores)",
+   "p_basural": 0.06111614798022573,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06) (toca un negativo del catálogo: NEG-057972 puerto_playa_contenedores, NEG-AMBA-001103 puerto_playa_contenedores)",
    "lat": -34.58028,
    "lon": -58.37351,
    "que": null,
@@ -4325,10 +4325,10 @@
    "manchas": [
     "MAN-AMBA-0299"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.012060044225096175,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.57589,
    "lon": -58.78241,
    "que": null,
@@ -4349,10 +4349,10 @@
    "manchas": [
     "MAN-AMBA-0300"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.009826059426230258,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.79601,
    "lon": -58.49806,
    "que": null,
@@ -4373,10 +4373,10 @@
    "manchas": [
     "MAN-AMBA-0302"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0059381599962015875,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.83898,
    "lon": -58.63663,
    "que": null,
@@ -4397,10 +4397,10 @@
    "manchas": [
     "MAN-AMBA-0305"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.001945339226105278,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.64058,
    "lon": -58.33497,
    "que": null,
@@ -4421,10 +4421,10 @@
    "manchas": [
     "MAN-AMBA-0307"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0068682562887372855,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.61231,
    "lon": -58.7407,
    "que": null,
@@ -4445,10 +4445,10 @@
    "manchas": [
     "MAN-AMBA-0311"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.002771443175670251,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.80319,
    "lon": -58.50516,
    "que": null,
@@ -4469,10 +4469,10 @@
    "manchas": [
     "MAN-AMBA-0312"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.008506261043586455,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.51405,
    "lon": -58.63483,
    "que": null,
@@ -4493,10 +4493,10 @@
    "manchas": [
     "MAN-AMBA-0313"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.014082263591051745,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.78926,
    "lon": -58.53238,
    "que": null,
@@ -4517,10 +4517,10 @@
    "manchas": [
     "MAN-AMBA-0314"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.06406926356807091,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.06)",
    "lat": -34.75671,
    "lon": -58.78445,
    "que": null,
@@ -4541,10 +4541,10 @@
    "manchas": [
     "MAN-AMBA-0316"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.00682825710652852,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.37999,
    "lon": -58.52003,
    "que": null,
@@ -4565,10 +4565,10 @@
    "manchas": [
     "MAN-AMBA-0317"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0010944204355750671,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.57401,
    "lon": -58.8112,
    "que": null,
@@ -4589,10 +4589,10 @@
    "manchas": [
     "MAN-AMBA-0319"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.010099775330990463,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.4849,
    "lon": -58.89922,
    "que": null,
@@ -4613,10 +4613,10 @@
    "manchas": [
     "MAN-AMBA-0321"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.00047963261027368843,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.59358,
    "lon": -58.48076,
    "que": null,
@@ -4637,10 +4637,10 @@
    "manchas": [
     "MAN-AMBA-0323"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.00012840415966089777,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.69863,
    "lon": -58.5331,
    "que": null,
@@ -4661,10 +4661,10 @@
    "manchas": [
     "MAN-AMBA-0324"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.604813622129803,
+   "veredicto": "posible_nuevo",
+   "veredicto_texto": "Posible basural activo nuevo",
+   "motivo": "no está en el catálogo de basurales; p_basural 0.60",
    "lat": -34.85277,
    "lon": -58.49008,
    "que": null,
@@ -4685,10 +4685,10 @@
    "manchas": [
     "MAN-AMBA-0327"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0056932390158632015,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.30839,
    "lon": -58.59835,
    "que": null,
@@ -4709,10 +4709,10 @@
    "manchas": [
     "MAN-AMBA-0329"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0007916558411849362,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.28952,
    "lon": -58.68408,
    "que": null,
@@ -4733,10 +4733,10 @@
    "manchas": [
     "MAN-AMBA-0330"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.002030373871023264,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.28167,
    "lon": -58.71579,
    "que": null,
@@ -4757,10 +4757,10 @@
    "manchas": [
     "MAN-AMBA-0331"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.12400461079536398,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.12)",
    "lat": -34.45918,
    "lon": -58.86015,
    "que": null,
@@ -4781,10 +4781,10 @@
    "manchas": [
     "MAN-AMBA-0334"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0012542450568109131,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.84581,
    "lon": -58.43913,
    "que": null,
@@ -4805,10 +4805,10 @@
    "manchas": [
     "MAN-AMBA-0335"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.1319422228296716,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.13)",
    "lat": -34.87011,
    "lon": -58.81831,
    "que": null,
@@ -4829,10 +4829,10 @@
    "manchas": [
     "MAN-AMBA-0337"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0011632201248462392,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.32623,
    "lon": -58.52246,
    "que": null,
@@ -4853,10 +4853,10 @@
    "manchas": [
     "MAN-AMBA-0339"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.01710462580572021,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.36227,
    "lon": -58.49233,
    "que": null,
@@ -4877,10 +4877,10 @@
    "manchas": [
     "MAN-AMBA-0340"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.030988462004857175,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.73474,
    "lon": -58.5138,
    "que": null,
@@ -4901,10 +4901,10 @@
    "manchas": [
     "MAN-AMBA-0342"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0010050158049164375,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.7366,
    "lon": -58.31572,
    "que": null,
@@ -4925,10 +4925,10 @@
    "manchas": [
     "MAN-AMBA-0343"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.08746343345232668,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.09)",
    "lat": -34.75341,
    "lon": -58.53041,
    "que": null,
@@ -4949,10 +4949,10 @@
    "manchas": [
     "MAN-AMBA-0346"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0005568292124928486,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.27236,
    "lon": -58.56316,
    "que": null,
@@ -4973,10 +4973,10 @@
    "manchas": [
     "MAN-AMBA-0349"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.05153827773880154,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.05)",
    "lat": -34.604,
    "lon": -58.83861,
    "que": null,
@@ -4997,10 +4997,10 @@
    "manchas": [
     "MAN-AMBA-0350"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.012174214069679038,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.8604,
    "lon": -58.37236,
    "que": null,
@@ -5021,10 +5021,10 @@
    "manchas": [
     "MAN-AMBA-0351"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.002131741419942993,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.86254,
    "lon": -58.45806,
    "que": null,
@@ -5045,10 +5045,10 @@
    "manchas": [
     "MAN-AMBA-0353"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000863 obra)",
+   "p_basural": 0.012121498627721675,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01) (toca un negativo del catálogo: NEG-AMBA-000863 obra)",
    "lat": -34.5016,
    "lon": -58.60459,
    "que": null,
@@ -5069,10 +5069,10 @@
    "manchas": [
     "MAN-AMBA-0354"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.2828878809851695,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.28)",
    "lat": -34.47166,
    "lon": -58.81546,
    "que": null,
@@ -5093,10 +5093,10 @@
    "manchas": [
     "MAN-AMBA-0355"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.007261882193633852,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.33215,
    "lon": -58.47798,
    "que": null,
@@ -5117,10 +5117,10 @@
    "manchas": [
     "MAN-AMBA-0362"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo (toca un negativo del catálogo: NEG-AMBA-000916 aeropuerto)",
+   "p_basural": 0.003491226491959108,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00) (toca un negativo del catálogo: NEG-AMBA-000916 aeropuerto)",
    "lat": -34.81834,
    "lon": -58.67142,
    "que": "aeródromo: Aeródromo Virrey del Pino",
@@ -5141,10 +5141,10 @@
    "manchas": [
     "MAN-AMBA-0363"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.11406871359059408,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.11)",
    "lat": -34.80552,
    "lon": -58.83711,
    "que": null,
@@ -5165,10 +5165,10 @@
    "manchas": [
     "MAN-AMBA-0370"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.004101442034731606,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.8647,
    "lon": -58.43411,
    "que": null,
@@ -5189,10 +5189,10 @@
    "manchas": [
     "MAN-AMBA-0372"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0003512295462414369,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.27872,
    "lon": -58.7649,
    "que": null,
@@ -5213,10 +5213,10 @@
    "manchas": [
     "MAN-AMBA-0373"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.006138564124369451,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.86911,
    "lon": -58.6403,
    "que": null,
@@ -5237,10 +5237,10 @@
    "manchas": [
     "MAN-AMBA-0374"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.4847090754382423,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.48)",
    "lat": -34.86942,
    "lon": -58.66049,
    "que": null,
@@ -5261,10 +5261,10 @@
    "manchas": [
     "MAN-AMBA-0375"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.007347607171258279,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.73277,
    "lon": -58.80377,
    "que": null,
@@ -5285,10 +5285,10 @@
    "manchas": [
     "MAN-AMBA-0379"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0009894636981621,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.82406,
    "lon": -58.41859,
    "que": null,
@@ -5309,10 +5309,10 @@
    "manchas": [
     "MAN-AMBA-0381"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0030795956228709094,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.54608,
    "lon": -58.87862,
    "que": null,
@@ -5333,10 +5333,10 @@
    "manchas": [
     "MAN-AMBA-0383"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.02299634400947669,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.71755,
    "lon": -58.54989,
    "que": null,
@@ -5357,10 +5357,10 @@
    "manchas": [
     "MAN-AMBA-0387"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.014106490585225758,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.58915,
    "lon": -58.70248,
    "que": "golf: Buenos Aires Golf Club",
@@ -5381,10 +5381,10 @@
    "manchas": [
     "MAN-AMBA-0389"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.16480415840465093,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.16)",
    "lat": -34.49821,
    "lon": -58.86356,
    "que": null,
@@ -5405,10 +5405,10 @@
    "manchas": [
     "MAN-AMBA-0390"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.006148870763275989,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.01)",
    "lat": -34.51572,
    "lon": -58.85371,
    "que": null,
@@ -5429,10 +5429,10 @@
    "manchas": [
     "MAN-AMBA-0391"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0006401226917799163,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.57934,
    "lon": -58.51979,
    "que": "golf: Golf Club General Bartolomé Mitre",
@@ -5453,10 +5453,10 @@
    "manchas": [
     "MAN-AMBA-0392"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.020158765359072052,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.02)",
    "lat": -34.33705,
    "lon": -58.47583,
    "que": null,
@@ -5477,10 +5477,10 @@
    "manchas": [
     "MAN-AMBA-0393"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.08946586646230115,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.09)",
    "lat": -34.6955,
    "lon": -59.30537,
    "que": null,
@@ -5501,10 +5501,10 @@
    "manchas": [
     "MAN-AMBA-0394"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.14748641088062933,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.15)",
    "lat": -34.50655,
    "lon": -58.82148,
    "que": null,
@@ -5525,10 +5525,10 @@
    "manchas": [
     "MAN-AMBA-0396"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.0006302236288993233,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.00)",
    "lat": -34.26337,
    "lon": -58.58495,
    "que": null,
@@ -5549,10 +5549,10 @@
    "manchas": [
     "MAN-AMBA-0397"
    ],
-   "p_basural": null,
-   "veredicto": "sin_clasificar",
-   "veredicto_texto": "Mancha despierta sin clasificar (sin modelo)",
-   "motivo": "no está en el catálogo de basurales y no hay modelo",
+   "p_basural": 0.025241758429588448,
+   "veredicto": "descartada",
+   "veredicto_texto": "Descartada",
+   "motivo": "el modelo dice otra cosa (p_basural 0.03)",
    "lat": -34.85375,
    "lon": -58.36168,
    "que": null,
