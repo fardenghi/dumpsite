@@ -1,0 +1,658 @@
+{
+ "capa": "80m",
+ "version": "final",
+ "frame": {
+  "frame": "USA_CA_LOS_ANGELES",
+  "orbita": [
+   13,
+   34
+  ],
+  "ciudad": "Palmdale, Los Angeles, CA (alrededor de Antelope Valley Recycling and Disposal Facility)",
+  "pais": "USA",
+  "hemisferio": "N",
+  "epsg": 32611,
+  "epsg_fijo": true,
+  "bbox": [
+   -118.9463,
+   34.5207,
+   -118.0585,
+   35.0408
+  ],
+  "fecha_inicio": "2025-11-23",
+  "fecha_fin": "2026-10-14",
+  "frames_nisar": [
+   "034_A_019",
+   "013_D_071"
+  ]
+ },
+ "parametros": {
+  "razon": 0.8,
+  "min_insomnio": 0.7,
+  "min_persistencia": 0.5,
+  "max_quieto": 0.2,
+  "eco_min_db": -13.0,
+  "agua_min": 10.0,
+  "borde_agua_m": 80.0,
+  "radio_entorno_m": 2000.0,
+  "anillo_m": 1500.0,
+  "bloque_entorno_m": 320.0,
+  "suavizado_m": 240.0,
+  "umbral_abs": 0.3,
+  "min_ha": 10.0,
+  "max_elongacion": 4.0,
+  "min_nucleo": 0.1,
+  "min_px_sitio": 8,
+  "min_coh_anillo": 0.3,
+  "min_pares_orbita": 3
+ },
+ "anillo_excluye": {
+  "basurales": 5,
+  "negativos": 34,
+  "ha": 1798
+ },
+ "pares": [
+  {
+   "orbita": 13,
+   "desde": "2025-11-23",
+   "hasta": "2025-12-05",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_006_013_D_071_007_4000_SH_20251123T024035_20251123T024113_20251205T024036_20251205T024113_P05023_N_F_J_001",
+   "mediana_tierra": 0.552,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2025-12-05",
+   "hasta": "2025-12-29",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_007_013_D_071_009_4000_SH_20251205T024036_20251205T024113_20251229T024037_20251229T024115_P05023_N_F_J_001",
+   "mediana_tierra": 0.515,
+   "factor_separacion": 0.784
+  },
+  {
+   "orbita": 13,
+   "desde": "2025-12-29",
+   "hasta": "2026-01-22",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_009_013_D_071_011_4000_SH_20251229T024037_20251229T024115_20260122T024038_20260122T024116_P05023_N_F_J_001",
+   "mediana_tierra": 0.47,
+   "factor_separacion": 0.784
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-01-22",
+   "hasta": "2026-02-03",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_011_013_D_071_012_4000_SH_20260122T024038_20260122T024116_20260203T024039_20260203T024116_P05023_N_F_J_001",
+   "mediana_tierra": 0.667,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-02-03",
+   "hasta": "2026-02-15",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_012_013_D_071_013_4000_SH_20260203T024039_20260203T024116_20260215T024039_20260215T024117_P05023_N_F_J_001",
+   "mediana_tierra": 0.629,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-02-15",
+   "hasta": "2026-02-27",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_013_013_D_071_014_4000_SH_20260215T024039_20260215T024117_20260227T024039_20260227T024117_P05023_N_F_J_001",
+   "mediana_tierra": 0.623,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-02-27",
+   "hasta": "2026-03-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_014_013_D_071_015_4000_SH_20260227T024039_20260227T024117_20260311T024040_20260311T024118_P05023_N_F_J_001",
+   "mediana_tierra": 0.594,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-03-11",
+   "hasta": "2026-03-23",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_015_013_D_071_016_4000_SH_20260311T024040_20260311T024118_20260323T024040_20260323T024118_P05023_N_F_J_001",
+   "mediana_tierra": 0.651,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-03-23",
+   "hasta": "2026-04-04",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_016_013_D_071_017_4000_SH_20260323T024040_20260323T024118_20260404T024040_20260404T024118_P05023_N_F_J_001",
+   "mediana_tierra": 0.629,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-04-04",
+   "hasta": "2026-04-16",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_017_013_D_071_018_4000_SH_20260404T024040_20260404T024118_20260416T024040_20260416T024118_P05023_N_F_J_001",
+   "mediana_tierra": 0.665,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-04-16",
+   "hasta": "2026-04-28",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_018_013_D_071_019_4000_SH_20260416T024040_20260416T024118_20260428T024040_20260428T024117_P05023_N_F_J_001",
+   "mediana_tierra": 0.687,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-04-28",
+   "hasta": "2026-05-10",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_019_013_D_071_020_4000_SH_20260428T024040_20260428T024117_20260510T024039_20260510T024117_P05023_N_F_J_001",
+   "mediana_tierra": 0.657,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-05-10",
+   "hasta": "2026-05-22",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_020_013_D_071_021_4000_SH_20260510T024039_20260510T024117_20260522T024038_20260522T024116_P05023_N_F_J_001",
+   "mediana_tierra": 0.712,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-05-22",
+   "hasta": "2026-06-03",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_021_013_D_071_022_4000_SH_20260522T024038_20260522T024116_20260603T024038_20260603T024115_P05023_N_F_J_001",
+   "mediana_tierra": 0.076,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-06-03",
+   "hasta": "2026-06-15",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_022_013_D_071_023_4000_SH_20260603T024038_20260603T024115_20260615T024037_20260615T024115_P05023_N_F_J_001",
+   "mediana_tierra": 0.076,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-06-15",
+   "hasta": "2026-06-27",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_023_013_D_071_024_4000_SH_20260615T024037_20260615T024115_20260627T024036_20260627T024114_P05023_N_F_J_001",
+   "mediana_tierra": 0.738,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-06-27",
+   "hasta": "2026-07-09",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_024_013_D_071_025_4000_SH_20260627T024036_20260627T024114_20260709T024036_20260709T024113_P05023_N_F_J_001",
+   "mediana_tierra": 0.694,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-07-09",
+   "hasta": "2026-07-21",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_025_013_D_071_026_4000_SH_20260709T024036_20260709T024113_20260721T024035_20260721T024113_P05023_N_F_J_001",
+   "mediana_tierra": 0.661,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-07-21",
+   "hasta": "2026-08-14",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_026_013_D_071_028_4000_SH_20260721T024035_20260721T024113_20260814T024034_20260814T024111_P05023_N_F_J_001",
+   "mediana_tierra": 0.681,
+   "factor_separacion": 0.784
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-08-14",
+   "hasta": "2026-08-26",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_013_D_071_029_4000_SH_20260814T024034_20260814T024111_20260826T024033_20260826T024111_P05023_N_F_J_001",
+   "mediana_tierra": 0.77,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-08-26",
+   "hasta": "2026-09-07",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_013_D_071_030_4000_SH_20260826T024033_20260826T024111_20260907T024033_20260907T024111_P05023_N_F_J_001",
+   "mediana_tierra": 0.535,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-09-07",
+   "hasta": "2026-09-19",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_013_D_071_031_4000_SH_20260907T024033_20260907T024111_20260919T024033_20260919T024111_P05023_F_F_J_001",
+   "mediana_tierra": 0.548,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-09-19",
+   "hasta": "2026-10-01",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_031_013_D_071_032_4000_SH_20260919T024033_20260919T024111_20261001T024033_20261001T024111_P05023_N_F_J_001",
+   "mediana_tierra": 0.771,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 13,
+   "desde": "2026-10-01",
+   "hasta": "2026-10-13",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_032_013_D_071_033_4000_SH_20261001T024033_20261001T024111_20261013T024033_20261013T024111_P05023_N_F_J_001",
+   "mediana_tierra": 0.733,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2025-11-24",
+   "hasta": "2025-12-06",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_006_034_A_019_007_4000_SH_20251124T130824_20251124T130859_20251206T130825_20251206T130900_P05023_N_F_J_001",
+   "mediana_tierra": 0.626,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2025-12-06",
+   "hasta": "2025-12-18",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_007_034_A_019_008_4000_SH_20251206T130825_20251206T130900_20251218T130826_20251218T130900_P05023_N_F_J_001",
+   "mediana_tierra": 0.708,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2025-12-06",
+   "hasta": "2025-12-30",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_007_034_A_019_009_4000_SH_20251206T130825_20251206T130900_20251230T130826_20251230T130901_X05010_N_F_J_001",
+   "mediana_tierra": 0.594,
+   "factor_separacion": 1.006
+  },
+  {
+   "orbita": 34,
+   "desde": "2025-12-18",
+   "hasta": "2025-12-30",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_008_034_A_019_009_4000_SH_20251218T130826_20251218T130900_20251230T130826_20251230T130901_P05023_N_F_J_001",
+   "mediana_tierra": 0.58,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2025-12-30",
+   "hasta": "2026-01-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_009_034_A_019_010_4000_SH_20251230T130826_20251230T130901_20260111T130827_20260111T130902_X05010_N_F_J_001",
+   "mediana_tierra": 0.706,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-01-11",
+   "hasta": "2026-01-23",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_010_034_A_019_011_4000_SH_20260111T130827_20260111T130902_20260123T130827_20260123T130902_P05023_N_F_J_001",
+   "mediana_tierra": 0.652,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-01-23",
+   "hasta": "2026-02-04",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_011_034_A_019_012_4000_SH_20260123T130827_20260123T130902_20260204T130828_20260204T130903_P05023_N_F_J_001",
+   "mediana_tierra": 0.717,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-02-04",
+   "hasta": "2026-02-16",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_012_034_A_019_013_4000_SH_20260204T130828_20260204T130903_20260216T130828_20260216T130903_P05023_N_F_J_001",
+   "mediana_tierra": 0.545,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-02-16",
+   "hasta": "2026-02-28",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_013_034_A_019_014_4000_SH_20260216T130828_20260216T130903_20260228T130829_20260228T130903_P05023_N_F_J_001",
+   "mediana_tierra": 0.532,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-02-28",
+   "hasta": "2026-03-12",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_014_034_A_019_015_4000_SH_20260228T130829_20260228T130903_20260312T130829_20260312T130904_P05023_N_F_J_001",
+   "mediana_tierra": 0.592,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-03-12",
+   "hasta": "2026-03-24",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_015_034_A_019_016_4000_SH_20260312T130829_20260312T130904_20260324T130829_20260324T130904_P05023_N_F_J_001",
+   "mediana_tierra": 0.664,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-03-24",
+   "hasta": "2026-04-05",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_016_034_A_019_017_4000_SH_20260324T130829_20260324T130904_20260405T130829_20260405T130904_P05023_N_F_J_001",
+   "mediana_tierra": 0.683,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-04-05",
+   "hasta": "2026-04-17",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_017_034_A_019_018_4000_SH_20260405T130829_20260405T130904_20260417T130829_20260417T130904_P05023_N_F_J_001",
+   "mediana_tierra": 0.469,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-04-17",
+   "hasta": "2026-04-29",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_018_034_A_019_019_4000_SH_20260417T130829_20260417T130904_20260429T130829_20260429T130904_P05023_N_F_J_001",
+   "mediana_tierra": 0.557,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-04-29",
+   "hasta": "2026-05-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_019_034_A_019_020_4000_SH_20260429T130829_20260429T130904_20260511T130828_20260511T130903_P05023_N_F_J_001",
+   "mediana_tierra": 0.696,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-05-11",
+   "hasta": "2026-05-23",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_020_034_A_019_021_4000_SH_20260511T130828_20260511T130903_20260523T130828_20260523T130902_P05023_N_F_J_001",
+   "mediana_tierra": 0.69,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-05-23",
+   "hasta": "2026-06-04",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_021_034_A_019_022_4000_SH_20260523T130828_20260523T130902_20260604T130827_20260604T130902_P05023_N_F_J_001",
+   "mediana_tierra": 0.66,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-06-04",
+   "hasta": "2026-06-16",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_022_034_A_019_023_4000_SH_20260604T130827_20260604T130902_20260616T130826_20260616T130901_P05023_N_F_J_001",
+   "mediana_tierra": 0.714,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-06-16",
+   "hasta": "2026-06-28",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_023_034_A_019_024_4000_SH_20260616T130826_20260616T130901_20260628T130825_20260628T130900_P05023_N_F_J_001",
+   "mediana_tierra": 0.754,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-06-28",
+   "hasta": "2026-07-10",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_024_034_A_019_025_4000_SH_20260628T130825_20260628T130900_20260710T130825_20260710T130900_P05023_N_F_J_001",
+   "mediana_tierra": 0.75,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-07-10",
+   "hasta": "2026-07-22",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_025_034_A_019_026_4000_SH_20260710T130825_20260710T130900_20260722T130824_20260722T130859_P05023_N_F_J_001",
+   "mediana_tierra": 0.776,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-07-22",
+   "hasta": "2026-08-15",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_026_034_A_019_028_4000_SH_20260722T130824_20260722T130859_20260815T130823_20260815T130858_P05023_N_F_J_001",
+   "mediana_tierra": 0.694,
+   "factor_separacion": 1.006
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-08-15",
+   "hasta": "2026-08-27",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_034_A_019_029_4000_SH_20260815T130823_20260815T130858_20260827T130823_20260827T130857_P05023_N_F_J_001",
+   "mediana_tierra": 0.739,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-08-27",
+   "hasta": "2026-09-08",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_034_A_019_030_4000_SH_20260827T130823_20260827T130857_20260908T130822_20260908T130857_P05023_N_F_J_001",
+   "mediana_tierra": 0.722,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-09-08",
+   "hasta": "2026-09-20",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_034_A_019_031_4000_SH_20260908T130822_20260908T130857_20260920T130823_20260920T130857_P05023_N_F_J_001",
+   "mediana_tierra": 0.738,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 34,
+   "desde": "2026-09-20",
+   "hasta": "2026-10-14",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_031_034_A_019_033_4000_SH_20260920T130823_20260920T130857_20261014T130823_20261014T130857_P05023_N_F_J_001",
+   "mediana_tierra": 0.756,
+   "factor_separacion": 1.006
+  }
+ ],
+ "gcov": 52,
+ "superficie": {
+  "agua_ha": 4054,
+  "tierra_ha": 470456,
+  "candidata_ha": 129,
+  "estacional_ha": 978,
+  "lisa_ha": 11311
+ },
+ "sitios": {},
+ "manchas": {
+  "candidatas": 9,
+  "por_clase": {
+   "relleno_osm": 0,
+   "sin_explicar": 5,
+   "uso_conocido": 4
+  },
+  "descartadas_lineales": 10,
+  "descartadas_lisas": 279,
+  "descartadas_chicas": 970,
+  "primeras": [
+   {
+    "ha": 23.0,
+    "insomnio": 0.84,
+    "persistencia": 0.74,
+    "eco_db": -13.0,
+    "elongacion": 2.5,
+    "nucleo": 0.33,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 34.99035,
+    "lon": -118.93809,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 17.3,
+    "insomnio": 0.9,
+    "persistencia": 0.81,
+    "eco_db": -12.9,
+    "elongacion": 4.0,
+    "nucleo": 0.11,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 34.58858,
+    "lon": -118.37396,
+    "clase": "uso_conocido",
+    "que": "reserva: Angeles National Forest"
+   },
+   {
+    "ha": 16.6,
+    "insomnio": 0.86,
+    "persistencia": 0.8,
+    "eco_db": -10.6,
+    "elongacion": 2.5,
+    "nucleo": 0.31,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 34.51551,
+    "lon": -118.75629,
+    "clase": "uso_conocido",
+    "que": "reserva: Los Padres National Forest"
+   },
+   {
+    "ha": 15.4,
+    "insomnio": 0.74,
+    "persistencia": 0.53,
+    "eco_db": -12.2,
+    "elongacion": 1.1,
+    "nucleo": 0.42,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 35.02605,
+    "lon": -118.8852,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 13.4,
+    "insomnio": 0.89,
+    "persistencia": 0.8,
+    "eco_db": -13.0,
+    "elongacion": 1.5,
+    "nucleo": 0.33,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 34.98209,
+    "lon": -118.19496,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 11.5,
+    "insomnio": 0.81,
+    "persistencia": 0.67,
+    "eco_db": -10.4,
+    "elongacion": 2.8,
+    "nucleo": 0.17,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 35.01078,
+    "lon": -118.57279,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 11.5,
+    "insomnio": 0.83,
+    "persistencia": 0.71,
+    "eco_db": -12.5,
+    "elongacion": 3.6,
+    "nucleo": 0.11,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 34.59075,
+    "lon": -118.65874,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 10.2,
+    "insomnio": 0.79,
+    "persistencia": 0.7,
+    "eco_db": -12.5,
+    "elongacion": 2.2,
+    "nucleo": 0.19,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 34.87522,
+    "lon": -118.92142,
+    "clase": "uso_conocido",
+    "que": "reserva: Los Padres National Forest"
+   },
+   {
+    "ha": 10.2,
+    "insomnio": 0.88,
+    "persistencia": 0.78,
+    "eco_db": -9.3,
+    "elongacion": 2.5,
+    "nucleo": 0.19,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 34.81627,
+    "lon": -118.88917,
+    "clase": "sin_explicar",
+    "que": null
+   }
+  ]
+ },
+ "fuentes": [
+  "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC",
+  "JRC Global Surface Water v1.4",
+  "© colaboradores de OpenStreetMap (ODbL), por Nominatim y por Overture Maps 2026-10-21.0"
+ ]
+}
