@@ -1,40 +1,40 @@
-# La idea: lo que el radar nunca ve quieto
+# The idea: what the radar never sees asleep
 
 **Challenge:** Dancing with the SARs (NISAR), NASA Space Apps 2026.
 
-## El problema
-En Argentina se estima que hay unos 5.000 basurales a cielo abierto. El dato es del Ministerio de Ambiente y no sale de un relevamiento formal. En la Provincia de Buenos Aires, 81 de 135 municipios usaban basurales según el informe de 2023. Los cierres se anuncian, pero no hay un inventario abierto y georreferenciado que permita controlar si un basural "cerrado" sigue recibiendo residuos.
+## The problem
+Argentina has an estimated 5,000 open-air dump sites. The figure comes from the Ministry of Environment and isn't based on a formal survey. In Buenos Aires Province, 81 of 135 municipalities were using dump sites according to the 2023 report. Closures get announced, but there's no open, georeferenced inventory to check whether a "closed" dump site is still receiving waste.
 
-## Qué hace
-NISAR pasa sobre el mismo lugar cada 12 días. Al comparar dos pasadas, mide cuánto se parecen (la **coherencia**). Un campo pierde coherencia por la estación (cosecha, lluvia) y una ciudad casi nunca la pierde. Un basural activo, en cambio, la pierde en todos los pares, porque lo remueven todos los días.
+## What it does
+NISAR passes over the same place every 12 days. Comparing two passes, it measures how similar they look (the **coherence**). A field loses coherence with the seasons (harvest, rain) and a city almost never does. An active dump site, on the other hand, loses it in every pair, because it gets moved around every day.
 
-Dumpsite busca los lugares que **nunca se ven quietos**:
+Dumpsite looks for the places that are **never seen asleep**:
 
-1. Calcula un **índice de insomnio** por píxel: la fracción de pares en los que la coherencia cae muy por debajo de la de su entorno (`indice-insomnio.md`).
-2. Arma **manchas candidatas** y descarta agua, rutas y superficies lisas.
-3. **Cruza** las manchas con un catálogo de 66.981 basurales del mundo y con 64.986 negativos (lo que el radar confunde con un basural: aeródromos, canteras, playas de contenedores).
-4. Da un **veredicto por sitio** contra el registro oficial: "activo, ya conocido", "cerrado pero despierto", "cerrado y quieto" o "el radar no alcanza".
-5. Con un **modelo de abierto contra cerrado** entrenado con el registro de la EPA, ordena los sitios según qué tan compatibles son con un basural abierto (`modelo.md`).
+1. It computes a per-pixel **insomnia index**: the fraction of pairs in which the coherence falls well below that of its surroundings (`indice-insomnio.md`).
+2. It builds **candidate blobs** and discards water, roads and smooth surfaces.
+3. It **crosses** the blobs with a catalog of 66,981 dump sites around the world and with 64,986 negatives (what the radar confuses with a dump site: airfields, quarries, container yards).
+4. It gives a **verdict per site** against the official registry: "active, already known", "closed but awake", "closed and quiet" or "the radar can't tell".
+5. With an **open-versus-closed model** trained on the EPA registry, it ranks the sites by how compatible they are with an open dump site (`modelo.md`).
 
-Todo se ve en una web con el mapa del índice, una ficha por sitio y el panel del modelo.
+It all shows up on a website with the index map, a card per site and the model panel.
 
-## El caso Luján
-El basural de Luján dejó de recibir residuos el **1/07/2026**, tras unos 52 años. NISAR tiene unos 3,5 meses de pares posteriores al cierre.
+## The Luján case
+The Luján dump site stopped receiving waste on **1 July 2026**, after about 52 years. NISAR has about 3.5 months of pairs after the closure.
 
-- **Luján da insomnio 0,00 en los 15 pares** (dos órbitas, del 25/06 al 12/10/2026). En ningún par la coherencia del predio bajó respecto de su anillo. El veredicto es "cerrado y quieto".
-- **Norte III (CEAMSE)**, el relleno que recibe la mayor parte de la basura del AMBA, da 0,86, y González Catán da 1,00. La ciudad (Palermo) da 0,00.
-- El modelo de abierto contra cerrado, entrenado sólo con EE. UU., le da 0,16 a Luján y 0,99 al complejo Norte III.
+- **Luján gets an insomnia of 0.00 in all 15 pairs** (two orbits, from 25 June to 12 October 2026). In no pair did the site's coherence drop relative to its ring. The verdict is "closed and quiet".
+- **Norte III (CEAMSE)**, the landfill that takes most of the AMBA's waste, gets 0.86, and González Catán gets 1.00. The city (Palermo) gets 0.00.
+- The open-versus-closed model, trained only with US data, gives Luján 0.16 and the Norte III complex 0.99.
 
-Límite: el primer par de cada órbita cruza el 1/07, así que no hay un "antes" del cierre con NISAR.
+Limit: the first pair of each orbit spans 1 July, so there's no NISAR "before" the closure.
 
-## Para quién
-Autoridades ambientales provinciales y municipales, periodistas y ONG que auditan cierres. La salida es una lista que se puede revisar sitio por sitio, con la fuente de cada número.
+## Who it's for
+Provincial and municipal environmental authorities, journalists and NGOs that audit closures. The output is a list that can be checked site by site, with the source of every number.
 
-## Lo que no dice
-- **No acusa a nadie.** Habla de "señal compatible con actividad" y de "quieto según el radar".
-- **No separa todo.** El pasto de un aeródromo, un humedal o una playa de contenedores también pierden coherencia. Por eso se cruza con los negativos.
-- **No ve lo chico.** Abajo de 10 ha, que son unos 16 píxeles de 80 m, el veredicto es "el radar no alcanza".
-- **La serie es corta.** Los datos públicos de NISAR arrancan a mediados de 2026: en el AMBA hay cuatro meses de pares y en EE. UU., hasta un año.
+## What it doesn't say
+- **It doesn't accuse anyone.** It talks about a "signal compatible with activity" and "quiet according to the radar".
+- **It doesn't separate everything.** The grass of an airfield, a wetland or a container yard also lose coherence. That's why it's crossed with the negatives.
+- **It doesn't see small sites.** Below 10 ha, about 16 pixels of 80 m, the verdict is "the radar can't tell".
+- **The series is short.** Public NISAR data starts in mid-2026: the AMBA has four months of pairs and the US up to a year.
 
-## Por qué no es obvia
-Lo típico del challenge es comparar antes y después de un evento: una inundación, la deforestación o la subsidencia. Esta idea no busca un cambio, busca la firma temporal de lo que cambia **siempre**. Usa la coherencia perdida que los demás descartan y la cruza contra un registro oficial.
+## Why it isn't obvious
+The usual approach in this challenge is comparing before and after an event: a flood, deforestation or subsidence. This idea doesn't look for a change, it looks for the time signature of what changes **all the time**. It uses the lost coherence that others throw away and crosses it with an official registry.
