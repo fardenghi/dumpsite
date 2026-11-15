@@ -1,11 +1,11 @@
 """Etapa 7: LightGBM binario (`basural_activo` contra `otro_movil`) con validación cruzada por frame.
 
 Lee `tabla_entrenamiento.parquet` y `particiones.json`; escribe `modelo.txt` y `metricas.json` y, si se le pasan las
-tablas de todas las manchas candidatas, `predicciones.parquet` (según `idea/contratos-datos.md`).
+tablas de todas las manchas candidatas, `predicciones.parquet` (según `../docs/contratos-datos.md`).
 
-    python entrenar.py                                      # lee y escribe en ../salidas/
-    python entrenar.py --datos ../datos/mock --salida ../datos/mock/prueba --predecir
-    python entrenar.py --datos ../datos/amba_provisional --humo   # pocas filas, un solo frame: sólo ver que corre
+    python entrenar.py                                      # lee y escribe en ../data/salidas/
+    python entrenar.py --datos datos/mock --salida datos/mock/prueba --predecir
+    python entrenar.py --datos datos/amba_provisional --humo   # pocas filas, un solo frame: sólo ver que corre
 
 - Cada partición se predice con un modelo entrenado sin ella (fuera de la partición). Los frames de `prueba_final`
   (Argentina) no se usan para entrenar ni para elegir nada: se predicen con el modelo final, entrenado con todo lo demás.
@@ -17,7 +17,7 @@ tablas de todas las manchas candidatas, `predicciones.parquet` (según `idea/con
   en `metricas.json` que **no es una métrica para reportar**.
 - `n_pares` y `n_orbitas` no entran al modelo: son casi constantes por frame (dicen cuántos datos hay, no qué es la
   mancha) y con frames que sólo tienen una clase serían una forma de aprenderse el frame. `--con-cantidad-de-datos` las suma.
-- `contraste_p10` y `eco_var_p90` (etapa 4, `idea/indice-actividad.md`) entran al modelo si la tabla las trae: miran la
+- `contraste_p10` y `eco_var_p90` (etapa 4, `../docs/indice-insomnio.md`) entran al modelo si la tabla las trae: miran la
   parte más activa de la mancha y no la mediana. No son del contrato (`RADAR_NUEVAS`). `indice_actividad` no entra: se
   ajustó con etiquetas de una IA. `ha_insomnio_90` tampoco: es otra medida de tamaño.
 - `--controles` (prompt 4, parte C): con las mismas particiones, entrena también sin las columnas de Forma, sólo con
@@ -289,7 +289,7 @@ def correr(t, partes, humo=False, todas=None, reservar=False, con_controles=Fals
     ok = oof.notna()
     imp = final.booster_.feature_importance(importance_type="gain")
     res = {
-        "generado_por": "herramientas/entrenar.py",
+        "generado_por": "motor/entrenar.py",
         "validacion": tipo,
         "advertencia": None if tipo == "por_frame" else
         "PRUEBA DE HUMO: un solo frame o sin particiones por frame. Sirve para ver que corre. NO reportar estas métricas.",

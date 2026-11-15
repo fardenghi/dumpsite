@@ -6,7 +6,7 @@ EPA o de Climate TRACE, y los cerrados de OSM que Overture no tiene) van como pu
 `geometria = "punto"`.
 
 Uso:
-    python geometrias_armar.py <dir_descargas> ../../data
+    python geometrias_armar.py <dir_descargas> ../data/catalogos/
 """
 
 from __future__ import annotations

@@ -10,7 +10,7 @@ Por cada área candidata (ciudades fijas + las celdas de 1° con más basurales 
      - pares GUNW y rango de fechas.
 Después ordena por prioridad (ver `puntaje`) y elige ~10 frames sin quedarse sólo en EE. UU.
 
-    python frames_elegir.py                     # consulta ASF, escribe ../../data/frames.json y ../idea/frames-elegidos.md
+    python frames_elegir.py                     # consulta ASF, escribe ../data/catalogos/frames.json y datos/frames-elegidos.md
     python frames_elegir.py --cache /tmp/asf    # guarda/reusa las respuestas de ASF
     python frames_elegir.py --n 10 --max-usa 5
     python frames_elegir.py --agregar 20        # deja los frames ya elegidos como están y suma 20 por cantidad de abiertos
@@ -419,7 +419,7 @@ def agregar(args):
               "prioridad", "puntaje", "n_negativos_a_10ha", "n_gunw_por_track", "cobertura", "criterio", "celda", "n_sitios_10ha"]
     actual["frames"] = viejos + [{k: f[k] for k in claves} for f in elegidos]
     actual["meta"]["agregados"] = {
-        "generado": dt.date.today().isoformat(), "generado_por": "herramientas/frames_elegir.py --agregar",
+        "generado": dt.date.today().isoformat(), "generado_por": "motor/frames_elegir.py --agregar",
         "n": len(elegidos), "prioridad_desde": max(g["prioridad"] for g in viejos) + 1,
         "criterio": ("celdas de 1° con más basurales abiertos de 10 ha o más con polígono, por sitio (puntaje 2 × abiertos + cerrados), "
                      "sin contar los que ya caen en una caja elegida; caja achicada a esos basurales más "
@@ -629,9 +629,9 @@ def main():
     elegidos = {f["frame"] for f in frames}
     descartados = [f for f in evaluados if f["frame"] not in elegidos]
     meta = {
-        "generado": dt.date.today().isoformat(), "generado_por": "herramientas/frames_elegir.py",
+        "generado": dt.date.today().isoformat(), "generado_por": "motor/frames_elegir.py",
         "fuente": "ASF Search API (api.daac.asf.alaska.edu), productos NISAR L2 GUNW PR (provisional V1)",
-        "catalogos": ["data/basurales/complejos.json", "data/negativos/negativos_mundo.json", "data/negativos/negativos_amba.json"],
+        "catalogos": ["data/catalogos/basurales/complejos.json", "data/catalogos/negativos/negativos_mundo.json", "data/catalogos/negativos/negativos_amba.json"],
         "criterio": ("~10 frames que maximizan complejos de 10 ha o más con estado conocido, negativos de clase A de 10 ha o más "
                      "y pares GUNW (ver `puntaje` en el script); tope de frames de EE. UU.; Argentina reservada para la prueba final"),
         "min_cobertura": args.min_cobertura, "max_usa": args.max_usa,
@@ -708,9 +708,9 @@ def estado_conocido(frames):
         salida[f["frame"]] = lista
     return {
         "meta": {
-            "generado": dt.date.today().isoformat(), "generado_por": "herramientas/frames_elegir.py",
-            "fuentes": ["data/basurales/basurales_mundo.json (EPA LMOP, OSM vía Overture, casos curados)",
-                        "data/basurales/basurales_cerrados.json", "data/basurales/casos_curados_argentina.json"],
+            "generado": dt.date.today().isoformat(), "generado_por": "motor/frames_elegir.py",
+            "fuentes": ["data/catalogos/basurales/basurales_mundo.json (EPA LMOP, OSM vía Overture, casos curados)",
+                        "data/catalogos/basurales/basurales_cerrados.json", "data/catalogos/basurales/casos_curados_argentina.json"],
             "criterio": "sitios con estado abierto, cerrado o contradictorio dentro de la caja y de la huella de los frames elegidos",
             "uso": "etiquetas independientes del insomnio para la etapa 8 (evaluar_actividad.py). `grande` = 10 ha o más.",
             "advertencia": "el estado de OSM sale de etiquetas disused/abandoned, sin fecha; el de la EPA es de 2024-09",
@@ -757,8 +757,8 @@ def _escribir_md(ruta, tabla, desc, meta, frames):
     conocidos_no_usa = sum(f["n_basurales_10ha"]["abierto"] + f["n_basurales_10ha"]["cerrado"] for f in frames if f["pais"] not in EEUU)
     texto = f"""# Frames elegidos para el modelo (etapa 2, {meta['generado']})
 
-Generado por `herramientas/frames_elegir.py` (se regenera con `python frames_elegir.py`). Datos: `../../data/frames.json`, validado con `contratos.py`.
-Fuente: {meta['fuente']}. Catálogos: `data/basurales/complejos.json` y `data/negativos/`.
+Generado por `motor/frames_elegir.py` (se regenera con `python frames_elegir.py`). Datos: `../data/catalogos/frames.json`, validado con `contratos.py`.
+Fuente: {meta['fuente']}. Catálogos: `data/catalogos/basurales/complejos.json` y `data/catalogos/negativos/`.
 
 **Orden de procesamiento:** la columna Prioridad. Si no da el tiempo, se procesan los primeros 3 o 4. El AMBA ya está procesado y queda **reservado para la prueba final** (Argentina no entra al entrenamiento).
 
@@ -782,7 +782,7 @@ Fuente: {meta['fuente']}. Catálogos: `data/basurales/complejos.json` y `data/ne
 
 ## Limitaciones
 - El estado conocido es casi todo de la EPA (EE. UU.): de los complejos de 10 ha o más con estado abierto o cerrado del catálogo, la gran mayoría está en EE. UU. La matriz de actividad (etapa 8) se reporta por país por eso.
-- Los negativos se muestrearon cerca de basurales con estado conocido (`idea/negativos-dataset.md`): fuera de EE. UU. hay pocos, salvo en el AMBA.
+- Los negativos se muestrearon cerca de basurales con estado conocido (`../docs/datos.md`): fuera de EE. UU. hay pocos, salvo en el AMBA.
 - `frame_nisar` de los catálogos todavía no se completó: lo hace la etapa 4 al leer cada frame.
 """
     with open(ruta, "w", encoding="utf-8") as fh:

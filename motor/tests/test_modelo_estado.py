@@ -1,7 +1,7 @@
 """El modelo de abierto contra cerrado al lado de los veredictos (`veredicto_estado.py`) y la regla con que se elige
 el modelo principal (`modelo_estado.elegir_principal`). Todo sintético y sin red.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 """
 import json
 import os

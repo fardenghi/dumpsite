@@ -10,7 +10,7 @@ Fuentes de entrada (bajadas a un directorio, ver `bajar_fuentes()`):
 - NASA EMIT L2B CH4PLM v002 (metadatos de CMR): `emit_p*.json`.
 
 Uso:
-    python curar_basurales.py <dir_descargas> ../../data/basurales
+    python curar_basurales.py <dir_descargas> ../data/catalogos/basurales
 """
 
 from __future__ import annotations
@@ -43,7 +43,7 @@ FUENTES = {
         "uso": "polígonos y áreas de los sitios OSM",
     },
     "curado_manual": {
-        "nombre": "Casos curados a mano por el equipo (data/basurales/casos_curados_argentina.json)",
+        "nombre": "Casos curados a mano por el equipo (data/catalogos/basurales/casos_curados_argentina.json)",
         "url": "ver 'fuentes_documentales' de cada sitio",
         "licencia": "cada nota o documento citado conserva la suya",
         "cita": "fuentes periodísticas y oficiales listadas por sitio",
@@ -281,7 +281,7 @@ def leer_lmop(dir_in):
 
 
 def leer_curados(ruta):
-    """Casos curados a mano (data/basurales/casos_curados_argentina.json) con coordenadas."""
+    """Casos curados a mano (data/catalogos/basurales/casos_curados_argentina.json) con coordenadas."""
     if not os.path.exists(ruta):
         return []
     sitios = []
@@ -541,7 +541,7 @@ def main(dir_in, dir_out):
     meta = {
         "titulo": "Catálogo curado de basurales y rellenos del mundo",
         "generado": HOY.isoformat(),
-        "script": "idea-basurales-nisar/herramientas/curar_basurales.py (salida en data/basurales/)",
+        "script": "motor/curar_basurales.py (salida en data/catalogos/basurales/)",
         "fuentes": FUENTES,
         "criterios": {
             "cruce": f"registros de distintas fuentes a menos de {RADIO_CRUCE_M} m se unen en un sitio; dos objetos OSM nunca se unen entre sí",

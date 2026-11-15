@@ -1,12 +1,12 @@
 """Baja de Overture Maps los polígonos de los sitios de los catálogos de basurales y de negativos.
 
-Lee los ids de `data/basurales/basurales_mundo.json` (objetos OSM, que se cruzan con el id de
-Overture usando `overture_landfill.parquet`) y de `data/negativos/negativos_*.json`
+Lee los ids de `data/catalogos/basurales/basurales_mundo.json` (objetos OSM, que se cruzan con el id de
+Overture usando `overture_landfill.parquet`) y de `data/catalogos/negativos/negativos_*.json`
 (`poligono.overture_id`). Baja solo esos polígonos, los simplifica a ~10 m y deja un parquet por
 archivo de Overture en <dir_descargas>/geom_parts/.
 
 Uso:
-    python geometrias_extraer.py <dir_descargas> ../../data
+    python geometrias_extraer.py <dir_descargas> ../data/catalogos/
 """
 
 from __future__ import annotations

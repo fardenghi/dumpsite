@@ -1,12 +1,12 @@
 """Etapa 1 del catálogo de negativos: extrae de Overture Maps los polígonos de los confusores.
 
 Lee `base/land_use`, `base/land`, `base/water` y `base/infrastructure` de la release indicada,
-se queda con las clases de `idea/negativos-dataset.md` y con superficie entre 2 y 500 ha, y
+se queda con las clases de `../docs/datos.md` y con superficie entre 2 y 500 ha, y
 solo en las celdas de 0,25° cercanas a basurales con estado conocido (proxy de "mismos frames
 de NISAR que los positivos"). Guarda un parquet por archivo en <dir_descargas>/neg_parts/.
 
 Uso:
-    python negativos_extraer.py <dir_descargas> ../../data/basurales/basurales_mundo.json
+    python negativos_extraer.py <dir_descargas> ../data/catalogos/basurales/basurales_mundo.json
 Requiere duckdb y acceso anónimo a s3://overturemaps-us-west-2.
 """
 

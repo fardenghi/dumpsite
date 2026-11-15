@@ -1,6 +1,6 @@
 """flujo.py (etapa 9): frames reales de salidas/<FRAME>/, controles del AMBA, matriz y casos para mirar a mano.
 
-Correr desde `herramientas/`:  python -m pytest tests/test_flujo.py -q
+Correr desde `motor/`:  python -m pytest tests/test_flujo.py -q
 Los tests con datos reales se saltean si la etapa 4 todavía no subió frames.
 """
 import glob

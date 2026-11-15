@@ -8,7 +8,7 @@ serie (`contraste_mediana`, `contraste_desvio`, `tendencia`, `eco_variacion`, `h
 - el anillo es el de `insomnio.anillo` (sin agua), todavía sin excluir los demás polígonos de los catálogos;
 - `compacidad` se mide sobre el borde en escalera de los píxeles de 80 m (da menos que la real).
 
-    python tabla_radar_provisional.py        # escribe ../datos/amba_provisional/tabla_radar.parquet (no se sube)
+    python tabla_radar_provisional.py        # escribe datos/amba_provisional/tabla_radar.parquet (no se sube)
 
 **No se escribe en `salidas/`** para no pisar el archivo de la etapa 4.
 """

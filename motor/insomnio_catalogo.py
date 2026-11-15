@@ -1,8 +1,8 @@
 """Etapa 4, segunda dirección del cruce: el insomnio sobre CADA polígono del catálogo de un frame.
 
-Lee el insomnio sobre cada basural (`data/basurales/geometrias.geojson`) y cada negativo (`data/negativos/`) que cae
+Lee el insomnio sobre cada basural (`data/catalogos/basurales/geometrias.geojson`) y cada negativo (`data/catalogos/negativos/`) que cae
 en el frame, haya quedado o no en una mancha, y escribe `salidas/insomnio_catalogo.parquet` con el contrato de
-`idea/contratos-datos.md` (sección 3). Sin esto no hay "cerrado y quieto" para un basural que no formó mancha (Luján).
+`../docs/contratos-datos.md` (sección 3). Sin esto no hay "cerrado y quieto" para un basural que no formó mancha (Luján).
 
 Dos modos:
   exacto      con los recortes por par (`salidas/recortes_80m/`): `insomnio.ficha()` por polígono, la misma serie
@@ -12,7 +12,7 @@ Dos modos:
 
     python insomnio_catalogo.py                     # exacto si están los recortes; si no, aproximado
     python insomnio_catalogo.py --modo aproximado
-    python insomnio_catalogo.py --salida /tmp/x     # carpeta de salida (por defecto ../salidas)
+    python insomnio_catalogo.py --salida /tmp/x     # carpeta de salida (por defecto ../data/salidas)
 
 Por ahora sólo el AMBA: `geo.py` tiene fija la grilla y la zona UTM 21 sur hasta que la etapa 1 la generalice.
 Los recortes: `gs://basurales-514714-salidas/salidas-v3.tgz` (ver README).

@@ -8,7 +8,7 @@ Entra una pila de coherencia por par (GUNW de NISAR) ya recortada a una grilla c
 Y por sitio conocido: la serie par a par contra un anillo y un veredicto.
 
 Las dos órbitas se calculan por separado (tienen geometrías distintas) y se promedian al final.
-Cómo se eligieron los umbrales: `pipeline_insomnio.py calibrar` y `idea/indice-final.md`.
+Cómo se eligieron los umbrales: `pipeline_insomnio.py calibrar` y `../docs/indice-insomnio.md`.
 """
 import warnings
 from dataclasses import asdict, dataclass

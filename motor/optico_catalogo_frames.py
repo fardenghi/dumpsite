@@ -6,13 +6,13 @@ que no están ni en `salidas/optico_estado_conocido/` (prompt 7, sólo los de es
 `optico_estado_conocido.py`: usa `extraer_optico.extraer()` sin modificarlo, con el mismo período y anillo.
 
     python optico_catalogo_frames.py preparar                      # arma datos/optico_frames/trabajo.json (sin red)
-    python optico_catalogo_frames.py correr                        # lee Sentinel-2 y escribe ../salidas/optico_catalogo_frames.parquet
+    python optico_catalogo_frames.py correr                        # lee Sentinel-2 y escribe ../data/salidas/optico_catalogo_frames.parquet
     python optico_catalogo_frames.py correr --trabajo t.json --salida s.parquet --hilos 16
 
 `preparar` y `correr` van separados para poder correr la lectura en otra máquina (la VM) sin llevar los catálogos:
 el trabajo trae cada polígono a medir y los polígonos de los catálogos que tiene cerca (para sacarlos del anillo).
 
-Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer. Catálogo: ver `../../data/README.md`.
+Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer. Catálogo: ver `../data/README.md`.
 """
 import argparse
 import glob

@@ -1,6 +1,6 @@
 """Etapa 4: de las manchas en píxeles a polígonos, la tabla de radar y el insomnio del catálogo. Sintético y sin red.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 """
 import argparse
 import json

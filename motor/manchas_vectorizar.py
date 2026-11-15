@@ -5,8 +5,8 @@ con `insomnio.manchas()` (mismos parámetros que el índice) y vectoriza cada ma
 manchas, también las descartadas (`descartada` dice el motivo), con `id_mancha` = `MAN-<frame>-<n>` en el orden de
 `insomnio.manchas()` (de mayor a menor superficie).
 
-    python manchas_vectorizar.py                                    # el AMBA: ../salidas/indice_80m.npz
-    python manchas_vectorizar.py --indice otro.npz --frame DELHI --epsg 32643 --salida ../salidas/DELHI
+    python manchas_vectorizar.py                                    # el AMBA: ../data/salidas/indice_80m.npz
+    python manchas_vectorizar.py --indice otro.npz --frame DELHI --epsg 32643 --salida ../data/salidas/DELHI
 
 Es el `manchas.geojson` del AMBA mientras no esté la etapa 4: cuando la VM lo escriba, ese reemplaza a este.
 Las geometrías son los bordes de los píxeles de 80 m (en escalera), pasados de UTM a grados.
@@ -73,7 +73,7 @@ def armar(indice, frame, epsg, p=None):
         feats.append({"type": "Feature", "properties": props, "geometry": geoms[m["etiqueta"]]})
     return {
         "type": "FeatureCollection",
-        "meta": {"generado_por": "herramientas/manchas_vectorizar.py", "indice": os.path.basename(indice), "frame": frame,
+        "meta": {"generado_por": "motor/manchas_vectorizar.py", "indice": os.path.basename(indice), "frame": frame,
                  "epsg": epsg, "paso_m": paso, "parametros": p.dict(),
                  "fuentes": ["NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC", "JRC Global Surface Water v1.4"]},
         "features": feats,

@@ -12,7 +12,7 @@ Cada complejo hereda un estado agregado:
 - `desconocido` si ninguna tiene estado.
 
 Uso:
-    python complejos_agrupar.py ../../data            # escribe data/basurales/complejos.json
+    python complejos_agrupar.py ../data/catalogos/            # escribe data/catalogos/basurales/complejos.json
 """
 
 from __future__ import annotations
@@ -114,7 +114,7 @@ def main(dir_data):
     salida = {
         "meta": {
             "titulo": "Complejos: basurales del catálogo a menos de 1 km entre sí",
-            "generado_por": "idea-basurales-nisar/herramientas/complejos_agrupar.py",
+            "generado_por": "motor/complejos_agrupar.py",
             "criterio": f"distancia geodésica entre geometrías <= {DIST_M:.0f} m, agrupada por componentes conexas; los polígonos de menos de {AREA_MIN_UNE_HA:g} ha no unen (quedan solos)",
             "uso": "Validación por grupos (un complejo entero en la misma partición) y una sola etiqueta por complejo. Al extraer, el anillo excluye todos los polígonos de los catálogos.",
             "conteos": {

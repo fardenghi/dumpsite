@@ -5,13 +5,13 @@ lo da abierto o cerrado? Las etiquetas son las del registro (`estado` del catál
 **no** salen del insomnio. Se entrena con los basurales de 10 ha o más de los frames procesados, menos el AMBA, que
 queda como prueba. Después se predice a los que no tienen estado.
 
-    python modelo_estado.py            # escribe ../salidas/modelo_estado.json y ../salidas/predicciones_estado.parquet
+    python modelo_estado.py            # escribe ../data/salidas/modelo_estado.json y ../data/salidas/predicciones_estado.parquet
 
 Tres familias de variables por predio:
 - **frente** (10): las de `radar_frente.py`, que miran la parte del predio que más cambia (variación del eco por píxel,
-  el peor parche de coherencia). Salen de `../salidas/radar_frente.parquet`.
+  el peor parche de coherencia). Salen de `../data/salidas/radar_frente.parquet`.
 - **óptico** (8): Sentinel-2, predio contra anillo.
-- **radar de antes** (7): las del predio entero (insomnio, persistencia, eco…), de `../salidas/insomnio_catalogo.parquet`.
+- **radar de antes** (7): las del predio entero (insomnio, persistencia, eco…), de `../data/salidas/insomnio_catalogo.parquet`.
 
 **Cómo se elige el modelo principal (fijado acá, antes de mirar el AMBA):** de `CANDIDATOS`, que van del más simple
 al más complejo, el primero cuyo AUC (regresión logística, un frame afuera por vez) no quede a más de `TOLERANCIA`
@@ -26,9 +26,9 @@ Qué reporta:
   cada variable, y el AUC adentro de cada tercil de área (control por tamaño).
 - La prueba reservada del AMBA, con cada candidato.
 
-Entradas: `../salidas/insomnio_catalogo.parquet`, `../salidas/radar_frente.parquet` y el óptico de
-`../salidas/optico_estado_conocido/` (prompt 7), `../salidas/tabla_optico_catalogo.parquet` (prompt 4) y
-`../salidas/optico_catalogo_frames.parquet`. No es una probabilidad calibrada y el estado del registro puede estar
+Entradas: `../data/salidas/insomnio_catalogo.parquet`, `../data/salidas/radar_frente.parquet` y el óptico de
+`../data/salidas/optico_estado_conocido/` (prompt 7), `../data/salidas/tabla_optico_catalogo.parquet` (prompt 4) y
+`../data/salidas/optico_catalogo_frames.parquet`. No es una probabilidad calibrada y el estado del registro puede estar
 desactualizado.
 """
 import glob
@@ -64,7 +64,7 @@ GRUPOS = {"frente": FRENTE, "óptico": OPTICO, "frente + óptico": FRENTE + OPTI
 CANDIDATOS = ("frente", "frente + óptico", "frente + óptico + radar de antes")  # del más simple al más complejo
 TOLERANCIA = 0.02
 # El estado "abierto" de Norte III es del complejo (caso curado, con coordenada aproximada) y en el catálogo quedó pegado
-# a `BAS-053304`, un sector cubierto de vegetación (ver idea/norte-iii.md). Por eso la prueba trae, además de los
+# a `BAS-053304`, un sector cubierto de vegetación (ver ../docs/resultados.md). Por eso la prueba trae, además de los
 # polígonos sueltos, el complejo `CPX-015400` medido como una sola unidad (lo mide `radar_frente.py`, `UNIDADES`).
 PRUEBA_IDS = {"BAS-000007": "Basural de Luján",
               "CPX-015400": "Norte III, el complejo como una sola unidad (BAS-053304 + módulo C + BAS-016796)",
@@ -272,7 +272,7 @@ def main():
                              "ndvi_contraste", "swir_b12_contraste"]].round(3).to_dict("records")
     sin = d[d["y"].isna()]
     salida = {
-        "generado_por": "herramientas/modelo_estado.py",
+        "generado_por": "motor/modelo_estado.py",
         "pregunta": "con el radar y el óptico de un predio, ¿el registro lo da abierto o cerrado?",
         "etiquetas": "estado del registro (EPA LMOP, OSM, casos curados); no salen del insomnio y pueden estar desactualizadas",
         "muestras": {"n": int(len(e)), "abiertos": int(y.sum()), "cerrados": int((1 - y).sum()), "frames": int(e["frame"].nunique()),

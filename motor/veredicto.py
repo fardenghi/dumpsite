@@ -1,4 +1,4 @@
-"""Etapa 9: junta el cruce en las dos direcciones y da un veredicto por sitio (tabla de `idea/plan-entrenamiento.md`).
+"""Etapa 9: junta el cruce en las dos direcciones y da un veredicto por sitio (tabla de `../docs/modelo.md`).
 
 Del catálogo a las manchas (`insomnio_catalogo.parquet`, una fila por polígono del catálogo) y de las manchas al
 catálogo (`cruce_manchas_catalogo.parquet`, lo escribe el prompt 3). La probabilidad de basural sale de
@@ -24,8 +24,8 @@ Decisiones (no estaban en el plan):
 - El registro de un polígono sin estado toma el de su complejo si lo tiene (Norte III C no tiene estado propio; el
   complejo Norte III figura abierto).
 
-    python veredicto.py                                   # lee y escribe en ../salidas
-    python veredicto.py --carpeta ../datos/mock --salida /tmp/v.json
+    python veredicto.py                                   # lee y escribe en ../data/salidas
+    python veredicto.py --carpeta datos/mock --salida /tmp/v.json
     python veredicto.py --frame AMBA --umbral 0.5
 """
 import argparse
@@ -234,7 +234,7 @@ def main(argv=None):
     vs = calcular(ic, cruce, manchas, pred, umbral=args.umbral, frame=args.frame)
     r = resumen(vs)
     meta = {
-        "generado": dt.datetime.now().isoformat(timespec="seconds"), "generado_por": "herramientas/veredicto.py",
+        "generado": dt.datetime.now().isoformat(timespec="seconds"), "generado_por": "motor/veredicto.py",
         "entradas": {"insomnio_catalogo": True, "cruce_manchas_catalogo": cruce is not None, "manchas": manchas is not None,
                      "predicciones": pred is not None},
         "carpeta": os.path.relpath(args.carpeta, RAIZ), "umbral_p_basural": args.umbral, "criterio_cruce": contratos.CRITERIO_CRUCE,

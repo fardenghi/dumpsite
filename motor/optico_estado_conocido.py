@@ -8,18 +8,18 @@ No usa NISAR ni la VM: lee ventanas de Sentinel-2 L2A con `extraer_optico.py` (s
 entre varias compus y cortar y seguir: cada celda de 1° se guarda en `datos/optico_estado/celdas/` (no se sube).
 
     python optico_estado_conocido.py correr --parte 1/3     # un tercio de las celdas; las otras compus, 2/3 y 3/3
-    python optico_estado_conocido.py juntar                 # arma ../salidas/optico_estado_conocido.parquet con lo que haya
+    python optico_estado_conocido.py juntar                 # arma ../data/salidas/optico_estado_conocido.parquet con lo que haya
     python optico_estado_conocido.py resumen                # abiertos contra cerrados, en total y por país
 
-`correr` deja al final su parte en `../salidas/optico_estado_conocido/parte_<i>de<n>.parquet` (chico: se sube).
+`correr` deja al final su parte en `../data/salidas/optico_estado_conocido/parte_<i>de<n>.parquet` (chico: se sube).
 `juntar` lee todas las partes subidas más las celdas locales.
 
 - Período: del 21/10/2025 al 21/10/2026 (el año de NISAR de los frames), hasta 10 fechas repartidas en el año.
 - Anillo de 1,5 km sin agua y sin los demás polígonos de los catálogos, igual que en `extraer_optico.py`.
-- El estado es el del registro (`data/basurales/`: EPA LMOP, OSM y casos curados). Puede estar desactualizado.
+- El estado es el del registro (`data/catalogos/basurales/`: EPA LMOP, OSM y casos curados). Puede estar desactualizado.
 - **El umbral no se toca acá:** `resumen` reporta el de −0,15 ya fijado, y además el AUC, que no depende del umbral.
 
-Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer. Catálogo: ver `../../data/README.md`.
+Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer. Catálogo: ver `../data/README.md`.
 """
 import argparse
 import glob
@@ -234,7 +234,7 @@ def resumen():
     filas += [fila(f"cerrados con fecha de cierre {txt}", pd.concat([t[t.estado == "abierto"], t[(t.estado == "cerrado") & m]]))
               for txt, m in (("hasta 2015", t.fecha_cierre.astype(str).str[:4].str.isdigit() & (t.fecha_cierre.astype(str).str[:4] <= "2015")),
                              ("desde 2016", t.fecha_cierre.astype(str).str[:4].str.isdigit() & (t.fecha_cierre.astype(str).str[:4] >= "2016")))]
-    salida = {"generado_por": "herramientas/optico_estado_conocido.py resumen", "periodo": PERIODO, "umbral_ndvi_contraste": UMBRAL_NDVI,
+    salida = {"generado_por": "motor/optico_estado_conocido.py resumen", "periodo": PERIODO, "umbral_ndvi_contraste": UMBRAL_NDVI,
               "nota": "pelado = ndvi_contraste < umbral. AUC = probabilidad de que un abierto sea menos verde, contra su entorno, "
                       "que un cerrado. El estado es el del registro y puede estar desactualizado.", "grupos": filas}
     destino = SALIDA.replace(".parquet", "_resumen.json")

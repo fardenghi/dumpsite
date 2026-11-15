@@ -1,13 +1,13 @@
 """Etapa 2 del catálogo de negativos: clasifica, filtra y muestrea los confusores.
 
 Toma los parquet de `negativos_extraer.py`, asigna a cada polígono una clase de
-`idea/negativos-dataset.md`, descarta lo que está a menos de 500 m de un basural del catálogo
+`../docs/datos.md`, descarta lo que está a menos de 500 m de un basural del catálogo
 y arma dos archivos con el mismo estilo que el catálogo de positivos:
 - `negativos_mundo.json`: muestra balanceada por clase y por celda de 1°, cerca de positivos.
 - `negativos_amba.json`: todos los confusores del AMBA (con tope por clase).
 
 Uso:
-    python negativos_curar.py <dir_descargas> ../../data/basurales/basurales_mundo.json ../../data/negativos
+    python negativos_curar.py <dir_descargas> ../data/catalogos/basurales/basurales_mundo.json ../data/catalogos/negativos
 """
 
 from __future__ import annotations
@@ -76,7 +76,7 @@ FUENTES = {
     },
     "catalogo_basurales": {
         "nombre": "Catálogo curado de basurales del equipo",
-        "url": "data/basurales/basurales_mundo.json",
+        "url": "data/catalogos/basurales/basurales_mundo.json",
         "uso": "excluir negativos a menos de 500 m de un basural e inferir el país",
     },
 }
@@ -318,8 +318,8 @@ def main(dir_in, ruta_catalogo, dir_out):
     meta = {
         "titulo": "Catálogo de negativos: lo que el radar puede confundir con un basural",
         "generado": HOY.isoformat(),
-        "documento": "idea-basurales-nisar/idea/negativos-dataset.md",
-        "scripts": ["idea-basurales-nisar/herramientas/negativos_extraer.py", "idea-basurales-nisar/herramientas/negativos_curar.py"],
+        "documento": "docs/datos.md",
+        "scripts": ["motor/negativos_extraer.py", "motor/negativos_curar.py"],
         "fuentes": FUENTES,
         "clases": {k: {"prioridad": v[0], "grupo": v[1], "rol": v[2]} for k, v in CLASES.items()},
         "clases_pendientes": PENDIENTES,

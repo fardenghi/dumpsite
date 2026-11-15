@@ -9,7 +9,7 @@ punto de Ciudad de México (19.4270, -99.1677 -> 482395.1, 2148083.7 en EPSG 326
 al azar en cada una de 8 zonas de los dos hemisferios: la diferencia máxima es de 2 mm.
 
 Un **frame** es un área de trabajo: una caja en lat/lon, el EPSG de su grilla y las órbitas de NISAR que la cubren.
-Sale de `../../data/frames.json` (etapa 2), de `<salida>/<FRAME>/frame.json` (lo escribe el pipeline) o de `--caja`.
+Sale de `../data/catalogos/frames.json` (etapa 2), de `<salida>/<FRAME>/frame.json` (lo escribe el pipeline) o de `--caja`.
 """
 import json
 import math

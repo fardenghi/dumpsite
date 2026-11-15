@@ -1,4 +1,4 @@
-"""Etapa 4: manchas y extractor de radar, frame por frame (ver `idea/plan-entrenamiento.md`).
+"""Etapa 4: manchas y extractor de radar, frame por frame (ver `../docs/modelo.md`).
 
 Por cada frame, con los recortes que dejó `pipeline_insomnio.py procesar`:
   1. calcula el insomnio por píxel y arma las manchas (los mismos filtros del índice: agua, forma, eco y 10 ha);
@@ -8,11 +8,11 @@ Por cada frame, con los recortes que dejó `pipeline_insomnio.py procesar`:
   4. mide el insomnio de cada polígono de los catálogos del frame, haya quedado o no en una mancha, y escribe
      `insomnio_catalogo.parquet` (la segunda dirección del cruce: sin esto no hay "cerrado y quieto").
 
-    python extraer_manchas.py --frame LOS_ANGELES             # un frame: escribe en ../salidas/LOS_ANGELES/
+    python extraer_manchas.py --frame LOS_ANGELES             # un frame: escribe en ../data/salidas/LOS_ANGELES/
     python extraer_manchas.py --frame todos                   # todos los de data/frames.json que tengan recortes
-    python extraer_manchas.py juntar                          # junta los frames en ../salidas/*.geojson y *.parquet
+    python extraer_manchas.py juntar                          # junta los frames en ../data/salidas/*.geojson y *.parquet
 
-Los tres archivos siguen `idea/contratos-datos.md` (se validan con `contratos.py`). El anillo no tiene agua ni
+Los tres archivos siguen `../docs/contratos-datos.md` (se validan con `contratos.py`). El anillo no tiene agua ni
 polígonos de los catálogos. Todo sale de `insomnio.py`, sin copiar la lógica: `cocientes`, `por_orbita`,
 `persistencia`, `anillo` y `ficha`.
 
@@ -48,7 +48,7 @@ PARTES = ("manchas.geojson", "tabla_radar.parquet", "insomnio_catalogo.parquet")
 #   eco_var_p90    variación del eco en el tiempo, por píxel (percentil 90 del predio, dB)
 # Es una regresión logística ajustada con 53 predios de 9 frames (19 con actividad visible en Sentinel-2 y 34 sin),
 # con etiquetas ópticas asignadas por IA (`salidas/etiquetas_optico_ia.json`). Dejando un frame afuera por vez da
-# AUC 0,75 (IC 95 %: 0,59 a 0,89), contra 0,60 de la mediana del predio. El AMBA no se usó. Ver idea/indice-actividad.md.
+# AUC 0,75 (IC 95 %: 0,59 a 0,89), contra 0,60 de la mediana del predio. El AMBA no se usó. Ver ../docs/indice-insomnio.md.
 ACTIVIDAD = {"intercepto": -0.75, "contraste_p10": (-1.17, 0.483, 0.136), "eco_var_p90": (0.65, 3.046, 0.790)}  # (coeficiente, media, desvío)
 UMBRAL_ACTIVIDAD = 0.45  # el que maximiza la exactitud balanceada sobre los 53 predios
 
@@ -380,8 +380,8 @@ def _guardar_manchas(features, carpeta, meta):
     return ruta
 
 
-META = {"fuente": "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC; índice de insomnio de herramientas/insomnio.py",
-        "generado_por": "herramientas/extraer_manchas.py", "aviso": "Señal compatible con actividad; no son basurales verificados."}
+META = {"fuente": "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC; índice de insomnio de motor/insomnio.py",
+        "generado_por": "motor/extraer_manchas.py", "aviso": "Señal compatible con actividad; no son basurales verificados."}
 
 
 def _sin_chicas(features, min_ha):

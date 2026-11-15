@@ -3,7 +3,7 @@
 Es una prueba independiente de la calibración: los catálogos no se usaron para elegir los umbrales. Pero no es una
 validación fuerte: en la grilla del AMBA hay pocos basurales que se puedan medir a 80 m.
 
-    python cruce_catalogo.py                       # el índice de referencia, ../salidas/indice_80m.npz
+    python cruce_catalogo.py                       # el índice de referencia, ../data/salidas/indice_80m.npz
     python cruce_catalogo.py --indice otra.npz --min-ha 5
 
 - Positivos: los basurales de `basurales/geometrias.geojson` que caen en la grilla, agrupados por complejo

@@ -1,6 +1,6 @@
 """Prompt 4: `modelo_por_frame.py` (cruce y óptico frame por frame, juntar) y los controles de `entrenar.py`.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 No usan la red: el óptico no se llama y las fechas se prueban con escenas inventadas.
 """
 import json

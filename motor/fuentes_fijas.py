@@ -2,14 +2,14 @@
 
   python fuentes_fijas.py agua      [--frame X]   máscara de agua de JRC Global Surface Water sobre la grilla del frame
   python fuentes_fijas.py usos      [--frame X]   polígonos de usos conocidos (aeródromos, golf, parques, ...) de Overture Maps
-  python fuentes_fijas.py catalogo  [--frame X]   polígonos de `data/basurales/` y `data/negativos/` que caen en el frame (sin red)
+  python fuentes_fijas.py catalogo  [--frame X]   polígonos de `data/catalogos/basurales/` y `data/catalogos/negativos/` que caen en el frame (sin red)
   python fuentes_fijas.py cobertura [--frame X]   fracción urbana y de cultivo de ESA WorldCover (contexto del modelo, etapa 4)
   python fuentes_fijas.py todo      [--frame X]   las cuatro cosas
   python fuentes_fijas.py sitios                  contornos de OpenStreetMap de los sitios de sitios_registro.json (sólo AMBA)
 
-El frame sale de `../../data/frames.json` o de `--caja lon_oeste lat_sur lon_este lat_norte` (con `--frame NOMBRE`).
+El frame sale de `../data/catalogos/frames.json` o de `--caja lon_oeste lat_sur lon_este lat_norte` (con `--frame NOMBRE`).
 Los resultados quedan cacheados por frame en `fijos/<FRAME>/` (no se suben: `indice` los rehace solo si faltan).
-Los del AMBA sí van al repo, sueltos en `fijos/`: son los de referencia de `idea/indice-final.md` (los usos, de
+Los del AMBA sí van al repo, sueltos en `fijos/`: son los de referencia de `../docs/indice-insomnio.md` (los usos, de
 Nominatim) y con ellos `indice` no necesita red. Para rehacerlos hay que pasar `--pisar`.
 
 Fuentes:
@@ -21,7 +21,7 @@ Fuentes:
 - © colaboradores de OpenStreetMap, licencia ODbL 1.0. Geometrías por la API de OSM y por Nominatim (sitios y usos del AMBA).
 - ESA WorldCover 10 m 2021 v200. Zanaga et al. (2022), doi:10.5281/zenodo.7254221. © ESA WorldCover project,
   licencia CC BY 4.0. https://esa-worldcover.org/
-- Catálogos de `data/` (ver `../../data/README.md`): Overture/OSM (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP y NASA EMIT.
+- Catálogos de `data/` (ver `../data/README.md`): Overture/OSM (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP y NASA EMIT.
 """
 import argparse
 import json
@@ -356,7 +356,7 @@ def catalogo(fr, destino=None, data=DATA):
                                "prioridad": p.get("prioridad"), "rol": p.get("rol"), "area_ha": p.get("area_ha"), "anillos": anillos})
     ruta = os.path.join(destino, "catalogo.json")
     n = {c: sum(1 for x in salida if x["catalogo"] == c) for c in ("basurales", "negativos")}
-    _guardar_json(ruta, {"fuente": "data/basurales/geometrias.geojson, data/negativos/geometrias_amba.geojson y geometrias_mundo.parquet "
+    _guardar_json(ruta, {"fuente": "data/catalogos/basurales/geometrias.geojson, data/catalogos/negativos/geometrias_amba.geojson y geometrias_mundo.parquet "
                                    "(Overture Maps 2026-10-21.0: © colaboradores de OpenStreetMap, ODbL 1.0; ver data/README.md)",
                          "armado": time.strftime("%Y-%m-%d"), "frame": fr.nombre, "bbox": fr.bbox, "margen_grados": MARGEN_CATALOGO,
                          "conteo": n, "poligonos": salida})
@@ -484,7 +484,7 @@ def main():
         else:
             fr = geo.frame(nombre, os.path.join(args.salida, nombre.upper()))
         if fr.nombre == "AMBA" and not args.destino and not args.pisar and args.paso not in ("catalogo", "cobertura"):
-            sys.exit("Los archivos de fijos/ del AMBA son los de referencia de idea/indice-final.md. Pasá --destino para "
+            sys.exit("Los archivos de fijos/ del AMBA son los de referencia de ../docs/indice-insomnio.md. Pasá --destino para "
                      "escribir en otro lado, o --pisar para rehacerlos (los usos pasan de Nominatim a Overture).")
         print(f"== {fr.nombre}: caja {fr.bbox}, EPSG {fr.epsg}")
         if args.paso in ("agua", "todo"):

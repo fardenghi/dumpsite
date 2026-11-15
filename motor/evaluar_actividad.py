@@ -9,7 +9,7 @@ la EPA, OSM y los casos curados de Argentina) compara el estado del registro con
 - Los frames que todavía no tienen filas en `insomnio_catalogo` se informan como "sin procesar".
 - Intervalo de confianza de Wilson al 95 % para las tasas: con pocos sitios, el margen es grande y hay que decirlo.
 
-    python evaluar_actividad.py                                  # ../salidas -> ../salidas/evaluacion_actividad.json
+    python evaluar_actividad.py                                  # ../data/salidas -> ../data/salidas/evaluacion_actividad.json
     python evaluar_actividad.py --fuentes epa_lmop curado_manual # sin los cerrados de OSM (etiquetas disused, sin fecha)
 """
 import argparse
@@ -133,7 +133,7 @@ def main(argv=None):
     r = evaluar(ec, ic, args.fuentes, args.min_ha)
     modo = sorted(ic["modo"].unique().tolist()) if "modo" in ic else None
     meta = {
-        "generado": dt.datetime.now().isoformat(timespec="seconds"), "generado_por": "herramientas/evaluar_actividad.py",
+        "generado": dt.datetime.now().isoformat(timespec="seconds"), "generado_por": "motor/evaluar_actividad.py",
         "entradas": [os.path.relpath(args.estado_conocido, RAIZ), os.path.relpath(args.insomnio_catalogo, RAIZ)],
         "fuentes_del_estado": args.fuentes, "min_ha": args.min_ha, "modo_insomnio": modo,
         "lectura": ("Filas: estado del registro. Columnas: lo que dice el radar sobre el polígono (insomnio.ficha). "

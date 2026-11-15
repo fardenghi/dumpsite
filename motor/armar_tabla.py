@@ -1,24 +1,24 @@
 """Etapa 6: junta radar, óptico y cruce de cada mancha, la etiqueta y arma las particiones por frame.
 
-Escribe `tabla_entrenamiento.parquet` y `particiones.json` según `idea/contratos-datos.md`.
+Escribe `tabla_entrenamiento.parquet` y `particiones.json` según `../docs/contratos-datos.md`.
 
-    python armar_tabla.py                                  # lee y escribe en ../salidas/
-    python armar_tabla.py --datos ../datos/mock --salida ../datos/mock/prueba
-    python armar_tabla.py --radar ../datos/amba_provisional/tabla_radar.parquet --salida ../datos/amba_provisional
+    python armar_tabla.py                                  # lee y escribe en ../data/salidas/
+    python armar_tabla.py --datos datos/mock --salida datos/mock/prueba
+    python armar_tabla.py --radar datos/amba_provisional/tabla_radar.parquet --salida datos/amba_provisional
 
 Etiqueta (etapa 6 del plan):
 - una mancha se cruza con un polígono si la intersección cubre al menos `--criterio` (0,30) del área menor y, si el
-  cruce trae `inter_ha`, además mide al menos `--min-inter-ha` (5,12 ha = 8 píxeles de 80 m; ver `idea/criterio-cruce.md`);
+  cruce trae `inter_ha`, además mide al menos `--min-inter-ha` (5,12 ha = 8 píxeles de 80 m; ver `../docs/modelo.md`);
 - se cruza sólo con basurales (de cualquier estado) → `basural_activo`; sólo con negativos → `otro_movil`;
   con los dos o con ninguno → no entra;
 - un complejo cuenta una vez: si varias manchas caen sobre el mismo complejo (o el mismo negativo), queda la más grande;
 - `id_catalogo` es el polígono de mayor `frac_area_menor`.
 
-Opciones que se agregaron con la corrida 2 (ver `idea/resultados-modelo.md`):
+Opciones que se agregaron con la corrida 2 (ver `../docs/resultados.md`):
 - `--negativos-osm`: suma como `otro_movil` las manchas candidatas que la etapa 4 marcó `clase_osm` = `uso_conocido`
   (aeródromos, golf, parques, cementerios, canteras, forestación, predios militares y reservas de OSM vía Overture) y
   que **no tocan ningún basural del catálogo** ni tienen nombre de relleno (`NOMBRE_DE_RELLENO`: "Freshkills Park"). Sólo en los frames que no son de la prueba final (en el AMBA esa marca
-  sale de Nominatim y no es comparable). Su `id_catalogo` es `NEG-OSM-<id_mancha>` (no están en `data/negativos/`),
+  sale de Nominatim y no es comparable). Su `id_catalogo` es `NEG-OSM-<id_mancha>` (no están en `data/catalogos/negativos/`),
   su `clase_negativo` es `osm_<tipo>` y, si el lugar tiene nombre, todas sus manchas cuentan una vez.
 - `--etiquetas-optico` y `--positivos`: `salidas/etiquetas_optico_ia.json` dice, por basural, si en Sentinel-2 se ve
   actividad (`act`), no se ve (`sin`) o no se puede decir (`nose`). **Las puso una IA y no las revisó una persona.**
@@ -51,7 +51,7 @@ def leer_frames(camino):
         df = contratos.leer(camino)
         return {r["frame"]: {"ciudad": r["ciudad"], "pais": r["pais"], "reservado_prueba": bool(r["reservado_prueba"])}
                 for _, r in df.iterrows()}
-    print(f"Aviso: no hay frames.json ({camino or "../../data/frames.json"}); se usan los datos por defecto del AMBA.", file=sys.stderr)
+    print(f"Aviso: no hay frames.json ({camino or "../data/catalogos/frames.json"}); se usan los datos por defecto del AMBA.", file=sys.stderr)
     return dict(FRAMES_POR_DEFECTO)
 
 
@@ -177,7 +177,7 @@ def armar(radar, optico, cruce, frames, criterio=contratos.CRITERIO_CRUCE, min_i
     partes = repartir(entrenar.groupby("frame").size().to_dict(), k) if len(entrenar) else {}
     conteos = {f: g["clase"].value_counts().to_dict() for f, g in t.groupby("frame")}
     particiones = {
-        "meta": {"generado_por": "herramientas/armar_tabla.py", "umbral_insomnio": umbral_insomnio,
+        "meta": {"generado_por": "motor/armar_tabla.py", "umbral_insomnio": umbral_insomnio,
                  "criterio_cruce": criterio, "min_inter_ha": min_inter_ha if "inter_ha" in cruce.columns else None,
                  "negativos_osm": bool(con_negativos_osm), "negativos_osm_antes_de_agrupar": int(n_osm),
                  "positivos": positivos, "positivos_sacados_por_el_optico": sacadas,
@@ -194,7 +194,7 @@ def main():
     a.add_argument("--radar")
     a.add_argument("--optico")
     a.add_argument("--cruce")
-    a.add_argument("--frames", help="frames.json (por defecto ../../data/frames.json, o el de --datos si existe)")
+    a.add_argument("--frames", help="frames.json (por defecto ../data/catalogos/frames.json, o el de --datos si existe)")
     a.add_argument("--cnn", help="parquet con id_mancha y cnn_p_basural (opcional)")
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--criterio", type=float, default=contratos.CRITERIO_CRUCE)

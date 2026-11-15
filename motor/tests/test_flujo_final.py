@@ -3,7 +3,7 @@
 Casos sintéticos para cada fila de la tabla del veredicto y pruebas con el AMBA real (`salidas/`).
 Las del modo exacto necesitan los recortes por par (`salidas/recortes_80m/`); si no están, se saltean.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 """
 import json
 import os

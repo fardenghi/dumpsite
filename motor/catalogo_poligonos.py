@@ -1,4 +1,4 @@
-"""Polígonos de los catálogos (`../data/basurales/` y `../data/negativos/`) y de las manchas, como shapely, para cruzar.
+"""Polígonos de los catálogos (`../data/catalogos/basurales/` y `../data/catalogos/negativos/`) y de las manchas, como shapely, para cruzar.
 
 Lo usan `cruce_manchas.py` y `extraer_optico.py`. No calcula nada del radar.
 

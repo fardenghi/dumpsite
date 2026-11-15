@@ -4,12 +4,12 @@ Por qué: el insomnio de `insomnio_catalogo.parquet` es la mediana del predio en
 abierto tiene un frente de descarga chico (1 % del polígono) en medio de celdas ya tapadas. Acá se mide, con las
 series por píxel de los mismos recortes de 80 m, la parte del predio que más cambia.
 
-    python radar_frente.py medir                          # los frames con recortes en ../salidas/<FRAME>/recortes_80m
+    python radar_frente.py medir                          # los frames con recortes en ../data/salidas/<FRAME>/recortes_80m
     python radar_frente.py medir --recortes /otra/carpeta # además, recortes leídos a otra carpeta (AMBA: <carpeta>/recortes_80m)
     python radar_frente.py evaluar                        # compara con las 7 variables de radar de `modelo_estado.py`
 
-`medir` escribe `../salidas/radar_frente.parquet` (una fila por basural de 10 ha o más y frame). `evaluar` escribe
-`../salidas/radar_frente_evaluacion.json`. No modifica nada de lo que ya está: lee los recortes con
+`medir` escribe `../data/salidas/radar_frente.parquet` (una fila por basural de 10 ha o más y frame). `evaluar` escribe
+`../data/salidas/radar_frente_evaluacion.json`. No modifica nada de lo que ya está: lee los recortes con
 `pipeline_insomnio.cargar()` y usa `insomnio.anillo()` (el mismo anillo de 1,5 km, sin agua ni polígonos de los catálogos).
 
 Las variables (todas contra el anillo del predio, para que el clima y la estación se cancelen):
@@ -39,7 +39,7 @@ Las variables (todas contra el anillo del predio, para que el clima y la estaci�
 
 Los umbrales (0,8 y 70 %) son los de `insomnio.Parametros`, sin tocar. Las variables se decidieron antes de mirar el AMBA.
 
-Datos: NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC. Agua: JRC Global Surface Water v1.4. Catálogo: `../../data/README.md`.
+Datos: NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC. Agua: JRC Global Surface Water v1.4. Catálogo: `../data/README.md`.
 """
 import argparse
 import glob
@@ -75,7 +75,7 @@ SENTIDO_ACTIVIDAD = {"eco_std_rel_p90": 1, "ecohv_std_rel_p90": 1, "eco_std_rel_
                      "frente_coh_fijo": -1, "frente_vs_predio": -1, "parche_bajo_ha": 1, "parche_bajo_frac": 1, "parche_se_mueve": 1,
                      "insomnio_px_max3": 1, "insomnio_px_p95": 1, "parche_insomnio90_ha": 1, "insomnio_parche_se_mueve": 1, "eco_std_en_parche": 1}
 # Complejos que además se miden como una sola unidad (la unión de sus polígonos), para la prueba del AMBA: en Norte III
-# el estado "abierto" es del complejo y quedó pegado a un solo polígono (ver idea/norte-iii.md). Van a la tabla con el
+# el estado "abierto" es del complejo y quedó pegado a un solo polígono (ver ../docs/resultados.md). Van a la tabla con el
 # id del complejo; no son filas del catálogo y no entran al entrenamiento.
 UNIDADES = {"AMBA": {"CPX-015400": ["BAS-053304", "BAS-053307", "BAS-016796"]}}
 PRUEBA_AMBA = {"BAS-000007": "Basural de Luján (cerrado el 1/07/2026)", "BAS-053304": "Norte III, polígono con estado abierto",
@@ -347,7 +347,7 @@ def cmd_evaluar(args):
             print(f"  AMBA {PRUEBA_AMBA[fila['id_catalogo']]:42s} radar actual {a:.2f} | frente {b:.2f} | los dos {c:.2f}")
     else:
         print("  AMBA: sin recortes medidos (pasá --recortes a `medir`)")
-    salida = {"generado_por": "herramientas/radar_frente.py evaluar",
+    salida = {"generado_por": "motor/radar_frente.py evaluar",
               "muestras": {"n": int(len(e)), "abiertos": int(y.sum()), "cerrados": int((1 - y).sum()), "frames": sorted(set(g))},
               "validacion": "regresión logística como en modelo_estado.py; un frame afuera por vez; IC 95 % por remuestreo",
               "auc": auc, "variables_nuevas": solas, "auc_por_tercil_de_area": por_area, "prueba_amba": prueba,
@@ -363,7 +363,7 @@ def main():
     q = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     q.add_argument("orden", choices=["medir", "evaluar"])
     q.add_argument("--frame", nargs="+", help="frames a medir (por defecto, todos los de data/frames.json que tengan recortes)")
-    q.add_argument("--recortes", nargs="+", help="otras carpetas de salida del pipeline donde buscar recortes, además de ../salidas")
+    q.add_argument("--recortes", nargs="+", help="otras carpetas de salida del pipeline donde buscar recortes, además de ../data/salidas")
     q.add_argument("--tabla", default=TABLA)
     q.add_argument("--evaluacion", default=EVALUACION)
     args = q.parse_args()

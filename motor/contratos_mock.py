@@ -1,7 +1,7 @@
 """Genera versiones chicas y FALSAS de cada archivo de `contratos.py`, para probar código antes de tener datos reales.
 
-    python herramientas/contratos_mock.py                       # escribe en datos/mock/ (no se sube al repo)
-    python herramientas/contratos_mock.py --manchas-por-frame 60 --semilla 3 --salida otra/carpeta
+    python motor/contratos_mock.py                       # escribe en datos/mock/ (no se sube al repo)
+    python motor/contratos_mock.py --manchas-por-frame 60 --semilla 3 --salida otra/carpeta
 
 Los archivos quedan todos en la misma carpeta, con el nombre del contrato, y son coherentes entre sí: los
 `id_mancha` y los `id_catalogo` cruzan de un archivo al otro. Además escribe `catalogo_mock.geojson`, con los
@@ -35,7 +35,7 @@ sys.path.insert(0, AQUI)
 import contratos as ct  # noqa: E402
 
 SALIDA = os.path.join(AQUI, "datos", "mock")
-AVISO = "DATOS FALSOS generados por herramientas/contratos_mock.py. No son resultados."
+AVISO = "DATOS FALSOS generados por motor/contratos_mock.py. No son resultados."
 
 # bbox = [lon_oeste, lat_sur, lon_este, lat_norte]. Órbitas y fechas inventadas, salvo las del AMBA.
 FRAMES = (
@@ -422,7 +422,7 @@ def main():
             with open(camino, encoding="utf-8") as f:
                 filas = f"{len(json.load(f)['features']):4d} features"
         print(f"  {os.path.relpath(camino):55s} {filas}")
-    print("Todo validado contra herramientas/contratos.py.")
+    print("Todo validado contra motor/contratos.py.")
 
 
 if __name__ == "__main__":

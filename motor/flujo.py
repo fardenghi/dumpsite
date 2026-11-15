@@ -1,6 +1,6 @@
 """Etapa 9: el flujo completo sobre los frames procesados (veredicto por sitio, matriz de actividad y salida para la web).
 
-Recorre los frames de `../data/frames.json` que ya tienen `salidas/<FRAME>/insomnio_catalogo.parquet` (los sube la
+Recorre los frames de `../data/catalogos/frames.json` que ya tienen `salidas/<FRAME>/insomnio_catalogo.parquet` (los sube la
 etapa 4) y, para cada uno, junta lo que haya:
 
 | Entrada                          | De dónde, en orden                                                                     |
@@ -18,7 +18,7 @@ Escribe (todo lo propio del prompt 5):
 - `salidas/evaluacion_actividad.json`: la matriz de abierto contra cerrado por país, con Wilson, con todas las fuentes
   del estado y sin los cerrados de OSM; los casos para mirar a mano con los descartes automáticos.
 - `salidas/resumen_flujo.json`: los conteos de la frase del pitch por frame y en total, y qué entró de cada frame.
-- `idea/resultados-flujo.md` y, con `--web`, `../insomnes-web/src/data/seed/veredictos.json` (y `modelo.json` si hay
+- `datos/resultados-flujo.md` y, con `--web`, `../web/src/data/seed/veredictos.json` (y `modelo.json` si hay
   `salidas/metricas.json`).
 
 Lo quieto no pasa por el modelo: "cerrado y quieto" sale del registro y del insomnio del polígono (`veredicto.py`).
@@ -342,7 +342,7 @@ def main(argv=None):
     a.add_argument("--salidas", default=SALIDAS)
     a.add_argument("--destino", default=SALIDAS, help="dónde escribir veredictos, evaluación y resumen")
     a.add_argument("--estado-conocido", default=os.path.join(SALIDAS, "estado_conocido.json"))
-    a.add_argument("--web", action="store_true", help="escribir también ../insomnes-web/src/data/seed/veredictos.json")
+    a.add_argument("--web", action="store_true", help="escribir también ../web/src/data/seed/veredictos.json")
     a.add_argument("--md", default=os.path.join(AQUI, "datos", "resultados-flujo.md"), help="'' para no escribirlo")
     args = a.parse_args(argv)
 
@@ -369,7 +369,7 @@ def main(argv=None):
              f"de estado conocido que el radar midió, {sum(1 for s in ev['sitios'] if s['pais'] == 'USA')} son de EE. UU. "
              f"La matriz vale para los países donde hay sitios ({', '.join(paises)}), no 'en el mundo'.")
     eval_json = {
-        "meta": {"generado": ahora, "generado_por": "herramientas/flujo.py (evaluar_actividad.evaluar)",
+        "meta": {"generado": ahora, "generado_por": "motor/flujo.py (evaluar_actividad.evaluar)",
                  "frames": frames, "modo_insomnio": {f: e.get("modo_insomnio") for f, e in entradas.items() if e["procesado"]},
                  "fuentes_del_estado": list(FUENTES_TODAS), "min_ha": contratos.MIN_HA,
                  "lectura": ("Filas: estado del registro. Columnas: lo que dice el radar sobre el polígono. Las tasas se "
@@ -383,11 +383,11 @@ def main(argv=None):
         "casos_para_mirar": casos,
     }
     _json(eval_json, os.path.join(args.destino, "evaluacion_actividad.json"))
-    _json({"meta": {"generado": ahora, "generado_por": "herramientas/flujo.py", "frames": frames,
+    _json({"meta": {"generado": ahora, "generado_por": "motor/flujo.py", "frames": frames,
                     "umbral_p_basural": 0.5, "criterio_cruce": contratos.CRITERIO_CRUCE, "modelo": _sin_metricas(modelo),
                     "aviso": aviso},
            "resumen": total, "veredictos": vs}, os.path.join(args.destino, "veredictos.json"))
-    resumen_json = {"meta": {"generado": ahora, "generado_por": "herramientas/flujo.py", "aviso": aviso},
+    resumen_json = {"meta": {"generado": ahora, "generado_por": "motor/flujo.py", "aviso": aviso},
                     "frames_procesados": frames, "entradas": entradas, "modelo": _sin_metricas(modelo),
                     "total": total, "por_frame": por_frame,
                     "actividad": {p: d["metricas"] for p, d in ev["por_pais"].items()}, "sesgo": sesgo}
@@ -427,12 +427,12 @@ def escribir_web(vs, total, frames, modelo, ahora, carpeta=WEB_SEED, estado=None
         if v.get("modelo_estado"):
             f["modelo_estado"] = v["modelo_estado"]
         filas.append(f)
-    _json({"generado": ahora, "generado_por": "idea-basurales-nisar/herramientas/flujo.py", "frames": frames,
+    _json({"generado": ahora, "generado_por": "motor/flujo.py", "frames": frames,
            "aviso": "Señal compatible con actividad, no prueba.", "resumen": total, "sitios": filas},
           os.path.join(carpeta, "veredictos.json"))
     if modelo.get("hay_metricas") or estado:
         m = modelo.get("metricas") or {}
-        _json({"generado": ahora, "generado_por": "idea-basurales-nisar/herramientas/flujo.py (desde salidas/metricas.json)",
+        _json({"generado": ahora, "generado_por": "motor/flujo.py (desde salidas/metricas.json)",
                "validado": modelo["validado"], "motivo": modelo["motivo"],
                "metricas": {k: m.get(k) for k in ("validacion", "advertencia", "umbral", "columnas", "filas",
                                                   "fuera_de_particion", "importancia")} if m else None,
@@ -448,7 +448,7 @@ def _tasa(t):
 
 def escribir_md(ruta, rs, ev, vs, extra=None):
     L = ["# Resultados del flujo (etapas 8 y 9)", "",
-         f"Generado por `herramientas/flujo.py` el {rs['meta']['generado']} (`python flujo.py --web` desde `herramientas/`). "
+         f"Generado por `motor/flujo.py` el {rs['meta']['generado']} (`python flujo.py --web` desde `motor/`). "
          "No editar a mano: se rehace con cada frame nuevo. Salidas: `salidas/veredictos.json`, "
          "`salidas/evaluacion_actividad.json` y `salidas/resumen_flujo.json`.", "",
          "**Lenguaje:** \"señal compatible con actividad\" y \"quieto según el radar\". Nada de esto es una acusación.", "",
@@ -523,7 +523,7 @@ def escribir_md(ruta, rs, ev, vs, extra=None):
         L.append("")
 
     L += ["## Formato para la web", "",
-          "`python flujo.py --web` escribe archivos **nuevos** en `insomnes-web/src/data/seed/` (no toca los que ya están):", "",
+          "`python flujo.py --web` escribe archivos **nuevos** en `web/src/data/seed/` (no toca los que ya están):", "",
           "- `veredictos.json`: `{generado, generado_por, frames, aviso, resumen, sitios: [...]}`. Cada sitio: `tipo` "
           "(`catalogo` o `mancha`), `id` (`BAS-…` o `MAN-<frame>-<n>`), `frame`, `nombre`, `complejo`, `area_ha`, `registro` "
           "(`abierto`, `cerrado`, `desconocido`, `no_figura`), `radar` (`despierto`, `quieto`, `no_alcanza`), `insomnio`, "
@@ -538,7 +538,7 @@ def escribir_md(ruta, rs, ev, vs, extra=None):
           "## Fuentes", "",
           "- NISAR L2 GUNW (NASA/ISRO, vía ASF DAAC): insomnio por polígono (`insomnio_catalogo.parquet`, etapa 4).",
           "- Estado del registro: EPA LMOP (dominio público, EE. UU.), OpenStreetMap vía Overture Maps (ODbL) y casos curados "
-          "de Argentina (`data/basurales/casos_curados_argentina.json`, con sus fuentes).",
+          "de Argentina (`data/catalogos/basurales/casos_curados_argentina.json`, con sus fuentes).",
           "- Agua: JRC Global Surface Water (Copernicus, CC BY 4.0).", ""]
     os.makedirs(os.path.dirname(ruta), exist_ok=True)
     with open(ruta, "w", encoding="utf-8") as fh:

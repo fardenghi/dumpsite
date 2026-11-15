@@ -1,6 +1,6 @@
 """Prueba de resolución: ¿mejora el modelo del frente (`radar_frente.py`) si se mide a 20 m en vez de 80 m?
 
-Tres variantes, cada una por separado contra las 10 variables de 80 m de `../salidas/radar_frente.parquet`:
+Tres variantes, cada una por separado contra las 10 variables de 80 m de `../data/salidas/radar_frente.parquet`:
   1. eco_80m_promediado  el eco (GCOV) promediado en potencia lineal sobre cada celda de 80 m (todos los píxeles nativos
                          que caen adentro: 8×8 si el GCOV viene a 10 m, 4×4 si viene a 20 m), en vez del vecino más
                          cercano de `pipeline_insomnio.recortar`
@@ -28,12 +28,12 @@ No relee frames enteros: lee por URL, de cada producto, una ventana por predio (
     python prueba_resolucion.py preparar   # fuentes fijas de cada frame (agua de JRC a 80 m y polígonos de los catálogos)
     python prueba_resolucion.py leer       # ventanas por URL; se puede cortar y repetir: lo leído no se vuelve a leer
     python prueba_resolucion.py medir      # las variables de cada variante, por predio (una tabla por frame en datos/)
-    python prueba_resolucion.py evaluar    # AUC, terciles, diferencias pareadas -> ../salidas/prueba_resolucion.json
+    python prueba_resolucion.py evaluar    # AUC, terciles, diferencias pareadas -> ../data/salidas/prueba_resolucion.json
 
 En contenedores de Claude Code en la nube: `env -u FSSPEC_GCS timeout -k 10 900 python prueba_resolucion.py leer`,
 repetido hasta que diga que no falta nada. Credenciales: EARTHDATA_TOKEN por variable de entorno, nunca en el repo.
 
-Datos: NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC. Agua: JRC Global Surface Water v1.4. Catálogo: `../../data/README.md`.
+Datos: NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC. Agua: JRC Global Surface Water v1.4. Catálogo: `../data/README.md`.
 """
 import argparse
 import glob
@@ -720,8 +720,8 @@ def cmd_evaluar(args):
 
     metas = _metas()
     base, p_base, p5_base = evaluar(tablas["base"][rf.NUEVAS].values)
-    salida = {"generado_por": "herramientas/prueba_resolucion.py evaluar",
-              "fuentes": "NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC; agua: JRC Global Surface Water v1.4; estado y polígonos: data/basurales",
+    salida = {"generado_por": "motor/prueba_resolucion.py evaluar",
+              "fuentes": "NISAR L2 GUNW y GCOV (NASA/ISRO), vía ASF DAAC; agua: JRC Global Surface Water v1.4; estado y polígonos: data/catalogos/basurales",
               "muestras": {"n": int(len(e)), "abiertos": int(y.sum()), "cerrados": int((1 - y).sum()), "frames": int(e["frame"].nunique()),
                            "sin_medir": faltan, "cortes_terciles_ha": cortes,
                            "por_tercil": {c: {"n": int((terc == c).sum()), "abiertos": int(y[(terc == c).values].sum())} for c in terc.cat.categories}},

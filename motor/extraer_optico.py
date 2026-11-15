@@ -1,14 +1,14 @@
 """Etapa 5: variables ópticas de Sentinel-2 L2A por mancha (y por polígono del catálogo), mancha contra anillo.
 
 Escribe `tabla_optico.parquet` (una fila por mancha candidata) y, con `--catalogo`, `tabla_optico_catalogo.parquet`
-(una fila por polígono de los catálogos que cae en el frame), según `idea/contratos-datos.md`.
+(una fila por polígono de los catálogos que cae en el frame), según `../docs/contratos-datos.md`.
 
-    python extraer_optico.py                                      # el AMBA: ../salidas/manchas.geojson + catálogo
-    python extraer_optico.py --manchas ../salidas/DELHI/manchas.geojson --salida ../salidas/DELHI --sin-catalogo
+    python extraer_optico.py                                      # el AMBA: ../data/salidas/manchas.geojson + catálogo
+    python extraer_optico.py --manchas ../data/salidas/DELHI/manchas.geojson --salida ../data/salidas/DELHI --sin-catalogo
     python extraer_optico.py --desde 2026-06-25 --hasta 2026-10-12 --hilos 24
 
 Cómo:
-- Busca escenas L2A en el STAC de Microsoft Planetary Computer (abierto, sin cuenta; como `insomnes-web/scripts/
+- Busca escenas L2A en el STAC de Microsoft Planetary Computer (abierto, sin cuenta; como `web/scripts/
   s2_fechas.py`) con nubes de escena < `--max-nube` %, en el período de NISAR.
 - Agrupa las geometrías en celdas de ~10 km y lee, por celda y escena, **sólo la ventana** de esa celda desde los COG
   (lectura por rango HTTP, a 20 m, usando las overviews de las bandas de 10 m). Celdas y escenas van en paralelo con hilos.
@@ -319,7 +319,7 @@ def main():
     cat.add_argument("--sin-catalogo", dest="catalogo", action="store_false")
     a.add_argument("--negativos", default="ambos", choices=("ambos", "amba", "mundo"))
     a.add_argument("--frame", action="append", help="sólo estos frames (se puede repetir); por defecto todos los del geojson")
-    a.add_argument("--cache", help="carpeta para guardar las ventanas leídas (por ejemplo ../datos/s2); no se sube")
+    a.add_argument("--cache", help="carpeta para guardar las ventanas leídas (por ejemplo datos/s2); no se sube")
     a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías (para probar)")
     args = a.parse_args()
 

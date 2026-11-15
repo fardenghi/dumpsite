@@ -1,7 +1,7 @@
-"""Prompt 4: el lado del modelo con datos reales, frame por frame (etapas 5, 6 y 7 de `idea/plan-entrenamiento.md`).
+"""Prompt 4: el lado del modelo con datos reales, frame por frame (etapas 5, 6 y 7 de `../docs/modelo.md`).
 
 La etapa 4 sube una carpeta por frame, `salidas/<FRAME>/`, con `manchas.geojson`, `tabla_radar.parquet` e
-`insomnio_catalogo.parquet`. Este script recorre los frames de `../data/frames.json` que ya la tienen y, para cada
+`insomnio_catalogo.parquet`. Este script recorre los frames de `../data/catalogos/frames.json` que ya la tienen y, para cada
 uno al que le falte (o cuyo `manchas.geojson` cambió), corre:
 
   1. `cruce_manchas.py`  → `salidas/<FRAME>/cruce_manchas_catalogo.parquet` (segundos; lo necesita el veredicto);
@@ -108,7 +108,7 @@ def falta(carpeta, paso, archivos, rehacer=False):
 
 def anotar(carpeta, paso, datos):
     e = leer_estado(carpeta)
-    e["generado_por"] = "herramientas/modelo_por_frame.py"
+    e["generado_por"] = "motor/modelo_por_frame.py"
     e[paso] = {"manchas_sha1": hash_archivo(os.path.join(carpeta, "manchas.geojson")), **datos}
     guardar_estado(carpeta, e)
 
@@ -312,7 +312,7 @@ def variantes(base=SALIDAS, avisar=print):
     ia = at.leer_etiquetas_optico(ia_ruta) if os.path.exists(ia_ruta) else None
     todas = radar.drop(columns=[c for c in ("clase_osm", "que") if c in radar.columns]) \
                  .merge(optico.drop(columns=["frame", "n_escenas", "fechas"]), on="id_mancha", how="left")
-    resumen = {"generado_por": "herramientas/modelo_por_frame.py variantes", "validacion": "una partición por frame (se deja un frame afuera por vez)",
+    resumen = {"generado_por": "motor/modelo_por_frame.py variantes", "validacion": "una partición por frame (se deja un frame afuera por vez)",
                "prueba_final": "reservada: ninguna variante miró ni predijo la prueba final (Argentina)", "avisos": avisos,
                "etiquetas_optico": "salidas/etiquetas_optico_ia.json: las puso una IA en dos pasadas a ciegas y NO las revisó una persona",
                "negativos_osm": "manchas con clase_osm = uso_conocido (OSM vía Overture, etapa 4) que no tocan ningún basural del catálogo",
@@ -377,13 +377,13 @@ def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("paso", nargs="?", choices=["frames", "juntar", "tabla", "variantes", "estado"], default="frames")
     a.add_argument("--frame", action="append", help="sólo estos frames (se puede repetir); por defecto, todos los que tengan manchas")
-    a.add_argument("--base", default=SALIDAS, help="carpeta con una subcarpeta por frame (por defecto ../salidas)")
+    a.add_argument("--base", default=SALIDAS, help="carpeta con una subcarpeta por frame (por defecto ../data/salidas)")
     a.add_argument("--solo-cruce", action="store_true", help="no correr el óptico")
     a.add_argument("--rehacer", action="store_true", help="correr aunque ya esté hecho")
     a.add_argument("--sin-juntar", action="store_true")
     a.add_argument("--hilos", type=int, default=24)
     a.add_argument("--max-fechas", type=int, default=10, help="fechas a leer por celda, repartidas en el período (quedan hasta 8 por geometría)")
-    a.add_argument("--cache", help="carpeta para guardar las ventanas de Sentinel-2 leídas (por ejemplo ../datos/s2); no se sube")
+    a.add_argument("--cache", help="carpeta para guardar las ventanas de Sentinel-2 leídas (por ejemplo datos/s2); no se sube")
     a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías de cada frame (para probar; no se anota)")
     a.add_argument("--final", action="store_true", help="`tabla`: predecir también la prueba final (Argentina). Una sola vez, al terminar")
     a.add_argument("--umbral-insomnio", type=float, help="`tabla`: insomnio mínimo de las manchas para entrenar (por defecto 0,70)")

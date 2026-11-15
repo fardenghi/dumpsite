@@ -2,11 +2,11 @@
 
 Una fila por par mancha candidata y polígono (basural o negativo) que se tocan, **sin filtrar por el 30 %**: el que
 lee aplica `contratos.CRITERIO_CRUCE` sobre `frac_area_menor`. Las áreas se miden en la UTM del frame.
-Además del contrato trae `inter_ha` (la superficie de la intersección), para el mínimo de `idea/criterio-cruce.md`.
+Además del contrato trae `inter_ha` (la superficie de la intersección), para el mínimo de `../docs/modelo.md`.
 
-    python cruce_manchas.py                                         # ../salidas/manchas.geojson (AMBA)
-    python cruce_manchas.py --manchas ../datos/mock/manchas.geojson --catalogo ../datos/mock/catalogo_mock.geojson \
-                            --salida ../datos/mock/prueba
+    python cruce_manchas.py                                         # ../data/salidas/manchas.geojson (AMBA)
+    python cruce_manchas.py --manchas datos/mock/manchas.geojson --catalogo datos/mock/catalogo_mock.geojson \
+                            --salida datos/mock/prueba
     python cruce_manchas.py --todas                                 # también las manchas descartadas
 
 Si se da `--catalogo`, se usa ese GeoJSON (con `id`, `catalogo`, `complejo`, `clase` en las propiedades) en vez de

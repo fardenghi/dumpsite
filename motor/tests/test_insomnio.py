@@ -1,6 +1,6 @@
 """Caso sintético: cada tipo de superficie tiene que caer donde corresponde.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 """
 import os
 import sys

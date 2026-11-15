@@ -5,7 +5,7 @@ polígono de basural. Lo usa `flujo.py`:
 
 - `anotar(veredictos, salidas)` le suma a cada veredicto de catálogo el objeto `modelo_estado`:
   `{"p_abierto": número o null, "lectura": "compatible con abierto" | "compatible con cerrado" | "sin dato", "origen": texto}`.
-- `bloque_web(salidas)` arma la clave `estado` de `insomnes-web/src/data/seed/modelo.json`.
+- `bloque_web(salidas)` arma la clave `estado` de `web/src/data/seed/modelo.json`.
 - `matriz(salidas)` y `lineas_md(salidas)` comparan, sobre los mismos predios de estado conocido, lo que dice la regla
   del insomnio y lo que dice el modelo (predicciones hechas sin el frame del predio).
 
@@ -138,7 +138,7 @@ def lineas_md(salidas):
     L = ["## Regla del insomnio contra el modelo de abierto contra cerrado", "",
          f"Sobre los mismos {x['predios']} basurales de 10 ha o más con estado en el registro, de {x['frames']} frames (sin el AMBA, "
          "que es la prueba). La regla es el veredicto del radar con los umbrales del AMBA. El modelo es el de "
-         f"`herramientas/modelo_estado.py` (variables: {x['variables']}; AUC {num(x['auc'])}, IC 95 % {num(x['ic95'][0])} a {num(x['ic95'][1])}), "
+         f"`motor/modelo_estado.py` (variables: {x['variables']}; AUC {num(x['auc'])}, IC 95 % {num(x['ic95'][0])} a {num(x['ic95'][1])}), "
          "y cada predio se predice con un modelo entrenado sin su frame. Las etiquetas son el estado del registro, no el insomnio.", "",
          "| Registro | Predios | Regla: despierto | Regla: quieto | Regla: no alcanza | Modelo: compatible con abierto | Modelo: compatible con cerrado | Modelo: sin dato |",
          "|---|---|---|---|---|---|---|---|"]
@@ -154,8 +154,8 @@ def lineas_md(salidas):
           "- **Prueba reservada (AMBA), modelo entrenado sólo con EE. UU.** (`p_abierto`): "
           + "; ".join(f"{p['nombre']}, registro {p['estado']}: {num(p['p_abierto'])}" for p in m["prueba"]) + ".",
           "- **Ojo con la frase del pitch de arriba:** los \"nuevos\" salen de otro modelo, el de \"basural contra otra cosa que se "
-          "mueve\" (`idea/resultados-modelo.md`: AUC 0,79 con 39 basurales, \"no alcanza como veredicto\"), y sólo en los frames que "
+          "mueve\" (`../docs/resultados.md`: AUC 0,79 con 39 basurales, \"no alcanza como veredicto\"), y sólo en los frames que "
           "tienen `predicciones.parquet`. En los 20 frames agregados las manchas sin catálogo quedan sin clasificar: falta su "
           "óptico y reentrenar ese modelo.",
-          "- Detalle, límites y qué aprende el modelo de abierto contra cerrado: `idea/modelo-estado.md`.", ""]
+          "- Detalle, límites y qué aprende el modelo de abierto contra cerrado: `../docs/modelo.md`.", ""]
     return L

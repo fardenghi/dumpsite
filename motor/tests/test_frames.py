@@ -1,7 +1,7 @@
 """El pipeline sobre cualquier frame (etapa 1): otras zonas UTM, el hemisferio norte, el anillo que excluye
 los catálogos, los recortes de dos frames de NISAR vecinos y las fuentes fijas por frame. Todo sintético y sin red.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 """
 import argparse
 import json

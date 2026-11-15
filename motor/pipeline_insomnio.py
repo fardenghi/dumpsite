@@ -6,7 +6,7 @@ Pasos (se pueden correr sueltos o todos con `todo`):
   procesar  recorta la coherencia (y el backscatter de los GCOV, si hay) a la grilla común del frame, en paralelo.
             La zona UTM y el hemisferio salen del EPSG de cada producto (dataset `projection`)
   indice    calcula el índice de insomnio final (insomnio.py), las fichas por sitio, las manchas candidatas
-            y la figura; para el AMBA, también los archivos que lee la web (insomnes-web/)
+            y la figura; para el AMBA, también los archivos que lee la web (web/)
   calibrar  barre los umbrales y dice con cuáles entran los sitios conocidos y no entran los controles (sólo AMBA)
 
 Con los recortes ya hechos, un solo comando reproduce todo lo que se informa del AMBA:
@@ -20,7 +20,7 @@ Otro frame, sin bajar los .h5 (lectura remota por ventana; así corre en la VM):
 Bajando los .h5 (frame por frame: baja, procesa y borra antes de pasar al siguiente):
   python pipeline_insomnio.py todo --frame todos --datos /mnt/datos --borrar
 
-Los frames salen de `../../data/frames.json` (etapa 2) o de `--caja lon_oeste lat_sur lon_este lat_norte`.
+Los frames salen de `../data/catalogos/frames.json` (etapa 2) o de `--caja lon_oeste lat_sur lon_este lat_norte`.
 Cada frame que no es el AMBA escribe en `<salida>/<FRAME>/`, baja en `<datos>/<FRAME>/` y cachea sus fuentes
 fijas (agua de JRC, usos de Overture y polígonos de los catálogos) en `fijos/<FRAME>/`.
 
@@ -621,7 +621,7 @@ def _png_web(capas, ctx, destino):
 
 
 def _escribir_web(ctx, capas, lista, fichas, p, web):
-    """Los archivos que lee insomnes-web. `sitios.json` tiene la forma exacta de `Sitio[]` (src/data/types.ts)."""
+    """Los archivos que lee la web. `sitios.json` tiene la forma exacta de `Sitio[]` (src/data/types.ts)."""
     seed = os.path.join(web, "src", "data", "seed")
     try:
         with open(os.path.join(seed, "imagenes.json"), encoding="utf-8") as fh:
@@ -728,7 +728,7 @@ def indice(args):
     _json(os.path.join(args.salida, f"resumen_{capa}.json"), resumen, indent=1)
     _json(os.path.join(args.salida, f"fichas_{capa}.json"), {k: v for k, v in fichas.items()}, indent=1)
     _figura(ctx, capas, lista, etiquetas, p, os.path.join(args.salida, f"indice_{capa}.png"))
-    # La web lee el AMBA: los otros frames no tocan insomnes-web.
+    # La web lee el AMBA: los otros frames no tocan la web.
     n_web = _escribir_web(ctx, capas, lista, fichas, p, args.web) if args.web and os.path.isdir(args.web) and capa == "80m" and fr.nombre == "AMBA" else 0
 
     print(f"{fr.nombre}: {len(ctx['pares'])} pares GUNW y {len(ctx['orbitas_eco'])} GCOV, órbitas {sorted(set(ctx['orbitas'].tolist()))}, "
@@ -842,7 +842,7 @@ def main():
     p.add_argument("--datos", default=os.path.join(AQUI, "datos"), help="carpeta de los .h5 (fuera del repo en la VM, por ejemplo /mnt/datos)")
     p.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas"), help="carpeta de productos chicos (lista, recortes, índice, figuras)")
     p.add_argument("--fijos", default=FIJOS, help="carpeta de las fuentes fijas: cada frame cachea las suyas en <fijos>/<FRAME>/ (el AMBA, sueltas)")
-    p.add_argument("--web", default=WEB, help="carpeta de insomnes-web; `indice` del AMBA a 80 m escribe ahí los datos de la web ('' para no escribir)")
+    p.add_argument("--web", default=WEB, help="carpeta de la web; `indice` del AMBA a 80 m escribe ahí los datos de la web ('' para no escribir)")
     p.add_argument("--orbitas", type=int, nargs="+", help="órbitas (path) a usar. Por defecto, las del frame (AMBA: 10 y 161) o todas las que crucen la caja")
     p.add_argument("--desde", help="AAAA-MM-DD: primera fecha de los productos que toma `buscar` (por defecto, la del frame; '' = sin límite)")
     p.add_argument("--hasta", help="AAAA-MM-DD: última fecha de los productos que toma `buscar` (por defecto, la del frame; '' = sin límite)")

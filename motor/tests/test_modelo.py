@@ -1,6 +1,6 @@
 """Prompt 3: manchas como polígonos, cruce con el catálogo, óptico, tabla y entrenamiento.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 No usan la red: el óptico se prueba con bandas sintéticas.
 """
 import json

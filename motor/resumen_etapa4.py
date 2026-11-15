@@ -1,10 +1,10 @@
-"""Tablas de `idea/etapa4-manchas.md`, en Markdown, a partir de `salidas/<FRAME>/` (no calcula nada nuevo).
+"""Tablas de `../docs/resultados.md`, en Markdown, a partir de `salidas/<FRAME>/` (no calcula nada nuevo).
 
     python resumen_etapa4.py            # manchas por frame, y despierto / quieto / no alcanza por estado
 
 Lee de cada frame `manchas.geojson` (encabezado), `tabla_radar.parquet` e `insomnio_catalogo.parquet`. Separa los
 frames de `data/frames.json` en dos grupos: los de antes y los agregados por cantidad de abiertos (`criterio` =
-`abiertos`, prompt 6). Cuenta polígonos de `data/basurales/` de 10 ha o más por el estado del registro.
+`abiertos`, prompt 6). Cuenta polígonos de `data/catalogos/basurales/` de 10 ha o más por el estado del registro.
 """
 import json
 import os
