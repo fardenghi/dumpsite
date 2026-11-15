@@ -1,103 +1,103 @@
-# VM para procesar NISAR
+# VM to process NISAR
 
-Una sola VM de CPU con mucha RAM, cerca de donde están los datos. Sin GPU ni Kubernetes: la descarga es el cuello de botella y el cálculo es liviano.
+A single CPU VM with lots of RAM, close to where the data is. No GPU or Kubernetes: the download is the bottleneck and the computation is light.
 
-## La VM que existe (14/11/2026)
+## The existing VM (14/11/2026)
 | | |
 |---|---|
-| Proyecto GCP | `basurales-514714` (cuenta de facturación con créditos) |
-| Nombre | `insomnio-vm`, zona `us-west1-b` |
-| Tipo | `n2-custom-12-98304` (12 vCPU, 96 GB) |
-| Disco | 200 GB `pd-balanced`; los 35 `.h5` (100 GB) están en `/mnt/datos` |
-| Cuenta de servicio | ninguna (`--no-service-account`): la VM no toca GCP |
-| Estado | **apagada** (la última corrida, del 15/11, se apagó sola al terminar; el token de Earthdata ya se borró de los metadatos). Se prende con `gcloud compute instances start insomnio-vm --zone=us-west1-b` |
+| GCP project | `basurales-514714` (billing account with credits) |
+| Name | `insomnio-vm`, zone `us-west1-b` |
+| Type | `n2-custom-12-98304` (12 vCPU, 96 GB) |
+| Disk | 200 GB `pd-balanced`; the 35 `.h5` files (100 GB) are in `/mnt/datos` |
+| Service account | none (`--no-service-account`): the VM doesn't touch GCP |
+| Status | **stopped** (the last run, on 15/11, shut itself down when it finished; the Earthdata token was already removed from the metadata). Start it with `gcloud compute instances start insomnio-vm --zone=us-west1-b` |
 
-**Por qué 12 vCPU y no 16:** la cuota global de la cuenta es `CPUS_ALL_REGIONS = 12` y no se puede subir. `n2-highmem-12` no existe, así que es una N2 a medida con el máximo de memoria (8 GB por vCPU). Los 200 GB de disco vienen de la cuota `SSD_TOTAL_GB = 250` en us-west1.
+**Why 12 vCPU and not 16:** the account's global quota is `CPUS_ALL_REGIONS = 12` and can't be raised. `n2-highmem-12` doesn't exist, so it's a custom N2 with the maximum memory (8 GB per vCPU). The 200 GB disk comes from the `SSD_TOTAL_GB = 250` quota in us-west1.
 
-**Tiempos medidos** (detalle en `infra/README.md`): bajar los 35 archivos (100 GB) tarda 531 s; procesar e índice tardan 8 s a 80 m y ~50 s a 20 m.
+**Measured times** (details in "Full AMBA run" below): downloading the 35 files (100 GB) takes 531 s; processing and the index take 8 s at 80 m and ~50 s at 20 m.
 
-## Por qué us-west1
-- Los datos de NISAR están en NASA Earthdata Cloud, en **AWS us-west-2 (Oregón)**. Las regiones más cercanas son **GCP us-west1 (Oregón)** y **Azure West US 2 (Washington)**.
-- **Mucha RAM:** apilar 15 pares a 20 m son 15-30 GB en memoria.
-- **Sin GPU:** no acelera la descarga y el cálculo ya es rápido en CPU.
+## Why us-west1
+- The NISAR data is in NASA Earthdata Cloud, in **AWS us-west-2 (Oregon)**. The closest regions are **GCP us-west1 (Oregon)** and **Azure West US 2 (Washington)**.
+- **Lots of RAM:** stacking 15 pairs at 20 m is 15-30 GB in memory.
+- **No GPU:** it doesn't speed up the download and the computation is already fast on CPU.
 
-## Tope de gasto (automático)
-- **Budget "Space Apps tope 275"** en la cuenta de facturación, filtrado al proyecto, del 1/11/2026 al 31/12/2027 y **sin descontar créditos**: mide lo que se consume de los créditos. Avisa al 91 % (USD 250) y al 100 % (USD 275).
-- **Corte automático:** el budget publica en el tema de Pub/Sub `corte-budget`. La Cloud Function `corte-budget` (us-west1, código en `corte-budget/`) **detiene todas las VMs del proyecto** cuando el costo llega al monto del budget. Los discos y los datos se conservan.
-- **Probado el 14/11:** con un mensaje de 10 de 275 no hace nada; con 275 de 275 detuvo `insomnio-vm`.
-- **No es un tope exacto:** GCP informa los costos con horas de atraso. Por eso el corte está en 275 y no en 300.
-- La función corre con la cuenta de servicio `corte-budget`, que tiene `compute.instanceAdmin.v1`, `cloudbuild.builds.builder` y permiso de invocar la función.
+## Spending cap (automatic)
+- **Budget "Space Apps tope 275"** on the billing account, filtered to the project, from 1/11/2026 to 31/12/2027 and **without subtracting credits**: it measures what's consumed from the credits. It alerts at 91 % (USD 250) and at 100 % (USD 275).
+- **Automatic cutoff:** the budget publishes to the `corte-budget` Pub/Sub topic. The `corte-budget` Cloud Function (us-west1, code in `corte-budget/`) **stops every VM in the project** when the cost reaches the budget amount. Disks and data are kept.
+- **Tested on 14/11:** with a message of 10 out of 275 it does nothing; with 275 out of 275 it stopped `insomnio-vm`.
+- **It's not an exact cap:** GCP reports costs with hours of delay. That's why the cutoff is at 275 and not at 300.
+- The function runs with the `corte-budget` service account, which has `compute.instanceAdmin.v1`, `cloudbuild.builds.builder` and permission to invoke the function.
 
-## Correrla sin SSH (como se hizo el 14/11)
-Desde una sesión de Claude Code en la nube no hay SSH: el proxy sólo deja pasar HTTPS. Todo se maneja con la API de Compute:
-1. **Código:** el repo es privado y la VM no tiene token de GitHub, así que `pipeline_insomnio.py`, `manchas.py` y `requirements.txt` van como metadatos de la VM (`pipeline-py`, `manchas-py`, `requirements-txt`).
-2. **Token de Earthdata:** cada uno el suyo, en el metadato `earthdata-token`. Se carga desde la máquina de la persona, nunca por el chat ni en el repo:
+## Running it without SSH (as done on 14/11)
+From a cloud session there's no SSH: the proxy only lets HTTPS through. Everything is handled with the Compute API:
+1. **Code:** the repo was private and the VM has no GitHub token, so `pipeline_insomnio.py`, `manchas.py` and `requirements.txt` go as VM metadata (`pipeline-py`, `manchas-py`, `requirements-txt`).
+2. **Earthdata token:** each person their own, in the `earthdata-token` metadata key. It's loaded from the person's machine, never through chat or into the repo:
    ```bash
-   gcloud compute instances add-metadata insomnio-vm --zone=us-west1-b --metadata=earthdata-token=TU_TOKEN
+   gcloud compute instances add-metadata insomnio-vm --zone=us-west1-b --metadata=earthdata-token=YOUR_TOKEN
    ```
-   Lo puede leer cualquiera con acceso de lectura al proyecto. Se borra con `gcloud compute instances remove-metadata insomnio-vm --zone=us-west1-b --keys=earthdata-token`.
-3. **Qué corre:** un script de arranque (`vm-sin-ssh/`) que corre una vez y escribe el avance en el puerto serie, con prefijo `INSOMNIO:`:
-   - `arranque-prueba.sh` prueba bajar, `procesar --remoto` y GCOV;
-   - `arranque-pipeline.sh` corre el pipeline completo;
-   - `arranque-subida.sh` sube `/opt/salidas` a una URL de subida de un solo uso.
-   - `arranque-frames.sh` (prompt 6, 15/11) corre `buscar` y `procesar --remoto` sobre una lista de frames, sube un tar por frame a su URL de un solo uso (`upload-url-<FRAME>`) y **apaga la VM al terminar**. El código va en un solo metadato (`codigo-tgz-b64`). Así se leyeron 18 de los 20 frames nuevos (`../../docs/resultados.md`).
-   - `arranque-optico.sh` (15/11) corre `optico_catalogo_frames.py correr` y apaga la VM. Se usó para comparar: la misma lectura de Sentinel-2 tardó 319 s en la VM y 254 s en un contenedor. **Para el óptico la VM no ayuda.**
-   Se carga con `add-metadata --metadata-from-file=startup-script=...` y se ejecuta con `gcloud compute instances reset`.
-4. **Avance:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
-5. **Resultados:** la VM no tiene permisos de GCP. Quien tiene permisos crea una sesión de subida resumible en el bucket `gs://basurales-514714-salidas` y pasa la URL en el metadato `upload-url`. El tar completo de `salidas/`, con los recortes de 20 m, quedó en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB). Los productos chicos están en `../data/salidas/`.
+   Anyone with read access to the project can read it. Remove it with `gcloud compute instances remove-metadata insomnio-vm --zone=us-west1-b --keys=earthdata-token`.
+3. **What runs:** a startup script (`vm-sin-ssh/`) that runs once and writes its progress to the serial port, with the `INSOMNIO:` prefix:
+   - `arranque-prueba.sh` tests downloading, `procesar --remoto` and GCOV;
+   - `arranque-pipeline.sh` runs the full pipeline;
+   - `arranque-subida.sh` uploads `/opt/salidas` to a single-use upload URL.
+   - `arranque-frames.sh` (prompt 6, 15/11) runs `buscar` and `procesar --remoto` over a list of frames, uploads one tar per frame to its single-use URL (`upload-url-<FRAME>`) and **shuts the VM down when it finishes**. The code goes in a single metadata key (`codigo-tgz-b64`). That's how 18 of the 20 new frames were read (`../../docs/resultados.md`).
+   - `arranque-optico.sh` (15/11) runs `optico_catalogo_frames.py correr` and shuts the VM down. It was used for comparison: the same Sentinel-2 reading took 319 s on the VM and 254 s in a container. **For the optical step the VM doesn't help.**
+   It's loaded with `add-metadata --metadata-from-file=startup-script=...` and run with `gcloud compute instances reset`.
+4. **Progress:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
+5. **Results:** the VM has no GCP permissions. Someone with permissions creates a resumable upload session on the `gs://basurales-514714-salidas` bucket and passes the URL in the `upload-url` metadata key. The full tar of `salidas/`, with the 20 m crops, ended up in `gs://basurales-514714-salidas/salidas-v3.tgz` (1.1 GB). The small products are in `../../data/salidas/`.
 
-**gcloud en Claude Code en la nube:** el entorno define `CLOUDSDK_AUTH_ACCESS_TOKEN` con un valor de relleno para el proxy. Si no hay una credencial de Google cargada en el entorno, hay que correr `env -u CLOUDSDK_AUTH_ACCESS_TOKEN gcloud ...` después de `gcloud auth login --no-launch-browser`. La política de la organización (`iam.disableServiceAccountKeyCreation`) no deja crear claves de cuentas de servicio; en lugar de claves se usa la personificación de `claude-vm` (`auth/impersonate_service_account`).
+**gcloud in a cloud session:** the environment sets `CLOUDSDK_AUTH_ACCESS_TOKEN` to a placeholder value for the proxy. If no Google credential is loaded in the environment, run `env -u CLOUDSDK_AUTH_ACCESS_TOKEN gcloud ...` after `gcloud auth login --no-launch-browser`. The organization policy (`iam.disableServiceAccountKeyCreation`) doesn't allow creating service account keys; instead of keys, impersonation of the `claude-vm` account is used (`auth/impersonate_service_account`).
 
-## Correrla con SSH (desde una laptop)
+## Running it with SSH (from a laptop)
 ```bash
 gcloud compute instances start insomnio-vm --zone=us-west1-b
 ```
 ```bash
 gcloud compute ssh insomnio-vm --zone=us-west1-b
 ```
-Para clonar el repo privado adentro de la VM hace falta un token de GitHub o una llave SSH de quien lo clona. Después se prepara con `bash dumpsite/motor/infra/setup-vm.sh` (los `.h5` ya están en `/mnt/datos`, así que `bajar` no vuelve a bajarlos):
+To clone a private repo inside the VM you need a GitHub token or an SSH key of whoever clones it. Then set it up with `bash dumpsite/motor/infra/setup-vm.sh` (the `.h5` files are already in `/mnt/datos`, so `bajar` doesn't download them again):
 ```bash
 export EARTHDATA_TOKEN='...'
 ```
 ```bash
 python motor/pipeline_insomnio.py todo --datos /mnt/datos --salida data/salidas --orbitas 10 161 --capa 80m
 ```
-**Sin bajar los .h5** (lectura remota por ventana; probada, ~240 MB por GUNW):
+**Without downloading the .h5 files** (remote windowed reading; tested, ~240 MB per GUNW):
 ```bash
 python motor/pipeline_insomnio.py buscar --salida data/salidas && python motor/pipeline_insomnio.py procesar --remoto --salida data/salidas --capa 80m && python motor/pipeline_insomnio.py indice --salida data/salidas --capa 80m
 ```
-**Otros frames** (etapa 4; los frames salen de `data/frames.json`). Cada uno escribe en `salidas/<FRAME>/`:
+**Other frames** (stage 4; the frames come from `data/catalogos/frames.json`). Each one writes to `salidas/<FRAME>/`:
 ```bash
 python motor/pipeline_insomnio.py todo --frame todos --remoto --salida data/salidas
 ```
-Si la lectura remota anda mal, bajando: `todo --frame todos --datos /mnt/datos --borrar` baja, recorta y borra cada `.h5`, frame por frame, así el disco de 200 GB nunca junta más de un frame. Detalle en `../README.md`.
+If remote reading misbehaves, download instead: `todo --frame todos --datos /mnt/datos --borrar` downloads, crops and deletes each `.h5`, frame by frame, so the 200 GB disk never holds more than one frame. Details in `../README.md`.
 
-Usen `tmux` para que no se corte si se cae el SSH (`tmux new -s nisar`; para volver, `tmux attach -t nisar`).
+Use `tmux` so it doesn't stop if SSH drops (`tmux new -s nisar`; to come back, `tmux attach -t nisar`).
 
-## Apagar (importante)
+## Shutting down (important)
 ```bash
 gcloud compute instances stop insomnio-vm --zone=us-west1-b
 ```
-Al terminar el hackathon, bórrenla junto con el disco y el bucket: `gcloud compute instances delete insomnio-vm --zone=us-west1-b` y `gcloud storage rm -r gs://basurales-514714-salidas`.
+When the hackathon is over, delete it together with the disk and the bucket: `gcloud compute instances delete insomnio-vm --zone=us-west1-b` and `gcloud storage rm -r gs://basurales-514714-salidas`.
 
-## Alternativa en Azure
-`Standard_E16s_v5` (16 vCPU, 128 GB) en `westus2`, 300 GB Premium SSD, Ubuntu 24.04:
+## Azure alternative
+`Standard_E16s_v5` (16 vCPU, 128 GB) in `westus2`, 300 GB Premium SSD, Ubuntu 24.04:
 ```bash
 az group create --name spaceapps-rg --location westus2
 ```
 ```bash
 az vm create --resource-group spaceapps-rg --name insomnio-vm --image Ubuntu2404 --size Standard_E16s_v5 --os-disk-size-gb 300 --storage-sku Premium_LRS --admin-username equipo --generate-ssh-keys
 ```
-Para apagarla sin que cobre el cómputo: `az vm deallocate --resource-group spaceapps-rg --name insomnio-vm`.
+To shut it down without paying for compute: `az vm deallocate --resource-group spaceapps-rg --name insomnio-vm`.
 
-## Corrida completa del AMBA (14/11/2026)
-La primera corrida con todos los datos de NISAR sobre el AMBA: 15 GUNW y 20 GCOV de las órbitas 10 y 161, en una VM de GCP en us-west1.
+## Full AMBA run (14/11/2026)
+The first run with all the NISAR data over the AMBA: 15 GUNWs and 20 GCOVs from orbits 10 and 161, on a GCP VM in us-west1.
 
-| Paso | Medido |
+| Step | Measured |
 |---|---|
-| `buscar` | 15 GUNW y 20 GCOV, en 2 s |
-| `bajar` (todo) | 35 archivos, 100 GB, en 531 s (~190 MB/s). Un GUNW pesa ~2,1 GB y un GCOV ~3,4 GB |
-| `procesar --remoto` | 8 GUNW de la órbita 10 en 20 s, leyendo ~240 MB por archivo (~11 % del archivo) |
-| `procesar` + `indice` | 8 s a 80 m y ~50 s a 20 m, 35 de 35 archivos sin error |
+| `buscar` | 15 GUNWs and 20 GCOVs, in 2 s |
+| `bajar` (everything) | 35 files, 100 GB, in 531 s (~190 MB/s). A GUNW weighs ~2.1 GB and a GCOV ~3.4 GB |
+| `procesar --remoto` | 8 GUNWs from orbit 10 in 20 s, reading ~240 MB per file (~11 % of the file) |
+| `procesar` + `indice` | 8 s at 80 m and ~50 s at 20 m, 35 of 35 files without errors |
 
-Esa corrida fue la v0 del índice: con un umbral absoluto de coherencia, el río salía como la mayor mancha y ningún relleno conocido pasaba el umbral. De ahí salieron la máscara de agua, la comparación con el entorno y la calibración de `docs/indice-insomnio.md`.
+That run was the v0 of the index: with an absolute coherence threshold, the river came out as the largest blob and no known landfill passed the threshold. That's where the water mask, the comparison with the surroundings and the calibration in `docs/indice-insomnio.md` came from.
