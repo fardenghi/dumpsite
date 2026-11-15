@@ -41,6 +41,7 @@ Desde una sesión de Claude Code en la nube no hay SSH: el proxy sólo deja pasa
    - `arranque-pipeline.sh` corre el pipeline completo;
    - `arranque-subida.sh` sube `/opt/salidas` a una URL de subida de un solo uso.
    - `arranque-frames.sh` (prompt 6, 15/11) corre `buscar` y `procesar --remoto` sobre una lista de frames, sube un tar por frame a su URL de un solo uso (`upload-url-<FRAME>`) y **apaga la VM al terminar**. El código va en un solo metadato (`codigo-tgz-b64`). Así se leyeron 18 de los 20 frames nuevos (`../idea/etapa4-manchas.md`).
+   - `arranque-optico.sh` (15/11) corre `optico_catalogo_frames.py correr` y apaga la VM. Se usó para comparar: la misma lectura de Sentinel-2 tardó 319 s en la VM y 254 s en un contenedor. **Para el óptico la VM no ayuda.**
    Se carga con `add-metadata --metadata-from-file=startup-script=...` y se ejecuta con `gcloud compute instances reset`.
 4. **Avance:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
 5. **Resultados:** la VM no tiene permisos de GCP. Quien tiene permisos crea una sesión de subida resumible en el bucket `gs://basurales-514714-salidas` y pasa la URL en el metadato `upload-url`. El tar completo de `salidas/`, con los recortes de 20 m, quedó en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB). Los productos chicos están en `../salidas/`.
