@@ -1,0 +1,464 @@
+{
+ "generado_por": "herramientas/modelo_estado.py",
+ "pregunta": "con el radar y el óptico de un predio, ¿el registro lo da abierto o cerrado?",
+ "etiquetas": "estado del registro (EPA LMOP, OSM, casos curados); no salen del insomnio y pueden estar desactualizadas",
+ "muestras": {
+  "n": 198,
+  "abiertos": 121,
+  "cerrados": 77,
+  "frames": 26,
+  "con_optico": 198,
+  "prueba_reservada": [
+   "AMBA"
+  ]
+ },
+ "validacion": "un frame afuera por vez; IC 95 % por remuestreo de predios",
+ "modelo_principal": {
+  "variables": "radar + óptico",
+  "tipo": "regresión logística (C = 0,5), faltantes con la mediana"
+ },
+ "auc": {
+  "logística": {
+   "radar": {
+    "auc": 0.778,
+    "ic95": [
+     0.708,
+     0.839
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "óptico": {
+    "auc": 0.869,
+    "ic95": [
+     0.807,
+     0.92
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar + óptico": {
+    "auc": 0.877,
+    "ic95": [
+     0.815,
+     0.929
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar + área": {
+    "auc": 0.84,
+    "ic95": [
+     0.781,
+     0.892
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "óptico + área": {
+    "auc": 0.915,
+    "ic95": [
+     0.873,
+     0.951
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar + óptico + área": {
+    "auc": 0.909,
+    "ic95": [
+     0.858,
+     0.953
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "sólo área": {
+    "auc": 0.791,
+    "ic95": [
+     0.729,
+     0.853
+    ],
+    "n": 198,
+    "abiertos": 121
+   }
+  },
+  "árboles": {
+   "radar": {
+    "auc": 0.809,
+    "ic95": [
+     0.741,
+     0.869
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "óptico": {
+    "auc": 0.852,
+    "ic95": [
+     0.787,
+     0.906
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar + óptico": {
+    "auc": 0.893,
+    "ic95": [
+     0.838,
+     0.935
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar + área": {
+    "auc": 0.857,
+    "ic95": [
+     0.802,
+     0.906
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "óptico + área": {
+    "auc": 0.872,
+    "ic95": [
+     0.816,
+     0.917
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "radar + óptico + área": {
+    "auc": 0.902,
+    "ic95": [
+     0.856,
+     0.941
+    ],
+    "n": 198,
+    "abiertos": 121
+   },
+   "sólo área": {
+    "auc": 0.752,
+    "ic95": [
+     0.684,
+     0.818
+    ],
+    "n": 198,
+    "abiertos": 121
+   }
+  }
+ },
+ "aciertos_con_umbral_0.5": {
+  "abiertos": [
+   111,
+   121
+  ],
+  "cerrados": [
+   58,
+   77
+  ]
+ },
+ "auc_por_zona": [
+  {
+   "zona": "California y Arizona",
+   "n": 54,
+   "auc": 0.891
+  },
+  {
+   "zona": "resto",
+   "n": 144,
+   "auc": 0.867
+  }
+ ],
+ "lineas_de_base": {
+  "insomnio": {
+   "auc": 0.369,
+   "ic95": [
+    0.294,
+    0.45
+   ],
+   "n": 196,
+   "abiertos": 120,
+   "sentido": "más alto = más abierto"
+  },
+  "indice_actividad": {
+   "auc": 0.655,
+   "ic95": [
+    0.58,
+    0.731
+   ],
+   "n": 196,
+   "abiertos": 120,
+   "sentido": "más alto = más abierto"
+  },
+  "ndvi_contraste": {
+   "auc": 0.831,
+   "ic95": [
+    0.769,
+    0.887
+   ],
+   "n": 198,
+   "abiertos": 121,
+   "sentido": "más bajo = más abierto"
+  }
+ },
+ "variables": [
+  {
+   "variable": "swir_b12_contraste",
+   "coeficiente": 1.13,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.751,
+   "caida_auc_al_desordenar": 0.084,
+   "faltantes": 0
+  },
+  {
+   "variable": "insomnio",
+   "coeficiente": -0.89,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.369,
+   "caida_auc_al_desordenar": 0.046,
+   "faltantes": 2
+  },
+  {
+   "variable": "contraste_p10",
+   "coeficiente": -0.77,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.449,
+   "caida_auc_al_desordenar": 0.018,
+   "faltantes": 2
+  },
+  {
+   "variable": "frac_insomnio_90",
+   "coeficiente": -0.56,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.478,
+   "caida_auc_al_desordenar": 0.011,
+   "faltantes": 0
+  },
+  {
+   "variable": "ndvi_contraste",
+   "coeficiente": -0.46,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.169,
+   "caida_auc_al_desordenar": 0.01,
+   "faltantes": 0
+  },
+  {
+   "variable": "ndwi_contraste",
+   "coeficiente": 0.51,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.842,
+   "caida_auc_al_desordenar": 0.009,
+   "faltantes": 0
+  },
+  {
+   "variable": "bsi_contraste",
+   "coeficiente": -0.52,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.707,
+   "caida_auc_al_desordenar": 0.007,
+   "faltantes": 0
+  },
+  {
+   "variable": "hv_hh",
+   "coeficiente": -0.44,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.362,
+   "caida_auc_al_desordenar": 0.006,
+   "faltantes": 0
+  },
+  {
+   "variable": "ndvi_media",
+   "coeficiente": -0.43,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.249,
+   "caida_auc_al_desordenar": 0.005,
+   "faltantes": 0
+  },
+  {
+   "variable": "persistencia",
+   "coeficiente": 0.29,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.387,
+   "caida_auc_al_desordenar": 0.001,
+   "faltantes": 2
+  },
+  {
+   "variable": "eco_db",
+   "coeficiente": 0.07,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.477,
+   "caida_auc_al_desordenar": -0.0,
+   "faltantes": 0
+  },
+  {
+   "variable": "swir_b11_contraste",
+   "coeficiente": -0.39,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.558,
+   "caida_auc_al_desordenar": -0.0,
+   "faltantes": 0
+  },
+  {
+   "variable": "ndvi_variacion",
+   "coeficiente": -0.38,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.23,
+   "caida_auc_al_desordenar": -0.001,
+   "faltantes": 0
+  },
+  {
+   "variable": "bsi_media",
+   "coeficiente": -0.04,
+   "sentido": "más alto = más cerrado",
+   "auc_sola": 0.659,
+   "caida_auc_al_desordenar": -0.001,
+   "faltantes": 0
+  },
+  {
+   "variable": "eco_var_p90",
+   "coeficiente": 0.07,
+   "sentido": "más alto = más abierto",
+   "auc_sola": 0.787,
+   "caida_auc_al_desordenar": -0.005,
+   "faltantes": 0
+  }
+ ],
+ "auc_por_tercil_de_area": [
+  {
+   "tercil": "chicos",
+   "ha": [
+    10.7,
+    42.2
+   ],
+   "n": 66,
+   "abiertos": 20,
+   "auc": 0.863
+  },
+  {
+   "tercil": "medianos",
+   "ha": [
+    42.7,
+    82.6
+   ],
+   "n": 66,
+   "abiertos": 44,
+   "auc": 0.849
+  },
+  {
+   "tercil": "grandes",
+   "ha": [
+    83.3,
+    437.8
+   ],
+   "n": 66,
+   "abiertos": 57,
+   "auc": 0.979
+  }
+ ],
+ "sin_estado": {
+  "n": 148,
+  "p_abierto_mayor_0.5": 49
+ },
+ "prueba": [
+  {
+   "id_catalogo": "BAS-000007",
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "p_abierto": 0.66
+  },
+  {
+   "id_catalogo": "BAS-053304",
+   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "estado": "abierto",
+   "p_abierto": 0.018
+  }
+ ],
+ "prueba_por_grupo_de_variables": [
+  {
+   "variables": "radar",
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "p_abierto": 0.399
+  },
+  {
+   "variables": "radar",
+   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "estado": "abierto",
+   "p_abierto": 0.379
+  },
+  {
+   "variables": "óptico",
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "p_abierto": 0.705
+  },
+  {
+   "variables": "óptico",
+   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "estado": "abierto",
+   "p_abierto": 0.029
+  },
+  {
+   "variables": "radar + óptico",
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "p_abierto": 0.66
+  },
+  {
+   "variables": "radar + óptico",
+   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "estado": "abierto",
+   "p_abierto": 0.018
+  }
+ ],
+ "prueba_mediciones": [
+  {
+   "nombre": "Basural de Luján",
+   "estado": "cerrado",
+   "insomnio": 0.0,
+   "contraste_p10": 0.865,
+   "eco_var_p90": 2.002,
+   "ndvi_contraste": -0.121,
+   "swir_b12_contraste": 0.001
+  },
+  {
+   "nombre": "Complejo Ambiental Norte III (CEAMSE)",
+   "estado": "abierto",
+   "insomnio": 1.0,
+   "contraste_p10": 0.283,
+   "eco_var_p90": 2.261,
+   "ndvi_contraste": 0.246,
+   "swir_b12_contraste": -0.03
+  }
+ ],
+ "medianas_entrenamiento": {
+  "insomnio": [
+   0.34,
+   0.585
+  ],
+  "contraste_p10": [
+   0.482,
+   0.505
+  ],
+  "eco_var_p90": [
+   3.17,
+   2.671
+  ],
+  "ndvi_contraste": [
+   -0.187,
+   0.005
+  ],
+  "swir_b12_contraste": [
+   0.059,
+   0.026
+  ]
+ },
+ "limites": [
+  "casi todo EE. UU. (registro de la EPA)",
+  "el estado es el del registro, no una observación de actividad",
+  "p_abierto no es una probabilidad calibrada",
+  "en el registro los abiertos son más grandes: por eso el modelo principal no usa el área"
+ ]
+}
