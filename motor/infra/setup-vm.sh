@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prepara una VM Ubuntu 24.04 para procesar NISAR (Idea B). Se corre una vez, desde el home.
+# Prepara una VM Ubuntu 24.04 para procesar NISAR. Se corre una vez, desde el home.
 set -euo pipefail
 
 sudo apt-get update -y

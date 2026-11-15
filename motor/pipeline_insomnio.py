@@ -1,4 +1,4 @@
-"""Pipeline del índice de insomnio con NISAR (Idea B), para cualquier frame. Sin `--frame` trabaja sobre el AMBA.
+"""Pipeline del índice de insomnio con NISAR, para cualquier frame. Sin `--frame` trabaja sobre el AMBA.
 
 Pasos (se pueden correr sueltos o todos con `todo`):
   buscar    consulta la API pública de ASF y guarda la lista de GUNW (y GCOV) que cruzan la caja del frame

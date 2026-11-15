@@ -1,6 +1,16 @@
-# Herramientas (Python)
+# motor/
 
-Instalación: `python -m venv .venv` y `.venv/Scripts/pip install -r requirements.txt` (en Windows) o `.venv/bin/pip install -r requirements.txt`.
+El pipeline de Dumpsite en Python: lee NISAR, calcula el índice de insomnio, arma las manchas, las cruza con los catálogos de `../data/catalogos/`, mide el óptico, entrena los modelos y escribe los veredictos para la web. Todo lo que escribe va a `../data/salidas/` (ver `../data/README.md`). Cómo funciona cada paso está en `../docs/`.
+
+```bash
+cd motor
+python -m venv .venv && .venv/bin/pip install -r requirements.txt   # en Windows: .venv\Scripts\pip
+python -m pytest tests -q                                           # unos 2 minutos
+```
+
+Para bajar NISAR hace falta una cuenta de NASA Earthdata (`EARTHDATA_TOKEN`). Los `.h5` y los recortes no se suben: van a `datos/` o a una VM (`infra/README.md`).
+
+## Scripts
 
 | Script | Uso | Qué hace |
 |---|---|---|

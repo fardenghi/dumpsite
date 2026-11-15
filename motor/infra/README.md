@@ -1,4 +1,4 @@
-# VM para procesar NISAR (Idea B)
+# VM para procesar NISAR
 
 Una sola VM de CPU con mucha RAM, cerca de donde están los datos. Sin GPU ni Kubernetes: la descarga es el cuello de botella y el cálculo es liviano.
 
