@@ -1,16 +1,16 @@
-// Veredictos de todos los frames procesados y métricas del modelo de abierto contra cerrado.
-// Los dos archivos los escribe `motor/flujo.py --web` y pueden faltar:
-// por eso se buscan con `import.meta.glob` (un `import` directo de un archivo que no está rompe el build).
+// Verdicts for all processed frames and metrics of the open-versus-closed model.
+// Both files are written by `motor/flujo.py --web` and may be missing:
+// that's why they're looked up with `import.meta.glob` (a direct `import` of a missing file breaks the build).
 import { useEffect, useState } from 'react'
 import type { LecturaModelo, ModeloEstado, Sitio, Veredicto, Veredictos } from './types'
 
 const cargaVeredictos = import.meta.glob<Veredictos>('./seed/veredictos.json', { import: 'default' })
 const modeloJson = import.meta.glob<{ estado?: ModeloEstado | null }>('./seed/modelo.json', { import: 'default', eager: true })
 
-/** Métricas del modelo de abierto contra cerrado, o null si `modelo.json` no está o no trae `estado`. */
+/** Metrics of the open-versus-closed model, or null if `modelo.json` isn't there or doesn't carry `estado`. */
 export const MODELO_ESTADO: ModeloEstado | null = Object.values(modeloJson)[0]?.estado ?? null
 
-/** El frame de los 12 sitios curados de `seed/sitios.json`: el mapa y la lista arrancan ahí. */
+/** The frame of the 12 curated sites in `seed/sitios.json`: the map and the list start there. */
 export const FRAME_AMBA = 'AMBA'
 
 let cache: Promise<Veredictos | null> | null = null
@@ -21,7 +21,7 @@ export function getVeredictos(): Promise<Veredictos | null> {
   return cache
 }
 
-/** null mientras carga o si no hay archivo: quien lo usa tiene que andar igual sin veredictos. */
+/** null while loading or if there's no file: callers have to work without verdicts too. */
 export function useVeredictos() {
   const [v, setV] = useState<Veredictos | null>(null)
   useEffect(() => {
@@ -34,17 +34,17 @@ export function useVeredictos() {
   return v
 }
 
-/** Los polígonos del catálogo que se pueden ubicar en el mapa. */
+/** The catalog polygons that can be placed on the map. */
 export function delCatalogo(v: Veredictos | null): Veredicto[] {
   return (v?.sitios ?? []).filter((x) => x.tipo === 'catalogo' && typeof x.lat === 'number' && typeof x.lon === 'number')
 }
 
-/** Los de los otros frames: los del AMBA ya están en los sitios curados. */
+/** Those from the other frames: the AMBA ones are already among the curated sites. */
 export function fueraDelAmba(v: Veredictos | null): Veredicto[] {
   return delCatalogo(v).filter((x) => x.frame !== FRAME_AMBA)
 }
 
-/** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Sale de la clave: no hay otra fuente en el seed. */
+/** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Derived from the key: there's no other source in the seed. */
 export function nombreFrame(frame: string): string {
   const palabras = (t: string[]) => t.map((p) => p.charAt(0) + p.slice(1).toLowerCase()).join(' ')
   const partes = frame.split('_')
@@ -56,13 +56,13 @@ export function nombreFrame(frame: string): string {
 const km = (a: { lat: number; lon: number }, b: { lat: number; lon: number }) =>
   Math.hypot((a.lat - b.lat) * 111.32, (a.lon - b.lon) * 111.32 * Math.cos((a.lat * Math.PI) / 180))
 
-// Los sitios curados del AMBA no traen el id del catálogo. Se busca el polígono del catálogo del mismo frame
-// que está en el mismo lugar y mide lo mismo: a menos de MAX_KM y con una superficie parecida. Si no hay uno
-// claro (por ejemplo, la mancha al oeste de Luján, que no es un predio), el sitio queda sin lectura del modelo.
+// The curated AMBA sites don't carry the catalog id. We look for the catalog polygon in the same frame
+// that is in the same place and has the same size: within MAX_KM and with a similar area. If there isn't a
+// clear one (for example, the blob west of Luján, which isn't a site), the site stays without a model reading.
 const MAX_KM = 0.4
 const MAX_COCIENTE_HA = 1.25
 
-/** El polígono del catálogo que corresponde a un sitio curado, si hay uno claro. */
+/** The catalog polygon that matches a curated site, if there's a clear one. */
 export function veredictoDeSitio(s: Sitio, v: Veredictos | null): Veredicto | null {
   let mejor: Veredicto | null = null
   let dMejor = MAX_KM
@@ -78,7 +78,7 @@ export function veredictoDeSitio(s: Sitio, v: Veredictos | null): Veredicto | nu
   return mejor
 }
 
-/** La lectura del modelo, sólo si de verdad vino (un `modelo_estado` vacío o sin `lectura` no cuenta). */
+/** The model reading, only if it really came (an empty `modelo_estado` or one without `lectura` doesn't count). */
 export function lecturaModelo(x: Veredicto | null | undefined): LecturaModelo | null {
   const m = x?.modelo_estado
   return m && typeof m.lectura === 'string' ? m : null

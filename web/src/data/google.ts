@@ -1,9 +1,9 @@
-// Imagen satelital de Google (Map Tiles API, tiles 2D). Es opcional: sin VITE_GOOGLE_MAPS_KEY
-// la web sigue andando con Sentinel-2. Cada tile se cobra, así que el mapa sólo la pide adentro
-// de la caja del sitio abierto y con zoom alto (ver Mapa.tsx).
-// Los términos de Google no permiten guardar ni precargar sus tiles: no pasan por el caché de
-// public/sw.js; sólo los guarda el navegador según las cabeceras de la respuesta.
-// Documentación: https://developers.google.com/maps/documentation/tile/satellite
+// Google satellite imagery (Map Tiles API, 2D tiles). It's optional: without VITE_GOOGLE_MAPS_KEY
+// the web keeps working with Sentinel-2. Each tile is billed, so the map only requests it inside
+// the box of the open site and at high zoom (see Mapa.tsx).
+// Google's terms don't allow storing or prefetching their tiles: they don't go through the
+// public/sw.js cache; only the browser keeps them according to the response headers.
+// Docs: https://developers.google.com/maps/documentation/tile/satellite
 const KEY = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined
 const BASE = 'https://tile.googleapis.com'
 const GUARDADA = 'insomnes.google.sesion'
@@ -12,14 +12,14 @@ export const HAY_GOOGLE = !!KEY
 
 let sesion: Promise<string> | null = null
 
-/** Token de sesión de la Map Tiles API. Dura unas dos semanas y se reutiliza entre visitas. */
+/** Map Tiles API session token. It lasts about two weeks and is reused between visits. */
 export function sesionGoogle(): Promise<string> {
   sesion ??= (async () => {
     try {
       const g = JSON.parse(localStorage.getItem(GUARDADA) ?? 'null') as { token: string; vence: number } | null
       if (g && g.vence > Date.now() / 1000 + 3600) return g.token
     } catch {
-      // sin localStorage se pide una sesión nueva
+      // without localStorage a new session is requested
     }
     const r = await fetch(`${BASE}/v1/createSession?key=${KEY}`, {
       method: 'POST',
@@ -41,7 +41,7 @@ export function sesionGoogle(): Promise<string> {
 
 export const tilesGoogle = (token: string) => `${BASE}/v1/2dtiles/{z}/{x}/{y}?session=${token}&key=${KEY}`
 
-/** Texto de copyright que Google exige mostrar para la zona visible. */
+/** Copyright text that Google requires to show for the visible area. */
 export async function creditoGoogle(token: string, zoom: number, [o, s, e, n]: [number, number, number, number]): Promise<string> {
   const r = await fetch(`${BASE}/tile/v1/viewport?session=${token}&key=${KEY}&zoom=${Math.round(zoom)}&north=${n}&south=${s}&east=${e}&west=${o}`)
   if (!r.ok) return ''

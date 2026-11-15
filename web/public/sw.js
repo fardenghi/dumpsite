@@ -1,9 +1,9 @@
-// Caché de las imágenes abiertas del mapa: Blue Marble (NASA GIBS), Sentinel-2 (Planetary
-// Computer) y los recortes guardados en /escenas/. Primero el caché y después la red, así las
-// zonas de los basurales, que son las que se recorren siempre, cargan al instante y sin conexión.
-// Los tiles de Google quedan afuera a propósito: sus términos no permiten guardarlos.
+// Cache of the map images already opened: Blue Marble (NASA GIBS), Sentinel-2 (Planetary
+// Computer) and the crops stored in /escenas/. Cache first and network second, so the
+// dump-site areas, which are the ones people always browse, load instantly and offline.
+// Google tiles are left out on purpose: their terms don't allow storing them.
 const CACHE = 'insomnes-mapa-v1'
-const MAX = 4000 // entradas; al pasarse se borran las más viejas
+const MAX = 4000 // entries; when exceeded, the oldest are deleted
 
 const guardable = (url) =>
   url.hostname === 'gibs.earthdata.nasa.gov' ||

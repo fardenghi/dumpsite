@@ -11,25 +11,25 @@ import indice from '../data/seed/indice.json'
 import type { Imagen, LecturaModelo, Sitio, Veredicto } from '../data/types'
 import { fueraDelAmba, lecturaModelo, nombreFrame, useVeredictos, veredictoDeSitio } from '../data/veredictos'
 
-// El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
-// de la fecha elegida, servida por Microsoft Planetary Computer. Las dos andan sin claves.
-// Con VITE_GOOGLE_MAPS_KEY hay además una vista de alta resolución (Google, menos de 1 m, sin
-// fecha): se pide sólo adentro de la caja del sitio abierto y desde ZOOM_GOOGLE, porque cada
-// tile se cobra. Para comparar fechas se sigue usando Sentinel-2.
+// The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
+// of the chosen date, served by Microsoft Planetary Computer. Both work without keys.
+// With VITE_GOOGLE_MAPS_KEY there's also a high-resolution view (Google, under 1 m, no
+// date): it's requested only inside the box of the open site and from ZOOM_GOOGLE, because each
+// tile is billed. Sentinel-2 is still used to compare dates.
 const FONDO = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg'
 const s2 = (i: Imagen) =>
   `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${i.item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`
 
 const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5bb3a8', '#dfe5e1'] as unknown as maplibregl.ExpressionSpecification
-// la vista de partida es el AMBA entero: la grilla del índice de insomnio
+// the starting view is the whole AMBA: the insomnia index grid
 const AMBA: [number, number, number, number] = [indice.oeste, indice.sur, indice.este, indice.norte]
 const margenAmba = (ancho: number) => (ancho > 860 ? { top: 70, bottom: 90, left: 40, right: 40 } : { top: 70, bottom: 90, left: 12, right: 12 })
 const ZOOM_GOOGLE = 13
-// los basurales de los otros frames no tienen contorno ni imágenes cargadas: se va hasta ahí sin acercarse tanto
+// the dump sites of the other frames have no outline or images loaded: fly there without zooming in as much
 const ZOOM_OTRO = 9.5
 type Vista = 'google' | 'sentinel'
 
-/** Tiles Sentinel-2 que MapLibre pide al abrir un sitio (fuente de 512 px: el z del tile es el del mapa menos 1). */
+/** Sentinel-2 tiles MapLibre requests when opening a site (512 px source: the tile z is the map's minus 1). */
 function tilesDelSitio(s: Sitio): string[] {
   const ultima = s.imagenes[s.imagenes.length - 1]
   if (!ultima || !s.caja) return []
@@ -43,11 +43,11 @@ function tilesDelSitio(s: Sitio): string[] {
   return urls
 }
 
-/** Deja en el caché de public/sw.js la imagen más reciente de cada basural, de a poco y sin apurar al mapa. */
+/** Leaves in the public/sw.js cache the latest image of each dump site, little by little and without slowing the map. */
 async function precargar(sitios: Sitio[]) {
   if (!('serviceWorker' in navigator)) return
   await navigator.serviceWorker.ready
-  if (!navigator.serviceWorker.controller) return // primera visita: el caché empieza a llenarse en la próxima carga
+  if (!navigator.serviceWorker.controller) return // first visit: the cache starts filling on the next load
   const cola = sitios.flatMap(tilesDelSitio)
   const tanda = async () => {
     for (let url = cola.shift(); url; url = cola.shift()) await fetch(url).catch(() => null)
@@ -135,7 +135,7 @@ function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; mode
   )
 }
 
-/** Ficha de un polígono del catálogo de otro frame: lo que trae `veredictos.json`, sin serie ni imágenes. */
+/** Card for a catalog polygon of another frame: what `veredictos.json` carries, no series or images. */
 function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
   const radar = v.radar ?? 'no_alcanza'
   const modelo = lecturaModelo(v)
@@ -189,10 +189,10 @@ function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
 export default function Mapa() {
   const { sitios } = useSitios()
   const veredictos = useVeredictos()
-  // los basurales del catálogo de los otros frames: van como puntos, sin tocar la vista del AMBA
+  // the catalog dump sites of the other frames: they go as points, without touching the AMBA view
   const otros = useMemo(() => fueraDelAmba(veredictos), [veredictos])
   const { page, query } = useRoute()
-  // con un panel abierto no hay ficha: el mapa queda donde estaba
+  // with a panel open there's no card: the map stays where it was
   const enMapa = page === 'mapa'
   const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
@@ -211,7 +211,7 @@ export default function Mapa() {
   }, [sitios])
   const [verIndice, setVerIndice] = useState(false)
 
-  // el mapa se crea una sola vez
+  // the map is created only once
   useEffect(() => {
     const m = new maplibregl.Map({
       container: caja.current!,
@@ -237,7 +237,7 @@ export default function Mapa() {
     }
   }, [])
 
-  // puntos de lejos; de cerca, el contorno del predio (o un aro si OpenStreetMap no lo tiene)
+  // points from afar; up close, the site outline (or a ring if OpenStreetMap doesn't have it)
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios) return
@@ -258,7 +258,7 @@ export default function Mapa() {
     const deCerca = (desde: number, hasta: number): maplibregl.ExpressionSpecification => ['interpolate', ['linear'], ['zoom'], 9, desde, 10.5, hasta]
     m.addSource('sitios', { type: 'geojson', data: puntos })
     m.addSource('contornos', { type: 'geojson', data: contornos })
-    // índice de insomnio del AMBA: un PNG precalculado (pipeline_insomnio.py indice) con sus cuatro esquinas
+    // AMBA insomnia index: a precomputed PNG (pipeline_insomnio.py indice) with its four corners
     m.addSource('indice', { type: 'image', url: `${import.meta.env.BASE_URL}${indice.url}`, coordinates: indice.coordinates as [[number, number], [number, number], [number, number], [number, number]] })
     m.addLayer({ id: 'indice', type: 'raster', source: 'indice', minzoom: 7, paint: { 'raster-opacity': 0.8, 'raster-resampling': 'nearest', 'raster-fade-duration': 0 } })
     m.addLayer({ id: 'contorno-relleno', type: 'fill', source: 'contornos', minzoom: 9, paint: { 'fill-color': COLOR, 'fill-opacity': deCerca(0, 0.08) } })
@@ -302,7 +302,7 @@ export default function Mapa() {
     if (m && listo && m.getLayer('indice')) m.setLayoutProperty('indice', 'visibility', verIndice ? 'visible' : 'none')
   }, [listo, sitios, verIndice])
 
-  // los basurales de los otros frames: un punto por polígono del catálogo, debajo de los sitios del AMBA
+  // the dump sites of the other frames: one point per catalog polygon, under the AMBA sites
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !otros.length) return
@@ -326,7 +326,7 @@ export default function Mapa() {
       },
       debajoDe,
     )
-    // el elegido, con un aro
+    // the chosen one, with a ring
     m.addLayer(
       {
         id: 'otros-sel',
@@ -348,7 +348,7 @@ export default function Mapa() {
     if (m && listo && m.getLayer('otros-sel')) m.setFilter('otros-sel', ['==', ['get', 'id'], idOtro])
   }, [listo, otros, idOtro])
 
-  /** Alejar hasta ver todos los frames: el AMBA y los puntos del catálogo. */
+  /** Zoom out to see all the frames: the AMBA and the catalog points. */
   const verOtros = () => {
     const m = mapa.current
     if (!m || !otros.length) return
@@ -358,12 +358,12 @@ export default function Mapa() {
     m.fitBounds([Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))], { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
   }
 
-  // al elegir un sitio: volar hasta ahí y mostrar su imagen más reciente
+  // when choosing a site: fly there and show its latest image
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
     if (!sel && !selOtro) {
-      // al cerrar la ficha se vuelve a la vista del AMBA; la última imagen queda cargada
+      // closing the card goes back to the AMBA view; the last image stays loaded
       if (habiaSitio.current && enMapa) m.fitBounds(AMBA, { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
       habiaSitio.current = false
       return
@@ -372,7 +372,7 @@ export default function Mapa() {
     const ancho = m.getContainer().clientWidth
     const margen = ancho > 860 ? { right: 440, top: 80, bottom: 100, left: 60 } : { bottom: 400, top: 80, left: 24, right: 24 }
     if (!sel) {
-      // un basural de otro frame: no hay contorno ni recorte, se vuela hasta el punto
+      // a dump site from another frame: there's no outline or crop, fly to the point
       m.flyTo({ center: [selOtro!.lon as number, selOtro!.lat as number], zoom: Math.max(ZOOM_OTRO, Math.min(m.getZoom(), 12)), padding: margen, duration: 2200, essential: true })
       return
     }
@@ -380,7 +380,7 @@ export default function Mapa() {
     if (HAY_GOOGLE) setVista('google')
     const anillo = sel.contorno?.coordinates[0]
     if (HAY_GOOGLE && anillo) {
-      // con alta resolución se encuadra el predio, no la caja de varios km
+      // with high resolution the site is framed, not the several-km box
       const lons = anillo.map((p) => p[0])
       const lats = anillo.map((p) => p[1])
       m.fitBounds([Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)], { padding: margen, maxZoom: 17, duration: 2200, essential: true })
@@ -395,8 +395,8 @@ export default function Mapa() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, sel, selOtro])
 
-  // la imagen de la fecha elegida: el recorte guardado del sitio (anda sin conexión) y,
-  // debajo, la escena entera en tiles para ver los alrededores cuando hay red
+  // the image of the chosen date: the site's stored crop (works offline) and,
+  // underneath, the whole scene in tiles to see the surroundings when online
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !imagen || !sel) return
@@ -418,14 +418,14 @@ export default function Mapa() {
     }
   }, [listo, imagen, sel])
 
-  // la imagen Sentinel-2 del sitio sólo se ve con ese sitio abierto: en la vista general quedaría como un parche
+  // the site's Sentinel-2 image is only shown with that site open: in the overview it would look like a patch
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
     for (const capa of ['escena', 'recorte']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', sel ? 'visible' : 'none')
   }, [listo, imagen, sel])
 
-  // alta resolución de Google: sólo adentro de la caja del sitio abierto y con zoom alto
+  // Google high resolution: only inside the box of the open site and at high zoom
   const idSel = sel?.id
   useEffect(() => {
     const m = mapa.current
@@ -463,7 +463,7 @@ export default function Mapa() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, idSel])
 
-  // la vista elegida: Google tapa a Sentinel-2 o se esconde; con Google el relleno del contorno no tiñe la imagen
+  // the chosen view: Google covers Sentinel-2 or hides; with Google the outline fill doesn't tint the image
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return

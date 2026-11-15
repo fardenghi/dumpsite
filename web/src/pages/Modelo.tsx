@@ -8,8 +8,8 @@ import fichasJson from '../data/seed/fichas.json'
 import indice from '../data/seed/indice.json'
 import { Fuentes } from './Inicio'
 
-// Todos los números de esta página salen del pipeline (seed/*.json) o de
-// docs/indice-insomnio.md. Lo que no se midió no se muestra.
+// Every number on this page comes from the pipeline (seed/*.json) or from
+// docs/indice-insomnio.md. What wasn't measured isn't shown.
 interface Ficha {
   motivo: string
   persistencia: number | null
@@ -22,7 +22,7 @@ const FICHAS = fichasJson as unknown as Record<string, Ficha>
 const P = indice.parametros
 const ECO_MIN = -13
 
-// la grilla del AMBA, en hectáreas (indice-final.md)
+// the AMBA grid, in hectares (docs/indice-insomnio.md)
 const GRILLA = 718952
 const AGUA = 97493
 const CLASES = [
@@ -50,7 +50,7 @@ const LIMITES = [
 
 const dec = (n: number, d = 2) => n.toFixed(d).replace('.', ',').replace('-', '−')
 
-/** Cada par de pasadas: la raya es el 80 % de la coherencia del entorno y el punto, la del sitio. Punto debajo de la raya = par despierto. */
+/** Each pair of passes: the dash is 80 % of the surroundings' coherence and the dot, the site's. Dot below the dash = awake pair. */
 function Pares({ f }: { f: Ficha }) {
   const orbitas = [...new Set(f.pares.map((p) => p.orbita))].sort((a, b) => a - b)
   const alto = 84
@@ -94,7 +94,7 @@ function Pares({ f }: { f: Ficha }) {
   )
 }
 
-/** Una barra con el umbral marcado. */
+/** A bar with the threshold marked. */
 function Medidor({ nombre, valor, texto, umbral, textoUmbral, min = 0, max = 1, pasa }: { nombre: string; valor: number | null; texto: string; umbral: number; textoUmbral: string; min?: number; max?: number; pasa: boolean }) {
   const pos = (v: number) => `${Math.max(0, Math.min(1, (v - min) / (max - min))) * 100}%`
   return (
@@ -114,7 +114,7 @@ function Medidor({ nombre, valor, texto, umbral, textoUmbral, min = 0, max = 1, 
   )
 }
 
-/** El modelo de abierto contra cerrado, con lo que trae `seed/modelo.json` en `estado` y nada más: ni se redondea a favor ni se saca un límite. */
+/** The open-versus-closed model, with what `seed/modelo.json` carries in `estado` and nothing else: no favorable rounding, no limit removed. */
 function AbiertoOCerrado({ m, paso }: { m: ModeloEstado; paso: number }) {
   const ic = Array.isArray(m.ic95) && m.ic95.length === 2 ? m.ic95 : null
   const prueba = Array.isArray(m.prueba_amba) ? m.prueba_amba : []
@@ -364,7 +364,7 @@ export default function Modelo() {
         </div>
       </section>
 
-      {/* si `modelo.json` no trae `estado`, esta sección no aparece y la página queda como antes: sin métricas */}
+      {/* if `modelo.json` doesn't carry `estado`, this section doesn't show up and the page stays as before: no metrics */}
       {MODELO_ESTADO && <AbiertoOCerrado m={MODELO_ESTADO} paso={4} />}
 
       <section className="section">

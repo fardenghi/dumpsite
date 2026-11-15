@@ -1,13 +1,13 @@
-"""Busca, para cada sitio, escenas Sentinel-2 (10 m) con pocas nubes.
+"""Finds, for each site, Sentinel-2 scenes (10 m) with few clouds.
 
-Consulta el catálogo STAC de Microsoft Planetary Computer (abierto, sin cuenta),
-lee src/data/seed/sitios.json, escribe src/data/seed/imagenes.json y guarda un
-recorte JPG por sitio y por fecha en public/escenas/ (la web los usa sin conexión).
-Correr después de contornos.py, que fija el centro y el contorno de cada sitio.
-Uso: python3 scripts/s2_fechas.py [desde] [hasta]   (fechas AAAA-MM-DD)
+Queries the Microsoft Planetary Computer STAC catalog (open, no account),
+reads src/data/seed/sitios.json, writes src/data/seed/imagenes.json and saves a
+JPG crop per site and per date in public/escenas/ (the web uses them offline).
+Run after contornos.py, which sets each site's center and outline.
+Usage: python3 scripts/s2_fechas.py [from] [to]   (dates YYYY-MM-DD)
 
-Datos: Copernicus Sentinel-2 L2A (ESA). El porcentaje de nubes es el de la
-escena entera (unos 110 km de lado), no el del sitio.
+Data: Copernicus Sentinel-2 L2A (ESA). The cloud percentage is the one of the
+whole scene (about 110 km per side), not the site's.
 """
 import json
 import math
@@ -20,7 +20,7 @@ STAC = "https://planetarycomputer.microsoft.com/api/stac/v1/search"
 DATOS = "https://planetarycomputer.microsoft.com/api/data/v1"
 RECORTES = SEED.parent.parent.parent / "public" / "escenas"
 MAX_POR_SITIO = 8
-MAX_NUBE = 10  # % de la escena
+MAX_NUBE = 10  # % of the scene
 
 
 def buscar(lat, lon, desde, hasta):
@@ -36,7 +36,7 @@ def buscar(lat, lon, desde, hasta):
 
 
 def repartir(lista, n):
-    """Hasta n elementos repartidos a lo largo del período."""
+    """Up to n elements spread over the period."""
     if len(lista) <= n:
         return lista
     paso = (len(lista) - 1) / (n - 1)
@@ -44,7 +44,7 @@ def repartir(lista, n):
 
 
 def caja(sitio, contorno):
-    """Caja alrededor del sitio: oeste, sur, este, norte. Entre 3 y 10 km de lado."""
+    """Box around the site: west, south, east, north. Between 3 and 10 km per side."""
     kx, ky = 111320 * math.cos(math.radians(sitio["lat"])), 110540
     if contorno:
         lons = [p[0] for p in contorno["coordinates"][0]]
@@ -58,7 +58,7 @@ def caja(sitio, contorno):
 
 
 def bajar_recorte(item, c, medio, destino):
-    lado = min(1024, round(2 * medio / 10))  # un píxel por cada 10 m: la resolución real
+    lado = min(1024, round(2 * medio / 10))  # one pixel per 10 m: the real resolution
     url = (f"{DATOS}/item/bbox/{c[0]},{c[1]},{c[2]},{c[3]}/{lado}x{lado}.jpg"
            f"?collection=sentinel-2-l2a&item={item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3")
     destino.write_bytes(urllib.request.urlopen(url, timeout=120).read())
@@ -71,7 +71,7 @@ def main():
     salida = {}
     for s in json.loads((SEED / "sitios.json").read_text()):
         por_fecha = {}
-        # de la más despejada a la más nublada: queda una escena por día
+        # from the clearest to the cloudiest: one scene per day is kept
         for e in sorted(buscar(s["lat"], s["lon"], desde, hasta), key=lambda e: e["properties"]["eo:cloud_cover"]):
             por_fecha.setdefault(e["properties"]["datetime"][:10], e["id"])
         elegidas = repartir(sorted(por_fecha), MAX_POR_SITIO)

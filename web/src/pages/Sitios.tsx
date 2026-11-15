@@ -7,7 +7,7 @@ import { FRAME_AMBA, fueraDelAmba, lecturaModelo, nombreFrame, useVeredictos, ve
 type Orden = 'insomnio' | 'ha' | 'nombre'
 const TODOS = '*'
 
-/** Una fila de la lista: un sitio curado del AMBA o un polígono del catálogo de otro frame. */
+/** A row of the list: a curated AMBA site or a catalog polygon from another frame. */
 interface Fila {
   id: string
   frame: string
@@ -19,13 +19,13 @@ interface Fila {
   radar: Radar
   insomnio: number | null
   veredicto: string
-  /** estado del registro en palabras, para el CSV y la vista angosta */
+  /** registry status in words, for the CSV and the narrow view */
   registro: string
   cierre?: string
   modelo: LecturaModelo | null
-  /** el sitio curado, si la fila es del AMBA: tiene su propia etiqueta de registro */
+  /** the curated site, if the row is from the AMBA: it has its own registry tag */
   sitio?: Sitio
-  /** el estado del registro del catálogo, tal como viene, si la fila es de otro frame */
+  /** the catalog registry status, as it comes, if the row is from another frame */
   registroCatalogo?: string | null
 }
 

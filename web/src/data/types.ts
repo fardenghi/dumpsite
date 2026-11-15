@@ -1,22 +1,22 @@
-/** Qué dice el registro oficial o la prensa sobre el sitio. */
+/** What the official registry or the press says about the site. */
 export type Registro = 'activo' | 'cerrado' | 'sin_registro'
-/** Qué ve el radar: coherencia baja en casi todos los pares, alta, o no se distingue del entorno. */
+/** What the radar sees: low coherence in almost every pair, high, or indistinguishable from its surroundings. */
 export type Radar = 'despierto' | 'quieto' | 'no_alcanza'
 
-/** Un par de pasadas de NISAR separadas por 12 días. */
+/** A pair of NISAR passes 12 days apart. */
 export interface Par {
-  /** fecha de la segunda pasada, AAAA-MM-DD */
+  /** date of the second pass, YYYY-MM-DD */
   fecha: string
-  /** mediana de la coherencia adentro del sitio, 0 a 1 */
+  /** median coherence inside the site, 0 to 1 */
   sitio: number
   /** mediana en un anillo de 1,5 km alrededor */
   anillo: number
 }
 
-/** Una escena Sentinel-2 (10 m) con pocas nubes sobre el sitio. */
+/** A Sentinel-2 scene (10 m) with few clouds over the site. */
 export interface Imagen {
   fecha: string
-  /** id de la escena en la colección sentinel-2-l2a de Planetary Computer */
+  /** scene id in the Planetary Computer sentinel-2-l2a collection */
   item: string
 }
 
@@ -30,16 +30,16 @@ export interface Sitio {
   lon: number
   ha: number
   registro: Registro
-  /** fecha de cierre según el registro, si está cerrado */
+  /** closure date according to the registry, if it's closed */
   cierre?: string
   radar: Radar
-  /** fracción de pares con coherencia baja respecto del entorno, 0 a 1 */
+  /** fraction of pairs with low coherence relative to the surroundings, 0 to 1 */
   insomnio: number
   pares: Par[]
   imagenes: Imagen[]
-  /** contorno del predio según OpenStreetMap, si existe */
+  /** site outline according to OpenStreetMap, if it exists */
   contorno?: { type: 'Polygon'; coordinates: number[][][] }
-  /** caja de los recortes guardados: oeste, sur, este, norte */
+  /** box of the stored crops: west, south, east, north */
   caja?: [number, number, number, number]
 }
 
@@ -53,28 +53,28 @@ export interface Resumen {
   hasta: string
 }
 
-// ---------- veredictos por frame y modelo de abierto contra cerrado
-// Los escribe `motor/flujo.py --web` en seed/veredictos.json y seed/modelo.json.
-// Todo lo del modelo es opcional: si no vino, la web no muestra nada del modelo.
+// ---------- verdicts per frame and open-versus-closed model
+// Written by `motor/flujo.py --web` in seed/veredictos.json and seed/modelo.json.
+// Everything about the model is optional: if it didn't come, the web shows nothing about the model.
 
-/** Lo que dice el modelo de abierto contra cerrado de un polígono. No es el estado del registro ni una probabilidad calibrada. */
+/** What the open-versus-closed model says about a polygon. It's neither the registry status nor a calibrated probability. */
 export interface LecturaModelo {
-  /** puntaje de 0 a 1; null si no se pudo calcular */
+  /** score from 0 to 1; null if it couldn't be computed */
   p_abierto: number | null
   lectura: 'compatible con abierto' | 'compatible con cerrado' | 'sin dato'
-  /** de dónde sale el puntaje (por ejemplo, validación sin su frame o modelo final) */
+  /** where the score comes from (for example, validation without its frame or final model) */
   origen: string
 }
 
-/** Un polígono del catálogo de basurales (o una mancha) de un frame procesado: una fila de seed/veredictos.json. */
+/** A dump-site catalog polygon (or a blob) of a processed frame: one row of seed/veredictos.json. */
 export interface Veredicto {
   tipo: string
   id: string
-  /** clave del frame de `data/catalogos/frames.json`: `AMBA`, `LOS_ANGELES`, `USA_OH_LAKE`… */
+  /** frame key in `data/catalogos/frames.json`: `AMBA`, `LOS_ANGELES`, `USA_OH_LAKE`… */
   frame: string
   nombre: string | null
   area_ha: number | null
-  /** estado según el registro: `abierto`, `cerrado`, `desconocido` o `contradictorio` */
+  /** status according to the registry: `abierto`, `cerrado`, `desconocido` or `contradictorio` */
   registro: string | null
   radar: Radar | null
   insomnio: number | null
@@ -93,7 +93,7 @@ export interface Veredictos {
   sitios: Veredicto[]
 }
 
-/** Métricas del modelo de abierto contra cerrado: la clave `estado` de seed/modelo.json. */
+/** Metrics of the open-versus-closed model: the `estado` key of seed/modelo.json. */
 export interface ModeloEstado {
   auc: number
   ic95: [number, number]

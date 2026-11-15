@@ -9,5 +9,5 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-// caché de las imágenes abiertas del mapa (ver public/sw.js)
+// cache for the map images already opened (see public/sw.js)
 if ('serviceWorker' in navigator) navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => null)

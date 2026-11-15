@@ -1,9 +1,9 @@
-"""Baja de OpenStreetMap el contorno de cada sitio (polígonos landuse=landfill).
+"""Downloads from OpenStreetMap the outline of each site (landuse=landfill polygons).
 
-Lee src/data/seed/sitios.json, escribe src/data/seed/contornos.json y actualiza
-en sitios.json el centro y la superficie de los sitios que tienen polígono.
-Uso: python3 scripts/contornos.py
-Datos: © colaboradores de OpenStreetMap, licencia ODbL.
+Reads src/data/seed/sitios.json, writes src/data/seed/contornos.json and updates
+in sitios.json the center and area of the sites that have a polygon.
+Usage: python3 scripts/contornos.py
+Data: © OpenStreetMap contributors, ODbL license.
 """
 import json
 import math
@@ -14,11 +14,11 @@ from pathlib import Path
 
 SEED = Path(__file__).resolve().parent.parent / "src" / "data" / "seed"
 SERVIDOR = "https://overpass-api.de/api/interpreter"
-RADIO = 5000  # metros alrededor del punto del sitio
+RADIO = 5000  # meters around the site's point
 
 
 def overpass(consulta):
-    """El servidor público se satura seguido: una sola consulta y varios reintentos."""
+    """The public server is often overloaded: a single query and several retries."""
     for intento in range(10):
         try:
             pedido = urllib.request.Request(SERVIDOR, urllib.parse.urlencode({"data": consulta}).encode(), {"User-Agent": "insomnes-contornos/0.1"})
@@ -30,14 +30,14 @@ def overpass(consulta):
 
 
 def anillos(elemento):
-    """Anillos exteriores cerrados de un way o de una relación."""
+    """Closed exterior rings of a way or a relation."""
     if elemento["type"] == "way":
         partes = [elemento.get("geometry", [])]
     else:
         partes = [m.get("geometry", []) for m in elemento.get("members", []) if m.get("role") in ("outer", "") and m["type"] == "way"]
     tramos = [[(round(n["lon"], 5), round(n["lat"], 5)) for n in p] for p in partes if len(p) >= 2]
     salida = []
-    # en una relación el borde suele venir partido en varios tramos abiertos: se unen por las puntas
+    # in a relation the edge often comes split into several open segments: they are joined end to end
     while tramos:
         anillo = tramos.pop()
         while anillo[0] != anillo[-1]:
@@ -52,7 +52,7 @@ def anillos(elemento):
 
 
 def medir(anillo):
-    """Superficie en hectáreas y centroide (lon, lat), en un plano local."""
+    """Area in hectares and centroid (lon, lat), on a local plane."""
     lat0 = sum(p[1] for p in anillo) / len(anillo)
     kx, ky = 111320 * math.cos(math.radians(lat0)), 110540
     pts = [(lon * kx, lat * ky) for lon, lat in anillo]
@@ -75,7 +75,7 @@ def distancia(lon1, lat1, lon2, lat2):
 def main():
     sitios = json.loads((SEED / "sitios.json").read_text(encoding="utf-8"))
     contornos = {}
-    con_predio = [s for s in sitios if s["registro"] != "sin_registro"]  # las manchas sin predio conocido no tienen polígono propio
+    con_predio = [s for s in sitios if s["registro"] != "sin_registro"]  # blobs without a known site don't have their own polygon
     zonas = "".join(f"way[landuse=landfill](around:{RADIO},{s['lat']},{s['lon']});relation[landuse=landfill](around:{RADIO},{s['lat']},{s['lon']});" for s in con_predio)
     poligonos = []
     for e in overpass(f"[out:json][timeout:180];({zonas});out geom;"):
@@ -85,12 +85,12 @@ def main():
                 poligonos.append((ha, centro, anillo))
     for s in con_predio:
         candidatos = [(distancia(c[0], c[1], s["lon"], s["lat"]), ha, c, a) for ha, c, a in poligonos]
-        # lejos del punto sólo se acepta un predio grande: uno chico a varios km suele ser otro relleno
+        # far from the point only a large site is accepted: a small one several km away is usually another landfill
         candidatos = [c for c in candidatos if c[0] <= 2500 or (c[0] <= RADIO + 1500 and c[1] >= 100)]
         if not candidatos:
             print(f"{s['id']:16s} sin polígono")
             continue
-        # el más grande entre los que están cerca del punto
+        # the largest among those near the point
         cerca = [c for c in candidatos if c[0] <= min(c[0] for c in candidatos) + 800]
         _, ha, centro, anillo = max(cerca, key=lambda c: c[1])
         contornos[s["id"]] = {"type": "Polygon", "coordinates": [[list(p) for p in anillo]]}

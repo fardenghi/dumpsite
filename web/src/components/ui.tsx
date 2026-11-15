@@ -13,13 +13,13 @@ export const pct = (x: number) => `${Math.round(x * 100)} %`
 export const coh = (x: number) => x.toFixed(2).replace('.', ',')
 
 const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
-/** "2026-10-12" -> "12 oct" (con año si se pide). Sin Date: no depende del huso horario. */
+/** "2026-10-12" -> "12 oct" (with the year if asked). No Date: doesn't depend on the time zone. */
 export function fecha(iso: string, conAnio = false) {
   const [a, m, d] = iso.split('-').map(Number)
   return `${d} ${MESES[m - 1]}${conAnio ? ` ${a}` : ''}`
 }
 
-/** El cruce entre lo que dice el registro y lo que ve el radar. */
+/** The cross between what the registry says and what the radar sees. */
 export function veredicto(s: Sitio) {
   if (s.radar === 'no_alcanza') return 'El radar no alcanza'
   if (s.registro === 'cerrado') return s.radar === 'despierto' ? 'Cerrado pero despierto' : 'Cerrado y quieto'
@@ -67,7 +67,7 @@ export function Seg<T extends string>({ value, onChange, options }: { value: T; 
   )
 }
 
-/** Si el sitio figura en un registro oficial, y cómo. */
+/** Whether the site is in an official registry, and how. */
 export function RegistroTag({ s }: { s: Sitio }) {
   if (s.registro === 'sin_registro') return <span className="reg no">Sin registro</span>
   return (
@@ -80,7 +80,7 @@ export function RegistroTag({ s }: { s: Sitio }) {
   )
 }
 
-/** El estado del registro de un polígono del catálogo, tal como viene: sin estado no se inventa uno. */
+/** The registry status of a catalog polygon, as it comes: if there's no status, none is made up. */
 export function RegistroCatalogo({ registro }: { registro: string | null }) {
   if (registro === 'abierto' || registro === 'cerrado')
     return (
@@ -96,10 +96,10 @@ export function RegistroCatalogo({ registro }: { registro: string | null }) {
 
 /** "compatible con abierto" -> "Compatible con abierto". */
 const mayuscula = (t: string) => t.charAt(0).toUpperCase() + t.slice(1)
-/** Puntaje del modelo, de 0 a 1, con coma. */
+/** Model score, from 0 to 1, with a decimal comma. */
 export const puntaje = (p: number) => p.toFixed(2).replace('.', ',')
 
-/** Lo que dice el modelo de abierto contra cerrado. Va siempre rotulado: no es el registro ni el veredicto del radar. */
+/** What the open-versus-closed model says. Always labeled: it's not the registry nor the radar verdict. */
 export function SegunModelo({ m, corto }: { m: LecturaModelo; corto?: boolean }) {
   const p = typeof m.p_abierto === 'number' ? m.p_abierto : null
   if (corto)
@@ -135,7 +135,7 @@ export interface Opcion<T extends string> {
   radar?: Radar
 }
 
-/** Desplegable propio, en vez del selector del navegador. */
+/** Custom dropdown, instead of the browser's select. */
 export function Picker<T extends string>({ value, onChange, options, placeholder, className = '', label }: { value: T | ''; onChange: (v: T) => void; options: Opcion<T>[]; placeholder?: string; className?: string; label: string }) {
   const [abierto, setAbierto] = useState(false)
   const ref = useRef<HTMLDivElement>(null)

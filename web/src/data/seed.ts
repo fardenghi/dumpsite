@@ -1,7 +1,7 @@
-// Datos reales, precalculados. `seed/sitios.json` lo escribe el pipeline del índice de insomnio
-// (motor/pipeline_insomnio.py indice) con la forma exacta de `Sitio[]`:
-// 15 pares de NISAR (GUNW, 80 m) sobre el AMBA, contornos de OpenStreetMap y registro con fuente.
-// No se edita a mano: se regenera con ese comando.
+// Real, precomputed data. `seed/sitios.json` is written by the insomnia index pipeline
+// (motor/pipeline_insomnio.py indice) with the exact shape of `Sitio[]`:
+// 15 NISAR pairs (GUNW, 80 m) over the AMBA, OpenStreetMap outlines and the registry with its source.
+// Not edited by hand: regenerate it with that command.
 import base from './seed/sitios.json'
 import type { Sitio } from './types'
 

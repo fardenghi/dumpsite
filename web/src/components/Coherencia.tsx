@@ -5,15 +5,15 @@ export interface Serie {
   nombre: string
   color: string
   valores: number[]
-  /** línea fina de referencia (el entorno) en vez de la serie principal */
+  /** thin reference line (the surroundings) instead of the main series */
   tenue?: boolean
 }
 
 /**
- * Coherencia par a par, de 0 a 1. Una serie baja y plana es un lugar que no durmió.
- * `marca` dibuja una línea vertical en una fecha (por ejemplo, el cierre).
+ * Pair-by-pair coherence, from 0 to 1. A low, flat series is a place that never slept.
+ * `marca` draws a vertical line at a date (for example, the closure).
  */
-export function Coherencia({ fechas, series, marca, alto: altoFijo = 150, llenar }: { fechas: string[]; series: Serie[]; marca?: { fecha: string; texto: string }; alto?: number; /** el gráfico crece hasta ocupar el alto que le deje su contenedor */ llenar?: boolean }) {
+export function Coherencia({ fechas, series, marca, alto: altoFijo = 150, llenar }: { fechas: string[]; series: Serie[]; marca?: { fecha: string; texto: string }; alto?: number; /** the chart grows to fill the height its container leaves */ llenar?: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const [w, setW] = useState(0)
   const [h, setH] = useState(0)
@@ -35,7 +35,7 @@ export function Coherencia({ fechas, series, marca, alto: altoFijo = 150, llenar
   const x = (i: number) => m.l + (fechas.length > 1 ? (i / (fechas.length - 1)) * iw : iw / 2)
   const y = (v: number) => m.t + (1 - v) * ih
   const t = (iso: string) => Date.parse(iso)
-  // posición de una fecha cualquiera entre la primera y la última pasada
+  // position of any date between the first and the last pass
   const xFecha = (iso: string) => m.l + ((t(iso) - t(fechas[0])) / (t(fechas[fechas.length - 1]) - t(fechas[0]))) * iw
   const conMarca = marca && fechas.length > 1 && t(marca.fecha) >= t(fechas[0]) && t(marca.fecha) <= t(fechas[fechas.length - 1])
   const etiquetas = [0, Math.floor((fechas.length - 1) / 2), fechas.length - 1].filter((v, i, a) => a.indexOf(v) === i)

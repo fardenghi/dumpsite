@@ -1,13 +1,13 @@
-// Única puerta a los datos. Hoy lee el seed; con VITE_API_URL definida le pega al backend.
-// Contrato esperado del backend:
+// Single gateway to the data. Today it reads the seed; with VITE_API_URL set it calls the backend.
+// Expected backend contract:
 //   GET /sitios  -> Sitio[]   (ver types.ts)
-// El resumen se calcula acá: son pocos miles de filas como mucho.
+// The summary is computed here: a few thousand rows at most.
 import { useEffect, useState } from 'react'
 import type { Resumen, Sitio } from './types'
 
 const API = import.meta.env.VITE_API_URL as string | undefined
 
-/** true mientras no haya backend: la interfaz lo avisa. */
+/** true while there's no backend: the UI says so. */
 export const DEMO = !API
 
 let cache: Promise<Sitio[]> | null = null

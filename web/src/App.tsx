@@ -5,10 +5,10 @@ import Inicio from './pages/Inicio'
 import Modelo from './pages/Modelo'
 import Sitios from './pages/Sitios'
 
-// MapLibre pesa: se baja aparte, pero el mapa es el fondo de toda la web y queda siempre montado
+// MapLibre is heavy: it's loaded separately, but the map is the background of the whole site and stays mounted
 const Mapa = lazy(() => import('./pages/Mapa'))
 
-// Los paneles flotan sobre el mapa; "mapa" es no tener ninguno abierto
+// Panels float over the map; "mapa" means having none open
 const PANELES = [
   { id: 'inicio', label: 'Resumen', el: Inicio },
   { id: 'sitios', label: 'Sitios', el: Sitios },
@@ -57,7 +57,7 @@ export function Marca() {
 export default function App() {
   const { page } = useRoute()
   const P = PANELES.find((p) => p.id === page)
-  // el último panel queda montado mientras se cierra, para que salga con transición
+  // the last panel stays mounted while it closes, so it leaves with a transition
   const [ultimo, setUltimo] = useState(P)
   useEffect(() => {
     if (P) setUltimo(P)
@@ -94,7 +94,7 @@ export default function App() {
           Mapa
         </a>
         {PANELES.map((p) => (
-          // tocar la sección abierta la cierra: el panel se pone y se saca
+          // tapping the open section closes it: the panel toggles
           <a key={p.id} href={p.id === P?.id ? '#/mapa' : `#/${p.id}`} className={p.id === P?.id ? 'on' : ''} aria-current={p.id === P?.id ? 'page' : undefined}>
             {p.label}
           </a>
