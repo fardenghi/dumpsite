@@ -192,7 +192,567 @@
     -33.9753
    ]
   ],
-  "ancho": 758,
-  "alto": 1159
+  "ancho": 694,
+  "alto": 1326
+ },
+ {
+  "frame": "USA_CA_SAN_BERNARDINO",
+  "url": "indice/insomnio-usa_ca_san_bernardino.png",
+  "oeste": -117.4863,
+  "sur": 33.9553,
+  "este": -116.9601,
+  "norte": 34.8865,
+  "coordinates": [
+   [
+    -117.4863,
+    34.8865
+   ],
+   [
+    -116.9601,
+    34.8865
+   ],
+   [
+    -116.9601,
+    33.9553
+   ],
+   [
+    -117.4863,
+    33.9553
+   ]
+  ],
+  "ancho": 668,
+  "alto": 1433
+ },
+ {
+  "frame": "USA_CA_TULARE",
+  "url": "indice/insomnio-usa_ca_tulare.png",
+  "oeste": -120.0038,
+  "sur": 35.9687,
+  "este": -119.0421,
+  "norte": 36.9906,
+  "coordinates": [
+   [
+    -120.0038,
+    36.9906
+   ],
+   [
+    -119.0421,
+    36.9906
+   ],
+   [
+    -119.0421,
+    35.9687
+   ],
+   [
+    -120.0038,
+    35.9687
+   ]
+  ],
+  "ancho": 1221,
+  "alto": 1614
+ },
+ {
+  "frame": "USA_FL_OSCEOLA",
+  "url": "indice/insomnio-usa_fl_osceola.png",
+  "oeste": -81.9038,
+  "sur": 27.9739,
+  "este": -81.02,
+  "norte": 28.8455,
+  "coordinates": [
+   [
+    -81.9038,
+    28.8455
+   ],
+   [
+    -81.02,
+    28.8455
+   ],
+   [
+    -81.02,
+    27.9739
+   ],
+   [
+    -81.9038,
+    27.9739
+   ]
+  ],
+  "ancho": 1122,
+  "alto": 1258
+ },
+ {
+  "frame": "USA_GA_FORSYTH",
+  "url": "indice/insomnio-usa_ga_forsyth.png",
+  "oeste": -84.9975,
+  "sur": 34.0911,
+  "este": -84.1788,
+  "norte": 34.7284,
+  "coordinates": [
+   [
+    -84.9975,
+    34.7284
+   ],
+   [
+    -84.1788,
+    34.7284
+   ],
+   [
+    -84.1788,
+    34.0911
+   ],
+   [
+    -84.9975,
+    34.0911
+   ]
+  ],
+  "ancho": 1040,
+  "alto": 981
+ },
+ {
+  "frame": "USA_IL_ST_CLAIR",
+  "url": "indice/insomnio-usa_il_st_clair.png",
+  "oeste": -90.985,
+  "sur": 38.1241,
+  "este": -89.953,
+  "norte": 38.8757,
+  "coordinates": [
+   [
+    -90.985,
+    38.8757
+   ],
+   [
+    -89.953,
+    38.8757
+   ],
+   [
+    -89.953,
+    38.1241
+   ],
+   [
+    -90.985,
+    38.1241
+   ]
+  ],
+  "ancho": 1311,
+  "alto": 1220
+ },
+ {
+  "frame": "USA_IN_FULTON",
+  "url": "indice/insomnio-usa_in_fulton.png",
+  "oeste": -86.9732,
+  "sur": 41.1125,
+  "este": -85.9441,
+  "norte": 41.8583,
+  "coordinates": [
+   [
+    -86.9732,
+    41.8583
+   ],
+   [
+    -85.9441,
+    41.8583
+   ],
+   [
+    -85.9441,
+    41.1125
+   ],
+   [
+    -86.9732,
+    41.1125
+   ]
+  ],
+  "ancho": 1307,
+  "alto": 1264
+ },
+ {
+  "frame": "USA_MD_FREDERICK",
+  "url": "indice/insomnio-usa_md_frederick.png",
+  "oeste": -77.8817,
+  "sur": 38.9864,
+  "este": -77.2808,
+  "norte": 40.0168,
+  "coordinates": [
+   [
+    -77.8817,
+    40.0168
+   ],
+   [
+    -77.2808,
+    40.0168
+   ],
+   [
+    -77.2808,
+    38.9864
+   ],
+   [
+    -77.8817,
+    38.9864
+   ]
+  ],
+  "ancho": 763,
+  "alto": 1696
+ },
+ {
+  "frame": "USA_MD_HOWARD",
+  "url": "indice/insomnio-usa_md_howard.png",
+  "oeste": -77.054,
+  "sur": 38.922,
+  "este": -76.154,
+  "norte": 39.822,
+  "coordinates": [
+   [
+    -77.054,
+    39.822
+   ],
+   [
+    -76.154,
+    39.822
+   ],
+   [
+    -76.154,
+    38.922
+   ],
+   [
+    -77.054,
+    38.922
+   ]
+  ],
+  "ancho": 1143,
+  "alto": 1479
+ },
+ {
+  "frame": "USA_MI_WAYNE",
+  "url": "indice/insomnio-usa_mi_wayne.png",
+  "oeste": -84.0427,
+  "sur": 42.0427,
+  "este": -83.145,
+  "norte": 43.0281,
+  "coordinates": [
+   [
+    -84.0427,
+    43.0281
+   ],
+   [
+    -83.145,
+    43.0281
+   ],
+   [
+    -83.145,
+    42.0427
+   ],
+   [
+    -84.0427,
+    42.0427
+   ]
+  ],
+  "ancho": 1140,
+  "alto": 1698
+ },
+ {
+  "frame": "USA_NH_HILLSBOROUGH",
+  "url": "indice/insomnio-usa_nh_hillsborough.png",
+  "oeste": -71.93,
+  "sur": 42.043,
+  "este": -71.03,
+  "norte": 42.943,
+  "coordinates": [
+   [
+    -71.93,
+    42.943
+   ],
+   [
+    -71.03,
+    42.943
+   ],
+   [
+    -71.03,
+    42.043
+   ],
+   [
+    -71.93,
+    42.043
+   ]
+  ],
+  "ancho": 1143,
+  "alto": 1550
+ },
+ {
+  "frame": "USA_NY_RICHMOND",
+  "url": "indice/insomnio-usa_ny_richmond.png",
+  "oeste": -74.786,
+  "sur": 39.983,
+  "este": -73.886,
+  "norte": 40.883,
+  "coordinates": [
+   [
+    -74.786,
+    40.883
+   ],
+   [
+    -73.886,
+    40.883
+   ],
+   [
+    -73.886,
+    39.983
+   ],
+   [
+    -74.786,
+    39.983
+   ]
+  ],
+  "ancho": 1143,
+  "alto": 1502
+ },
+ {
+  "frame": "USA_OH_HAMILTON",
+  "url": "indice/insomnio-usa_oh_hamilton.png",
+  "oeste": -84.8968,
+  "sur": 39.1368,
+  "este": -84.0994,
+  "norte": 39.9056,
+  "coordinates": [
+   [
+    -84.8968,
+    39.9056
+   ],
+   [
+    -84.0994,
+    39.9056
+   ],
+   [
+    -84.0994,
+    39.1368
+   ],
+   [
+    -84.8968,
+    39.1368
+   ]
+  ],
+  "ancho": 1013,
+  "alto": 1266
+ },
+ {
+  "frame": "USA_OH_LAKE",
+  "url": "indice/insomnio-usa_oh_lake.png",
+  "oeste": -81.957,
+  "sur": 40.942,
+  "este": -81.057,
+  "norte": 41.842,
+  "coordinates": [
+   [
+    -81.957,
+    41.842
+   ],
+   [
+    -81.057,
+    41.842
+   ],
+   [
+    -81.057,
+    40.942
+   ],
+   [
+    -81.957,
+    40.942
+   ]
+  ],
+  "ancho": 1143,
+  "alto": 1524
+ },
+ {
+  "frame": "USA_OH_MAHONING",
+  "url": "indice/insomnio-usa_oh_mahoning.png",
+  "oeste": -80.9807,
+  "sur": 40.0977,
+  "este": -80.1075,
+  "norte": 40.9988,
+  "coordinates": [
+   [
+    -80.9807,
+    40.9988
+   ],
+   [
+    -80.1075,
+    40.9988
+   ],
+   [
+    -80.1075,
+    40.0977
+   ],
+   [
+    -80.9807,
+    40.0977
+   ]
+  ],
+  "ancho": 1109,
+  "alto": 1506
+ },
+ {
+  "frame": "USA_PA_ALLEGHENY",
+  "url": "indice/insomnio-usa_pa_allegheny.png",
+  "oeste": -80.0551,
+  "sur": 40.082,
+  "este": -79.0689,
+  "norte": 40.5417,
+  "coordinates": [
+   [
+    -80.0551,
+    40.5417
+   ],
+   [
+    -79.0689,
+    40.5417
+   ],
+   [
+    -79.0689,
+    40.082
+   ],
+   [
+    -80.0551,
+    40.082
+   ]
+  ],
+  "ancho": 1252,
+  "alto": 765
+ },
+ {
+  "frame": "USA_PA_BERKS",
+  "url": "indice/insomnio-usa_pa_berks.png",
+  "oeste": -76.0123,
+  "sur": 40.0616,
+  "este": -75.1556,
+  "norte": 40.9038,
+  "coordinates": [
+   [
+    -76.0123,
+    40.9038
+   ],
+   [
+    -75.1556,
+    40.9038
+   ],
+   [
+    -75.1556,
+    40.0616
+   ],
+   [
+    -76.0123,
+    40.0616
+   ]
+  ],
+  "ancho": 1088,
+  "alto": 1406
+ },
+ {
+  "frame": "USA_SC_GREENVILLE",
+  "url": "indice/insomnio-usa_sc_greenville.png",
+  "oeste": -83.0067,
+  "sur": 34.1536,
+  "este": -82.0108,
+  "norte": 35.0475,
+  "coordinates": [
+   [
+    -83.0067,
+    35.0475
+   ],
+   [
+    -82.0108,
+    35.0475
+   ],
+   [
+    -82.0108,
+    34.1536
+   ],
+   [
+    -83.0067,
+    34.1536
+   ]
+  ],
+  "ancho": 1265,
+  "alto": 1379
+ },
+ {
+  "frame": "USA_TX_DALLAS",
+  "url": "indice/insomnio-usa_tx_dallas.png",
+  "oeste": -97.0088,
+  "sur": 32.0386,
+  "este": -96.3628,
+  "norte": 33.0105,
+  "coordinates": [
+   [
+    -97.0088,
+    33.0105
+   ],
+   [
+    -96.3628,
+    33.0105
+   ],
+   [
+    -96.3628,
+    32.0386
+   ],
+   [
+    -97.0088,
+    32.0386
+   ]
+  ],
+  "ancho": 820,
+  "alto": 1463
+ },
+ {
+  "frame": "USA_VA_ROCKINGHAM",
+  "url": "indice/insomnio-usa_va_rockingham.png",
+  "oeste": -78.9536,
+  "sur": 37.9745,
+  "este": -77.9722,
+  "norte": 38.8934,
+  "coordinates": [
+   [
+    -78.9536,
+    38.8934
+   ],
+   [
+    -77.9722,
+    38.8934
+   ],
+   [
+    -77.9722,
+    37.9745
+   ],
+   [
+    -78.9536,
+    37.9745
+   ]
+  ],
+  "ancho": 1246,
+  "alto": 1489
+ },
+ {
+  "frame": "YAKARTA",
+  "url": "indice/insomnio-yakarta.png",
+  "oeste": 106.55,
+  "sur": -6.55,
+  "este": 107.2,
+  "norte": -5.95,
+  "coordinates": [
+   [
+    106.55,
+    -5.95
+   ],
+   [
+    107.2,
+    -5.95
+   ],
+   [
+    107.2,
+    -6.55
+   ],
+   [
+    106.55,
+    -6.55
+   ]
+  ],
+  "ancho": 826,
+  "alto": 767
  }
 ]

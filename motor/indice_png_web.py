@@ -24,6 +24,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 SALIDAS = os.path.join(AQUI, "..", "salidas")
 WEB = os.path.join(AQUI, "..", "..", "insomnes-web")
 PX_POR_GRADO = 1270  # como el PNG del AMBA: 1400 px para 1,1° de ancho
+NIVELES = 64  # tonos de la paleta
 
 
 def exportar(frame, salidas, web):
@@ -35,18 +36,23 @@ def exportar(frame, salidas, web):
         xs, ys, epsg = z["xs"], z["ys"], int(z["epsg"])
         o, s, e, n = (float(v) for v in z["bbox"])
     import matplotlib
-
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
+    from PIL import Image
 
     ancho = max(200, int(round((e - o) * PX_POR_GRADO)))
     img, (o, s, e, n) = geo.a_mercator(insomnio, xs, ys, ancho=ancho, caja=(n, o, s, e), epsg=epsg)
-    rgba = plt.get_cmap("magma")(np.clip(np.nan_to_num(img), 0, 1))
-    rgba[..., 3] = np.where(np.isfinite(img), np.clip((img - 0.3) / 0.4, 0, 1) * 0.85, 0)
+    # Misma paleta y transparencia que `_png_web` del pipeline (magma; transparente por debajo de 0,3 y en el agua),
+    # pero como PNG de paleta con NIVELES tonos: pesa varias veces menos que el RGBA y en el mapa se ve igual.
+    valor = np.linspace(0, 1, NIVELES)
+    rgb = (matplotlib.colormaps["magma"](valor)[:, :3] * 255).round().astype(np.uint8)
+    alfa = (np.clip((valor - 0.3) / 0.4, 0, 1) * 0.85 * 255).round().astype(np.uint8)
+    nivel = np.where(np.isfinite(img), np.rint(np.clip(np.nan_to_num(img), 0, 1) * (NIVELES - 1)), 0).astype(np.uint8)
+    nivel[alfa[nivel] == 0] = 0  # todo lo transparente es un solo índice: comprime mejor
     nombre = f"insomnio-{frame.lower()}.png"
     destino = os.path.join(web, "public", "indice", nombre)
     os.makedirs(os.path.dirname(destino), exist_ok=True)
-    plt.imsave(destino, rgba)
+    png = Image.fromarray(nivel, mode="P")
+    png.putpalette(rgb.tobytes())
+    png.save(destino, transparency=alfa.tobytes(), optimize=True)
     return {"frame": frame, "url": f"indice/{nombre}", "oeste": o, "sur": s, "este": e, "norte": n,
             "coordinates": [[o, n], [e, n], [e, s], [o, s]], "ancho": img.shape[1], "alto": img.shape[0]}
 

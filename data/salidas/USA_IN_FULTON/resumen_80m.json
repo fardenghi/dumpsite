@@ -1,0 +1,453 @@
+{
+ "capa": "80m",
+ "version": "final",
+ "frame": {
+  "frame": "USA_IN_FULTON",
+  "orbita": [
+   156
+  ],
+  "ciudad": "Argos, Fulton, IN (alrededor de County Line LF)",
+  "pais": "USA",
+  "hemisferio": "N",
+  "epsg": 32616,
+  "epsg_fijo": true,
+  "bbox": [
+   -86.9732,
+   41.1125,
+   -85.9441,
+   41.8583
+  ],
+  "fecha_inicio": "2025-10-28",
+  "fecha_fin": "2026-10-11",
+  "frames_nisar": [
+   "156_D_068"
+  ]
+ },
+ "parametros": {
+  "razon": 0.8,
+  "min_insomnio": 0.7,
+  "min_persistencia": 0.5,
+  "max_quieto": 0.2,
+  "eco_min_db": -13.0,
+  "agua_min": 10.0,
+  "borde_agua_m": 80.0,
+  "radio_entorno_m": 2000.0,
+  "anillo_m": 1500.0,
+  "bloque_entorno_m": 320.0,
+  "suavizado_m": 240.0,
+  "umbral_abs": 0.3,
+  "min_ha": 10.0,
+  "max_elongacion": 4.0,
+  "min_nucleo": 0.1,
+  "min_px_sitio": 8,
+  "min_coh_anillo": 0.3,
+  "min_pares_orbita": 3
+ },
+ "anillo_excluye": {
+  "basurales": 12,
+  "negativos": 60,
+  "ha": 1879
+ },
+ "pares": [
+  {
+   "orbita": 156,
+   "desde": "2025-10-28",
+   "hasta": "2025-11-09",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_003_156_D_068_004_2000_QD_20251028T004222_20251028T004255_20251109T004222_20251109T004256_X05009_N_F_J_001",
+   "mediana_tierra": 0.506,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2025-11-09",
+   "hasta": "2025-11-21",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_004_156_D_068_005_2000_QD_20251109T004222_20251109T004256_20251121T004223_20251121T004256_X05010_N_F_J_001",
+   "mediana_tierra": 0.598,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2025-11-21",
+   "hasta": "2025-12-03",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_005_156_D_068_006_2000_QD_20251121T004223_20251121T004256_20251203T004224_20251203T004257_X05010_N_F_J_001",
+   "mediana_tierra": 0.405,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2025-12-03",
+   "hasta": "2025-12-15",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_006_156_D_068_007_2000_QD_20251203T004224_20251203T004257_20251215T004222_20251215T004257_X05010_N_F_J_001",
+   "mediana_tierra": 0.35,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2025-12-15",
+   "hasta": "2025-12-27",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_007_156_D_068_008_2000_QD_20251215T004222_20251215T004257_20251227T004225_20251227T004258_X05010_N_F_J_001",
+   "mediana_tierra": 0.339,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2025-12-27",
+   "hasta": "2026-01-08",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_008_156_D_068_009_2000_QD_20251227T004225_20251227T004258_20260108T004225_20260108T004258_X05010_N_F_J_001",
+   "mediana_tierra": 0.721,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-01-08",
+   "hasta": "2026-01-20",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_009_156_D_068_010_2000_QD_20260108T004225_20260108T004258_20260120T004226_20260120T004259_X05010_N_F_J_001",
+   "mediana_tierra": 0.348,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-06-25",
+   "hasta": "2026-07-07",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_023_156_D_068_024_2000_SH_20260625T004224_20260625T004258_20260707T004223_20260707T004258_P05023_N_F_J_001",
+   "mediana_tierra": 0.428,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-07-07",
+   "hasta": "2026-07-19",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_024_156_D_068_025_2000_SH_20260707T004223_20260707T004258_20260719T004223_20260719T004257_P05023_N_F_J_001",
+   "mediana_tierra": 0.477,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-07-19",
+   "hasta": "2026-08-12",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_025_156_D_068_027_2000_SH_20260719T004223_20260719T004257_20260812T004221_20260812T004256_P05023_N_F_J_001",
+   "mediana_tierra": 0.418,
+   "factor_separacion": 0.851
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-08-12",
+   "hasta": "2026-08-24",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_027_156_D_068_028_2000_SH_20260812T004221_20260812T004256_20260824T004221_20260824T004255_P05023_N_F_J_001",
+   "mediana_tierra": 0.533,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-08-24",
+   "hasta": "2026-09-05",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_156_D_068_029_2000_SH_20260824T004221_20260824T004255_20260905T004221_20260905T004255_P05023_N_F_J_002",
+   "mediana_tierra": 0.57,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-09-05",
+   "hasta": "2026-09-17",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_156_D_068_030_2000_SH_20260905T004221_20260905T004255_20260917T004221_20260917T004255_P05023_N_F_J_001",
+   "mediana_tierra": 0.562,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-09-17",
+   "hasta": "2026-09-29",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_156_D_068_031_2000_SH_20260917T004221_20260917T004255_20260929T004221_20260929T004255_P05023_N_F_J_001",
+   "mediana_tierra": 0.585,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 156,
+   "desde": "2026-09-29",
+   "hasta": "2026-10-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_031_156_D_068_032_2000_SH_20260929T004221_20260929T004255_20261011T004221_20261011T004255_P05023_N_F_J_001",
+   "mediana_tierra": 0.376,
+   "factor_separacion": 1.0
+  }
+ ],
+ "gcov": 17,
+ "superficie": {
+  "agua_ha": 39690,
+  "tierra_ha": 672905,
+  "candidata_ha": 319,
+  "estacional_ha": 989,
+  "lisa_ha": 197
+ },
+ "sitios": {},
+ "manchas": {
+  "candidatas": 17,
+  "por_clase": {
+   "relleno_osm": 0,
+   "sin_explicar": 7,
+   "uso_conocido": 10
+  },
+  "descartadas_lineales": 12,
+  "descartadas_lisas": 8,
+  "descartadas_chicas": 1295,
+  "primeras": [
+   {
+    "ha": 53.1,
+    "insomnio": 0.87,
+    "persistencia": 0.75,
+    "eco_db": -6.6,
+    "elongacion": 1.4,
+    "nucleo": 0.51,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.64735,
+    "lon": -86.20618,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 42.9,
+    "insomnio": 0.82,
+    "persistencia": 0.68,
+    "eco_db": -5.0,
+    "elongacion": 1.5,
+    "nucleo": 0.19,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.27012,
+    "lon": -86.80942,
+    "clase": "uso_conocido",
+    "que": "reserva: Kankakee Fish & Wildlife Area"
+   },
+   {
+    "ha": 35.8,
+    "insomnio": 0.83,
+    "persistencia": 0.74,
+    "eco_db": -5.9,
+    "elongacion": 1.1,
+    "nucleo": 0.61,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.64741,
+    "lon": -86.25986,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 20.5,
+    "insomnio": 0.8,
+    "persistencia": 0.68,
+    "eco_db": -9.8,
+    "elongacion": 1.5,
+    "nucleo": 0.44,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.30711,
+    "lon": -86.7503,
+    "clase": "uso_conocido",
+    "que": "reserva: Kankakee Fish & Wildlife Area"
+   },
+   {
+    "ha": 16.6,
+    "insomnio": 0.8,
+    "persistencia": 0.65,
+    "eco_db": -5.3,
+    "elongacion": 2.0,
+    "nucleo": 0.27,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.64439,
+    "lon": -86.19339,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 14.1,
+    "insomnio": 0.88,
+    "persistencia": 0.75,
+    "eco_db": -12.7,
+    "elongacion": 2.4,
+    "nucleo": 0.23,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.53559,
+    "lon": -86.49607,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 14.1,
+    "insomnio": 0.82,
+    "persistencia": 0.67,
+    "eco_db": -8.5,
+    "elongacion": 2.3,
+    "nucleo": 0.23,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.51801,
+    "lon": -86.50427,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 13.4,
+    "insomnio": 0.84,
+    "persistencia": 0.72,
+    "eco_db": -9.7,
+    "elongacion": 1.2,
+    "nucleo": 0.33,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.30455,
+    "lon": -86.79934,
+    "clase": "uso_conocido",
+    "que": "reserva: Kankakee Fish & Wildlife Area"
+   },
+   {
+    "ha": 12.8,
+    "insomnio": 0.83,
+    "persistencia": 0.68,
+    "eco_db": -12.7,
+    "elongacion": 3.0,
+    "nucleo": 0.1,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 41.48243,
+    "lon": -86.29166,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 12.8,
+    "insomnio": 0.84,
+    "persistencia": 0.74,
+    "eco_db": -12.1,
+    "elongacion": 2.4,
+    "nucleo": 0.3,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.31418,
+    "lon": -86.74022,
+    "clase": "uso_conocido",
+    "que": "reserva: Kankakee Fish & Wildlife Area"
+   },
+   {
+    "ha": 12.8,
+    "insomnio": 0.83,
+    "persistencia": 0.7,
+    "eco_db": -6.2,
+    "elongacion": 2.2,
+    "nucleo": 0.25,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.68531,
+    "lon": -86.82462,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 12.2,
+    "insomnio": 0.86,
+    "persistencia": 0.69,
+    "eco_db": -11.1,
+    "elongacion": 2.1,
+    "nucleo": 0.11,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.58555,
+    "lon": -86.03793,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 12.2,
+    "insomnio": 0.79,
+    "persistencia": 0.54,
+    "eco_db": -8.9,
+    "elongacion": 1.9,
+    "nucleo": 0.11,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.62998,
+    "lon": -86.01867,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 12.2,
+    "insomnio": 0.87,
+    "persistencia": 0.72,
+    "eco_db": -8.4,
+    "elongacion": 1.7,
+    "nucleo": 0.32,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.29621,
+    "lon": -86.76934,
+    "clase": "uso_conocido",
+    "que": "reserva: Kankakee Fish & Wildlife Area"
+   },
+   {
+    "ha": 11.5,
+    "insomnio": 0.76,
+    "persistencia": 0.61,
+    "eco_db": -12.9,
+    "elongacion": 1.8,
+    "nucleo": 0.22,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.31497,
+    "lon": -86.18322,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 11.5,
+    "insomnio": 0.87,
+    "persistencia": 0.77,
+    "eco_db": -6.3,
+    "elongacion": 2.6,
+    "nucleo": 0.11,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 41.62273,
+    "lon": -86.68533,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 10.2,
+    "insomnio": 0.77,
+    "persistencia": 0.62,
+    "eco_db": -11.4,
+    "elongacion": 1.3,
+    "nucleo": 0.12,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 41.43787,
+    "lon": -86.91322,
+    "clase": "sin_explicar",
+    "que": null
+   }
+  ]
+ },
+ "fuentes": [
+  "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC",
+  "JRC Global Surface Water v1.4",
+  "© colaboradores de OpenStreetMap (ODbL), por Nominatim y por Overture Maps 2026-10-21.0"
+ ]
+}

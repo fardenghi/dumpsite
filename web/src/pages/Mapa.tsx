@@ -906,7 +906,7 @@ export default function Mapa() {
           role="switch"
           aria-checked={verIndice}
           onClick={() => setVerIndice((v) => !v)}
-          title={t('En el AMBA, el índice completo ({0} comparaciones de NISAR, del {1} al {2}). En las otras regiones, las manchas donde el índice supera el umbral', indice.pares, fecha(indice.desde, true), fecha(indice.hasta, true))}
+          title={t('Índice de insomnio relativo, de 0 a 1; transparente por debajo de 0,3 y en el agua. En el AMBA, {0} comparaciones de NISAR, del {1} al {2}. Donde no hay imagen del índice se pintan las manchas despiertas', indice.pares, fecha(indice.desde, true), fecha(indice.hasta, true))}
         >
           <span>{t('Índice de insomnio')}</span>
           <i />
@@ -916,7 +916,7 @@ export default function Mapa() {
             <div />
             <span>{getLang() === 'es' ? '0,3' : '0.3'}</span>
             <span>1</span>
-            {frames && frames.length > 1 && <small>{t('Recuadro: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas: acercate a un recuadro para verlas')}</small>}
+            {frames && frames.length > 1 && <small>{t('Recuadro: cada región procesada con NISAR. Acercate a un recuadro para ver el índice')}</small>}
           </div>
         )}
         {otros.length > 0 && (

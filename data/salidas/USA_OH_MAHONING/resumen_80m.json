@@ -1,0 +1,420 @@
+{
+ "capa": "80m",
+ "version": "final",
+ "frame": {
+  "frame": "USA_OH_MAHONING",
+  "orbita": [
+   18,
+   26
+  ],
+  "ciudad": "Salem, Mahoning, OH (alrededor de CLD Landfill)",
+  "pais": "USA",
+  "hemisferio": "N",
+  "epsg": 32617,
+  "epsg_fijo": true,
+  "bbox": [
+   -80.9807,
+   40.0977,
+   -80.1075,
+   40.9988
+  ],
+  "fecha_inicio": "2025-10-30",
+  "fecha_fin": "2026-10-14",
+  "frames_nisar": [
+   "018_A_022",
+   "026_D_068"
+  ]
+ },
+ "parametros": {
+  "razon": 0.8,
+  "min_insomnio": 0.7,
+  "min_persistencia": 0.5,
+  "max_quieto": 0.2,
+  "eco_min_db": -13.0,
+  "agua_min": 10.0,
+  "borde_agua_m": 80.0,
+  "radio_entorno_m": 2000.0,
+  "anillo_m": 1500.0,
+  "bloque_entorno_m": 320.0,
+  "suavizado_m": 240.0,
+  "umbral_abs": 0.3,
+  "min_ha": 10.0,
+  "max_elongacion": 4.0,
+  "min_nucleo": 0.1,
+  "min_px_sitio": 8,
+  "min_coh_anillo": 0.3,
+  "min_pares_orbita": 3
+ },
+ "anillo_excluye": {
+  "basurales": 18,
+  "negativos": 63,
+  "ha": 2862
+ },
+ "pares": [
+  {
+   "orbita": 18,
+   "desde": "2025-10-30",
+   "hasta": "2025-11-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_004_018_A_022_005_4000_SH_20251030T103156_20251030T103233_20251111T103156_20251111T103234_X05010_N_F_J_001",
+   "mediana_tierra": 0.239,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2025-11-11",
+   "hasta": "2025-11-23",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_005_018_A_022_006_4000_SH_20251111T103156_20251111T103234_20251123T103157_20251123T103234_X05010_N_F_J_001",
+   "mediana_tierra": 0.41,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2025-11-23",
+   "hasta": "2025-12-05",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_006_018_A_022_007_4000_SH_20251123T103157_20251123T103234_20251205T103157_20251205T103235_X05010_N_F_J_001",
+   "mediana_tierra": 0.366,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2025-12-05",
+   "hasta": "2025-12-17",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_007_018_A_022_008_4000_SH_20251205T103157_20251205T103235_20251217T103158_20251217T103236_X05010_N_F_J_001",
+   "mediana_tierra": 0.254,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2025-12-17",
+   "hasta": "2025-12-29",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_008_018_A_022_009_4000_SH_20251217T103158_20251217T103236_20251229T103158_20251229T103236_X05010_N_F_J_001",
+   "mediana_tierra": 0.246,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2025-12-29",
+   "hasta": "2026-01-10",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_009_018_A_022_010_4000_SH_20251229T103158_20251229T103236_20260110T103159_20260110T103237_X05010_N_F_J_001",
+   "mediana_tierra": 0.336,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-06-27",
+   "hasta": "2026-07-09",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_024_018_A_022_025_4000_SH_20260627T103158_20260627T103235_20260709T103157_20260709T103234_P05023_N_F_J_001",
+   "mediana_tierra": 0.324,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-07-09",
+   "hasta": "2026-07-21",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_025_018_A_022_026_4000_SH_20260709T103157_20260709T103234_20260721T103156_20260721T103234_P05023_N_F_J_001",
+   "mediana_tierra": 0.566,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-07-21",
+   "hasta": "2026-08-14",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_026_018_A_022_028_4000_SH_20260721T103156_20260721T103234_20260814T103155_20260814T103233_P05023_N_F_J_001",
+   "mediana_tierra": 0.447,
+   "factor_separacion": 1.089
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-08-14",
+   "hasta": "2026-08-26",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_018_A_022_029_4000_SH_20260814T103155_20260814T103233_20260826T103155_20260826T103232_P05023_N_F_J_001",
+   "mediana_tierra": 0.578,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-08-26",
+   "hasta": "2026-09-07",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_018_A_022_030_4000_SH_20260826T103155_20260826T103232_20260907T103155_20260907T103232_P05023_N_F_J_002",
+   "mediana_tierra": 0.545,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-09-07",
+   "hasta": "2026-09-19",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_018_A_022_031_4000_SH_20260907T103155_20260907T103232_20260919T103155_20260919T103232_P05023_F_F_J_001",
+   "mediana_tierra": 0.591,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-09-19",
+   "hasta": "2026-10-01",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_031_018_A_022_032_4000_SH_20260919T103155_20260919T103232_20261001T103155_20261001T103233_P05023_N_F_J_001",
+   "mediana_tierra": 0.569,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 18,
+   "desde": "2026-10-01",
+   "hasta": "2026-10-13",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_032_018_A_022_033_4000_SH_20261001T103155_20261001T103233_20261013T103155_20261013T103233_P05023_N_F_J_001",
+   "mediana_tierra": 0.532,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 26,
+   "desde": "2025-11-12",
+   "hasta": "2025-12-18",
+   "dias": 36,
+   "producto": "NISAR_L2_PR_GUNW_005_026_D_068_008_4000_SH_20251112T001723_20251112T001758_20251218T001725_20251218T001759_X05010_N_F_J_001",
+   "mediana_tierra": 0.403,
+   "factor_separacion": 1.161
+  },
+  {
+   "orbita": 26,
+   "desde": "2025-12-18",
+   "hasta": "2025-12-30",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_008_026_D_068_009_4000_SH_20251218T001725_20251218T001759_20251230T001725_20251230T001800_X05010_N_F_J_001",
+   "mediana_tierra": 0.276,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 26,
+   "desde": "2026-06-28",
+   "hasta": "2026-08-15",
+   "dias": 48,
+   "producto": "NISAR_L2_PR_GUNW_024_026_D_068_028_4000_SH_20260628T001724_20260628T001759_20260815T001722_20260815T001757_P05023_N_F_J_001",
+   "mediana_tierra": 0.251,
+   "factor_separacion": 0.724
+  },
+  {
+   "orbita": 26,
+   "desde": "2026-08-15",
+   "hasta": "2026-08-27",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_026_D_068_029_4000_SH_20260815T001722_20260815T001757_20260827T001722_20260827T001757_P05023_N_F_J_001",
+   "mediana_tierra": 0.459,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 26,
+   "desde": "2026-08-27",
+   "hasta": "2026-09-08",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_026_D_068_030_4000_SH_20260827T001722_20260827T001757_20260908T001721_20260908T001756_P05023_N_F_J_001",
+   "mediana_tierra": 0.069,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 26,
+   "desde": "2026-09-08",
+   "hasta": "2026-09-20",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_026_D_068_031_4000_SH_20260908T001721_20260908T001756_20260920T001722_20260920T001756_P05023_F_F_J_001",
+   "mediana_tierra": 0.068,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 26,
+   "desde": "2026-09-20",
+   "hasta": "2026-10-02",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_031_026_D_068_032_4000_SH_20260920T001722_20260920T001756_20261002T001722_20261002T001756_P05023_N_F_J_001",
+   "mediana_tierra": 0.417,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 26,
+   "desde": "2026-10-02",
+   "hasta": "2026-10-14",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_032_026_D_068_033_4000_SH_20261002T001722_20261002T001756_20261014T001722_20261014T001757_P05023_N_F_J_001",
+   "mediana_tierra": 0.496,
+   "factor_separacion": 1.0
+  }
+ ],
+ "gcov": 26,
+ "superficie": {
+  "agua_ha": 16365,
+  "tierra_ha": 727446,
+  "candidata_ha": 185,
+  "estacional_ha": 134,
+  "lisa_ha": 142
+ },
+ "sitios": {},
+ "manchas": {
+  "candidatas": 10,
+  "por_clase": {
+   "relleno_osm": 1,
+   "sin_explicar": 5,
+   "uso_conocido": 4
+  },
+  "descartadas_lineales": 3,
+  "descartadas_lisas": 9,
+  "descartadas_chicas": 815,
+  "primeras": [
+   {
+    "ha": 35.8,
+    "insomnio": 0.85,
+    "persistencia": 0.73,
+    "eco_db": -6.7,
+    "elongacion": 1.9,
+    "nucleo": 0.52,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 40.67374,
+    "lon": -80.24899,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 31.4,
+    "insomnio": 0.81,
+    "persistencia": 0.72,
+    "eco_db": -0.6,
+    "elongacion": 2.8,
+    "nucleo": 0.41,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 40.30422,
+    "lon": -80.61225,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 23.7,
+    "insomnio": 0.79,
+    "persistencia": 0.58,
+    "eco_db": -11.3,
+    "elongacion": 2.2,
+    "nucleo": 0.35,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 40.72889,
+    "lon": -80.14038,
+    "clase": "uso_conocido",
+    "que": "golf: Cranberry Highlands Golf Course"
+   },
+   {
+    "ha": 18.6,
+    "insomnio": 0.76,
+    "persistencia": 0.53,
+    "eco_db": -11.5,
+    "elongacion": 3.2,
+    "nucleo": 0.28,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 40.72827,
+    "lon": -80.13476,
+    "clase": "uso_conocido",
+    "que": "golf: Cranberry Highlands Golf Course"
+   },
+   {
+    "ha": 16.6,
+    "insomnio": 0.79,
+    "persistencia": 0.65,
+    "eco_db": -12.1,
+    "elongacion": 2.0,
+    "nucleo": 0.31,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 40.99276,
+    "lon": -80.53227,
+    "clase": "relleno_osm",
+    "que": "BAS-064892"
+   },
+   {
+    "ha": 14.1,
+    "insomnio": 0.79,
+    "persistencia": 0.69,
+    "eco_db": -12.8,
+    "elongacion": 3.2,
+    "nucleo": 0.14,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 40.93718,
+    "lon": -80.42622,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 12.2,
+    "insomnio": 0.78,
+    "persistencia": 0.55,
+    "eco_db": -9.3,
+    "elongacion": 1.2,
+    "nucleo": 0.32,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 40.69413,
+    "lon": -80.14391,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 11.5,
+    "insomnio": 0.76,
+    "persistencia": 0.66,
+    "eco_db": -12.2,
+    "elongacion": 2.3,
+    "nucleo": 0.17,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 40.13666,
+    "lon": -80.29407,
+    "clase": "uso_conocido",
+    "que": "aeródromo: Washington County Airport"
+   },
+   {
+    "ha": 10.9,
+    "insomnio": 0.78,
+    "persistencia": 0.56,
+    "eco_db": -8.8,
+    "elongacion": 2.7,
+    "nucleo": 0.18,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": 40.7732,
+    "lon": -80.15705,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 10.2,
+    "insomnio": 0.76,
+    "persistencia": 0.55,
+    "eco_db": -10.3,
+    "elongacion": 1.6,
+    "nucleo": 0.12,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": 40.30265,
+    "lon": -80.89615,
+    "clase": "sin_explicar",
+    "que": null
+   }
+  ]
+ },
+ "fuentes": [
+  "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC",
+  "JRC Global Surface Water v1.4",
+  "© colaboradores de OpenStreetMap (ODbL), por Nominatim y por Overture Maps 2026-10-21.0"
+ ]
+}
