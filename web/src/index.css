@@ -388,12 +388,16 @@ select:hover { border-color: var(--green); }
   :root { --gap: 10px; }
   .marca { padding: 0 14px; }
   .marca span:last-child { display: none; }
-  .map-top .repo { display: none; }
+  /* the GitHub badge leaves the top bar and sits at the end of the tab bar, which makes room for it */
+  .map-top .repo { position: fixed; right: var(--gap); bottom: var(--gap); width: var(--dock); height: var(--dock); padding: 0; justify-content: center; box-shadow: var(--shadow-lg); z-index: 6; }
+  .map-top .repo span { display: none; }
+  /* the zoom buttons go above the tab bar instead of behind it */
+  .app .maplibregl-ctrl-bottom-right { bottom: calc(var(--dock) + 8px); }
   .map-top .picker { flex: 1 1 0; }
   .map-top.con-ficha { right: var(--gap); }
   .map-legend { display: none; }
   .map-credit { left: var(--gap); right: 56px; bottom: calc(var(--gap) + var(--dock) + 8px); max-width: none; }
-  .dock { left: var(--gap); right: var(--gap); transform: none; justify-content: space-between; }
+  .dock { left: var(--gap); right: calc(2 * var(--gap) + var(--dock)); transform: none; justify-content: space-between; }
   .dock a { padding: 0 8px; flex: 1; justify-content: center; }
   .flota { top: auto; max-height: calc(100dvh - 2 * var(--gap) - 44px - var(--dock) - 24px); }
   .flota-in { padding: 22px 18px 18px; }
@@ -425,4 +429,10 @@ select:hover { border-color: var(--green); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* very narrow phones: the tab bar shares the row with the GitHub badge */
+@media (max-width: 380px) {
+  .dock { gap: 0; padding: 5px; }
+  .dock a { padding: 0 6px; font-size: 14px; }
 }
