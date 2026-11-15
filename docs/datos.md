@@ -1,47 +1,47 @@
-# Datos y fuentes
+# Data and sources
 
-Qué datos usa Dumpsite, de dónde salen y con qué licencia. Qué archivo es cada cosa y qué script lo regenera está en `data/README.md`.
+What data Dumpsite uses, where it comes from and under which license. Which file is which and what script regenerates it is in `data/README.md`.
 
 ## NISAR
-- **Productos:** L2 GUNW (interferograma con capa de coherencia a 80 m y otra envuelta a 20 m) y L2 GCOV (eco, a 10 o 20 m según el modo), de NASA/ISRO vía ASF DAAC (https://search.asf.alaska.edu/). Los productos son públicos y la descarga necesita una cuenta de NASA Earthdata.
-- **Madurez:** la primera liberación pública de datos calibrados fue el 20/07/2026. ASF advierte que no hay que mezclar madureces (BETA, PROVISIONAL y VALIDATED). Usamos productos `PR`.
-- **AMBA:** 15 GUNW y 19 GCOV de las órbitas 10 (descendente) y 161 (ascendente), del 25/06 al 12/10/2026. Cada GUNW pesa unos 2,2 GB, pero el pipeline lee por URL sólo la ventana que necesita.
-- **30 frames:** 962 pares GUNW. Los `.h5` y los recortes no van al repo.
+- **Products:** L2 GUNW (interferogram with an 80 m coherence layer and a wrapped one at 20 m) and L2 GCOV (echo, at 10 or 20 m depending on the mode), from NASA/ISRO via ASF DAAC (https://search.asf.alaska.edu/). The products are public and downloading needs a NASA Earthdata account.
+- **Maturity:** the first public release of calibrated data was on 20/07/2026. ASF warns against mixing maturities (BETA, PROVISIONAL and VALIDATED). We use `PR` products.
+- **AMBA:** 15 GUNWs and 19 GCOVs from orbits 10 (descending) and 161 (ascending), from 25/06 to 12/10/2026. Each GUNW weighs about 2.2 GB, but the pipeline reads by URL only the window it needs.
+- **30 frames:** 962 GUNW pairs. The `.h5` files and the crops aren't committed.
 
-## Catálogo de basurales
-Son **66.981 sitios del mundo** (1.225 abiertos, 3.579 cerrados, 31 contradictorios y 62.146 sin estado), unidos por sitio desde:
+## Dump-site catalog
+**66,981 sites around the world** (1,225 open, 3,579 closed, 31 contradictory and 62,146 without a status), joined per site from:
 
-| Fuente | Qué aporta | Licencia |
+| Source | What it adds | License |
 |---|---|---|
-| OpenStreetMap vía Overture Maps (release 2026-10-21.0) | Polígonos de `landuse=landfill` y los cerrados (`disused:landuse=landfill`) | ODbL 1.0, © colaboradores de OpenStreetMap |
-| U.S. EPA LMOP (2024-09) | Estado, año de cierre y captura de biogás de los rellenos de EE. UU. | Dominio público |
-| Climate TRACE (API v6) | Emisiones por sitio | CC BY 4.0 |
-| NASA EMIT L2B CH4PLM v002 | Plumas de metano | Sin restricciones |
-| Casos curados del equipo | 7 casos de Buenos Aires: Luján, Norte III, González Catán, Ensenada, San Pedro, Navarro y Nueve de Julio | La de cada fuente citada |
+| OpenStreetMap via Overture Maps (release 2026-10-21.0) | `landuse=landfill` polygons and the closed ones (`disused:landuse=landfill`) | ODbL 1.0, © OpenStreetMap contributors |
+| U.S. EPA LMOP (2024-09) | Status, closure year and biogas capture of US landfills | Public domain |
+| Climate TRACE (API v6) | Emissions per site | CC BY 4.0 |
+| NASA EMIT L2B CH4PLM v002 | Methane plumes | No restrictions |
+| Team's curated cases | 7 Buenos Aires cases: Luján, Norte III, González Catán, Ensenada, San Pedro, Navarro and Nueve de Julio | That of each cited source |
 
-**OSM casi nunca dice si un basural está activo**, por eso la mayoría queda sin estado. El estado conocido sale casi todo de la EPA, y por eso los resultados están sesgados hacia EE. UU.
+**OSM almost never says whether a dump site is active**, so most remain without a status. The known status comes almost entirely from the EPA, which is why the results are biased toward the US.
 
-Otros datasets relevados que no entraron: detectores ópticos con etiquetas para ML, registros nacionales y regionales, y en el AMBA la base georreferenciada del CIM-FADU (UBA), que no confirmamos que tenga descarga pública.
+Other datasets we surveyed that didn't make it in: optical detectors with ML labels, national and regional registries, and, in the AMBA, the CIM-FADU (UBA) georeferenced database, which we couldn't confirm has a public download.
 
-## Negativos
-**64.986 polígonos de 24 clases**, más 1.259 del AMBA. Son lo que el radar puede confundir con un basural porque también cambia seguido o devuelve poco eco:
+## Negatives
+**64,986 polygons of 24 classes**, plus 1,259 in the AMBA. They're what the radar can confuse with a dump site because they also change often or return little echo:
 
-- agua y superficies mojadas;
-- canteras y movimiento de suelo;
-- chatarrerías y playas de contenedores;
-- agro y vegetación;
-- aeródromos y otra infraestructura.
+- water and wet surfaces;
+- quarries and earthworks;
+- scrapyards and container yards;
+- farming and vegetation;
+- airfields and other infrastructure.
 
-Salen de Overture Maps (OSM, ODbL). Miden entre 2 y 500 ha, están a más de 500 m de cualquier basural del catálogo y se muestrean cerca de basurales con estado conocido. Lo fijo y bien mapeado se saca con máscaras. Lo que el modelo tiene que aprender a separar, como las canteras, no se filtra: entra como negativo.
+They come from Overture Maps (OSM, ODbL). They measure between 2 and 500 ha, are more than 500 m from any catalog dump site and are sampled near dump sites with a known status. What's fixed and well mapped is removed with masks. What the model has to learn to separate, like quarries, isn't filtered: it goes in as a negative.
 
-## Otras fuentes
-- **Sentinel-2 L2A** (Copernicus, ESA), vía Microsoft Planetary Computer, sin cuenta: variables ópticas, etiquetas ópticas y el video.
-- **JRC Global Surface Water** v1.4: máscara de agua.
-- **ESA WorldCover** 2021 v200 (CC BY 4.0): cobertura de suelo como contexto.
+## Other sources
+- **Sentinel-2 L2A** (Copernicus, ESA), via Microsoft Planetary Computer, no account needed: optical variables, optical labels and the video.
+- **JRC Global Surface Water** v1.4: water mask.
+- **ESA WorldCover** 2021 v200 (CC BY 4.0): land cover as context.
 
-## Casos de validación en Argentina
-| Caso | Qué pasó | Para qué sirve |
+## Validation cases in Argentina
+| Case | What happened | What it's for |
 |---|---|---|
-| **Basural de Luján** | Dejó de recibir residuos el 1/07/2026, tras unos 52 años. La reconversión quedó frenada por disputas judiciales | Caso central: ¿cerrado y quieto o cerrado pero despierto? |
-| **Norte III, CEAMSE** | Relleno activo que recibe la mayor parte de la basura del AMBA | Control positivo |
-| San Pedro, Navarro, Nueve de Julio | Basural con orden judicial (octubre de 2026), cierre anunciado (febrero de 2026) y cierre en curso | Casos para seguir. Sus coordenadas son del centro del partido y falta ubicar cada predio |
+| **Luján dump site** | Stopped receiving waste on 1/07/2026, after about 52 years. The conversion stalled because of legal disputes | Central case: closed and quiet, or closed but awake? |
+| **Norte III, CEAMSE** | Active landfill that takes most of the AMBA's waste | Positive control |
+| San Pedro, Navarro, Nueve de Julio | Dump site under a court order (October 2026), announced closure (February 2026) and ongoing closure | Cases to follow. Their coordinates are the district centers; each site still has to be located |
