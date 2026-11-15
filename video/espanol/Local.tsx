@@ -5,7 +5,7 @@ import React from "react";
 import {AbsoluteFill, Easing, Html5Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {ALTO, ANCHO, DATOS, FPS, RESULTADOS, fechaCorta} from "../compartido/data";
 import {C, F} from "../compartido/theme";
-import {AvisoIA, Creditos, PinUbicacion, Subtitulos, TituloSeccion} from "../compartido/components/Overlays";
+import {AvisoIA, Creditos, Equipo, PinUbicacion, Subtitulos, TituloSeccion} from "../compartido/components/Overlays";
 import {MapaAmba, caminoPoligono, cajaNorte3EnAmba} from "../compartido/components/Mapa";
 import {Arbol, Cuadro, Navegador, OFFSET_Y, Ojo, Poligono, clamp, cxNa, cxS2, cyNa, cyS2, entreno, n3, pasadas, serie, zoomExp} from "../compartido/escenas/Escenas";
 import voz from "./voz-es.json";
@@ -531,7 +531,7 @@ export const DumpsiteLocal: React.FC = () => {
   return (
     <AbsoluteFill style={{background: C.bg}}>
       {S("ia", () => (
-        <AbsoluteFill><OffthreadVideo src={staticFile("clip1-ai.mp4")} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} /><AvisoIA texto="Imagen generada con IA" /></AbsoluteFill>
+        <AbsoluteFill><OffthreadVideo src={staticFile("clip1-ai.mp4")} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} /><AvisoIA texto="Imagen generada con IA" /><Equipo titulo="Equipo · NASA Space Apps 2026" dur={CLIP_IA} /></AbsoluteFill>
       ))}
       {S("problema", (d) => <Problema dur={d} t2={fr("problema").inicio + dentro("problema", "En Argentina") - CLIP_IA} />)}
       {S("pulso", (d) => <Pulso dur={d} />)}
