@@ -52,7 +52,7 @@ Salen del feedback de muchas iteraciones.
 
 **Integrantes**
 - Los nombres de los 6 integrantes aparecen abajo a la derecha durante el clip inicial de los dos videos, sin decirlos en voz alta (la guía oficial sugiere presentar al equipo al principio).
-- Están en `EQUIPO` en `compartido/data.ts`, tal como figuran en la página del equipo, y el componente es `Equipo` en `Overlays.tsx`.
+- Están en `EQUIPO` en `compartido/data.ts`, tal como figuran en la página del equipo, y el componente es `Equipo` en `Overlays.tsx`: misma letra y sombra que los subtítulos, más chica y sin caja (así lo pidió el equipo).
 
 **Subtítulos**
 - Blancos con sombra sobre un degradado oscuro (nunca blanco sobre blanco).
