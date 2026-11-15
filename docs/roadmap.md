@@ -3,12 +3,14 @@
 Dumpsite was built in two days. It works end to end, but several pieces are first versions. This is what we would do next, ordered by priority. Each item points to the document where the limitation is measured.
 
 ## Next weeks: make what exists trustworthy
-- **Review by people.** Have people check the 89 optical labels assigned by AI and the 16 "closed but awake" cases, looking at optical imagery before naming any site ([`results.md`](results.md), [`model.md`](model.md)).
+- **Review by people.** Have people check, in optical imagery and before naming any site:
+  - the 89 optical labels assigned by AI and the 16 "closed but awake" cases ([`results.md`](results.md), [`model.md`](model.md));
+  - the 174 possible new dump sites highlighted on the map, starting with the 5 Argentine blobs outside the AMBA ([`argentina.md`](argentina.md)).
 - **Known pipeline fixes:**
   - the fallback to frequency B/VV in 3 GCOVs that lack frequency A;
   - the looks metadata of the BETA products;
   - using a single product maturity once there are enough VALIDATED products ([`model.md`](model.md), resolution test).
-- **Calibrate outside the AMBA.** The thresholds come from 2 positives and 5 controls in Buenos Aires. We'd build a calibration set per region and recalibrate ([`insomnia-index.md`](insomnia-index.md)).
+- **Calibrate outside the AMBA.** The thresholds come from 2 positives and 5 controls in Buenos Aires. We'd build a calibration set per region and recalibrate ([`insomnia-index.md`](insomnia-index.md)). The 7 Argentine frames already processed have no known status, so they need field or registry labels first ([`argentina.md`](argentina.md)).
 - **Reproducibility:**
   - a single entry point to run a frame end to end;
   - pinned dependencies;
@@ -16,9 +18,7 @@ Dumpsite was built in two days. It works end to end, but several pieces are firs
   - moving heavy data out of git (release assets or DVC).
 - **Web:**
   - deploy it at dumpsite.earth;
-  - an English or bilingual interface;
-  - show the blob classification for the 20 new frames;
-  - remove the outdated ResNet mention on the model page.
+  - measure whether the 0.4 threshold for possible new sites and the low threshold for "not enough" sites hold up, since the team set both for the map without calibration ([`../web/README.md`](../web/README.md)).
 
 ## Next months: a better model
 - **Longer series.** Use the NISAR archive as it grows past a year, to separate seasonal from permanent activity. Add a "before" for recent closures with Sentinel-1 or SAOCOM, which Luján doesn't have today ([`idea.md`](idea.md)).
@@ -26,7 +26,7 @@ Dumpsite was built in two days. It works end to end, but several pieces are firs
   - recalibrated 20 m coherence;
   - native 10 m GCOV;
   - front variables that depend less on size.
-- **Less US bias.** 179 of the 193 known-status sites the radar measured are in the US and come from the EPA ([`results.md`](results.md)). Add Argentine provincial registries (OPDS, ACUMAR), the CIM-FADU database and other national inventories ([`data.md`](data.md)).
+- **Less US bias.** 179 of the 193 known-status sites the radar measured are in the US and come from the EPA ([`results.md`](results.md)). Add Argentine provincial registries (OPDS, the ACUMAR 2017 dump-site baseline), the CIM-FADU database and other national inventories ([`data.md`](data.md), [`argentina.md`](argentina.md)). Clean the Argentine catalog too: 9 sites aren't municipal waste.
 - **Per-blob classifier.** Its AUC is 0.79, which isn't enough as a verdict ([`model.md`](model.md)). Ways to improve it:
   - the pending negative classes: FIRMS fires, GHSL settlements, a DEM layover mask;
   - the proposed optical CNN (ResNet-50 SSL4EO-S12) as one more variable.
