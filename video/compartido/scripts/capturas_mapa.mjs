@@ -11,8 +11,8 @@ import puppeteer from "puppeteer-core";
 
 const chrome = process.argv[2];
 const RAIZ = new URL("../../../", import.meta.url).pathname;
-const sitios = Object.fromEntries(JSON.parse(fs.readFileSync(`${RAIZ}insomnes-web/src/data/seed/sitios.json`)).map((s) => [s.id, s]));
-const catalogo = JSON.parse(fs.readFileSync(`${RAIZ}data/basurales/basurales_mundo.json`)).sitios.filter((x) => x.pais === "ARG");
+const sitios = Object.fromEntries(JSON.parse(fs.readFileSync(`${RAIZ}web/src/data/seed/sitios.json`)).map((s) => [s.id, s]));
+const catalogo = JSON.parse(fs.readFileSync(`${RAIZ}data/catalogos/basurales/basurales_mundo.json`)).sitios.filter((x) => x.pais === "ARG");
 const S2 = (item) => `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`;
 const OUT = `${RAIZ}video/public/casos`;
 fs.mkdirSync(OUT, {recursive: true});
@@ -36,7 +36,7 @@ async function preparar(w, h) {
 const quieto = () => pg.evaluate(() => new Promise((r) => { const m = window.mapa; if (m.loaded() && m.areTilesLoaded()) setTimeout(r, 400); else m.once("idle", () => setTimeout(r, 400)); }));
 const proyectar = (pts) => pg.evaluate((pts) => pts.map(([lon, lat]) => { const p = window.mapa.project([lon, lat]); return [Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10]; }), pts);
 
-const salida = {fuente: "capturas_mapa.mjs: insomnes-web/src/data/seed/sitios.json y data/basurales/basurales_mundo.json", argentina: {}, sitios: {}};
+const salida = {fuente: "capturas_mapa.mjs: web/src/data/seed/sitios.json y data/catalogos/basurales/basurales_mundo.json", argentina: {}, sitios: {}};
 
 // 1 · Argentina
 const [AW, AH] = [1920, 1080];

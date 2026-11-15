@@ -46,7 +46,7 @@ def escribir(nombre, dato):
 
 
 def catalogo():
-    mundo = leer(RAIZ, "data", "basurales", "basurales_mundo.json")
+    mundo = leer(RAIZ, "data", "catalogos", "basurales", "basurales_mundo.json")
     sitios = mundo["sitios"]
     # el id es BAS-000001 en adelante, en orden: la web lo rearma con la posición
     assert all(s["id"] == f"BAS-{i + 1:06d}" for i, s in enumerate(sitios)), "los ids del catálogo no son correlativos"
@@ -54,7 +54,7 @@ def catalogo():
     indice_pais = {p: i for i, p in enumerate(paises)}
     escribir("catalogo.json", {
         "generado": mundo["meta"].get("generado"),
-        "origen": "data/basurales/basurales_mundo.json",
+        "origen": "data/catalogos/basurales/basurales_mundo.json",
         "fuentes": {str(bit): mundo["meta"]["fuentes"][clave]["cita"] for clave, bit in FUENTE.items() if clave in mundo["meta"]["fuentes"]},
         "claves_fuente": {clave: bit for clave, bit in FUENTE.items()},
         "estados": {v: k for k, v in ESTADO.items()},
@@ -109,7 +109,7 @@ def geometria(g):
 
 
 def manchas():
-    crudo = leer(RAIZ, "idea-basurales-nisar", "salidas", "manchas.geojson")
+    crudo = leer(RAIZ, "data", "salidas", "manchas.geojson")
     del_flujo = {v["id"]: v for v in leer(WEB, "src", "data", "seed", "veredictos.json")["sitios"] if v["tipo"] == "mancha"}
     veredicto = {i: v["veredicto"] for i, v in del_flujo.items()}
     # p: puntaje del clasificador de "basural contra otra cosa", si el flujo lo calculó; la web decide con qué umbral destacar
@@ -138,7 +138,7 @@ def manchas():
 def frames():
     escribir("frames.json", [
         {"frame": f["frame"], "ciudad": f.get("ciudad"), "pais": f.get("pais"), "bbox": f["bbox"], "pares": f.get("n_gunw"), "desde": f.get("fecha_inicio"), "hasta": f.get("fecha_fin")}
-        for f in leer(RAIZ, "data", "frames.json")["frames"]
+        for f in leer(RAIZ, "data", "catalogos", "frames.json")["frames"]
     ])
 
 
@@ -158,7 +158,7 @@ def rango_valido(tabla, clave, fija, valor_fijo, elegido):
 
 
 def calibracion():
-    salidas = os.path.join(RAIZ, "idea-basurales-nisar", "salidas")
+    salidas = os.path.join(RAIZ, "data", "salidas")
     r = leer(salidas, "resumen_80m.json")
     c = leer(salidas, "calibracion_80m.json")
     p, sup, man, sitios, e = r["parametros"], r["superficie"], r["manchas"], r["sitios"], c["elegido"]
@@ -172,10 +172,10 @@ def calibracion():
     ruta = os.path.join(WEB, "src", "data", "seed", "calibracion.json")
     with open(ruta, "w", encoding="utf-8") as f:
         json.dump({
-            "origen": "idea-basurales-nisar/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
+            "origen": "data/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
             "frame": r["frame"]["frame"],
             # el catálogo mundial con el que se entrena el clasificador
-            "catalogo_sitios": len(leer(RAIZ, "data", "basurales", "basurales_mundo.json")["sitios"]),
+            "catalogo_sitios": len(leer(RAIZ, "data", "catalogos", "basurales", "basurales_mundo.json")["sitios"]),
             "superficie": {k: sup[k] for k in ("agua_ha", "tierra_ha", "candidata_ha", "estacional_ha")},
             "descartes": {"chicas": man["descartadas_chicas"], "lisas": man["descartadas_lisas"], "lineales": man["descartadas_lineales"]},
             "parametros": {k: p[k] for k in ("razon", "min_insomnio", "eco_min_db", "min_ha", "min_px_sitio")},
