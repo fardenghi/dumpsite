@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { Dot, PageHead, Picker, dec, fecha, num, pct, radar } from '../components/ui'
 import { useSitios } from '../data/api'
-import { getLang, t } from '../i18n'
+import type { ModeloEstado } from '../data/types'
+import { MODELO_ESTADO } from '../data/veredictos'
+import cal from '../data/seed/calibracion.json'
 import candidatos from '../data/seed/candidatos.json'
 import fichasJson from '../data/seed/fichas.json'
 import indice from '../data/seed/indice.json'
 import { Fuentes } from './Inicio'
 
-// Every number on this page comes from the pipeline (seed/*.json) or from
-// docs/insomnia-index.md. What wasn't measured isn't shown.
+// Todos los números de esta página salen del pipeline (seed/*.json). Los del embudo y los umbrales están en
+// seed/calibracion.json, que escribe scripts/datos_mapa.py desde las salidas del índice. Lo que no se midió no se muestra.
 interface Ficha {
   motivo: string
   persistencia: number | null
@@ -19,36 +21,49 @@ interface Ficha {
 }
 const FICHAS = fichasJson as unknown as Record<string, Ficha>
 const P = indice.parametros
-const ECO_MIN = -13
+const dec = (n: number, d = 2) => n.toFixed(d).replace('.', ',').replace('-', '−')
+/** Un umbral o un borde de rango, sin ceros de más: 0,8 · 0,725 · −13. */
+const corto = (n: number) => dec(n, 3).replace(/0+$/, '').replace(/,$/, '')
 
-// the AMBA grid, in hectares (docs/insomnia-index.md)
-const GRILLA = 718952
-const AGUA = 97493
+const ECO_MIN = cal.parametros.eco_min_db
+// la grilla del frame, en hectáreas: la tierra más el agua de JRC
+const AGUA = cal.superficie.agua_ha
+const GRILLA = cal.superficie.tierra_ha + AGUA
 const CLASES = [
   { id: 'relleno_osm', nombre: 'Relleno según OpenStreetMap', color: 'var(--despierto)' },
   { id: 'uso_conocido', nombre: 'Uso conocido: aeródromos, golf, parques', color: 'var(--green)' },
   { id: 'sin_explicar', nombre: 'Sin explicar', color: 'var(--faint)' },
 ]
 const DESCARTES = [
-  { n: '2.375', que: 'de menos de 10 ha' },
-  { n: '160', que: 'lisas: eco menor que −13 dB' },
-  { n: '19', que: 'lineales: rutas y arroyos' },
-  { n: '4.226 ha', que: 'despiertas sólo por temporada' },
+  { n: num(cal.descartes.chicas), que: `de menos de ${corto(cal.parametros.min_ha)} ha` },
+  { n: num(cal.descartes.lisas), que: `lisas: eco menor que ${corto(ECO_MIN)} dB` },
+  { n: num(cal.descartes.lineales), que: 'lineales: rutas y arroyos' },
+  { n: `${num(cal.superficie.estacional_ha)} ha`, que: 'despiertas sólo por temporada' },
 ]
+const R = cal.rangos
+// min y max son sólo el ancho de la escala dibujada; el valor y la franja válida salen de la calibración
 const UMBRALES = [
-  { nombre: 'Sitio / entorno', valor: 0.8, desde: 0.75, hasta: 0.825, min: 0.6, max: 1, nota: 'Más bajo, Norte III deja de ser persistente. Más alto, aparecen manchas en la costa del Roggero' },
-  { nombre: 'Insomnio mínimo', valor: 0.7, desde: 0.5, hasta: 0.8, min: 0.3, max: 1, nota: 'Con 0,9 Norte III (0,86) queda afuera' },
-  { nombre: 'Eco mínimo, dB', valor: -13, desde: -16.6, hasta: -11.6, min: -20, max: -8, nota: 'Entre lo liso conocido (el río, −16,6) y el relleno con menos eco (González Catán, −11,6)' },
+  {
+    nombre: 'Sitio / entorno', valor: cal.parametros.razon, desde: R.razon.desde, hasta: R.razon.hasta, min: 0.6, max: 1,
+    nota: `Por debajo de ${corto(R.razon.desde)}, ${cal.testigo.nombre} deja de ser persistente.${R.razon.siguiente == null ? '' : ` Desde ${corto(R.razon.siguiente)}, aparecen manchas en la costa del Roggero`}`,
+  },
+  {
+    nombre: 'Insomnio mínimo', valor: cal.parametros.min_insomnio, desde: R.min_insomnio.desde, hasta: R.min_insomnio.hasta, min: 0.3, max: 1,
+    nota: R.min_insomnio.siguiente == null ? '' : `Con ${corto(R.min_insomnio.siguiente)}, ${cal.testigo.nombre} (${corto(cal.testigo.insomnio)}) queda afuera`,
+  },
+  {
+    nombre: 'Eco mínimo, dB', valor: ECO_MIN, desde: R.eco_min_db.desde, hasta: R.eco_min_db.hasta, min: -20, max: -8,
+    nota: `Entre lo liso conocido (${R.eco_min_db.liso}, ${corto(R.eco_min_db.desde)}) y el relleno con menos eco (${R.eco_min_db.relleno}, ${corto(R.eco_min_db.hasta)})`,
+  },
 ]
+const CALIBRADO_CON = `${cal.calibrado_con.rellenos} rellenos y ${cal.calibrado_con.controles} controles`
 const LIMITES = [
   { que: 'Pasto y monte', porque: 'Pierden coherencia igual que un relleno' },
-  { que: 'Predios chicos', porque: 'Menos de 8 píxeles de 80 m' },
-  { que: 'Un año entero', porque: 'Hay datos de junio a octubre de 2026' },
-  { que: 'Validación independiente', porque: 'Sólo dos rellenos y cinco controles' },
+  { que: 'Predios chicos', porque: `Menos de ${cal.parametros.min_px_sitio} píxeles de 80 m` },
+  { que: 'Un año entero', porque: `Hay datos del ${fecha(indice.desde)} al ${fecha(indice.hasta, true)}` },
+  { que: 'Validación independiente', porque: `Sólo ${CALIBRADO_CON}` },
 ]
 
-// catálogo mundial de basurales con el que se entrena el clasificador (data/basurales/basurales_mundo.json)
-const CATALOGO = 66981
 
 /** Each pair of passes: the dash is 80 % of the surroundings' coherence and the dot, the site's. Dot below the dash = awake pair. */
 function Pares({ f }: { f: Ficha }) {
@@ -185,7 +200,7 @@ export default function Modelo() {
         </div>
         <div className="embudo">
           <div>
-            <span>{t('Grilla del AMBA')}</span>
+            <span>Grilla del {cal.frame === 'AMBA' ? 'AMBA' : 'frame'}</span>
             <div className="embudo-b" style={{ width: '100%' }} />
             <b className="num">{num(GRILLA)} ha</b>
           </div>
@@ -238,8 +253,8 @@ export default function Modelo() {
         <div className="paso-t">
           <i>3</i>
           <div>
-            <h3>{t('Los umbrales')}</h3>
-            <p>{t('Calibrados con dos rellenos y cinco controles. La franja es el rango válido')}</p>
+            <h3>Los umbrales</h3>
+            <p>Calibrados con {CALIBRADO_CON}. La franja es el rango válido</p>
           </div>
         </div>
         <div className="umbrales">
@@ -248,8 +263,8 @@ export default function Modelo() {
             return (
               <div key={u.nombre} title={t(u.nota)}>
                 <div className="medidor-t">
-                  <span>{t(u.nombre)}</span>
-                  <b className="num">{dec(u.valor, Number.isInteger(u.valor) ? 0 : 2)}</b>
+                  <span>{u.nombre}</span>
+                  <b className="num">{corto(u.valor)}</b>
                 </div>
                 <div className="rango">
                   <div style={{ left: pos(u.desde), right: `calc(100% - ${pos(u.hasta)})` }} />
@@ -257,7 +272,9 @@ export default function Modelo() {
                 </div>
                 <div className="rango-e num">
                   <span>{dec(u.min, 1)}</span>
-                  <span>{t('válido de {0} a {1}', dec(u.desde, 3).replace(/0+$/, '').replace(/[,.]$/, ''), dec(u.hasta, 3).replace(/0+$/, '').replace(/[,.]$/, ''))}</span>
+                  <span>
+                    válido de {corto(u.desde)} a {corto(u.hasta)}
+                  </span>
                   <span>{dec(u.max, 1)}</span>
                 </div>
               </div>

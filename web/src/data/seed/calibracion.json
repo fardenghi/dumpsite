@@ -1,0 +1,48 @@
+{
+ "origen": "idea-basurales-nisar/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
+ "frame": "AMBA",
+ "superficie": {
+  "agua_ha": 97493,
+  "tierra_ha": 621459,
+  "candidata_ha": 7050,
+  "estacional_ha": 4226
+ },
+ "descartes": {
+  "chicas": 2375,
+  "lisas": 160,
+  "lineales": 19
+ },
+ "parametros": {
+  "razon": 0.8,
+  "min_insomnio": 0.7,
+  "eco_min_db": -13.0,
+  "min_ha": 10.0,
+  "min_px_sitio": 8
+ },
+ "calibrado_con": {
+  "rellenos": 2,
+  "controles": 5
+ },
+ "rangos": {
+  "razon": {
+   "desde": 0.725,
+   "hasta": 0.825,
+   "siguiente": 0.85
+  },
+  "min_insomnio": {
+   "desde": 0.5,
+   "hasta": 0.8,
+   "siguiente": 0.9
+  },
+  "eco_min_db": {
+   "desde": -16.6,
+   "hasta": -11.6,
+   "liso": "Río de la Plata",
+   "relleno": "González Catán"
+  }
+ },
+ "testigo": {
+  "nombre": "Norte III",
+  "insomnio": 0.86
+ }
+}

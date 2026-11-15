@@ -9,11 +9,13 @@ Lee (no modifica):
 - `../idea-basurales-nisar/salidas/manchas.geojson`: las manchas despiertas de todos los frames
   (el índice de insomnio por encima del umbral, vectorizado por `extraer_manchas.py`).
 - `src/data/seed/veredictos.json`: el veredicto de cada mancha (`flujo.py --web`).
+- `../idea-basurales-nisar/salidas/resumen_80m.json` y `calibracion_80m.json`: el embudo y la calibración del AMBA.
 
 Escribe:
 - `public/datos/catalogo.json`: el catálogo en columnas (lat, lon, estado, superficie, país, fuentes, nombre).
 - `public/datos/manchas.geojson`: los polígonos de las manchas, simplificados, con su insomnio y su veredicto.
 - `public/datos/frames.json`: las cajas de los frames.
+- `src/data/seed/calibracion.json`: los números del panel Modelo (superficies, descartes, umbrales y su rango válido).
 
 Sin dependencias. No inventa nada: lo que la fuente no trae queda vacío.
 """
@@ -136,8 +138,57 @@ def frames():
     ])
 
 
+def rango_valido(tabla, clave, fija, valor_fijo, elegido):
+    """Los valores seguidos de `clave` que cumplen la calibración alrededor del elegido, con `fija` en su valor elegido.
+    Devuelve (desde, hasta, primer valor probado por encima que ya no cumple)."""
+    cumple = {t[clave]: t["cumple"] for t in tabla if t[fija] == valor_fijo}
+    valores = sorted(cumple)
+    i = valores.index(elegido)
+    assert cumple[elegido], f"el valor elegido de {clave} no cumple la calibración"
+    a = b = i
+    while a > 0 and cumple[valores[a - 1]]:
+        a -= 1
+    while b < len(valores) - 1 and cumple[valores[b + 1]]:
+        b += 1
+    return valores[a], valores[b], valores[b + 1] if b < len(valores) - 1 else None
+
+
+def calibracion():
+    salidas = os.path.join(RAIZ, "idea-basurales-nisar", "salidas")
+    r = leer(salidas, "resumen_80m.json")
+    c = leer(salidas, "calibracion_80m.json")
+    p, sup, man, sitios, e = r["parametros"], r["superficie"], r["manchas"], r["sitios"], c["elegido"]
+    razon = rango_valido(c["tabla"], "razon", "min_insomnio", e["min_insomnio"], e["razon"])
+    insomnio = rango_valido(c["tabla"], "min_insomnio", "razon", e["razon"], e["min_insomnio"])
+    # el eco mínimo queda entre lo liso con más eco y el relleno con menos eco
+    liso = max(c["eco_db"]["lisos"].items(), key=lambda x: x[1])
+    relleno = min(c["eco_db"]["rellenos"].items(), key=lambda x: x[1])
+    nombre = lambda i: sitios[i]["nombre"].replace("Control: ", "")
+    roles = [s["rol"] for s in sitios.values()]
+    ruta = os.path.join(WEB, "src", "data", "seed", "calibracion.json")
+    with open(ruta, "w", encoding="utf-8") as f:
+        json.dump({
+            "origen": "idea-basurales-nisar/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
+            "frame": r["frame"]["frame"],
+            "superficie": {k: sup[k] for k in ("agua_ha", "tierra_ha", "candidata_ha", "estacional_ha")},
+            "descartes": {"chicas": man["descartadas_chicas"], "lisas": man["descartadas_lisas"], "lineales": man["descartadas_lineales"]},
+            "parametros": {k: p[k] for k in ("razon", "min_insomnio", "eco_min_db", "min_ha", "min_px_sitio")},
+            "calibrado_con": {"rellenos": roles.count("calibracion"), "controles": roles.count("control")},
+            "rangos": {
+                "razon": {"desde": razon[0], "hasta": razon[1], "siguiente": razon[2]},
+                "min_insomnio": {"desde": insomnio[0], "hasta": insomnio[1], "siguiente": insomnio[2]},
+                "eco_min_db": {"desde": liso[1], "hasta": relleno[1], "liso": nombre(liso[0]), "relleno": nombre(relleno[0])},
+            },
+            # el relleno de calibración que queda afuera cuando se sube el insomnio mínimo
+            "testigo": {"nombre": sitios["norte-iii"]["nombre"], "insomnio": sitios["norte-iii"]["insomnio"]},
+        }, f, ensure_ascii=False, indent=1)
+        f.write("\n")
+    print("seed/calibracion.json")
+
+
 if __name__ == "__main__":
     os.makedirs(SALIDA, exist_ok=True)
     catalogo()
     manchas()
     frames()
+    calibracion()
