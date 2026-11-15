@@ -1,0 +1,67 @@
+{
+ "_nota": "Un solo narrador. Dumpsite (dumpsite.earth). Modelo real: LightGBM, terminado; clasifica cada mancha. Las marcadas son 'clasificadas como basural por el modelo', no confirmadas.",
+ "voz": "en-US-AndrewMultilingualNeural",
+ "huecos_s": {
+  "antes_de_la_primera": 0.2,
+  "entre_frases": 0.25,
+  "antes_de_la_2": 0.4
+ },
+ "frases": [
+  {
+   "id": "intro",
+   "partes": [
+    {
+     "texto": "New dumps appear and grow faster than anyone can map them, and most are never registered.",
+     "velocidad": "+27%",
+     "tono": "+3%",
+     "volumen": "+8%"
+    }
+   ]
+  },
+  {
+   "id": "nisar",
+   "partes": [
+    {
+     "texto": "So we built Dumpsite, a platform that tracks dump sites with NASA's NISAR radar, which images Earth every twelve days.",
+     "velocidad": "+24%",
+     "tono": "+3%",
+     "volumen": "+4%"
+    }
+   ]
+  },
+  {
+   "id": "insomnia",
+   "partes": [
+    {
+     "texto": "Radar coherence tells how alike two passes look, and active dumps never stop changing, so we turn that restlessness into our Insomnia score.",
+     "velocidad": "+24%",
+     "tono": "+1%"
+    }
+   ]
+  },
+  {
+   "id": "red",
+   "partes": [
+    {
+     "texto": "Then our LightGBM model, trained on thousands of mapped dumps, classifies each one as a dump or not.",
+     "velocidad": "+27%",
+     "tono": "+2%",
+     "decir": {
+      "LightGBM": "light G B M"
+     }
+    }
+   ]
+  },
+  {
+   "id": "resultados",
+   "partes": [
+    {
+     "texto": "It's all implemented and open, at the links on screen.",
+     "velocidad": "+20%",
+     "tono": "+5%",
+     "volumen": "+10%"
+    }
+   ]
+  }
+ ]
+}

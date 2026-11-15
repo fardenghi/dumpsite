@@ -1,0 +1,41 @@
+{
+ "voz": "en-US-AndrewMultilingualNeural",
+ "duracion_video": 29.5,
+ "frases": [
+  {
+   "id": "intro",
+   "archivo": "voz-en/frase-1.wav",
+   "inicio": 0.2,
+   "duracion": 4.11,
+   "texto": "New dumps appear and grow faster than anyone can map them, and most are never registered."
+  },
+  {
+   "id": "nisar",
+   "archivo": "voz-en/frase-2.wav",
+   "inicio": 4.71,
+   "duracion": 6.7,
+   "texto": "So we built Dumpsite, a platform that tracks dump sites with NASA's NISAR radar, which images Earth every twelve days."
+  },
+  {
+   "id": "insomnia",
+   "archivo": "voz-en/frase-3.wav",
+   "inicio": 11.66,
+   "duracion": 7.46,
+   "texto": "Radar coherence tells how alike two passes look, and active dumps never stop changing, so we turn that restlessness into our Insomnia score."
+  },
+  {
+   "id": "red",
+   "archivo": "voz-en/frase-4.wav",
+   "inicio": 19.37,
+   "duracion": 5.93,
+   "texto": "Then our LightGBM model, trained on thousands of mapped dumps, classifies each one as a dump or not."
+  },
+  {
+   "id": "resultados",
+   "archivo": "voz-en/frase-5.wav",
+   "inicio": 25.55,
+   "duracion": 2.39,
+   "texto": "It's all implemented and open, at the links on screen."
+  }
+ ]
+}
