@@ -1,6 +1,6 @@
 import React from "react";
 import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from "remotion";
-import {FRASES as FRASES_EN, MOSTRAR_PLACEHOLDERS} from "../data";
+import {EQUIPO, FRASES as FRASES_EN, MOSTRAR_PLACEHOLDERS} from "../data";
 import {C, F} from "../theme";
 
 const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
@@ -81,6 +81,25 @@ export const AvisoIA: React.FC<{texto?: string}> = ({texto = "AI-generated image
     {texto}
   </div>
 );
+
+/* Integrantes del equipo: abajo a la derecha, arriba del aviso de IA y por encima de la zona de subtítulos.
+   La guía oficial sugiere presentar al equipo al principio del video. No se dicen en voz alta. */
+export const Equipo: React.FC<{titulo?: string; dur: number}> = ({titulo = "Team", dur}) => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const n = dur * fps;
+  const v = interpolate(f, [8, 20, n - 12, n - 2], [0, 1, 1, 0], clamp);
+  return (
+    <div style={{position: "absolute", right: 40, bottom: 236, opacity: v, transform: `translateY(${(1 - Math.min(1, f / 20)) * 10}px)`,
+      padding: "14px 20px", borderRadius: 16, background: "rgba(8,12,18,0.5)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.22)",
+      textAlign: "right", textShadow: "0 1px 3px rgba(0,0,0,0.8)"}}>
+      <div style={{fontFamily: F.mono, fontSize: 15, letterSpacing: 3, textTransform: "uppercase", color: C.glow, marginBottom: 6}}>{titulo}</div>
+      {EQUIPO.map((nombre) => (
+        <div key={nombre} style={{fontFamily: F.sans, fontWeight: 500, fontSize: 21, lineHeight: 1.35, color: "rgba(255,255,255,0.94)"}}>{nombre}</div>
+      ))}
+    </div>
+  );
+};
 
 /* Créditos de la imagen en pantalla, como ficha técnica chiquita. */
 export const Creditos: React.FC<{items: [string, string][]; opacidad?: number}> = ({items, opacidad = 1}) => (
