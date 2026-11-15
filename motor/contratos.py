@@ -1,15 +1,15 @@
 """Contratos de datos: el formato de los archivos intermedios del modelo, en código.
 
-La explicación larga (quién escribe, quién lee y por qué) está en `idea/contratos-datos.md`. Acá están
+La explicación larga (quién escribe, quién lee y por qué) está en `../docs/contratos-datos.md`. Acá están
 las columnas de cada archivo como constantes y `validar()`, que falla con un mensaje claro.
 
     import contratos
     contratos.validar(df, "tabla_radar")                  # un DataFrame que estás por escribir
-    contratos.guardar(df, "tabla_radar", "../salidas")    # valida, ordena las columnas y escribe
-    df = contratos.leer("../datos/mock", "tabla_radar")   # lee y valida
+    contratos.guardar(df, "tabla_radar", "../data/salidas")    # valida, ordena las columnas y escribe
+    df = contratos.leer("datos/mock", "tabla_radar")   # lee y valida
 
-    python contratos.py ../datos/mock                     # valida todo lo que encuentre en una carpeta
-    python contratos.py ../salidas/tabla_radar.parquet    # o un archivo
+    python contratos.py datos/mock                     # valida todo lo que encuentre en una carpeta
+    python contratos.py ../data/salidas/tabla_radar.parquet    # o un archivo
 
 Reglas: se pueden agregar columnas, pero no sacar ni renombrar las del contrato. Las columnas marcadas
 como opcionales pueden faltar; si están, se validan.
@@ -68,7 +68,7 @@ class Col:
 F01 = (0.0, 1.0)
 
 _ID_MANCHA = Col("id_mancha", "str", "", "Identificador de la mancha: `MAN-<frame>-<n>`", patron=PATRON_MANCHA)
-_ID_CATALOGO = Col("id_catalogo", "str", "", "`id` del polígono en `data/basurales/` (`BAS-…`) o `data/negativos/` (`NEG-…`)",
+_ID_CATALOGO = Col("id_catalogo", "str", "", "`id` del polígono en `data/catalogos/basurales/` (`BAS-…`) o `data/catalogos/negativos/` (`NEG-…`)",
                    patron=PATRON_CATALOGO)
 _CATALOGO = Col("catalogo", "str", "", "De qué catálogo sale el polígono", valores=CATALOGOS)
 _FRAME = Col("frame", "str", "", "Clave del frame, la de `frames.json` (por ejemplo `AMBA`)", patron=PATRON_FRAME)
@@ -126,7 +126,7 @@ COLUMNAS_MODELO = tuple(c.nombre for c in MOVIMIENTO + RUGOSIDAD + OPTICO + FORM
 @dataclass(frozen=True)
 class Contrato:
     nombre: str
-    ruta: str  # relativa a `idea-basurales-nisar/`
+    ruta: str  # relativa a `data/` (la carpeta de datos de la raíz del repo)
     escribe: str
     lee: str
     fila: str
@@ -212,7 +212,7 @@ CONTRATOS = {c.nombre: c for c in (
         ),
     ),
     Contrato(
-        "frames", "../data/frames.json", "etapa 2", "etapas 1, 4, 6, 7, 8 y 9",
+        "frames", "catalogos/frames.json", "etapa 2", "etapas 1, 4, 6, 7, 8 y 9",
         "un frame (un área de trabajo cubierta por una o más órbitas de NISAR)", ("frame",),
         (
             _FRAME,
@@ -420,7 +420,7 @@ def validar(df, nombre):
             errores.append(f"hay {len(rep)} filas con la clave {list(c.clave)} repetida; por ejemplo {rep[list(c.clave)].iloc[0].tolist()}")
     _coherencia(df, n, errores)
     if errores:
-        raise ErrorContrato(f"{c.archivo} no cumple el contrato (ver idea/contratos-datos.md):\n  - " + "\n  - ".join(errores))
+        raise ErrorContrato(f"{c.archivo} no cumple el contrato (ver ../docs/contratos-datos.md):\n  - " + "\n  - ".join(errores))
     return df
 
 
@@ -455,7 +455,7 @@ def validar_particiones(d, frames=None):
         if sobran:
             errores.append(f"frames que no están en la tabla: {sobran}")
     if errores:
-        raise ErrorContrato("particiones.json no cumple el contrato (ver idea/contratos-datos.md):\n  - " + "\n  - ".join(errores))
+        raise ErrorContrato("particiones.json no cumple el contrato (ver ../docs/contratos-datos.md):\n  - " + "\n  - ".join(errores))
     return d
 
 

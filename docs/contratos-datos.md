@@ -1,29 +1,29 @@
 # Contratos de datos del modelo (14/11/2026)
 
-El formato de los archivos intermedios del modelo, para que las etapas de `plan-entrenamiento.md` se puedan escribir en paralelo sin esperarse. Cada etapa escribe sus archivos y lee los de las otras **con este formato y no otro**.
+El formato de los archivos intermedios del modelo, para que las etapas de `modelo.md` se puedan escribir en paralelo sin esperarse. Cada etapa escribe sus archivos y lee los de las otras **con este formato y no otro**.
 
-- **En código:** `herramientas/contratos.py` tiene las mismas columnas como constantes y la función `validar()`. Si este documento y el código no coinciden, manda el código (y hay un test que avisa).
-- **Datos de prueba:** `python herramientas/contratos_mock.py` genera todos los archivos en `datos/mock/`, con valores inventados.
+- **En código:** `motor/contratos.py` tiene las mismas columnas como constantes y la función `validar()`. Si este documento y el código no coinciden, manda el código (y hay un test que avisa).
+- **Datos de prueba:** `python motor/contratos_mock.py` genera todos los archivos en `motor/datos/mock/`, con valores inventados.
 - **Nada de esto se calculó con datos reales.** Los valores del mock no son resultados: no se citan ni van a la web.
 
 ## Cómo se usa
 ```python
-import contratos                                        # desde herramientas/
+import contratos                                        # desde motor/
 
 contratos.validar(df, "tabla_radar")                    # falla con ErrorContrato y dice todo lo que está mal
-contratos.guardar(df, "tabla_radar", "../salidas")      # valida, ordena las columnas y escribe el parquet
-df = contratos.leer("../datos/mock", "tabla_radar")     # lee y valida (también manchas, frames y particiones)
+contratos.guardar(df, "tabla_radar", "../data/salidas") # valida, ordena las columnas y escribe el parquet
+df = contratos.leer("datos/mock", "tabla_radar")        # lee y valida (también manchas, frames y particiones)
 contratos.COLUMNAS_MODELO                               # las 29 variables del modelo, en orden
 ```
 ```bash
-python herramientas/contratos_mock.py                   # genera datos/mock/
-python herramientas/contratos.py datos/mock             # valida todo lo que haya en una carpeta
-python herramientas/contratos.py salidas/tabla_radar.parquet
+python motor/contratos_mock.py                         # genera motor/datos/mock/
+python motor/contratos.py motor/datos/mock             # valida todo lo que haya en una carpeta
+python motor/contratos.py data/salidas/tabla_radar.parquet
 ```
-Hacen falta `pandas` y `pyarrow` (están en `herramientas/requirements.txt`).
+Hacen falta `pandas` y `pyarrow` (están en `motor/requirements.txt`).
 
 ## Reglas comunes
-- **Rutas:** relativas a `idea-basurales-nisar/`. `salidas/` es de esta carpeta; `../data/` es la carpeta `data/` de la raíz del repo, donde están los catálogos.
+- **Rutas:** relativas a `data/`, la carpeta de datos de la raíz del repo. `salidas/` tiene lo que escribe el motor y `catalogos/` los catálogos.
 - **Se pueden agregar columnas. No se pueden sacar ni renombrar** las del contrato. Las marcadas como *opcional* pueden faltar; si están, se validan.
 - **Tablas:** parquet, escritas con `contratos.guardar()` (pandas y pyarrow), sin índice. Los textos son texto, los números `float64` y los enteros `int64` (o `Int64` si puede haber vacíos).
 - **Vacíos:** una columna sólo puede venir vacía (null o NaN) si la tabla dice "sí" en *¿Vacía?*. Vacío quiere decir "no se pudo medir", nunca cero.
@@ -31,7 +31,7 @@ Hacen falta `pandas` y `pyarrow` (están en `herramientas/requirements.txt`).
 - **Fechas:** texto `AAAA-MM-DD`.
 - **`frame`:** la clave de `frames.json`, en mayúsculas, con letras, números y guion bajo (`AMBA`, `DELHI`, `LOS_ANGELES`). Un frame es un área de trabajo; puede juntar más de una órbita de NISAR, como el AMBA (órbitas 10 y 161).
 - **`id_mancha`:** `MAN-<frame>-<n>`, con `n` de cuatro cifras desde 1, en el orden de `insomnio.manchas()` (de mayor a menor superficie). Ejemplo: `MAN-AMBA-0001`. Lo arma `contratos.id_mancha(frame, n)`. El número cuenta también las manchas descartadas.
-- **`id_catalogo`:** el `id` del polígono en los catálogos, tal cual: `BAS-…` para `../data/basurales/` y `NEG-…` para `../data/negativos/`. **No** son los ids de `fichas_80m.json` (`norte-iii`) ni los de `casos_curados_argentina.json` (`AR-LUJAN`).
+- **`id_catalogo`:** el `id` del polígono en los catálogos, tal cual: `BAS-…` para `data/catalogos/basurales/` y `NEG-…` para `data/catalogos/negativos/`. **No** son los ids de `fichas_80m.json` (`norte-iii`) ni los de `casos_curados_argentina.json` (`AR-LUJAN`).
 - **Anillo:** 1,5 km alrededor de la mancha o del polígono, sin agua y sin los demás polígonos de los catálogos (`insomnio.anillo`, etapa 1).
 - **Tamaño mínimo:** 10 ha. Lo que mide menos sale como `no_alcanza`.
 - **Lo pesado no se sube:** un parquet de más de unos MB va a `datos/`.
@@ -46,7 +46,7 @@ Hacen falta `pandas` y `pyarrow` (están en `herramientas/requirements.txt`).
 | `salidas/tabla_optico.parquet` | etapa 5 | etapa 6 | una mancha candidata de un frame |
 | `salidas/tabla_optico_catalogo.parquet` | etapa 5 | etapas 8 y 9 (ficha) | un polígono del catálogo en un frame |
 | `salidas/cruce_manchas_catalogo.parquet` | etapa 6 (`cruce_manchas.py`) | etapas 6 y 9 | un par mancha y polígono del catálogo que se tocan (intersección > 0), sin filtrar por el 30 % |
-| `../data/frames.json` | etapa 2 | etapas 1, 4, 6, 7, 8 y 9 | un frame (un área de trabajo cubierta por una o más órbitas de NISAR) |
+| `catalogos/frames.json` | etapa 2 | etapas 1, 4, 6, 7, 8 y 9 | un frame (un área de trabajo cubierta por una o más órbitas de NISAR) |
 | `salidas/particiones.json` | etapa 6 (`armar_tabla.py`) | etapa 7 y la CNN | no es una tabla: qué frames van en cada partición |
 | `salidas/tabla_entrenamiento.parquet` | etapa 6 (`armar_tabla.py`) | etapa 7 y la CNN | una mancha etiquetada de un frame |
 | `salidas/predicciones.parquet` | etapa 7 (o el mock, mientras no haya modelo) | etapa 9 (`veredicto.py`) | una mancha candidata de un frame |
@@ -216,7 +216,7 @@ Además el mock escribe `catalogo_mock.geojson`, que no es un contrato: son los 
 
 **Clave** (no se repite): `id_mancha`, `id_catalogo`.
 
-## 7. `../data/frames.json`
+## 7. `catalogos/frames.json`
 - **Lo escribe:** la etapa 2 (`frames_elegir.py`).
 - **Lo leen:** la etapa 1 y la 4 (caja y EPSG de cada frame), la 6 y la 7 (ciudad, país y qué queda para la prueba final), la 8 y la 9.
 - **Una entrada por frame.** Va en `data/`, en la raíz del repo, junto a los catálogos.
@@ -224,7 +224,7 @@ Además el mock escribe `catalogo_mock.geojson`, que no es un contrato: son los 
 
 ```json
 {
-  "meta": {"generado_por": "herramientas/frames_elegir.py", "fuente": "ASF, productos GUNW PR"},
+  "meta": {"generado_por": "motor/frames_elegir.py", "fuente": "ASF, productos GUNW PR"},
   "frames": [
     {
       "frame": "AMBA", "orbita": [10, 161], "ciudad": "Buenos Aires", "pais": "ARG",
@@ -348,7 +348,7 @@ Cada frame de la tabla aparece exactamente una vez. `contratos.particion_por_fra
 ---
 
 ## Qué trae el mock
-`python herramientas/contratos_mock.py` escribe en `datos/mock/` (que no se sube) todos los archivos de arriba, con el mismo nombre y en una sola carpeta. Son coherentes entre sí: los ids cruzan de un archivo al otro.
+`python motor/contratos_mock.py` escribe en `motor/datos/mock/` (que no se sube) todos los archivos de arriba, con el mismo nombre y en una sola carpeta. Son coherentes entre sí: los ids cruzan de un archivo al otro.
 
 - **Frames:** `AMBA` (Argentina, va a `prueba_final`) y tres más para que haya particiones: `DELHI`, `CDMX` y `NAIROBI`. Las órbitas, las fechas y los conteos de los tres son inventados.
 - **Por frame, 10 manchas candidatas:** 2 sobre un basural, 4 sobre un negativo (aeropuerto, cantera, contenedores y humedal), 1 que toca un basural y un negativo, 1 que roza un negativo con menos del 30 %, y 2 que no tocan nada. Más 3 descartadas (chica, lineal y lisa), que sólo están en el geojson.
@@ -359,7 +359,7 @@ Cada frame de la tabla aparece exactamente una vez. `contratos.particion_por_fra
 ## Decisiones que se tomaron acá
 Las que no estaban en el plan y hubo que fijar. Si alguna molesta, se discute en la mesa y se cambia en `contratos.py` y acá a la vez.
 
-1. **`frames.json` va en `data/` de la raíz** (`../data/frames.json`), junto a los catálogos, y `orbita` es una lista porque el AMBA usa dos órbitas.
+1. **`frames.json` va con los catálogos** (`data/catalogos/frames.json`), y `orbita` es una lista porque el AMBA usa dos órbitas.
 2. **`reservado_prueba`** en cada frame, para que las particiones salgan de un solo lugar.
 3. **Columnas de contraste óptico** (`ndvi_contraste`, `bsi_contraste`, `ndwi_contraste`, `swir_b11_contraste`, `swir_b12_contraste`): el plan pide los índices "adentro y contra el anillo" pero sólo nombra los de adentro.
 4. **`tabla_optico_catalogo.parquet`**, para el óptico de los polígonos del catálogo, separado del de las manchas.
@@ -372,4 +372,4 @@ Las que no estaban en el plan y hubo que fijar. Si alguna molesta, se discute en
 - NISAR GUNW y GCOV (NASA/ISRO, vía ASF DAAC): movimiento y rugosidad.
 - Sentinel-2 L2A (Copernicus, ESA): óptico.
 - JRC Global Surface Water y ESA WorldCover: contexto.
-- OpenStreetMap vía Overture Maps (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP (dominio público) y NASA EMIT: los catálogos de `../data/` (detalle en `../data/README.md`).
+- OpenStreetMap vía Overture Maps (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP (dominio público) y NASA EMIT: los catálogos de `data/catalogos/` (detalle en `data/README.md`).

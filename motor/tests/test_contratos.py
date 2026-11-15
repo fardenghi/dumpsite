@@ -1,6 +1,6 @@
 """El mock cumple los contratos, y `validar` falla con un mensaje claro cuando algo no cumple.
 
-Correr desde `herramientas/`:  python -m pytest tests -q
+Correr desde `motor/`:  python -m pytest tests -q
 """
 import json
 import os
