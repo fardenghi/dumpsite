@@ -44,29 +44,29 @@ export function fueraDelAmba(v: Veredictos | null): Veredicto[] {
   return delCatalogo(v).filter((x) => x.frame !== FRAME_AMBA)
 }
 
-/** Las manchas despiertas que no están en ningún catálogo y que el modelo lee como basural: lo que el sistema busca.
- * Quedan afuera las que OpenStreetMap ya explica con otro uso (un aeródromo, una reserva, una cantera). */
+/** The awake blobs that aren't in any catalog and that the model reads as a dump site: what the system looks for.
+ * Blobs that OpenStreetMap already explains with another use (an airfield, a reserve, a quarry) are left out. */
 export function posiblesNuevos(v: Veredictos | null): Veredicto[] {
   return (v?.sitios ?? []).filter((x) => esNuevo(x) && !x.que && typeof x.lat === 'number' && typeof x.lon === 'number')
 }
 
-/** Puntaje mínimo del clasificador de "basural contra otra cosa" para destacar una mancha como posible basural nuevo.
- * El flujo corta en 0,5 (`veredicto = posible_nuevo`); el equipo lo bajó a 0,4 el 15/11 para la web. */
+/** Minimum score of the "dump site versus something else" classifier to highlight a blob as a possible new dump site.
+ * The flow cuts at 0.5 (`veredicto = posible_nuevo`); the team lowered it to 0.4 on 15/11 for the web. */
 export const UMBRAL_NUEVO = 0.4
 const esNuevo = (x: Veredicto) => x.tipo === 'mancha' && typeof x.p_basural === 'number' && x.p_basural >= UMBRAL_NUEVO
 
-/** Las manchas que el flujo marca como posible basural nuevo pero OpenStreetMap explica con otro uso. */
+/** The blobs the flow marks as a possible new dump site but OpenStreetMap explains with another use. */
 export function nuevosConUsoConocido(v: Veredictos | null): number {
   return (v?.sitios ?? []).filter((x) => esNuevo(x) && !!x.que).length
 }
 
-/** Los polígonos del catálogo con dato de radar que el mapa dibuja como punto: los de los otros frames y los del AMBA
- * que no son uno de los sitios curados (esos ya están, con su contorno). */
+/** The catalog polygons with radar data that the map draws as a point: those of the other frames and those of the AMBA
+ * that aren't one of the curated sites (those are already there, with their outline). */
 export function conRadar(v: Veredictos | null, curados: Sitio[]): Veredicto[] {
   return delCatalogo(v).filter((x) => x.frame !== FRAME_AMBA || !curados.some((s) => km(s, x as { lat: number; lon: number }) <= 0.5))
 }
 
-/** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Sale de la clave: no hay otra fuente en el seed. */
+/** `USA_OH_LAKE` -> "Lake, OH, USA"; `LOS_ANGELES` -> "Los Angeles". Derived from the key: there's no other source in the seed. */
 export function nombreFrame(frame: string): string {
   const palabras = (t: string[]) => t.map((p) => p.charAt(0) + p.slice(1).toLowerCase()).join(' ')
   const partes = frame.split('_')

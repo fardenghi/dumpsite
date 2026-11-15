@@ -1,6 +1,6 @@
 # web/
 
-Dumpsite's web: the insomnia index map, each site's card and the model panel. It's a static site (React, Vite and MapLibre) that reads data precomputed by the engine, with no backend. The interface is in Spanish.
+Dumpsite's web: the insomnia index map, each site's card and the model panel. It's a static site (React, Vite and MapLibre) that reads data precomputed by the engine, with no backend. The interface is in English by default and in Spanish on request (selector in the top bar, or `?lang=es`); the texts live in `src/i18n.ts`.
 
 ```bash
 npm install
@@ -13,10 +13,10 @@ The map is the background of the whole site and is always visible. The sections 
 
 | Route | What it shows |
 |---|---|
-| `#/mapa` | Arranca en el AMBA. Muestra **todo el catálogo de basurales** (66.981) y los 30 frames de NISAR procesados; ver "Capas del mapa". Al abrir un sitio curado del AMBA: veredicto, coherencia par a par e imágenes Sentinel-2 por fecha. "Ir a un sitio" lista todo lo que tiene dato de radar, agrupado por país y con buscador. Con `VITE_GOOGLE_MAPS_KEY`, desde zoom 13 la imagen de Google aparece sola en la caja de cada basural (la de los recortes en los sitios curados, 1,5 km alrededor del punto en el resto), sin tener que abrirlo; afuera de las cajas no se pide nada a Google |
-| `#/inicio` | Panel "Resumen": cantidad de sitios, ranking de insomnio y el caso Luján |
-| `#/sitios` | Panel con la lista filtrable por frame y por estado del radar, exportable a CSV. Arranca en el AMBA |
-| `#/modelo` | Panel con la regla par por par (con un sitio de ejemplo), el embudo de la grilla a las manchas candidatas, los umbrales calibrados, **el modelo de abierto contra cerrado con sus métricas** (si `modelo.json` las trae) y el clasificador por mancha propuesto, que todavía no tiene métricas |
+| `#/mapa` | Starts on the AMBA. It shows **the whole dump-site catalog** (66,981) and the processed NISAR frames; see "Map layers". Opening a curated AMBA site shows: verdict, pair-by-pair coherence and Sentinel-2 images by date. "Ir a un sitio" (go to a site) lists everything with radar data, grouped by country and with a search box. With `VITE_GOOGLE_MAPS_KEY`, from zoom 13 the Google image appears on its own inside the box of each dump site (the crop box on curated sites, 1.5 km around the point elsewhere), without opening it; outside the boxes nothing is requested from Google |
+| `#/inicio` | "Resumen" (summary) panel: number of sites, insomnia ranking and the Luján case |
+| `#/sitios` | Panel with the list, filterable by frame and by radar status, exportable to CSV. It starts on the AMBA |
+| `#/modelo` | Panel with the pair-by-pair rule (with an example site), the funnel from the grid to the candidate blobs, the calibrated thresholds, **the open-versus-closed model with its metrics** (if `modelo.json` carries them) and the proposed per-blob classifier, which has no metrics yet |
 
 ## Data
 **They're real and precomputed.** They're written by the insomnia index pipeline and aren't edited by hand:
@@ -32,34 +32,34 @@ python ../motor/pipeline_insomnio.py indice
 | `src/data/seed/candidatos.json` | The 219 candidate blobs with center, area and class (`relleno_osm`, `uso_conocido`, `sin_explicar`). The Model panel shows the count per class; they're not on the map yet. The "unexplained" ones aren't verified: say "signal compatible with activity" |
 | `public/indice/insomnio-amba.png` + `src/data/seed/indice.json` | The AMBA index as a PNG (north up, regular in Web Mercator) and its bounds: `oeste`, `sur`, `este`, `norte` and `coordinates`, the four corners in the order a MapLibre `image` source expects. `Mapa.tsx` loads it that way and the "Índice de insomnio" button toggles it |
 
-### Capas del mapa
-Lo que no entra en el bundle va en `public/datos/` y la web lo pide al cargar. Lo escribe, sin dependencias y sin tocar las fuentes:
+### Map layers
+What doesn't fit in the bundle goes to `public/datos/` and the web requests it on load. It's written, with no dependencies and without touching the sources, by:
 
 ```bash
 python3 scripts/datos_mapa.py
 ```
 
-| Archivo | Sale de | Qué dibuja |
+| File | Comes from | What it draws |
 |---|---|---|
-| `public/datos/catalogo.json` (2,7 MB) | `../data/basurales/basurales_mundo.json` | Los 66.981 basurales del catálogo, en columnas. Los que no caen en un frame procesado van como puntos chicos celestes, **"Sin dato de radar"**: la ficha muestra nombre, país, superficie y fuente, y dice que no hay índice (sin el estado de ningún registro, como el resto de la web) |
-| `public/datos/manchas.geojson` (6,3 MB) | `../idea-basurales-nisar/salidas/manchas.geojson` + `seed/veredictos.json` | Las 20.589 manchas despiertas de los 30 frames, simplificadas a un píxel de 80 m. Con "Índice de insomnio" prendido se pintan por insomnio con la paleta del PNG del AMBA |
-| `public/datos/frames.json` | `../data/frames.json` | La caja de cada frame (recuadro lleno de lejos, que se aclara al acercarse; con el índice prendido), su ciudad y su país |
+| `public/datos/catalogo.json` (2.7 MB) | `../data/catalogos/basurales/basurales_mundo.json` | The 66,981 catalog dump sites, in columns. The ones that don't fall in a processed frame are small light-blue points, **"Sin dato de radar"** (no radar data): the card shows name, country, area and source, and says there's no index (without the status of any registry, like the rest of the web) |
+| `public/datos/manchas.geojson` (6.3 MB) | `../data/salidas/manchas.geojson` + `seed/veredictos.json` | The 20,589 awake blobs of the frames, simplified to an 80 m pixel. With "Índice de insomnio" on they're painted by insomnia with the AMBA PNG palette |
+| `public/datos/frames.json` | `../data/catalogos/frames.json` | The box of each frame (filled from afar, fading when zooming in; with the index on), its city and its country |
 
-El mismo script escribe `src/data/seed/calibracion.json` desde `../idea-basurales-nisar/salidas/resumen_80m.json` y `calibracion_80m.json`: superficies de la grilla, descartes del embudo, umbrales elegidos y su rango válido. **El panel Modelo ya no tiene números escritos en el código**: los lee de ahí.
+The same script writes `src/data/seed/calibracion.json` from `../data/salidas/resumen_80m.json` and `calibracion_80m.json`: grid areas, funnel discards, chosen thresholds and their valid range. **The Model panel no longer has numbers written in the code**: it reads them from there.
 
-- **Colores:** coral, verde agua y blanco son el veredicto del radar (despierto, quieto, no alcanza). **Amarillo es "posible basural nuevo"**: una mancha despierta que no está en ningún catálogo y que el modelo lee como basural (`veredicto = posible_nuevo` en `veredictos.json`). Va arriba de todo, con halo, y desde el zoom 8 con su contorno. Celeste es el catálogo sin dato de radar.
-- **Se destacan 174 manchas: las que tienen puntaje de basural de 0,4 o más** (`UMBRAL_NUEVO` en `src/data/veredictos.ts`; el flujo corta en 0,5 y da 168, el equipo lo bajó el 15/11). Otras 40 con ese puntaje caen sobre algo que OpenStreetMap ya explica (aeródromos, reservas, canteras, golf: por ejemplo el aeropuerto de Los Ángeles) y no se pintan de amarillo. La regla está en `posiblesNuevos` (`src/data/veredictos.ts`). Ninguno está verificado.
-- **El índice completo, píxel por píxel, está para las 37 regiones:** el AMBA (`public/indice/insomnio-amba.png`, del pipeline) y las otras 36 (las 7 de Argentina fuera del AMBA se sumaron después, con su propia corrida: `../idea-basurales-nisar/idea/argentina-fuera-del-amba.md`) (`public/indice/insomnio-<frame>.png` y `src/data/seed/indices.json`). **Cómo se hicieron las 29 primeras (15/11):** para 27 frames se bajó `gs://basurales-514714-salidas/p6/<FRAME>.tgz` y se extrajo `recortes_80m/` en `../idea-basurales-nisar/salidas/<FRAME>/`; `USA_TX_HARRIS` y `USA_CA_SAN_JOAQUIN` no están en el bucket y se leyeron en remoto desde un contenedor (`pipeline_insomnio.py procesar --frame <FRAME> --remoto --procesos 4`, 8 y 11 minutos, con `EARTHDATA_TOKEN`; en Claude Code en la nube hay que sacar la variable `FSSPEC_GCS` del entorno, con `env -u FSSPEC_GCS`, porque rompe la lectura por HTTPS). Después, por frame, `python pipeline_insomnio.py indice --frame <FRAME> --web ''` (unos 60 s; escribe `indice_80m.npz`, que no va al repo, y `resumen_80m.json` y `fichas_80m.json`, que sí) y al final `python indice_png_web.py`. La web carga las imágenes de `indices.json` y no pinta las manchas de esos frames.
-- Desde la corrida del 15/11 a la tarde el AMBA también tiene predicción del clasificador: 7 de los 174 están ahí.
+- **Colors:** coral, teal and white are the radar verdict (awake, quiet, not enough). **Yellow is "possible new dump site"**: an awake blob that isn't in any catalog and that the model reads as a dump site (`veredicto = posible_nuevo` in `veredictos.json`). It goes above everything, with a halo, and with its outline from zoom 8. Light blue is the catalog without radar data.
+- **174 blobs are highlighted: the ones with a dump-site score of 0.4 or more** (`UMBRAL_NUEVO` in `src/data/veredictos.ts`; the flow cuts at 0.5 and gives 168, the team lowered it on 15/11). Another 40 with that score fall on something OpenStreetMap already explains (airfields, reserves, quarries, golf courses: for example Los Angeles airport) and aren't painted yellow. The rule is in `posiblesNuevos` (`src/data/veredictos.ts`). None is verified.
+- **The full index, pixel by pixel, is there for all 37 regions:** the AMBA (`public/indice/insomnio-amba.png`, from the pipeline) and the other 36 (`public/indice/insomnio-<frame>.png` and `src/data/seed/indices.json`; the 7 Argentine frames outside the AMBA were added later, with their own run: [`../docs/argentina.md`](../docs/argentina.md)). **How the first 29 were made (15/11):** for 27 frames `gs://basurales-514714-salidas/p6/<FRAME>.tgz` was downloaded and `recortes_80m/` extracted into `../data/salidas/<FRAME>/`; `USA_TX_HARRIS` and `USA_CA_SAN_JOAQUIN` aren't in the bucket and were read remotely from a container (`pipeline_insomnio.py procesar --frame <FRAME> --remoto --procesos 4`, 8 and 11 minutes, with `EARTHDATA_TOKEN`; in a cloud container the `FSSPEC_GCS` variable has to be removed from the environment, with `env -u FSSPEC_GCS`, because it breaks reading over HTTPS). Then, per frame, `python pipeline_insomnio.py indice --frame <FRAME> --web ''` (about 60 s; it writes `indice_80m.npz`, which isn't committed, and `resumen_80m.json` and `fichas_80m.json`, which are) and finally `python indice_png_web.py`. The web loads the images from `indices.json` and doesn't paint those frames' blobs.
+- Since the run on the afternoon of 15/11 the AMBA also has a classifier prediction: 7 of the 174 are there.
 
-### Umbral bajo (decisión del equipo, 15/11)
-Los sitios que el pipeline deja en "no alcanza" (predio chico, superficie lisa o señal intermedia) **se muestran como despiertos si su insomnio medido es mayor que 0,2**, el techo de "quieto" del índice. Es una regla de la web, no del pipeline: `conUmbralBajo` en `src/data/types.ts` se aplica al cargar `sitios.json` y `veredictos.json`, que no se tocan, y deja la marca `umbral_bajo`. La ficha y el panel Modelo lo dicen ("Despierto con el umbral bajo").
-- Con esto pasan a despiertos 278 sitios: 4 del AMBA (Villa Domínico, Ministro Rivadavia, Cuartel V y la mancha al oeste de Luján) y 274 del catálogo.
-- Quedan 169 en "no alcanza": 78 sin insomnio medido (más chicos que un píxel o fuera de la grilla) y 91 con insomnio de 0,2 o menos.
-- **Ojo en el pitch:** la regla calibrada sigue siendo insomnio de 0,7 o más (panel Modelo). Los del umbral bajo no pasaron esa calibración: son "señal compatible con actividad", no un veredicto validado.
+### Low threshold (team decision, 15/11)
+Sites the pipeline leaves as "no alcanza" (small site, smooth surface or intermediate signal) **are shown as awake if their measured insomnia is above 0.2**, the index's "quiet" ceiling. It's a web rule, not a pipeline one: `conUmbralBajo` in `src/data/types.ts` is applied when loading `sitios.json` and `veredictos.json`, which aren't touched, and leaves the `umbral_bajo` flag. The card and the Model panel say so ("Despierto con el umbral bajo").
+- With this, 278 sites become awake: 4 in the AMBA (Villa Domínico, Ministro Rivadavia, Cuartel V and the blob west of Luján) and 274 from the catalog.
+- 169 stay as "no alcanza": 78 without measured insomnia (smaller than a pixel or outside the grid) and 91 with insomnia of 0.2 or less.
+- **Careful in the pitch:** the calibrated rule is still insomnia of 0.7 or more (Model panel). The low-threshold ones didn't go through that calibration: they're "signal compatible with activity", not a validated verdict.
 
-### Veredictos de todos los frames y modelo de abierto contra cerrado
-Los escribe `python ../idea-basurales-nisar/herramientas/flujo.py --web`. **Los dos archivos son opcionales**: la web los busca con `import.meta.glob` (`src/data/veredictos.ts`) y, si faltan o no traen las claves nuevas, queda como antes.
+### Verdicts for all frames and open-versus-closed model
+Written by `python ../motor/flujo.py --web`. **Both files are optional**: the web looks for them with `import.meta.glob` (`src/data/veredictos.ts`) and, if they're missing or don't carry the new keys, it stays as before.
 
 | File | What the web uses |
 |---|---|
@@ -104,7 +104,7 @@ The outlines come from the index pipeline (OpenStreetMap `landuse=landfill` poly
 - Blue Marble (NASA), via GIBS.
 - Sentinel-2 (ESA Copernicus), via Microsoft Planetary Computer.
 - OpenStreetMap, ODbL.
-- Catálogo de basurales: polígonos de OpenStreetMap vía Overture Maps (release 2026-10-21.0, ODbL), Climate TRACE (solid-waste-disposal, API v6, CC BY 4.0), estado del registro de U.S. EPA LMOP (2024-09, dominio público) y plumas de NASA EMIT L2B CH4PLM v002. Detalle en `../data/README.md`.
-- Imagen satelital de Google (Map Tiles API), sólo si se configura la clave. Tiene copyright de Google y de sus proveedores: hay que declararla en el formulario de entrega.
-- Tipografías Roboto Slab (Apache 2.0) y DM Sans (OFL). Mapa con MapLibre GL JS (BSD-3).
-- Código: Apache 2.0. Escrito con asistencia de IA (Claude).
+- Dump-site catalog: OpenStreetMap polygons via Overture Maps (release 2026-10-21.0, ODbL), Climate TRACE (solid-waste-disposal, API v6, CC BY 4.0), registry status from U.S. EPA LMOP (2024-09, public domain) and NASA EMIT L2B CH4PLM v002 plumes. Details in `../data/README.md`.
+- Google satellite imagery (Map Tiles API), only if the key is configured. It's copyrighted by Google and its providers: it has to be declared in the submission form.
+- Roboto Slab (Apache 2.0) and DM Sans (OFL) fonts. Map with MapLibre GL JS (BSD-3).
+- Code: Apache 2.0. Written with AI assistance (Claude).

@@ -8,7 +8,7 @@ import { getLang, t } from '../i18n'
 type Orden = 'insomnio' | 'ha' | 'nombre'
 const TODOS = '*'
 
-/** Una fila de la lista: un sitio curado del AMBA o un polígono del catálogo de otra región. Sólo lo que ve el radar. */
+/** A row of the list: a curated AMBA site or a catalog polygon from another region. Only what the radar sees. */
 interface Fila {
   id: string
   frame: string
@@ -56,7 +56,7 @@ export default function Sitios() {
   const frames = useMemo(() => {
     const n = new Map<string, number>()
     for (const f of todas) n.set(f.frame, (n.get(f.frame) ?? 0) + 1)
-    // primero el AMBA y después por cantidad
+    // the AMBA first and then by count
     return [...n].sort((a, b) => Number(b[0] === FRAME_AMBA) - Number(a[0] === FRAME_AMBA) || b[1] - a[1])
   }, [todas])
   const delFrame = useMemo(() => todas.filter((f) => frame === TODOS || f.frame === frame), [todas, frame])
@@ -127,7 +127,7 @@ export default function Sitios() {
         </button>
       </div>
 
-      {/* una grilla que se acomoda al ancho del panel: nunca hay scroll horizontal */}
+      {/* a grid that fits the panel width: there's never horizontal scroll */}
       <div className="lista">
         <div className="lista-head">
           <Col id="nombre">{t('Sitio')}</Col>

@@ -1,7 +1,7 @@
-// Idioma de la web: inglés por defecto, castellano a elección (selector propio en la barra de arriba).
-// Los textos se escriben en castellano en el código y se traducen con t('…'): si falta una traducción,
-// se muestra el castellano. {0}, {1}… se reemplazan por los valores que se pasan después.
-// El idioma se puede forzar con ?lang=es o #/mapa?lang=es (lo usan las capturas del video).
+// Web language: English by default, Spanish on request (its own selector in the top bar).
+// Texts are written in Spanish in the code and translated with t('…'): if a translation is missing,
+// the Spanish is shown. {0}, {1}… are replaced by the values passed after it.
+// The language can be forced with ?lang=es or #/mapa?lang=es (the video captures use it).
 import { useSyncExternalStore } from 'react'
 
 export type Lang = 'en' | 'es'
@@ -19,7 +19,7 @@ function inicial(): Lang {
     const guardado = localStorage.getItem(CLAVE)
     if (guardado === 'es' || guardado === 'en') return guardado
   } catch {
-    /* sin almacenamiento: queda el de por defecto */
+    /* no storage: the default stays */
   }
   return 'en'
 }
@@ -37,12 +37,12 @@ export function setLang(l: Lang) {
   try {
     localStorage.setItem(CLAVE, l)
   } catch {
-    /* sin almacenamiento: dura hasta recargar */
+    /* no storage: it lasts until reload */
   }
   subs.forEach((f) => f())
 }
 
-/** Hace que el componente se vuelva a dibujar al cambiar de idioma. App lo usa y así se redibuja todo. */
+/** Makes the component redraw when the language changes. App uses it, so everything redraws. */
 export function useLang(): Lang {
   return useSyncExternalStore(
     (f) => {
@@ -61,7 +61,7 @@ export function t(es: string, ...vals: (string | number)[]): string {
 }
 
 const EN: Record<string, string> = {
-  // marca y navegación
+  // brand and navigation
   'Basurales que el radar NISAR de la NASA nunca ve quietos.': 'Dump sites that NASA’s NISAR radar never sees at rest.',
   '{0} de {1} despiertos': '{0} of {1} awake',
   'Datos reales precalculados: 15 comparaciones de pasadas de NISAR (GUNW, 80 m) sobre el AMBA, del 25/06 al 12/10/2026':
@@ -75,7 +75,7 @@ const EN: Record<string, string> = {
   Cerrar: 'Close',
   Idioma: 'Language',
 
-  // estados del radar
+  // radar states
   Despierto: 'Awake',
   Quieto: 'At rest',
   'No alcanza': 'Out of reach',
@@ -216,7 +216,7 @@ const EN: Record<string, string> = {
   'Sólo dos rellenos y cinco controles': 'Only two landfills and five controls',
   'todas las pasadas': 'all passes',
 
-  // catálogo completo, posibles nuevos e índice en todas las regiones
+  // full catalog, possible new sites and index in every region
   'Posible basural nuevo': 'Possible new dump site',
   'No figura en ningún catálogo': 'Not in any catalog',
   'Según el modelo · basural u otra cosa': 'According to the model · dump site or something else',
@@ -249,7 +249,7 @@ const EN: Record<string, string> = {
   'Catálogo de basurales · Climate TRACE, CC BY 4.0': 'Dump-site catalog · Climate TRACE, CC BY 4.0',
   'Plumas de metano · NASA EMIT L2B CH4PLM': 'Methane plumes · NASA EMIT L2B CH4PLM',
 
-  // panel Modelo: los números salen de seed/calibracion.json
+  // Model panel: the numbers come from seed/calibracion.json
   'de menos de {0} ha': 'under {0} ha',
   'lisas: eco menor que {0} dB': 'smooth: echo below {0} dB',
   'Calibrados con {0} rellenos y {1} controles. La franja es el rango válido': 'Calibrated on {0} landfills and {1} controls. The band is the valid range',
@@ -261,7 +261,7 @@ const EN: Record<string, string> = {
   'Hay datos del {0} al {1}': 'Data runs from {0} to {1}',
   'Sólo {0} rellenos y {1} controles': 'Only {0} landfills and {1} controls',
 
-  // nombres de los sitios curados
+  // names of the curated sites
   'Norte III, disposición final': 'Norte III, final disposal',
   'Relleno del CEAMSE al noreste de Norte III': 'CEAMSE landfill northeast of Norte III',
   'Relleno al norte de Norte III': 'Landfill north of Norte III',

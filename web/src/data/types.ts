@@ -9,7 +9,7 @@ export interface Par {
   fecha: string
   /** median coherence inside the site, 0 to 1 */
   sitio: number
-  /** mediana en un anillo de 1,5 km alrededor */
+  /** median in a 1.5 km ring around it */
   anillo: number
 }
 
@@ -20,13 +20,13 @@ export interface Imagen {
   item: string
 }
 
-/** Umbral bajo, decidido por el equipo el 15/11: un sitio que el pipeline deja en "no alcanza" (predio chico, superficie
- * lisa o señal intermedia) se muestra como despierto si su insomnio medido supera el techo de "quieto" (`max_quieto` del
- * índice, 0,2). No toca los datos del pipeline: se aplica al cargarlos y deja la marca `umbral_bajo`.
- * Los que no tienen insomnio medido, o lo tienen en 0,2 o menos, siguen en "no alcanza". */
+/** Low threshold, decided by the team on 15/11: a site the pipeline leaves as "no alcanza" (small site, smooth
+ * surface or intermediate signal) is shown as awake if its measured insomnia is above the "quieto" ceiling (the index's
+ * `max_quieto`, 0.2). It doesn't touch the pipeline data: it's applied on load and leaves the `umbral_bajo` flag.
+ * Sites without measured insomnia, or with 0.2 or less, stay as "no alcanza". */
 export const UMBRAL_BAJO = 0.2
 
-/** Aplica el umbral bajo a un sitio o a una fila de veredictos. */
+/** Applies the low threshold to a site or to a verdict row. */
 export function conUmbralBajo<T extends { radar: Radar | null; insomnio: number | null; umbral_bajo?: boolean }>(x: T): T {
   return x.radar === 'no_alcanza' && typeof x.insomnio === 'number' && x.insomnio > UMBRAL_BAJO ? { ...x, radar: 'despierto', umbral_bajo: true } : x
 }
@@ -46,7 +46,7 @@ export interface Sitio {
   radar: Radar
   /** fraction of pairs with low coherence relative to the surroundings, 0 to 1 */
   insomnio: number
-  /** true si el pipeline lo dejó en "no alcanza" y se muestra despierto por el umbral bajo */
+  /** true if the pipeline left it as "no alcanza" and it's shown awake because of the low threshold */
   umbral_bajo?: boolean
   pares: Par[]
   imagenes: Imagen[]
@@ -96,13 +96,13 @@ export interface Veredicto {
   motivo?: string | null
   lat: number | null
   lon: number | null
-  /** sólo en las manchas: puntaje del modelo de "basural contra otra cosa que se mueve", de 0 a 1 */
+  /** blobs only: score of the "dump site versus something else that moves" model, from 0 to 1 */
   p_basural?: number | null
-  /** sólo en las manchas: lo que OpenStreetMap tiene mapeado ahí (aeródromo, reserva…), si hay algo */
+  /** blobs only: what OpenStreetMap has mapped there (airfield, reserve…), if anything */
   que?: string | null
   persistencia?: number | null
   modelo_estado?: LecturaModelo | null
-  /** true si el flujo lo dejó en "no alcanza" y se muestra despierto por el umbral bajo */
+  /** true if the flow left it as "no alcanza" and it's shown awake because of the low threshold */
   umbral_bajo?: boolean
 }
 

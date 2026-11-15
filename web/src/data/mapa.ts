@@ -1,31 +1,31 @@
-// Datos del mapa que no van en el bundle: los escribe `scripts/datos_mapa.py` en `public/datos/`
-// a partir de `../data/` y de las salidas del pipeline. Si falta alguno, el mapa anda igual sin esa capa.
+// Map data that doesn't go in the bundle: `scripts/datos_mapa.py` writes it to `public/datos/`
+// from `../data/` and the pipeline outputs. If one is missing, the map works the same without that layer.
 import type { FeatureCollection } from 'geojson'
 import { useEffect, useState } from 'react'
 import { getLang, t } from '../i18n'
 
-/** El catálogo de basurales del mundo (`data/basurales/basurales_mundo.json`), en columnas. La fila i es `BAS-` + (i + 1). */
+/** The world dump-site catalog (`data/catalogos/basurales/basurales_mundo.json`), in columns. Row i is `BAS-` + (i + 1). */
 export interface Catalogo {
   generado?: string
-  /** cita de cada fuente, por bit de `fuente` */
+  /** citation of each source, by bit of `fuente` */
   fuentes: Record<string, string>
-  /** códigos de país (ISO 3166-1 alfa-3, como vienen de la fuente) */
+  /** country codes (ISO 3166-1 alpha-3, as they come from the source) */
   paises: string[]
   n: number
   lat: number[]
   lon: number[]
-  /** un carácter por sitio: d desconocido, a abierto, c cerrado, x contradictorio */
+  /** one character per site: d unknown, a open, c closed, x contradictory */
   estado: string
-  /** hectáreas; -1 si la fuente no trae superficie */
+  /** hectares; -1 if the source has no area */
   ha: number[]
-  /** índice en `paises`; -1 si la fuente no trae país (los que sólo están en OpenStreetMap) */
+  /** index into `paises`; -1 if the source has no country (the ones only in OpenStreetMap) */
   pais: number[]
   /** bits: 1 OpenStreetMap, 2 Climate TRACE, 4 EPA LMOP, 8 NASA EMIT, 16 curado a mano */
   fuente: number[]
   nombre: Record<string, string>
 }
 
-/** La caja de un frame de NISAR procesado (`data/frames.json`). */
+/** The box of a processed NISAR frame (`data/catalogos/frames.json`). */
 export interface Frame {
   frame: string
   ciudad: string | null
@@ -38,7 +38,7 @@ export interface Frame {
   hasta: string | null
 }
 
-/** Un sitio del catálogo que no cae en ningún frame procesado: no hay dato de radar. */
+/** A catalog site that doesn't fall in any processed frame: there's no radar data. */
 export interface SitioCatalogo {
   id: string
   nombre: string | null
@@ -50,17 +50,17 @@ export interface SitioCatalogo {
   fuentes: string[]
 }
 
-/** El índice de insomnio de un frame como imagen (`herramientas/indice_png_web.py`). */
+/** The insomnia index of a frame as an image (`motor/indice_png_web.py`). */
 export interface IndiceFrame {
   frame: string
-  /** relativo a la raíz de la web */
+  /** relative to the web root */
   url: string
-  /** las cuatro esquinas en el orden de una fuente `image` de MapLibre */
+  /** the four corners in the order of a MapLibre `image` source */
   coordinates: [[number, number], [number, number], [number, number], [number, number]]
 }
-// `seed/indices.json` puede faltar: sin él, fuera del AMBA el índice se ve sólo como manchas
+// `seed/indices.json` may be missing: without it, outside the AMBA the index only shows as blobs
 const indicesJson = import.meta.glob<IndiceFrame[]>('./seed/indices.json', { import: 'default', eager: true })
-/** Los frames, además del AMBA, que tienen el índice completo como imagen. */
+/** The frames, besides the AMBA, that have the full index as an image. */
 export const INDICES: IndiceFrame[] = Object.values(indicesJson)[0] ?? []
 
 const cache = new Map<string, Promise<unknown>>()
@@ -87,11 +87,11 @@ function useDato<T>(archivo: string): T | null {
 
 export const useCatalogo = () => useDato<Catalogo>('catalogo.json')
 export const useFrames = () => useDato<Frame[]>('frames.json')
-/** Las manchas despiertas de todos los frames: el índice de insomnio por encima del umbral, vectorizado. */
+/** The awake blobs of every frame: the insomnia index above the threshold, vectorized. */
 export const useManchas = () => useDato<FeatureCollection>('manchas.geojson')
 
 export const idCatalogo = (i: number) => `BAS-${String(i + 1).padStart(6, '0')}`
-/** La fila del catálogo de un id `BAS-000123`, o -1. */
+/** The catalog row of an id `BAS-000123`, or -1. */
 export function filaCatalogo(c: Catalogo | null, id: string | null): number {
   const m = id?.match(/^BAS-(\d{6})$/)
   const i = m ? Number(m[1]) - 1 : -1
@@ -120,7 +120,7 @@ export function sitioCatalogo(c: Catalogo, i: number): SitioCatalogo {
   }
 }
 
-// Los catálogos traen el país en alfa-3 y el navegador sólo sabe nombrar alfa-2
+// The catalogs have the country in alpha-3 and the browser can only name alpha-2
 const A2: Record<string, string> = {
   AGO: 'AO', ALB: 'AL', AND: 'AD', ARE: 'AE', ARG: 'AR', ARM: 'AM', AUS: 'AU', AUT: 'AT', BEL: 'BE', BEN: 'BJ', BFA: 'BF', BGD: 'BD', BGR: 'BG', BIH: 'BA',
   BLR: 'BY', BLZ: 'BZ', BOL: 'BO', BRA: 'BR', BRN: 'BN', BWA: 'BW', CAN: 'CA', CHE: 'CH', CHL: 'CL', CHN: 'CN', CMR: 'CM', COD: 'CD', COL: 'CO', CRI: 'CR',
@@ -136,7 +136,7 @@ const A2: Record<string, string> = {
   ZAF: 'ZA', ZMB: 'ZM', ZWE: 'ZW',
 }
 const regiones = { es: new Intl.DisplayNames('es', { type: 'region' }), en: new Intl.DisplayNames('en', { type: 'region' }) }
-/** "USA" -> "Estados Unidos" o "United States", según el idioma. Si no se reconoce el código, se muestra como vino. */
+/** "USA" -> "Estados Unidos" or "United States", depending on the language. If the code isn't recognized, it's shown as it came. */
 export function nombrePais(codigo: string | null | undefined): string {
   if (!codigo) return t('Sin país')
   const a2 = codigo.length === 2 ? codigo : A2[codigo]

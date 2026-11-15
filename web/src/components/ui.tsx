@@ -3,12 +3,12 @@ import { getLang, locale, t } from '../i18n'
 import type { Radar } from '../data/types'
 
 const RADAR_ES: Record<Radar, string> = { despierto: 'Despierto', quieto: 'Quieto', no_alcanza: 'No alcanza' }
-/** Estado del radar en el idioma elegido. */
+/** Radar status in the chosen language. */
 export const radar = (r: Radar) => t(RADAR_ES[r])
 
 export const num = (n: number) => new Intl.NumberFormat(locale()).format(n)
 export const pct = (x: number) => `${Math.round(x * 100)} %`
-/** Decimal con coma en castellano y punto en inglés. */
+/** Decimal with a comma in Spanish and a point in English. */
 export const dec = (n: number, d = 2) => {
   const s = n.toFixed(d).replace('-', '−')
   return getLang() === 'es' ? s.replace('.', ',') : s
@@ -19,17 +19,17 @@ const MESES: Record<string, string[]> = {
   es: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
   en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 }
-/** "2026-10-12" -> "12 oct" o "Oct 12" (con año si se pide). Sin Date: no depende del huso horario. */
+/** "2026-10-12" -> "12 oct" or "Oct 12" (with the year if asked). No Date: it doesn't depend on the time zone. */
 export function fecha(iso: string, conAnio = false) {
   const [a, m, d] = iso.split('-').map(Number)
   if (getLang() === 'en') return `${MESES.en[m - 1]} ${d}${conAnio ? `, ${a}` : ''}`
   return `${d} ${MESES.es[m - 1]}${conAnio ? ` ${a}` : ''}`
 }
 
-/** Lo que ve el radar, nada más: la web no muestra el estado de ningún registro. */
+/** What the radar sees, nothing else: the web doesn't show the status of any registry. */
 export const veredicto = (r: Radar) => (r === 'no_alcanza' ? t('El radar no alcanza') : radar(r))
 
-/** Radar de un sitio, o `nuevo` (mancha que no está en ningún catálogo) o `sin_dato` (catálogo sin NISAR procesado). */
+/** A site's radar, or `nuevo` (a blob that isn't in any catalog) or `sin_dato` (catalog without processed NISAR). */
 export type Marca = Radar | 'nuevo' | 'sin_dato'
 
 export function Dot({ radar }: { radar: Marca }) {
@@ -78,15 +78,15 @@ export interface Opcion<T extends string> {
   label: string
   sub?: string
   radar?: Marca
-  /** título bajo el que se agrupa en la lista (por ejemplo, el país). Las opciones tienen que venir ordenadas por grupo */
+  /** heading the option is grouped under in the list (for example, the country). Options have to come sorted by group */
   grupo?: string
 }
 
 const llano = (x: string) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-/** Con más opciones que estas, la lista trae un buscador. */
+/** With more options than this, the list has a search box. */
 const BUSCAR_DESDE = 20
 
-/** Desplegable propio, en vez del selector del navegador. */
+/** Custom dropdown, instead of the browser's select. */
 export function Picker<T extends string>({ value, onChange, options, placeholder, className = '', label }: { value: T | ''; onChange: (v: T) => void; options: Opcion<T>[]; placeholder?: string; className?: string; label: string }) {
   const [abierto, setAbierto] = useState(false)
   const [texto, setTexto] = useState('')
@@ -116,7 +116,7 @@ export function Picker<T extends string>({ value, onChange, options, placeholder
         e.preventDefault()
         const items = [...(ref.current?.querySelectorAll<HTMLButtonElement>('[role=option]') ?? [])]
         const i = items.indexOf(document.activeElement as HTMLButtonElement)
-        // desde el buscador, la flecha baja al primero
+        // from the search box, the down arrow goes to the first one
         items[i < 0 ? (e.key === 'ArrowDown' ? 0 : items.length - 1) : (i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus()
       }
     }

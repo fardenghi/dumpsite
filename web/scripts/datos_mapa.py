@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Datos del mapa que no entran en el bundle: se dejan en `public/datos/` y la web los pide al cargar.
+"""Map data that doesn't fit in the bundle: it goes to `public/datos/` and the web requests it on load.
 
     python3 scripts/datos_mapa.py
 
-Lee (no modifica):
-- `../data/basurales/basurales_mundo.json`: el catálogo de 66.981 basurales y rellenos.
-- `../data/frames.json`: la caja y las fechas de cada frame de NISAR procesado.
-- `../idea-basurales-nisar/salidas/manchas.geojson`: las manchas despiertas de todos los frames
-  (el índice de insomnio por encima del umbral, vectorizado por `extraer_manchas.py`).
-- `src/data/seed/veredictos.json`: el veredicto de cada mancha (`flujo.py --web`).
-- `../idea-basurales-nisar/salidas/resumen_80m.json` y `calibracion_80m.json`: el embudo y la calibración del AMBA.
+Reads (doesn't modify):
+- `../data/catalogos/basurales/basurales_mundo.json`: the catalog of 66,981 dump sites and landfills.
+- `../data/catalogos/frames.json`: the box and the dates of each processed NISAR frame.
+- `../data/salidas/manchas.geojson`: the awake blobs of every frame
+  (the insomnia index above the threshold, vectorized by `extraer_manchas.py`).
+- `src/data/seed/veredictos.json`: the verdict of each blob (`flujo.py --web`).
+- `../data/salidas/resumen_80m.json` and `calibracion_80m.json`: the AMBA funnel and calibration.
 
-Escribe:
-- `public/datos/catalogo.json`: el catálogo en columnas (lat, lon, estado, superficie, país, fuentes, nombre).
-- `public/datos/manchas.geojson`: los polígonos de las manchas, simplificados, con su insomnio y su veredicto.
-- `public/datos/frames.json`: las cajas de los frames.
-- `src/data/seed/calibracion.json`: los números del panel Modelo (superficies, descartes, umbrales y su rango válido).
+Writes:
+- `public/datos/catalogo.json`: the catalog in columns (lat, lon, status, area, country, sources, name).
+- `public/datos/manchas.geojson`: the blob polygons, simplified, with their insomnia and their verdict.
+- `public/datos/frames.json`: the frame boxes.
+- `src/data/seed/calibracion.json`: the numbers of the Model panel (areas, discards, thresholds and their valid range).
 
-Sin dependencias. No inventa nada: lo que la fuente no trae queda vacío.
+No dependencies. It makes nothing up: whatever the source doesn't have stays empty.
 """
 import json
 import os
@@ -29,7 +29,7 @@ SALIDA = os.path.join(WEB, "public", "datos")
 
 ESTADO = {"desconocido": "d", "abierto": "a", "cerrado": "c", "contradictorio": "x"}
 FUENTE = {"osm": 1, "climate_trace": 2, "epa_lmop": 4, "nasa_emit": 8, "curado_manual": 16}
-# tolerancia de la simplificación de las manchas: un píxel del GUNW de 80 m
+# tolerance of the blob simplification: one pixel of the 80 m GUNW
 TOLERANCIA = 0.0009
 
 
@@ -48,7 +48,7 @@ def escribir(nombre, dato):
 def catalogo():
     mundo = leer(RAIZ, "data", "catalogos", "basurales", "basurales_mundo.json")
     sitios = mundo["sitios"]
-    # el id es BAS-000001 en adelante, en orden: la web lo rearma con la posición
+    # the id is BAS-000001 onwards, in order: the web rebuilds it from the position
     assert all(s["id"] == f"BAS-{i + 1:06d}" for i, s in enumerate(sitios)), "los ids del catálogo no son correlativos"
     paises = sorted({s["pais"] for s in sitios if s.get("pais")})
     indice_pais = {p: i for i, p in enumerate(paises)}
@@ -63,7 +63,7 @@ def catalogo():
         "lat": [round(s["lat"], 4) for s in sitios],
         "lon": [round(s["lon"], 4) for s in sitios],
         "estado": "".join(ESTADO[s["estado"]] for s in sitios),
-        # hectáreas con un decimal; -1 si la fuente no trae superficie
+        # hectares with one decimal; -1 if the source has no area
         "ha": [round(s["area_ha"], 1) if s.get("area_ha") is not None else -1 for s in sitios],
         "pais": [indice_pais[s["pais"]] if s.get("pais") else -1 for s in sitios],
         "fuente": [sum({FUENTE.get(f["fuente"], 0) for f in s.get("fuentes", [])}) for s in sitios],
@@ -72,12 +72,12 @@ def catalogo():
 
 
 def simplificar(anillo, tol=TOLERANCIA):
-    """Douglas-Peucker sobre un anillo cerrado, sin recursión."""
+    """Douglas-Peucker over a closed ring, without recursion."""
     if len(anillo) < 6:
         return anillo
     queda = [False] * len(anillo)
     queda[0] = queda[-1] = True
-    # el anillo es cerrado: se parte por el punto más lejano del primero para tener dos tramos abiertos
+    # the ring is closed: it's split at the point farthest from the first one to get two open stretches
     lejos = max(range(len(anillo)), key=lambda i: (anillo[i][0] - anillo[0][0]) ** 2 + (anillo[i][1] - anillo[0][1]) ** 2)
     queda[lejos] = True
     pila = [(0, lejos), (lejos, len(anillo) - 1)]
@@ -112,7 +112,7 @@ def manchas():
     crudo = leer(RAIZ, "data", "salidas", "manchas.geojson")
     del_flujo = {v["id"]: v for v in leer(WEB, "src", "data", "seed", "veredictos.json")["sitios"] if v["tipo"] == "mancha"}
     veredicto = {i: v["veredicto"] for i, v in del_flujo.items()}
-    # p: puntaje del clasificador de "basural contra otra cosa", si el flujo lo calculó; la web decide con qué umbral destacar
+    # p: score of the "dump site versus something else" classifier, if the flow computed it; the web decides which threshold to highlight with
     puntaje = {i: round(v["p_basural"], 3) for i, v in del_flujo.items() if v.get("p_basural") is not None}
     features = []
     for f in crudo["features"]:
@@ -120,7 +120,7 @@ def manchas():
         features.append({
             "type": "Feature",
             "geometry": geometria(f["geometry"]),
-            # v: el veredicto de flujo.py; las manchas chicas que el flujo no lista quedan como descartadas
+            # v: the verdict from flujo.py; the small blobs the flow doesn't list stay as discarded
             "properties": {"id": p["id_mancha"], "i": p["insomnio"], "v": veredicto.get(p["id_mancha"], "descartada"), "q": 1 if p.get("que") else 0,
                            **({"p": puntaje[p["id_mancha"]]} if p["id_mancha"] in puntaje else {})},
         })
@@ -143,8 +143,8 @@ def frames():
 
 
 def rango_valido(tabla, clave, fija, valor_fijo, elegido):
-    """Los valores seguidos de `clave` que cumplen la calibración alrededor del elegido, con `fija` en su valor elegido.
-    Devuelve (desde, hasta, primer valor probado por encima que ya no cumple)."""
+    """The consecutive values of `clave` that pass the calibration around the chosen one, with `fija` at its chosen value.
+    Returns (from, to, first value tried above that no longer passes)."""
     cumple = {t[clave]: t["cumple"] for t in tabla if t[fija] == valor_fijo}
     valores = sorted(cumple)
     i = valores.index(elegido)
@@ -164,7 +164,7 @@ def calibracion():
     p, sup, man, sitios, e = r["parametros"], r["superficie"], r["manchas"], r["sitios"], c["elegido"]
     razon = rango_valido(c["tabla"], "razon", "min_insomnio", e["min_insomnio"], e["razon"])
     insomnio = rango_valido(c["tabla"], "min_insomnio", "razon", e["razon"], e["min_insomnio"])
-    # el eco mínimo queda entre lo liso con más eco y el relleno con menos eco
+    # the minimum echo sits between the smooth surface with the most echo and the landfill with the least
     liso = max(c["eco_db"]["lisos"].items(), key=lambda x: x[1])
     relleno = min(c["eco_db"]["rellenos"].items(), key=lambda x: x[1])
     nombre = lambda i: sitios[i]["nombre"].replace("Control: ", "")
@@ -174,7 +174,7 @@ def calibracion():
         json.dump({
             "origen": "data/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
             "frame": r["frame"]["frame"],
-            # el catálogo mundial con el que se entrena el clasificador
+            # the world catalog the classifier is trained with
             "catalogo_sitios": len(leer(RAIZ, "data", "catalogos", "basurales", "basurales_mundo.json")["sitios"]),
             "superficie": {k: sup[k] for k in ("agua_ha", "tierra_ha", "candidata_ha", "estacional_ha")},
             "descartes": {"chicas": man["descartadas_chicas"], "lisas": man["descartadas_lisas"], "lineales": man["descartadas_lineales"]},
@@ -185,7 +185,7 @@ def calibracion():
                 "min_insomnio": {"desde": insomnio[0], "hasta": insomnio[1], "siguiente": insomnio[2]},
                 "eco_min_db": {"desde": liso[1], "hasta": relleno[1], "liso": nombre(liso[0]), "relleno": nombre(relleno[0])},
             },
-            # el relleno de calibración que queda afuera cuando se sube el insomnio mínimo
+            # the calibration landfill that is left out when the minimum insomnia is raised
             "testigo": {"nombre": sitios["norte-iii"]["nombre"], "insomnio": sitios["norte-iii"]["insomnio"]},
         }, f, ensure_ascii=False, indent=1)
         f.write("\n")

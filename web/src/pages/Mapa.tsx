@@ -13,37 +13,37 @@ import { UMBRAL_BAJO, type Imagen, type Sitio, type Veredicto } from '../data/ty
 import { FRAME_AMBA, UMBRAL_NUEVO, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
-// El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
-// de la fecha elegida, servida por Microsoft Planetary Computer. Las dos andan sin claves.
-// Con VITE_GOOGLE_MAPS_KEY hay además una vista de alta resolución (Google, menos de 1 m, sin
-// fecha): se pide sólo adentro de las cajas de los basurales (abiertos o no) y desde ZOOM_GOOGLE,
-// porque cada tile se cobra. Para comparar fechas se sigue usando Sentinel-2.
-// mosaico Sentinel-2 sin nubes de EOX (10 m): el fondo con zoom, en todo el mapa y no sólo en el sitio abierto
+// The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
+// of the chosen date, served by Microsoft Planetary Computer. Both work without keys.
+// With VITE_GOOGLE_MAPS_KEY there's also a high-resolution view (Google, under 1 m, no
+// date): it's only requested inside the boxes of the dump sites (open or not) and from ZOOM_GOOGLE on,
+// because every tile is billed. Sentinel-2 is still used to compare dates.
+// EOX cloudless Sentinel-2 mosaic (10 m): the background when zoomed in, across the whole map and not only on the open site
 const MOSAICO = 'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/g/{z}/{y}/{x}.jpg'
 const FONDO = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg'
 const s2 = (i: Imagen) =>
   `https://planetarycomputer.microsoft.com/api/data/v1/item/tiles/WebMercatorQuad/{z}/{x}/{y}@2x?collection=sentinel-2-l2a&item=${i.item}&assets=visual&asset_bidx=visual%7C1%2C2%2C3&nodata=0&format=png`
 
 const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5bb3a8', '#dfe5e1'] as unknown as maplibregl.ExpressionSpecification
-// lo que el sistema busca: manchas despiertas que no están en ningún catálogo. Tiene que destacarse de todo lo demás
+// what the system looks for: awake blobs that aren't in any catalog. It has to stand out from everything else
 const COLOR_NUEVO = '#ffd21f'
-// basurales del catálogo que no caen en ningún frame procesado: no hay dato de radar
+// catalog dump sites that don't fall in any processed frame: there's no radar data
 const COLOR_SIN_DATO = '#9db4e8'
-// el índice de insomnio fuera del AMBA: las manchas, con la misma paleta que el PNG del AMBA (magma, de 0,3 a 1)
+// the insomnia index outside the AMBA: the blobs, with the same palette as the AMBA PNG (magma, from 0.3 to 1)
 const MAGMA = ['interpolate', ['linear'], ['get', 'i'], 0.3, '#641a80', 0.55, '#b73779', 0.8, '#fc8961', 1, '#fcfdbf'] as unknown as maplibregl.ExpressionSpecification
 const ES_NUEVO = ['all', ['>=', ['coalesce', ['get', 'p'], 0], UMBRAL_NUEVO], ['==', ['get', 'q'], 0]] as unknown as maplibregl.FilterSpecification
-// las capas que se pueden tocar, de más a menos importante: si hay varias debajo del cursor gana la primera
+// the clickable layers, from most to least important: if several are under the cursor the first one wins
 const TOCABLES = ['punto', 'aro', 'contorno-relleno', 'nuevos', 'otros', 'catalogo']
-// la vista de partida es el AMBA entero: la grilla del índice de insomnio
+// the starting view is the whole AMBA: the insomnia index grid
 const AMBA: [number, number, number, number] = [indice.oeste, indice.sur, indice.este, indice.norte]
 const margenAmba = (ancho: number) => (ancho > 860 ? { top: 70, bottom: 90, left: 40, right: 40 } : { top: 70, bottom: 90, left: 12, right: 12 })
 const ZOOM_GOOGLE = 13
 // the dump sites of the other frames have no outline or images loaded: fly there without zooming in as much
 const ZOOM_OTRO = 9.5
-// radio de la caja donde se piden tiles de Google alrededor de un basural del catálogo, que no trae caja propia
+// radius of the box where Google tiles are requested around a catalog dump site, which has no box of its own
 const RADIO_GOOGLE_KM = 1.5
 
-/** Caja oeste, sur, este, norte de `km` alrededor de un punto. */
+/** West, south, east, north box of `km` around a point. */
 function cajaAlrededor(lat: number, lon: number, km = RADIO_GOOGLE_KM): [number, number, number, number] {
   const dLat = km / 111.32
   const dLon = km / (111.32 * Math.cos((lat * Math.PI) / 180))
@@ -52,9 +52,9 @@ function cajaAlrededor(lat: number, lon: number, km = RADIO_GOOGLE_KM): [number,
 
 type Caja = [number, number, number, number]
 
-// Las cajas donde se piden tiles de Google. El protocolo `gtile://` mira cada tile: si no toca ninguna
-// caja devuelve uno transparente sin llamar a Google, así varias cajas sueltas no hacen una fuente por sitio
-// indexadas en una grilla de CELDA grados: con todo el catálogo son decenas de miles y cada tile mira sólo sus celdas
+// The boxes where Google tiles are requested. The `gtile://` protocol checks each tile: if it doesn't touch any
+// box it returns a transparent one without calling Google, so many separate boxes don't need one source per site
+// indexed on a grid of CELDA degrees: with the whole catalog there are tens of thousands and each tile only checks its cells
 const CELDA = 0.1
 let cajasGoogle = new Map<string, Caja[]>()
 const celdas = ([o, s, e, n]: Caja) => {
@@ -72,7 +72,7 @@ let vacio: Promise<ArrayBuffer> | null = null
 const tileVacio = () =>
   (vacio ??= new OffscreenCanvas(256, 256).convertToBlob({ type: 'image/png' }).then((b) => b.arrayBuffer()))
 
-/** Caja oeste, sur, este, norte de un tile de Web Mercator. */
+/** West, south, east, north box of a Web Mercator tile. */
 function cajaDelTile(z: number, x: number, y: number): Caja {
   const n = 2 ** z
   const lat = (j: number) => (Math.atan(Math.sinh(Math.PI * (1 - (2 * j) / n))) * 180) / Math.PI
@@ -82,11 +82,11 @@ function cajaDelTile(z: number, x: number, y: number): Caja {
 const tocan = (a: Caja, b: Caja) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
 const tocaAlguna = (c: Caja) => celdas(c).some((k) => cajasGoogle.get(k)?.some((b) => tocan(b, c)))
 
-/** Zoom para ver entero un predio de `ha` hectáreas con alta resolución (lo trata como un círculo). */
+/** Zoom to see a whole site of `ha` hectares in high resolution (treats it as a circle). */
 function zoomPorArea(ha: number | null | undefined): number {
   if (!ha || ha <= 0) return 15.5
   const radio = Math.sqrt((ha * 1e4) / Math.PI) // m
-  // a zoom z, en el ecuador, 600 px cubren 600 * 156543 / 2^z m; se busca que el diámetro ocupe ~300 px
+  // at zoom z, at the equator, 600 px cover 600 * 156543 / 2^z m; the goal is for the diameter to take ~300 px
   return Math.max(ZOOM_GOOGLE + 0.5, Math.min(17, Math.log2((300 * 156543) / (2 * radio * 1.15))))
 }
 type Vista = 'google' | 'sentinel'
@@ -214,7 +214,7 @@ const Pie = ({ lat, lon }: { lat: number; lon: number }) => (
   </div>
 )
 
-/** Ficha de una mancha despierta que no está en ningún catálogo y que el modelo lee como basural. */
+/** Card of an awake blob that isn't in any catalog and that the model reads as a dump site. */
 function FichaNuevo({ v, lugar }: { v: Veredicto; lugar: string }) {
   const p = typeof v.p_basural === 'number' ? v.p_basural : null
   return (
@@ -262,7 +262,7 @@ function FichaNuevo({ v, lugar }: { v: Veredicto; lugar: string }) {
   )
 }
 
-/** Ficha de un basural del catálogo que no cae en ningún frame de NISAR procesado. La web no muestra el estado de ningún registro. */
+/** Card of a catalog dump site that doesn't fall in any processed NISAR frame. The web doesn't show the status of any registry. */
 function FichaSinDato({ s }: { s: SitioCatalogo }) {
   return (
     <aside className="ficha" key={s.id}>
@@ -300,7 +300,7 @@ function FichaSinDato({ s }: { s: SitioCatalogo }) {
   )
 }
 
-/** Ficha de un polígono del catálogo con dato de radar: lo que trae `veredictos.json`, sin serie ni imágenes. */
+/** Card of a catalog polygon with radar data: what `veredictos.json` has, without series or images. */
 function FichaCatalogo({ v, lugar }: { v: Veredicto; lugar: string }) {
   const radar = v.radar ?? 'no_alcanza'
   return (
@@ -347,7 +347,7 @@ function FichaCatalogo({ v, lugar }: { v: Veredicto; lugar: string }) {
   )
 }
 
-/** Selector de idioma propio (no el del navegador): English o Español, sin banderas. */
+/** Our own language selector (not the browser's): English or Español, no flags. */
 function Idioma() {
   return <Picker className="float idioma" label={t('Idioma')} value={getLang()} onChange={(l: Lang) => setLang(l)} options={IDIOMAS} />
 }
@@ -358,9 +358,9 @@ export default function Mapa() {
   const catalogo = useCatalogo()
   const frames = useFrames()
   const manchas = useManchas()
-  // los basurales del catálogo con dato de radar que no son un sitio curado: van como puntos
+  // the catalog dump sites with radar data that aren't a curated site: they go as points
   const otros = useMemo(() => conRadar(veredictos, sitios ?? []), [veredictos, sitios])
-  // las manchas despiertas que no están en ningún catálogo: lo que el sistema busca
+  // the awake blobs that aren't in any catalog: what the system looks for
   const nuevos = useMemo(() => posiblesNuevos(veredictos), [veredictos])
   const porFrame = useMemo(() => new Map((frames ?? []).map((f) => [f.frame, f] as [string, Frame])), [frames])
   const lugarDe = (frame: string) => ciudadFrame(porFrame.get(frame)) ?? nombreFrame(frame)
@@ -370,12 +370,12 @@ export default function Mapa() {
   const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
   const selOtro = (!sel && id && (otros.find((v) => v.id === id) ?? nuevos.find((v) => v.id === id))) || null
-  // un basural del catálogo sin dato de radar
+  // a catalog dump site without radar data
   const selCat = useMemo(() => {
     const i = sel || selOtro || !catalogo ? -1 : filaCatalogo(catalogo, id)
     return i >= 0 ? sitioCatalogo(catalogo!, i) : null
   }, [sel, selOtro, catalogo, id])
-  // el punto elegido cuando no es un sitio curado (esos tienen contorno)
+  // the chosen point when it isn't a curated site (those have an outline)
   const punto = selOtro ? { lat: selOtro.lat as number, lon: selOtro.lon as number, color: selOtro.tipo === 'mancha' ? COLOR_NUEVO : '#ffffff' } : selCat ? { lat: selCat.lat, lon: selCat.lon, color: '#ffffff' } : null
   const caja = useRef<HTMLDivElement>(null)
   const mapa = useRef<maplibregl.Map | null>(null)
@@ -415,7 +415,7 @@ export default function Mapa() {
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
     m.on('load', () => setListo(true))
     mapa.current = m
-    // con ?captura el mapa queda accesible para el script que arma las imágenes del video (video/compartido/scripts/capturas_mapa.mjs)
+    // with ?captura the map is exposed to the script that builds the video images (video/compartido/scripts/capturas_mapa.mjs)
     if (new URLSearchParams(location.search).has('captura')) (window as unknown as { mapa?: maplibregl.Map }).mapa = m
     return () => {
       mapa.current = null
@@ -478,7 +478,7 @@ export default function Mapa() {
     })
   }, [listo, sitios])
 
-  // un solo manejador para todo lo que se puede tocar: con varias capas debajo del cursor gana la más importante
+  // a single handler for everything clickable: with several layers under the cursor the most important one wins
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
@@ -500,11 +500,11 @@ export default function Mapa() {
     }
   }, [listo])
 
-  // todos los basurales del catálogo que no tienen dato de radar: puntos chicos y de otro color, debajo de todo
+  // every catalog dump site without radar data: small points of another color, below everything
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !catalogo || !sitios || !veredictos) return
-    // los que ya se dibujan con lo que ve el radar (o son un sitio curado) no se repiten
+    // the ones already drawn with what the radar sees (or that are a curated site) aren't repeated
     const yaEstan = new Set(veredictos.sitios.filter((v) => v.tipo === 'catalogo').map((v) => v.id))
     const features: FeatureCollection['features'] = []
     for (let i = 0; i < catalogo.n; i++) {
@@ -535,8 +535,8 @@ export default function Mapa() {
     )
   }, [listo, catalogo, sitios, veredictos])
 
-  // el índice de insomnio de todos los frames: la caja de cada frame y sus manchas despiertas, pintadas por insomnio.
-  // El AMBA tiene además el índice completo como imagen, así que sus manchas no se pintan encima
+  // the insomnia index of every frame: each frame's box and its awake blobs, painted by insomnia.
+  // The AMBA also has the full index as an image, so its blobs aren't painted on top
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios || !frames || m.getSource('frames')) return
@@ -548,13 +548,13 @@ export default function Mapa() {
       }),
     }
     m.addSource('frames', { type: 'geojson', data: cajas })
-    // de lejos una región mide pocos píxeles y sus manchas no se ven: el recuadro va lleno y arriba de los puntos, y se aclara
-    // al acercarse, cuando ya se ven las manchas. No se puede tocar: los clics siguen llegando a los puntos de abajo
+    // from afar a region is a few pixels and its blobs can't be seen: the box is filled and above the points, and it fades
+    // when zooming in, once the blobs can be seen. It isn't clickable: clicks still reach the points below
     m.addLayer({ id: 'frames-relleno', type: 'fill', source: 'frames', paint: { 'fill-color': '#fc8961', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.85, 5, 0.6, 6.5, 0.15, 8, 0] } })
     m.addLayer({ id: 'frames', type: 'line', source: 'frames', paint: { 'line-color': '#fcfdbf', 'line-width': ['interpolate', ['linear'], ['zoom'], 1, 1.5, 6, 2], 'line-opacity': 0.95 } })
   }, [listo, sitios, frames])
 
-  // el índice completo de los otros frames, si se exportó (herramientas/indice_png_web.py): una imagen por frame, como la del AMBA
+  // the full index of the other frames, if it was exported (motor/indice_png_web.py): one image per frame, like the AMBA one
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios) return
@@ -569,21 +569,21 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios || !manchas || m.getSource('manchas')) return
-    // los frames que tienen el índice completo como imagen (el AMBA y los de seed/indices.json) no pintan sus manchas,
-    // pero sí el contorno de las que son posibles nuevos
+    // the frames that have the full index as an image (the AMBA and the ones in seed/indices.json) don't paint their blobs,
+    // but they do paint the outline of the possible new ones
     const conImagen = [FRAME_AMBA, ...INDICES.map((x) => x.frame)].map((f) => `MAN-${f}-`)
     const fueraDelAmba = ['all', ...conImagen.map((pre) => ['!=', ['slice', ['get', 'id'], 0, pre.length], pre])] as unknown as maplibregl.FilterSpecification
     const debajoDe = m.getLayer('contorno-relleno') ? 'contorno-relleno' : undefined
     m.addSource('manchas', { type: 'geojson', data: manchas })
     m.addLayer({ id: 'manchas', type: 'fill', source: 'manchas', filter: fueraDelAmba, paint: { 'fill-color': MAGMA, 'fill-opacity': 0.8, 'fill-antialias': false } }, debajoDe)
-    // de lejos una mancha mide menos que un píxel de pantalla: sin esta línea el índice no se vería hasta acercarse
+    // from afar a blob is smaller than a screen pixel: without this line the index wouldn't show until zooming in
     m.addLayer({ id: 'manchas-borde', type: 'line', source: 'manchas', maxzoom: 9, filter: fueraDelAmba, paint: { 'line-color': MAGMA, 'line-width': 1.2, 'line-opacity': 0.9 } }, debajoDe)
-    // el contorno de los posibles basurales nuevos queda siempre, con el índice prendido o apagado
+    // the outline of the possible new dump sites always stays, with the index on or off
     m.addLayer({ id: 'nuevo-contorno', type: 'line', source: 'manchas', minzoom: 8, filter: ES_NUEVO, layout: { 'line-join': 'round' }, paint: { 'line-color': COLOR_NUEVO, 'line-width': 2.5 } }, ['nuevos-halo', 'halo'].find((c) => m.getLayer(c)))
     m.addLayer({ id: 'nuevo-relleno', type: 'fill', source: 'manchas', minzoom: 8, filter: ES_NUEVO, paint: { 'fill-color': COLOR_NUEVO, 'fill-opacity': 0.12 } }, 'nuevo-contorno')
   }, [listo, sitios, manchas])
 
-  // los posibles basurales nuevos: arriba de todo el catálogo, con otro color y un halo
+  // the possible new dump sites: above the whole catalog, with another color and a halo
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !sitios || !nuevos.length) return
@@ -643,7 +643,7 @@ export default function Mapa() {
     )
   }, [listo, otros])
 
-  // el punto elegido, con un aro
+  // the chosen point, with a ring
   const puntoSel = punto ? `${punto.lon},${punto.lat},${punto.color}` : ''
   useEffect(() => {
     const m = mapa.current
@@ -659,14 +659,14 @@ export default function Mapa() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, puntoSel])
 
-  /** La vista general: el mundo con todas las regiones procesadas (el AMBA y los puntos del catálogo). Sin catálogo, el AMBA. */
+  /** The overview: the world with every processed region (the AMBA and the catalog points). Without the catalog, the AMBA. */
   const general = (): [number, number, number, number] => {
     if (!otros.length) return AMBA
     const lons = [AMBA[0], AMBA[2], ...(frames ?? []).flatMap((f) => [f.bbox[0], f.bbox[2]]), ...otros.map((v) => v.lon as number)]
     const lats = [AMBA[1], AMBA[3], ...(frames ?? []).flatMap((f) => [f.bbox[1], f.bbox[3]]), ...otros.map((v) => v.lat as number)]
     return [Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))]
   }
-  /** Alejar hasta ver todas las regiones. */
+  /** Zoom out until every region is visible. */
   const verOtros = () => {
     go('mapa')
     const m = mapa.current
@@ -674,7 +674,7 @@ export default function Mapa() {
     m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
   }
 
-  // al entrar, el mapa del mundo con todos los basurales; si se entra directo a un sitio, se va ahí
+  // on entry, the world map with every dump site; if a site is opened directly, it goes there
   const arranco = useRef(false)
   useEffect(() => {
     const m = mapa.current
@@ -684,18 +684,18 @@ export default function Mapa() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, otros])
 
-  // al elegir un sitio: volar hasta ahí y mostrar su imagen más reciente
+  // when choosing a site: fly there and show its latest image
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    // al cerrar la ficha el mapa queda donde está; para alejarse está "Ver todo"
+    // when the card closes the map stays where it is; "Ver todo" zooms out
     if (!sel && !punto) return
     const ancho = m.getContainer().clientWidth
     const margen = ancho > 860 ? { right: 440, top: 80, bottom: 100, left: 60 } : { bottom: 400, top: 80, left: 24, right: 24 }
     if (!sel) {
-      // un punto del catálogo o una mancha nueva: no hay recorte guardado, se vuela hasta el punto
-      // (las manchas nuevas tienen contorno desde el zoom 8: se va un poco más cerca para verlo).
-      // Con Google se baja hasta ver el predio entero en alta resolución
+      // a catalog point or a new blob: there's no saved crop, it flies to the point
+      // (new blobs have an outline from zoom 8: it goes a bit closer to show it).
+      // With Google it zooms in until the whole site is visible in high resolution
       if (HAY_GOOGLE) {
         setVista('google')
         m.flyTo({ center: [punto!.lon, punto!.lat], zoom: zoomPorArea(selOtro ? selOtro.area_ha : selCat?.ha), padding: margen, duration: 2600, essential: true })
@@ -754,16 +754,16 @@ export default function Mapa() {
     for (const capa of ['escena', 'recorte']) if (m.getLayer(capa)) m.setLayoutProperty(capa, 'visibility', sel ? 'visible' : 'none')
   }, [listo, imagen, sel])
 
-  // alta resolución de Google: con zoom alto, adentro de la caja de cualquier basural, sin tener que abrirlo.
-  // Los sitios curados traen su caja; el resto del catálogo y las manchas usan una de RADIO_GOOGLE_KM alrededor del punto
+  // Google high resolution: at high zoom, inside the box of any dump site, without having to open it.
+  // Curated sites have their own box; the rest of the catalog and the blobs use one of RADIO_GOOGLE_KM around the point
   const idSel = sel?.id ?? selOtro?.id ?? selCat?.id
   useEffect(() => {
     const cajas: Caja[] = (sitios ?? []).map((s) => s.caja ?? cajaAlrededor(s.lat, s.lon))
-    // todo el catálogo (con dato de radar o no) y las manchas nuevas
+    // the whole catalog (with radar data or not) and the new blobs
     if (catalogo) for (let i = 0; i < catalogo.n; i++) cajas.push(cajaAlrededor(catalogo.lat[i], catalogo.lon[i]))
     for (const v of [...otros, ...nuevos]) if (v.lat != null && v.lon != null) cajas.push(cajaAlrededor(v.lat, v.lon))
     cajasGoogle = indexar(cajas)
-    // los tiles que ya salieron vacíos se vuelven a pedir con las cajas nuevas
+    // tiles that came back empty are requested again with the new boxes
     const fuente = mapa.current?.getSource('google') as RasterTileSource | undefined
     fuente?.setTiles(['gtile://{z}/{x}/{y}'])
   }, [sitios, catalogo, otros, nuevos])
@@ -810,7 +810,7 @@ export default function Mapa() {
     }
   }, [listo])
 
-  // al cerrar la ficha vuelve la vista de Google, que en el mapa general es la única de alta resolución
+  // when the card closes the Google view comes back, which on the general map is the only high-resolution one
   useEffect(() => {
     if (HAY_GOOGLE && !idSel) setVista('google')
   }, [idSel])
@@ -830,8 +830,8 @@ export default function Mapa() {
     }
   }, [listo, vista, idSel])
 
-  // "Ir a un sitio": todo lo que tiene dato de radar, agrupado por país. Primero la Argentina y, dentro de cada país,
-  // los posibles nuevos, después los que tienen nombre y al final los polígonos sin nombre
+  // "Ir a un sitio": everything with radar data, grouped by country. Argentina first and, within each country,
+  // the possible new ones, then the named ones and at the end the unnamed polygons
   const idioma = getLang()
   const opciones = useMemo(() => {
     type Op = Opcion<string> & { orden: number }

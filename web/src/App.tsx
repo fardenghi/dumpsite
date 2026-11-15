@@ -52,7 +52,7 @@ export function Marca() {
 }
 
 export default function App() {
-  // al cambiar de idioma se redibuja toda la web desde acá
+  // switching language redraws the whole web from here
   useLang()
   const { page } = useRoute()
   const P = PANELES.find((p) => p.id === page)

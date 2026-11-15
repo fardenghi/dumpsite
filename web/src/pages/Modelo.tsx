@@ -9,8 +9,8 @@ import fichasJson from '../data/seed/fichas.json'
 import indice from '../data/seed/indice.json'
 import { Fuentes } from './Inicio'
 
-// Todos los números de esta página salen del pipeline (seed/*.json). Los del embudo y los umbrales están en
-// seed/calibracion.json, que escribe scripts/datos_mapa.py desde las salidas del índice. Lo que no se midió no se muestra.
+// Every number on this page comes from the pipeline (seed/*.json). The funnel and threshold ones are in
+// seed/calibracion.json, written by scripts/datos_mapa.py from the index outputs. What wasn't measured isn't shown.
 interface Ficha {
   motivo: string
   persistencia: number | null
@@ -22,7 +22,7 @@ interface Ficha {
 const FICHAS = fichasJson as unknown as Record<string, Ficha>
 const P = indice.parametros
 const ECO_MIN = cal.parametros.eco_min_db
-// la grilla del frame, en hectáreas: la tierra más el agua de JRC
+// the frame grid, in hectares: land plus JRC water
 const AGUA = cal.superficie.agua_ha
 const GRILLA = cal.superficie.tierra_ha + AGUA
 const CLASES = [
@@ -30,19 +30,19 @@ const CLASES = [
   { id: 'uso_conocido', nombre: 'Uso conocido: aeródromos, golf, parques', color: 'var(--green)' },
   { id: 'sin_explicar', nombre: 'Sin explicar', color: 'var(--faint)' },
 ]
-/** Un umbral o un borde de rango, sin ceros de más: 0,8 · 0,725 · −13. */
+/** A threshold or a range edge, without extra zeros: 0,8 · 0,725 · −13. */
 const corto = (n: number) => dec(n, 3).replace(/0+$/, '').replace(/[,.]$/, '')
 const R = cal.rangos
 const CON = cal.calibrado_con
 
-// Se arman al dibujar, no al cargar el módulo: los textos y los decimales dependen del idioma elegido
+// Built at render time, not at module load: texts and decimals depend on the chosen language
 const descartes = () => [
   { n: num(cal.descartes.chicas), que: t('de menos de {0} ha', corto(cal.parametros.min_ha)) },
   { n: num(cal.descartes.lisas), que: t('lisas: eco menor que {0} dB', corto(ECO_MIN)) },
   { n: num(cal.descartes.lineales), que: t('lineales: rutas y arroyos') },
   { n: `${num(cal.superficie.estacional_ha)} ha`, que: t('despiertas sólo por temporada') },
 ]
-// min y max son sólo el ancho de la escala dibujada; el valor y la franja válida salen de la calibración
+// min and max are only the width of the drawn scale; the value and the valid band come from the calibration
 const umbrales = () => [
   {
     nombre: t('Sitio / entorno'), valor: cal.parametros.razon, desde: R.razon.desde, hasta: R.razon.hasta, min: 0.6, max: 1,
@@ -64,7 +64,7 @@ const limites = () => [
   { que: t('Validación independiente'), porque: t('Sólo {0} rellenos y {1} controles', CON.rellenos, CON.controles) },
 ]
 
-// catálogo mundial de basurales con el que se entrena el clasificador (data/basurales/basurales_mundo.json)
+// world dump-site catalog the classifier is trained with (data/catalogos/basurales/basurales_mundo.json)
 const CATALOGO = cal.catalogo_sitios
 
 /** Each pair of passes: the dash is 80 % of the surroundings' coherence and the dot, the site's. Dot below the dash = awake pair. */
@@ -186,7 +186,7 @@ export default function Modelo() {
             <Dot radar={s.radar} />
             <div>
               <b>{radar(s.radar)}</b>
-              {/* con el umbral bajo el motivo del pipeline ("señal intermedia"…) ya no explica el veredicto: se dice la regla que se usó */}
+              {/* with the low threshold the pipeline's reason ("señal intermedia"…) no longer explains the verdict: the rule used is stated */}
               {s.umbral_bajo ? (
                 <span>{t('Despierto con el umbral bajo: insomnio mayor que {0}. El predio es chico, liso o de señal intermedia para la regla calibrada', pct(UMBRAL_BAJO))}</span>
               ) : (
