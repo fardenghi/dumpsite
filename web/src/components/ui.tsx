@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { getLang, locale, t } from '../i18n'
 import type { Radar } from '../data/types'
 
@@ -82,11 +82,11 @@ export interface Opcion<T extends string> {
   grupo?: string
 }
 
-/** Desplegable propio, en vez del selector del navegador. */
-const llano = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+const llano = (x: string) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 /** Con más opciones que estas, la lista trae un buscador. */
 const BUSCAR_DESDE = 20
 
+/** Desplegable propio, en vez del selector del navegador. */
 export function Picker<T extends string>({ value, onChange, options, placeholder, className = '', label }: { value: T | ''; onChange: (v: T) => void; options: Opcion<T>[]; placeholder?: string; className?: string; label: string }) {
   const [abierto, setAbierto] = useState(false)
   const [texto, setTexto] = useState('')
@@ -142,7 +142,7 @@ export function Picker<T extends string>({ value, onChange, options, placeholder
       </button>
       {abierto && (
         <div className="picker-lista" role="listbox" aria-label={label}>
-          {conBuscador && <input type="search" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="Buscar por nombre, ciudad o país" aria-label="Buscar" />}
+          {conBuscador && <input type="search" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder={t('Buscar por nombre, ciudad o país')} aria-label={t('Buscar')} />}
           {visibles.map((o, i) => (
             <Fragment key={o.value}>
               {o.grupo && o.grupo !== visibles[i - 1]?.grupo && (
@@ -167,7 +167,7 @@ export function Picker<T extends string>({ value, onChange, options, placeholder
               </button>
             </Fragment>
           ))}
-          {!visibles.length && <div className="picker-vacio">Ningún sitio con ese texto</div>}
+          {!visibles.length && <div className="picker-vacio">{t('Ningún sitio con ese texto')}</div>}
         </div>
       )}
     </div>

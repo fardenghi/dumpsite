@@ -170,6 +170,8 @@ def calibracion():
         json.dump({
             "origen": "idea-basurales-nisar/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
             "frame": r["frame"]["frame"],
+            # el catálogo mundial con el que se entrena el clasificador
+            "catalogo_sitios": len(leer(RAIZ, "data", "basurales", "basurales_mundo.json")["sitios"]),
             "superficie": {k: sup[k] for k in ("agua_ha", "tierra_ha", "candidata_ha", "estacional_ha")},
             "descartes": {"chicas": man["descartadas_chicas"], "lisas": man["descartadas_lisas"], "lineales": man["descartadas_lineales"]},
             "parametros": {k: p[k] for k in ("razon", "min_insomnio", "eco_min_db", "min_ha", "min_px_sitio")},

@@ -4,12 +4,13 @@ import type { FeatureCollection } from 'geojson'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Marca, go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
-import { Dot, Kpi, Picker, fecha, num, pct, radar as radarTxt, veredicto } from '../components/ui'
+import { Dot, Kpi, Picker, dec, fecha, num, pct, radar as radarTxt, veredicto, type Opcion } from '../components/ui'
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
+import { ciudadFrame, filaCatalogo, idCatalogo, nombrePais, sitioCatalogo, useCatalogo, useFrames, useManchas, type Frame, type SitioCatalogo } from '../data/mapa'
 import type { Imagen, Sitio, Veredicto } from '../data/types'
-import { fueraDelAmba, nombreFrame, useVeredictos } from '../data/veredictos'
+import { FRAME_AMBA, conRadar, nombreFrame, nuevosConUsoConocido, posiblesNuevos, useVeredictos } from '../data/veredictos'
 import { IDIOMAS, getLang, setLang, t, type Lang } from '../i18n'
 
 // The background is Blue Marble (NASA GIBS); opening a site adds the 10 m Sentinel-2 scene
@@ -141,8 +142,113 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
   )
 }
 
-/** Ficha de un polígono del catálogo de otro frame: lo que trae `veredictos.json`, sin serie ni imágenes. */
-function FichaCatalogo({ v }: { v: Veredicto }) {
+const Cerrar = () => (
+  <button className="btn icon" onClick={() => go('mapa')} aria-label={t('Cerrar')}>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <path d="M5 5l14 14M19 5L5 19" />
+    </svg>
+  </button>
+)
+
+const Pie = ({ lat, lon }: { lat: number; lon: number }) => (
+  <div className="row" style={{ justifyContent: 'space-between' }}>
+    <span className="coords">
+      {lat.toFixed(4)}, {lon.toFixed(4)}
+    </span>
+    <a className="btn sm" href={`https://www.google.com/maps/@${lat},${lon},900m/data=!3m1!1e3`} target="_blank" rel="noreferrer">
+      {t('Ver en Google Maps')}
+    </a>
+  </div>
+)
+
+/** Ficha de una mancha despierta que no está en ningún catálogo y que el modelo lee como basural. */
+function FichaNuevo({ v, lugar }: { v: Veredicto; lugar: string }) {
+  const p = typeof v.p_basural === 'number' ? v.p_basural : null
+  return (
+    <aside className="ficha" key={v.id}>
+      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
+        <div className="grow">
+          <h2>{t('Posible basural nuevo')}</h2>
+          <div className="where">
+            {lugar} · {v.id}
+          </div>
+        </div>
+        <Cerrar />
+      </div>
+
+      <div className="row" style={{ gap: 8 }}>
+        <span className="tag nuevo">
+          <Dot radar="nuevo" />
+          {t('No figura en ningún catálogo')}
+        </span>
+      </div>
+
+      {p != null && (
+        <div className="segun-modelo">
+          <span className="src">{t('Según el modelo · basural u otra cosa')}</span>
+          <div className="puntaje" role="img" aria-label={t('Puntaje de basural {0}, de 0 a 1', dec(p))}>
+            <div className="bar">
+              <div style={{ width: `${Math.round(Math.max(0, Math.min(1, p)) * 100)}%` }} />
+            </div>
+            <span className="num">{dec(p)}</span>
+          </div>
+          <small>{t('Puntaje de basural, de 0 a 1. No es una probabilidad')}</small>
+        </div>
+      )}
+
+      <div className="kpis sm grid g2">
+        <Kpi label={t('Insomnio')} value={v.insomnio == null ? '–' : pct(v.insomnio)} />
+        <Kpi label={t('Superficie')} value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
+      </div>
+
+      <p className="note">{t('Mancha que el radar NISAR nunca ve quieta y que no está en ninguno de los catálogos de basurales. Señal compatible con actividad, sin verificar en terreno')}</p>
+
+      <span className="grow" />
+      <Pie lat={v.lat as number} lon={v.lon as number} />
+    </aside>
+  )
+}
+
+/** Ficha de un basural del catálogo que no cae en ningún frame de NISAR procesado. La web no muestra el estado de ningún registro. */
+function FichaSinDato({ s }: { s: SitioCatalogo }) {
+  return (
+    <aside className="ficha" key={s.id}>
+      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
+        <div className="grow">
+          <h2>{s.nombre ?? t('Basural sin nombre')}</h2>
+          <div className="where">
+            {s.pais ? `${nombrePais(s.pais)} · ` : ''}
+            {s.id}
+          </div>
+        </div>
+        <Cerrar />
+      </div>
+
+      <div className="row" style={{ gap: 8 }}>
+        <span className="tag sin_dato">
+          <Dot radar="sin_dato" />
+          {t('Sin dato de radar')}
+        </span>
+      </div>
+
+      <div className="kpis sm grid g2">
+        <Kpi label={t('Insomnio')} value="–" />
+        <Kpi label={t('Superficie')} value={s.ha == null ? '–' : s.ha < 10 ? dec(s.ha, 1) : num(Math.round(s.ha))} unit={s.ha == null ? undefined : 'ha'} />
+      </div>
+
+      <p className="note">
+        {t('Está en el catálogo de basurales, pero todavía no procesamos pasadas de NISAR sobre este lugar: no hay índice de insomnio')}
+        {s.fuentes.length > 0 && `. ${t('Fuente del catálogo: {0}', s.fuentes.map((f) => t(f)).join(', '))}`}
+      </p>
+
+      <span className="grow" />
+      <Pie lat={s.lat} lon={s.lon} />
+    </aside>
+  )
+}
+
+/** Ficha de un polígono del catálogo con dato de radar: lo que trae `veredictos.json`, sin serie ni imágenes. */
+function FichaCatalogo({ v, lugar }: { v: Veredicto; lugar: string }) {
   const radar = v.radar ?? 'no_alcanza'
   return (
     <aside className="ficha" key={v.id}>
@@ -198,7 +304,7 @@ export default function Mapa() {
   const catalogo = useCatalogo()
   const frames = useFrames()
   const manchas = useManchas()
-  // los basurales del catálogo con dato de radar que no son un sitio curado: van como puntos, sin tocar la vista del AMBA
+  // los basurales del catálogo con dato de radar que no son un sitio curado: van como puntos
   const otros = useMemo(() => conRadar(veredictos, sitios ?? []), [veredictos, sitios])
   // las manchas despiertas que no están en ningún catálogo: lo que el sistema busca
   const nuevos = useMemo(() => posiblesNuevos(veredictos), [veredictos])
@@ -209,7 +315,14 @@ export default function Mapa() {
   const enMapa = page === 'mapa'
   const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
-  const selOtro = (!sel && id && otros.find((v) => v.id === id)) || null
+  const selOtro = (!sel && id && (otros.find((v) => v.id === id) ?? nuevos.find((v) => v.id === id))) || null
+  // un basural del catálogo sin dato de radar
+  const selCat = useMemo(() => {
+    const i = sel || selOtro || !catalogo ? -1 : filaCatalogo(catalogo, id)
+    return i >= 0 ? sitioCatalogo(catalogo!, i) : null
+  }, [sel, selOtro, catalogo, id])
+  // el punto elegido cuando no es un sitio curado (esos tienen contorno)
+  const punto = selOtro ? { lat: selOtro.lat as number, lon: selOtro.lon as number, color: selOtro.tipo === 'mancha' ? COLOR_NUEVO : '#ffffff' } : selCat ? { lat: selCat.lat, lon: selCat.lon, color: '#ffffff' } : null
   const caja = useRef<HTMLDivElement>(null)
   const mapa = useRef<maplibregl.Map | null>(null)
   const [listo, setListo] = useState(false)
@@ -332,7 +445,7 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo || !catalogo || !sitios || !veredictos) return
-    // los que ya se dibujan con su veredicto (o son un sitio curado) no se repiten
+    // los que ya se dibujan con lo que ve el radar (o son un sitio curado) no se repiten
     const yaEstan = new Set(veredictos.sitios.filter((v) => v.tipo === 'catalogo').map((v) => v.id))
     const features: FeatureCollection['features'] = []
     for (let i = 0; i < catalogo.n; i++) {
@@ -359,7 +472,7 @@ export default function Mapa() {
           'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 4, 0, 7, 1],
         },
       },
-      ['otros', 'nuevo-contorno', 'nuevos', 'halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c)),
+      ['otros', 'nuevo-relleno', 'nuevos-halo', 'halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c)),
     )
   }, [listo, catalogo, sitios, veredictos])
 
@@ -389,7 +502,7 @@ export default function Mapa() {
     // de lejos una mancha mide menos que un píxel de pantalla: sin esta línea el índice no se vería hasta acercarse
     m.addLayer({ id: 'manchas-borde', type: 'line', source: 'manchas', maxzoom: 9, paint: { 'line-color': MAGMA, 'line-width': 1.2, 'line-opacity': 0.9 } }, debajoDe)
     // el contorno de los posibles basurales nuevos queda siempre, con el índice prendido o apagado
-    m.addLayer({ id: 'nuevo-contorno', type: 'line', source: 'manchas', minzoom: 8, filter: ES_NUEVO, layout: { 'line-join': 'round' }, paint: { 'line-color': COLOR_NUEVO, 'line-width': 2.5 } }, ['nuevos', 'halo'].find((c) => m.getLayer(c)))
+    m.addLayer({ id: 'nuevo-contorno', type: 'line', source: 'manchas', minzoom: 8, filter: ES_NUEVO, layout: { 'line-join': 'round' }, paint: { 'line-color': COLOR_NUEVO, 'line-width': 2.5 } }, ['nuevos-halo', 'halo'].find((c) => m.getLayer(c)))
     m.addLayer({ id: 'nuevo-relleno', type: 'fill', source: 'manchas', minzoom: 8, filter: ES_NUEVO, paint: { 'fill-color': COLOR_NUEVO, 'fill-opacity': 0.12 } }, 'nuevo-contorno')
   }, [listo, sitios, manchas])
 
@@ -440,7 +553,7 @@ export default function Mapa() {
       src.setData(puntos)
       return
     }
-    const debajoDe = ['halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c))
+    const debajoDe = ['nuevo-relleno', 'nuevos-halo', 'halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c))
     m.addSource('otros', { type: 'geojson', data: puntos })
     m.addLayer(
       {
@@ -472,8 +585,8 @@ export default function Mapa() {
   /** La vista general: el mundo con todas las regiones procesadas (el AMBA y los puntos del catálogo). Sin catálogo, el AMBA. */
   const general = (): [number, number, number, number] => {
     if (!otros.length) return AMBA
-    const lons = [AMBA[0], AMBA[2], ...otros.map((v) => v.lon as number)]
-    const lats = [AMBA[1], AMBA[3], ...otros.map((v) => v.lat as number)]
+    const lons = [AMBA[0], AMBA[2], ...(frames ?? []).flatMap((f) => [f.bbox[0], f.bbox[2]]), ...otros.map((v) => v.lon as number)]
+    const lats = [AMBA[1], AMBA[3], ...(frames ?? []).flatMap((f) => [f.bbox[1], f.bbox[3]]), ...otros.map((v) => v.lat as number)]
     return [Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))]
   }
   /** Alejar hasta ver todas las regiones. */
@@ -498,7 +611,7 @@ export default function Mapa() {
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    if (!sel && !selOtro) {
+    if (!sel && !punto) {
       // al cerrar la ficha se vuelve a la vista general; la última imagen queda cargada
       if (habiaSitio.current && enMapa) m.fitBounds(general(), { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
       habiaSitio.current = false
@@ -618,18 +731,19 @@ export default function Mapa() {
 
   // "Ir a un sitio": todo lo que tiene dato de radar, agrupado por país. Primero la Argentina y, dentro de cada país,
   // los posibles nuevos, después los que tienen nombre y al final los polígonos sin nombre
+  const idioma = getLang()
   const opciones = useMemo(() => {
     type Op = Opcion<string> & { orden: number }
     const paisDe = (frame: string) => nombrePais(porFrame.get(frame)?.pais ?? (frame === FRAME_AMBA ? 'ARG' : frame.split('_')[0]))
     const ops: Op[] = [
-      ...(sitios ?? []).map((s) => ({ value: s.id, label: s.nombre, sub: s.lugar, radar: s.radar, grupo: nombrePais(s.pais), orden: 1 })),
-      ...nuevos.map((v) => ({ value: v.id, label: `Posible basural nuevo · ${num(Math.round(v.area_ha ?? 0))} ha`, sub: `${lugarDe(v.frame)} · ${v.id}`, radar: 'nuevo' as const, grupo: paisDe(v.frame), orden: 0 })),
-      ...otros.map((v) => ({ value: v.id, label: v.nombre ?? `Polígono sin nombre · ${v.id}`, sub: `${lugarDe(v.frame)} · ${v.veredicto_texto}`, radar: v.radar ?? ('no_alcanza' as const), grupo: paisDe(v.frame), orden: v.nombre ? 1 : 2 })),
+      ...(sitios ?? []).map((s) => ({ value: s.id, label: t(s.nombre), sub: s.lugar, radar: s.radar, grupo: nombrePais(s.pais), orden: 1 })),
+      ...nuevos.map((v) => ({ value: v.id, label: `${t('Posible basural nuevo')} · ${num(Math.round(v.area_ha ?? 0))} ha`, sub: `${lugarDe(v.frame)} · ${v.id}`, radar: 'nuevo' as const, grupo: paisDe(v.frame), orden: 0 })),
+      ...otros.map((v) => ({ value: v.id, label: v.nombre ?? `${t('Polígono sin nombre')} · ${v.id}`, sub: `${lugarDe(v.frame)} · ${veredicto(v.radar ?? 'no_alcanza')}`, radar: v.radar ?? ('no_alcanza' as const), grupo: paisDe(v.frame), orden: v.nombre ? 1 : 2 })),
     ]
     const argentina = nombrePais('ARG')
-    return ops.sort((a, b) => Number(b.grupo === argentina) - Number(a.grupo === argentina) || a.grupo!.localeCompare(b.grupo!, 'es') || a.orden - b.orden || a.label.localeCompare(b.label, 'es'))
+    return ops.sort((a, b) => Number(b.grupo === argentina) - Number(a.grupo === argentina) || a.grupo!.localeCompare(b.grupo!, idioma) || a.orden - b.orden || a.label.localeCompare(b.label, idioma))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sitios, otros, nuevos, porFrame])
+  }, [sitios, otros, nuevos, porFrame, idioma])
   const cuenta = useMemo(() => {
     const n = { despierto: 0, quieto: 0, no_alcanza: 0 }
     for (const s of sitios ?? []) n[s.radar]++
@@ -650,7 +764,7 @@ export default function Mapa() {
           placeholder={t('Ir a un sitio')}
           value={id ?? ''}
           onChange={(v) => go('mapa', `sitio=${v}`)}
-          options={[...(sitios ?? [])].map((s) => ({ value: s.id, label: t(s.nombre), sub: s.lugar, radar: s.radar })).sort((a, b) => a.label.localeCompare(b.label, getLang()))}
+          options={opciones}
         />
         {(sel || punto) && (
           <button className="btn float" onClick={() => go('mapa')}>
@@ -662,9 +776,12 @@ export default function Mapa() {
       <div className="map-legend">
         <div className="estados">
           {nuevos.length > 0 && (
-            <span className="destacado" title={`Manchas despiertas que no están en ningún catálogo y que el modelo lee como basural. Sin verificar${conUso ? `. Otras ${conUso} quedan afuera porque OpenStreetMap ya las explica con otro uso` : ''}`}>
+            <span
+              className="destacado"
+              title={`${t('Manchas despiertas que no están en ningún catálogo y que el modelo lee como basural. Sin verificar')}${conUso ? `. ${t('Otras {0} quedan afuera porque OpenStreetMap ya las explica con otro uso', conUso)}` : ''}`}
+            >
               <span className="dot nuevo" />
-              Posible basural nuevo
+              {t('Posible basural nuevo')}
               <b className="num">{num(nuevos.length)}</b>
             </span>
           )}
@@ -672,12 +789,13 @@ export default function Mapa() {
             <span key={r}>
               <span className={`dot ${r}`} />
               {radarTxt(r)}
+              <b className="num">{num(cuenta[r])}</b>
             </span>
           ))}
           {catalogo && (
-            <span title="Basurales del catálogo (OpenStreetMap, Climate TRACE, EPA LMOP, NASA EMIT) donde todavía no procesamos pasadas de NISAR">
+            <span title={t('Basurales del catálogo donde todavía no procesamos pasadas de NISAR')}>
               <span className="dot sin_dato" />
-              Sin dato de radar
+              {t('Sin dato de radar')}
               <b className="num">{num(sinDato)}</b>
             </span>
           )}
@@ -687,7 +805,7 @@ export default function Mapa() {
           role="switch"
           aria-checked={verIndice}
           onClick={() => setVerIndice((v) => !v)}
-          title={`${indice.que}. En el AMBA, el índice completo (${indice.pares} comparaciones de NISAR, del ${fecha(indice.desde, true)} al ${fecha(indice.hasta, true)}). En los otros frames, las manchas donde el índice supera el umbral`}
+          title={t('En el AMBA, el índice completo ({0} comparaciones de NISAR, del {1} al {2}). En las otras regiones, las manchas donde el índice supera el umbral', indice.pares, fecha(indice.desde, true), fecha(indice.hasta, true))}
         >
           <span>{t('Índice de insomnio')}</span>
           <i />
@@ -697,12 +815,12 @@ export default function Mapa() {
             <div />
             <span>{getLang() === 'es' ? '0,3' : '0.3'}</span>
             <span>1</span>
-            {frames && frames.length > 1 && <small>Línea punteada: cada frame de NISAR procesado. Fuera del AMBA se pintan las manchas despiertas</small>}
+            {frames && frames.length > 1 && <small>{t('Línea punteada: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas')}</small>}
           </div>
         )}
         {otros.length > 0 && (
           <button className="otros-frames" onClick={verOtros} title={t('Alejar el mapa hasta ver todos los frames procesados')}>
-            <b>{t('{0} basurales en {1} regiones', num(otros.length + (sitios?.length ?? 0)), new Set(otros.map((v) => v.frame)).size + 1)}</b>
+            <b>{t('{0} basurales en {1} regiones', num(otros.length + (sitios?.length ?? 0)), new Set([FRAME_AMBA, ...otros.map((v) => v.frame)]).size)}</b>
             <span>{t('Polígonos del catálogo, sin verificar')}</span>
           </button>
         )}
@@ -714,7 +832,7 @@ export default function Mapa() {
           </>
         )}
         {t('Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap')}
-        {otros.length > 0 && t(' · Otros frames: catálogo de basurales (OpenStreetMap vía Overture Maps, EPA LMOP)')} · {t('Imágenes:')}{' '}
+        {catalogo && t(' · Catálogo de basurales: © OpenStreetMap vía Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT')} · {t('Imágenes:')}{' '}
         <a href="https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api" target="_blank" rel="noreferrer">
           NASA GIBS
         </a>{' '}
@@ -723,7 +841,8 @@ export default function Mapa() {
           {t('ESA Copernicus, vía Planetary Computer')}
         </a>
       </div>
-      {selOtro && <FichaCatalogo v={selOtro} />}
+      {selOtro && (selOtro.tipo === 'mancha' ? <FichaNuevo v={selOtro} lugar={lugarDe(selOtro.frame)} /> : <FichaCatalogo v={selOtro} lugar={lugarDe(selOtro.frame)} />)}
+      {selCat && <FichaSinDato s={selCat} />}
       {sel && (
         <Ficha
           s={sel}

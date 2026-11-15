@@ -10,8 +10,10 @@ export const FUENTES = [
   { nombre: 'Blue Marble · NASA GIBS', url: 'https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api' },
   { nombre: 'Sentinel-2 · ESA Copernicus, vía Planetary Computer', url: 'https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a' },
   { nombre: 'Polígonos · OpenStreetMap, ODbL', url: 'https://www.openstreetmap.org/copyright' },
-  { nombre: 'Catálogo de otras regiones · Overture Maps (OpenStreetMap, ODbL)', url: 'https://docs.overturemaps.org/' },
+  { nombre: 'Catálogo de basurales · Overture Maps (OpenStreetMap, ODbL)', url: 'https://docs.overturemaps.org/' },
+  { nombre: 'Catálogo de basurales · Climate TRACE, CC BY 4.0', url: 'https://climatetrace.org/data' },
   { nombre: 'Rellenos en EE. UU. · EPA LMOP', url: 'https://www.epa.gov/lmop' },
+  { nombre: 'Plumas de metano · NASA EMIT L2B CH4PLM', url: 'https://doi.org/10.5067/EMIT/EMITL2BCH4PLM.002' },
 ]
 
 export function Fuentes() {

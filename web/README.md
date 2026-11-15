@@ -41,7 +41,7 @@ python3 scripts/datos_mapa.py
 
 | Archivo | Sale de | Qué dibuja |
 |---|---|---|
-| `public/datos/catalogo.json` (2,7 MB) | `../data/basurales/basurales_mundo.json` | Los 66.981 basurales del catálogo, en columnas. Los que no caen en un frame procesado van como puntos chicos celestes, **"Sin dato de radar"**: la ficha muestra nombre, país, estado del registro, superficie y fuente, y dice que no hay índice ni veredicto |
+| `public/datos/catalogo.json` (2,7 MB) | `../data/basurales/basurales_mundo.json` | Los 66.981 basurales del catálogo, en columnas. Los que no caen en un frame procesado van como puntos chicos celestes, **"Sin dato de radar"**: la ficha muestra nombre, país, superficie y fuente, y dice que no hay índice (sin el estado de ningún registro, como el resto de la web) |
 | `public/datos/manchas.geojson` (6,3 MB) | `../idea-basurales-nisar/salidas/manchas.geojson` + `seed/veredictos.json` | Las 20.589 manchas despiertas de los 30 frames, simplificadas a un píxel de 80 m. Con "Índice de insomnio" prendido se pintan por insomnio con la paleta del PNG del AMBA |
 | `public/datos/frames.json` | `../data/frames.json` | La caja de cada frame (línea punteada, con el índice prendido), su ciudad y su país |
 

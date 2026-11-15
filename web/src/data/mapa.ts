@@ -2,6 +2,7 @@
 // a partir de `../data/` y de las salidas del pipeline. Si falta alguno, el mapa anda igual sin esa capa.
 import type { FeatureCollection } from 'geojson'
 import { useEffect, useState } from 'react'
+import { getLang, t } from '../i18n'
 
 /** El catálogo de basurales del mundo (`data/basurales/basurales_mundo.json`), en columnas. La fila i es `BAS-` + (i + 1). */
 export interface Catalogo {
@@ -121,13 +122,13 @@ const A2: Record<string, string> = {
   TUR: 'TR', TWN: 'TW', TZA: 'TZ', UGA: 'UG', UKR: 'UA', URY: 'UY', USA: 'US', UZB: 'UZ', VEN: 'VE', VIR: 'VI', VNM: 'VN', VUT: 'VU', XKX: 'XK', YEM: 'YE',
   ZAF: 'ZA', ZMB: 'ZM', ZWE: 'ZW',
 }
-const regiones = new Intl.DisplayNames('es', { type: 'region' })
-/** "USA" -> "Estados Unidos". Si no se reconoce el código, se muestra como vino. */
+const regiones = { es: new Intl.DisplayNames('es', { type: 'region' }), en: new Intl.DisplayNames('en', { type: 'region' }) }
+/** "USA" -> "Estados Unidos" o "United States", según el idioma. Si no se reconoce el código, se muestra como vino. */
 export function nombrePais(codigo: string | null | undefined): string {
-  if (!codigo) return 'Sin país'
+  if (!codigo) return t('Sin país')
   const a2 = codigo.length === 2 ? codigo : A2[codigo]
   try {
-    return (a2 && regiones.of(a2)) || codigo
+    return (a2 && regiones[getLang()].of(a2)) || codigo
   } catch {
     return codigo
   }

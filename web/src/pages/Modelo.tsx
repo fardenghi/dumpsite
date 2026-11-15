@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Dot, PageHead, Picker, dec, fecha, num, pct, radar } from '../components/ui'
 import { useSitios } from '../data/api'
-import type { ModeloEstado } from '../data/types'
-import { MODELO_ESTADO } from '../data/veredictos'
+import { getLang, t } from '../i18n'
 import cal from '../data/seed/calibracion.json'
 import candidatos from '../data/seed/candidatos.json'
 import fichasJson from '../data/seed/fichas.json'
@@ -21,10 +20,6 @@ interface Ficha {
 }
 const FICHAS = fichasJson as unknown as Record<string, Ficha>
 const P = indice.parametros
-const dec = (n: number, d = 2) => n.toFixed(d).replace('.', ',').replace('-', '−')
-/** Un umbral o un borde de rango, sin ceros de más: 0,8 · 0,725 · −13. */
-const corto = (n: number) => dec(n, 3).replace(/0+$/, '').replace(/,$/, '')
-
 const ECO_MIN = cal.parametros.eco_min_db
 // la grilla del frame, en hectáreas: la tierra más el agua de JRC
 const AGUA = cal.superficie.agua_ha
@@ -34,36 +29,42 @@ const CLASES = [
   { id: 'uso_conocido', nombre: 'Uso conocido: aeródromos, golf, parques', color: 'var(--green)' },
   { id: 'sin_explicar', nombre: 'Sin explicar', color: 'var(--faint)' },
 ]
-const DESCARTES = [
-  { n: num(cal.descartes.chicas), que: `de menos de ${corto(cal.parametros.min_ha)} ha` },
-  { n: num(cal.descartes.lisas), que: `lisas: eco menor que ${corto(ECO_MIN)} dB` },
-  { n: num(cal.descartes.lineales), que: 'lineales: rutas y arroyos' },
-  { n: `${num(cal.superficie.estacional_ha)} ha`, que: 'despiertas sólo por temporada' },
-]
+/** Un umbral o un borde de rango, sin ceros de más: 0,8 · 0,725 · −13. */
+const corto = (n: number) => dec(n, 3).replace(/0+$/, '').replace(/[,.]$/, '')
 const R = cal.rangos
+const CON = cal.calibrado_con
+
+// Se arman al dibujar, no al cargar el módulo: los textos y los decimales dependen del idioma elegido
+const descartes = () => [
+  { n: num(cal.descartes.chicas), que: t('de menos de {0} ha', corto(cal.parametros.min_ha)) },
+  { n: num(cal.descartes.lisas), que: t('lisas: eco menor que {0} dB', corto(ECO_MIN)) },
+  { n: num(cal.descartes.lineales), que: t('lineales: rutas y arroyos') },
+  { n: `${num(cal.superficie.estacional_ha)} ha`, que: t('despiertas sólo por temporada') },
+]
 // min y max son sólo el ancho de la escala dibujada; el valor y la franja válida salen de la calibración
-const UMBRALES = [
+const umbrales = () => [
   {
-    nombre: 'Sitio / entorno', valor: cal.parametros.razon, desde: R.razon.desde, hasta: R.razon.hasta, min: 0.6, max: 1,
-    nota: `Por debajo de ${corto(R.razon.desde)}, ${cal.testigo.nombre} deja de ser persistente.${R.razon.siguiente == null ? '' : ` Desde ${corto(R.razon.siguiente)}, aparecen manchas en la costa del Roggero`}`,
+    nombre: t('Sitio / entorno'), valor: cal.parametros.razon, desde: R.razon.desde, hasta: R.razon.hasta, min: 0.6, max: 1,
+    nota: t('Por debajo de {0}, {1} deja de ser persistente', corto(R.razon.desde), cal.testigo.nombre) + (R.razon.siguiente == null ? '' : `. ${t('Desde {0}, aparecen manchas en la costa del Roggero', corto(R.razon.siguiente))}`),
   },
   {
-    nombre: 'Insomnio mínimo', valor: cal.parametros.min_insomnio, desde: R.min_insomnio.desde, hasta: R.min_insomnio.hasta, min: 0.3, max: 1,
-    nota: R.min_insomnio.siguiente == null ? '' : `Con ${corto(R.min_insomnio.siguiente)}, ${cal.testigo.nombre} (${corto(cal.testigo.insomnio)}) queda afuera`,
+    nombre: t('Insomnio mínimo'), valor: cal.parametros.min_insomnio, desde: R.min_insomnio.desde, hasta: R.min_insomnio.hasta, min: 0.3, max: 1,
+    nota: R.min_insomnio.siguiente == null ? '' : t('Con {0}, {1} ({2}) queda afuera', corto(R.min_insomnio.siguiente), cal.testigo.nombre, corto(cal.testigo.insomnio)),
   },
   {
-    nombre: 'Eco mínimo, dB', valor: ECO_MIN, desde: R.eco_min_db.desde, hasta: R.eco_min_db.hasta, min: -20, max: -8,
-    nota: `Entre lo liso conocido (${R.eco_min_db.liso}, ${corto(R.eco_min_db.desde)}) y el relleno con menos eco (${R.eco_min_db.relleno}, ${corto(R.eco_min_db.hasta)})`,
+    nombre: t('Eco mínimo, dB'), valor: ECO_MIN, desde: R.eco_min_db.desde, hasta: R.eco_min_db.hasta, min: -20, max: -8,
+    nota: t('Entre lo liso conocido ({0}, {1}) y el relleno con menos eco ({2}, {3})', R.eco_min_db.liso, corto(R.eco_min_db.desde), R.eco_min_db.relleno, corto(R.eco_min_db.hasta)),
   },
 ]
-const CALIBRADO_CON = `${cal.calibrado_con.rellenos} rellenos y ${cal.calibrado_con.controles} controles`
-const LIMITES = [
-  { que: 'Pasto y monte', porque: 'Pierden coherencia igual que un relleno' },
-  { que: 'Predios chicos', porque: `Menos de ${cal.parametros.min_px_sitio} píxeles de 80 m` },
-  { que: 'Un año entero', porque: `Hay datos del ${fecha(indice.desde)} al ${fecha(indice.hasta, true)}` },
-  { que: 'Validación independiente', porque: `Sólo ${CALIBRADO_CON}` },
+const limites = () => [
+  { que: t('Pasto y monte'), porque: t('Pierden coherencia igual que un relleno') },
+  { que: t('Predios chicos'), porque: t('Menos de {0} píxeles de 80 m', cal.parametros.min_px_sitio) },
+  { que: t('Un año entero'), porque: t('Hay datos del {0} al {1}', fecha(indice.desde), fecha(indice.hasta, true)) },
+  { que: t('Validación independiente'), porque: t('Sólo {0} rellenos y {1} controles', CON.rellenos, CON.controles) },
 ]
 
+// catálogo mundial de basurales con el que se entrena el clasificador (data/basurales/basurales_mundo.json)
+const CATALOGO = cal.catalogo_sitios
 
 /** Each pair of passes: the dash is 80 % of the surroundings' coherence and the dot, the site's. Dot below the dash = awake pair. */
 function Pares({ f }: { f: Ficha }) {
@@ -200,7 +201,7 @@ export default function Modelo() {
         </div>
         <div className="embudo">
           <div>
-            <span>Grilla del {cal.frame === 'AMBA' ? 'AMBA' : 'frame'}</span>
+            <span>{t('Grilla del AMBA')}</span>
             <div className="embudo-b" style={{ width: '100%' }} />
             <b className="num">{num(GRILLA)} ha</b>
           </div>
@@ -219,9 +220,9 @@ export default function Modelo() {
         </div>
         <div className="descartes">
           <span>{t('En el camino quedan')}</span>
-          {DESCARTES.map((d) => (
+          {descartes().map((d) => (
             <span className="tag" key={d.que}>
-              <b className="num">{getLang() === 'es' ? d.n : d.n.replace('.', ',')}</b> {t(d.que)}
+              <b className="num">{d.n}</b> {d.que}
             </span>
           ))}
         </div>
@@ -253,15 +254,15 @@ export default function Modelo() {
         <div className="paso-t">
           <i>3</i>
           <div>
-            <h3>Los umbrales</h3>
-            <p>Calibrados con {CALIBRADO_CON}. La franja es el rango válido</p>
+            <h3>{t('Los umbrales')}</h3>
+            <p>{t('Calibrados con {0} rellenos y {1} controles. La franja es el rango válido', CON.rellenos, CON.controles)}</p>
           </div>
         </div>
         <div className="umbrales">
-          {UMBRALES.map((u) => {
+          {umbrales().map((u) => {
             const pos = (v: number) => `${((v - u.min) / (u.max - u.min)) * 100}%`
             return (
-              <div key={u.nombre} title={t(u.nota)}>
+              <div key={u.nombre} title={u.nota}>
                 <div className="medidor-t">
                   <span>{u.nombre}</span>
                   <b className="num">{corto(u.valor)}</b>
@@ -272,9 +273,7 @@ export default function Modelo() {
                 </div>
                 <div className="rango-e num">
                   <span>{dec(u.min, 1)}</span>
-                  <span>
-                    válido de {corto(u.desde)} a {corto(u.hasta)}
-                  </span>
+                  <span>{t('válido de {0} a {1}', corto(u.desde), corto(u.hasta))}</span>
                   <span>{dec(u.max, 1)}</span>
                 </div>
               </div>
@@ -319,10 +318,10 @@ export default function Modelo() {
       <section className="panel section">
         <h3 style={{ marginBottom: 12 }}>{t('Lo que no ve')}</h3>
         <ul className="limits">
-          {LIMITES.map((l) => (
+          {limites().map((l) => (
             <li key={l.que}>
-              <b>{t(l.que)}</b>
-              <span>{t(l.porque)}</span>
+              <b>{l.que}</b>
+              <span>{l.porque}</span>
             </li>
           ))}
         </ul>

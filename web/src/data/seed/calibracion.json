@@ -1,6 +1,7 @@
 {
  "origen": "idea-basurales-nisar/salidas/resumen_80m.json y calibracion_80m.json (pipeline_insomnio.py indice y calibrar)",
  "frame": "AMBA",
+ "catalogo_sitios": 66981,
  "superficie": {
   "agua_ha": 97493,
   "tierra_ha": 621459,

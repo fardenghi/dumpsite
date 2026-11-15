@@ -214,6 +214,47 @@ const EN: Record<string, string> = {
   'Sólo dos rellenos y cinco controles': 'Only two landfills and five controls',
   'todas las pasadas': 'all passes',
 
+  // catálogo completo, posibles nuevos e índice en todas las regiones
+  'Posible basural nuevo': 'Possible new dump site',
+  'No figura en ningún catálogo': 'Not in any catalog',
+  'Según el modelo · basural u otra cosa': 'According to the model · dump site or something else',
+  'Puntaje de basural {0}, de 0 a 1': 'Dump-site score {0}, from 0 to 1',
+  'Puntaje de basural, de 0 a 1. No es una probabilidad': 'Dump-site score, from 0 to 1. Not a probability',
+  'Mancha que el radar NISAR nunca ve quieta y que no está en ninguno de los catálogos de basurales. Señal compatible con actividad, sin verificar en terreno':
+    'A patch the NISAR radar never sees at rest and that is in none of the dump-site catalogs. Signal consistent with activity, not verified on the ground',
+  'Basural sin nombre': 'Unnamed dump site',
+  'Sin dato de radar': 'No radar data',
+  'Está en el catálogo de basurales, pero todavía no procesamos pasadas de NISAR sobre este lugar: no hay índice de insomnio':
+    'It is in the dump-site catalog, but we have not processed NISAR passes over this place yet: there is no insomnia index',
+  'Fuente del catálogo: {0}': 'Catalog source: {0}',
+  'curado a mano': 'hand-curated',
+  'Sin país': 'No country',
+  'Manchas despiertas que no están en ningún catálogo y que el modelo lee como basural. Sin verificar': 'Awake patches that are in no catalog and that the model reads as a dump site. Not verified',
+  'Otras {0} quedan afuera porque OpenStreetMap ya las explica con otro uso': 'Another {0} are left out because OpenStreetMap already explains them with another use',
+  'Basurales del catálogo donde todavía no procesamos pasadas de NISAR': 'Catalog dump sites where we have not processed NISAR passes yet',
+  'En el AMBA, el índice completo ({0} comparaciones de NISAR, del {1} al {2}). En las otras regiones, las manchas donde el índice supera el umbral':
+    'In Greater Buenos Aires, the full index ({0} NISAR comparisons, {1} to {2}). In the other regions, the patches where the index exceeds the threshold',
+  'Línea punteada: cada región procesada con NISAR. Fuera del AMBA se pintan las manchas despiertas': 'Dashed line: each region processed with NISAR. Outside Greater Buenos Aires, the awake patches are painted',
+  ' · Catálogo de basurales: © OpenStreetMap vía Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT': ' · Dump-site catalog: © OpenStreetMap via Overture Maps, Climate TRACE (CC BY 4.0), U.S. EPA LMOP, NASA EMIT',
+  'Buscar por nombre, ciudad o país': 'Search by name, city or country',
+  'Buscar': 'Search',
+  'Ningún sitio con ese texto': 'No site matches that text',
+  'Catálogo de basurales · Overture Maps (OpenStreetMap, ODbL)': 'Dump-site catalog · Overture Maps (OpenStreetMap, ODbL)',
+  'Catálogo de basurales · Climate TRACE, CC BY 4.0': 'Dump-site catalog · Climate TRACE, CC BY 4.0',
+  'Plumas de metano · NASA EMIT L2B CH4PLM': 'Methane plumes · NASA EMIT L2B CH4PLM',
+
+  // panel Modelo: los números salen de seed/calibracion.json
+  'de menos de {0} ha': 'under {0} ha',
+  'lisas: eco menor que {0} dB': 'smooth: echo below {0} dB',
+  'Calibrados con {0} rellenos y {1} controles. La franja es el rango válido': 'Calibrated on {0} landfills and {1} controls. The band is the valid range',
+  'Por debajo de {0}, {1} deja de ser persistente': 'Below {0}, {1} stops being persistent',
+  'Desde {0}, aparecen manchas en la costa del Roggero': 'From {0} up, patches appear on the Roggero shore',
+  'Con {0}, {1} ({2}) queda afuera': 'At {0}, {1} ({2}) is left out',
+  'Entre lo liso conocido ({0}, {1}) y el relleno con menos eco ({2}, {3})': 'Between known smooth ground ({0}, {1}) and the landfill with the least echo ({2}, {3})',
+  'Menos de {0} píxeles de 80 m': 'Fewer than {0} pixels of 80 m',
+  'Hay datos del {0} al {1}': 'Data runs from {0} to {1}',
+  'Sólo {0} rellenos y {1} controles': 'Only {0} landfills and {1} controls',
+
   // nombres de los sitios curados
   'Norte III, disposición final': 'Norte III, final disposal',
   'Relleno del CEAMSE al noreste de Norte III': 'CEAMSE landfill northeast of Norte III',
