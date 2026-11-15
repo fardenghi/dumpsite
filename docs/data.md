@@ -6,7 +6,7 @@ What data Dumpsite uses, where it comes from and under which license. Which file
 - **Products:** L2 GUNW (interferogram with an 80 m coherence layer and a wrapped one at 20 m) and L2 GCOV (echo, at 10 or 20 m depending on the mode), from NASA/ISRO via ASF DAAC (https://search.asf.alaska.edu/). The products are public and downloading needs a NASA Earthdata account.
 - **Maturity:** the first public release of calibrated data was on 20/07/2026. ASF warns against mixing maturities (BETA, PROVISIONAL and VALIDATED). We use `PR` products.
 - **AMBA:** 15 GUNWs and 19 GCOVs from orbits 10 (descending) and 161 (ascending), from 25/06 to 12/10/2026. Each GUNW weighs about 2.2 GB, but the pipeline reads by URL only the window it needs.
-- **30 frames:** 962 GUNW pairs. The `.h5` files and the crops aren't committed.
+- **37 frames:** 1,087 GUNW pairs. The `.h5` files and the crops aren't committed.
 
 ## Dump-site catalog
 **66,981 sites around the world** (1,225 open, 3,579 closed, 31 contradictory and 62,146 without a status), joined per site from:

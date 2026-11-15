@@ -25,7 +25,7 @@ flowchart LR
 |---|---|---|
 | ![Card of the Luján dump site](docs/img/lujan-card.png) | ![Model panel](docs/img/model.png) | ![Video frame](docs/img/video.png) |
 
-**Results:** 30 NISAR frames and 962 pairs. The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/results.md`](docs/results.md).
+**Results:** 37 NISAR frames (7 of them in Argentina outside the AMBA) and 1,087 pairs. The radar and the model find 274 active dump sites, 172 of them not in any catalog (not verified). The open-versus-closed model, which uses radar only, gets **AUC 0.91** on frames it didn't see. Details and limits in [`docs/results.md`](docs/results.md) and [`docs/argentina.md`](docs/argentina.md).
 
 ## Roadmap
 Built in two days, so several pieces are first versions. Next steps, in short:
@@ -38,7 +38,7 @@ Full roadmap in [`docs/roadmap.md`](docs/roadmap.md).
 ## Repo structure
 | Folder | What's in it |
 |---|---|
-| [`docs/`](docs/README.md) | The idea, the index, the model, the results and the data |
+| [`docs/`](docs/README.md) | The idea, the index, the model, the results, Argentina and the data |
 | [`web/`](web/README.md) | The web: map, site cards and model panel (React, Vite, MapLibre) |
 | [`motor/`](motor/README.md) | The NISAR pipeline, the models, the tests and the VM infra (Python) |
 | [`video/`](video/README.md) | The two submission videos (Remotion) |

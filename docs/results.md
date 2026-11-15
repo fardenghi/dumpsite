@@ -2,11 +2,12 @@
 
 **Wording:** "signal compatible with activity" and "quiet according to the radar". None of this is an accusation.
 
-## The 30 frames
-The pipeline ran over **30 NISAR frames, with 962 GUNW pairs** on the 80 m layer:
+## The 37 frames
+The pipeline ran over **37 NISAR frames, with 1,087 GUNW pairs** on the 80 m layer:
 
 - **10 frames chosen first** by number of known-status dump sites and negatives: AMBA, Los Angeles, Mexico City, Delhi, Jakarta, Ponce (Puerto Rico) and four US counties.
 - **20 US frames added** by number of open dump sites.
+- **7 Argentine frames outside the AMBA**, added later for prediction only (125 pairs, 151 candidate blobs): [`argentina.md`](argentina.md).
 
 | Frames | Pairs | Blobs | Candidates | On a catalog dump site | Known land use (OSM) | Unexplained | Candidate ha |
 |---|---|---|---|---|---|---|---|
@@ -18,9 +19,12 @@ A blob is a **candidate** if it has an insomnia of 0.70 or more, a persistence o
 ## Verdict per site
 `motor/flujo.py` joins the cross in both directions (blobs over catalog and catalog over blobs) and gives a verdict per catalog polygon and per blob without a catalog. It's in `data/salidas/veredictos.json` and it's what the web shows.
 
+**Across the 37 frames, the radar and the model find 274 active dump sites: 102 were already in the catalogs and 172 are new (possible new dump sites, not verified). Of the known ones, 20 are listed as closed but are still awake.** The web highlights the blobs with a dump-site score of 0.4 or more (174), a threshold the team lowered from 0.5 for the map.
+
 **AMBA controls:**
 - **González Catán:** not listed, awake, insomnia 1.0. Verdict: active, already known.
 - **Norte III:** open, awake, insomnia 1.0. Verdict: active, already known.
+- The per-blob classifier also ran on the AMBA, as the final test: it doubts on the two active landfills (`p_basural` 0.08 for González Catán and 0.00 for Norte III), and recognizes 1 of the 7 blobs that sit on known landfills.
 - **Luján dump site:** closed, quiet, insomnia 0.0. Verdict: **closed and quiet**.
 
 ## Activity matrix
@@ -44,7 +48,7 @@ Over the same 198 dump sites of 10 ha or more with a status (26 frames, without 
 | Insomnia rule | 73 of 198 (37 %) | 28 of 73 (38 %) |
 | **Front model** (0.5 threshold) | 198 of 198 | **170 of 198 (86 %)** |
 
-Applied to the 148 dump sites of 10 ha or more **without a status** in the 30 frames, the model flags 56 with `p_abierto` above 0.5. They're in `data/salidas/predicciones_estado.parquet`. **They're not verified.**
+Applied to the 148 dump sites of 10 ha or more **without a status** in the first 30 frames, the model flags 56 with `p_abierto` above 0.5. They're in `data/salidas/predicciones_estado.parquet`. **They're not verified.**
 
 ## Cases to check by hand
 - **Closed but awake: 16**, all in the US. For example: Operating Industries (Los Angeles, closed in 1984), Palos Verdes (1980), Norris Farms (Maryland, 1986) and Tri-Cities (California, 2012). In almost all of them an obvious explanation **can't be ruled out**: many have biogas capture according to LMOP (wells and pipes move the ground) or a recycling plant on the site. Before naming one, it has to be checked in optical imagery.
