@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_CORDOBA",
+ "orbita": [
+  17,
+  140
+ ],
+ "ciudad": "Córdoba (alrededor de Bower)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32720,
+ "epsg_fijo": true,
+ "bbox": [
+  -64.3926,
+  -31.6033,
+  -64.0499,
+  -31.0001
+ ],
+ "fecha_inicio": "2025-11-11",
+ "fecha_fin": "2026-10-21",
+ "frames_nisar": [
+  "017_A_162",
+  "140_D_104"
+ ]
+}

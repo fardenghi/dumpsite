@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_JUNIN",
+ "orbita": [
+  10,
+  89
+ ],
+ "ciudad": "Junín y Chacabuco (alrededor de Planta RSU)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32720,
+ "epsg_fijo": true,
+ "bbox": [
+  -60.2757,
+  -34.9744,
+  -59.9679,
+  -34.2268
+ ],
+ "fecha_inicio": "2026-06-20",
+ "fecha_fin": "2026-10-18",
+ "frames_nisar": [
+  "089_A_160",
+  "010_D_106"
+ ]
+}

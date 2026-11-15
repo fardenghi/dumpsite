@@ -1,0 +1,319 @@
+{
+ "capa": "80m",
+ "version": "final",
+ "frame": {
+  "frame": "ARG_MAR_DEL_PLATA",
+  "orbita": [
+   82,
+   161
+  ],
+  "ciudad": "Mar del Plata (alrededor de Predio)",
+  "pais": "ARG",
+  "hemisferio": "S",
+  "epsg": 32721,
+  "epsg_fijo": true,
+  "bbox": [
+   -57.7165,
+   -38.1236,
+   -57.5642,
+   -38.0117
+  ],
+  "fecha_inicio": "2026-06-19",
+  "fecha_fin": "2026-10-17",
+  "frames_nisar": [
+   "082_D_108",
+   "161_A_158"
+  ]
+ },
+ "parametros": {
+  "razon": 0.8,
+  "min_insomnio": 0.7,
+  "min_persistencia": 0.5,
+  "max_quieto": 0.2,
+  "eco_min_db": -13.0,
+  "agua_min": 10.0,
+  "borde_agua_m": 80.0,
+  "radio_entorno_m": 2000.0,
+  "anillo_m": 1500.0,
+  "bloque_entorno_m": 320.0,
+  "suavizado_m": 240.0,
+  "umbral_abs": 0.3,
+  "min_ha": 10.0,
+  "max_elongacion": 4.0,
+  "min_nucleo": 0.1,
+  "min_px_sitio": 8,
+  "min_coh_anillo": 0.3,
+  "min_pares_orbita": 3
+ },
+ "anillo_excluye": {
+  "basurales": 4,
+  "negativos": 0,
+  "ha": 152
+ },
+ "pares": [
+  {
+   "orbita": 82,
+   "desde": "2026-06-19",
+   "hasta": "2026-07-01",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_023_082_D_108_024_2000_SH_20260619T215320_20260619T215340_20260701T215319_20260701T215339_P05023_N_P_J_002",
+   "mediana_tierra": 0.657,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-07-01",
+   "hasta": "2026-07-13",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_024_082_D_108_025_2000_SH_20260701T215319_20260701T215339_20260713T215319_20260713T215338_P05023_N_P_J_001",
+   "mediana_tierra": 0.582,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-07-13",
+   "hasta": "2026-07-25",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_025_082_D_108_026_2000_SH_20260713T215319_20260713T215338_20260725T215318_20260725T215338_P05023_N_P_J_001",
+   "mediana_tierra": 0.658,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-07-25",
+   "hasta": "2026-08-18",
+   "dias": 24,
+   "producto": "NISAR_L2_PR_GUNW_026_082_D_108_028_2000_SH_20260725T215318_20260725T215338_20260818T215317_20260818T215337_P05023_N_P_J_001",
+   "mediana_tierra": 0.556,
+   "factor_separacion": 0.956
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-08-18",
+   "hasta": "2026-08-30",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_082_D_108_029_2000_SH_20260818T215317_20260818T215337_20260830T215316_20260830T215336_P05023_N_P_J_001",
+   "mediana_tierra": 0.636,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-08-30",
+   "hasta": "2026-09-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_082_D_108_030_2000_SH_20260830T215316_20260830T215336_20260911T215316_20260911T215336_P05023_N_P_J_001",
+   "mediana_tierra": 0.58,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-09-11",
+   "hasta": "2026-09-23",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_082_D_108_031_2000_SH_20260911T215316_20260911T215336_20260923T215316_20260923T215336_P05023_N_P_J_001",
+   "mediana_tierra": 0.532,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-09-23",
+   "hasta": "2026-10-05",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_031_082_D_108_032_2000_SH_20260923T215316_20260923T215336_20261005T215316_20261005T215337_P05023_N_P_J_001",
+   "mediana_tierra": 0.434,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 82,
+   "desde": "2026-10-05",
+   "hasta": "2026-10-17",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_032_082_D_108_033_2000_SH_20261005T215316_20261005T215337_20261017T215316_20261017T215337_P05023_N_P_J_001",
+   "mediana_tierra": 0.463,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-06-25",
+   "hasta": "2026-07-07",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_023_161_A_158_024_4000_SH_20260625T095326_20260625T095331_20260707T095325_20260707T095330_P05023_N_P_J_001",
+   "mediana_tierra": 0.662,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-07-07",
+   "hasta": "2026-07-19",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_024_161_A_158_025_4000_SH_20260707T095325_20260707T095330_20260719T095325_20260719T095330_P05023_N_P_J_001",
+   "mediana_tierra": 0.537,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-07-19",
+   "hasta": "2026-08-24",
+   "dias": 36,
+   "producto": "NISAR_L2_PR_GUNW_025_161_A_158_028_2000_SH_20260719T095321_20260719T095330_20260824T095320_20260824T095328_P05023_N_P_J_001",
+   "mediana_tierra": 0.485,
+   "factor_separacion": 0.883
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-07-19",
+   "hasta": "2026-09-05",
+   "dias": 48,
+   "producto": "NISAR_L2_PR_GUNW_025_161_A_158_029_4000_SH_20260719T095325_20260719T095330_20260905T095323_20260905T095328_P05023_N_P_J_002",
+   "mediana_tierra": 0.413,
+   "factor_separacion": 0.752
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-08-24",
+   "hasta": "2026-09-05",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_028_161_A_158_029_2000_SH_20260824T095320_20260824T095328_20260905T095319_20260905T095328_P05023_N_P_J_001",
+   "mediana_tierra": 0.627,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-09-05",
+   "hasta": "2026-09-17",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_029_161_A_158_030_4000_SH_20260905T095323_20260905T095328_20260917T095323_20260917T095327_P05023_N_P_J_001",
+   "mediana_tierra": 0.529,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-09-17",
+   "hasta": "2026-09-29",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_030_161_A_158_031_2000_SH_20260917T095319_20260917T095327_20260929T095320_20260929T095327_P05023_N_P_J_001",
+   "mediana_tierra": 0.399,
+   "factor_separacion": 1.0
+  },
+  {
+   "orbita": 161,
+   "desde": "2026-09-29",
+   "hasta": "2026-10-11",
+   "dias": 12,
+   "producto": "NISAR_L2_PR_GUNW_031_161_A_158_032_2000_SH_20260929T095320_20260929T095327_20261011T095320_20261011T095328_P05023_N_P_J_001",
+   "mediana_tierra": 0.561,
+   "factor_separacion": 1.0
+  }
+ ],
+ "gcov": 17,
+ "superficie": {
+  "agua_ha": 469,
+  "tierra_ha": 16296,
+  "candidata_ha": 106,
+  "estacional_ha": 157,
+  "lisa_ha": 0
+ },
+ "sitios": {},
+ "manchas": {
+  "candidatas": 6,
+  "por_clase": {
+   "relleno_osm": 1,
+   "sin_explicar": 3,
+   "uso_conocido": 2
+  },
+  "descartadas_lineales": 0,
+  "descartadas_lisas": 0,
+  "descartadas_chicas": 70,
+  "primeras": [
+   {
+    "ha": 30.1,
+    "insomnio": 0.9,
+    "persistencia": 0.68,
+    "eco_db": -11.4,
+    "elongacion": 2.2,
+    "nucleo": 0.47,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": -38.01961,
+    "lon": -57.71284,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 18.6,
+    "insomnio": 0.77,
+    "persistencia": 0.63,
+    "eco_db": -8.0,
+    "elongacion": 1.2,
+    "nucleo": 0.34,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": -38.09515,
+    "lon": -57.5743,
+    "clase": "uso_conocido",
+    "que": "forestación"
+   },
+   {
+    "ha": 16.6,
+    "insomnio": 0.87,
+    "persistencia": 0.7,
+    "eco_db": -11.0,
+    "elongacion": 2.6,
+    "nucleo": 0.27,
+    "forma": "alargada",
+    "descartada": null,
+    "lat": -38.07689,
+    "lon": -57.57321,
+    "clase": "uso_conocido",
+    "que": "reserva: Bosque de Peralta Ramos"
+   },
+   {
+    "ha": 15.4,
+    "insomnio": 0.93,
+    "persistencia": 0.85,
+    "eco_db": -9.9,
+    "elongacion": 1.6,
+    "nucleo": 0.33,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": -38.06945,
+    "lon": -57.64991,
+    "clase": "relleno_osm",
+    "que": "BAS-053315"
+   },
+   {
+    "ha": 14.7,
+    "insomnio": 0.88,
+    "persistencia": 0.76,
+    "eco_db": -11.7,
+    "elongacion": 1.6,
+    "nucleo": 0.43,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": -38.04747,
+    "lon": -57.62094,
+    "clase": "sin_explicar",
+    "que": null
+   },
+   {
+    "ha": 10.2,
+    "insomnio": 0.74,
+    "persistencia": 0.55,
+    "eco_db": -12.4,
+    "elongacion": 1.8,
+    "nucleo": 0.25,
+    "forma": "compacta",
+    "descartada": null,
+    "lat": -38.0971,
+    "lon": -57.65247,
+    "clase": "sin_explicar",
+    "que": null
+   }
+  ]
+ },
+ "fuentes": [
+  "NISAR L2 GUNW y GCOV (NASA/ISRO), ASF DAAC",
+  "JRC Global Surface Water v1.4",
+  "© colaboradores de OpenStreetMap (ODbL), por Nominatim y por Overture Maps 2026-10-21.0"
+ ]
+}

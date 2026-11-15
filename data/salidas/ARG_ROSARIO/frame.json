@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_ROSARIO",
+ "orbita": [
+  89,
+  111
+ ],
+ "ciudad": "Rosario (alrededor de Relleno Sanitario de Pérez)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32720,
+ "epsg_fijo": true,
+ "bbox": [
+  -60.9923,
+  -33.0345,
+  -60.697,
+  -32.6327
+ ],
+ "fecha_inicio": "2026-06-20",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "089_A_161",
+  "111_D_105"
+ ]
+}

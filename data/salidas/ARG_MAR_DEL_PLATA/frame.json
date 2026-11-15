@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_MAR_DEL_PLATA",
+ "orbita": [
+  82,
+  161
+ ],
+ "ciudad": "Mar del Plata (alrededor de Predio)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32721,
+ "epsg_fijo": true,
+ "bbox": [
+  -57.7165,
+  -38.1236,
+  -57.5642,
+  -38.0117
+ ],
+ "fecha_inicio": "2026-06-19",
+ "fecha_fin": "2026-10-17",
+ "frames_nisar": [
+  "082_D_108",
+  "161_A_158"
+ ]
+}

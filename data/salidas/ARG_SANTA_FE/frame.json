@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_SANTA_FE",
+ "orbita": [
+  89,
+  111
+ ],
+ "ciudad": "Santa Fe y Paraná (alrededor de Relleno Sanitario Santa Fe)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32720,
+ "epsg_fijo": true,
+ "bbox": [
+  -60.9784,
+  -31.8315,
+  -60.3577,
+  -31.5456
+ ],
+ "fecha_inicio": "2025-11-04",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "089_A_162",
+  "111_D_104"
+ ]
+}

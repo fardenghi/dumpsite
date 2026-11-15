@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_CASILDA",
+ "orbita": [
+  89,
+  111
+ ],
+ "ciudad": "Casilda y Venado Tuerto (alrededor de Basural)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32720,
+ "epsg_fijo": true,
+ "bbox": [
+  -62.0544,
+  -33.9545,
+  -61.0782,
+  -33.0141
+ ],
+ "fecha_inicio": "2026-06-20",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "089_A_161",
+  "111_D_105"
+ ]
+}

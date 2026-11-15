@@ -1,0 +1,24 @@
+{
+ "frame": "ARG_SAN_NICOLAS",
+ "orbita": [
+  89,
+  111
+ ],
+ "ciudad": "San Nicolás y Pergamino (alrededor de Planta de Tratamiento de Residuos)",
+ "pais": "ARG",
+ "hemisferio": "S",
+ "epsg": 32720,
+ "epsg_fijo": true,
+ "bbox": [
+  -60.6038,
+  -33.9753,
+  -60.007,
+  -33.2152
+ ],
+ "fecha_inicio": "2026-06-20",
+ "fecha_fin": "2026-10-19",
+ "frames_nisar": [
+  "089_A_161",
+  "111_D_105"
+ ]
+}
