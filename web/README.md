@@ -22,7 +22,7 @@ El mapa es el fondo de toda la web y queda siempre a la vista. Las secciones son
 **Son reales y están precalculados.** Los escribe el pipeline del índice de insomnio y no se editan a mano:
 
 ```bash
-python ../idea-basurales-nisar/herramientas/pipeline_insomnio.py indice
+python ../motor/pipeline_insomnio.py indice
 ```
 
 | Archivo | Qué tiene |
@@ -33,7 +33,7 @@ python ../idea-basurales-nisar/herramientas/pipeline_insomnio.py indice
 | `public/indice/insomnio-amba.png` + `src/data/seed/indice.json` | El índice del AMBA como PNG (norte arriba, regular en Web Mercator) y sus límites: `oeste`, `sur`, `este`, `norte` y `coordinates`, las cuatro esquinas en el orden que pide una fuente `image` de MapLibre. `Mapa.tsx` lo carga así y el botón "Índice de insomnio" lo prende y lo apaga |
 
 ### Veredictos de todos los frames y modelo de abierto contra cerrado
-Los escribe `python ../idea-basurales-nisar/herramientas/flujo.py --web`. **Los dos archivos son opcionales**: la web los busca con `import.meta.glob` (`src/data/veredictos.ts`) y, si faltan o no traen las claves nuevas, queda como antes.
+Los escribe `python ../motor/flujo.py --web`. **Los dos archivos son opcionales**: la web los busca con `import.meta.glob` (`src/data/veredictos.ts`) y, si faltan o no traen las claves nuevas, queda como antes.
 
 | Archivo | Qué usa la web |
 |---|---|
@@ -47,7 +47,7 @@ Los escribe `python ../idea-basurales-nisar/herramientas/flujo.py --web`. **Los 
 - **Fuera del AMBA no hay contorno, serie de coherencia ni imágenes por fecha**: la ficha muestra el veredicto, el registro, el insomnio, la superficie, el motivo y la lectura del modelo, y el mapa se acerca menos (el fondo de Blue Marble llega hasta el zoom 8).
 - **Lenguaje:** "compatible con abierto según el modelo" y "señal compatible con actividad". El estado sólo se muestra cuando lo da el registro; los polígonos sin estado dicen "En el catálogo, sin estado".
 
-Los sitios de otros países que tenía el seed se sacaron: no tienen NISAR procesado. `scripts/contornos.py` quedó sin uso (los contornos los escribe el pipeline). Cómo se calcula cada número: `../idea-basurales-nisar/idea/indice-final.md`.
+Los sitios de otros países que tenía el seed se sacaron: no tienen NISAR procesado. `scripts/contornos.py` quedó sin uso (los contornos los escribe el pipeline). Cómo se calcula cada número: `../docs/indice-insomnio.md`.
 
 Toda la web lee los datos por `src/data/api.ts`. Para conectar un backend alcanza con definir `VITE_API_URL` (ver `.env.example`) y que responda `GET /sitios` con la forma de `Sitio` en `src/data/types.ts`.
 

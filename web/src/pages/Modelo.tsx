@@ -9,7 +9,7 @@ import indice from '../data/seed/indice.json'
 import { Fuentes } from './Inicio'
 
 // Todos los números de esta página salen del pipeline (seed/*.json) o de
-// idea-basurales-nisar/idea/indice-final.md. Lo que no se midió no se muestra.
+// docs/indice-insomnio.md. Lo que no se midió no se muestra.
 interface Ficha {
   motivo: string
   persistencia: number | null

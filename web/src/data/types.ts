@@ -54,7 +54,7 @@ export interface Resumen {
 }
 
 // ---------- veredictos por frame y modelo de abierto contra cerrado
-// Los escribe `idea-basurales-nisar/herramientas/flujo.py --web` en seed/veredictos.json y seed/modelo.json.
+// Los escribe `motor/flujo.py --web` en seed/veredictos.json y seed/modelo.json.
 // Todo lo del modelo es opcional: si no vino, la web no muestra nada del modelo.
 
 /** Lo que dice el modelo de abierto contra cerrado de un polígono. No es el estado del registro ni una probabilidad calibrada. */
@@ -70,7 +70,7 @@ export interface LecturaModelo {
 export interface Veredicto {
   tipo: string
   id: string
-  /** clave del frame de `data/frames.json`: `AMBA`, `LOS_ANGELES`, `USA_OH_LAKE`… */
+  /** clave del frame de `data/catalogos/frames.json`: `AMBA`, `LOS_ANGELES`, `USA_OH_LAKE`… */
   frame: string
   nombre: string | null
   area_ha: number | null

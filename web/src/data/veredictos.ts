@@ -1,5 +1,5 @@
 // Veredictos de todos los frames procesados y métricas del modelo de abierto contra cerrado.
-// Los dos archivos los escribe `idea-basurales-nisar/herramientas/flujo.py --web` y pueden faltar:
+// Los dos archivos los escribe `motor/flujo.py --web` y pueden faltar:
 // por eso se buscan con `import.meta.glob` (un `import` directo de un archivo que no está rompe el build).
 import { useEffect, useState } from 'react'
 import type { LecturaModelo, ModeloEstado, Sitio, Veredicto, Veredictos } from './types'
