@@ -1,6 +1,6 @@
 import React from "react";
 import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from "remotion";
-import {EQUIPO, FRASES as FRASES_EN, MOSTRAR_PLACEHOLDERS} from "../data";
+import {EQUIPO, FRASES as FRASES_EN, NOMBRE_EQUIPO, MOSTRAR_PLACEHOLDERS} from "../data";
 import {C, F} from "../theme";
 
 const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
@@ -94,6 +94,7 @@ export const Equipo: React.FC<{dur: number}> = ({dur}) => {
     <div style={{position: "absolute", right: 44, bottom: 330, opacity: v, transform: `translateY(${(1 - Math.min(1, f / 20)) * 8}px)`,
       textAlign: "right", fontFamily: F.sans, fontWeight: 600, fontSize: 27, lineHeight: 1.3, letterSpacing: 0.2, color: "#fff",
       textShadow: "0 2px 3px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.65), 0 0 60px rgba(0,0,0,0.45)"}}>
+      <div style={{fontSize: 36, marginBottom: 6}}>{NOMBRE_EQUIPO}</div>
       {EQUIPO.map((nombre) => <div key={nombre}>{nombre}</div>)}
     </div>
   );
