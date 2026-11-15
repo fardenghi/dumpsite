@@ -1,14 +1,15 @@
 import maplibregl, { type GeoJSONSource, type ImageSource, type RasterTileSource } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { FeatureCollection } from 'geojson'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Marca, go, useRoute } from '../App'
 import { Coherencia } from '../components/Coherencia'
-import { Dot, Kpi, Picker, RADAR, RegistroTag, fecha, num, pct, veredicto } from '../components/ui'
+import { Dot, Kpi, Picker, RADAR, RegistroCatalogo, RegistroTag, SegunModelo, fecha, num, pct, veredicto } from '../components/ui'
 import { useSitios } from '../data/api'
 import { HAY_GOOGLE, creditoGoogle, sesionGoogle, tilesGoogle } from '../data/google'
 import indice from '../data/seed/indice.json'
-import type { Imagen, Sitio } from '../data/types'
+import type { Imagen, LecturaModelo, Sitio, Veredicto } from '../data/types'
+import { fueraDelAmba, lecturaModelo, nombreFrame, useVeredictos, veredictoDeSitio } from '../data/veredictos'
 
 // El fondo es Blue Marble (NASA GIBS); al abrir un sitio se suma la escena Sentinel-2 de 10 m
 // de la fecha elegida, servida por Microsoft Planetary Computer. Las dos andan sin claves.
@@ -24,6 +25,8 @@ const COLOR = ['match', ['get', 'radar'], 'despierto', '#ec5b3f', 'quieto', '#5b
 const AMBA: [number, number, number, number] = [indice.oeste, indice.sur, indice.este, indice.norte]
 const margenAmba = (ancho: number) => (ancho > 860 ? { top: 70, bottom: 90, left: 40, right: 40 } : { top: 70, bottom: 90, left: 12, right: 12 })
 const ZOOM_GOOGLE = 13
+// los basurales de los otros frames no tienen contorno ni imágenes cargadas: se va hasta ahí sin acercarse tanto
+const ZOOM_OTRO = 9.5
 type Vista = 'google' | 'sentinel'
 
 /** Tiles Sentinel-2 que MapLibre pide al abrir un sitio (fuente de 512 px: el z del tile es el del mapa menos 1). */
@@ -52,7 +55,7 @@ async function precargar(sitios: Sitio[]) {
   await Promise.all([tanda(), tanda(), tanda()])
 }
 
-function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imagen | null; onImagen: (i: Imagen) => void; vista: Vista; onVista: (v: Vista) => void }) {
+function Ficha({ s, modelo, imagen, onImagen, vista, onVista }: { s: Sitio; modelo: LecturaModelo | null; imagen: Imagen | null; onImagen: (i: Imagen) => void; vista: Vista; onVista: (v: Vista) => void }) {
   return (
     <aside className="ficha" key={s.id}>
       <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
@@ -76,6 +79,8 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
         </span>
         <RegistroTag s={s} />
       </div>
+
+      {modelo && <SegunModelo m={modelo} />}
 
       <div className="kpis sm grid g2">
         <Kpi label="Insomnio" value={pct(s.insomnio)} />
@@ -130,13 +135,69 @@ function Ficha({ s, imagen, onImagen, vista, onVista }: { s: Sitio; imagen: Imag
   )
 }
 
+/** Ficha de un polígono del catálogo de otro frame: lo que trae `veredictos.json`, sin serie ni imágenes. */
+function FichaCatalogo({ v, aviso }: { v: Veredicto; aviso?: string }) {
+  const radar = v.radar ?? 'no_alcanza'
+  const modelo = lecturaModelo(v)
+  return (
+    <aside className="ficha" key={v.id}>
+      <div className="row" style={{ alignItems: 'flex-start', flexWrap: 'nowrap' }}>
+        <div className="grow">
+          <h2>{v.nombre ?? 'Polígono sin nombre'}</h2>
+          <div className="where">
+            {nombreFrame(v.frame)} · {v.id}
+          </div>
+        </div>
+        <button className="btn icon" onClick={() => go('mapa')} aria-label="Cerrar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+            <path d="M5 5l14 14M19 5L5 19" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="row" style={{ gap: 8 }}>
+        <span className={`tag ${radar}`}>
+          <Dot radar={radar} />
+          {v.veredicto_texto}
+        </span>
+        <RegistroCatalogo registro={v.registro} />
+      </div>
+
+      {modelo && <SegunModelo m={modelo} />}
+
+      <div className="kpis sm grid g2">
+        <Kpi label="Insomnio" value={v.insomnio == null ? '–' : pct(v.insomnio)} />
+        <Kpi label="Superficie" value={v.area_ha == null ? '–' : num(Math.round(v.area_ha))} unit="ha" />
+      </div>
+
+      {v.motivo && <p className="motivo">Radar: {v.motivo}</p>}
+      <p className="note">Polígono del catálogo de basurales, en un frame de NISAR fuera del AMBA. {aviso ?? 'Señal compatible con actividad, no prueba.'} No está verificado</p>
+
+      <span className="grow" />
+      <div className="row" style={{ justifyContent: 'space-between' }}>
+        <span className="coords">
+          {(v.lat as number).toFixed(4)}, {(v.lon as number).toFixed(4)}
+        </span>
+        <a className="btn sm" href={`https://www.google.com/maps/@${v.lat},${v.lon},900m/data=!3m1!1e3`} target="_blank" rel="noreferrer">
+          Ver en Google Maps
+        </a>
+      </div>
+    </aside>
+  )
+}
+
 export default function Mapa() {
   const { sitios } = useSitios()
+  const veredictos = useVeredictos()
+  // los basurales del catálogo de los otros frames: van como puntos, sin tocar la vista del AMBA
+  const otros = useMemo(() => fueraDelAmba(veredictos), [veredictos])
   const { page, query } = useRoute()
   // con un panel abierto no hay ficha: el mapa queda donde estaba
   const enMapa = page === 'mapa'
   const id = enMapa ? query.get('sitio') : null
   const sel = sitios?.find((s) => s.id === id) ?? null
+  const selOtro = (!sel && id && otros.find((v) => v.id === id)) || null
+  const modeloSel = useMemo(() => (sel ? lecturaModelo(veredictoDeSitio(sel, veredictos)) : null), [sel, veredictos])
   const caja = useRef<HTMLDivElement>(null)
   const mapa = useRef<maplibregl.Map | null>(null)
   const [listo, setListo] = useState(false)
@@ -241,21 +302,82 @@ export default function Mapa() {
     if (m && listo && m.getLayer('indice')) m.setLayoutProperty('indice', 'visibility', verIndice ? 'visible' : 'none')
   }, [listo, sitios, verIndice])
 
+  // los basurales de los otros frames: un punto por polígono del catálogo, debajo de los sitios del AMBA
+  useEffect(() => {
+    const m = mapa.current
+    if (!m || !listo || !otros.length) return
+    const puntos: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: otros.map((v) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [v.lon as number, v.lat as number] }, properties: { id: v.id, radar: v.radar ?? 'no_alcanza' } })),
+    }
+    const src = m.getSource('otros') as GeoJSONSource | undefined
+    if (src) {
+      src.setData(puntos)
+      return
+    }
+    const debajoDe = ['halo', 'aro', 'contorno-relleno'].find((c) => m.getLayer(c))
+    m.addSource('otros', { type: 'geojson', data: puntos })
+    m.addLayer(
+      {
+        id: 'otros',
+        type: 'circle',
+        source: 'otros',
+        paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 1, 4, 6, 5, 10, 7], 'circle-color': COLOR, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 1, 'circle-opacity': 0.95 },
+      },
+      debajoDe,
+    )
+    // el elegido, con un aro
+    m.addLayer(
+      {
+        id: 'otros-sel',
+        type: 'circle',
+        source: 'otros',
+        filter: ['==', ['get', 'id'], ''],
+        paint: { 'circle-radius': 16, 'circle-opacity': 0, 'circle-stroke-color': COLOR, 'circle-stroke-width': 2.5 },
+      },
+      debajoDe,
+    )
+    m.on('click', 'otros', (e) => go('mapa', `sitio=${e.features![0].properties.id}`))
+    m.on('mouseenter', 'otros', () => (m.getCanvas().style.cursor = 'pointer'))
+    m.on('mouseleave', 'otros', () => (m.getCanvas().style.cursor = ''))
+  }, [listo, otros])
+
+  const idOtro = selOtro?.id ?? ''
+  useEffect(() => {
+    const m = mapa.current
+    if (m && listo && m.getLayer('otros-sel')) m.setFilter('otros-sel', ['==', ['get', 'id'], idOtro])
+  }, [listo, otros, idOtro])
+
+  /** Alejar hasta ver todos los frames: el AMBA y los puntos del catálogo. */
+  const verOtros = () => {
+    const m = mapa.current
+    if (!m || !otros.length) return
+    const lons = [AMBA[0], AMBA[2], ...otros.map((v) => v.lon as number)]
+    const lats = [AMBA[1], AMBA[3], ...otros.map((v) => v.lat as number)]
+    go('mapa')
+    m.fitBounds([Math.min(...lons), Math.max(-80, Math.min(...lats)), Math.max(...lons), Math.min(80, Math.max(...lats))], { padding: margenAmba(m.getContainer().clientWidth), duration: 1800 })
+  }
+
   // al elegir un sitio: volar hasta ahí y mostrar su imagen más reciente
   useEffect(() => {
     const m = mapa.current
     if (!m || !listo) return
-    if (!sel) {
+    if (!sel && !selOtro) {
       // al cerrar la ficha se vuelve a la vista del AMBA; la última imagen queda cargada
       if (habiaSitio.current && enMapa) m.fitBounds(AMBA, { padding: margenAmba(m.getContainer().clientWidth), duration: 1400 })
       habiaSitio.current = false
       return
     }
     habiaSitio.current = true
-    setImagen(sel.imagenes[sel.imagenes.length - 1] ?? null)
-    if (HAY_GOOGLE) setVista('google')
     const ancho = m.getContainer().clientWidth
     const margen = ancho > 860 ? { right: 440, top: 80, bottom: 100, left: 60 } : { bottom: 400, top: 80, left: 24, right: 24 }
+    if (!sel) {
+      // un basural de otro frame: no hay contorno ni recorte, se vuela hasta el punto
+      m.flyTo({ center: [selOtro!.lon as number, selOtro!.lat as number], zoom: Math.max(ZOOM_OTRO, Math.min(m.getZoom(), 12)), padding: margen, duration: 2200, essential: true })
+      return
+    }
+    setImagen(sel.imagenes[sel.imagenes.length - 1] ?? null)
+    if (HAY_GOOGLE) setVista('google')
     const anillo = sel.contorno?.coordinates[0]
     if (HAY_GOOGLE && anillo) {
       // con alta resolución se encuadra el predio, no la caja de varios km
@@ -271,7 +393,7 @@ export default function Mapa() {
       m.flyTo({ center: [sel.lon, sel.lat], zoom: 13.6, padding: margen, duration: 1800, essential: true })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listo, sel])
+  }, [listo, sel, selOtro])
 
   // la imagen de la fecha elegida: el recorte guardado del sitio (anda sin conexión) y,
   // debajo, la escena entera en tiles para ver los alrededores cuando hay red
@@ -359,7 +481,7 @@ export default function Mapa() {
   return (
     <>
       <div className="map" ref={caja} />
-      <div className={`map-top ${sel ? 'con-ficha' : ''}`}>
+      <div className={`map-top ${sel || selOtro ? 'con-ficha' : ''}`}>
         <Marca />
         <Picker
           className="float"
@@ -369,7 +491,7 @@ export default function Mapa() {
           onChange={(v) => go('mapa', `sitio=${v}`)}
           options={[...(sitios ?? [])].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')).map((s) => ({ value: s.id, label: s.nombre, sub: s.lugar, radar: s.radar }))}
         />
-        {sel && (
+        {(sel || selOtro) && (
           <button className="btn float" onClick={() => go('mapa')}>
             Ver todo
           </button>
@@ -401,6 +523,14 @@ export default function Mapa() {
             <span>1</span>
           </div>
         )}
+        {otros.length > 0 && (
+          <button className="otros-frames" onClick={verOtros} title="Alejar el mapa hasta ver todos los frames procesados">
+            <b>
+              {num(otros.length)} basurales en otros {new Set(otros.map((v) => v.frame)).size} frames
+            </b>
+            <span>Polígonos del catálogo, sin verificar</span>
+          </button>
+        )}
       </div>
       <div className="map-credit">
         {vista === 'google' && credito && (
@@ -408,7 +538,8 @@ export default function Mapa() {
             <b className="google">Google</b> {credito} ·{' '}
           </>
         )}
-        Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap · Imágenes:{' '}
+        Índice: NISAR GUNW (NASA/ISRO, vía ASF DAAC), agua de JRC Global Surface Water · Contornos: © OpenStreetMap
+        {otros.length > 0 && ' · Otros frames: catálogo de basurales (OpenStreetMap vía Overture Maps, EPA LMOP)'} · Imágenes:{' '}
         <a href="https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api" target="_blank" rel="noreferrer">
           NASA GIBS
         </a>{' '}
@@ -417,9 +548,11 @@ export default function Mapa() {
           ESA Copernicus, vía Planetary Computer
         </a>
       </div>
+      {selOtro && <FichaCatalogo v={selOtro} aviso={veredictos?.aviso} />}
       {sel && (
         <Ficha
           s={sel}
+          modelo={modeloSel}
           imagen={imagen}
           vista={vista}
           onVista={setVista}
