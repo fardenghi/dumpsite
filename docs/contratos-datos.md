@@ -1,226 +1,226 @@
-# Contratos de datos del modelo (14/11/2026)
+# Model data contracts (14/11/2026)
 
-El formato de los archivos intermedios del modelo, para que las etapas de `modelo.md` se puedan escribir en paralelo sin esperarse. Cada etapa escribe sus archivos y lee los de las otras **con este formato y no otro**.
+The format of the model's intermediate files, so the stages in `modelo.md` can be written in parallel without waiting for each other. Each stage writes its files and reads the others' **in this format and no other**.
 
-- **En código:** `motor/contratos.py` tiene las mismas columnas como constantes y la función `validar()`. Si este documento y el código no coinciden, manda el código (y hay un test que avisa).
-- **Datos de prueba:** `python motor/contratos_mock.py` genera todos los archivos en `motor/datos/mock/`, con valores inventados.
-- **Nada de esto se calculó con datos reales.** Los valores del mock no son resultados: no se citan ni van a la web.
+- **In code:** `motor/contratos.py` has the same columns as constants and the `validar()` function. If this document and the code disagree, the code wins (and there's a test that warns).
+- **Test data:** `python motor/contratos_mock.py` generates all the files in `motor/datos/mock/`, with made-up values.
+- **None of this was computed with real data.** The mock values aren't results: they're not quoted and they don't go to the web.
 
-## Cómo se usa
+## How to use it
 ```python
-import contratos                                        # desde motor/
+import contratos                                        # from motor/
 
-contratos.validar(df, "tabla_radar")                    # falla con ErrorContrato y dice todo lo que está mal
-contratos.guardar(df, "tabla_radar", "../data/salidas") # valida, ordena las columnas y escribe el parquet
-df = contratos.leer("datos/mock", "tabla_radar")        # lee y valida (también manchas, frames y particiones)
-contratos.COLUMNAS_MODELO                               # las 29 variables del modelo, en orden
+contratos.validar(df, "tabla_radar")                    # fails with ErrorContrato and says everything that's wrong
+contratos.guardar(df, "tabla_radar", "../data/salidas") # validates, orders the columns and writes the parquet
+df = contratos.leer("datos/mock", "tabla_radar")        # reads and validates (also manchas, frames and particiones)
+contratos.COLUMNAS_MODELO                               # the model's 29 variables, in order
 ```
 ```bash
-python motor/contratos_mock.py                         # genera motor/datos/mock/
-python motor/contratos.py motor/datos/mock             # valida todo lo que haya en una carpeta
+python motor/contratos_mock.py                         # generates motor/datos/mock/
+python motor/contratos.py motor/datos/mock             # validates everything in a folder
 python motor/contratos.py data/salidas/tabla_radar.parquet
 ```
-Hacen falta `pandas` y `pyarrow` (están en `motor/requirements.txt`).
+It needs `pandas` and `pyarrow` (they're in `motor/requirements.txt`).
 
-## Reglas comunes
-- **Rutas:** relativas a `data/`, la carpeta de datos de la raíz del repo. `salidas/` tiene lo que escribe el motor y `catalogos/` los catálogos.
-- **Se pueden agregar columnas. No se pueden sacar ni renombrar** las del contrato. Las marcadas como *opcional* pueden faltar; si están, se validan.
-- **Tablas:** parquet, escritas con `contratos.guardar()` (pandas y pyarrow), sin índice. Los textos son texto, los números `float64` y los enteros `int64` (o `Int64` si puede haber vacíos).
-- **Vacíos:** una columna sólo puede venir vacía (null o NaN) si la tabla dice "sí" en *¿Vacía?*. Vacío quiere decir "no se pudo medir", nunca cero.
-- **Coordenadas:** grados, WGS84, en el orden de GeoJSON: **(lon, lat)**. Las cajas van como `[lon_oeste, lat_sur, lon_este, lat_norte]`. **Ojo:** `geo.CAJA` va en otro orden (`lat_norte, lon_oeste, lat_sur, lon_este`).
-- **Fechas:** texto `AAAA-MM-DD`.
-- **`frame`:** la clave de `frames.json`, en mayúsculas, con letras, números y guion bajo (`AMBA`, `DELHI`, `LOS_ANGELES`). Un frame es un área de trabajo; puede juntar más de una órbita de NISAR, como el AMBA (órbitas 10 y 161).
-- **`id_mancha`:** `MAN-<frame>-<n>`, con `n` de cuatro cifras desde 1, en el orden de `insomnio.manchas()` (de mayor a menor superficie). Ejemplo: `MAN-AMBA-0001`. Lo arma `contratos.id_mancha(frame, n)`. El número cuenta también las manchas descartadas.
-- **`id_catalogo`:** el `id` del polígono en los catálogos, tal cual: `BAS-…` para `data/catalogos/basurales/` y `NEG-…` para `data/catalogos/negativos/`. **No** son los ids de `fichas_80m.json` (`norte-iii`) ni los de `casos_curados_argentina.json` (`AR-LUJAN`).
-- **Anillo:** 1,5 km alrededor de la mancha o del polígono, sin agua y sin los demás polígonos de los catálogos (`insomnio.anillo`, etapa 1).
-- **Tamaño mínimo:** 10 ha. Lo que mide menos sale como `no_alcanza`.
-- **Lo pesado no se sube:** un parquet de más de unos MB va a `datos/`.
-- **Lenguaje:** "señal compatible con actividad" y "quieto según el radar". Nunca "basural ilegal".
+## Common rules
+- **Paths:** relative to `data/`, the data folder at the repo root. `salidas/` holds what the engine writes and `catalogos/` the catalogs.
+- **Columns can be added. The contract's can't be removed or renamed.** The ones marked *optional* may be missing; if present, they're validated.
+- **Tables:** parquet, written with `contratos.guardar()` (pandas and pyarrow), without an index. Texts are text, numbers `float64` and integers `int64` (or `Int64` if there may be empty values).
+- **Empty values:** a column may only come empty (null or NaN) if the table says "yes" under *Empty?*. Empty means "couldn't be measured", never zero.
+- **Coordinates:** degrees, WGS84, in GeoJSON order: **(lon, lat)**. Boxes go as `[lon_oeste, lat_sur, lon_este, lat_norte]` (west, south, east, north). **Watch out:** `geo.CAJA` uses another order (`lat_norte, lon_oeste, lat_sur, lon_este`).
+- **Dates:** text `YYYY-MM-DD`.
+- **`frame`:** the key in `frames.json`, uppercase, with letters, digits and underscores (`AMBA`, `DELHI`, `LOS_ANGELES`). A frame is a working area; it can join more than one NISAR orbit, like the AMBA (orbits 10 and 161).
+- **`id_mancha`:** `MAN-<frame>-<n>`, with `n` as four digits from 1, in the order of `insomnio.manchas()` (largest area first). Example: `MAN-AMBA-0001`. Built by `contratos.id_mancha(frame, n)`. The number also counts the discarded blobs.
+- **`id_catalogo`:** the polygon's `id` in the catalogs, as is: `BAS-…` for `data/catalogos/basurales/` and `NEG-…` for `data/catalogos/negativos/`. They're **not** the ids in `fichas_80m.json` (`norte-iii`) or in `casos_curados_argentina.json` (`AR-LUJAN`).
+- **Ring:** 1.5 km around the blob or polygon, without water and without the other catalog polygons (`insomnio.anillo`, stage 1).
+- **Minimum size:** 10 ha. Anything smaller comes out as `no_alcanza`.
+- **Heavy files aren't committed:** a parquet of more than a few MB goes to `datos/`.
+- **Wording:** "signal compatible with activity" and "quiet according to the radar". Never "illegal dump".
 
-## Resumen
-| Archivo | Lo escribe | Lo lee | Una fila por |
+## Summary
+| File | Written by | Read by | One row per |
 |---|---|---|---|
-| `salidas/manchas.geojson` | etapa 4 (en el AMBA, el prompt 3) | etapas 5, 6 y 9, y la web | una mancha de un frame, incluidas las descartadas |
-| `salidas/tabla_radar.parquet` | etapa 4 | etapa 6 | una mancha candidata (no descartada) de un frame |
-| `salidas/insomnio_catalogo.parquet` | etapa 4 (la lógica, el prompt 2) | etapas 8 y 9 | un polígono del catálogo (basural o negativo) en un frame, esté o no en una mancha |
-| `salidas/tabla_optico.parquet` | etapa 5 | etapa 6 | una mancha candidata de un frame |
-| `salidas/tabla_optico_catalogo.parquet` | etapa 5 | etapas 8 y 9 (ficha) | un polígono del catálogo en un frame |
-| `salidas/cruce_manchas_catalogo.parquet` | etapa 6 (`cruce_manchas.py`) | etapas 6 y 9 | un par mancha y polígono del catálogo que se tocan (intersección > 0), sin filtrar por el 30 % |
-| `catalogos/frames.json` | etapa 2 | etapas 1, 4, 6, 7, 8 y 9 | un frame (un área de trabajo cubierta por una o más órbitas de NISAR) |
-| `salidas/particiones.json` | etapa 6 (`armar_tabla.py`) | etapa 7 y la CNN | no es una tabla: qué frames van en cada partición |
-| `salidas/tabla_entrenamiento.parquet` | etapa 6 (`armar_tabla.py`) | etapa 7 y la CNN | una mancha etiquetada de un frame |
-| `salidas/predicciones.parquet` | etapa 7 (o el mock, mientras no haya modelo) | etapa 9 (`veredicto.py`) | una mancha candidata de un frame |
+| `salidas/manchas.geojson` | stage 4 (in the AMBA, prompt 3) | stages 5, 6 and 9, and the web | a blob of a frame, including the discarded ones |
+| `salidas/tabla_radar.parquet` | stage 4 | stage 6 | a candidate (not discarded) blob of a frame |
+| `salidas/insomnio_catalogo.parquet` | stage 4 (the logic, prompt 2) | stages 8 and 9 | a catalog polygon (dump site or negative) in a frame, whether or not it's in a blob |
+| `salidas/tabla_optico.parquet` | stage 5 | stage 6 | a candidate blob of a frame |
+| `salidas/tabla_optico_catalogo.parquet` | stage 5 | stages 8 and 9 (site card) | a catalog polygon in a frame |
+| `salidas/cruce_manchas_catalogo.parquet` | stage 6 (`cruce_manchas.py`) | stages 6 and 9 | a pair of blob and catalog polygon that touch (intersection > 0), not filtered by the 30 % |
+| `catalogos/frames.json` | stage 2 | stages 1, 4, 6, 7, 8 and 9 | a frame (a working area covered by one or more NISAR orbits) |
+| `salidas/particiones.json` | stage 6 (`armar_tabla.py`) | stage 7 and the CNN | it's not a table: which frames go in each partition |
+| `salidas/tabla_entrenamiento.parquet` | stage 6 (`armar_tabla.py`) | stage 7 and the CNN | a labeled blob of a frame |
+| `salidas/predicciones.parquet` | stage 7 (or the mock, while there's no model) | stage 9 (`veredicto.py`) | a candidate blob of a frame |
 
-Además el mock escribe `catalogo_mock.geojson`, que no es un contrato: son los polígonos de catálogo inventados contra los que se cruzan las manchas del mock.
+The mock also writes `catalogo_mock.geojson`, which isn't a contract: it's the made-up catalog polygons the mock blobs are crossed against.
 
 ---
 
 ## 1. `salidas/manchas.geojson`
-- **Lo escribe:** la etapa 4, frame por frame. Para el AMBA lo arma el prompt 3, desde `salidas/indice_80m.npz` con `insomnio.manchas()`.
-- **Lo leen:** la etapa 5 (óptico), la etapa 6 (cruce con el catálogo), la etapa 9 y la web.
-- **Una fila por mancha y frame** porque la mancha es la unidad del modelo: se entrena y se predice sobre manchas, no sobre polígonos del catálogo.
-- **Formato:** un `FeatureCollection` de GeoJSON. Cada feature es un `Polygon` o `MultiPolygon` en grados (lon, lat). Las propiedades son las columnas de abajo.
-- **Están todas las manchas, también las descartadas** (`descartada` dice el motivo). Las candidatas son las que tienen `descartada` en null.
-- **Sólo manchas.** Los polígonos del catálogo no van acá: su óptico va en `tabla_optico_catalogo.parquet`.
+- **Written by:** stage 4, frame by frame. For the AMBA it's built by prompt 3, from `salidas/indice_80m.npz` with `insomnio.manchas()`.
+- **Read by:** stage 5 (optical), stage 6 (cross with the catalog), stage 9 and the web.
+- **One row per blob and frame** because the blob is the model's unit: it trains and predicts on blobs, not on catalog polygons.
+- **Format:** a GeoJSON `FeatureCollection`. Each feature is a `Polygon` or `MultiPolygon` in degrees (lon, lat). The properties are the columns below.
+- **All the blobs are there, including the discarded ones** (`descartada` gives the reason). The candidates are the ones with `descartada` null.
+- **Blobs only.** Catalog polygons don't go here: their optical data goes in `tabla_optico_catalogo.parquet`.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_mancha` | texto | — | no | Identificador de la mancha: `MAN-<frame>-<n>` |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `ha` | número | ha | no | Superficie de la mancha |
-| `forma` | texto | — | no | Forma según `insomnio.manchas()`. Valores: `compacta`, `alargada`, `lineal` |
-| `descartada` | texto | — | sí | Motivo del descarte, o null si es candidata. Valores: `chica`, `lineal`, `lisa` |
-| `etiqueta` | entero | — | no | Número de la mancha en la capa `manchas` del índice |
-| `insomnio` | número | fracción 0-1 | sí | Media del insomnio por píxel en la mancha |
-| `persistencia` | número | fracción 0-1 | sí | Media de la persistencia por píxel |
-| `eco_db` | número | dB | sí | Eco medio de la mancha |
-| `elongacion` | número | cociente ≥ 1 | no | Eje mayor / eje menor |
-| `nucleo` | número | fracción 0-1 | no | Parte de la mancha que sobrevive a una erosión de 1 píxel |
-| `lat` | número | grados | no | *Opcional.* Latitud del centro |
-| `lon` | número | grados | no | *Opcional.* Longitud del centro |
+| `id_mancha` | text | — | no | Blob identifier: `MAN-<frame>-<n>` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `ha` | number | ha | no | Blob area |
+| `forma` | text | — | no | Shape according to `insomnio.manchas()`. Values: `compacta`, `alargada`, `lineal` |
+| `descartada` | text | — | yes | Reason for discarding, or null if it's a candidate. Values: `chica`, `lineal`, `lisa` |
+| `etiqueta` | integer | — | no | Blob number in the index's `manchas` layer |
+| `insomnio` | number | fraction 0-1 | yes | Mean per-pixel insomnia over the blob |
+| `persistencia` | number | fraction 0-1 | yes | Mean per-pixel persistence |
+| `eco_db` | number | dB | yes | Mean echo of the blob |
+| `elongacion` | number | ratio ≥ 1 | no | Major axis / minor axis |
+| `nucleo` | number | fraction 0-1 | no | Part of the blob that survives a 1-pixel erosion |
+| `lat` | number | degrees | no | *Optional.* Latitude of the center |
+| `lon` | number | degrees | no | *Optional.* Longitude of the center |
 
-**Clave** (no se repite): `id_mancha`.
+**Key** (not repeated): `id_mancha`.
 
-`insomnio`, `persistencia`, `eco_db`, `elongacion`, `nucleo`, `forma`, `descartada` y `etiqueta` son los resúmenes que devuelve `insomnio.manchas()`, sin cambios. Los valores permitidos de `descartada`: `chica` (menos de 10 ha), `lineal` (ruta o arroyo) y `lisa` (eco medio menor que −13 dB).
+`insomnio`, `persistencia`, `eco_db`, `elongacion`, `nucleo`, `forma`, `descartada` and `etiqueta` are the summaries `insomnio.manchas()` returns, unchanged. The allowed values of `descartada`: `chica` (under 10 ha), `lineal` (road or stream) and `lisa` (mean echo below −13 dB).
 
 ## 2. `salidas/tabla_radar.parquet`
-- **Lo escribe:** la etapa 4 (`extraer_manchas.py`, en la VM).
-- **Lo lee:** la etapa 6 (`armar_tabla.py`).
-- **Una fila por mancha candidata y frame.** Las descartadas no entran. Todo se mide **mancha contra anillo**.
-- Son las columnas de Movimiento, Rugosidad, Forma y Contexto de la sección 4 del plan.
+- **Written by:** stage 4 (`extraer_manchas.py`, on the VM).
+- **Read by:** stage 6 (`armar_tabla.py`).
+- **One row per candidate blob and frame.** Discarded ones aren't included. Everything is measured **blob against ring**.
+- They're the Movement, Roughness, Shape and Context columns of section 4 of the plan.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_mancha` | texto | — | no | Identificador de la mancha: `MAN-<frame>-<n>` |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `insomnio` | número | fracción 0-1 | no | Fracción de pares con coherencia < 0,80 × la del anillo, promediando órbitas |
-| `persistencia` | número | fracción 0-1 | no | Mínimo de la fracción despierta en los tres tramos de la serie |
-| `contraste_mediana` | número | cociente | sí | Coherencia de la mancha / la del anillo: mediana entre pares |
-| `contraste_desvio` | número | cociente | sí | Desvío estándar de ese cociente entre pares |
-| `coherencia_media` | número | coherencia 0-1 | sí | Coherencia absoluta media, normalizada a 12 días |
-| `tendencia` | número | coherencia por día | sí | Pendiente de la coherencia normalizada en el tiempo |
-| `n_pares` | entero | pares | no | Pares GUNW válidos sobre la mancha |
-| `n_orbitas` | entero | órbitas | no | Órbitas con pares suficientes |
-| `eco_db` | número | dB | sí | Eco (backscatter HH, gamma0) medio de la mancha |
-| `eco_contraste` | número | dB | sí | Eco de la mancha menos el del anillo |
-| `eco_variacion` | número | dB | sí | Desvío estándar del eco medio entre fechas |
-| `hv_hh` | número | dB | sí | Cociente entre polarizaciones: eco HV menos eco HH |
-| `area_ha` | número | ha | no | Superficie de la mancha (igual a `ha` en `manchas.geojson`) |
-| `elongacion` | número | cociente ≥ 1 | no | Eje mayor / eje menor (la de `insomnio.manchas()`) |
-| `compacidad` | número | 0-1 | sí | 4π × área / perímetro²: 1 es un círculo |
-| `agua_anillo` | número | fracción 0-1 | sí | Parte del anillo de 1,5 km que es agua (JRC) |
-| `urbano_anillo` | número | fracción 0-1 | sí | Parte del anillo que es urbana (ESA WorldCover, clase 50) |
-| `cultivo_anillo` | número | fracción 0-1 | sí | Parte del anillo que es cultivo (ESA WorldCover, clase 40) |
+| `id_mancha` | text | — | no | Blob identifier: `MAN-<frame>-<n>` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `insomnio` | number | fraction 0-1 | no | Fraction of pairs with coherence < 0.80 × the ring's, averaging orbits |
+| `persistencia` | number | fraction 0-1 | no | Minimum of the awake fraction across the three segments of the series |
+| `contraste_mediana` | number | ratio | yes | Blob coherence / ring coherence: median across pairs |
+| `contraste_desvio` | number | ratio | yes | Standard deviation of that ratio across pairs |
+| `coherencia_media` | number | coherence 0-1 | yes | Mean absolute coherence, normalized to 12 days |
+| `tendencia` | number | coherence per day | yes | Slope of the normalized coherence over time |
+| `n_pares` | integer | pairs | no | Valid GUNW pairs over the blob |
+| `n_orbitas` | integer | orbits | no | Orbits with enough pairs |
+| `eco_db` | number | dB | yes | Mean echo (HH backscatter, gamma0) of the blob |
+| `eco_contraste` | number | dB | yes | Blob echo minus ring echo |
+| `eco_variacion` | number | dB | yes | Standard deviation of the mean echo across dates |
+| `hv_hh` | number | dB | yes | Polarization ratio: HV echo minus HH echo |
+| `area_ha` | number | ha | no | Blob area (same as `ha` in `manchas.geojson`) |
+| `elongacion` | number | ratio ≥ 1 | no | Major axis / minor axis (the one from `insomnio.manchas()`) |
+| `compacidad` | number | 0-1 | yes | 4π × area / perimeter²: 1 is a circle |
+| `agua_anillo` | number | fraction 0-1 | yes | Part of the 1.5 km ring that is water (JRC) |
+| `urbano_anillo` | number | fraction 0-1 | yes | Part of the ring that is urban (ESA WorldCover, class 50) |
+| `cultivo_anillo` | number | fraction 0-1 | yes | Part of the ring that is cropland (ESA WorldCover, class 40) |
 
-**Clave** (no se repite): `id_mancha`.
+**Key** (not repeated): `id_mancha`.
 
 ## 3. `salidas/insomnio_catalogo.parquet`
-- **Lo escribe:** la etapa 4. La lógica es `insomnio_catalogo.py` (prompt 2).
-- **Lo leen:** la etapa 8 (evaluación de la actividad) y la etapa 9 (veredicto).
-- **Una fila por polígono del catálogo y frame, esté o no en una mancha.** Es la segunda dirección del cruce: sin esto no se puede decir "cerrado y quieto" de un basural que no formó ninguna mancha, como Luján.
-- Entran los basurales y los negativos cuyo polígono cae en el frame. Los de menos de 10 ha también entran, con `radar` = `no_alcanza`.
-- `radar` usa los umbrales de `insomnio.Parametros`: `despierto` (insomnio ≥ 0,70 y persistencia ≥ 0,50), `quieto` (insomnio ≤ 0,20 con un entorno coherente) y `no_alcanza` (todo lo demás).
-- Referencia en el AMBA (`salidas/fichas_80m.json`): Norte III 0,86 despierto, González Catán 1,00 despierto y Luján 0,00 quieto.
+- **Written by:** stage 4. The logic is `insomnio_catalogo.py` (prompt 2).
+- **Read by:** stage 8 (activity evaluation) and stage 9 (verdict).
+- **One row per catalog polygon and frame, whether or not it's in a blob.** It's the second direction of the cross: without it you can't say "closed and quiet" about a dump site that formed no blob, like Luján.
+- Dump sites and negatives whose polygon falls in the frame are included. Those under 10 ha are included too, with `radar` = `no_alcanza`.
+- `radar` uses the thresholds of `insomnio.Parametros`: `despierto` (insomnia ≥ 0.70 and persistence ≥ 0.50), `quieto` (insomnia ≤ 0.20 with coherent surroundings) and `no_alcanza` (everything else).
+- Reference in the AMBA (`salidas/fichas_80m.json`): Norte III 0.86 awake, González Catán 1.00 awake and Luján 0.00 quiet.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_catalogo` | texto | — | no | `id` del polígono en `data/basurales/` (`BAS-…`) o `data/negativos/` (`NEG-…`) |
-| `catalogo` | texto | — | no | De qué catálogo sale el polígono. Valores: `basurales`, `negativos` |
-| `complejo` | texto | — | sí | `CPX-…` de `complejos.json` para los basurales; null para los negativos |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `insomnio` | número | fracción 0-1 | sí | Insomnio del polígono contra su anillo, como `insomnio.ficha()` |
-| `persistencia` | número | fracción 0-1 | sí | Mínimo de la fracción despierta en los tres tramos |
-| `eco_db` | número | dB | sí | Mediana del eco en el polígono |
-| `n_pares` | entero | pares | no | Pares GUNW válidos sobre el polígono |
-| `radar` | texto | — | no | Lo que dice el radar, con los umbrales de `insomnio.Parametros`. Valores: `despierto`, `quieto`, `no_alcanza` |
-| `motivo` | texto | — | sí | *Opcional.* Por qué salió ese `radar` |
-| `area_ha` | número | ha | sí | *Opcional.* Superficie del polígono según el catálogo |
-| `estado` | texto | — | sí | *Opcional.* Estado del registro (sólo basurales). Valores: `abierto`, `cerrado`, `contradictorio`, `desconocido` |
-| `clase` | texto | — | sí | *Opcional.* Clase del negativo (`aeropuerto`, `cantera`…); null en basurales |
+| `id_catalogo` | text | — | no | Polygon `id` in `data/catalogos/basurales/` (`BAS-…`) or `data/catalogos/negativos/` (`NEG-…`) |
+| `catalogo` | text | — | no | Which catalog the polygon comes from. Values: `basurales`, `negativos` |
+| `complejo` | text | — | yes | `CPX-…` from `complejos.json` for dump sites; null for negatives |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `insomnio` | number | fraction 0-1 | yes | Insomnia of the polygon against its ring, like `insomnio.ficha()` |
+| `persistencia` | number | fraction 0-1 | yes | Minimum of the awake fraction across the three segments |
+| `eco_db` | number | dB | yes | Median echo over the polygon |
+| `n_pares` | integer | pairs | no | Valid GUNW pairs over the polygon |
+| `radar` | text | — | no | What the radar says, with the thresholds of `insomnio.Parametros`. Values: `despierto`, `quieto`, `no_alcanza` |
+| `motivo` | text | — | yes | *Optional.* Why that `radar` came out |
+| `area_ha` | number | ha | yes | *Optional.* Polygon area according to the catalog |
+| `estado` | text | — | yes | *Optional.* Registry status (dump sites only). Values: `abierto`, `cerrado`, `contradictorio`, `desconocido` |
+| `clase` | text | — | yes | *Optional.* Negative class (`aeropuerto`, `cantera`…); null for dump sites |
 
-**Clave** (no se repite): `id_catalogo`, `frame`.
+**Key** (not repeated): `id_catalogo`, `frame`.
 
 ## 4. `salidas/tabla_optico.parquet`
-- **Lo escribe:** la etapa 5 (`extraer_optico.py`).
-- **Lo lee:** la etapa 6.
-- **Una fila por mancha candidata y frame.** Se junta con `tabla_radar` por `id_mancha`.
-- **Fuente:** Sentinel-2 L2A (Copernicus), 6 a 8 escenas con pocas nubes en el período de NISAR, con las nubes enmascaradas con la capa SCL. Las reflectancias van de 0 a 1, con el offset del producto ya aplicado.
-- **Índices:** NDVI = (B08 − B04) / (B08 + B04); NDWI = (B03 − B08) / (B03 + B08); BSI = ((B11 + B04) − (B08 + B02)) / ((B11 + B04) + (B08 + B02)).
-- "Media" es la media entre fechas del valor medio de adentro. "Contraste" es ese valor menos el del anillo. Si no hubo ninguna escena útil, `n_escenas` es 0 y lo demás va vacío.
+- **Written by:** stage 5 (`extraer_optico.py`).
+- **Read by:** stage 6.
+- **One row per candidate blob and frame.** It's joined with `tabla_radar` by `id_mancha`.
+- **Source:** Sentinel-2 L2A (Copernicus), 6 to 8 low-cloud scenes in the NISAR period, with clouds masked using the SCL layer. Reflectances go from 0 to 1, with the product offset already applied.
+- **Indices:** NDVI = (B08 − B04) / (B08 + B04); NDWI = (B03 − B08) / (B03 + B08); BSI = ((B11 + B04) − (B08 + B02)) / ((B11 + B04) + (B08 + B02)).
+- "Mean" is the mean across dates of the mean value inside. "Contrast" is that value minus the ring's. If there was no useful scene, `n_escenas` is 0 and the rest is empty.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_mancha` | texto | — | no | Identificador de la mancha: `MAN-<frame>-<n>` |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `ndvi_media` | número | índice −1 a 1 | sí | NDVI adentro, media entre fechas |
-| `ndvi_variacion` | número | índice | sí | Desvío estándar del NDVI de adentro entre fechas |
-| `bsi_media` | número | índice −1 a 1 | sí | Suelo desnudo (BSI) adentro, media entre fechas |
-| `ndwi_media` | número | índice −1 a 1 | sí | NDWI (agua) adentro, media entre fechas |
-| `swir_b11` | número | reflectancia 0-1 | sí | Banda B11 (1,6 µm) adentro, media entre fechas |
-| `swir_b12` | número | reflectancia 0-1 | sí | Banda B12 (2,2 µm) adentro, media entre fechas |
-| `ndvi_contraste` | número | índice | sí | `ndvi_media` menos el NDVI del anillo |
-| `bsi_contraste` | número | índice | sí | `bsi_media` menos el BSI del anillo |
-| `ndwi_contraste` | número | índice | sí | `ndwi_media` menos el NDWI del anillo |
-| `swir_b11_contraste` | número | reflectancia | sí | `swir_b11` menos la B11 del anillo |
-| `swir_b12_contraste` | número | reflectancia | sí | `swir_b12` menos la B12 del anillo |
-| `n_escenas` | entero | escenas | no | Escenas de Sentinel-2 usadas |
-| `fechas` | texto | AAAA-MM-DD | sí | Fechas de esas escenas, separadas por coma y en orden |
+| `id_mancha` | text | — | no | Blob identifier: `MAN-<frame>-<n>` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `ndvi_media` | number | index −1 to 1 | yes | NDVI inside, mean across dates |
+| `ndvi_variacion` | number | index | yes | Standard deviation of the inside NDVI across dates |
+| `bsi_media` | number | index −1 to 1 | yes | Bare soil (BSI) inside, mean across dates |
+| `ndwi_media` | number | index −1 to 1 | yes | NDWI (water) inside, mean across dates |
+| `swir_b11` | number | reflectance 0-1 | yes | Band B11 (1.6 µm) inside, mean across dates |
+| `swir_b12` | number | reflectance 0-1 | yes | Band B12 (2.2 µm) inside, mean across dates |
+| `ndvi_contraste` | number | index | yes | `ndvi_media` minus the ring NDVI |
+| `bsi_contraste` | number | index | yes | `bsi_media` minus the ring BSI |
+| `ndwi_contraste` | number | index | yes | `ndwi_media` minus the ring NDWI |
+| `swir_b11_contraste` | number | reflectance | yes | `swir_b11` minus the ring B11 |
+| `swir_b12_contraste` | number | reflectance | yes | `swir_b12` minus the ring B12 |
+| `n_escenas` | integer | scenes | no | Sentinel-2 scenes used |
+| `fechas` | text | YYYY-MM-DD | yes | Dates of those scenes, comma-separated and in order |
 
-**Clave** (no se repite): `id_mancha`.
+**Key** (not repeated): `id_mancha`.
 
 ## 5. `salidas/tabla_optico_catalogo.parquet`
-- **Lo escribe:** la etapa 5, con el mismo script.
-- **Lo leen:** las etapas 8 y 9, para la ficha de cada sitio.
-- **Una fila por polígono del catálogo y frame.** Son las mismas columnas ópticas, pero la clave es `id_catalogo` en vez de `id_mancha`.
-- Existe para que los polígonos del catálogo no se mezclen con las manchas en `tabla_optico.parquet`. **No entra al entrenamiento.**
+- **Written by:** stage 5, with the same script.
+- **Read by:** stages 8 and 9, for each site's card.
+- **One row per catalog polygon and frame.** Same optical columns, but the key is `id_catalogo` instead of `id_mancha`.
+- It exists so catalog polygons don't get mixed with blobs in `tabla_optico.parquet`. **It doesn't go into training.**
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_catalogo` | texto | — | no | `id` del polígono en `data/basurales/` (`BAS-…`) o `data/negativos/` (`NEG-…`) |
-| `catalogo` | texto | — | no | De qué catálogo sale el polígono. Valores: `basurales`, `negativos` |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `ndvi_media` | número | índice −1 a 1 | sí | NDVI adentro, media entre fechas |
-| `ndvi_variacion` | número | índice | sí | Desvío estándar del NDVI de adentro entre fechas |
-| `bsi_media` | número | índice −1 a 1 | sí | Suelo desnudo (BSI) adentro, media entre fechas |
-| `ndwi_media` | número | índice −1 a 1 | sí | NDWI (agua) adentro, media entre fechas |
-| `swir_b11` | número | reflectancia 0-1 | sí | Banda B11 (1,6 µm) adentro, media entre fechas |
-| `swir_b12` | número | reflectancia 0-1 | sí | Banda B12 (2,2 µm) adentro, media entre fechas |
-| `ndvi_contraste` | número | índice | sí | `ndvi_media` menos el NDVI del anillo |
-| `bsi_contraste` | número | índice | sí | `bsi_media` menos el BSI del anillo |
-| `ndwi_contraste` | número | índice | sí | `ndwi_media` menos el NDWI del anillo |
-| `swir_b11_contraste` | número | reflectancia | sí | `swir_b11` menos la B11 del anillo |
-| `swir_b12_contraste` | número | reflectancia | sí | `swir_b12` menos la B12 del anillo |
-| `n_escenas` | entero | escenas | no | Escenas de Sentinel-2 usadas |
-| `fechas` | texto | AAAA-MM-DD | sí | Fechas de esas escenas, separadas por coma y en orden |
+| `id_catalogo` | text | — | no | Polygon `id` in `data/catalogos/basurales/` (`BAS-…`) or `data/catalogos/negativos/` (`NEG-…`) |
+| `catalogo` | text | — | no | Which catalog the polygon comes from. Values: `basurales`, `negativos` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `ndvi_media` | number | index −1 to 1 | yes | NDVI inside, mean across dates |
+| `ndvi_variacion` | number | index | yes | Standard deviation of the inside NDVI across dates |
+| `bsi_media` | number | index −1 to 1 | yes | Bare soil (BSI) inside, mean across dates |
+| `ndwi_media` | number | index −1 to 1 | yes | NDWI (water) inside, mean across dates |
+| `swir_b11` | number | reflectance 0-1 | yes | Band B11 (1.6 µm) inside, mean across dates |
+| `swir_b12` | number | reflectance 0-1 | yes | Band B12 (2.2 µm) inside, mean across dates |
+| `ndvi_contraste` | number | index | yes | `ndvi_media` minus the ring NDVI |
+| `bsi_contraste` | number | index | yes | `bsi_media` minus the ring BSI |
+| `ndwi_contraste` | number | index | yes | `ndwi_media` minus the ring NDWI |
+| `swir_b11_contraste` | number | reflectance | yes | `swir_b11` minus the ring B11 |
+| `swir_b12_contraste` | number | reflectance | yes | `swir_b12` minus the ring B12 |
+| `n_escenas` | integer | scenes | no | Sentinel-2 scenes used |
+| `fechas` | text | YYYY-MM-DD | yes | Dates of those scenes, comma-separated and in order |
 
-**Clave** (no se repite): `id_catalogo`, `frame`.
+**Key** (not repeated): `id_catalogo`, `frame`.
 
 ## 6. `salidas/cruce_manchas_catalogo.parquet`
-- **Lo escribe:** la etapa 6 (`cruce_manchas.py`).
-- **Lo leen:** la etapa 6 (`armar_tabla.py`, para etiquetar) y la etapa 9 (para saber si una mancha ya era conocida).
-- **Una fila por par de mancha y polígono que se tocan** (intersección mayor que cero). Una mancha puede tener varias filas y un polígono también.
-- **No se filtra por el 30 %:** el archivo trae todos los cruces y el que lo lee aplica el criterio (`contratos.CRITERIO_CRUCE`, 0,30 sobre `frac_area_menor`; es un supuesto que se ajusta mirando el AMBA).
-- Las áreas se miden en metros (UTM del frame), no en grados.
+- **Written by:** stage 6 (`cruce_manchas.py`).
+- **Read by:** stage 6 (`armar_tabla.py`, to label) and stage 9 (to know whether a blob was already known).
+- **One row per pair of blob and polygon that touch** (intersection greater than zero). A blob can have several rows and so can a polygon.
+- **It isn't filtered by the 30 %:** the file carries all the crosses and the reader applies the criterion (`contratos.CRITERIO_CRUCE`, 0.30 on `frac_area_menor`; it's an assumption tuned by looking at the AMBA).
+- Areas are measured in meters (the frame's UTM), not in degrees.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_mancha` | texto | — | no | Identificador de la mancha: `MAN-<frame>-<n>` |
-| `id_catalogo` | texto | — | no | `id` del polígono en `data/basurales/` (`BAS-…`) o `data/negativos/` (`NEG-…`) |
-| `catalogo` | texto | — | no | De qué catálogo sale el polígono. Valores: `basurales`, `negativos` |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `frac_mancha` | número | fracción 0-1 | no | Intersección / área de la mancha |
-| `frac_poligono` | número | fracción 0-1 | no | Intersección / área del polígono |
-| `frac_area_menor` | número | fracción 0-1 | no | Intersección / la menor de las dos áreas (el máximo de las otras dos) |
-| `complejo` | texto | — | sí | *Opcional.* `CPX-…` del basural; null en negativos |
-| `clase_negativo` | texto | — | sí | *Opcional.* Clase del negativo; null en basurales |
+| `id_mancha` | text | — | no | Blob identifier: `MAN-<frame>-<n>` |
+| `id_catalogo` | text | — | no | Polygon `id` in `data/catalogos/basurales/` (`BAS-…`) or `data/catalogos/negativos/` (`NEG-…`) |
+| `catalogo` | text | — | no | Which catalog the polygon comes from. Values: `basurales`, `negativos` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `frac_mancha` | number | fraction 0-1 | no | Intersection / blob area |
+| `frac_poligono` | number | fraction 0-1 | no | Intersection / polygon area |
+| `frac_area_menor` | number | fraction 0-1 | no | Intersection / the smaller of the two areas (the maximum of the other two) |
+| `complejo` | text | — | yes | *Optional.* `CPX-…` of the dump site; null for negatives |
+| `clase_negativo` | text | — | yes | *Optional.* Negative class; null for dump sites |
 
-**Clave** (no se repite): `id_mancha`, `id_catalogo`.
+**Key** (not repeated): `id_mancha`, `id_catalogo`.
 
 ## 7. `catalogos/frames.json`
-- **Lo escribe:** la etapa 2 (`frames_elegir.py`).
-- **Lo leen:** la etapa 1 y la 4 (caja y EPSG de cada frame), la 6 y la 7 (ciudad, país y qué queda para la prueba final), la 8 y la 9.
-- **Una entrada por frame.** Va en `data/`, en la raíz del repo, junto a los catálogos.
-- **Formato:** `{"meta": {…}, "frames": [ {…}, … ]}`, como los catálogos. En `meta` van la fecha, el script, la fuente (API de ASF) y el criterio de elección.
+- **Written by:** stage 2 (`frames_elegir.py`).
+- **Read by:** stages 1 and 4 (each frame's box and EPSG), 6 and 7 (city, country and what's kept for the final test), 8 and 9.
+- **One entry per frame.** It goes in `data/catalogos/`, next to the catalogs.
+- **Format:** `{"meta": {…}, "frames": [ {…}, … ]}`, like the catalogs. `meta` holds the date, the script, the source (ASF API) and the selection criterion.
 
 ```json
 {
@@ -237,83 +237,83 @@ Además el mock escribe `catalogo_mock.geojson`, que no es un contrato: son los 
   ]
 }
 ```
-Los conteos del ejemplo son ilustrativos.
+The counts in the example are illustrative.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `orbita` | lista de enteros | — | no | Órbitas (tracks) de NISAR que se usan. El AMBA usa dos: `[10, 161]` |
-| `ciudad` | texto | — | no | Ciudad de referencia |
-| `pais` | texto | ISO 3166-1 alfa-3 | no | País, como en los catálogos (`ARG`, `USA`, `IND`) |
-| `hemisferio` | texto | — | no | Hemisferio de la zona UTM. Valores: `N`, `S` |
-| `epsg` | entero | — | no | EPSG de la grilla UTM del producto (326xx norte, 327xx sur) |
-| `bbox` | lista de 4 números | grados | no | `[lon_oeste, lat_sur, lon_este, lat_norte]`, como en GeoJSON. OJO: `geo.CAJA` va en otro orden |
-| `n_gunw` | entero | pares | no | Pares GUNW `PR` disponibles |
-| `fecha_inicio` | texto | AAAA-MM-DD | no | Primera fecha de la serie |
-| `fecha_fin` | texto | AAAA-MM-DD | no | Última fecha de la serie |
-| `n_basurales_10ha` | objeto {clave: entero} | complejos | no | Basurales de 10 ha o más por estado, contando cada complejo una vez. Claves: `abierto`, `cerrado`, `desconocido` |
-| `n_negativos` | objeto {clave: entero} | polígonos | no | Negativos por clase (`aeropuerto`, `cantera`…) |
-| `reservado_prueba` | booleano | — | no | true si queda fuera del entrenamiento (Argentina) |
-| `frames_nisar` | lista de textos | — | sí | *Opcional.* Track, dirección y frame de cada producto, como en el nombre: `010_D_106` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `orbita` | list of integers | — | no | NISAR orbits (tracks) used. The AMBA uses two: `[10, 161]` |
+| `ciudad` | text | — | no | Reference city |
+| `pais` | text | ISO 3166-1 alpha-3 | no | Country, as in the catalogs (`ARG`, `USA`, `IND`) |
+| `hemisferio` | text | — | no | Hemisphere of the UTM zone. Values: `N`, `S` |
+| `epsg` | integer | — | no | EPSG of the product's UTM grid (326xx north, 327xx south) |
+| `bbox` | list of 4 numbers | degrees | no | `[lon_oeste, lat_sur, lon_este, lat_norte]`, as in GeoJSON. WATCH OUT: `geo.CAJA` uses another order |
+| `n_gunw` | integer | pairs | no | Available `PR` GUNW pairs |
+| `fecha_inicio` | text | YYYY-MM-DD | no | First date of the series |
+| `fecha_fin` | text | YYYY-MM-DD | no | Last date of the series |
+| `n_basurales_10ha` | object {key: integer} | complexes | no | Dump sites of 10 ha or more by status, counting each complex once. Keys: `abierto`, `cerrado`, `desconocido` |
+| `n_negativos` | object {key: integer} | polygons | no | Negatives by class (`aeropuerto`, `cantera`…) |
+| `reservado_prueba` | boolean | — | no | true if it stays out of training (Argentina) |
+| `frames_nisar` | list of texts | — | yes | *Optional.* Track, direction and frame of each product, as in the name: `010_D_106` |
 
-**Clave** (no se repite): `frame`.
+**Key** (not repeated): `frame`.
 
 ## 8. `salidas/tabla_entrenamiento.parquet`
-- **Lo escribe:** la etapa 6 (`armar_tabla.py`).
-- **Lo leen:** la etapa 7 (`entrenar.py`) y la CNN opcional.
-- **Una fila por mancha etiquetada y frame.** Es la tabla de la sección 4 del plan: identificación, las 29 variables (`contratos.COLUMNAS_MODELO`) y la etiqueta.
-- **Qué manchas entran** (etapa 6): las que se cruzan, con el criterio del 30 %, con polígonos de **un solo** catálogo. Con un basural de cualquier estado → `basural_activo`; con un negativo → `otro_movil`. Las que se cruzan con los dos, o con ninguno, no entran.
-- **Un complejo cuenta una vez:** si varias manchas caen sobre el mismo complejo, queda una fila por `complejo` y frame.
-- **Las variables de EMIT no entran** (sería fuga de datos).
-- Los frames de Argentina están en la tabla, pero en `prueba_final` (ver `particiones.json`).
+- **Written by:** stage 6 (`armar_tabla.py`).
+- **Read by:** stage 7 (`entrenar.py`) and the optional CNN.
+- **One row per labeled blob and frame.** It's the table in section 4 of the plan: identification, the 29 variables (`contratos.COLUMNAS_MODELO`) and the label.
+- **Which blobs get in** (stage 6): those that cross, with the 30 % criterion, polygons of **a single** catalog. With a dump site of any status → `basural_activo`; with a negative → `otro_movil`. Those that cross both, or neither, don't get in.
+- **A complex counts once:** if several blobs fall on the same complex, one row per `complejo` and frame is kept.
+- **EMIT variables don't go in** (it would be data leakage).
+- The Argentine frames are in the table, but in `prueba_final` (see `particiones.json`).
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_mancha` | texto | — | no | Identificador de la mancha: `MAN-<frame>-<n>` |
-| `id_catalogo` | texto | — | no | El polígono con el que se cruza (el de mayor `frac_area_menor`) |
-| `complejo` | texto | — | no | `CPX-…` del basural; en los negativos, su propio `id_catalogo`. Sirve para agrupar |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `ciudad` | texto | — | no | La de `frames.json` |
-| `pais` | texto | ISO 3166-1 alfa-3 | no | El de `frames.json` |
-| `clase_negativo` | texto | — | sí | Clase del negativo (`aeropuerto`…); null si es basural |
-| `insomnio` | número | fracción 0-1 | no | Fracción de pares con coherencia < 0,80 × la del anillo, promediando órbitas |
-| `persistencia` | número | fracción 0-1 | no | Mínimo de la fracción despierta en los tres tramos de la serie |
-| `contraste_mediana` | número | cociente | sí | Coherencia de la mancha / la del anillo: mediana entre pares |
-| `contraste_desvio` | número | cociente | sí | Desvío estándar de ese cociente entre pares |
-| `coherencia_media` | número | coherencia 0-1 | sí | Coherencia absoluta media, normalizada a 12 días |
-| `tendencia` | número | coherencia por día | sí | Pendiente de la coherencia normalizada en el tiempo |
-| `n_pares` | entero | pares | no | Pares GUNW válidos sobre la mancha |
-| `n_orbitas` | entero | órbitas | no | Órbitas con pares suficientes |
-| `eco_db` | número | dB | sí | Eco (backscatter HH, gamma0) medio de la mancha |
-| `eco_contraste` | número | dB | sí | Eco de la mancha menos el del anillo |
-| `eco_variacion` | número | dB | sí | Desvío estándar del eco medio entre fechas |
-| `hv_hh` | número | dB | sí | Cociente entre polarizaciones: eco HV menos eco HH |
-| `ndvi_media` | número | índice −1 a 1 | sí | NDVI adentro, media entre fechas |
-| `ndvi_variacion` | número | índice | sí | Desvío estándar del NDVI de adentro entre fechas |
-| `bsi_media` | número | índice −1 a 1 | sí | Suelo desnudo (BSI) adentro, media entre fechas |
-| `ndwi_media` | número | índice −1 a 1 | sí | NDWI (agua) adentro, media entre fechas |
-| `swir_b11` | número | reflectancia 0-1 | sí | Banda B11 (1,6 µm) adentro, media entre fechas |
-| `swir_b12` | número | reflectancia 0-1 | sí | Banda B12 (2,2 µm) adentro, media entre fechas |
-| `ndvi_contraste` | número | índice | sí | `ndvi_media` menos el NDVI del anillo |
-| `bsi_contraste` | número | índice | sí | `bsi_media` menos el BSI del anillo |
-| `ndwi_contraste` | número | índice | sí | `ndwi_media` menos el NDWI del anillo |
-| `swir_b11_contraste` | número | reflectancia | sí | `swir_b11` menos la B11 del anillo |
-| `swir_b12_contraste` | número | reflectancia | sí | `swir_b12` menos la B12 del anillo |
-| `area_ha` | número | ha | no | Superficie de la mancha (igual a `ha` en `manchas.geojson`) |
-| `elongacion` | número | cociente ≥ 1 | no | Eje mayor / eje menor (la de `insomnio.manchas()`) |
-| `compacidad` | número | 0-1 | sí | 4π × área / perímetro²: 1 es un círculo |
-| `agua_anillo` | número | fracción 0-1 | sí | Parte del anillo de 1,5 km que es agua (JRC) |
-| `urbano_anillo` | número | fracción 0-1 | sí | Parte del anillo que es urbana (ESA WorldCover, clase 50) |
-| `cultivo_anillo` | número | fracción 0-1 | sí | Parte del anillo que es cultivo (ESA WorldCover, clase 40) |
-| `cnn_p_basural` | número | probabilidad 0-1 | sí | *Opcional.* Lo que dice la ResNet-50, fuera de la partición |
-| `clase` | texto | — | no | La etiqueta. Valores: `basural_activo`, `otro_movil` |
+| `id_mancha` | text | — | no | Blob identifier: `MAN-<frame>-<n>` |
+| `id_catalogo` | text | — | no | The polygon it crosses (the one with the largest `frac_area_menor`) |
+| `complejo` | text | — | no | `CPX-…` of the dump site; for negatives, its own `id_catalogo`. Used for grouping |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `ciudad` | text | — | no | The one in `frames.json` |
+| `pais` | text | ISO 3166-1 alpha-3 | no | The one in `frames.json` |
+| `clase_negativo` | text | — | yes | Negative class (`aeropuerto`…); null if it's a dump site |
+| `insomnio` | number | fraction 0-1 | no | Fraction of pairs with coherence < 0.80 × the ring's, averaging orbits |
+| `persistencia` | number | fraction 0-1 | no | Minimum of the awake fraction across the three segments of the series |
+| `contraste_mediana` | number | ratio | yes | Blob coherence / ring coherence: median across pairs |
+| `contraste_desvio` | number | ratio | yes | Standard deviation of that ratio across pairs |
+| `coherencia_media` | number | coherence 0-1 | yes | Mean absolute coherence, normalized to 12 days |
+| `tendencia` | number | coherence per day | yes | Slope of the normalized coherence over time |
+| `n_pares` | integer | pairs | no | Valid GUNW pairs over the blob |
+| `n_orbitas` | integer | orbits | no | Orbits with enough pairs |
+| `eco_db` | number | dB | yes | Mean echo (HH backscatter, gamma0) of the blob |
+| `eco_contraste` | number | dB | yes | Blob echo minus ring echo |
+| `eco_variacion` | number | dB | yes | Standard deviation of the mean echo across dates |
+| `hv_hh` | number | dB | yes | Polarization ratio: HV echo minus HH echo |
+| `ndvi_media` | number | index −1 to 1 | yes | NDVI inside, mean across dates |
+| `ndvi_variacion` | number | index | yes | Standard deviation of the inside NDVI across dates |
+| `bsi_media` | number | index −1 to 1 | yes | Bare soil (BSI) inside, mean across dates |
+| `ndwi_media` | number | index −1 to 1 | yes | NDWI (water) inside, mean across dates |
+| `swir_b11` | number | reflectance 0-1 | yes | Band B11 (1.6 µm) inside, mean across dates |
+| `swir_b12` | number | reflectance 0-1 | yes | Band B12 (2.2 µm) inside, mean across dates |
+| `ndvi_contraste` | number | index | yes | `ndvi_media` minus the ring NDVI |
+| `bsi_contraste` | number | index | yes | `bsi_media` minus the ring BSI |
+| `ndwi_contraste` | number | index | yes | `ndwi_media` minus the ring NDWI |
+| `swir_b11_contraste` | number | reflectance | yes | `swir_b11` minus the ring B11 |
+| `swir_b12_contraste` | number | reflectance | yes | `swir_b12` minus the ring B12 |
+| `area_ha` | number | ha | no | Blob area (same as `ha` in `manchas.geojson`) |
+| `elongacion` | number | ratio ≥ 1 | no | Major axis / minor axis (the one from `insomnio.manchas()`) |
+| `compacidad` | number | 0-1 | yes | 4π × area / perimeter²: 1 is a circle |
+| `agua_anillo` | number | fraction 0-1 | yes | Part of the 1.5 km ring that is water (JRC) |
+| `urbano_anillo` | number | fraction 0-1 | yes | Part of the ring that is urban (ESA WorldCover, class 50) |
+| `cultivo_anillo` | number | fraction 0-1 | yes | Part of the ring that is cropland (ESA WorldCover, class 40) |
+| `cnn_p_basural` | number | probability 0-1 | yes | *Optional.* What the ResNet-50 says, out of partition |
+| `clase` | text | — | no | The label. Values: `basural_activo`, `otro_movil` |
 
-**Clave** (no se repite): `id_mancha`.
+**Key** (not repeated): `id_mancha`.
 
 ## 9. `salidas/particiones.json`
-- **Lo escribe:** la etapa 6, junto con la tabla.
-- **Lo leen:** la etapa 7 y la CNN, que tiene que usar las mismas particiones.
-- **Las particiones van por frame:** todas las manchas de un frame caen en la misma, así un complejo nunca queda repartido. Los frames de Argentina (`reservado_prueba` en `frames.json`) van a `prueba_final` y no se usan para entrenar ni para elegir nada.
+- **Written by:** stage 6, together with the table.
+- **Read by:** stage 7 and the CNN, which has to use the same partitions.
+- **Partitions go by frame:** all the blobs of a frame fall in the same one, so a complex is never split. The Argentine frames (`reservado_prueba` in `frames.json`) go to `prueba_final` and are used neither for training nor for choosing anything.
 
 ```json
 {
@@ -323,53 +323,53 @@ Los conteos del ejemplo son ilustrativos.
 }
 ```
 
-| Clave | Tipo | Qué es |
+| Key | Type | What it is |
 |---|---|---|
-| `meta.umbral_insomnio` | número | El insomnio mínimo con el que se armaron las manchas de entrenamiento (0,70, o menos si se bajó sólo para entrenar) |
-| `meta.criterio_cruce` | número | La fracción del área menor que se usó para etiquetar (0,30) |
-| `particiones` | objeto | Número de partición (como texto) → lista de frames. Al menos dos particiones, ninguna vacía |
-| `prueba_final` | lista | Frames que quedan fuera del entrenamiento. Puede estar vacía |
+| `meta.umbral_insomnio` | number | The minimum insomnia used to build the training blobs (0.70, or less if it was lowered only for training) |
+| `meta.criterio_cruce` | number | The fraction of the smaller area used for labeling (0.30) |
+| `particiones` | object | Partition number (as text) → list of frames. At least two partitions, none empty |
+| `prueba_final` | list | Frames left out of training. It can be empty |
 
-Cada frame de la tabla aparece exactamente una vez. `contratos.particion_por_frame(d)` devuelve `{frame: partición}`. En `meta` se puede agregar lo que haga falta (semilla, conteos por clase).
+Each frame in the table appears exactly once. `contratos.particion_por_frame(d)` returns `{frame: partition}`. Anything needed (seed, counts per class) can be added to `meta`.
 
 ## 10. `salidas/predicciones.parquet`
-- **Lo escribe:** la etapa 7, cuando haya modelo. Mientras tanto, el mock.
-- **Lo lee:** la etapa 9 (`veredicto.py`).
-- **Una fila por mancha candidata y frame.** Para los frames de entrenamiento, la probabilidad sale de la partición en la que la mancha no se usó para entrenar.
+- **Written by:** stage 7, once there's a model. Meanwhile, the mock.
+- **Read by:** stage 9 (`veredicto.py`).
+- **One row per candidate blob and frame.** For the training frames, the probability comes from the partition in which the blob wasn't used for training.
 
-| Columna | Tipo | Unidad | ¿Vacía? | Qué es |
+| Column | Type | Unit | Empty? | What it is |
 |---|---|---|---|---|
-| `id_mancha` | texto | — | no | Identificador de la mancha: `MAN-<frame>-<n>` |
-| `frame` | texto | — | no | Clave del frame, la de `frames.json` (por ejemplo `AMBA`) |
-| `p_basural` | número | probabilidad 0-1 | no | Probabilidad de `basural_activo` según el modelo |
+| `id_mancha` | text | — | no | Blob identifier: `MAN-<frame>-<n>` |
+| `frame` | text | — | no | Frame key, the one in `frames.json` (for example `AMBA`) |
+| `p_basural` | number | probability 0-1 | no | Probability of `basural_activo` according to the model |
 
-**Clave** (no se repite): `id_mancha`.
+**Key** (not repeated): `id_mancha`.
 
 ---
 
-## Qué trae el mock
-`python motor/contratos_mock.py` escribe en `motor/datos/mock/` (que no se sube) todos los archivos de arriba, con el mismo nombre y en una sola carpeta. Son coherentes entre sí: los ids cruzan de un archivo al otro.
+## What the mock carries
+`python motor/contratos_mock.py` writes to `motor/datos/mock/` (not committed) all the files above, with the same names and in a single folder. They're consistent with each other: the ids cross from one file to another.
 
-- **Frames:** `AMBA` (Argentina, va a `prueba_final`) y tres más para que haya particiones: `DELHI`, `CDMX` y `NAIROBI`. Las órbitas, las fechas y los conteos de los tres son inventados.
-- **Por frame, 10 manchas candidatas:** 2 sobre un basural, 4 sobre un negativo (aeropuerto, cantera, contenedores y humedal), 1 que toca un basural y un negativo, 1 que roza un negativo con menos del 30 %, y 2 que no tocan nada. Más 3 descartadas (chica, lineal y lisa), que sólo están en el geojson.
-- **Polígonos del catálogo sin mancha:** un basural cerrado y quieto, uno abierto y quieto, uno de menos de 10 ha, un cultivo quieto y una obra chica. Fuera del AMBA hay además un basural cerrado con una mancha encima, para probar "cerrado pero despierto".
-- **Lo único real:** los ids y los valores de radar de Norte III (`BAS-053304`), González Catán (`BAS-000001`) y Luján (`BAS-000007`) en `insomnio_catalogo.parquet`, copiados de `salidas/fichas_80m.json`, y el id del aeropuerto El Palomar (`NEG-AMBA-000931`). Sus geometrías en el mock son rectángulos inventados.
-- **Más filas:** `--manchas-por-frame 60` (para probar el entrenamiento con algo más que 27 filas) y `--semilla`.
+- **Frames:** `AMBA` (Argentina, goes to `prueba_final`) and three more so there are partitions: `DELHI`, `CDMX` and `NAIROBI`. The orbits, dates and counts of those three are made up.
+- **Per frame, 10 candidate blobs:** 2 over a dump site, 4 over a negative (airport, quarry, containers and wetland), 1 touching a dump site and a negative, 1 grazing a negative with less than 30 %, and 2 touching nothing. Plus 3 discarded ones (small, linear and smooth), which are only in the geojson.
+- **Catalog polygons without a blob:** a closed quiet dump site, an open quiet one, one under 10 ha, a quiet crop field and a small construction site. Outside the AMBA there's also a closed dump site with a blob on top, to test "closed but awake".
+- **The only real things:** the ids and radar values of Norte III (`BAS-053304`), González Catán (`BAS-000001`) and Luján (`BAS-000007`) in `insomnio_catalogo.parquet`, copied from `salidas/fichas_80m.json`, and the id of the El Palomar airport (`NEG-AMBA-000931`). Their geometries in the mock are made-up rectangles.
+- **More rows:** `--manchas-por-frame 60` (to test training with more than 27 rows) and `--semilla`.
 
-## Decisiones que se tomaron acá
-Las que no estaban en el plan y hubo que fijar. Si alguna molesta, se discute en la mesa y se cambia en `contratos.py` y acá a la vez.
+## Decisions made here
+The ones that weren't in the plan and had to be fixed. If any is a problem, it's discussed with the team and changed in `contratos.py` and here at the same time.
 
-1. **`frames.json` va con los catálogos** (`data/catalogos/frames.json`), y `orbita` es una lista porque el AMBA usa dos órbitas.
-2. **`reservado_prueba`** en cada frame, para que las particiones salgan de un solo lugar.
-3. **Columnas de contraste óptico** (`ndvi_contraste`, `bsi_contraste`, `ndwi_contraste`, `swir_b11_contraste`, `swir_b12_contraste`): el plan pide los índices "adentro y contra el anillo" pero sólo nombra los de adentro.
-4. **`tabla_optico_catalogo.parquet`**, para el óptico de los polígonos del catálogo, separado del de las manchas.
-5. **`predicciones.parquet`**, con `p_basural`, para que el veredicto se pueda escribir antes de que haya modelo.
-6. **`clase_negativo`** en la tabla de entrenamiento, para reportar en qué clase de negativo se equivoca el modelo; y `complejo` nunca vacío (en los negativos es su propio id), para agrupar sin casos especiales.
-7. **`fechas` es un texto** con las fechas separadas por coma, no una lista: se lee igual desde cualquier herramienta.
-8. **Unidades que el plan no decía:** `tendencia` en coherencia por día; `hv_hh` y `eco_contraste` en dB (restas); `compacidad` = 4π × área / perímetro²; `urbano_anillo` y `cultivo_anillo` con las clases 50 y 40 de ESA WorldCover.
+1. **`frames.json` goes with the catalogs** (`data/catalogos/frames.json`), and `orbita` is a list because the AMBA uses two orbits.
+2. **`reservado_prueba`** on each frame, so the partitions come from a single place.
+3. **Optical contrast columns** (`ndvi_contraste`, `bsi_contraste`, `ndwi_contraste`, `swir_b11_contraste`, `swir_b12_contraste`): the plan asks for the indices "inside and against the ring" but only names the inside ones.
+4. **`tabla_optico_catalogo.parquet`**, for the optical data of the catalog polygons, separate from the blobs'.
+5. **`predicciones.parquet`**, with `p_basural`, so the verdict can be written before there's a model.
+6. **`clase_negativo`** in the training table, to report which negative class the model gets wrong; and `complejo` never empty (for negatives it's their own id), to group without special cases.
+7. **`fechas` is a text** with the dates comma-separated, not a list: it reads the same from any tool.
+8. **Units the plan didn't state:** `tendencia` in coherence per day; `hv_hh` and `eco_contraste` in dB (differences); `compacidad` = 4π × area / perimeter²; `urbano_anillo` and `cultivo_anillo` with ESA WorldCover classes 50 and 40.
 
-## Fuentes
-- NISAR GUNW y GCOV (NASA/ISRO, vía ASF DAAC): movimiento y rugosidad.
-- Sentinel-2 L2A (Copernicus, ESA): óptico.
-- JRC Global Surface Water y ESA WorldCover: contexto.
-- OpenStreetMap vía Overture Maps (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP (dominio público) y NASA EMIT: los catálogos de `data/catalogos/` (detalle en `data/README.md`).
+## Sources
+- NISAR GUNW and GCOV (NASA/ISRO, via ASF DAAC): movement and roughness.
+- Sentinel-2 L2A (Copernicus, ESA): optical.
+- JRC Global Surface Water and ESA WorldCover: context.
+- OpenStreetMap via Overture Maps (ODbL), Climate TRACE (CC BY 4.0), EPA LMOP (public domain) and NASA EMIT: the catalogs in `data/catalogos/` (details in `data/README.md`).
