@@ -1,14 +1,14 @@
 # docs/
 
-La documentación del proyecto, en pocos archivos. Cada uno dice de dónde salen sus números (qué script y qué archivo de `data/`).
+The project documentation, in a few files. Each one says where its numbers come from (which script and which file in `data/`).
 
-| Archivo | Qué tiene |
+| File | What it has |
 |---|---|
-| [`idea.md`](idea.md) | El problema, qué hace Dumpsite, el caso Luján y lo que no dice |
-| [`indice-insomnio.md`](indice-insomnio.md) | Cómo se calcula el índice de insomnio, los umbrales y sus límites |
-| [`modelo.md`](modelo.md) | El flujo completo, el modelo de abierto contra cerrado y el de basural por mancha |
-| [`resultados.md`](resultados.md) | Lo que dio en los 30 frames: manchas, veredictos, matriz de actividad y casos para mirar a mano |
-| [`datos.md`](datos.md) | Las fuentes de datos, los catálogos y sus licencias |
-| [`contratos-datos.md`](contratos-datos.md) | El formato de cada archivo intermedio del motor (lo valida `motor/contratos.py`) |
-| `figuras/` | Figuras de coherencia de las primeras pruebas y del análisis de Norte III |
-| `img/` | Capturas de la web y del video para el README |
+| [`idea.md`](idea.md) | The problem, what Dumpsite does, the Luján case and what it doesn't say |
+| [`indice-insomnio.md`](indice-insomnio.md) | How the insomnia index is computed, the thresholds and their limits |
+| [`modelo.md`](modelo.md) | The full flow, the open-versus-closed model and the per-blob dump-site model |
+| [`resultados.md`](resultados.md) | What came out in the 30 frames: blobs, verdicts, activity matrix and cases to check by hand |
+| [`datos.md`](datos.md) | The data sources, the catalogs and their licenses |
+| [`contratos-datos.md`](contratos-datos.md) | The format of each intermediate file of the engine (validated by `motor/contratos.py`) |
+| `figuras/` | Coherence figures from the first tests and from the Norte III analysis |
+| `img/` | Screenshots of the web and the video for the README |
