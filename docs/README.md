@@ -9,6 +9,7 @@ The project documentation, in a few files. Each one says where its numbers come 
 | [`model.md`](model.md) | The full flow, the open-versus-closed model and the per-blob dump-site model |
 | [`results.md`](results.md) | What came out in the 30 frames: blobs, verdicts, activity matrix and cases to check by hand |
 | [`data.md`](data.md) | The data sources, the catalogs and their licenses |
+| [`argentina.md`](argentina.md) | What the catalog has in Argentina and the classifier in 7 Argentine zones outside the AMBA |
 | [`roadmap.md`](roadmap.md) | What we would do next to improve the project |
 | [`data-contracts.md`](data-contracts.md) | The format of each intermediate file of the engine (validated by `motor/contratos.py`) |
 | `figures/` | Coherence figures from the first tests and from the Norte III analysis |
