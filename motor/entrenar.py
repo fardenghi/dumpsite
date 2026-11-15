@@ -1,33 +1,33 @@
-"""Etapa 7: LightGBM binario (`basural_activo` contra `otro_movil`) con validación cruzada por frame.
+"""Stage 7: binary LightGBM (`basural_activo` versus `otro_movil`) with cross-validation by frame.
 
-Lee `tabla_entrenamiento.parquet` y `particiones.json`; escribe `modelo.txt` y `metricas.json` y, si se le pasan las
-tablas de todas las manchas candidatas, `predicciones.parquet` (según `../docs/contratos-datos.md`).
+Reads `tabla_entrenamiento.parquet` and `particiones.json`; writes `modelo.txt` and `metricas.json` and, if given the
+tables of all the candidate blobs, `predicciones.parquet` (following `../docs/contratos-datos.md`).
 
-    python entrenar.py                                      # lee y escribe en ../data/salidas/
+    python entrenar.py                                      # reads and writes in ../data/salidas/
     python entrenar.py --datos datos/mock --salida datos/mock/prueba --predecir
-    python entrenar.py --datos datos/amba_provisional --humo   # pocas filas, un solo frame: sólo ver que corre
+    python entrenar.py --datos datos/amba_provisional --humo   # few rows, a single frame: just check that it runs
 
-- Cada partición se predice con un modelo entrenado sin ella (fuera de la partición). Los frames de `prueba_final`
-  (Argentina) no se usan para entrenar ni para elegir nada: se predicen con el modelo final, entrenado con todo lo demás.
-- Peso por clase (`class_weight="balanced"`), árboles chicos y regularizados: hay pocas filas por frame.
-- Por frame: AUC con intervalo bootstrap del 95 %, y precisión y recall con umbral 0,5 e intervalo de Wilson del 95 %.
-- En qué clase de negativo se equivoca: fracción de cada `clase_negativo` que el modelo da como basural (≥ 0,5).
-- Importancia de variables: ganancia del modelo final.
-- `--humo`: si no hay al menos dos particiones (por ejemplo, sólo el AMBA), valida agrupando por complejo y avisa
-  en `metricas.json` que **no es una métrica para reportar**.
-- `n_pares` y `n_orbitas` no entran al modelo: son casi constantes por frame (dicen cuántos datos hay, no qué es la
-  mancha) y con frames que sólo tienen una clase serían una forma de aprenderse el frame. `--con-cantidad-de-datos` las suma.
-- `contraste_p10` y `eco_var_p90` (etapa 4, `../docs/indice-insomnio.md`) entran al modelo si la tabla las trae: miran la
-  parte más activa de la mancha y no la mediana. No son del contrato (`RADAR_NUEVAS`). `indice_actividad` no entra: se
-  ajustó con etiquetas de una IA. `ha_insomnio_90` tampoco: es otra medida de tamaño.
-- `--controles` (prompt 4, parte C): con las mismas particiones, entrena también sin las columnas de Forma, sólo con
-  radar, sólo con óptico y con la cantidad de datos; compara `area_ha` entre clases (¿aprende "grande es basural"?);
-  revisa que no entre ninguna columna de fuera del contrato; y lista los diez errores más grandes.
-- `validado` en `metricas.json`: true sólo si la validación es por frame, hay al menos `MIN_FRAMES_VALIDOS` frames con
-  `MIN_FILAS_CLASE` filas o más de cada clase, y el límite inferior del IC 95 % del AUC fuera de partición pasa de 0,5.
-  Es un supuesto de este script (prompt 4). **Si no está validado, `p_basural` no va a la web ni al pitch.**
-- `--reservar-prueba-final`: no mira la prueba final (Argentina): ni la métrica ni las predicciones. Es lo que se usa
-  mientras se elige el modelo; la prueba final se predice una sola vez, al terminar, sin esta opción.
+- Each partition is predicted by a model trained without it (out of partition). The `prueba_final` frames
+  (Argentina) are used neither for training nor for choosing anything: they're predicted with the final model, trained on everything else.
+- Class weights (`class_weight="balanced"`), small regularized trees: there are few rows per frame.
+- Per frame: AUC with a 95 % bootstrap interval, and precision and recall with a 0.5 threshold and a 95 % Wilson interval.
+- Which negative class it gets wrong: fraction of each `clase_negativo` that the model calls a dump site (≥ 0.5).
+- Variable importance: gain of the final model.
+- `--humo`: if there aren't at least two partitions (for example, only the AMBA), it validates grouping by complex and warns
+  in `metricas.json` that **it's not a metric to report**.
+- `n_pares` and `n_orbitas` don't go into the model: they're nearly constant per frame (they say how much data there is, not what the
+  blob is) and with frames that only have one class they'd be a way of learning the frame. `--con-cantidad-de-datos` adds them.
+- `contraste_p10` and `eco_var_p90` (stage 4, `../docs/indice-insomnio.md`) go into the model if the table carries them: they look at the
+  most active part of the blob, not the median. They're not in the contract (`RADAR_NUEVAS`). `indice_actividad` doesn't go in: it was
+  fitted with labels from an AI. `ha_insomnio_90` doesn't either: it's another size measure.
+- `--controles` (prompt 4, part C): with the same partitions, it also trains without the Shape columns, with radar only,
+  with optical only and with the amount of data; compares `area_ha` between classes (does it learn "big means dump site"?);
+  checks that no column outside the contract goes in; and lists the ten largest errors.
+- `validado` in `metricas.json`: true only if the validation is by frame, there are at least `MIN_FRAMES_VALIDOS` frames with
+  `MIN_FILAS_CLASE` rows or more of each class, and the lower bound of the 95 % CI of the out-of-partition AUC is above 0.5.
+  It's an assumption of this script (prompt 4). **If it's not validated, `p_basural` goes neither to the web nor to the pitch.**
+- `--reservar-prueba-final`: doesn't look at the final test (Argentina): neither the metric nor the predictions. It's what's used
+  while choosing the model; the final test is predicted only once, at the end, without this option.
 """
 import argparse
 import json
@@ -45,12 +45,12 @@ import contratos  # noqa: E402
 
 UMBRAL = 0.5
 SEMILLA = 0
-MIN_FRAMES_VALIDOS = 3  # frames de fuera de la prueba final con las dos clases bien pobladas
-MIN_FILAS_CLASE = 5     # filas de cada clase para que un frame cuente
+MIN_FRAMES_VALIDOS = 3  # frames outside the final test with both classes well populated
+MIN_FILAS_CLASE = 5     # rows of each class for a frame to count
 
 
 def validacion(tipo, t_ent, m_global):
-    """(validado, criterio, motivos por los que no). El criterio es un supuesto de este script."""
+    """(validated, criterion, reasons why not). The criterion is an assumption of this script."""
     criterio = (f"validación por frame, al menos {MIN_FRAMES_VALIDOS} frames con {MIN_FILAS_CLASE} filas o más de cada clase, "
                 "y límite inferior del IC 95 % del AUC fuera de partición mayor que 0,5")
     motivos = []
@@ -66,18 +66,18 @@ def validacion(tipo, t_ent, m_global):
 
 
 def parametros(n_filas):
-    import lightgbm as lgb  # noqa: F401  (falla temprano si no está)
+    import lightgbm as lgb  # noqa: F401  (fails early if it's missing)
     return dict(objective="binary", n_estimators=300, learning_rate=0.05, num_leaves=7, max_depth=3,
                 min_child_samples=max(2, min(20, n_filas // 10)), subsample=0.8, subsample_freq=1, colsample_bytree=0.8,
                 reg_lambda=1.0, class_weight="balanced", n_jobs=-1, random_state=SEMILLA, verbose=-1)
 
 
-CANTIDAD_DE_DATOS = ("n_pares", "n_orbitas")  # casi constantes por frame: no dicen qué es la mancha
-RADAR_NUEVAS = ("contraste_p10", "eco_var_p90")  # la parte más activa de la mancha (etapa 4); fuera del contrato
+CANTIDAD_DE_DATOS = ("n_pares", "n_orbitas")  # nearly constant per frame: they don't say what the blob is
+RADAR_NUEVAS = ("contraste_p10", "eco_var_p90")  # the most active part of the blob (stage 4); outside the contract
 GRUPOS = {"movimiento": tuple(c.nombre for c in contratos.MOVIMIENTO), "rugosidad": tuple(c.nombre for c in contratos.RUGOSIDAD),
           "optico": tuple(c.nombre for c in contratos.OPTICO), "forma": tuple(c.nombre for c in contratos.FORMA),
           "contexto": tuple(c.nombre for c in contratos.CONTEXTO)}
-# Lo que no puede entrar nunca: sale de la etiqueta o del registro (fuga de datos).
+# What can never go in: it comes from the label or the registry (data leakage).
 PROHIBIDAS = ("clase", "clase_negativo", "id_catalogo", "complejo", "estado", "catalogo", "frame", "ciudad", "pais", "p_basural",
               "actividad_optica", "indice_actividad", "clase_osm", "que")
 
@@ -92,7 +92,7 @@ def columnas(t, con_cantidad=False):
 
 
 def revisar_fuga(cols):
-    """Falla si entra una columna que no es del contrato, o una de EMIT, del registro o de la etiqueta."""
+    """Fails if a column outside the contract goes in, or one from EMIT, the registry or the label."""
     permitidas = set(contratos.COLUMNAS_MODELO) | {"cnn_p_basural"} | set(RADAR_NUEVAS)
     malas = [c for c in cols if c not in permitidas or c in PROHIBIDAS or "emit" in c.lower() or "metano" in c.lower()]
     if malas:
@@ -117,7 +117,7 @@ def predecir(m, X):
     return m.predict_proba(X)[:, 1]
 
 
-# ------------------------------------------------------------------ métricas
+# ------------------------------------------------------------------ metrics
 def wilson(k, n, z=1.96):
     if n == 0:
         return None
@@ -170,7 +170,7 @@ def errores_por_clase(t, p):
 
 # ------------------------------------------------------------------ flujo
 def grupos_validacion(t, partes, humo):
-    """{nombre: índices de prueba} y si es validación por frame o de humo."""
+    """{name: test indices} and whether it's validation by frame or a smoke test."""
     por_frame = contratos.particion_por_frame(partes)
     ent = t[t["frame"].map(por_frame) != contratos.PRUEBA_FINAL]
     if len(partes.get("particiones", {})) >= 2:
@@ -178,7 +178,7 @@ def grupos_validacion(t, partes, humo):
     if not humo:
         raise SystemExit("Hacen falta al menos 2 particiones por frame para validar. Para probar con un solo frame: --humo")
     from sklearn.model_selection import StratifiedGroupKFold
-    ent = t  # en humo se usa todo, también la prueba final
+    ent = t  # in a smoke test everything is used, including the final test
     y = (ent["clase"] == "basural_activo").astype(int)
     k = int(max(2, min(5, y.sum(), (1 - y).sum(), ent["complejo"].nunique())))
     if min(y.sum(), (1 - y).sum()) < 2:
@@ -188,7 +188,7 @@ def grupos_validacion(t, partes, humo):
 
 
 def validar_fuera(t, y, cols, grupos, ent):
-    """Predicción de cada fila con un modelo que no la vio (por partición). Devuelve (serie, modelos)."""
+    """Prediction for each row with a model that didn't see it (by partition). Returns (series, models)."""
     oof = pd.Series(np.nan, index=t.index)
     modelos = {}
     for k, idx in grupos.items():
@@ -210,7 +210,7 @@ def resumen_validacion(t, y, oof):
 
 
 def controles(t, y, grupos, ent, cols, oof):
-    """Parte C del prompt 4: tamaño, fuga, aporte del óptico y en qué se equivoca."""
+    """Part C of prompt 4: size, leakage, contribution of the optical data and what it gets wrong."""
     from sklearn.metrics import roc_auc_score
     variantes = {
         "sin_forma": [c for c in cols if c not in GRUPOS["forma"]],
@@ -229,7 +229,7 @@ def controles(t, y, grupos, ent, cols, oof):
                            "auc_por_frame": {f: m["auc"] for f, m in r["por_frame"].items() if m["auc"] is not None}}
     res_var["completo"]["auc_por_frame"] = {f: m["auc"] for f, m in resumen_validacion(t, y, oof)["por_frame"].items() if m["auc"] is not None}
 
-    # ¿las variables separan algo? AUC de cada una sola (lejos de 0,5 = separa), sobre las filas de entrenamiento
+    # do the variables separate anything? AUC of each one alone (far from 0.5 = it separates), over the training rows
     e = t.loc[ent.index]
     ye = y[ent.index]
     univariado = {}
@@ -239,8 +239,8 @@ def controles(t, y, grupos, ent, cols, oof):
             if ok_c.sum() >= 10 and len(set(ye[ok_c])) == 2:
                 univariado[c] = round(float(roc_auc_score(ye[ok_c], e.loc[ok_c, c])), 2)
         univariado = dict(sorted(univariado.items(), key=lambda x: -abs(x[1] - 0.5)))
-    # Diagnóstico, NO es una métrica: validar mezclando frames (por complejo). Si da mucho más que por frame,
-    # el modelo se aprende el paisaje de cada frame y no transfiere.
+    # Diagnostic, NOT a metric: validating with mixed frames (by complex). If it gives much more than by frame,
+    # the model learns each frame's landscape and doesn't transfer.
     mezclado = None
     if min(ye.sum(), (1 - ye).sum()) >= 5:
         from sklearn.model_selection import StratifiedGroupKFold
@@ -316,7 +316,7 @@ def correr(t, partes, humo=False, todas=None, reservar=False, con_controles=Fals
         res["controles"] = controles(t, y, grupos, ent, cols, oof)
     pred = None
     if todas is not None:
-        if reservar:  # la prueba final no se predice hasta el final
+        if reservar:  # the final test isn't predicted until the end
             todas = todas[todas["frame"].map(por_frame) != contratos.PRUEBA_FINAL]
         todas = todas.reset_index(drop=True)
         for c in cols:
@@ -339,15 +339,15 @@ def main():
     a.add_argument("--tabla")
     a.add_argument("--particiones")
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
-    a.add_argument("--humo", action="store_true", help="permitir un solo frame (prueba de que corre; no reportar)")
+    a.add_argument("--humo", action="store_true", help="allow a single frame (test that it runs; don't report)")
     a.add_argument("--predecir", action="store_true",
-                   help="escribir predicciones.parquet para todas las manchas candidatas (tabla_radar + tabla_optico de --datos)")
-    a.add_argument("--radar", help="tabla_radar.parquet para --predecir (por defecto, el de --datos)")
-    a.add_argument("--optico", help="tabla_optico.parquet para --predecir (por defecto, el de --datos)")
-    a.add_argument("--controles", action="store_true", help="tamaño, fuga, aporte del óptico y mayores errores (ver arriba)")
-    a.add_argument("--reservar-prueba-final", action="store_true", help="no mirar ni predecir la prueba final (Argentina)")
-    a.add_argument("--con-cantidad-de-datos", action="store_true", help="sumar n_pares y n_orbitas al modelo")
-    a.add_argument("--aviso", action="append", default=[], help="texto que se anota en metricas.json (se puede repetir)")
+                   help="write predicciones.parquet for all the candidate blobs (tabla_radar + tabla_optico from --datos)")
+    a.add_argument("--radar", help="tabla_radar.parquet for --predecir (default: the one in --datos)")
+    a.add_argument("--optico", help="tabla_optico.parquet for --predecir (default: the one in --datos)")
+    a.add_argument("--controles", action="store_true", help="size, leakage, optical contribution and largest errors (see above)")
+    a.add_argument("--reservar-prueba-final", action="store_true", help="don't look at or predict the final test (Argentina)")
+    a.add_argument("--con-cantidad-de-datos", action="store_true", help="add n_pares and n_orbitas to the model")
+    a.add_argument("--aviso", action="append", default=[], help="text noted in metricas.json (can be repeated)")
     args = a.parse_args()
 
     t = contratos.leer(args.tabla or contratos.ruta("tabla_entrenamiento", args.datos))
@@ -361,7 +361,7 @@ def main():
         optico = contratos.leer(args.optico or contratos.ruta("tabla_optico", args.datos))
         todas = radar.merge(optico.drop(columns=["frame", "n_escenas", "fechas"]), on="id_mancha", how="left")
 
-    if todas is not None:  # un frame de las predicciones que no está en las particiones (sin filas etiquetadas) va con el modelo final
+    if todas is not None:  # a frame in the predictions that's not in the partitions (no labeled rows) goes with the final model
         reservados = set(partes.get("prueba_final", []))
         frames_json = os.path.join(AQUI, "..", "data", "catalogos", "frames.json")
         if os.path.exists(frames_json):

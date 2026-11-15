@@ -1,7 +1,7 @@
-"""Prompt 4: `modelo_por_frame.py` (cruce y óptico frame por frame, juntar) y los controles de `entrenar.py`.
+"""Prompt 4: `modelo_por_frame.py` (cross and optical frame by frame, joining) and the `entrenar.py` controls.
 
-Correr desde `motor/`:  python -m pytest tests -q
-No usan la red: el óptico no se llama y las fechas se prueban con escenas inventadas.
+Run from `motor/`:  python -m pytest tests -q
+They don't use the network: the optical part isn't called and the dates are tested with made-up scenes.
 """
 import json
 import os
@@ -31,7 +31,7 @@ def mock(tmp_path_factory):
 
 @pytest.fixture()
 def base(mock, tmp_path):
-    """Una carpeta por frame, como las deja la etapa 4, armada desde el mock."""
+    """One folder per frame, as stage 4 leaves them, built from the mock."""
     with open(os.path.join(mock, "manchas.geojson"), encoding="utf-8") as fh:
         fc = json.load(fh)
     for frame in ("DELHI", "CDMX"):
@@ -67,18 +67,18 @@ def test_se_rehace_si_cambian_las_manchas(base, mock, monkeypatch):
     camino = os.path.join(carpeta, "manchas.geojson")
     with open(camino, encoding="utf-8") as fh:
         fc = json.load(fh)
-    fc["features"] = fc["features"][:-1]  # la etapa 4 volvió a subir el frame
+    fc["features"] = fc["features"][:-1]  # stage 4 uploaded the frame again
     with open(camino, "w", encoding="utf-8") as fh:
         json.dump(fc, fh)
     assert mpf.falta(carpeta, "cruce", ["cruce_manchas_catalogo.parquet"])
     mpf.paso_cruce("DELHI", carpeta, avisar=lambda *_: None)
-    os.remove(os.path.join(carpeta, "cruce_manchas_catalogo.parquet"))  # y si se borra el archivo, también falta
+    os.remove(os.path.join(carpeta, "cruce_manchas_catalogo.parquet"))  # and if the file is deleted, it's missing too
     assert mpf.falta(carpeta, "cruce", ["cruce_manchas_catalogo.parquet"])
 
 
 def test_juntar_conserva_los_frames_sin_carpeta(base, mock, monkeypatch):
     _cruce_mock(mock, monkeypatch)
-    # el archivo anterior tiene el AMBA (sin carpeta: se conserva) y un DELHI viejo (con carpeta: se reemplaza)
+    # the previous file has the AMBA (no folder: kept) and an old DELHI (with a folder: replaced)
     viejo = ct.leer(mock, "cruce_manchas_catalogo")
     viejo = viejo[viejo["frame"].isin(["AMBA", "DELHI"])].copy()
     n_amba = int((viejo["frame"] == "AMBA").sum())
@@ -90,7 +90,7 @@ def test_juntar_conserva_los_frames_sin_carpeta(base, mock, monkeypatch):
     assert set(juntos["frame"]) == {"AMBA", "DELHI", "CDMX"}
     assert int((juntos["frame"] == "AMBA").sum()) == n_amba
     assert not (juntos.loc[juntos["frame"] == "DELHI", "frac_mancha"] == 0.0123).any()
-    # y correrlo de nuevo no cambia nada
+    # and running it again changes nothing
     otra = mpf.juntar(base, avisar=lambda *_: None)["cruce_manchas_catalogo"]
     assert len(otra) == len(juntos)
 
@@ -105,12 +105,12 @@ def _escena(fecha, nube):
 
 
 def test_las_fechas_se_reparten_en_el_periodo():
-    # un año: muchas escenas despejadas en verano y pocas, más nubladas, en invierno
+    # one year: many clear scenes in summer and few, cloudier ones in winter
     verano = [_escena(f"2026-07-{d:02d}", 1.0) for d in range(1, 29, 2)]
     resto = [_escena(f"2025-{m:02d}-15", 15.0) for m in (11, 12)] + [_escena(f"2026-{m:02d}-15", 15.0) for m in (1, 2, 3, 4, 5, 9)]
     caja = (0, 0, 1, 1)
     sin = eo.escenas_para(caja, verano + resto, 8)
-    assert all(e["fecha"].startswith("2026-07") for e in sin)  # sin repartir, todas del verano
+    assert all(e["fecha"].startswith("2026-07") for e in sin)  # without spreading, all from summer
     con = eo.escenas_para(caja, verano + resto, 8, periodo=("2025-11-01", "2026-10-31"))
     meses = {e["fecha"][:7] for e in con}
     assert len(con) == 8 and len(meses) >= 7
@@ -120,15 +120,15 @@ def test_las_fechas_se_reparten_en_el_periodo():
 def test_reparto_completa_los_tramos_vacios():
     escenas = [_escena(f"2026-07-{d:02d}", float(d)) for d in range(1, 11)]
     con = eo.escenas_para((0, 0, 1, 1), escenas, 6, periodo=("2025-11-01", "2026-10-31"))
-    assert len(con) == 6  # todas caen en un tramo, pero se completa hasta 6 con las de menos nubes
+    assert len(con) == 6  # all fall in one segment, but it's filled up to 6 with the least cloudy ones
 
 
-# ------------------------------------------------------------------ controles del entrenamiento
+# ------------------------------------------------------------------ training controls
 def test_entrenar_controles_y_prueba_final_reservada(mock):
     cruce = ct.leer(mock, "cruce_manchas_catalogo")
     t, partes = armar_tabla.armar(ct.leer(mock, "tabla_radar"), ct.leer(mock, "tabla_optico"), cruce,
                                   armar_tabla.leer_frames(os.path.join(mock, "frames.json")), k=50)
-    assert len(partes["particiones"]) == 3  # una por frame: se deja un frame afuera por vez
+    assert len(partes["particiones"]) == 3  # one per frame: one frame is left out at a time
     radar, optico = ct.leer(mock, "tabla_radar"), ct.leer(mock, "tabla_optico")
     todas = radar.merge(optico.drop(columns=["frame", "n_escenas", "fechas"]), on="id_mancha", how="left")
     _, res, pred = entrenar.correr(t, partes, todas=todas, reservar=True, con_controles=True)
@@ -140,7 +140,7 @@ def test_entrenar_controles_y_prueba_final_reservada(mock):
     assert c["variantes"]["solo_radar"]["columnas"] < c["variantes"]["completo"]["columnas"]
     assert len(c["mayores_errores"]) == 10 and {"id_mancha", "p_basural", "clase"} <= set(c["mayores_errores"][0])
     assert set(c["tamano"]["area_ha_por_clase"]) == {"basural_activo", "otro_movil"}
-    # sin reservar, la prueba final se predice
+    # without reserving, the final test gets predicted
     _, res2, pred2 = entrenar.correr(t, partes, todas=todas)
     assert "AMBA" in res2["prueba_final"] and "AMBA" in set(pred2["frame"])
 
@@ -152,9 +152,9 @@ def test_fuga_falla_con_columnas_prohibidas():
             entrenar.revisar_fuga(["insomnio", mala])
 
 
-# ------------------------------------------------------------------ corrida 2: negativos de OSM y etiquetas ópticas
+# ------------------------------------------------------------------ run 2: OSM negatives and optical labels
 def _radar_con_osm(mock):
-    """El radar del mock con `clase_osm` y `que`, como el de la etapa 4: las manchas que no cruzan nada, de uso conocido."""
+    """The mock radar with `clase_osm` and `que`, like stage 4's: the blobs that cross nothing, of known land use."""
     radar = ct.leer(mock, "tabla_radar")
     cruce = ct.leer(mock, "cruce_manchas_catalogo")
     libres = ~radar["id_mancha"].isin(set(cruce["id_mancha"]))
@@ -172,14 +172,14 @@ def test_negativos_osm_entran_como_otro_movil(mock):
     ct.validar(t, "tabla_entrenamiento")
     osm = t[t["id_catalogo"].str.startswith("NEG-OSM-")]
     assert len(osm) and set(osm["clase"]) == {"otro_movil"} and set(osm["clase_negativo"]) == {"osm_golf", "osm_forestación"}
-    assert "AMBA" not in set(osm["frame"])  # la prueba final no recibe negativos de OSM
+    assert "AMBA" not in set(osm["frame"])  # the final test doesn't get OSM negatives
     assert not set(osm["id_mancha"]) & set(cruce.loc[cruce["catalogo"] == "basurales", "id_mancha"])
-    # un lugar con nombre cuenta una vez por frame; la forestación sin nombre, cada mancha
+    # a named place counts once per frame; unnamed plantations, each blob
     golf = osm[osm["clase_negativo"] == "osm_golf"]
     assert golf.groupby("frame").size().max() == 1
     assert len(t) > len(base) and partes["meta"]["negativos_osm"] is True
-    assert "clase_osm" not in t.columns and "que" not in t.columns  # no pueden llegar al modelo
-    # un parque que se llama como un relleno no es un negativo
+    assert "clase_osm" not in t.columns and "que" not in t.columns  # they can't reach the model
+    # a park named like a landfill isn't a negative
     i = radar.index[radar["clase_osm"] == "uso_conocido"][0]
     radar.loc[i, "que"] = "parque: Toyon Canyon Closed Landfill"
     t2, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50, con_negativos_osm=True)
@@ -202,7 +202,7 @@ def test_positivos_segun_las_etiquetas_opticas(mock):
     solo, _ = armar_tabla.armar(radar, optico, cruce, frames, k=50, optico_ia=ia, positivos="solo_act")
     entrena = solo[(solo["clase"] == "basural_activo") & (solo["frame"] != "AMBA")]
     assert list(entrena["id_catalogo"]) == [ids[0]]
-    # la prueba final no se toca, y los negativos tampoco
+    # the final test isn't touched, and neither are the negatives
     assert (solo["frame"] == "AMBA").sum() == (todos["frame"] == "AMBA").sum()
     assert (solo["clase"] == "otro_movil").sum() == (todos["clase"] == "otro_movil").sum()
     with pytest.raises(SystemExit):

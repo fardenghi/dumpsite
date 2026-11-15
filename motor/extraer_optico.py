@@ -1,27 +1,27 @@
-"""Etapa 5: variables ópticas de Sentinel-2 L2A por mancha (y por polígono del catálogo), mancha contra anillo.
+"""Stage 5: Sentinel-2 L2A optical variables per blob (and per catalog polygon), blob versus ring.
 
-Escribe `tabla_optico.parquet` (una fila por mancha candidata) y, con `--catalogo`, `tabla_optico_catalogo.parquet`
-(una fila por polígono de los catálogos que cae en el frame), según `../docs/contratos-datos.md`.
+Writes `tabla_optico.parquet` (one row per candidate blob) and, with `--catalogo`, `tabla_optico_catalogo.parquet`
+(one row per catalog polygon that falls in the frame), following `../docs/contratos-datos.md`.
 
-    python extraer_optico.py                                      # el AMBA: ../data/salidas/manchas.geojson + catálogo
+    python extraer_optico.py                                      # the AMBA: ../data/salidas/manchas.geojson + catalog
     python extraer_optico.py --manchas ../data/salidas/DELHI/manchas.geojson --salida ../data/salidas/DELHI --sin-catalogo
     python extraer_optico.py --desde 2026-06-25 --hasta 2026-10-12 --hilos 24
 
-Cómo:
-- Busca escenas L2A en el STAC de Microsoft Planetary Computer (abierto, sin cuenta; como `web/scripts/
-  s2_fechas.py`) con nubes de escena < `--max-nube` %, en el período de NISAR.
-- Agrupa las geometrías en celdas de ~10 km y lee, por celda y escena, **sólo la ventana** de esa celda desde los COG
-  (lectura por rango HTTP, a 20 m, usando las overviews de las bandas de 10 m). Celdas y escenas van en paralelo con hilos.
-  No se baja ninguna escena entera; con `--cache datos/s2` se guardan las ventanas leídas (no se suben).
-- Nubes con la capa SCL: adentro valen vegetación, suelo, agua y sin clasificar (4, 5, 6, 7); en el anillo, sin agua
-  (4, 5, 7). Una escena cuenta para una geometría si al menos `--min-valido` de sus píxeles son válidos.
-- Anillo de 1,5 km alrededor de la geometría, sin la geometría, sin agua (SCL) y sin los polígonos de los catálogos.
-- Por geometría se quedan hasta 8 escenas (las de más píxeles válidos). Reflectancia = (DN − 1000) / 10000 con la
-  línea de base de procesamiento ≥ 04.00, y DN / 10000 antes.
-- Índices: NDVI = (B08 − B04)/(B08 + B04); NDWI = (B03 − B08)/(B03 + B08);
+How:
+- Looks for L2A scenes in the Microsoft Planetary Computer STAC (open, no account; like `web/scripts/
+  s2_fechas.py`) with scene clouds < `--max-nube` %, in the NISAR period.
+- Groups the geometries into ~10 km cells and reads, per cell and scene, **only the window** of that cell from the COGs
+  (HTTP range reads, at 20 m, using the overviews of the 10 m bands). Cells and scenes run in parallel with threads.
+  No whole scene is downloaded; with `--cache datos/s2` the windows read are saved (not committed).
+- Clouds with the SCL layer: inside, vegetation, soil, water and unclassified count (4, 5, 6, 7); in the ring, without water
+  (4, 5, 7). A scene counts for a geometry if at least `--min-valido` of its pixels are valid.
+- 1.5 km ring around the geometry, without the geometry, without water (SCL) and without the catalog polygons.
+- Up to 8 scenes are kept per geometry (those with the most valid pixels). Reflectance = (DN − 1000) / 10000 with
+  processing baseline ≥ 04.00, and DN / 10000 before.
+- Indices: NDVI = (B08 − B04)/(B08 + B04); NDWI = (B03 − B08)/(B03 + B08);
   BSI = ((B11 + B04) − (B08 + B02)) / ((B11 + B04) + (B08 + B02)).
 
-Datos: Copernicus Sentinel-2 L2A (ESA), vía Microsoft Planetary Computer.
+Data: Copernicus Sentinel-2 L2A (ESA), via Microsoft Planetary Computer.
 """
 import argparse
 import json
@@ -64,7 +64,7 @@ INDICES = ("ndvi", "bsi", "ndwi", "b11", "b12")
 
 # ------------------------------------------------------------------ STAC
 class Firma:
-    """Token SAS de Planetary Computer, renovado cada 40 minutos."""
+    """Planetary Computer SAS token, renewed every 40 minutes."""
 
     def __init__(self):
         self._token, self._t, self._lock = None, 0.0, threading.Lock()
@@ -98,9 +98,9 @@ def buscar_escenas(bbox, desde, hasta, max_nube):
     return escenas
 
 
-# ------------------------------------------------------------------ geometrías
+# ------------------------------------------------------------------ geometries
 def objetivos_desde(fc, poligonos_catalogo, con_catalogo):
-    """Lista de geometrías a medir: las manchas candidatas y, si se pide, los polígonos del catálogo."""
+    """List of geometries to measure: the candidate blobs and, if requested, the catalog polygons."""
     obj = [{"tipo": "mancha", "clave": p["id_mancha"], "frame": p["frame"], "geom": g} for p, g in cp.manchas(fc)]
     if con_catalogo:
         frame = obj[0]["frame"] if obj else "AMBA"
@@ -129,7 +129,7 @@ def caja_celda(objetivos, idx):
 
 # ------------------------------------------------------------------ lectura
 def leer_ventana(escena, caja, firma, cache=None):
-    """Lee las bandas de la escena en la caja (grados), a 20 m en la UTM de la escena. Devuelve (dict, transform)."""
+    """Reads the scene's bands in the box (degrees), at 20 m in the scene's UTM. Returns (dict, transform)."""
     x0, y0, x1, y1 = transform_bounds("EPSG:4326", f"EPSG:{escena['epsg']}", *caja)
     x0, y0 = math.floor(x0 / PASO) * PASO, math.floor(y0 / PASO) * PASO
     x1, y1 = math.ceil(x1 / PASO) * PASO, math.ceil(y1 / PASO) * PASO
@@ -155,7 +155,7 @@ def leer_ventana(escena, caja, firma, cache=None):
 
 
 def indices(bandas, offset):
-    # DN 0 es sin dato; la reflectancia se acota abajo en 1e-4 (con el offset puede dar negativa en agua o sombra)
+    # DN 0 is no data; reflectance is clipped below at 1e-4 (with the offset it can be negative over water or shadow)
     r = {b: np.where(bandas[b] > 0, np.maximum((bandas[b].astype(np.float32) - offset) / 10000.0, 1e-4), np.nan)
          for b in BANDAS if b != "SCL"}
     with np.errstate(invalid="ignore", divide="ignore"):
@@ -166,7 +166,7 @@ def indices(bandas, offset):
 
 
 def mascaras(geom_utm, excluir_utm, forma, t):
-    """(adentro, anillo) como máscaras booleanas en la ventana."""
+    """(inside, ring) as boolean masks in the window."""
     adentro = ~geometry_mask([mapping(geom_utm)], out_shape=forma, transform=t, all_touched=False)
     if adentro.sum() < 3:
         adentro = ~geometry_mask([mapping(geom_utm)], out_shape=forma, transform=t, all_touched=True)
@@ -178,13 +178,13 @@ def mascaras(geom_utm, excluir_utm, forma, t):
 
 
 def medir_celda(objetivos, idx, escenas_celda, excluir_por_epsg, firma, min_valido, cache):
-    """Por cada objetivo de la celda, la lista de mediciones por escena."""
+    """For each target in the cell, the list of measurements per scene."""
     caja = caja_celda(objetivos, idx)
     salida = defaultdict(list)
     for esc in escenas_celda:
         try:
             bandas, t = leer_ventana(esc, caja, firma, cache)
-        except Exception as e:  # noqa: BLE001 - una escena que falla no corta la corrida
+        except Exception as e:  # noqa: BLE001 - a failing scene doesn't stop the run
             print(f"  aviso: {esc['id']}: {type(e).__name__}: {str(e)[:120]}", file=sys.stderr)
             continue
         scl = bandas["SCL"]
@@ -216,10 +216,10 @@ def medir_celda(objetivos, idx, escenas_celda, excluir_por_epsg, firma, min_vali
 
 # ------------------------------------------------------------------ resumen
 def resumir(medidas):
-    """Columnas ópticas del contrato a partir de las mediciones por escena de una geometría."""
+    """The contract's optical columns from a geometry's per-scene measurements."""
     vacio = {c: np.nan for c in ("ndvi_media", "ndvi_variacion", "bsi_media", "ndwi_media", "swir_b11", "swir_b12",
                                  "ndvi_contraste", "bsi_contraste", "ndwi_contraste", "swir_b11_contraste", "swir_b12_contraste")}
-    # una medición por fecha (la de más píxeles válidos) y como mucho MAX_ESCENAS
+    # one measurement per date (the one with the most valid pixels) and at most MAX_ESCENAS
     por_fecha = {}
     for m in sorted(medidas, key=lambda m: -m["valido"]):
         por_fecha.setdefault(m["fecha"], m)
@@ -244,11 +244,11 @@ def resumir(medidas):
 
 
 def escenas_para(caja, escenas, max_fechas, periodo=None):
-    """Una escena por fecha (la que más cubre la celda), hasta `max_fechas` fechas, en orden.
+    """One scene per date (the one that covers the cell best), up to `max_fechas` dates, in order.
 
-    Sin `periodo`, las `max_fechas` fechas de menos nubes. Con `periodo` = (desde, hasta), las fechas se **reparten**:
-    el período se parte en `max_fechas` tramos iguales y de cada tramo sale la fecha de menos nubes; los tramos sin
-    escenas se completan con las de menos nubes que queden. Así una serie de un año no queda toda en el verano.
+    Without `periodo`, the `max_fechas` least cloudy dates. With `periodo` = (from, to), the dates are **spread**:
+    the period is split into `max_fechas` equal segments and each segment gives its least cloudy date; segments without
+    scenes are filled with the least cloudy remaining ones. That way a one-year series doesn't end up all in summer.
     """
     b = box(*caja)
     por_fecha = {}
@@ -266,7 +266,7 @@ def escenas_para(caja, escenas, max_fechas, periodo=None):
         d0, d1 = (np.datetime64(x, "D") for x in periodo)
         largo = max(int((d1 - d0) / np.timedelta64(1, "D")) + 1, 1)
         elegidas, usados = [], set()
-        for e in candidatas:  # de menos a más nubes: la primera de cada tramo es la mejor
+        for e in candidatas:  # from fewest to most clouds: the first in each segment is the best
             tramo = min(max(int((np.datetime64(e["fecha"], "D") - d0) / np.timedelta64(1, "D")) * max_fechas // largo, 0), max_fechas - 1)
             if tramo not in usados:
                 usados.add(tramo)
@@ -292,7 +292,7 @@ def extraer(objetivos, escenas, excluir_deg, hilos=16, min_valido=0.6, max_fecha
     avisar(f"{len(objetivos)} geometrías en {len(grupos)} celdas; {sum(len(e) for _, e in tareas)} ventanas de escena a leer")
     medidas = defaultdict(list)
     t0 = time.time()
-    # se paraleliza por (celda, escena): es lo que va por la red
+    # parallelized by (cell, scene): that's what goes over the network
     trabajos = [(idx, [e]) for idx, es in tareas for e in es]
     with ThreadPoolExecutor(max_workers=hilos) as ex:
         futuros = [ex.submit(medir_celda, objetivos, idx, es, excluir_por_epsg, firma, min_valido, cache) for idx, es in trabajos]
@@ -310,17 +310,17 @@ def main():
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--desde", default="2026-06-25")
     a.add_argument("--hasta", default="2026-10-12")
-    a.add_argument("--max-nube", type=float, default=20.0, help="%% de nubes de la escena entera, para buscar")
-    a.add_argument("--max-fechas", type=int, default=10, help="fechas a leer por celda (después quedan hasta 8 por geometría)")
-    a.add_argument("--min-valido", type=float, default=0.6, help="fracción de píxeles sin nubes para que una escena cuente")
+    a.add_argument("--max-nube", type=float, default=20.0, help="%% clouds of the whole scene, for the search")
+    a.add_argument("--max-fechas", type=int, default=10, help="dates to read per cell (then up to 8 are kept per geometry)")
+    a.add_argument("--min-valido", type=float, default=0.6, help="fraction of cloud-free pixels for a scene to count")
     a.add_argument("--hilos", type=int, default=16)
     cat = a.add_mutually_exclusive_group()
-    cat.add_argument("--catalogo", dest="catalogo", action="store_true", default=None, help="medir también los polígonos del catálogo")
+    cat.add_argument("--catalogo", dest="catalogo", action="store_true", default=None, help="also measure the catalog polygons")
     cat.add_argument("--sin-catalogo", dest="catalogo", action="store_false")
     a.add_argument("--negativos", default="ambos", choices=("ambos", "amba", "mundo"))
-    a.add_argument("--frame", action="append", help="sólo estos frames (se puede repetir); por defecto todos los del geojson")
-    a.add_argument("--cache", help="carpeta para guardar las ventanas leídas (por ejemplo datos/s2); no se sube")
-    a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías (para probar)")
+    a.add_argument("--frame", action="append", help="only these frames (can be repeated); by default all of those in the geojson")
+    a.add_argument("--cache", help="folder to save the windows read (for example datos/s2); not committed")
+    a.add_argument("--limite", type=int, help="measure only the first N geometries (for testing)")
     args = a.parse_args()
 
     contratos.leer(args.manchas)
@@ -330,7 +330,7 @@ def main():
     if args.frame:
         frames = [f for f in frames if f in set(args.frame)]
     objetivos, res = [], []
-    for frame in frames:  # cada frame con su caja: el geojson de `extraer_manchas.py juntar` trae todos
+    for frame in frames:  # each frame with its box: the geojson from `extraer_manchas.py juntar` carries all of them
         sub = {"type": "FeatureCollection", "features": [f for f in fc["features"] if f["properties"]["frame"] == frame]}
         ms = cp.manchas(sub)
         con_catalogo = args.catalogo if args.catalogo is not None else frame == "AMBA"

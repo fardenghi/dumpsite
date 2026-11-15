@@ -1,6 +1,6 @@
-"""El mock cumple los contratos, y `validar` falla con un mensaje claro cuando algo no cumple.
+"""The mock follows the contracts, and `validar` fails with a clear message when something doesn't.
 
-Correr desde `motor/`:  python -m pytest tests -q
+Run from `motor/`:  python -m pytest tests -q
 """
 import json
 import os
@@ -32,7 +32,7 @@ def radar(mock):
 def test_el_mock_genera_todos_los_archivos_y_cumplen(mock):
     for nombre in ct.NOMBRES:
         assert os.path.exists(ct.ruta(nombre, mock)), nombre
-        d = ct.leer(mock, nombre)  # valida al leer
+        d = ct.leer(mock, nombre)  # validates on read
         if isinstance(d, pd.DataFrame):
             assert 4 <= len(d) <= 80, f"{nombre}: {len(d)} filas"
     assert ct.main([mock]) == 0
@@ -49,11 +49,11 @@ def test_el_mock_es_coherente_entre_archivos(mock):
     assert set(t["cruce_manchas_catalogo"]["id_mancha"]) <= candidatas
     assert set(t["cruce_manchas_catalogo"]["id_catalogo"]) <= set(t["insomnio_catalogo"]["id_catalogo"])
     assert set(t["tabla_optico_catalogo"]["id_catalogo"]) == set(t["insomnio_catalogo"]["id_catalogo"])
-    # la superficie es la misma en el geojson y en la tabla de radar
+    # the area is the same in the geojson and in the radar table
     ha = manchas.set_index("id_mancha")["ha"]
     assert (t["tabla_radar"].set_index("id_mancha")["area_ha"] == ha.loc[t["tabla_radar"]["id_mancha"]]).all()
 
-    # la tabla de entrenamiento sigue la regla de la etapa 6
+    # the training table follows the stage 6 rule
     ent, cruce = t["tabla_entrenamiento"], t["cruce_manchas_catalogo"]
     fuerte = cruce[cruce["frac_area_menor"] >= ct.CRITERIO_CRUCE]
     catalogos = fuerte.groupby("id_mancha")["catalogo"].nunique()
@@ -63,7 +63,7 @@ def test_el_mock_es_coherente_entre_archivos(mock):
     assert set(ent["clase"]) == set(ct.CLASES)
     assert set(ct.COLUMNAS_MODELO) <= set(ent.columns)
 
-    # particiones: por frame, y Argentina aparte
+    # partitions: by frame, and Argentina separate
     partes = t["particiones"]
     ct.validar_particiones(partes, frames=list(frames["frame"]))
     por_frame = ct.particion_por_frame(partes)
@@ -77,8 +77,8 @@ def test_el_mock_trae_los_casos_del_amba(mock):
     assert cat.loc["BAS-000007", ["estado", "radar"]].tolist() == ["cerrado", "quieto"]  # Luján
     assert cat.loc["BAS-053304", ["estado", "radar", "insomnio"]].tolist() == ["abierto", "despierto", 0.86]  # Norte III
     amba = cat[cat["frame"] == "AMBA"]
-    assert not ((amba["estado"] == "cerrado") & (amba["radar"] == "despierto")).any()  # en el AMBA real no hay ninguno
-    assert ((cat["estado"] == "cerrado") & (cat["radar"] == "despierto")).any()  # pero el caso existe para probar el veredicto
+    assert not ((amba["estado"] == "cerrado") & (amba["radar"] == "despierto")).any()  # there are none in the real AMBA
+    assert ((cat["estado"] == "cerrado") & (cat["radar"] == "despierto")).any()  # but the case exists to test the verdict
 
 
 def test_el_mock_es_reproducible(mock, tmp_path):
@@ -114,12 +114,12 @@ def test_validar_junta_todos_los_errores_y_deja_pasar_columnas_de_mas(radar, moc
         ct.validar(radar.drop(columns=["hv_hh"]).assign(persistencia=-1.0), "salidas/tabla_radar.parquet")
     assert "hv_hh" in str(e.value) and "persistencia" in str(e.value)
     ct.validar(radar.assign(columna_mia=1), "tabla_radar")
-    vacios = radar.assign(eco_db=None, hv_hh=float("nan"))  # las que pueden venir vacías
+    vacios = radar.assign(eco_db=None, hv_hh=float("nan"))  # the ones that may be empty
     ct.validar(vacios, "tabla_radar")
     cat = ct.leer(mock, "insomnio_catalogo")
     with pytest.raises(ct.ErrorContrato, match="valores no permitidos"):
         ct.validar(cat.assign(radar="dormido"), "insomnio_catalogo")
-    ct.validar(cat.drop(columns=["motivo", "estado", "clase", "area_ha"]), "insomnio_catalogo")  # las opcionales pueden faltar
+    ct.validar(cat.drop(columns=["motivo", "estado", "clase", "area_ha"]), "insomnio_catalogo")  # the optional ones may be missing
     with pytest.raises(KeyError, match="No hay un contrato"):
         ct.validar(radar, "tabla_rara")
 

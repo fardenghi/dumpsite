@@ -1,16 +1,16 @@
-"""Tabla de radar **provisional** del AMBA, sacada sólo del índice ya calculado, para probar el modelo de punta a punta.
+"""**Provisional** AMBA radar table, taken only from the already computed index, to test the model end to end.
 
-La tabla de radar de verdad (`salidas/tabla_radar.parquet`) la escribe la etapa 4 en la VM (prompt 1), con la serie
-par a par. Ésta sale de las capas resumidas de `indice_80m.npz` y por eso deja vacías las columnas que necesitan la
-serie (`contraste_mediana`, `contraste_desvio`, `tendencia`, `eco_variacion`, `hv_hh`) y las de WorldCover
-(`urbano_anillo`, `cultivo_anillo`). Además:
-- `persistencia` es la media por píxel de la mancha, no el mínimo por tramos medido sobre la mancha entera;
-- el anillo es el de `insomnio.anillo` (sin agua), todavía sin excluir los demás polígonos de los catálogos;
-- `compacidad` se mide sobre el borde en escalera de los píxeles de 80 m (da menos que la real).
+The real radar table (`salidas/tabla_radar.parquet`) is written by stage 4 on the VM (prompt 1), with the
+pair-by-pair series. This one comes from the summary layers of `indice_80m.npz`, so it leaves empty the columns
+that need the series (`contraste_mediana`, `contraste_desvio`, `tendencia`, `eco_variacion`, `hv_hh`) and the
+WorldCover ones (`urbano_anillo`, `cultivo_anillo`). Also:
+- `persistencia` is the per-pixel mean over the blob, not the per-segment minimum measured over the whole blob;
+- the ring is `insomnio.anillo` (without water), still without excluding the other catalog polygons;
+- `compacidad` is measured on the stair-step edge of the 80 m pixels (it comes out lower than the real one).
 
-    python tabla_radar_provisional.py        # escribe datos/amba_provisional/tabla_radar.parquet (no se sube)
+    python tabla_radar_provisional.py        # writes datos/amba_provisional/tabla_radar.parquet (not committed)
 
-**No se escribe en `salidas/`** para no pisar el archivo de la etapa 4.
+**It does not write to `salidas/`** so it doesn't overwrite the stage 4 file.
 """
 import argparse
 import json

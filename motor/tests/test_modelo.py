@@ -1,7 +1,7 @@
-"""Prompt 3: manchas como polígonos, cruce con el catálogo, óptico, tabla y entrenamiento.
+"""Prompt 3: blobs as polygons, cross with the catalog, optical, table and training.
 
-Correr desde `motor/`:  python -m pytest tests -q
-No usan la red: el óptico se prueba con bandas sintéticas.
+Run from `motor/`:  python -m pytest tests -q
+They don't use the network: the optical part is tested with synthetic bands.
 """
 import json
 import os
@@ -57,7 +57,7 @@ def test_vectorizar_un_indice_sintetico(tmp_path):
 # ------------------------------------------------------------------ cruce
 def test_cruce_mide_las_fracciones_en_metros():
     m = box(-58.60, -34.60, -58.59, -34.59)  # ~0,9 × 1,1 km
-    mitad = box(-58.595, -34.60, -58.58, -34.59)  # pisa la mitad este de la mancha y es más grande
+    mitad = box(-58.595, -34.60, -58.58, -34.59)  # overlaps the east half of the blob and is larger
     lejos = box(-58.50, -34.50, -58.49, -34.49)
     pol = [{"id_catalogo": "BAS-1", "catalogo": "basurales", "complejo": "CPX-1", "clase": None, "geom": mitad},
            {"id_catalogo": "NEG-1", "catalogo": "negativos", "complejo": None, "clase": "cantera", "geom": lejos}]
@@ -76,7 +76,7 @@ def test_el_cruce_del_mock_coincide_con_el_del_mock(mock):
     pol = cruce_manchas._catalogo_archivo(os.path.join(mock, "catalogo_mock.geojson"))
     cajas = []
 
-    def cargar(bbox):  # se llama una vez por frame, con la caja de ese frame
+    def cargar(bbox):  # called once per frame, with that frame's box
         cajas.append(bbox)
         return pol
     df, _ = cruce_manchas.cruzar_por_frame(ms, {}, cargar)
@@ -89,12 +89,12 @@ def test_el_cruce_del_mock_coincide_con_el_del_mock(mock):
 # ------------------------------------------------------------------ etiquetas
 def test_etiquetar_sigue_las_reglas_de_la_etapa_6():
     c = pd.DataFrame([
-        ("MAN-A-0001", "BAS-1", "basurales", 0.9, 50.0, "CPX-1", None),   # sólo basural
-        ("MAN-A-0002", "NEG-1", "negativos", 0.8, 40.0, None, "aeropuerto"),  # sólo negativo
-        ("MAN-A-0003", "BAS-2", "basurales", 0.6, 30.0, "CPX-2", None),   # los dos: no entra
+        ("MAN-A-0001", "BAS-1", "basurales", 0.9, 50.0, "CPX-1", None),   # dump site only
+        ("MAN-A-0002", "NEG-1", "negativos", 0.8, 40.0, None, "aeropuerto"),  # negative only
+        ("MAN-A-0003", "BAS-2", "basurales", 0.6, 30.0, "CPX-2", None),   # both: not included
         ("MAN-A-0003", "NEG-2", "negativos", 0.5, 20.0, None, "cantera"),
-        ("MAN-A-0004", "BAS-3", "basurales", 0.2, 10.0, "CPX-3", None),   # menos del 30 %: no entra
-        ("MAN-A-0005", "BAS-4", "basurales", 0.9, 0.6, "CPX-4", None),    # polígono diminuto: no entra
+        ("MAN-A-0004", "BAS-3", "basurales", 0.2, 10.0, "CPX-3", None),   # less than 30 %: not included
+        ("MAN-A-0005", "BAS-4", "basurales", 0.9, 0.6, "CPX-4", None),    # tiny polygon: not included
         ("MAN-A-0006", "NEG-3", "negativos", 0.1, 2.0, None, "obra"),     # roza uno y cubre otro
         ("MAN-A-0006", "NEG-4", "negativos", 0.7, 9.0, None, "obra"),
     ], columns=["id_mancha", "id_catalogo", "catalogo", "frac_area_menor", "inter_ha", "complejo", "clase_negativo"])
@@ -114,7 +114,7 @@ def test_repartir_equilibra_y_no_parte_frames():
     assert cargas == [11, 11]
 
 
-# ------------------------------------------------------------------ óptico
+# ------------------------------------------------------------------ optical
 def test_indices_y_resumen_opticos():
     def dn(r):
         return np.full((4, 4), int(r * 10000 + 1000), np.uint16)
@@ -143,11 +143,11 @@ def test_mascaras_del_anillo_excluyen_la_geometria_y_lo_excluido():
     adentro, aro = eo.mascaras(g, excl, (200, 200), t)
     assert adentro.sum() == 400
     assert not (adentro & aro).any()
-    assert not aro[:, :50].any()  # la franja excluida (x < 1000 m)
+    assert not aro[:, :50].any()  # the excluded strip (x < 1000 m)
     assert aro.sum() > 0
 
 
-# ------------------------------------------------------------------ de punta a punta con el mock
+# ------------------------------------------------------------------ end to end with the mock
 def test_de_punta_a_punta_con_el_mock(mock, tmp_path):
     radar, optico = ct.leer(mock, "tabla_radar"), ct.leer(mock, "tabla_optico")
     cruce = ct.leer(mock, "cruce_manchas_catalogo")
@@ -168,7 +168,7 @@ def test_de_punta_a_punta_con_el_mock(mock, tmp_path):
     ct.validar(pred, "predicciones")
     assert len(pred) == len(radar)
     final.booster_.save_model(str(tmp_path / "modelo.txt"))
-    json.dumps(res)  # se puede escribir
+    json.dumps(res)  # it can be written
 
 
 def test_humo_con_un_solo_frame(mock):

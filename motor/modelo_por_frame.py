@@ -1,38 +1,38 @@
-"""Prompt 4: el lado del modelo con datos reales, frame por frame (etapas 5, 6 y 7 de `../docs/modelo.md`).
+"""Prompt 4: the model side with real data, frame by frame (stages 5, 6 and 7 of `../docs/modelo.md`).
 
-La etapa 4 sube una carpeta por frame, `salidas/<FRAME>/`, con `manchas.geojson`, `tabla_radar.parquet` e
-`insomnio_catalogo.parquet`. Este script recorre los frames de `../data/catalogos/frames.json` que ya la tienen y, para cada
-uno al que le falte (o cuyo `manchas.geojson` cambió), corre:
+Stage 4 uploads one folder per frame, `salidas/<FRAME>/`, with `manchas.geojson`, `tabla_radar.parquet` and
+`insomnio_catalogo.parquet`. This script goes through the frames in `../data/catalogos/frames.json` that already have it and, for each
+one that's missing it (or whose `manchas.geojson` changed), runs:
 
-  1. `cruce_manchas.py`  → `salidas/<FRAME>/cruce_manchas_catalogo.parquet` (segundos; lo necesita el veredicto);
-  2. `extraer_optico.py` → `salidas/<FRAME>/tabla_optico.parquet` y `tabla_optico_catalogo.parquet`, con las fechas
-     del frame (`fecha_inicio` y `fecha_fin` de `frames.json`) repartidas en todo el período.
+  1. `cruce_manchas.py`  → `salidas/<FRAME>/cruce_manchas_catalogo.parquet` (seconds; the verdict needs it);
+  2. `extraer_optico.py` → `salidas/<FRAME>/tabla_optico.parquet` and `tabla_optico_catalogo.parquet`, with the frame's
+     dates (`fecha_inicio` and `fecha_fin` from `frames.json`) spread over the whole period.
 
-Cada archivo se valida con `contratos.py`. En `salidas/<FRAME>/modelo_por_frame.json` queda qué se hizo y con qué
-`manchas.geojson` (su hash): si la etapa 4 vuelve a subir el frame, se rehace.
+Each file is validated with `contratos.py`. `salidas/<FRAME>/modelo_por_frame.json` records what was done and with which
+`manchas.geojson` (its hash): if stage 4 uploads the frame again, it's redone.
 
-    python modelo_por_frame.py                       # cruce y óptico de los frames que falten, y después `juntar`
-    python modelo_por_frame.py --solo-cruce          # sólo el cruce (para subirlo enseguida)
-    python modelo_por_frame.py --frame LOS_ANGELES   # sólo esos frames (se puede repetir)
-    python modelo_por_frame.py --rehacer             # aunque ya estén hechos
-    python modelo_por_frame.py juntar                # arma los tres archivos de `salidas/` con todos los frames
-    python modelo_por_frame.py tabla                 # radar de todos los frames → `armar_tabla.py` → `entrenar.py --predecir`
-                                                     # (con los negativos de OSM; --solo-catalogo da las etiquetas de la corrida 1)
-    python modelo_por_frame.py tabla --final         # ídem, y predice la prueba final (Argentina). Una sola vez, al terminar
-                                                     # (predicciones.parquet va a salidas/ sólo si el modelo está validado)
-    python modelo_por_frame.py variantes             # las variantes de etiquetas de la corrida 2 → salidas/metricas_variantes.json
-    python modelo_por_frame.py estado                # qué tiene cada frame
+    python modelo_por_frame.py                       # cross and optical for the missing frames, then `juntar`
+    python modelo_por_frame.py --solo-cruce          # only the cross (to upload it right away)
+    python modelo_por_frame.py --frame LOS_ANGELES   # only those frames (can be repeated)
+    python modelo_por_frame.py --rehacer             # even if they're already done
+    python modelo_por_frame.py juntar                # builds the three `salidas/` files with all the frames
+    python modelo_por_frame.py tabla                 # radar of all frames → `armar_tabla.py` → `entrenar.py --predecir`
+                                                     # (with the OSM negatives; --solo-catalogo gives the run 1 labels)
+    python modelo_por_frame.py tabla --final         # same, and predicts the final test (Argentina). Only once, at the end
+                                                     # (predicciones.parquet goes to salidas/ only if the model is validated)
+    python modelo_por_frame.py variantes             # the run 2 label variants → salidas/metricas_variantes.json
+    python modelo_por_frame.py estado                # what each frame has
 
-`juntar` escribe `salidas/cruce_manchas_catalogo.parquet`, `tabla_optico.parquet` y `tabla_optico_catalogo.parquet`.
-Las filas de un frame que todavía no tiene carpeta (el AMBA del prompt 3, hasta que llegue `salidas/AMBA/`) se
-conservan del archivo que ya estaba.
+`juntar` writes `salidas/cruce_manchas_catalogo.parquet`, `tabla_optico.parquet` and `tabla_optico_catalogo.parquet`.
+The rows of a frame that doesn't have a folder yet (the AMBA from prompt 3, until `salidas/AMBA/` arrives) are
+kept from the existing file.
 
-`tabla` no escribe `salidas/tabla_radar.parquet` ni `salidas/manchas.geojson` (los sube sólo el prompt 1): junta el
-radar de todos los frames en `datos/modelo/tabla_radar.parquet`, que no se sube. Si no hay `salidas/AMBA/`, el radar
-del AMBA es el provisional de `tabla_radar_provisional.py` (sin las columnas que necesitan la serie) y se avisa.
+`tabla` doesn't write `salidas/tabla_radar.parquet` or `salidas/manchas.geojson` (only prompt 1 uploads them): it joins the
+radar of all frames in `datos/modelo/tabla_radar.parquet`, which isn't committed. If there's no `salidas/AMBA/`, the AMBA
+radar is the provisional one from `tabla_radar_provisional.py` (without the columns that need the series) and it warns.
 
-Fuentes: NISAR L2 GUNW y GCOV (NASA/ISRO, ASF DAAC) para las manchas; Copernicus Sentinel-2 L2A (ESA) vía Microsoft
-Planetary Computer; catálogos de `data/` (Overture Maps / © colaboradores de OpenStreetMap, ODbL; EPA LMOP; Climate TRACE).
+Sources: NISAR L2 GUNW and GCOV (NASA/ISRO, ASF DAAC) for the blobs; Copernicus Sentinel-2 L2A (ESA) via Microsoft
+Planetary Computer; catalogs in `data/` (Overture Maps / © OpenStreetMap contributors, ODbL; EPA LMOP; Climate TRACE).
 """
 import argparse
 import glob
@@ -58,7 +58,7 @@ DATOS_MODELO = os.path.join(AQUI, "datos", "modelo")
 AMBA_PROVISIONAL = os.path.join(AQUI, "datos", "amba_provisional")
 ESTADO = "modelo_por_frame.json"
 JUNTOS = ("cruce_manchas_catalogo", "tabla_optico", "tabla_optico_catalogo")
-NUBES = (20.0, 40.0, 70.0)  # % de nubes de la escena entera: se afloja si no alcanzan las fechas
+NUBES = (20.0, 40.0, 70.0)  # % clouds of the whole scene: relaxed if there aren't enough dates
 
 
 # ------------------------------------------------------------------ frames y estado
@@ -80,7 +80,7 @@ def carpeta_de(frame, base=SALIDAS):
 
 
 def con_manchas(frames, base=SALIDAS):
-    """Frames de `frames.json` que ya tienen `<base>/<FRAME>/manchas.geojson`, en el orden de `frames.json`."""
+    """Frames in `frames.json` that already have `<base>/<FRAME>/manchas.geojson`, in `frames.json` order."""
     return [f for f in frames if os.path.exists(os.path.join(carpeta_de(f, base), "manchas.geojson"))]
 
 
@@ -98,7 +98,7 @@ def guardar_estado(carpeta, estado):
 
 
 def falta(carpeta, paso, archivos, rehacer=False):
-    """True si hay que correr `paso`: no se hizo, cambió `manchas.geojson` o falta alguno de sus archivos."""
+    """True if `paso` has to run: it wasn't done, `manchas.geojson` changed or one of its files is missing."""
     e = leer_estado(carpeta)
     hecho = e.get(paso) or {}
     if rehacer or hecho.get("manchas_sha1") != hash_archivo(os.path.join(carpeta, "manchas.geojson")):
@@ -120,7 +120,7 @@ def leer_manchas(carpeta):
         return json.load(fh)
 
 
-# ------------------------------------------------------------------ pasos por frame
+# ------------------------------------------------------------------ steps per frame
 def paso_cruce(frame, carpeta, avisar=print):
     fc = leer_manchas(carpeta)
     ms = cp.manchas(fc)
@@ -141,7 +141,7 @@ def paso_cruce(frame, carpeta, avisar=print):
 
 
 def paso_optico(frame, info, carpeta, hilos=24, max_fechas=10, min_valido=0.6, cache=None, limite=None, avisar=print):
-    import extraer_optico as eo  # acá, para que el cruce no necesite rasterio abierto ni red
+    import extraer_optico as eo  # here, so the cross doesn't need rasterio open or the network
 
     fc = leer_manchas(carpeta)
     o, s, e, n = info["bbox"]
@@ -187,8 +187,8 @@ def paso_optico(frame, info, carpeta, hilos=24, max_fechas=10, min_valido=0.6, c
 
 # ------------------------------------------------------------------ juntar
 def juntar(base=SALIDAS, frames=None, avisar=print):
-    """Arma los archivos de `base` con los de cada `<base>/<FRAME>/`. Las filas de los frames que no tienen carpeta
-    se conservan del archivo anterior (el AMBA del prompt 3, hasta que llegue `salidas/AMBA/`)."""
+    """Builds the `base` files from each `<base>/<FRAME>/`. The rows of frames without a folder
+    are kept from the previous file (the AMBA from prompt 3, until `salidas/AMBA/` arrives)."""
     escritos = {}
     for nombre in JUNTOS:
         archivo = os.path.basename(contratos.ruta(nombre, base))
@@ -202,7 +202,7 @@ def juntar(base=SALIDAS, frames=None, avisar=print):
         if os.path.exists(anterior):
             viejo = pd.read_parquet(anterior)
             viejo = viejo[~viejo["frame"].isin(propios)]
-            # sólo se conserva un frame que no tiene carpeta propia con manchas (si la tiene, manda lo nuevo)
+            # a frame is kept only if it has no folder of its own with blobs (if it has one, the new data wins)
             viejo = viejo[[not os.path.exists(os.path.join(base, f, "manchas.geojson")) for f in viejo["frame"]]]
             if len(viejo):
                 partes.append(viejo)
@@ -219,7 +219,7 @@ def juntar(base=SALIDAS, frames=None, avisar=print):
 
 # ------------------------------------------------------------------ tabla y entrenamiento
 def radar_de_todos(base=SALIDAS, destino=DATOS_MODELO, avisar=print):
-    """Junta el radar de todos los frames en `datos/modelo/tabla_radar.parquet` (no se sube). Devuelve (ruta, avisos)."""
+    """Joins the radar of all frames in `datos/modelo/tabla_radar.parquet` (not committed). Returns (path, warnings)."""
     partes = [pd.read_parquet(c) for c in sorted(glob.glob(os.path.join(base, "*", "tabla_radar.parquet")))]
     avisos = []
     if not os.path.exists(os.path.join(base, "AMBA", "tabla_radar.parquet")):
@@ -244,16 +244,16 @@ def radar_de_todos(base=SALIDAS, destino=DATOS_MODELO, avisar=print):
 
 def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_sin_validar=False, extra_entrenar=(), avisar=print,
                      negativos_osm=True, positivos="todos"):
-    """`armar_tabla.py` y `entrenar.py --predecir --controles` sobre todos los frames. La tabla, las particiones, el
-    modelo y las métricas van a `base`. **`predicciones.parquet` va a `base` sólo si el modelo está validado**
-    (`validado` en `metricas.json`); si no, queda en `datos/modelo/` y se saca el de `base`, para que el veredicto
-    (prompt 5) deje las manchas como `sin_clasificar` en vez de clasificarlas con un modelo que no se distingue del azar."""
+    """`armar_tabla.py` and `entrenar.py --predecir --controles` over all frames. The table, the partitions, the
+    model and the metrics go to `base`. **`predicciones.parquet` goes to `base` only if the model is validated**
+    (`validado` in `metricas.json`); otherwise it stays in `datos/modelo/` and the one in `base` is removed, so the verdict
+    (prompt 5) leaves the blobs as `sin_clasificar` instead of classifying them with a model no better than chance."""
     import shutil
     radar, avisos = radar_de_todos(base, avisar=avisar)
-    # una partición por frame (dejar un frame afuera por vez): la validación es por frame de verdad
+    # one partition per frame (leave one frame out at a time): the validation is truly by frame
     armar = [sys.executable, os.path.join(AQUI, "armar_tabla.py"), "--datos", base, "--radar", radar, "--salida", base,
              "--particiones", "50"]
-    if negativos_osm:  # desde la corrida 2: las manchas `uso_conocido` de OSM entran como otro_movil
+    if negativos_osm:  # since run 2: the OSM `uso_conocido` blobs go in as otro_movil
         armar.append("--negativos-osm")
     ia = os.path.join(base, "etiquetas_optico_ia.json")
     if os.path.exists(ia):
@@ -285,7 +285,7 @@ def tabla_y_entrenar(base=SALIDAS, final=False, umbral_insomnio=None, publicar_s
 
 
 # ------------------------------------------------------------------ variantes de etiquetas (corrida 2)
-# nombre: (opciones de `armar_tabla.armar`, qué cambia). Todas con las mismas particiones (una por frame).
+# name: (options of `armar_tabla.armar`, what changes). All with the same partitions (one per frame).
 VARIANTES = {
     "catalogo": (dict(), "La de la corrida 1: positivos y negativos de los catálogos."),
     "catalogo_y_osm": (dict(con_negativos_osm=True),
@@ -298,8 +298,8 @@ VARIANTES = {
 
 
 def variantes(base=SALIDAS, avisar=print):
-    """Entrena y valida por frame cada variante de etiquetas. Cada una queda entera en `datos/modelo/variantes/<nombre>/`
-    (no se sube) y el resumen de todas, en `<base>/metricas_variantes.json`. No toca la prueba final."""
+    """Trains and validates by frame each label variant. Each one stays whole in `datos/modelo/variantes/<nombre>/`
+    (not committed) and the summary of all of them, in `<base>/metricas_variantes.json`. It doesn't touch the final test."""
     import armar_tabla as at
     import entrenar
 
@@ -376,23 +376,23 @@ def estado(frames, base=SALIDAS):
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("paso", nargs="?", choices=["frames", "juntar", "tabla", "variantes", "estado"], default="frames")
-    a.add_argument("--frame", action="append", help="sólo estos frames (se puede repetir); por defecto, todos los que tengan manchas")
-    a.add_argument("--base", default=SALIDAS, help="carpeta con una subcarpeta por frame (por defecto ../data/salidas)")
-    a.add_argument("--solo-cruce", action="store_true", help="no correr el óptico")
-    a.add_argument("--rehacer", action="store_true", help="correr aunque ya esté hecho")
+    a.add_argument("--frame", action="append", help="only these frames (can be repeated); by default, all those with blobs")
+    a.add_argument("--base", default=SALIDAS, help="folder with one subfolder per frame (default ../data/salidas)")
+    a.add_argument("--solo-cruce", action="store_true", help="don't run the optical step")
+    a.add_argument("--rehacer", action="store_true", help="run even if it's already done")
     a.add_argument("--sin-juntar", action="store_true")
     a.add_argument("--hilos", type=int, default=24)
-    a.add_argument("--max-fechas", type=int, default=10, help="fechas a leer por celda, repartidas en el período (quedan hasta 8 por geometría)")
-    a.add_argument("--cache", help="carpeta para guardar las ventanas de Sentinel-2 leídas (por ejemplo datos/s2); no se sube")
-    a.add_argument("--limite", type=int, help="medir sólo las primeras N geometrías de cada frame (para probar; no se anota)")
-    a.add_argument("--final", action="store_true", help="`tabla`: predecir también la prueba final (Argentina). Una sola vez, al terminar")
-    a.add_argument("--umbral-insomnio", type=float, help="`tabla`: insomnio mínimo de las manchas para entrenar (por defecto 0,70)")
+    a.add_argument("--max-fechas", type=int, default=10, help="dates to read per cell, spread over the period (up to 8 are kept per geometry)")
+    a.add_argument("--cache", help="folder to save the Sentinel-2 windows read (for example datos/s2); not committed")
+    a.add_argument("--limite", type=int, help="measure only the first N geometries of each frame (for testing; not recorded)")
+    a.add_argument("--final", action="store_true", help="`tabla`: also predict the final test (Argentina). Only once, at the end")
+    a.add_argument("--umbral-insomnio", type=float, help="`tabla`: minimum blob insomnia to train (default 0.70)")
     a.add_argument("--solo-catalogo", action="store_true",
-                   help="`tabla`: sin los negativos de OSM (las etiquetas de la corrida 1: sólo los catálogos)")
+                   help="`tabla`: without the OSM negatives (the run 1 labels: catalogs only)")
     a.add_argument("--positivos", choices=("todos", "sin_sin", "solo_act"), default="todos",
-                   help="`tabla`: qué basurales cuentan como basural_activo según las etiquetas ópticas de la IA (ver armar_tabla.py)")
+                   help="`tabla`: which dump sites count as basural_activo according to the AI optical labels (see armar_tabla.py)")
     a.add_argument("--publicar-sin-validar", action="store_true",
-                   help="`tabla`: escribir salidas/predicciones.parquet aunque el modelo no esté validado (decisión de la mesa)")
+                   help="`tabla`: write salidas/predicciones.parquet even if the model isn't validated (team decision)")
     args = a.parse_args()
 
     frames = leer_frames()
@@ -413,7 +413,7 @@ def main():
     elegidos = [f for f in con_manchas(frames, args.base) if not args.frame or f in set(args.frame)]
     if not elegidos:
         sys.exit("No hay frames con manchas.geojson para procesar.")
-    for f in elegidos:  # el cruce de todos primero: tarda segundos y el veredicto lo espera
+    for f in elegidos:  # the cross for all of them first: it takes seconds and the verdict waits for it
         c = carpeta_de(f, args.base)
         if falta(c, "cruce", ["cruce_manchas_catalogo.parquet"], args.rehacer):
             paso_cruce(f, c)

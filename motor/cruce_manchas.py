@@ -1,16 +1,16 @@
-"""Cruza las manchas con los polígonos de los catálogos: escribe `cruce_manchas_catalogo.parquet` según el contrato.
+"""Crosses the blobs with the catalog polygons: writes `cruce_manchas_catalogo.parquet` following the contract.
 
-Una fila por par mancha candidata y polígono (basural o negativo) que se tocan, **sin filtrar por el 30 %**: el que
-lee aplica `contratos.CRITERIO_CRUCE` sobre `frac_area_menor`. Las áreas se miden en la UTM del frame.
-Además del contrato trae `inter_ha` (la superficie de la intersección), para el mínimo de `../docs/modelo.md`.
+One row per pair of candidate blob and polygon (dump site or negative) that touch, **without filtering by the 30 %**: the
+reader applies `contratos.CRITERIO_CRUCE` on `frac_area_menor`. Areas are measured in the frame's UTM.
+Besides the contract it carries `inter_ha` (the area of the intersection), for the minimum in `../docs/modelo.md`.
 
     python cruce_manchas.py                                         # ../data/salidas/manchas.geojson (AMBA)
     python cruce_manchas.py --manchas datos/mock/manchas.geojson --catalogo datos/mock/catalogo_mock.geojson \
                             --salida datos/mock/prueba
-    python cruce_manchas.py --todas                                 # también las manchas descartadas
+    python cruce_manchas.py --todas                                 # also the discarded blobs
 
-Si se da `--catalogo`, se usa ese GeoJSON (con `id`, `catalogo`, `complejo`, `clase` en las propiedades) en vez de
-`../data/`. Sirve para el mock.
+If `--catalogo` is given, that GeoJSON (with `id`, `catalogo`, `complejo`, `clase` in the properties) is used instead of
+`../data/catalogos/`. It's for the mock.
 """
 import argparse
 import json
@@ -43,7 +43,7 @@ def _catalogo_archivo(camino):
 
 
 def cruzar(lista_manchas, poligonos, epsg_por_frame):
-    """DataFrame del contrato `cruce_manchas_catalogo` (más `frac_area_menor` calculado)."""
+    """DataFrame of the `cruce_manchas_catalogo` contract (plus the computed `frac_area_menor`)."""
     filas = []
     por_frame = defaultdict(list)
     for props, g in lista_manchas:
@@ -76,14 +76,14 @@ def cruzar(lista_manchas, poligonos, epsg_por_frame):
             })
     cols = list(contratos.CONTRATOS["cruce_manchas_catalogo"].nombres) + ["inter_ha"]
     df = pd.DataFrame(filas, columns=cols)
-    # un polígono puede venir en las dos fuentes de negativos; nos quedamos con el par de mayor solape
+    # a polygon can come from both negative sources; we keep the pair with the largest overlap
     return df.sort_values("frac_area_menor", ascending=False).drop_duplicates(["id_mancha", "id_catalogo"]) \
              .sort_values(["id_mancha", "frac_area_menor"], ascending=[True, False]).reset_index(drop=True)
 
 
 def cruzar_por_frame(ms, fc, cargar):
-    """Cruza frame por frame: el catálogo se carga con la caja de cada frame (sirve para el geojson de todos los frames
-    que arma `extraer_manchas.py juntar`). Devuelve (DataFrame, polígonos cargados en total)."""
+    """Crosses frame by frame: the catalog is loaded with each frame's box (works for the all-frames geojson
+    built by `extraer_manchas.py juntar`). Returns (DataFrame, total polygons loaded)."""
     epsg_meta = (fc.get("meta") or {}).get("epsg") or fc.get("epsg")
     frames = sorted({p["frame"] for p, _ in ms})
     partes, total = [], 0
@@ -108,9 +108,9 @@ def cruzar_por_frame(ms, fc, cargar):
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--manchas", default=os.path.join(AQUI, "..", "data", "salidas", "manchas.geojson"))
-    a.add_argument("--catalogo", help="GeoJSON de polígonos en vez de ../data/ (el mock)")
+    a.add_argument("--catalogo", help="GeoJSON of polygons instead of ../data/catalogos/ (the mock)")
     a.add_argument("--negativos", default="ambos", choices=("ambos", "amba", "mundo"))
-    a.add_argument("--todas", action="store_true", help="cruzar también las manchas descartadas")
+    a.add_argument("--todas", action="store_true", help="also cross the discarded blobs")
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     args = a.parse_args()
 

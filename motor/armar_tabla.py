@@ -1,33 +1,33 @@
-"""Etapa 6: junta radar, óptico y cruce de cada mancha, la etiqueta y arma las particiones por frame.
+"""Stage 6: joins the radar, optical and cross data of each blob, labels it and builds the partitions by frame.
 
-Escribe `tabla_entrenamiento.parquet` y `particiones.json` según `../docs/contratos-datos.md`.
+Writes `tabla_entrenamiento.parquet` and `particiones.json` following `../docs/contratos-datos.md`.
 
-    python armar_tabla.py                                  # lee y escribe en ../data/salidas/
+    python armar_tabla.py                                  # reads and writes in ../data/salidas/
     python armar_tabla.py --datos datos/mock --salida datos/mock/prueba
     python armar_tabla.py --radar datos/amba_provisional/tabla_radar.parquet --salida datos/amba_provisional
 
-Etiqueta (etapa 6 del plan):
-- una mancha se cruza con un polígono si la intersección cubre al menos `--criterio` (0,30) del área menor y, si el
-  cruce trae `inter_ha`, además mide al menos `--min-inter-ha` (5,12 ha = 8 píxeles de 80 m; ver `../docs/modelo.md`);
-- se cruza sólo con basurales (de cualquier estado) → `basural_activo`; sólo con negativos → `otro_movil`;
-  con los dos o con ninguno → no entra;
-- un complejo cuenta una vez: si varias manchas caen sobre el mismo complejo (o el mismo negativo), queda la más grande;
-- `id_catalogo` es el polígono de mayor `frac_area_menor`.
+Label (stage 6 of the plan):
+- a blob crosses a polygon if the intersection covers at least `--criterio` (0.30) of the smaller area and, if the
+  cross carries `inter_ha`, it also measures at least `--min-inter-ha` (5.12 ha = 8 pixels of 80 m; see `../docs/modelo.md`);
+- it crosses only dump sites (any status) → `basural_activo`; only negatives → `otro_movil`;
+  both or none → not included;
+- a complex counts once: if several blobs fall on the same complex (or the same negative), the largest one is kept;
+- `id_catalogo` is the polygon with the largest `frac_area_menor`.
 
-Opciones que se agregaron con la corrida 2 (ver `../docs/resultados.md`):
-- `--negativos-osm`: suma como `otro_movil` las manchas candidatas que la etapa 4 marcó `clase_osm` = `uso_conocido`
-  (aeródromos, golf, parques, cementerios, canteras, forestación, predios militares y reservas de OSM vía Overture) y
-  que **no tocan ningún basural del catálogo** ni tienen nombre de relleno (`NOMBRE_DE_RELLENO`: "Freshkills Park"). Sólo en los frames que no son de la prueba final (en el AMBA esa marca
-  sale de Nominatim y no es comparable). Su `id_catalogo` es `NEG-OSM-<id_mancha>` (no están en `data/catalogos/negativos/`),
-  su `clase_negativo` es `osm_<tipo>` y, si el lugar tiene nombre, todas sus manchas cuentan una vez.
-- `--etiquetas-optico` y `--positivos`: `salidas/etiquetas_optico_ia.json` dice, por basural, si en Sentinel-2 se ve
-  actividad (`act`), no se ve (`sin`) o no se puede decir (`nose`). **Las puso una IA y no las revisó una persona.**
-  `--positivos sin_sin` saca de `basural_activo` las manchas cuyo basural es `sin`; `--positivos solo_act` deja sólo
-  las `act`. La columna `actividad_optica` queda en la tabla (no entra al modelo).
+Options added with run 2 (see `../docs/resultados.md`):
+- `--negativos-osm`: adds as `otro_movil` the candidate blobs that stage 4 marked `clase_osm` = `uso_conocido`
+  (airfields, golf courses, parks, cemeteries, quarries, plantations, military sites and reserves from OSM via Overture) and
+  that **don't touch any catalog dump site** nor have a landfill name (`NOMBRE_DE_RELLENO`: "Freshkills Park"). Only in the frames that aren't the final test (in the AMBA that mark
+  comes from Nominatim and isn't comparable). Their `id_catalogo` is `NEG-OSM-<id_mancha>` (they're not in `data/catalogos/negativos/`),
+  their `clase_negativo` is `osm_<tipo>` and, if the place has a name, all its blobs count once.
+- `--etiquetas-optico` and `--positivos`: `salidas/etiquetas_optico_ia.json` says, per dump site, whether activity is
+  visible in Sentinel-2 (`act`), not visible (`sin`) or can't be told (`nose`). **They were assigned by an AI and no person reviewed them.**
+  `--positivos sin_sin` removes from `basural_activo` the blobs whose dump site is `sin`; `--positivos solo_act` keeps only
+  the `act` ones. The `actividad_optica` column stays in the table (it doesn't go into the model).
 
-Particiones: por frame. Los frames con `reservado_prueba` (Argentina) van a `prueba_final`. Los demás se reparten en
-hasta `--particiones` grupos, equilibrando la cantidad de filas (cada frame entero en un grupo).
-Sin `frames.json`, el AMBA se toma como Buenos Aires, ARG, reservado para la prueba final.
+Partitions: by frame. Frames with `reservado_prueba` (Argentina) go to `prueba_final`. The others are spread over
+up to `--particiones` groups, balancing the number of rows (each frame whole in one group).
+Without `frames.json`, the AMBA is taken as Buenos Aires, ARG, reserved for the final test.
 """
 import argparse
 import json
@@ -43,7 +43,7 @@ sys.path.insert(0, AQUI)
 import contratos  # noqa: E402
 
 FRAMES_POR_DEFECTO = {"AMBA": {"ciudad": "Buenos Aires", "pais": "ARG", "reservado_prueba": True}}
-MIN_INTER_HA = 5.12  # 8 píxeles de 80 m: `insomnio.Parametros.min_px_sitio`
+MIN_INTER_HA = 5.12  # 8 pixels of 80 m: `insomnio.Parametros.min_px_sitio`
 
 
 def leer_frames(camino):
@@ -59,26 +59,26 @@ POSITIVOS = ("todos", "sin_sin", "solo_act")
 
 
 def leer_etiquetas_optico(camino):
-    """{id_catalogo: 'act' | 'sin' | 'nose'} de `etiquetas_optico_ia.json` (etiquetas de una IA, sin revisar)."""
+    """{id_catalogo: 'act' | 'sin' | 'nose'} from `etiquetas_optico_ia.json` (labels from an AI, not reviewed)."""
     with open(camino, encoding="utf-8") as fh:
         return {e["id_catalogo"]: e["final"] for e in json.load(fh)["etiquetas"]}
 
 
 def _actividad(ids, optico_ia):
-    """Actividad óptica de una mancha según los basurales que cruza: `act` si en alguno se ve, `sin` si en ninguno se
-    ve y en alguno se dijo que no, `nose` si no se pudo decir, y None si ninguno tiene etiqueta."""
+    """Optical activity of a blob according to the dump sites it crosses: `act` if it's visible in any, `sin` if it's visible
+    in none and some were labeled as not, `nose` if it couldn't be told, and None if none has a label."""
     vistos = {optico_ia[i] for i in ids if i in optico_ia}
     return "act" if "act" in vistos else "sin" if "sin" in vistos else "nose" if vistos else None
 
 
-# Un uso conocido cuyo nombre dice que es (o fue) un relleno no puede ser negativo: un basural de cualquier estado es
-# `basural_activo` (etapa 6). No entra al entrenamiento ni como positivo (no está cruzado con el catálogo).
+# A known land use whose name says it is (or was) a landfill can't be a negative: a dump site of any status is
+# `basural_activo` (stage 6). It doesn't go into training even as a positive (it isn't crossed with the catalog).
 NOMBRE_DE_RELLENO = re.compile(r"landfill|fresh ?kills|relleno sanitario|vertedero|basur|tiradero|dump|tempat pembuangan|\bTPA\b", re.I)
 
 
 def negativos_osm(radar, cruce, frames, ya_etiquetadas):
-    """Manchas `uso_conocido` de OSM como `otro_movil`: las que no tocan ningún basural del catálogo, no están ya
-    etiquetadas y son de frames que no van a la prueba final."""
+    """OSM `uso_conocido` blobs as `otro_movil`: those that touch no catalog dump site, aren't labeled already
+    and come from frames that don't go to the final test."""
     cols = ["id_mancha", "id_catalogo", "complejo", "clase_negativo", "clase"]
     if "clase_osm" not in radar.columns:
         raise SystemExit("--negativos-osm: la tabla de radar no trae `clase_osm` (la escribe la etapa 4).")
@@ -98,8 +98,8 @@ def negativos_osm(radar, cruce, frames, ya_etiquetadas):
 
 
 def etiquetar(cruce, criterio=contratos.CRITERIO_CRUCE, min_inter_ha=MIN_INTER_HA, optico_ia=None):
-    """Una fila por mancha etiquetada: id_mancha, id_catalogo, complejo, clase_negativo, clase (y `actividad_optica`
-    si se pasan las etiquetas ópticas)."""
+    """One row per labeled blob: id_mancha, id_catalogo, complejo, clase_negativo, clase (and `actividad_optica`
+    if the optical labels are given)."""
     c = cruce[cruce["frac_area_menor"] >= criterio].copy()
     if "inter_ha" in c.columns and min_inter_ha:
         c = c[c["inter_ha"] >= min_inter_ha]
@@ -123,7 +123,7 @@ def etiquetar(cruce, criterio=contratos.CRITERIO_CRUCE, min_inter_ha=MIN_INTER_H
 
 
 def repartir(filas_por_frame, k):
-    """Reparte frames en k grupos equilibrando filas (el más grande primero al grupo más chico)."""
+    """Spreads frames into k groups balancing rows (the largest first, into the smallest group)."""
     k = max(1, min(k, len(filas_por_frame)))
     grupos = [[] for _ in range(k)]
     carga = [0] * k
@@ -142,7 +142,7 @@ def armar(radar, optico, cruce, frames, criterio=contratos.CRITERIO_CRUCE, min_i
         raise SystemExit("--positivos sin_sin y solo_act necesitan --etiquetas-optico")
     etiquetas = etiquetar(cruce, criterio, min_inter_ha, optico_ia)
     sacadas = {}
-    if positivos != "todos":  # sólo en los frames de entrenamiento: la prueba final no se toca
+    if positivos != "todos":  # only in the training frames: the final test isn't touched
         frame_de = dict(zip(radar["id_mancha"], radar["frame"]))
         entrena = ~etiquetas["id_mancha"].map(lambda i: bool(frames.get(frame_de.get(i), {}).get("reservado_prueba")))
         bas = etiquetas["clase"] == "basural_activo"
@@ -157,10 +157,10 @@ def armar(radar, optico, cruce, frames, criterio=contratos.CRITERIO_CRUCE, min_i
     radar = radar.drop(columns=[c for c in ("clase_osm", "que") if c in radar.columns])
     opt = optico.drop(columns=[c for c in ("frame", "n_escenas", "fechas") if c in optico.columns])
     t = radar.merge(opt, on="id_mancha", how="left").merge(etiquetas, on="id_mancha", how="inner")
-    if extra is not None:  # por ejemplo, cnn_p_basural
+    if extra is not None:  # for example, cnn_p_basural
         t = t.merge(extra, on="id_mancha", how="left")
     t = t[t["insomnio"] >= umbral_insomnio]
-    # un complejo cuenta una vez por frame: queda la mancha más grande
+    # a complex counts once per frame: the largest blob is kept
     t = t.sort_values(["area_ha", "id_mancha"], ascending=[False, True]).drop_duplicates(["frame", "complejo"])
     faltan = sorted(set(t["frame"]) - set(frames))
     if faltan:
@@ -190,22 +190,22 @@ def armar(radar, optico, cruce, frames, criterio=contratos.CRITERIO_CRUCE, min_i
 
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--datos", default=os.path.join(AQUI, "..", "data", "salidas"), help="carpeta con los parquets de entrada")
+    a.add_argument("--datos", default=os.path.join(AQUI, "..", "data", "salidas"), help="folder with the input parquets")
     a.add_argument("--radar")
     a.add_argument("--optico")
     a.add_argument("--cruce")
-    a.add_argument("--frames", help="frames.json (por defecto ../data/catalogos/frames.json, o el de --datos si existe)")
-    a.add_argument("--cnn", help="parquet con id_mancha y cnn_p_basural (opcional)")
+    a.add_argument("--frames", help="frames.json (default ../data/catalogos/frames.json, or the one in --datos if it exists)")
+    a.add_argument("--cnn", help="parquet with id_mancha and cnn_p_basural (optional)")
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     a.add_argument("--criterio", type=float, default=contratos.CRITERIO_CRUCE)
     a.add_argument("--min-inter-ha", type=float, default=MIN_INTER_HA)
     a.add_argument("--umbral-insomnio", type=float, default=0.70,
-                   help="insomnio mínimo de la mancha para entrenar (se anota en particiones.json)")
+                   help="minimum blob insomnia to train (noted in particiones.json)")
     a.add_argument("--particiones", type=int, default=5)
-    a.add_argument("--negativos-osm", action="store_true", help="sumar las manchas `uso_conocido` de OSM como `otro_movil`")
-    a.add_argument("--etiquetas-optico", help="etiquetas_optico_ia.json (actividad en óptico por basural; de una IA, sin revisar)")
+    a.add_argument("--negativos-osm", action="store_true", help="add the OSM `uso_conocido` blobs as `otro_movil`")
+    a.add_argument("--etiquetas-optico", help="etiquetas_optico_ia.json (optical activity per dump site; from an AI, not reviewed)")
     a.add_argument("--positivos", choices=POSITIVOS, default="todos",
-                   help="qué basurales cuentan como `basural_activo` según --etiquetas-optico")
+                   help="which dump sites count as `basural_activo` according to --etiquetas-optico")
     args = a.parse_args()
 
     radar = contratos.leer(args.radar or contratos.ruta("tabla_radar", args.datos))

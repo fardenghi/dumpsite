@@ -1,25 +1,25 @@
-"""Genera versiones chicas y FALSAS de cada archivo de `contratos.py`, para probar código antes de tener datos reales.
+"""Generates small, FAKE versions of each `contratos.py` file, to test code before having real data.
 
-    python motor/contratos_mock.py                       # escribe en datos/mock/ (no se sube al repo)
+    python motor/contratos_mock.py                       # writes to datos/mock/ (not committed to the repo)
     python motor/contratos_mock.py --manchas-por-frame 60 --semilla 3 --salida otra/carpeta
 
-Los archivos quedan todos en la misma carpeta, con el nombre del contrato, y son coherentes entre sí: los
-`id_mancha` y los `id_catalogo` cruzan de un archivo al otro. Además escribe `catalogo_mock.geojson`, con los
-polígonos de catálogo que usa el mock, para probar `cruce_manchas.py` sin los catálogos reales.
+The files all end up in the same folder, with the contract's name, and are consistent with each other: the
+`id_mancha` and `id_catalogo` values cross from one file to another. It also writes `catalogo_mock.geojson`, with the
+catalog polygons the mock uses, to test `cruce_manchas.py` without the real catalogs.
 
-TODOS LOS VALORES SON INVENTADOS. No son resultados: no se citan, no van a la web ni al pitch.
-Lo único real son los identificadores y los valores de radar de tres sitios del AMBA (Norte III, González
-Catán y Luján), copiados de `salidas/fichas_80m.json`, para que el veredicto de prueba dé lo mismo que el real.
+ALL VALUES ARE MADE UP. They're not results: they're not quoted, and they go neither to the web nor to the pitch.
+The only real things are the identifiers and the radar values of three AMBA sites (Norte III, González
+Catán and Luján), copied from `salidas/fichas_80m.json`, so the test verdict matches the real one.
 
-Qué hay en cada frame (con 10 manchas por frame, el valor por defecto):
-  - 2 manchas sobre un basural y 4 sobre un negativo (aeropuerto, cantera, contenedores, humedal): son las que se etiquetan;
-  - 1 mancha que toca un basural y un negativo a la vez, y 1 que apenas roza un negativo (menos del 30 %): no se etiquetan;
-  - 2 manchas que no tocan nada: son las que hay que predecir;
-  - 3 manchas descartadas (chica, lineal y lisa), que sólo están en `manchas.geojson`;
-  - polígonos de catálogo sin mancha: un basural cerrado y quieto, uno abierto y quieto, uno de menos de 10 ha,
-    un cultivo quieto y una obra chica.
-Fuera del AMBA hay además un basural cerrado con una mancha encima ("cerrado pero despierto").
-El AMBA es de Argentina, así que va a `prueba_final`; los otros tres frames son las particiones.
+What each frame has (with 10 blobs per frame, the default):
+  - 2 blobs over a dump site and 4 over a negative (airport, quarry, containers, wetland): these are the labeled ones;
+  - 1 blob touching a dump site and a negative at once, and 1 barely grazing a negative (under 30 %): not labeled;
+  - 2 blobs touching nothing: these are the ones to predict;
+  - 3 discarded blobs (small, linear and smooth), which are only in `manchas.geojson`;
+  - catalog polygons without a blob: a closed quiet dump site, an open quiet one, one under 10 ha,
+    a quiet crop field and a small construction site.
+Outside the AMBA there's also a closed dump site with a blob on top ("closed but awake").
+The AMBA is in Argentina, so it goes to `prueba_final`; the other three frames are the partitions.
 """
 import argparse
 import json
@@ -37,7 +37,7 @@ import contratos as ct  # noqa: E402
 SALIDA = os.path.join(AQUI, "datos", "mock")
 AVISO = "DATOS FALSOS generados por motor/contratos_mock.py. No son resultados."
 
-# bbox = [lon_oeste, lat_sur, lon_este, lat_norte]. Órbitas y fechas inventadas, salvo las del AMBA.
+# bbox = [lon_west, lat_south, lon_east, lat_north]. Orbits and dates are made up, except the AMBA's.
 FRAMES = (
     dict(frame="AMBA", orbita=[10, 161], ciudad="Buenos Aires", pais="ARG", hemisferio="S", epsg=32721,
          bbox=[-59.35, -34.90, -58.25, -34.25], n_gunw=15, fecha_inicio="2026-06-25", fecha_fin="2026-10-12",
@@ -50,7 +50,7 @@ FRAMES = (
          bbox=[36.60, -1.55, 37.20, -1.00], n_gunw=9, fecha_inicio="2026-07-01", fecha_fin="2026-10-23", reservado_prueba=False),
 )
 
-# Sitios reales del AMBA: id del catálogo, complejo, estado, área, y (insomnio, persistencia, eco_db) de fichas_80m.json.
+# Real AMBA sites: catalog id, complex, status, area, and (insomnia, persistence, eco_db) from fichas_80m.json.
 AMBA_REALES = {
     "despierto_1": dict(id="BAS-053304", complejo="CPX-015400", nombre="Complejo Ambiental Norte III (CEAMSE)", estado="abierto",
                         area_ha=71.5, radar=(0.86, 0.6, -9.9)),
@@ -61,7 +61,7 @@ AMBA_REALES = {
     "aeropuerto": dict(id="NEG-AMBA-000931", nombre="Aeropuerto El Palomar", area_ha=303.8),
 }
 
-# Perfil medio de cada tipo de superficie: eco, hv_hh, ndvi, bsi, ndwi, b11, b12. Inventado, pero con el signo esperado.
+# Mean profile of each surface type: echo, hv_hh, ndvi, bsi, ndwi, b11, b12. Made up, but with the expected sign.
 PERFILES = {
     "basural": (-10.0, -7.0, 0.18, 0.12, -0.25, 0.28, 0.22),
     "aeropuerto": (-12.0, -10.0, 0.45, -0.02, -0.40, 0.22, 0.14),
@@ -74,12 +74,12 @@ PERFILES = {
 }
 NEGATIVOS_DESPIERTOS = ("aeropuerto", "cantera", "puerto_playa_contenedores", "humedal", "obra", "chatarreria_desguace")
 ESTADOS_DESPIERTOS = ("abierto", "desconocido", "abierto", "desconocido", "cerrado")
-ANILLO = (-10.5, -7.5, 0.42, 0.00, -0.38, 0.22, 0.14)  # el entorno "típico"
+ANILLO = (-10.5, -7.5, 0.42, 0.00, -0.38, 0.22, 0.14)  # the "typical" surroundings
 
 
-# ------------------------------------------------------------------ geometría (rectángulos en metros locales)
+# ------------------------------------------------------------------ geometry (rectangles in local meters)
 class Plano:
-    """Metros locales (x al este, y al norte) desde la esquina sudoeste del bbox, y de vuelta a grados."""
+    """Local meters (x east, y north) from the southwest corner of the bbox, and back to degrees."""
 
     def __init__(self, bbox):
         self.lon0, self.lat0 = bbox[0], bbox[1]
@@ -114,7 +114,7 @@ def interseccion_ha(a, b):
 
 
 def celdas(plano, n, rng):
-    """n centros de celda que no se pisan, en orden aleatorio. Cada celda tiene que alojar un polígono de 300 ha."""
+    """n non-overlapping cell centers, in random order. Each cell has to fit a 300 ha polygon."""
     lado = math.sqrt(plano.ancho * plano.alto / (n * 1.3))
     if lado < 3500:
         raise SystemExit(f"No entran {n} sitios en el frame sin pisarse: bajá --manchas-por-frame.")
@@ -125,14 +125,14 @@ def celdas(plano, n, rng):
 
 # ------------------------------------------------------------------ un frame
 def roles(n):
-    """El papel de cada mancha candidata. Las primeras 10 cubren todos los casos; el resto repite los que se etiquetan."""
+    """The role of each candidate blob. The first 10 cover every case; the rest repeat the labeled ones."""
     base = ["basural", "basural", "negativo", "negativo", "negativo", "negativo", "nada", "nada", "ambos", "roce"]
     extra = ["basural", "negativo", "negativo", "nada"]
     return (base + [extra[i % len(extra)] for i in range(max(n - len(base), 0))])[:max(n, 1)]
 
 
 def armar_frame(fr, n_manchas, rng, contador):
-    """Devuelve (manchas, catálogo) del frame: listas de diccionarios con su rectángulo y lo que hace falta para las tablas."""
+    """Returns (blobs, catalog) of the frame: lists of dicts with their rectangle and what the tables need."""
     plano = Plano(fr["bbox"])
     es_amba = fr["frame"] == "AMBA"
     papeles = roles(n_manchas)
@@ -171,7 +171,7 @@ def armar_frame(fr, n_manchas, rng, contador):
                             compacidad=round(4 * math.pi * ancho * alto / (2 * (ancho + alto)) ** 2, 3)))
 
     def encima(p, cubre=(0.55, 0.95)):
-        """Una mancha que cubre buena parte del rectángulo p, un poco corrida."""
+        """A blob covering a good part of rectangle p, a bit shifted."""
         ancho, alto = p[2] - p[0], p[3] - p[1]
         w, h = max(ancho * rng.uniform(*cubre), 330), max(alto * rng.uniform(*cubre), 330)
         return rect((p[0] + p[2]) / 2 + rng.uniform(-0.15, 0.15) * ancho, (p[1] + p[3]) / 2 + rng.uniform(-0.15, 0.15) * alto, w, h)
@@ -192,16 +192,16 @@ def armar_frame(fr, n_manchas, rng, contador):
             p = cuadrado(cx, cy, real["area_ha"] if real else rng.uniform(250, 320) if clase == "aeropuerto" else rng.uniform(15, 150))
             negativo(p, clase, real, radar="despierto")
             mancha(encima(p, (0.35, 0.6) if clase == "aeropuerto" else (0.55, 0.95)), clase, "negativo")
-        elif papel == "ambos":  # un basural y una cantera pegados, y la mancha arriba de los dos
+        elif papel == "ambos":  # a dump site and a quarry side by side, and the blob over both
             lado = math.sqrt(rng.uniform(25, 60) * 1e4)
             basural(rect(cx - lado / 2 - 50, cy, lado, lado), "desconocido", radar="despierto")
             negativo(rect(cx + lado / 2 + 50, cy, lado, lado), "cantera", radar="despierto")
             mancha(rect(cx, cy, lado * 1.2, lado * 0.8), "basural", "ambos")
-        elif papel == "roce":  # la mancha pisa el 10 % del negativo: no alcanza para etiquetarla
+        elif papel == "roce":  # the blob covers 10 % of the negative: not enough to label it
             lado = math.sqrt(rng.uniform(20, 60) * 1e4)
             negativo(rect(cx - lado * 0.45, cy, lado, lado), "cultivo", radar="intermedio")
             mancha(rect(cx + lado * 0.45, cy, lado, lado), str(rng.choice(list(PERFILES))), "roce")
-        else:  # nada: lo que hay que predecir
+        else:  # nothing: what has to be predicted
             ha = rng.uniform(10.5, 90)
             ancho = math.sqrt(ha * 1e4 * rng.uniform(1.0, 2.4))
             mancha(rect(cx, cy, ancho, ha * 1e4 / ancho), str(rng.choice(list(PERFILES))), "nada")
@@ -224,7 +224,7 @@ def armar_frame(fr, n_manchas, rng, contador):
         else:
             negativo(cuadrado(cx, cy, rng.uniform(2, 8)), "obra", radar="chico")
 
-    # Como `insomnio.manchas()`: de mayor a menor superficie, y de ahí sale el número del id.
+    # Like `insomnio.manchas()`: largest area first, and the id number comes from that.
     manchas.sort(key=lambda m: -area_ha(m["rect"]))
     for i, m in enumerate(manchas, 1):
         m.update(id_mancha=ct.id_mancha(fr["frame"], i), etiqueta=i, frame=fr["frame"], ha=round(area_ha(m["rect"]), 1),
@@ -241,7 +241,7 @@ def r2(v, n=2):
 
 
 def optico(tipo, rng, fr):
-    """Las columnas ópticas de una superficie de ese tipo, con ruido."""
+    """The optical columns of a surface of that type, with noise."""
     _, _, ndvi, bsi, ndwi, b11, b12 = PERFILES[tipo]
     v = dict(ndvi_media=ndvi + rng.normal(0, 0.05), ndvi_variacion=abs(rng.normal(0.03 if tipo != "cultivo" else 0.12, 0.01)),
              bsi_media=bsi + rng.normal(0, 0.04), ndwi_media=ndwi + rng.normal(0, 0.04),
@@ -263,7 +263,7 @@ def radar_mancha(m, rng, fr):
     ins = rng.uniform(0.70, 1.0)
     agua = rng.uniform(0.10, 0.40) if m["tipo"] == "humedal" else rng.uniform(0, 0.12)
     urbano = rng.uniform(0, 0.8) * (1 - agua)
-    eco_m = float(np.clip(eco + rng.normal(0, 1.2), -12.9, -2.0))  # nunca menos de −13 dB: sería "lisa" y estaría descartada
+    eco_m = float(np.clip(eco + rng.normal(0, 1.2), -12.9, -2.0))  # never under −13 dB: it would be "smooth" and discarded
     return dict(
         id_mancha=m["id_mancha"], frame=m["frame"], insomnio=r2(ins), persistencia=r2(rng.uniform(0.5, ins)),
         contraste_mediana=r2(rng.uniform(0.45, 0.75)), contraste_desvio=r2(rng.uniform(0.05, 0.15)),
@@ -277,7 +277,7 @@ def radar_mancha(m, rng, fr):
 
 
 def radar_catalogo(c, rng, fr):
-    """La fila de `insomnio_catalogo` de un polígono, con el veredicto de `insomnio.ficha()` que le toca en el mock."""
+    """The `insomnio_catalogo` row of a polygon, with the `insomnio.ficha()` verdict it gets in the mock."""
     eco = PERFILES["basural" if c["catalogo"] == "basurales" else c["clase"]][0]
     eco = r2(np.clip(eco + rng.normal(0, 1.0), -12.9, -2.0), 1)
     n = fr["n_gunw"]
@@ -310,7 +310,7 @@ def p_basural(m, rng):
 
 # ------------------------------------------------------------------ todo
 def generar(salida=SALIDA, manchas_por_frame=10, semilla=0):
-    """Escribe todos los archivos del mock en `salida` y devuelve {nombre: ruta}."""
+    """Writes all the mock files to `salida` and returns {name: path}."""
     rng = np.random.default_rng(semilla)
     contador = {"BAS": 0, "NEG": 0}
     manchas, catalogo, frames = [], [], []
@@ -343,7 +343,7 @@ def generar(salida=SALIDA, manchas_por_frame=10, semilla=0):
     ])
     predicciones = pd.DataFrame([dict(id_mancha=m["id_mancha"], frame=m["frame"], p_basural=p_basural(m, rng)) for m in candidatas])
 
-    # La regla de la etapa 6: la mancha se etiqueta si se cruza (30 % del área menor) con polígonos de un solo catálogo.
+    # The stage 6 rule: the blob is labeled if it crosses (30 % of the smaller area) polygons of a single catalog.
     fuerte = cruce[cruce["frac_area_menor"] >= ct.CRITERIO_CRUCE]
     un_catalogo = fuerte.groupby("id_mancha")["catalogo"].transform("nunique") == 1
     mejor = fuerte[un_catalogo].sort_values("frac_area_menor", ascending=False).drop_duplicates("id_mancha")
@@ -399,7 +399,7 @@ def generar(salida=SALIDA, manchas_por_frame=10, semilla=0):
                        ("tabla_entrenamiento", entrenamiento)):
         rutas[nombre] = ct.guardar(df, nombre, salida)
 
-    # Se relee todo desde el disco: lo que se valida es lo que van a leer los demás.
+    # Everything is reread from disk: what gets validated is what the others will read.
     for nombre in ct.NOMBRES:
         ct.leer(salida, nombre)
     ct.validar_particiones(particiones, frames=[f["frame"] for f in frames])
@@ -408,8 +408,8 @@ def generar(salida=SALIDA, manchas_por_frame=10, semilla=0):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--salida", default=SALIDA, help="carpeta de destino (por defecto, datos/mock/)")
-    ap.add_argument("--manchas-por-frame", type=int, default=10, help="manchas candidatas por frame (por defecto 10)")
+    ap.add_argument("--salida", default=SALIDA, help="destination folder (default: datos/mock/)")
+    ap.add_argument("--manchas-por-frame", type=int, default=10, help="candidate blobs per frame (default 10)")
     ap.add_argument("--semilla", type=int, default=0)
     a = ap.parse_args()
     rutas = generar(a.salida, a.manchas_por_frame, a.semilla)

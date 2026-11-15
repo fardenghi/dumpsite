@@ -1,15 +1,15 @@
-"""Manchas de un índice ya calculado como polígonos: escribe `salidas/manchas.geojson` según el contrato.
+"""Blobs of an already computed index as polygons: writes `salidas/manchas.geojson` following the contract.
 
-Lee la capa `candidato` (y las de insomnio, persistencia y eco) de un `indice_80m.npz`, vuelve a agrupar los candidatos
-con `insomnio.manchas()` (mismos parámetros que el índice) y vectoriza cada mancha píxel a píxel. Escribe todas las
-manchas, también las descartadas (`descartada` dice el motivo), con `id_mancha` = `MAN-<frame>-<n>` en el orden de
-`insomnio.manchas()` (de mayor a menor superficie).
+Reads the `candidato` layer (and the insomnia, persistence and echo layers) from an `indice_80m.npz`, regroups the
+candidates with `insomnio.manchas()` (same parameters as the index) and vectorizes each blob pixel by pixel. Writes all
+blobs, including the discarded ones (`descartada` gives the reason), with `id_mancha` = `MAN-<frame>-<n>` in the order of
+`insomnio.manchas()` (largest area first).
 
-    python manchas_vectorizar.py                                    # el AMBA: ../data/salidas/indice_80m.npz
+    python manchas_vectorizar.py                                    # the AMBA: ../data/salidas/indice_80m.npz
     python manchas_vectorizar.py --indice otro.npz --frame DELHI --epsg 32643 --salida ../data/salidas/DELHI
 
-Es el `manchas.geojson` del AMBA mientras no esté la etapa 4: cuando la VM lo escriba, ese reemplaza a este.
-Las geometrías son los bordes de los píxeles de 80 m (en escalera), pasados de UTM a grados.
+It is the AMBA `manchas.geojson` until stage 4 exists: once the VM writes it, that one replaces this one.
+The geometries are the edges of the 80 m pixels (stair-stepped), converted from UTM to degrees.
 """
 import argparse
 import json
@@ -34,7 +34,7 @@ def _redondear(g, dec=6):
 
 
 def vectorizar(etiquetas, xs, ys, paso, epsg):
-    """{etiqueta: geometría GeoJSON en grados} de cada etiqueta > 0 de la capa."""
+    """{label: GeoJSON geometry in degrees} for each label > 0 of the layer."""
     t = from_origin(xs[0] - paso / 2, ys[0] + paso / 2, paso, paso)
     partes = {}
     for g, v in features.shapes(etiquetas.astype(np.int32), mask=etiquetas > 0, transform=t, connectivity=4):
@@ -47,7 +47,7 @@ def vectorizar(etiquetas, xs, ys, paso, epsg):
 
 
 def armar(indice, frame, epsg, p=None):
-    """Devuelve el FeatureCollection de las manchas del índice."""
+    """Returns the FeatureCollection of the index blobs."""
     p = p or ins.Parametros()
     with np.load(indice) as z:
         d = {k: z[k] for k in z.files}
@@ -84,7 +84,7 @@ def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--indice", default=os.path.join(AQUI, "..", "data", "salidas", "indice_80m.npz"))
     a.add_argument("--frame", default="AMBA")
-    a.add_argument("--epsg", type=int, default=32721, help="EPSG de la grilla del índice (el AMBA es UTM 21 sur)")
+    a.add_argument("--epsg", type=int, default=32721, help="EPSG of the index grid (the AMBA is UTM 21 south)")
     a.add_argument("--salida", default=os.path.join(AQUI, "..", "data", "salidas"))
     args = a.parse_args()
     fc = armar(args.indice, args.frame, args.epsg)

@@ -1,18 +1,18 @@
-"""Contratos de datos: el formato de los archivos intermedios del modelo, en código.
+"""Data contracts: the format of the model's intermediate files, in code.
 
-La explicación larga (quién escribe, quién lee y por qué) está en `../docs/contratos-datos.md`. Acá están
-las columnas de cada archivo como constantes y `validar()`, que falla con un mensaje claro.
+The long explanation (who writes, who reads and why) is in `../docs/contratos-datos.md`. Here are
+each file's columns as constants and `validar()`, which fails with a clear message.
 
     import contratos
-    contratos.validar(df, "tabla_radar")                  # un DataFrame que estás por escribir
-    contratos.guardar(df, "tabla_radar", "../data/salidas")    # valida, ordena las columnas y escribe
-    df = contratos.leer("datos/mock", "tabla_radar")   # lee y valida
+    contratos.validar(df, "tabla_radar")                  # a DataFrame you're about to write
+    contratos.guardar(df, "tabla_radar", "../data/salidas")    # validates, orders the columns and writes
+    df = contratos.leer("datos/mock", "tabla_radar")   # reads and validates
 
-    python contratos.py datos/mock                     # valida todo lo que encuentre en una carpeta
-    python contratos.py ../data/salidas/tabla_radar.parquet    # o un archivo
+    python contratos.py datos/mock                     # validates everything it finds in a folder
+    python contratos.py ../data/salidas/tabla_radar.parquet    # or a file
 
-Reglas: se pueden agregar columnas, pero no sacar ni renombrar las del contrato. Las columnas marcadas
-como opcionales pueden faltar; si están, se validan.
+Rules: columns can be added, but the contract's can't be removed or renamed. Columns marked
+as optional may be missing; if present, they're validated.
 """
 import json
 import os
@@ -41,13 +41,13 @@ PATRON_CATALOGO = r"(BAS|NEG)-.+"
 PATRON_FECHA = r"\d{4}-\d{2}-\d{2}"
 PATRON_FECHAS = rf"{PATRON_FECHA}(,{PATRON_FECHA})*"
 
-# Umbrales que figuran en el plan (sección 3, etapa 6). Se guardan en `particiones.json`.
-CRITERIO_CRUCE = 0.30  # la intersección cubre al menos esto del área menor
+# Thresholds in the plan (section 3, stage 6). They're saved in `particiones.json`.
+CRITERIO_CRUCE = 0.30  # the intersection covers at least this much of the smaller area
 MIN_HA = 10.0
 
 
 def id_mancha(frame, n):
-    """`MAN-<frame>-<n>`, con n desde 1 en el orden de `insomnio.manchas()` (de mayor a menor superficie)."""
+    """`MAN-<frame>-<n>`, with n from 1 in the order of `insomnio.manchas()` (largest area first)."""
     return f"MAN-{frame}-{int(n):04d}"
 
 
@@ -58,10 +58,10 @@ class Col:
     tipo: str  # str, float, int, bool, lista_int, lista_str, caja, conteos
     unidad: str
     que: str
-    nulo: bool = False  # ¿puede venir vacía?
-    opcional: bool = False  # ¿puede faltar la columna?
+    nulo: bool = False  # may it be empty?
+    opcional: bool = False  # may the column be missing?
     valores: tuple = None
-    rango: tuple = None  # (mínimo, máximo); None en un extremo es "sin límite"
+    rango: tuple = None  # (minimum, maximum); None at one end means "no limit"
     patron: str = None
 
 
@@ -118,7 +118,7 @@ _ESCENAS = (
 )
 CNN = (Col("cnn_p_basural", "float", "probabilidad 0-1", "Lo que dice la ResNet-50, fuera de la partición", nulo=True, opcional=True, rango=F01),)
 
-# Las variables que puede usar el modelo, en orden (29). `clase` es la etiqueta y no va acá.
+# The variables the model can use, in order (29). `clase` is the label and doesn't go here.
 COLUMNAS_MODELO = tuple(c.nombre for c in MOVIMIENTO + RUGOSIDAD + OPTICO + FORMA + CONTEXTO)
 
 
@@ -126,7 +126,7 @@ COLUMNAS_MODELO = tuple(c.nombre for c in MOVIMIENTO + RUGOSIDAD + OPTICO + FORM
 @dataclass(frozen=True)
 class Contrato:
     nombre: str
-    ruta: str  # relativa a `data/` (la carpeta de datos de la raíz del repo)
+    ruta: str  # relative to `data/` (the data folder at the repo root)
     escribe: str
     lee: str
     fila: str
@@ -253,13 +253,13 @@ CONTRATOS = {c.nombre: c for c in (
     ),
 )}
 
-PARTICIONES = "particiones"  # salidas/particiones.json: no es una tabla, ver `validar_particiones`
+PARTICIONES = "particiones"  # salidas/particiones.json: it's not a table, see `validar_particiones`
 RUTA_PARTICIONES = "salidas/particiones.json"
 NOMBRES = tuple(CONTRATOS) + (PARTICIONES,)
 
 
 class ErrorContrato(ValueError):
-    """El archivo no cumple el contrato. El mensaje lista todo lo que está mal."""
+    """The file doesn't follow the contract. The message lists everything that's wrong."""
 
 
 def _nombre(nombre):
@@ -270,11 +270,11 @@ def _nombre(nombre):
 
 
 def columnas(nombre):
-    """Los nombres de las columnas del contrato, en orden."""
+    """The names of the contract's columns, in order."""
     return CONTRATOS[_nombre(nombre)].nombres
 
 
-# ------------------------------------------------------------------ validación
+# ------------------------------------------------------------------ validation
 def _es_num(v):
     return isinstance(v, (int, float, np.integer, np.floating)) and not isinstance(v, (bool, np.bool_))
 
@@ -308,7 +308,7 @@ def _nulos(s):
 
 
 def _tipo_ok(s, tipo):
-    """¿La serie (ya sin nulos) es del tipo? Devuelve (ok, ejemplo que no cumple)."""
+    """Is the series (already without nulls) of the type? Returns (ok, example that fails)."""
     if tipo == "float" and pdt.is_numeric_dtype(s) and not pdt.is_bool_dtype(s):
         return True, None
     if tipo == "int" and pdt.is_integer_dtype(s):
@@ -376,7 +376,7 @@ def _coherencia(df, n, errores):
             if _POR_CELDA["caja"](b) and not (-180 <= b[0] < b[2] <= 180 and -90 <= b[1] < b[3] <= 90):
                 errores.append(f"{quien}: `bbox` tiene que ser [lon_oeste, lat_sur, lon_este, lat_norte]; vino {list(b)}")
             elif _POR_CELDA["caja"](b) and _es_ent(f.get("epsg")):
-                meridiano = (f["epsg"] % 100) * 6 - 183  # el central de la zona UTM
+                meridiano = (f["epsg"] % 100) * 6 - 183  # the UTM zone's central one
                 if abs((b[0] + b[2]) / 2 - meridiano) > 6:
                     errores.append(f"{quien}: el centro del `bbox` {list(b)} queda lejos de la zona UTM del EPSG {f['epsg']} "
                                    f"(meridiano {meridiano}°). ¿Está como [lon_oeste, lat_sur, lon_este, lat_norte]?")
@@ -395,11 +395,11 @@ def _coherencia(df, n, errores):
 
 
 def validar(df, nombre):
-    """Falla con `ErrorContrato` si `df` no cumple el contrato `nombre`; si cumple, devuelve `df`.
+    """Fails with `ErrorContrato` if `df` doesn't follow the `nombre` contract; if it does, returns `df`.
 
-    `nombre` es el del archivo, con o sin carpeta y extensión: "tabla_radar" o "salidas/tabla_radar.parquet".
-    Para `manchas` se pasa la tabla de propiedades (una fila por feature) y para `frames` una fila por frame;
-    `leer()` las arma. Para `particiones` se pasa el diccionario del JSON.
+    `nombre` is the file's, with or without folder and extension: "tabla_radar" or "salidas/tabla_radar.parquet".
+    For `manchas` pass the properties table (one row per feature) and for `frames` one row per frame;
+    `leer()` builds them. For `particiones` pass the JSON dictionary.
     """
     n = _nombre(nombre)
     if n == PARTICIONES:
@@ -425,7 +425,7 @@ def validar(df, nombre):
 
 
 def validar_particiones(d, frames=None):
-    """Valida el contenido de `particiones.json`. Con `frames` (los de la tabla) chequea que estén todos."""
+    """Validates the content of `particiones.json`. With `frames` (those in the table) it checks they're all there."""
     errores = []
     if not isinstance(d, dict):
         raise ErrorContrato(f"particiones.json: se esperaba un objeto y vino {type(d).__name__}")
@@ -460,7 +460,7 @@ def validar_particiones(d, frames=None):
 
 
 def particion_por_frame(d):
-    """{frame: "0" | "1" | … | "prueba_final"} a partir del contenido de `particiones.json`."""
+    """{frame: "0" | "1" | … | "prueba_final"} from the content of `particiones.json`."""
     salida = {f: k for k, v in d["particiones"].items() for f in v}
     salida.update({f: PRUEBA_FINAL for f in d[PRUEBA_FINAL]})
     return salida
@@ -468,7 +468,7 @@ def particion_por_frame(d):
 
 # ------------------------------------------------------------------ leer y guardar
 def ruta(nombre, carpeta):
-    """Dónde está el archivo de un contrato adentro de `carpeta` (sin subcarpetas: sirve para `salidas/` y `datos/mock/`)."""
+    """Where a contract's file is inside `carpeta` (no subfolders: works for `salidas/` and `datos/mock/`)."""
     n = _nombre(nombre)
     return os.path.join(carpeta, os.path.basename(RUTA_PARTICIONES) if n == PARTICIONES else CONTRATOS[n].archivo)
 
@@ -494,10 +494,10 @@ def _tabla_manchas(geo, archivo="manchas.geojson"):
 
 
 def leer(carpeta_o_archivo, nombre=None):
-    """Lee un archivo de contrato, lo valida y lo devuelve.
+    """Reads a contract file, validates it and returns it.
 
-    Las tablas vuelven como DataFrame; `manchas` como DataFrame de propiedades con la columna `geometry`
-    (el diccionario GeoJSON de cada mancha); `frames` como DataFrame, una fila por frame; `particiones` como dict.
+    Tables come back as DataFrame; `manchas` as a DataFrame of properties with the `geometry` column
+    (each blob's GeoJSON dictionary); `frames` as a DataFrame, one row per frame; `particiones` as a dict.
     """
     camino = carpeta_o_archivo if nombre is None else ruta(nombre, carpeta_o_archivo)
     n = _nombre(camino)
@@ -517,7 +517,7 @@ def leer(carpeta_o_archivo, nombre=None):
 
 
 def guardar(df, nombre, carpeta):
-    """Valida una tabla, pone las columnas del contrato primero y en orden, y la escribe en parquet. Devuelve la ruta."""
+    """Validates a table, puts the contract's columns first and in order, and writes it to parquet. Returns the path."""
     n = _nombre(nombre)
     c = CONTRATOS[n]
     if not c.ruta.endswith(".parquet"):
