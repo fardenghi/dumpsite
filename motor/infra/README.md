@@ -10,7 +10,7 @@ Una sola VM de CPU con mucha RAM, cerca de donde están los datos. Sin GPU ni Ku
 | Tipo | `n2-custom-12-98304` (12 vCPU, 96 GB) |
 | Disco | 200 GB `pd-balanced`; los 35 `.h5` (100 GB) están en `/mnt/datos` |
 | Cuenta de servicio | ninguna (`--no-service-account`): la VM no toca GCP |
-| Estado | **apagada**. Se prende con `gcloud compute instances start insomnio-vm --zone=us-west1-b` |
+| Estado | **apagada** (la última corrida, del 15/11, se apagó sola al terminar; el token de Earthdata ya se borró de los metadatos). Se prende con `gcloud compute instances start insomnio-vm --zone=us-west1-b` |
 
 **Por qué 12 vCPU y no 16:** la cuota global de la cuenta es `CPUS_ALL_REGIONS = 12` y no se puede subir. `n2-highmem-12` no existe, así que es una N2 a medida con el máximo de memoria (8 GB por vCPU). Los 200 GB de disco vienen de la cuota `SSD_TOTAL_GB = 250` en us-west1.
 
@@ -40,6 +40,7 @@ Desde una sesión de Claude Code en la nube no hay SSH: el proxy sólo deja pasa
    - `arranque-prueba.sh` prueba bajar, `procesar --remoto` y GCOV;
    - `arranque-pipeline.sh` corre el pipeline completo;
    - `arranque-subida.sh` sube `/opt/salidas` a una URL de subida de un solo uso.
+   - `arranque-frames.sh` (prompt 6, 15/11) corre `buscar` y `procesar --remoto` sobre una lista de frames, sube un tar por frame a su URL de un solo uso (`upload-url-<FRAME>`) y **apaga la VM al terminar**. El código va en un solo metadato (`codigo-tgz-b64`). Así se leyeron 18 de los 20 frames nuevos (`../idea/etapa4-manchas.md`).
    Se carga con `add-metadata --metadata-from-file=startup-script=...` y se ejecuta con `gcloud compute instances reset`.
 4. **Avance:** `gcloud compute instances get-serial-port-output insomnio-vm --zone=us-west1-b | grep INSOMNIO`.
 5. **Resultados:** la VM no tiene permisos de GCP. Quien tiene permisos crea una sesión de subida resumible en el bucket `gs://basurales-514714-salidas` y pasa la URL en el metadato `upload-url`. El tar completo de `salidas/`, con los recortes de 20 m, quedó en `gs://basurales-514714-salidas/salidas-v3.tgz` (1,1 GB). Los productos chicos están en `../salidas/`.
