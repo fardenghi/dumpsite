@@ -1,22 +1,22 @@
-"""Frames de Argentina fuera del AMBA: dónde el catálogo tiene más basurales de 10 ha o más (15/11, prompt 7).
+"""Argentine frames outside the AMBA: where the catalog has the most dump sites of 10 ha or more (15/11, prompt 7).
 
-Sólo para predecir con el modelo vigente: estos frames no entran al entrenamiento (`reservado_prueba = true`).
+Only for predicting with the current model: these frames don't go into training (`reservado_prueba = true`).
 
-    python frames_argentina.py contar                  # tabla por celda de 1° (no escribe nada)
-    python frames_argentina.py agregar --celdas 61O,33S 65O,32S ...   # suma esas celdas a data/frames.json
+    python frames_argentina.py contar                  # table per 1° cell (writes nothing)
+    python frames_argentina.py agregar --celdas 61O,33S 65O,32S ...   # adds those cells to data/catalogos/frames.json
 
-Cómo cuenta:
-- Un sitio es de Argentina si su punto cae en el contorno de Natural Earth 1:10m (`fijos/argentina_ne10m.geojson`).
-  No se usa el campo `pais`: los sitios que sólo vienen de OSM no lo traen.
-- Se sacan los que caen en la caja de un frame que ya está en `data/frames.json` (el AMBA).
-- Celda = (piso de lon, piso de lat). Se cuentan los sitios de 10 ha o más (el piso del índice) y el total.
+How it counts:
+- A site is in Argentina if its point falls inside the Natural Earth 1:10m outline (`fijos/argentina_ne10m.geojson`).
+  The `pais` field isn't used: sites that only come from OSM don't have it.
+- Sites inside the box of a frame already in `data/catalogos/frames.json` (the AMBA) are left out.
+- Cell = (floor of lon, floor of lat). It counts the sites of 10 ha or more (the index floor) and the total.
 
-`agregar` hace lo mismo que `frames_elegir.py --agregar`, pero con todos los estados (en Argentina fuera del AMBA
-ningún sitio tiene estado conocido, así que `--agregar`, que elige por abiertos, no sirve):
-- la caja es la de los polígonos (o el punto, si no hay polígono) de los sitios de 10 ha o más de la celda, más 5 km;
-- consulta la API pública de ASF y elige hasta 2 tracks que cubran el 75 % de la caja;
-- entra si tiene al menos 15 pares GUNW `PR` y la caja no se toca con la de otro frame;
-- deja los frames que ya están con el mismo nombre, caja y prioridad, y suma los nuevos con prioridad de ahí en adelante.
+`agregar` does the same as `frames_elegir.py --agregar`, but with every status (in Argentina outside the AMBA
+no site has a known status, so `--agregar`, which picks by open sites, is no use):
+- the box is the polygons (or the point, if there's no polygon) of the cell's sites of 10 ha or more, plus 5 km;
+- it queries the public ASF API and picks up to 2 tracks that cover 75 % of the box;
+- a cell gets in if it has at least 15 `PR` GUNW pairs and its box doesn't touch another frame's box;
+- it keeps the existing frames with the same name, box and priority, and adds the new ones with priority from there on.
 """
 import argparse
 import collections
@@ -58,7 +58,7 @@ def cajas_poligono():
 
 
 def sitios_argentina(frames):
-    """Los sitios del catálogo dentro de Argentina y fuera de las cajas de `frames`."""
+    """The catalog sites inside Argentina and outside the `frames` boxes."""
     from shapely.geometry import Point
     arg = contorno_argentina()
     with open(os.path.join(fe.DATA, "basurales", "basurales_mundo.json"), encoding="utf-8") as fh:
@@ -174,10 +174,10 @@ def main():
     p.add_argument("accion", choices=["contar", "agregar"])
     p.add_argument("--frames", default=os.path.join(fe.DATA, "frames.json"))
     p.add_argument("--top", type=int, default=12)
-    p.add_argument("--celdas", nargs="+", default=[], help='esquina sudoeste de cada celda, en grados oeste y sur: 61O,33S es lon -61 a -60, lat -33 a -32')
-    p.add_argument("--nombres", nargs="+", default=[], help="nombre del frame de cada celda, en el mismo orden")
-    p.add_argument("--ciudades", nargs="+", default=[], help="ciudad de referencia de cada celda, en el mismo orden")
-    p.add_argument("--cache", help="carpeta para guardar las respuestas de ASF")
+    p.add_argument("--celdas", nargs="+", default=[], help='south-west corner of each cell, in degrees west and south: 61O,33S is lon -61 to -60, lat -33 to -32')
+    p.add_argument("--nombres", nargs="+", default=[], help="frame name of each cell, in the same order")
+    p.add_argument("--ciudades", nargs="+", default=[], help="reference city of each cell, in the same order")
+    p.add_argument("--cache", help="folder to save the ASF responses")
     args = p.parse_args()
     if args.accion == "agregar" and not (len(args.celdas) == len(args.nombres) == len(args.ciudades)):
         sys.exit("--celdas, --nombres y --ciudades tienen que tener el mismo largo")

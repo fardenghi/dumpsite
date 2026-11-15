@@ -1,10 +1,10 @@
-"""Conteo de basurales en Argentina a partir de data/basurales/basurales_mundo.json.
+"""Count of dump sites in Argentina from data/catalogos/basurales/basurales_mundo.json.
 
-Los sitios que solo vienen de OSM no traen país, así que se ubican con el límite
-de Natural Earth 10m (dominio público). Uso:
-    python conteo_argentina.py <ne_10m_admin_0_countries.geojson> <ne_10m_admin_1_states_provinces.geojson> <salida.csv>
-Categoría: se asigna por el nombre del sitio (OSM / Climate TRACE). El campo `tipo`
-del catálogo no sirve: Climate TRACE pone "relleno sanitario" a casi todo.
+Sites that only come from OSM have no country, so they are located with the Natural Earth 10m
+boundary (public domain). Usage:
+    python conteo_argentina.py <ne_10m_admin_0_countries.geojson> <ne_10m_admin_1_states_provinces.geojson> <output.csv>
+Category: assigned from the site name (OSM / Climate TRACE). The catalog's `tipo` field
+is no use: Climate TRACE labels almost everything as "relleno sanitario".
 """
 import csv, json, re, sys, collections as C
 from pathlib import Path
@@ -13,7 +13,7 @@ from shapely.prepared import prep
 
 RAIZ = Path(__file__).resolve().parents[1]
 
-CATEGORIAS = [  # (categoría, regex sobre el nombre en minúsculas), en orden de prioridad
+CATEGORIAS = [  # (category, regex over the lowercase name), in priority order
     ("No es RSU (minería, nuclear, autos, industrial, humedal)",
      r"botadero|uranio|radioactiv|cementerio de autos|ceniza|humedal|ex canteras|razzini"),
     ("Ex basural / cerrado o antiguo", r"^ex |\bex basural|viejo|antiguo|clausurad"),
@@ -39,7 +39,7 @@ def categoria(nombre):
 def main(ne0, ne1, salida):
     paises = json.load(open(ne0))["features"]
     arg = shape(next(f for f in paises if f["properties"]["ADM0_A3"] == "ARG")["geometry"])
-    parg, pbuf = prep(arg), prep(arg.buffer(0.02))  # ~2 km para la costa
+    parg, pbuf = prep(arg), prep(arg.buffer(0.02))  # ~2 km for the coast
     otros = [prep(shape(f["geometry"])) for f in paises if f["properties"]["ADM0_A3"] != "ARG"]
     provs = [(f["properties"]["name"], prep(shape(f["geometry"]).buffer(0.02)))
              for f in json.load(open(ne1))["features"] if f["properties"]["adm0_a3"] == "ARG"]

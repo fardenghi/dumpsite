@@ -1,16 +1,16 @@
-"""El índice de insomnio de cada frame como imagen para la web, igual que el del AMBA.
+"""The insomnia index of each frame as an image for the web, like the AMBA one.
 
-    python indice_png_web.py                 # todos los frames con salidas/<FRAME>/indice_80m.npz
+    python indice_png_web.py                 # every frame with data/salidas/<FRAME>/indice_80m.npz
     python indice_png_web.py --frame DELHI CDMX
 
-Lee `salidas/<FRAME>/indice_80m.npz`, que escribe `pipeline_insomnio.py indice --frame <FRAME>` (no va al repo:
-hace falta tener los recortes del frame; ver README.md). No vuelve a calcular nada: sólo remuestrea la capa
-`insomnio` a Web Mercator y la pinta con la misma paleta y transparencia que `_png_web` del pipeline.
+Reads `data/salidas/<FRAME>/indice_80m.npz`, written by `pipeline_insomnio.py indice --frame <FRAME>` (not in the repo:
+it needs the frame's crops; see README.md). It recomputes nothing: it only resamples the `insomnio` layer
+to Web Mercator and paints it with the same palette and transparency as the pipeline's `_png_web`.
 
-Escribe en insomnes-web:
-- `public/indice/insomnio-<frame>.png`, uno por frame;
-- `src/data/seed/indices.json`, la lista con las esquinas de cada imagen. La web la lee si está.
-El AMBA no se toca: su imagen y su `indice.json` los escribe el pipeline.
+Writes to web/:
+- `public/indice/insomnio-<frame>.png`, one per frame;
+- `src/data/seed/indices.json`, the list with the corners of each image. The web reads it if it exists.
+The AMBA isn't touched: its image and its `indice.json` are written by the pipeline.
 """
 import argparse
 import json
@@ -23,8 +23,8 @@ import geo
 AQUI = os.path.dirname(os.path.abspath(__file__))
 SALIDAS = os.path.join(AQUI, "..", "data", "salidas")
 WEB = os.path.join(AQUI, "..", "web")
-PX_POR_GRADO = 1270  # como el PNG del AMBA: 1400 px para 1,1° de ancho
-NIVELES = 64  # tonos de la paleta
+PX_POR_GRADO = 1270  # like the AMBA PNG: 1400 px for 1.1° of width
+NIVELES = 64  # palette tones
 
 
 def exportar(frame, salidas, web):
@@ -40,13 +40,13 @@ def exportar(frame, salidas, web):
 
     ancho = max(200, int(round((e - o) * PX_POR_GRADO)))
     img, (o, s, e, n) = geo.a_mercator(insomnio, xs, ys, ancho=ancho, caja=(n, o, s, e), epsg=epsg)
-    # Misma paleta y transparencia que `_png_web` del pipeline (magma; transparente por debajo de 0,3 y en el agua),
-    # pero como PNG de paleta con NIVELES tonos: pesa varias veces menos que el RGBA y en el mapa se ve igual.
+    # Same palette and transparency as the pipeline's `_png_web` (magma; transparent below 0.3 and over water),
+    # but as a palette PNG with NIVELES tones: several times lighter than RGBA and it looks the same on the map.
     valor = np.linspace(0, 1, NIVELES)
     rgb = (matplotlib.colormaps["magma"](valor)[:, :3] * 255).round().astype(np.uint8)
     alfa = (np.clip((valor - 0.3) / 0.4, 0, 1) * 0.85 * 255).round().astype(np.uint8)
     nivel = np.where(np.isfinite(img), np.rint(np.clip(np.nan_to_num(img), 0, 1) * (NIVELES - 1)), 0).astype(np.uint8)
-    nivel[alfa[nivel] == 0] = 0  # todo lo transparente es un solo índice: comprime mejor
+    nivel[alfa[nivel] == 0] = 0  # everything transparent is a single index: it compresses better
     nombre = f"insomnio-{frame.lower()}.png"
     destino = os.path.join(web, "public", "indice", nombre)
     os.makedirs(os.path.dirname(destino), exist_ok=True)
@@ -59,7 +59,7 @@ def exportar(frame, salidas, web):
 
 def main():
     a = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    a.add_argument("--frame", nargs="+", help="frames a exportar (por defecto, todos los que tengan indice_80m.npz)")
+    a.add_argument("--frame", nargs="+", help="frames to export (by default, every one that has indice_80m.npz)")
     a.add_argument("--salidas", default=SALIDAS)
     a.add_argument("--web", default=WEB)
     args = a.parse_args()
@@ -69,7 +69,7 @@ def main():
         raise SystemExit(f"No hay ningún salidas/<FRAME>/indice_80m.npz en {os.path.relpath(args.salidas)}: "
                          "corré antes `python pipeline_insomnio.py indice --frame <FRAME>` con los recortes del frame.")
     destino = os.path.join(args.web, "src", "data", "seed", "indices.json")
-    try:  # los que ya estaban se conservan: se puede exportar de a un frame
+    try:  # existing ones are kept: frames can be exported one at a time
         with open(destino, encoding="utf-8") as fh:
             lista = {x["frame"]: x for x in json.load(fh)}
     except FileNotFoundError:

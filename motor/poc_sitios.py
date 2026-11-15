@@ -1,31 +1,31 @@
-"""POC: insomnio de un puñado de basurales del catálogo, en cualquier parte del mundo, sin bajar los .h5.
+"""POC: insomnia of a handful of catalog dump sites, anywhere in the world, without downloading the .h5 files.
 
-Para cada sitio de `data/basurales/` (por id) busca los GUNW de NISAR que lo cubren en la API pública de ASF,
-lee por URL sólo la ventana del sitio con su anillo (unos MB por par, no los 2 GB) y calcula la misma ficha
-que el índice del AMBA (`insomnio.ficha`): coherencia del sitio contra un anillo de 1,5 km, par a par, y el
-veredicto "despierto", "quieto" o "no_alcanza". Después lo compara con el estado del catálogo.
+For each site in `data/catalogos/basurales/` (by id) it finds the NISAR GUNWs that cover it in the public ASF API,
+reads by URL only the site's window with its ring (a few MB per pair, not the 2 GB) and computes the same card
+as the AMBA index (`insomnio.ficha`): the site's coherence against a 1.5 km ring, pair by pair, and the
+verdict "despierto", "quieto" or "no_alcanza". Then it compares it with the catalog status.
 
-    python poc_sitios.py buscar      # qué pares hay por sitio (no pide credenciales)
-    python poc_sitios.py leer        # lee las ventanas por URL y las guarda en salidas/poc_sitios/ (pide credenciales)
-    python poc_sitios.py ficha       # calcula las fichas con lo leído, la tabla y la figura (sin red)
+    python poc_sitios.py buscar      # which pairs each site has (no credentials needed)
+    python poc_sitios.py leer        # reads the windows by URL and saves them to data/salidas/poc_sitios/ (needs credentials)
+    python poc_sitios.py ficha       # computes the cards from what was read, the table and the figure (no network)
     python poc_sitios.py todo
 
-    python poc_sitios.py todo --sitios BAS-066227 BAS-066083     # otros sitios
-    python poc_sitios.py leer --datos /mnt/datos                  # con los .h5 ya bajados, sin red
+    python poc_sitios.py todo --sitios BAS-066227 BAS-066083     # other sites
+    python poc_sitios.py leer --datos /mnt/datos                  # with the .h5 files already downloaded, no network
 
-Por defecto: cuatro rellenos de Los Ángeles, dos cerrados y dos abiertos según la EPA (LMOP).
+By default: four Los Angeles landfills, two closed and two open according to the EPA (LMOP).
 
-Credenciales de NASA Earthdata (gratis, https://urs.earthdata.nasa.gov): variable EARTHDATA_TOKEN, o
-EARTHDATA_USERNAME y EARTHDATA_PASSWORD, o ~/.netrc. También se leen de un archivo `.env` en la carpeta de la
-idea (está en el .gitignore). Nunca en el repo.
+NASA Earthdata credentials (free, https://urs.earthdata.nasa.gov): the EARTHDATA_TOKEN variable, or
+EARTHDATA_USERNAME and EARTHDATA_PASSWORD, or ~/.netrc. They are also read from a `.env` file in motor/
+(it's in the .gitignore). Never in the repo.
 
-Diferencias con el índice del AMBA (`pipeline_insomnio.py`), a propósito, por ser una prueba:
-- no usa `geo.grilla` (fija en el AMBA y en UTM 21 sur): arma una grilla chica por sitio en la zona UTM del producto;
-- no hay máscara de agua de JRC ni eco de GCOV: no descarta superficies lisas;
-- el anillo excluye los demás basurales del catálogo que caen en la ventana (en el AMBA, sólo el propio sitio);
-- los umbrales son los calibrados en el AMBA, sin tocar.
+Differences with the AMBA index (`pipeline_insomnio.py`), on purpose, since this is a test:
+- it doesn't use `geo.grilla` (fixed on the AMBA and on UTM 21 south): it builds a small grid per site in the product's UTM zone;
+- there's no JRC water mask and no GCOV echo: it doesn't discard smooth surfaces;
+- the ring excludes the other catalog dump sites that fall in the window (in the AMBA, only the site itself);
+- the thresholds are the ones calibrated in the AMBA, untouched.
 
-Fuentes: NISAR L2 GUNW (NASA/ISRO), ASF DAAC. Catálogo: ver `data/README.md` (OSM/Overture, EPA LMOP, Climate TRACE).
+Sources: NISAR L2 GUNW (NASA/ISRO), ASF DAAC. Catalog: see `data/README.md` (OSM/Overture, EPA LMOP, Climate TRACE).
 """
 import argparse
 import concurrent.futures as cf
@@ -47,15 +47,15 @@ import insomnio as ins  # noqa: E402
 RAIZ = os.path.dirname(AQUI)
 DATA = os.path.join(RAIZ, "data", "catalogos", "basurales")
 API_ASF = "https://api.daac.asf.alaska.edu/services/search/param"
-GRUPO = "science/LSAR/GUNW/grids/frequencyA/unwrappedInterferogram"  # la capa de 80 m, la calibrada
+GRUPO = "science/LSAR/GUNW/grids/frequencyA/unwrappedInterferogram"  # the 80 m layer, the calibrated one
 PASO = 80.0
-MARGEN_M = 2000.0  # anillo de 1,5 km más un resto
+MARGEN_M = 2000.0  # 1.5 km ring plus a margin
 SITIOS_DEFECTO = ["BAS-066227", "BAS-066488", "BAS-066083", "BAS-066391"]  # Puente Hills, Spadra, Olinda Alpha, Scholl Canyon
 
 
-# ------------------------------------------------------------------ geometría
+# ------------------------------------------------------------------ geometry
 def utm(lat, lon, zona, norte):
-    """lat, lon -> x, y en la zona UTM dada. `geo.utm` es del hemisferio sur: al norte se le saca el falso norte."""
+    """lat, lon -> x, y in the given UTM zone. `geo.utm` is for the southern hemisphere: in the north the false northing is removed."""
     x, y = geo.utm(lat, lon, zona)
     return x, (y - 10000000 if norte else y)
 
@@ -85,7 +85,7 @@ def mascara(lista_anillos, xs, ys, zona, norte):
 
 
 def cargar_sitios(ids):
-    """Sitios pedidos (con sus anillos) y los anillos de todo el catálogo, para sacarlos del anillo de control."""
+    """Requested sites (with their rings) and the rings of the whole catalog, to remove them from the control ring."""
     with open(os.path.join(DATA, "basurales_mundo.json"), encoding="utf-8") as fh:
         catalogo = {s["id"]: s for s in json.load(fh)["sitios"]}
     with open(os.path.join(DATA, "geometrias.geojson"), encoding="utf-8") as fh:
@@ -112,7 +112,7 @@ def _fechas(nombre):
 
 
 def buscar(args):
-    """Por sitio, los GUNW PROVISIONAL que lo cubren: uno por (órbita, par de fechas), el frame completo más nuevo."""
+    """Per site, the PROVISIONAL GUNWs that cover it: one per (orbit, date pair), the newest full frame."""
     sitios, _ = cargar_sitios(args.sitios)
     productos = {}
     for s in sitios:
@@ -124,7 +124,7 @@ def buscar(args):
         elegidos = {}
         for g in resultados:
             nombre = g["granuleName"]
-            if "_PR_GUNW_" not in nombre or not g.get("downloadUrl"):  # una sola madurez
+            if "_PR_GUNW_" not in nombre or not g.get("downloadUrl"):  # a single maturity
                 continue
             clave = (int(g["path"]),) + _fechas(nombre)
             rango = ("_F_" in nombre, nombre[-3:])
@@ -140,7 +140,7 @@ def buscar(args):
         print(f"{s['id']} {s['nombre'][:34]:34s} {s['estado']:9s} {len(elegidos):3d} pares  órbitas {por_orbita}")
     lista = sorted(productos.values(), key=lambda x: (x["orbita"], x["fechas"]))
     if args.max_pares:
-        # los más recientes de cada órbita
+        # the most recent ones of each orbit
         por = {}
         for x in reversed(lista):
             por.setdefault(x["orbita"], []).append(x)
@@ -154,7 +154,7 @@ def buscar(args):
 
 # ------------------------------------------------------------------ leer
 def _credenciales():
-    """Carga `.env` de la carpeta de la idea (si existe) al entorno, sin mostrar nada."""
+    """Loads `.env` from motor/ (if it exists) into the environment, without printing anything."""
     ruta = os.path.join(AQUI, ".env")
     if os.path.exists(ruta):
         with open(ruta, encoding="utf-8") as fh:
@@ -178,7 +178,7 @@ def _login():
 
 
 def _ventana(f, sitio):
-    """Recorta la coherencia de 80 m alrededor del sitio. Devuelve (coh, xs, ys, epsg) o None si no lo cubre."""
+    """Crops the 80 m coherence around the site. Returns (coh, xs, ys, epsg) or None if it doesn't cover it."""
     ds = None
     for pol in ("HH", "VV", "HV", "VH"):
         if f"{GRUPO}/{pol}/coherenceMagnitude" in f:
@@ -227,7 +227,7 @@ def _leer_uno(tarea):
                                     epsg=epsg, orbita=producto["orbita"], fecha_ref=producto["fechas"][0], fecha_sec=producto["fechas"][1])
                 estados.append(f"{s['id']} {coh.shape[0]}x{coh.shape[1]} {np.isfinite(coh).mean():.0%}")
         return producto["nombre"], "ok " + ", ".join(estados)
-    except Exception as e:  # un archivo roto no frena a los demás
+    except Exception as e:  # a broken file doesn't stop the others
         return producto["nombre"], f"ERROR {type(e).__name__}: {e}"
 
 
@@ -257,7 +257,7 @@ def _dias(a, b):
 
 
 def _apilar(carpeta_sitio):
-    """Pila de coherencia del sitio en una grilla común (la del primer recorte). Devuelve (coh, xs, ys, epsg, pares)."""
+    """The site's coherence stack on a common grid (the first crop's). Returns (coh, xs, ys, epsg, pares)."""
     rutas = sorted(glob.glob(os.path.join(carpeta_sitio, "*.npz")))
     if not rutas:
         return None
@@ -272,7 +272,7 @@ def _apilar(carpeta_sitio):
             print(f"  se saltea {os.path.basename(ruta)[:40]}: EPSG {epsg} distinto de {epsg0}")
             continue
         if coh.shape != (len(ys0), len(xs0)) or xs[0] != xs0[0] or ys[0] != ys0[0]:
-            # otra órbita puede traer otra ventana: vecino más cercano a la grilla del primero
+            # another orbit can bring another window: nearest neighbour onto the first one's grid
             c = np.rint((xs0 - xs[0]) / (xs[1] - xs[0])).astype(int)
             f = np.rint((ys0 - ys[0]) / (ys[1] - ys[0])).astype(int)
             vc, vf = (c >= 0) & (c < len(xs)), (f >= 0) & (f < len(ys))
@@ -302,12 +302,12 @@ def ficha(args):
         coh, xs, ys, epsg, pares = apilado
         zona, norte = zona_de_epsg(epsg)
         propia = mascara(s["anillos"], xs, ys, zona, norte)
-        # el anillo no pisa otros basurales del catálogo
+        # the ring doesn't overlap other catalog dump sites
         lat0, lon0, dlat = s["lat"], s["lon"], 0.2
         otros = [a for i, g in geometrias.items() if i != s["id"]
                  for a in anillos(g) if abs(a[0][1] - lat0) < dlat and abs(a[0][0] - lon0) < dlat]
         ajenos = mascara(otros, xs, ys, zona, norte) & ~propia
-        # sin dato en más de la mitad de los pares: no es tierra medible (agua, sombra, borde del frame)
+        # no data in more than half of the pairs: not measurable land (water, shadow, frame edge)
         tierra = ~ajenos & (np.isfinite(coh).mean(0) >= 0.5)
         f = ins.ficha(propia, coh, np.array([x["orbita"] for x in pares]), np.array([x["hasta"] for x in pares]), tierra, PASO, p)
         dias = {(x["orbita"], x["hasta"]): x["dias"] for x in pares}
@@ -380,10 +380,10 @@ def _figura(salida, p, destino):
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("paso", choices=["buscar", "leer", "ficha", "todo"])
-    a.add_argument("--sitios", nargs="+", default=SITIOS_DEFECTO, help="ids del catálogo (BAS-...)")
+    a.add_argument("--sitios", nargs="+", default=SITIOS_DEFECTO, help="catalog ids (BAS-...)")
     a.add_argument("--salida", default=os.path.join(RAIZ, "data", "salidas", "poc_sitios"))
-    a.add_argument("--datos", default="", help="carpeta con los .h5 ya bajados; si no se da, se lee por URL")
-    a.add_argument("--max-pares", type=int, default=0, help="como mucho esta cantidad de pares por órbita, los más recientes (0 = todos)")
+    a.add_argument("--datos", default="", help="folder with the .h5 files already downloaded; if not given, they are read by URL")
+    a.add_argument("--max-pares", type=int, default=0, help="at most this many pairs per orbit, the most recent ones (0 = all)")
     a.add_argument("--hilos", type=int, default=6)
     args = a.parse_args()
     for paso in (["buscar", "leer", "ficha"] if args.paso == "todo" else [args.paso]):

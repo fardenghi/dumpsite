@@ -1,13 +1,13 @@
-"""Predice con el modelo vigente, sin reentrenar, las manchas candidatas de uno o más frames (prompt 7, 15/11).
+"""Predicts with the current model, without retraining, the candidate blobs of one or more frames (prompt 7, 15/11).
 
-Carga `salidas/modelo.txt` como Booster de LightGBM y arma las variables igual que `entrenar.py --predecir`:
-`tabla_radar.parquet` del frame unida con su `tabla_optico.parquet` por `id_mancha` (left join), con las columnas
-de `salidas/metricas.json` en ese orden. Escribe `salidas/<FRAME>/predicciones.parquet` con `contratos.guardar`.
+Loads `data/salidas/modelo.txt` as a LightGBM Booster and builds the variables like `entrenar.py --predecir`:
+the frame's `tabla_radar.parquet` joined with its `tabla_optico.parquet` on `id_mancha` (left join), with the columns
+of `data/salidas/metricas.json` in that order. Writes `data/salidas/<FRAME>/predicciones.parquet` with `contratos.guardar`.
 
     python predecir_frames.py --frame ARG_ROSARIO ARG_CORDOBA
 
-No toca `modelo.txt`, `metricas.json` ni `salidas/predicciones.parquet` (a diferencia de `modelo_por_frame.py tabla`,
-que reentrena). El umbral es el de `metricas.json` (0,5).
+It doesn't touch `modelo.txt`, `metricas.json` or `data/salidas/predicciones.parquet` (unlike `modelo_por_frame.py tabla`,
+which retrains). The threshold is the one in `metricas.json` (0.5).
 """
 import argparse
 import json
