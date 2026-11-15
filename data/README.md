@@ -2,8 +2,8 @@
 
 Datos curados y livianos que usa el equipo. Los pesados (por ejemplo, los `.h5` de NISAR) no van acá ni al repo.
 
-## basurales/
-Catálogo de basurales y rellenos del mundo, armado el 14/11/2026 por `idea-basurales-nisar/herramientas/curar_basurales.py`. El objetivo es encontrar sitios que **en teoría están cerrados pero en la práctica siguen activos**.
+## catalogos/basurales/
+Catálogo de basurales y rellenos del mundo, armado el 14/11/2026 por `motor/curar_basurales.py`. El objetivo es encontrar sitios que **en teoría están cerrados pero en la práctica siguen activos**.
 
 | Archivo | Qué tiene |
 |---|---|
@@ -40,12 +40,12 @@ Cada archivo tiene `meta` (fuentes con licencia y cita, criterios, advertencias 
 ### Regenerar
 Bajar las fuentes a un directorio (Overture con DuckDB, Climate TRACE por su API, el `.xlsx` de LMOP y los metadatos de EMIT por CMR) y correr:
 ```bash
-cd idea-basurales-nisar/herramientas
-python curar_basurales.py <dir_descargas> ../../data/basurales
+cd motor
+python curar_basurales.py <dir_descargas> ../data/catalogos/basurales
 ```
 
-## negativos/
-Catálogo de **confusores**: lo que el radar puede confundir con un basural. Sirve para entrenar el modelo con casos negativos. Sigue la lista y las reglas de `idea-basurales-nisar/idea/negativos-dataset.md` y lo arman `negativos_extraer.py` y `negativos_curar.py` (en `idea-basurales-nisar/herramientas/`).
+## catalogos/negativos/
+Catálogo de **confusores**: lo que el radar puede confundir con un basural. Sirve para entrenar el modelo con casos negativos. Sigue la lista y las reglas de `docs/datos.md` y lo arman `negativos_extraer.py` y `negativos_curar.py` (en `motor/`).
 
 | Archivo | Qué tiene |
 |---|---|
@@ -80,9 +80,9 @@ Los polígonos van en archivos aparte. Cada feature se enlaza con su catálogo p
 
 | Archivo | Sitios | Con polígono | Formato |
 |---|---|---|---|
-| `basurales/geometrias.geojson` (30 MB) | 66.981 | 57.068 | GeoJSON |
-| `negativos/geometrias_mundo.parquet` (34 MB) | 64.986 | 64.986 | GeoParquet (más de 50 MB en GeoJSON) |
-| `negativos/geometrias_amba.geojson` (1 MB) | 1.259 | 1.259 | GeoJSON |
+| `catalogos/basurales/geometrias.geojson` (30 MB) | 66.981 | 57.068 | GeoJSON |
+| `catalogos/negativos/geometrias_mundo.parquet` (34 MB) | 64.986 | 64.986 | GeoParquet (más de 50 MB en GeoJSON) |
+| `catalogos/negativos/geometrias_amba.geojson` (1 MB) | 1.259 | 1.259 | GeoJSON |
 
 - **Fuente:** Overture Maps 2026-10-21.0 (OSM, ODbL 1.0, © colaboradores de OpenStreetMap). Está en WGS84 (lon/lat), sin reproyectar.
 - **Simplificación:** `ST_SimplifyPreserveTopology` con 0,0001° (unos 10 m), menos que un píxel de NISAR. El área cambia un 0,8 % en la mediana respecto del `area_ha` del catálogo, que se calculó con el polígono original.
@@ -93,7 +93,7 @@ Los polígonos van en archivos aparte. Cada feature se enlaza con su catálogo p
   - De los 614 sitios formados por varios objetos OSM, sólo 33 (7 de 5 ha o más) quedaron con un contorno parcial, porque `geometrias_armar.py` se quedaba con el primer objeto. **El script ya une todos los objetos de cada sitio** (`ST_Union_Agg`), pero hay que volver a correrlo: los crudos (`geom_parts/`) no están en el repo.
 
 ## Complejos
-`basurales/complejos.json` (14 MB) agrupa en **complejos** los basurales del catálogo que están a menos de 1 km entre sí, por ejemplo las tres entradas de Norte III. Lo arma `idea-basurales-nisar/herramientas/complejos_agrupar.py` a partir de `geometrias.geojson`, en unos 15 segundos.
+`catalogos/basurales/complejos.json` (14 MB) agrupa en **complejos** los basurales del catálogo que están a menos de 1 km entre sí, por ejemplo las tres entradas de Norte III. Lo arma `motor/complejos_agrupar.py` a partir de `geometrias.geojson`, en unos 15 segundos.
 - **Para qué:** que cada complejo cuente una sola vez y caiga entero en la misma partición de la validación. Al extraer variables, el anillo de control excluye todos los polígonos de los catálogos.
 - **Estado del complejo:** `abierto` si alguna entrada está abierta y ninguna cerrada; `cerrado` al revés; `contradictorio` si hay de los dos; `desconocido` si ninguna tiene estado.
 - **Contenido:** `complejo_por_sitio` (id del sitio → id del complejo) y `complejos` (sitios, estado, estados por sitio, área sumada, centro y nombres).
