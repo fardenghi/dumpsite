@@ -11,7 +11,7 @@ export const n3 = DATOS.norte3;
 export const pasadas = (n3.pares as Par[]).filter((p) => p.orbita === 10).sort((a, b) => a.fecha.localeCompare(b.fecha));
 export const serie = DATOS.serie_s2 as {imagenes: {fecha: string; archivo: string}[]; poligono: number[][]};
 export const entreno = DATOS.entreno as {total_catalogo: number; muestras: {archivo: string; pais: string}[]};
-export const CRED_OPTICO: [string, string] = ["Optical", "Sentinel-2 · Copernicus"];
+export const CRED_OPTICO: [string, string] = ["Optical", "Sentinel-2 · Copernicus · EOX (CC BY-NC-SA)"];
 export const CRED_RADAR: [string, string] = ["Radar", "NASA–ISRO NISAR · ASF DAAC"];
 export const zoomExp = (f: number, r: [number, number], de: number, a: number, easing = Easing.inOut(Easing.cubic)) =>
   Math.exp(interpolate(f, r, [Math.log(de), Math.log(a)], {...clamp, easing}));

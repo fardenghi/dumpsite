@@ -38,7 +38,7 @@ const CASOS = casosJson as unknown as {argentina: {ancho: number; alto: number; 
 const RECTS = rectsJson as unknown as {mapa: {lujan: number[]}; lujan: Record<string, Rect>; norte3: Record<string, Rect>; sitios: {csv: Rect; lista: Rect}};
 
 const RADAR_ES: [string, string] = ["Radar", "NASA–ISRO NISAR · ASF DAAC"];
-const OPTICO_ES: [string, string] = ["Óptico", "Sentinel-2 · Copernicus"];
+const OPTICO_ES: [string, string] = ["Óptico", "Sentinel-2 · Copernicus · EOX (CC BY-NC-SA)"];
 const CLIP_IA = 4.733; // the Higgsfield clip at normal speed: it covers the first sentence
 const FOTO_EQUIPO: string | null = "equipo.jpg"; // photo of the six in public/
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
@@ -476,7 +476,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
         </div>
       </AbsoluteFill>
       <TituloSeccion titulo="Los datos" bajada="El radar dice qué cambia, no qué es" salida={salida} />
-      <Creditos items={f < b0 ? [["Óptico", "Sentinel-2 · Copernicus"]] : [["Catálogo", "OSM · Overture · Climate TRACE · EPA · NASA EMIT"]]} opacidad={e(a0)} />
+      <Creditos items={f < b0 ? [["Óptico", "Sentinel-2 · Copernicus · EOX (CC BY-NC-SA)"]] : [["Catálogo", "OSM · Overture · Climate TRACE · EPA · NASA EMIT"]]} opacidad={e(a0)} />
     </AbsoluteFill>
   );
 };
