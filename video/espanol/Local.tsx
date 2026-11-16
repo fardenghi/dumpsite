@@ -9,6 +9,7 @@ import {ALTO, ANCHO, EQUIPO, FPS, RESULTADOS} from "../compartido/data";
 import {C, F} from "../compartido/theme";
 import {AvisoIA, Creditos, PinUbicacion, Placeholder, Subtitulos, TituloSeccion} from "../compartido/components/Overlays";
 import {MapaAmba, caminoPoligono, cajaNorte3EnAmba} from "../compartido/components/Mapa";
+import {EscenaMundo, MUNDO_EN, TextosMundo} from "../ingles/Final";
 import {Arbol, Cuadro, OFFSET_Y, Ojo, Poligono, clamp, cxNa, cxS2, cyNa, cyS2, entreno, n3, pasadas, serie, zoomExp} from "../compartido/escenas/Escenas";
 import casosJson from "../compartido/casos.json";
 import rectsJson from "../compartido/web-rects.json";
@@ -578,65 +579,21 @@ const Modelo: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   );
 };
 
-/* 8 · Results: the model across Argentina */
-// PLACEHOLDER until the national run is in the repo: the voice says "unos siete mil" and "dos mil más" than the official estimate (≈5,000).
-const MODELO_AR = 7000, ESTIMACION = 5000;
+/* 8 · Results: the same world map as the international video (ingles/Final.tsx), tied to the voice:
+   known catalog → regions run ("29 regiones") → possible new ("encontró 183") → the caveat */
 const Resultados: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
-  const f = useCurrentFrame();
-  const e = useEntra();
   const at = (abs: number) => s(abs - t0);
-  const n = s(dur);
-  const salida = 10;
-  const base = tras(salida);
-  const A = CASOS.argentina;
-  const barrido = interpolate(f, [base, at(en("argentina", "modelo")) + 6], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
-  const c0 = at(en("argentina", "siete")) - 4;
-  const cuenta = Math.round(MODELO_AR * interpolate(f, [c0, c0 + 26], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)}));
-  const comp = at(en("argentina", "dos")) - 4;
-  const vComp = e(comp);
-  const reg = at(en("argentina", "ningun")) - 4;
-  const dx = -330; // Argentina on the left
-  const Y0 = 170, yScan = Y0 + barrido * (1010 - Y0);
-  return (
-    <AbsoluteFill style={{background: C.bg}}>
-      <div style={{position: "absolute", inset: 0, transform: `translateX(${dx}px) scale(${interpolate(f, [0, n], [1.02, 1.08], clamp)})`, transformOrigin: `${A.amba[0]}px ${A.amba[1]}px`}}>
-        <Img src={staticFile("casos/argentina.jpg")} style={{width: ANCHO, height: ALTO, filter: "brightness(0.72) saturate(0.85)"}} />
-        {/* the model sweeps the country: a north-to-south pass */}
-        <div style={{position: "absolute", left: 500, width: 620, top: Y0, height: yScan - Y0, WebkitMaskImage: "linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%)", background: "linear-gradient(to bottom, rgba(255,165,61,0.0) 0%, rgba(255,165,61,0.10) 85%, rgba(255,165,61,0.22) 100%)", opacity: barrido < 1 ? 1 : interpolate(f, [at(en("argentina", "modelo")) + 6, at(en("argentina", "modelo")) + 30], [1, 0.45], clamp)}} />
-        {barrido > 0 && barrido < 1 && <div style={{position: "absolute", left: 500, width: 620, top: yScan - 2, height: 3, opacity: interpolate(barrido, [0, 0.04, 0.95, 1], [0, 1, 1, 0]),
-          background: `linear-gradient(90deg, transparent 0%, ${C.glow} 15%, ${C.glow} 85%, transparent 100%)`, boxShadow: `0 0 18px 3px rgba(255,165,61,0.55)`}} />}
-      </div>
-      <AbsoluteFill style={{background: "linear-gradient(270deg, rgba(5,8,12,0.95) 0%, rgba(5,8,12,0.8) 40%, rgba(5,8,12,0) 62%)"}} />
-      <div style={{position: "absolute", left: 1000, top: 190, width: 820}}>
-        <Aparece v={e(c0)}>
-          <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 190, lineHeight: 0.9, color: C.glow, textShadow: "0 0 40px rgba(255,165,61,0.45)"}}>≈ {cuenta.toLocaleString("es-AR")}</div>
-          <Texto size={36}>lugares que el modelo clasifica como basural</Texto>
-        </Aparece>
-        <div style={{marginTop: 40, display: "grid", gap: 14, opacity: Math.min(1, vComp * 1.4)}}>
-          {[{t: "Estimación del Ministerio de Ambiente", v: ESTIMACION, c: C.radar}, {t: "Clasificados por el modelo", v: MODELO_AR, c: C.glow}].map((b, k) => {
-            const w = 600 * (b.v / MODELO_AR) * e(comp + k * 6, 18);
-            return (
-              <div key={b.t}>
-                <Texto size={22} color="rgba(231,235,241,0.8)">{b.t}</Texto>
-                <div style={{display: "flex", alignItems: "center", gap: 14, marginTop: 4}}>
-                  <div style={{width: w, height: 30, borderRadius: 6, background: b.c, boxShadow: `0 0 18px ${b.c}66`}} />
-                  <Mono size={24} color="#fff">≈ {b.v.toLocaleString("es-AR")}</Mono>
-                </div>
-              </div>
-            );
-          })}
-          <Aparece v={e(comp + 18)}><Texto size={44} style={{fontFamily: F.display, fontWeight: 700, color: C.glow}}>+ {(MODELO_AR - ESTIMACION).toLocaleString("es-AR")} más</Texto></Aparece>
-        </div>
-        <Aparece v={e(reg)} style={{marginTop: 18, paddingLeft: 18, borderLeft: `3px solid ${C.glow}`}}>
-          <Texto size={30}>que hoy no figuran en ningún registro</Texto>
-        </Aparece>
-        <Mono size={16} style={{marginTop: 22, opacity: e(reg + 8)}}>Clasificado como basural por el modelo · sin verificar en terreno</Mono>
-      </div>
-      <TituloSeccion titulo="Toda la Argentina" bajada="El modelo, corrido en todo el país" salida={salida} />
-      <Creditos items={[["Imagen", "NASA GIBS · Blue Marble"], OPTICO_ES, RADAR_ES]} opacidad={e(base)} />
-      <Placeholder texto="cifra nacional del modelo (≈7.000) a confirmar" />
-    </AbsoluteFill>
-  );
+  const salida = 14;
+  const tx: TextosMundo = {
+    ...MUNDO_EN,
+    catalogo: (n) => `${n} basurales en catálogos públicos`, regiones: (n) => `${n} regiones corridas hasta ahora`,
+    nuevos: ["posibles basurales nuevos,", "en ningún catálogo público"], nota: ["Clasificados como basural por el modelo · sin verificar en terreno.", "Falta correrlo en el resto del mundo."],
+    titulo: "Resultados", bajada: "La Argentina y ciudades del mundo",
+    cred: [["Imagen", "NASA GIBS · Blue Marble"], ["Basurales conocidos", "OpenStreetMap · Climate TRACE · EPA · NASA EMIT"]],
+    locale: "es-AR", salida,
+    t: {catalogo: tras(salida), regiones: at(en("argentina", "regiones")) - 8, nuevos: at(en("argentina", "encontro")) - 2, nota: at(en("argentina", "catalogo")) + 10},
+  };
+  return <EscenaMundo dur={dur} tx={tx} />;
 };
 
 /* 9 · The web, in a normal browser window, without crops */

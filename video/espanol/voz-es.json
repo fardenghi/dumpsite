@@ -1,6 +1,6 @@
 {
  "voz": "grabada",
- "duracion_video": 168.1,
+ "duracion_video": 166.5,
  "frases": [
   {
    "id": "problema",
@@ -1404,880 +1404,832 @@
    "id": "argentina",
    "archivo": "voz-es/frase-11.wav",
    "inicio": 102.98,
-   "duracion": 10.22,
-   "texto": "Después lo corrimos por toda la Argentina. El modelo encontró unos siete mil lugares que clasifica como basural, dos mil más de lo que estima el Ministerio de Ambiente, y que hoy no figuran en ningún registro.",
+   "duracion": 8.65,
+   "texto": "Lo corrimos sobre la Argentina y otras 29 regiones del mundo. El modelo encontró 183 posibles basurales nuevos que no figuran en ningún catálogo público.",
    "palabras": [
     [
-     "Después",
-     103.13
-    ],
-    [
-     "lo",
-     103.33
+     "Lo",
+     103.09
     ],
     [
      "corrimos",
-     103.39
+     103.215
     ],
     [
-     "por",
-     103.74
-    ],
-    [
-     "toda",
-     103.92
+     "sobre",
+     103.59
     ],
     [
      "la",
-     104.09
+     103.79
     ],
     [
-     "Argentina.",
-     104.14
-    ],
-    [
-     "El",
-     105.291
-    ],
-    [
-     "modelo",
-     105.343
-    ],
-    [
-     "encontró",
-     105.464
-    ],
-    [
-     "unos",
-     105.62
-    ],
-    [
-     "siete",
-     105.98
-    ],
-    [
-     "mil",
-     106.412
-    ],
-    [
-     "lugares",
-     106.7
-    ],
-    [
-     "que",
-     107.1
-    ],
-    [
-     "clasifica",
-     107.31
-    ],
-    [
-     "como",
-     107.64
-    ],
-    [
-     "basural,",
-     107.81
-    ],
-    [
-     "dos",
-     108.466
-    ],
-    [
-     "mil",
-     108.758
-    ],
-    [
-     "más",
-     109.05
-    ],
-    [
-     "de",
-     109.21
-    ],
-    [
-     "lo",
-     109.38
-    ],
-    [
-     "que",
-     109.44
-    ],
-    [
-     "estima",
-     109.61
-    ],
-    [
-     "el",
-     109.94
-    ],
-    [
-     "Ministerio",
-     110.06
-    ],
-    [
-     "de",
-     110.61
-    ],
-    [
-     "Ambiente,",
-     110.73
+     "Argentina",
+     103.89
     ],
     [
      "y",
-     111.23
+     104.39
+    ],
+    [
+     "otras",
+     104.44
+    ],
+    [
+     "29",
+     104.71
+    ],
+    [
+     "regiones",
+     105.04
+    ],
+    [
+     "del",
+     105.48
+    ],
+    [
+     "mundo.",
+     105.64
+    ],
+    [
+     "El",
+     106.249
+    ],
+    [
+     "modelo",
+     106.3
+    ],
+    [
+     "encontró",
+     106.76
+    ],
+    [
+     "183",
+     107.28
+    ],
+    [
+     "posibles",
+     107.91
+    ],
+    [
+     "basurales",
+     108.5
+    ],
+    [
+     "nuevos",
+     109.1
     ],
     [
      "que",
-     111.29
-    ],
-    [
-     "hoy",
-     111.41
+     109.728
     ],
     [
      "no",
-     111.57
+     109.79
     ],
     [
      "figuran",
-     111.67
+     109.93
     ],
     [
      "en",
-     112.07
+     110.43
     ],
     [
      "ningún",
-     112.18
+     110.58
     ],
     [
-     "registro.",
-     112.52
+     "catálogo",
+     111.1
+    ],
+    [
+     "público.",
+     111.62
     ]
    ]
   },
   {
    "id": "web",
    "archivo": "voz-es/frase-12.wav",
-   "inicio": 114.1,
+   "inicio": 112.53,
    "duracion": 8.07,
    "texto": "Todo esto se puede ver en nuestra web. Cuando entrás, te encontrás con un mapa del mundo, donde están marcados los basurales en los que el radar detecta movimiento.",
    "palabras": [
     [
      "Todo",
-     114.2
+     112.63
     ],
     [
      "esto",
-     114.36
+     112.79
     ],
     [
      "se",
-     114.66
+     113.09
     ],
     [
      "puede",
-     114.77
+     113.2
     ],
     [
      "ver",
-     115.08
+     113.51
     ],
     [
      "en",
-     115.28
+     113.71
     ],
     [
      "nuestra",
-     115.41
+     113.84
     ],
     [
      "web.",
-     116.06
+     114.49
     ],
     [
      "Cuando",
-     116.23
+     114.66
     ],
     [
      "entrás,",
-     116.49
+     114.92
     ],
     [
      "te",
-     116.91
+     115.34
     ],
     [
      "encontrás",
-     116.998
+     115.428
     ],
     [
      "con",
-     117.29
+     115.72
     ],
     [
      "un",
-     117.38
+     115.81
     ],
     [
      "mapa",
-     117.45
+     115.88
     ],
     [
      "del",
-     117.64
+     116.07
     ],
     [
      "mundo,",
-     117.81
+     116.24
     ],
     [
      "donde",
-     118.44
+     116.87
     ],
     [
      "están",
-     118.56
+     116.99
     ],
     [
      "marcados",
-     118.87
+     117.3
     ],
     [
      "los",
-     119.44
+     117.87
     ],
     [
      "basurales",
-     119.56
+     117.99
     ],
     [
      "en",
-     120.22
+     118.65
     ],
     [
      "los",
-     120.314
+     118.744
     ],
     [
      "que",
-     120.44
+     118.87
     ],
     [
      "el",
-     120.62
+     119.05
     ],
     [
      "radar",
-     120.73
+     119.16
     ],
     [
      "detecta",
-     121.06
+     119.49
     ],
     [
      "movimiento.",
-     121.49
+     119.92
     ]
    ]
   },
   {
    "id": "ficha",
    "archivo": "voz-es/frase-13.wav",
-   "inicio": 122.77,
+   "inicio": 121.2,
    "duracion": 7.01,
    "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar y lo que fue viendo el radar cada vez que pasó por ahí.",
    "palabras": [
     [
      "Si",
-     122.87
+     121.3
     ],
     [
      "hacés",
-     122.97
+     121.4
     ],
     [
      "clic",
-     123.17
+     121.6
     ],
     [
      "en",
-     123.32
+     121.75
     ],
     [
      "cualquiera",
-     123.42
+     121.85
     ],
     [
      "de",
-     123.92
+     122.35
     ],
     [
      "ellos,",
-     124.03
+     122.46
     ],
     [
      "por",
-     124.37
+     122.8
     ],
     [
      "ejemplo",
-     124.52
+     122.95
     ],
     [
      "en",
-     124.87
+     123.3
     ],
     [
      "el",
-     124.97
+     123.4
     ],
     [
      "de",
-     125.07
+     123.5
     ],
     [
      "Luján,",
-     125.18
+     123.61
     ],
     [
      "te",
-     125.722
+     124.152
     ],
     [
      "muestra",
-     125.795
+     124.225
     ],
     [
      "la",
-     125.99
+     124.42
     ],
     [
      "imagen",
-     126.08
+     124.51
     ],
     [
      "satelital",
-     126.41
+     124.84
     ],
     [
      "del",
-     126.87
+     125.3
     ],
     [
      "lugar",
-     127.03
+     125.46
     ],
     [
      "y",
-     127.41
+     125.84
     ],
     [
      "lo",
-     127.466
+     125.896
     ],
     [
      "que",
-     127.55
+     125.98
     ],
     [
      "fue",
-     127.8
+     126.23
     ],
     [
      "viendo",
-     127.89
+     126.32
     ],
     [
      "el",
-     128.22
+     126.65
     ],
     [
      "radar",
-     128.33
+     126.76
     ],
     [
      "cada",
-     128.64
+     127.07
     ],
     [
      "vez",
-     128.83
+     127.26
     ],
     [
      "que",
-     129.06
+     127.49
     ],
     [
      "pasó",
-     129.17
+     127.6
     ],
     [
      "por",
-     129.39
+     127.82
     ],
     [
      "ahí.",
-     129.751
+     128.181
     ]
    ]
   },
   {
    "id": "lujan_web",
    "archivo": "voz-es/frase-14.wav",
-   "inicio": 130.24,
+   "inicio": 128.67,
    "duracion": 5.1,
    "texto": "En Luján las dos cosas coinciden, porque figura cerrado desde julio y el radar lo ve quieto.",
    "palabras": [
     [
      "En",
-     130.37
+     128.8
     ],
     [
      "Luján",
-     130.49
+     128.92
     ],
     [
      "las",
-     130.73
+     129.16
     ],
     [
      "dos",
-     131.09
+     129.52
     ],
     [
      "cosas",
-     131.17
+     129.6
     ],
     [
      "coinciden,",
-     131.54
+     129.97
     ],
     [
      "porque",
-     132.49
+     130.92
     ],
     [
      "figura",
-     132.76
+     131.19
     ],
     [
      "cerrado",
-     133.14
+     131.57
     ],
     [
      "desde",
-     133.71
+     132.14
     ],
     [
      "julio",
-     134.25
+     132.68
     ],
     [
      "y",
-     134.4
+     132.83
     ],
     [
      "el",
-     134.47
+     132.9
     ],
     [
      "radar",
-     134.62
+     133.05
     ],
     [
      "lo",
-     134.99
+     133.42
     ],
     [
      "ve",
-     135.17
+     133.6
     ],
     [
      "quieto.",
-     135.33
+     133.76
     ]
    ]
   },
   {
    "id": "norte3_web",
    "archivo": "voz-es/frase-15.wav",
-   "inicio": 135.78,
+   "inicio": 134.21,
    "duracion": 4.13,
    "texto": "Con Norte Tres pasa lo contrario, porque el radar lo encuentra distinto en casi todas las pasadas.",
    "palabras": [
     [
      "Con",
-     135.88
+     134.31
     ],
     [
      "Norte",
-     135.95
+     134.38
     ],
     [
      "Tres",
-     136.23
+     134.66
     ],
     [
      "pasa",
-     136.47
+     134.9
     ],
     [
      "lo",
-     136.68
+     135.11
     ],
     [
      "contrario,",
-     136.79
+     135.22
     ],
     [
      "porque",
-     137.47
+     135.9
     ],
     [
      "el",
-     137.71
+     136.14
     ],
     [
      "radar",
-     137.79
+     136.22
     ],
     [
      "lo",
-     138.0
+     136.43
     ],
     [
      "encuentra",
-     138.08
+     136.51
     ],
     [
      "distinto",
-     138.45
+     136.88
     ],
     [
      "en",
-     138.77
+     137.2
     ],
     [
      "casi",
-     138.84
+     137.27
     ],
     [
      "todas",
-     139.01
+     137.44
     ],
     [
      "las",
-     139.28
+     137.71
     ],
     [
      "pasadas.",
-     139.36
+     137.79
     ]
    ]
   },
   {
    "id": "lista",
    "archivo": "voz-es/frase-16.wav",
-   "inicio": 140.51,
+   "inicio": 138.94,
    "duracion": 5.81,
    "texto": "Además, armamos una lista con todos los sitios, que se puede descargar para comparar lo que dicen los registros con lo que ve el radar.",
    "palabras": [
     [
      "Además,",
-     140.65
+     139.08
     ],
     [
      "armamos",
-     141.215
+     139.645
     ],
     [
      "una",
-     141.41
+     139.84
     ],
     [
      "lista",
-     141.59
+     140.02
     ],
     [
      "con",
-     141.9
+     140.33
     ],
     [
      "todos",
-     142.11
+     140.54
     ],
     [
      "los",
-     142.45
+     140.88
     ],
     [
      "sitios,",
-     142.55
+     140.98
     ],
     [
      "que",
-     143.12
+     141.55
     ],
     [
      "se",
-     143.177
+     141.607
     ],
     [
      "puede",
-     143.22
+     141.65
     ],
     [
      "descargar",
-     143.46
+     141.89
     ],
     [
      "para",
-     143.86
+     142.29
     ],
     [
      "comparar",
-     144.09
+     142.52
     ],
     [
      "lo",
-     144.41
+     142.84
     ],
     [
      "que",
-     144.49
+     142.92
     ],
     [
      "dicen",
-     144.61
+     143.04
     ],
     [
      "los",
-     144.81
+     143.24
     ],
     [
      "registros",
-     144.93
+     143.36
     ],
     [
      "con",
-     145.29
+     143.72
     ],
     [
      "lo",
-     145.49
+     143.92
     ],
     [
      "que",
-     145.541
+     143.971
     ],
     [
      "ve",
-     145.638
+     144.068
     ],
     [
      "el",
-     145.71
+     144.14
     ],
     [
      "radar.",
-     145.77
+     144.2
     ]
    ]
   },
   {
    "id": "cierre",
    "archivo": "voz-es/frase-17.wav",
-   "inicio": 147.22,
+   "inicio": 145.65,
    "duracion": 4.87,
    "texto": "Usamos solo datos abiertos, y el código, el modelo y los datos están en los links en pantalla.",
    "palabras": [
     [
      "Usamos",
-     147.33
+     145.76
     ],
     [
      "solo",
-     147.56
+     145.99
     ],
     [
      "datos",
-     147.79
+     146.22
     ],
     [
      "abiertos,",
-     148.08
+     146.51
     ],
     [
      "y",
-     148.52
+     146.95
     ],
     [
      "el",
-     148.58
+     147.01
     ],
     [
      "código,",
-     148.77
+     147.2
     ],
     [
      "el",
-     149.15
+     147.58
     ],
     [
      "modelo",
-     149.26
+     147.69
     ],
     [
      "y",
-     149.61
+     148.04
     ],
     [
      "los",
-     149.66
+     148.09
     ],
     [
      "datos",
-     149.83
+     148.26
     ],
     [
      "están",
-     150.12
+     148.55
     ],
     [
      "en",
-     150.41
+     148.84
     ],
     [
      "los",
-     150.69
+     149.12
     ],
     [
      "links",
-     150.8
+     149.23
     ],
     [
      "en",
-     150.98
+     149.41
     ],
     [
      "pantalla.",
-     151.09
+     149.52
     ]
    ]
   },
   {
    "id": "lema",
    "archivo": "voz-es/frase-18.wav",
-   "inicio": 152.99,
+   "inicio": 151.42,
    "duracion": 6.11,
    "texto": "Dumpsite. Un basural se puede cerrar en los papeles, pero desde el espacio se ve si verdaderamente sigue despierto.",
    "palabras": [
     [
      "Dumpsite.",
-     153.08
+     151.51
     ],
     [
      "Un",
-     154.16
+     152.59
     ],
     [
      "basural",
-     154.21
+     152.64
     ],
     [
      "se",
-     154.52
+     152.95
     ],
     [
      "puede",
-     154.64
+     153.07
     ],
     [
      "cerrar",
-     154.83
+     153.26
     ],
     [
      "en",
-     155.09
+     153.52
     ],
     [
      "los",
-     155.23
+     153.66
     ],
     [
      "papeles,",
-     155.36
+     153.79
     ],
     [
      "pero",
-     155.89
+     154.32
     ],
     [
      "desde",
-     156.01
+     154.44
     ],
     [
      "el",
-     156.38
+     154.81
     ],
     [
      "espacio",
-     156.47
+     154.9
     ],
     [
      "se",
-     157.08
+     155.51
     ],
     [
      "ve",
-     157.155
+     155.585
     ],
     [
      "si",
-     157.23
+     155.66
     ],
     [
      "verdaderamente",
-     157.39
+     155.82
     ],
     [
      "sigue",
-     158.27
+     156.7
     ],
     [
      "despierto.",
-     158.48
+     156.91
     ]
    ]
   },
   {
    "id": "equipo",
    "archivo": "voz-es/frase-19.wav",
-   "inicio": 159.9,
+   "inicio": 158.33,
    "duracion": 2.21,
    "texto": "Nosotros somos Spaceship. Muchas gracias.",
    "palabras": [
     [
      "Nosotros",
-     159.99
+     158.42
     ],
     [
      "somos",
-     160.27
+     158.7
     ],
     [
      "Spaceship.",
-     160.51
+     158.94
     ],
     [
      "Muchas",
-     161.443
+     159.873
     ],
     [
      "gracias.",
-     162.073
+     160.503
     ]
    ]
   }

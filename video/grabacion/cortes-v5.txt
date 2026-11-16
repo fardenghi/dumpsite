@@ -1,0 +1,19 @@
+1.22	13.32	problema	toma-v4-limpia-gate.wav
+18.42	29.40	dumpsite
+31.79	38.12	cambia
+38.44	43.24	coherencia
+43.74	51.10	insomnio
+16.52	25.02	mapa	toma-v4-limpia-gate.wav
+57.35	63.78	lujan
+64.31	67.86	norte3
+0.70	19.83	catalogo	toma-v3-limpia-gate.wav
+90.12	107.85	modelo
+1.80	10.45	argentina	toma-v5-limpia-gate.wav
+123.19	131.36	web
+33.12	40.20	ficha	toma-v4-limpia-gate.wav
+144.50	149.61	lujan_web
+149.89	154.07	norte3_web
+154.31	160.12	lista
+160.67	165.54	cierre
+27.13	33.32	lema	toma-v3-limpia-gate.wav
+176.65	178.92	equipo

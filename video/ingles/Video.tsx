@@ -4,7 +4,7 @@ import {ESCENAS, FPS, FRASES} from "../compartido/data";
 import {C} from "../compartido/theme";
 import {Subtitulos} from "../compartido/components/Overlays";
 import {EscenaIA, EscenaInsomnia, EscenaNisar, EscenaRed, Transicion} from "../compartido/escenas/Escenas";
-import {EscenaArgentina, EscenaEquipo, EscenaWeb} from "./Final";
+import {EscenaMundo, EscenaEquipo, EscenaWeb} from "./Final";
 
 const s = (seg: number) => Math.round(seg * FPS);
 const tramo = (e: {desde: number; hasta: number}) => ({from: s(e.desde), durationInFrames: Math.max(1, s(e.hasta) - s(e.desde))});
@@ -29,7 +29,7 @@ export const DumpsiteIntl: React.FC = () => {
       <Sequence {...tramo(ESCENAS.red)} name="4 · Red neuronal">
         <EscenaRed dur={dur(ESCENAS.red)} inicioParte2={dur(ESCENAS.red) * 0.4} />
       </Sequence>
-      <Sequence {...tramo(ESCENAS.argentina)} name="5 · Argentina"><EscenaArgentina dur={dur(ESCENAS.argentina)} /></Sequence>
+      <Sequence {...tramo(ESCENAS.argentina)} name="5 · Resultados (mundo)"><EscenaMundo dur={dur(ESCENAS.argentina)} /></Sequence>
       <Sequence {...tramo(ESCENAS.web)} name="6 · Web y links">
         <EscenaWeb dur={dur(ESCENAS.web)} inicioLinks={FRASES.find((x) => x.id === "resultados")!.inicio + inicioDe("resultados", "at the links") - ESCENAS.web.desde} />
       </Sequence>

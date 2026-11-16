@@ -52,15 +52,7 @@ export const RESULTADOS = {
   repo: "github.com/fardenghi/dumpsite", // PLACEHOLDER: confirm the public repo
 }
 
-// ---- PLACEHOLDER: model run near the large Argentine cities (not there yet) ----
-// null shows as "XX" in the international video. Fill in with the real output and re-render.
-export const RESULTADOS_AR: {encontrados: number | null; sinRegistro: number | null} = {encontrados: null, sinRegistro: null};
-// Cities where it runs (approximate: the most populated). Adjust to the real list of the run.
-export const CIUDADES_AR: [string, number, number][] = [
-  ["Buenos Aires", -58.45, -34.6], ["Córdoba", -64.19, -31.42], ["Rosario", -60.65, -32.95], ["Mendoza", -68.84, -32.89],
-  ["Tucumán", -65.22, -26.82], ["Mar del Plata", -57.55, -38.0], ["Salta", -65.41, -24.79], ["Santa Fe", -60.7, -31.63],
-  ["San Juan", -68.53, -31.54], ["Neuquén", -68.06, -38.95], ["Resistencia", -58.98, -27.45],
-];
+// Results of the international video: compartido/argentina.json (scripts/argentina_catalogo.py).
 
 // ---- PLACEHOLDER: CNN output per crop (the OSM class of each crop is real) ----
 export const EJEMPLOS_CNN = [
