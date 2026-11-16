@@ -31,7 +31,7 @@ Every dataset, imagery service, library, font and AI tool that Dumpsite uses, wi
 | **JRC Global Surface Water** v1.4 | Water mask | Free of charge, without restriction of use (Copernicus programme) | Pekel, J.-F., Cottam, A., Gorelick, N., Belward, A. S. (2016). High-resolution mapping of global surface water and its long-term changes. *Nature* 540, 418–422 |
 | **Natural Earth** 1:10m Admin 0 countries | Argentina's outline (`motor/fijos/argentina_ne10m.geojson`) | Public domain | Made with Natural Earth, https://www.naturalearthdata.com |
 | **Sentinel-2 cloudless 2024** by EOX | Background mosaic of the web map when zoomed in (tiles loaded from EOX, not stored in the repo) and some figures | CC BY-NC-SA 4.0 | Sentinel-2 cloudless – https://s2maps.eu by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024) |
-| **Google Map Tiles API** (2D satellite) | Optional, only if a key is configured. **The public site doesn't use it** | © Google and its providers, under the Google Maps Platform terms. Not redistributed | Shown on the map with Google's attribution |
+| **Google Map Tiles API** (2D satellite) | High-resolution imagery (under 1 m, no date) inside the box of each dump site from zoom 13 on. The public site uses it | © Google and its providers. Used through the API under the Google Maps Platform Terms of Service, which allow showing it with attribution; tiles aren't stored, cached or redistributed | Map data © Google and its providers, shown on the map as Google requires |
 | Curated Argentine cases (Luján, Norte III, González Catán, Ensenada, San Pedro, Navarro, Nueve de Julio) | Validation cases | That of each source | Each source (press articles and public documents) is cited with its URL in `data/catalogos/basurales/casos_curados_argentina.json` |
 
 Microsoft Planetary Computer and the ASF API are only used as access services; the data terms are the ones above.
@@ -94,16 +94,17 @@ OTHER DATA
 7. JRC Global Surface Water v1.4 – Pekel, J.-F. et al. (2016), Nature 540, 418–422 – free, without restriction of use.
 8. Natural Earth 1:10m Admin 0 countries – https://www.naturalearthdata.com – public domain.
 9. Sentinel-2 cloudless 2024 by EOX IT Services GmbH – https://s2maps.eu – CC BY-NC-SA 4.0 (web map background, loaded from EOX).
-10. Curated Argentine dump-site cases: press articles and public documents, each cited with its URL in data/catalogos/basurales/casos_curados_argentina.json.
+10. Google Map Tiles API (2D satellite imagery) – © Google and its providers – used under the Google Maps Platform Terms of Service, with on-map attribution; not stored or redistributed.
+11. Curated Argentine dump-site cases: press articles and public documents, each cited with its URL in data/catalogos/basurales/casos_curados_argentina.json.
 
 SOFTWARE
-11. Python: NumPy, SciPy, pandas, scikit-learn, h5py, Shapely, rasterio, tifffile, imagecodecs (BSD-3-Clause); Matplotlib (Matplotlib License); LightGBM, DuckDB, earthaccess, pytest, pyproj, openpyxl (MIT); Pillow (MIT-CMU); PyArrow, functions-framework, google-cloud-compute (Apache-2.0).
-12. Web: React, Vite, Vercel Web Analytics (MIT); MapLibre GL JS (BSD-3-Clause); TypeScript (Apache-2.0); Roboto Slab (Apache-2.0) and DM Sans (OFL 1.1) fonts.
-13. Video: Remotion (Remotion License); IBM Plex and Barlow Condensed fonts (OFL 1.1).
+12. Python: NumPy, SciPy, pandas, scikit-learn, h5py, Shapely, rasterio, tifffile, imagecodecs (BSD-3-Clause); Matplotlib (Matplotlib License); LightGBM, DuckDB, earthaccess, pytest, pyproj, openpyxl (MIT); Pillow (MIT-CMU); PyArrow, functions-framework, google-cloud-compute (Apache-2.0).
+13. Web: React, Vite, Vercel Web Analytics (MIT); MapLibre GL JS (BSD-3-Clause); TypeScript (Apache-2.0); Roboto Slab (Apache-2.0) and DM Sans (OFL 1.1) fonts.
+14. Video: Remotion (Remotion License); IBM Plex and Barlow Condensed fonts (OFL 1.1).
 
 AI TOOLS
-14. Claude (Anthropic): coding assistant, and 89 blind optical activity labels (data/salidas/etiquetas_optico_ia.json, not human-reviewed).
-15. Higgsfield (Seedance) and Azure AI Speech: AI clip and synthetic voice in the video, marked on screen.
+15. Claude (Anthropic): coding assistant, and 89 blind optical activity labels (data/salidas/etiquetas_optico_ia.json, not human-reviewed).
+16. Higgsfield (Seedance) and Azure AI Speech: AI clip and synthetic voice in the video, marked on screen.
 
 Full detail and licenses: https://github.com/fardenghi/dumpsite/blob/main/docs/credits.md
 ```

@@ -67,7 +67,7 @@ cd motor && python -m venv .venv && .venv/bin/pip install -r requirements.txt
 ## Sources and data
 - **NASA:** NISAR L2 GUNW and GCOV (NASA/ISRO, via ASF DAAC), EMIT L2B CH4PLM methane plumes and Blue Marble via GIBS.
 - **Partner agencies:** Sentinel-2 L2A and WorldCover (ESA / Copernicus).
-- **Others:** OpenStreetMap via Overture Maps (ODbL), Climate TRACE (CC BY 4.0), U.S. EPA LMOP (public domain), JRC Global Surface Water, Natural Earth and EOX Sentinel-2 cloudless (CC BY-NC-SA 4.0).
+- **Others:** OpenStreetMap via Overture Maps (ODbL), Climate TRACE (CC BY 4.0), U.S. EPA LMOP (public domain), JRC Global Surface Water, Natural Earth, EOX Sentinel-2 cloudless (CC BY-NC-SA 4.0) and Google satellite imagery (Map Tiles API, © Google).
 
 Every source, library and font with its license and citation is in [`docs/credits.md`](docs/credits.md); how each dataset is used, in [`docs/data.md`](docs/data.md).
 
