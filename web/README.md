@@ -103,8 +103,9 @@ The outlines come from the index pipeline (OpenStreetMap `landuse=landfill` poly
 - JRC Global Surface Water v1.4 (Pekel et al., 2016, Nature 540), for the water mask.
 - Blue Marble (NASA), via GIBS.
 - Sentinel-2 (ESA Copernicus), via Microsoft Planetary Computer.
+- Sentinel-2 cloudless 2024 mosaic by EOX IT Services (s2maps.eu, CC BY-NC-SA 4.0), as the zoomed-in background.
 - OpenStreetMap, ODbL.
 - Dump-site catalog: OpenStreetMap polygons via Overture Maps (release 2026-10-21.0, ODbL), Climate TRACE (solid-waste-disposal, API v6, CC BY 4.0), registry status from U.S. EPA LMOP (2024-09, public domain) and NASA EMIT L2B CH4PLM v002 plumes. Details in `../data/README.md`.
 - Google satellite imagery (Map Tiles API), only if the key is configured. It's copyrighted by Google and its providers: it has to be declared in the submission form.
 - Roboto Slab (Apache 2.0) and DM Sans (OFL) fonts. Map with MapLibre GL JS (BSD-3).
-- Code: Apache 2.0. Written with AI assistance (Claude).
+- Code: Apache 2.0 (see `../LICENSE`). Written with AI assistance (Claude). Full list of sources and licenses: `../docs/credits.md`.

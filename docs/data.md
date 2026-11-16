@@ -38,6 +38,10 @@ They come from Overture Maps (OSM, ODbL). They measure between 2 and 500 ha, are
 - **Sentinel-2 L2A** (Copernicus, ESA), via Microsoft Planetary Computer, no account needed: optical variables, optical labels and the video.
 - **JRC Global Surface Water** v1.4: water mask.
 - **ESA WorldCover** 2021 v200 (CC BY 4.0): land cover as context.
+- **Natural Earth** 1:10m (public domain): Argentina's outline.
+- **NASA Blue Marble** via GIBS and **Sentinel-2 cloudless 2024** by EOX (CC BY-NC-SA 4.0): web map backgrounds.
+
+The complete list of sources, libraries and fonts, with licenses and citations, is in [`credits.md`](credits.md).
 
 ## Validation cases in Argentina
 | Case | What happened | What it's for |

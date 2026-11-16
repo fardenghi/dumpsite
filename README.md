@@ -65,4 +65,16 @@ cd motor && python -m venv .venv && .venv/bin/pip install -r requirements.txt
 | Agustín Tomas Romero | [@sanrome](https://github.com/sanrome) |
 
 ## Sources and data
-NISAR (NASA/ISRO, via ASF DAAC), Sentinel-2 (Copernicus), OpenStreetMap via Overture, EPA LMOP, Climate TRACE, NASA EMIT and JRC: details and licenses in [`docs/data.md`](docs/data.md).
+- **NASA:** NISAR L2 GUNW and GCOV (NASA/ISRO, via ASF DAAC), EMIT L2B CH4PLM methane plumes and Blue Marble via GIBS.
+- **Partner agencies:** Sentinel-2 L2A and WorldCover (ESA / Copernicus).
+- **Others:** OpenStreetMap via Overture Maps (ODbL), Climate TRACE (CC BY 4.0), U.S. EPA LMOP (public domain), JRC Global Surface Water, Natural Earth and EOX Sentinel-2 cloudless (CC BY-NC-SA 4.0).
+
+Every source, library and font with its license and citation is in [`docs/credits.md`](docs/credits.md); how each dataset is used, in [`docs/data.md`](docs/data.md).
+
+## Use of AI
+AI was a tool, not the source of the idea. Claude (Anthropic) helped write code and docs, and assigned 89 blind optical activity labels that no person has reviewed (`data/salidas/etiquetas_optico_ia.json`, marked in its metadata). The video's AI clip and synthetic voice are marked on screen. Details in [`docs/credits.md`](docs/credits.md#use-of-ai).
+
+## License
+Code and documentation: [Apache License 2.0](LICENSE). Third-party data, imagery, libraries and fonts keep their own licenses, listed in [`docs/credits.md`](docs/credits.md).
+
+Dumpsite is an independent project for NASA Space Apps Challenge 2026. It is not endorsed by NASA, ISRO, ESA or any data provider named here.

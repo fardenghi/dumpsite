@@ -1,0 +1,11 @@
+Dumpsite
+Copyright 2026 the Dumpsite team (NASA Space Apps Challenge 2026)
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It uses third-party data, imagery, libraries and fonts under their own
+licenses, including NISAR data (NASA/JPL-Caltech and ISRO, via ASF DAAC),
+Copernicus Sentinel-2 data (ESA), ESA WorldCover (CC BY 4.0),
+OpenStreetMap data via Overture Maps (ODbL 1.0, © OpenStreetMap contributors),
+Climate TRACE (CC BY 4.0) and U.S. EPA LMOP (public domain).
+The full list, with licenses and citations, is in docs/credits.md.
