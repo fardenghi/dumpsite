@@ -25,7 +25,12 @@ await ir("/mapa?sitio=norte-iii", 11000); await pg.screenshot({path: `${out}/es-
 await ir("/mapa?sitio=lujan", 11000); await pg.screenshot({path: `${out}/es-ficha-lujan.png`}); await fichaRects("lujan"); console.log("lujan");
 await ir("/mapa?sitio=gonzalez-catan", 11000); await pg.screenshot({path: `${out}/es-ficha-catan.png`}); console.log("catan");
 await ir("/inicio", 4000); await pg.screenshot({path: `${out}/es-inicio.png`}); console.log("inicio");
-await ir("/sitios", 4000); await pg.screenshot({path: `${out}/es-sitios.png`}); rects.sitios = {csv: await caja("[data-filtros] .btn"), lista: await caja(".lista")}; console.log("sitios");
+await ir("/sitios", 4000); await pg.screenshot({path: `${out}/es-sitios.png`}); rects.sitios = {csv: await caja("[data-filtros] .btn"), lista: await pg.evaluate(() => {
+  // the list continues below the panel edge (scroll): crop it at the first container that cuts it
+  const e = document.querySelector(".lista"); const r = e.getBoundingClientRect(); let fondo = Math.min(r.bottom, innerHeight);
+  for (let p = e.parentElement; p; p = p.parentElement) { const st = getComputedStyle(p); if (/(auto|scroll|hidden)/.test(st.overflowY)) { fondo = Math.min(fondo, p.getBoundingClientRect().bottom); break; } }
+  return [Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(fondo - r.y - 12)];
+})}; console.log("sitios");
 await ir("/modelo", 4000); await pg.screenshot({path: `${out}/es-modelo.png`}); console.log("modelo");
 fs.writeFileSync(new URL("../web-rects.json", import.meta.url), JSON.stringify(rects, null, 1));
 await b.close();

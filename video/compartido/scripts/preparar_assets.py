@@ -169,7 +169,7 @@ def main():
     y0, y1 = ys[filas.min()] + 40, ys[filas.max()] - 40
     pol_utm = [utm(la, lo) for lo, la in anillo]
     data["norte3"]["poligono_nisar"] = [[round((x - x0) / (x1 - x0), 5), round((y0 - y) / (y0 - y1), 5)] for x, y in pol_utm]
-    # Wide (14 km) smoothed version, to show "what the radar sees" without the pixelated look.
+    # Wide version (14 km): upscaled with Lanczos and no extra blur (the Gaussian blur made it look fuzzy in the video).
     from PIL import ImageFilter
     lado2 = 14000.0
     cols2 = np.where((xs >= cx - lado2 / 2) & (xs <= cx + lado2 / 2))[0]
@@ -180,7 +180,7 @@ def main():
     j0 = np.floor(pos2).astype(int).clip(0, len(paleta) - 2)
     t2 = (pos2 - j0)[..., None]
     rgb2 = (paleta[j0] * (1 - t2) + paleta[j0 + 1] * t2).astype("uint8")
-    img2 = Image.fromarray(rgb2).resize((540, 540), Image.BICUBIC).filter(ImageFilter.GaussianBlur(1.6)).resize((1080, 1080), Image.LANCZOS)
+    img2 = Image.fromarray(rgb2).resize((2160, 2160), Image.LANCZOS)
     img2.save(PUB / "nisar-coherencia-amplia.png")
     ax0, ax1 = xs[cols2.min()] - 40, xs[cols2.max()] + 40
     ay0, ay1 = ys[filas2.min()] + 40, ys[filas2.max()] - 40

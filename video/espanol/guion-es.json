@@ -13,7 +13,7 @@
    "id": "problema",
    "partes": [
     {
-     "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede identificarlos. En Argentina hay unos cinco mil basurales a cielo abierto, según el Ministerio de Ambiente, pero esa cifra no sale de un relevamiento formal, y no existe un inventario oficial abierto que diga dónde están ni cuáles siguen activos."
+     "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede identificarlos. En Argentina hay cientos de basurales a cielo abierto, pero no existe un relevamiento formal ni un inventario oficial que diga dónde están ni cuáles siguen activos."
     }
    ]
   },
@@ -54,7 +54,7 @@
    "id": "mapa",
    "partes": [
     {
-     "texto": "Lo calculamos en todo el Gran Buenos Aires, dejando afuera el agua, las rutas y los cultivos, que cambian por otros motivos."
+     "texto": "Esto lo calculamos en distintas regiones. Acá, como ejemplo, se ve todo el Gran Buenos Aires, dejando fuera el agua, las rutas y los cultivos, que cambian por otros motivos."
     }
    ]
   },
@@ -115,7 +115,7 @@
    "id": "ficha",
    "partes": [
     {
-     "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar, lo que dice el registro oficial y lo que fue viendo el radar cada vez que pasó por ahí."
+     "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar y lo que fue viendo el radar cada vez que pasó por ahí."
     }
    ],
    "hueco_antes_s": 0.6

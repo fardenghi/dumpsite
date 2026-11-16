@@ -107,10 +107,13 @@ export const Equipo: React.FC<{dur: number}> = ({dur}) => {
 
 /* Credits for the image on screen, like a tiny spec sheet. */
 export const Creditos: React.FC<{items: [string, string][]; opacidad?: number}> = ({items, opacidad = 1}) => (
-  <div style={{position: "absolute", left: 40, bottom: 34, display: "flex", gap: 22, opacity: opacidad, fontFamily: F.mono, fontSize: 15,
-    color: "rgba(231,235,241,0.78)", textShadow: "0 1px 3px rgba(0,0,0,0.9)"}}>
+  // zIndex: above the subtitle gradient, which otherwise dims and lights them up with each sentence
+  <div style={{position: "absolute", left: 32, bottom: 24, zIndex: 40, display: "flex", gap: 10, opacity: opacidad, fontFamily: F.mono, fontSize: 18,
+    color: "rgba(244,246,249,0.95)"}}>
     {items.map(([etiqueta, valor]) => (
-      <span key={etiqueta}><span style={{color: C.glow, letterSpacing: 2, textTransform: "uppercase", marginRight: 8}}>{etiqueta}</span>{valor}</span>
+      <span key={etiqueta} style={{padding: "5px 12px", borderRadius: 8, background: "rgba(5,8,12,0.78)", border: "1px solid rgba(255,255,255,0.12)"}}>
+        <span style={{color: C.glow, letterSpacing: 2, textTransform: "uppercase", marginRight: 8}}>{etiqueta}</span>{valor}
+      </span>
     ))}
   </div>
 );
@@ -144,7 +147,8 @@ export const TituloSeccion: React.FC<{numero?: string; titulo: string; bajada?: 
           <div style={{fontFamily: F.mono, fontSize: 34, letterSpacing: 10, color: C.glow, textTransform: "uppercase",
             transform: `translateY(${(1 - entra) * 20}px)`}}>{numero}</div>
         )}
-        <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 200, lineHeight: 0.95, color: C.ink, letterSpacing: 2,
+        {/* loose lineHeight: descenders (p, g) don't overlap the subtitle */}
+        <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 200, lineHeight: 1.12, color: C.ink, letterSpacing: 2,
           textShadow: "0 6px 40px rgba(0,0,0,0.6)", whiteSpace: "nowrap", transform: `translateY(${(1 - entra) * 40}px)`}}>{titulo}</div>
         {bajada && (
           <div style={{fontFamily: F.sans, fontSize: 40, color: "rgba(231,235,241,0.85)", marginTop: 12, opacity: interpolate(frame, [8, 18], [0, 1], clamp)}}>

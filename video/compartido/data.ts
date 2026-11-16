@@ -15,20 +15,28 @@ const f = (id: string) => VOZ.frases.find((x) => x.id === id)!;
 
 // Scenes synced with the voice: each one starts when its sentence starts.
 const finIntro = f("intro").inicio + f("intro").duracion + 0.35;
+// The ending has no voice of its own, so it is split between the end of "red" (once the trays are full),
+// "resultados" and the tail: Argentina (2.4 s) → the web with the links (2.2 s) → Spaceship with the links (1.1 s, the final image).
+const finRed = f("red").inicio + 4.83;
+const finAR = finRed + 2.4;
+const finWeb = finAR + 2.2;
 export const ESCENAS = {
   ia: {desde: 0, hasta: finIntro},
   transicion: {desde: finIntro, hasta: f("nisar").inicio},
   nisar: {desde: f("nisar").inicio, hasta: f("insomnia").inicio},
   insomnia: {desde: f("insomnia").inicio, hasta: f("red").inicio},
-  red: {desde: f("red").inicio, hasta: f("resultados").inicio},
-  resultados: {desde: f("resultados").inicio, hasta: DURACION_S},
+  red: {desde: f("red").inicio, hasta: finRed},
+  argentina: {desde: finRed, hasta: finAR},
+  web: {desde: finAR, hasta: finWeb},
+  equipo: {desde: finWeb, hasta: DURACION_S},
 };
 export const FRASES = VOZ.frases;
 
 // While true, each example figure carries a discreet tag at the top right.
 // Team members, as listed on the team page at spaceappschallenge.org (they appear at the start, bottom right)
 export const NOMBRE_EQUIPO = "<=> (spaceship)";
-export const EQUIPO = ["Nicolas Priotto", "Agustín Tomás Romero", "Ezequiel Testoni", "Filipo Ardenghi", "Santiago Bassi", "Juan Ignacio Lategana"];
+// in alphabetical order by last name
+export const EQUIPO = ["Filipo Ardenghi", "Santiago Bassi", "Juan Ignacio Lategana", "Nicolas Priotto", "Agustín Tomás Romero", "Ezequiel Testoni"];
 
 export const MOSTRAR_PLACEHOLDERS = false; // hidden in the video; the only thing left to replace is the final figures (RESULTADOS)
 
@@ -43,6 +51,16 @@ export const RESULTADOS = {
   url: "dumpsite.earth", // PLACEHOLDER until there's a deploy
   repo: "github.com/fardenghi/dumpsite", // PLACEHOLDER: confirm the public repo
 }
+
+// ---- PLACEHOLDER: model run near the large Argentine cities (not there yet) ----
+// null shows as "XX" in the international video. Fill in with the real output and re-render.
+export const RESULTADOS_AR: {encontrados: number | null; sinRegistro: number | null} = {encontrados: null, sinRegistro: null};
+// Cities where it runs (approximate: the most populated). Adjust to the real list of the run.
+export const CIUDADES_AR: [string, number, number][] = [
+  ["Buenos Aires", -58.45, -34.6], ["Córdoba", -64.19, -31.42], ["Rosario", -60.65, -32.95], ["Mendoza", -68.84, -32.89],
+  ["Tucumán", -65.22, -26.82], ["Mar del Plata", -57.55, -38.0], ["Salta", -65.41, -24.79], ["Santa Fe", -60.7, -31.63],
+  ["San Juan", -68.53, -31.54], ["Neuquén", -68.06, -38.95], ["Resistencia", -58.98, -27.45],
+];
 
 // ---- PLACEHOLDER: CNN output per crop (the OSM class of each crop is real) ----
 export const EJEMPLOS_CNN = [

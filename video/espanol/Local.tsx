@@ -5,9 +5,9 @@
 // compartido/casos.json (capturas_mapa.mjs) and compartido/web-rects.json (capturas_web.mjs). See guion-es.json.
 import React from "react";
 import {AbsoluteFill, Easing, Html5Audio, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
-import {ALTO, ANCHO, EQUIPO, FPS, NOMBRE_EQUIPO, RESULTADOS} from "../compartido/data";
+import {ALTO, ANCHO, EQUIPO, FPS, RESULTADOS} from "../compartido/data";
 import {C, F} from "../compartido/theme";
-import {AvisoIA, Creditos, Equipo, PinUbicacion, Placeholder, Subtitulos, TituloSeccion} from "../compartido/components/Overlays";
+import {AvisoIA, Creditos, PinUbicacion, Placeholder, Subtitulos, TituloSeccion} from "../compartido/components/Overlays";
 import {MapaAmba, caminoPoligono, cajaNorte3EnAmba} from "../compartido/components/Mapa";
 import {Arbol, Cuadro, OFFSET_Y, Ojo, Poligono, clamp, cxNa, cxS2, cyNa, cyS2, entreno, n3, pasadas, serie, zoomExp} from "../compartido/escenas/Escenas";
 import casosJson from "../compartido/casos.json";
@@ -26,6 +26,10 @@ const en = (id: string, palabra: string, n = 1) => {
   throw new Error(`No está "${palabra}" en la frase ${id}`);
 };
 const s = (seg: number) => Math.round(seg * FPS);
+const enAlguna = (id: string, palabras: string[], siNo: number) => {
+  for (const w of palabras) for (const [p, t] of fr(id).palabras) if (norm(p).startsWith(norm(w))) return t;
+  return siNo;
+};
 
 type Rect = [number, number, number, number];
 type Sitio = {nombre: string; lugar: string; ha: number; insomnio: number; radar: string; lado: number; fechas: string[]; contorno: number[][]; pares: {fecha: string; sitio: number; anillo: number}[]};
@@ -35,7 +39,7 @@ const RECTS = rectsJson as unknown as {mapa: {lujan: number[]}; lujan: Record<st
 const RADAR_ES: [string, string] = ["Radar", "NASA–ISRO NISAR · ASF DAAC"];
 const OPTICO_ES: [string, string] = ["Óptico", "Sentinel-2 · Copernicus"];
 const CLIP_IA = 4.733; // the Higgsfield clip at normal speed: it covers the first sentence
-const FOTO_EQUIPO: string | null = null; // e.g. "equipo.jpg" in public/ once the photo of the six is there
+const FOTO_EQUIPO: string | null = "equipo.jpg"; // photo of the six in public/
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 const fechaEs = (iso: string) => `${Number(iso.slice(8, 10))} ${MESES[Number(iso.slice(5, 7)) - 1]}`;
 const FONDO = "radial-gradient(ellipse at 50% 45%, #0d1a26 0%, #05080c 72%)";
@@ -69,19 +73,22 @@ const ClipIA: React.FC = () => (
     <OffthreadVideo src={staticFile("clip1-ai.mp4")} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
     <AbsoluteFill style={{background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)"}} />
     <AvisoIA texto="Imagen generada con IA" />
-    <Equipo dur={CLIP_IA} />
   </AbsoluteFill>
 );
 
-/* 2 · Argentina: ≈5,000 estimated dump sites and no open inventory */
+/* 2 · Argentina: the dump sites that do have a public location, and for none of them is it officially known whether it is still active.
+   No total figure on screen: the national estimate isn't validated (the voice says "hundreds"). */
 const Argentina: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const f = useCurrentFrame();
   const e = useEntra();
   const at = (abs: number) => s(abs - t0);
   const n = s(dur);
   const A = CASOS.argentina;
-  const cuenta = Math.round(5000 * interpolate(f, [at(en("problema", "cinco")), at(en("problema", "basurales", 2)) + 12], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)}));
-  const p0 = at(en("problema", "existe")), p1 = at(en("problema", "activos")) - 6;
+  const fin = fr("problema").inicio + fr("problema").duracion;
+  const tArg = at(enAlguna("problema", ["argentina"], t0 + 0.3));
+  // the points appear as soon as the scene starts; with "no existe" it adds that many more are uncatalogued
+  const p0 = Math.max(4, tArg + 2), p1 = p0 + s(1.6);
+  const duda = e(at(enAlguna("problema", ["existe", "relevamiento"], fin - 4)) - 6, 16);
   const zoom = interpolate(f, [0, n], [1.0, 1.12], clamp);
   return (
     <AbsoluteFill style={{background: C.bg, opacity: interpolate(f, [0, 8], [0, 1], clamp)}}>
@@ -93,31 +100,34 @@ const Argentina: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
             const latido = 0.5 + 0.5 * Math.sin((f - k * 3) / 7);
             return v > 0.01 ? (
               <g key={k} opacity={Math.min(1, v * 1.5)}>
-                <circle cx={x} cy={y} r={9 + latido * 6} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth={1.5} />
-                <circle cx={x} cy={y} r={4.5 * v} fill="#fff" stroke={C.bg} strokeWidth={1.2} />
+                <circle cx={x} cy={y} r={9 + latido * 6} fill="none" stroke={`rgba(255,165,61,${0.45 * (1 - duda) + 0.25 * duda})`} strokeWidth={1.5} />
+                <circle cx={x} cy={y} r={4.5 * v} fill={C.glow} stroke={C.bg} strokeWidth={1.4} />
               </g>
             ) : null;
           })}
         </svg>
-        <div style={{position: "absolute", left: A.amba[0] - 345, top: A.amba[1] + 120, opacity: e(at(en("problema", "argentina")) - 4) * 0.9,
+        <div style={{position: "absolute", left: A.amba[0] - 345, top: A.amba[1] + 120, opacity: e(tArg - 4) * 0.9,
           fontFamily: F.display, fontWeight: 700, fontSize: 46, letterSpacing: 12, color: "rgba(255,255,255,0.85)", textShadow: "0 2px 12px rgba(0,0,0,0.9)"}}>ARGENTINA</div>
       </div>
-      <AbsoluteFill style={{background: "linear-gradient(270deg, rgba(5,8,12,0.92) 0%, rgba(5,8,12,0.7) 32%, rgba(5,8,12,0) 55%)"}} />
-      <div style={{position: "absolute", left: 1180, top: 200, width: 680}}>
-        <Aparece v={e(at(en("problema", "cinco")) - 6)}>
-          <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 190, lineHeight: 0.9, color: C.glow, textShadow: "0 0 40px rgba(255,165,61,0.45)"}}>≈ {cuenta.toLocaleString("es-AR")}</div>
-          <Texto size={38}>basurales a cielo abierto</Texto>
+      <AbsoluteFill style={{background: "linear-gradient(270deg, rgba(5,8,12,0.9) 0%, rgba(5,8,12,0.6) 30%, rgba(5,8,12,0) 50%)"}} />
+      <div style={{position: "absolute", left: 1240, top: 300, width: 600, display: "grid", gap: 28}}>
+        <Aparece v={e(p0)} dx={30} dy={0}>
+          <div style={{display: "flex", alignItems: "center", gap: 16}}>
+            <svg width={30} height={30}><circle cx={15} cy={15} r={12} fill="none" stroke="rgba(255,165,61,0.5)" strokeWidth={2} /><circle cx={15} cy={15} r={6} fill={C.glow} /></svg>
+            <div>
+              <Texto size={34} style={{fontFamily: F.display, fontWeight: 700}}>{A.puntos.length} con ubicación pública</Texto>
+              <Mono size={17}>en catálogos abiertos · OpenStreetMap · Climate TRACE</Mono>
+            </div>
+          </div>
         </Aparece>
-        <Aparece v={e(at(en("problema", "segun")))}><Mono size={20} style={{marginTop: 10}}>estimación del Ministerio de Ambiente de la Nación</Mono></Aparece>
-        <Aparece v={e(at(en("problema", "pero")))} style={{marginTop: 34, paddingLeft: 18, borderLeft: `3px solid ${C.radar}`}}>
-          <Texto size={30}>no sale de un relevamiento formal</Texto>
-        </Aparece>
-        <Aparece v={e(at(en("problema", "inventario")))} style={{marginTop: 16, paddingLeft: 18, borderLeft: `3px solid ${C.radar}`}}>
-          <Texto size={30}>no hay un inventario oficial abierto de dónde están ni de cuáles siguen activos</Texto>
-        </Aparece>
-        <Aparece v={e(p0 + 10)} style={{marginTop: 30, display: "flex", alignItems: "center", gap: 14}}>
-          <svg width={22} height={22}><circle cx={11} cy={11} r={6} fill="#fff" stroke="rgba(255,255,255,0.4)" strokeWidth={6} strokeOpacity={0.4} /></svg>
-          <Texto size={24} color="rgba(231,235,241,0.85)">{A.puntos.length} aparecen en los catálogos abiertos que cruzamos</Texto>
+        <Aparece v={duda} dx={30} dy={0}>
+          <div style={{display: "flex", alignItems: "center", gap: 16}}>
+            <svg width={30} height={30}><circle cx={15} cy={15} r={11} fill="none" stroke="rgba(231,235,241,0.8)" strokeWidth={1.8} strokeDasharray="3 4" /><text x={15} y={20.5} textAnchor="middle" fontSize={15} fontWeight={700} fill="#fff" fontFamily="sans-serif">?</text></svg>
+            <div>
+              <Texto size={34} style={{fontFamily: F.display, fontWeight: 700}}>Muchos más, sin catalogar</Texto>
+              <Mono size={17}>sin relevamiento formal ni inventario oficial de cuáles siguen activos</Mono>
+            </div>
+          </div>
         </Aparece>
       </div>
       <Creditos items={[["Imagen", "NASA GIBS · Blue Marble"], ["Puntos", "OpenStreetMap · Climate TRACE"]]} opacidad={interpolate(f, [10, 20], [0, 1], clamp)} />
@@ -150,8 +160,7 @@ const DumpsiteNisar: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const r0 = at(en("dumpsite", "radar")) - 4;
   const radar = interpolate(f, [r0, r0 + 20], [0, 1], {...clamp, easing: Easing.inOut(Easing.quad)});
   const escalaR = interpolate(f, [r0, n], [14 / 6, 1.08], {...clamp, easing: Easing.out(Easing.cubic)});
-  const chips: [string, number][] = [["radar de apertura sintética, banda L", at(en("dumpsite", "este"))], ["cada 12 días", at(en("dumpsite", "doce"))],
-    ["de día y de noche", at(en("dumpsite", "dia"))], ["a través de las nubes", at(en("dumpsite", "nubes"))]];
+  const chips: [string, number][] = [["cada 12 días", at(en("dumpsite", "doce"))]];
   const pin = tras(salida) + 4;
   return (
     <AbsoluteFill style={{background: C.bg}}>
@@ -164,8 +173,8 @@ const DumpsiteNisar: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
       <div style={{opacity: Math.min(1 - radar, interpolate(f, [pin, pin + 8], [0, 1], clamp))}}>
         <PinUbicacion x={ANCHO * cxS2} y={OFFSET_Y + ANCHO * cyS2 - 30} texto="Norte III · Buenos Aires" delay={pin} />
       </div>
-      <div style={{position: "absolute", left: 0, top: 0, width: 1300, height: 420, background: "radial-gradient(ellipse at 0% 0%, rgba(5,8,12,0.92) 0%, rgba(5,8,12,0.5) 52%, rgba(5,8,12,0) 78%)", opacity: radar}} />
-      <div style={{position: "absolute", left: 48, top: 150, opacity: radar}}>
+      <div style={{position: "absolute", left: 0, top: 0, width: 1500, height: 640, background: "radial-gradient(1400px 600px at 0% 0%, rgba(5,8,12,0.92) 0%, rgba(5,8,12,0.5) 52%, rgba(5,8,12,0) 100%)", opacity: radar}} />
+      <div style={{position: "absolute", left: 48, top: 180, opacity: radar}}>
         <Mono size={20} color={C.glow} style={{letterSpacing: 4}}>NASA–ISRO NISAR</Mono>
         <Texto size={62} style={{fontFamily: F.display, fontWeight: 700, lineHeight: 1, marginTop: 6}}>Lo que ve el radar sobre el basural</Texto>
         <div style={{display: "flex", gap: 26, marginTop: 14, fontFamily: F.sans, fontSize: 24, color: "#fff"}}>
@@ -209,7 +218,6 @@ const Insomnio: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
     zoom: zoomExp(f, [c0, c0 + 50], 1 / c.ancho, 1.25, Easing.inOut(Easing.poly(4))) * interpolate(f, [c0 + 50, n], [1, 1.08], clamp)};
   const mapa = interpolate(f, [c0 - 4, c0 + 8], [0, 1], clamp);
   const lado = 600, tile = 150;
-  const hechos: [string, number][] = [["llegan camiones", at(en("cambia", "camiones"))], ["se mueve tierra", at(en("cambia", "mueve"))], ["se tapa y se vuelve a abrir", at(en("cambia", "tapa"))]];
   return (
     <AbsoluteFill style={{background: FONDO}}>
       <AbsoluteFill style={{opacity: partA}}>
@@ -221,21 +229,12 @@ const Insomnio: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
         </div>
         <div style={{position: "absolute", left: 980, top: 190, width: 640}}>
           <Texto size={44} style={{fontFamily: F.display, fontWeight: 700}}><span style={{color: C.glow}}>Norte III,</span> {serie.imagenes.length} fechas de Sentinel-2</Texto>
-          <div style={{display: "flex", gap: 10, marginTop: 18}}>
+          <Texto size={26} color="rgba(231,235,241,0.75)" style={{marginTop: 6}}>junio a octubre de 2026</Texto>
+          <div style={{display: "grid", gridTemplateColumns: "repeat(3, 150px)", gap: 12, marginTop: 24}}>
             {serie.imagenes.map((im, k) => (
-              <div key={im.fecha} style={{width: 66, height: 66, borderRadius: 8, overflow: "hidden", outline: k === idx ? `3px solid ${C.glow}` : "1px solid rgba(255,255,255,0.2)", opacity: k <= idx ? 1 : 0.35}}>
+              <div key={im.fecha} style={{width: 150, height: 150, borderRadius: 10, overflow: "hidden", outline: k === idx ? `3px solid ${C.glow}` : "1px solid rgba(255,255,255,0.2)", opacity: k <= idx ? 1 : 0.35}}>
                 <Img src={staticFile(im.archivo)} style={{width: "100%", height: "100%"}} />
               </div>
-            ))}
-          </div>
-          <div style={{display: "grid", gap: 14, marginTop: 46}}>
-            {hechos.map(([h, d]) => (
-              <Aparece key={h} v={e(d - 3)} dx={-24} dy={0}>
-                <div style={{display: "flex", alignItems: "center", gap: 16}}>
-                  <div style={{width: 12, height: 12, borderRadius: 6, background: C.glow, boxShadow: `0 0 14px ${C.glow}`}} />
-                  <Texto size={38}>{h}</Texto>
-                </div>
-              </Aparece>
             ))}
           </div>
         </div>
@@ -278,9 +277,10 @@ const Insomnio: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
       {mapa > 0 && (
         <AbsoluteFill style={{opacity: mapa}}>
           <MapaAmba vista={vista}>{(px) => <path d={caminoPoligono(n3.poligono_amba as number[][], px)} fill="none" stroke={C.glow} strokeWidth={2} />}</MapaAmba>
-          <div style={{position: "absolute", left: 0, top: 0, width: 1300, height: 360, background: "radial-gradient(ellipse at 0% 0%, rgba(5,8,12,0.9) 0%, rgba(5,8,12,0.4) 55%, rgba(5,8,12,0) 80%)"}} />
-          <div style={{position: "absolute", left: 48, top: 150, opacity: interpolate(f, [c0 + 18, c0 + 30], [0, 1], clamp)}}>
-            <Texto size={58} style={{fontFamily: F.display, fontWeight: 700}}>Todo el Gran Buenos Aires, píxel por píxel</Texto>
+          <div style={{position: "absolute", left: 0, top: 0, width: 1500, height: 600, background: "radial-gradient(1400px 560px at 0% 0%, rgba(5,8,12,0.9) 0%, rgba(5,8,12,0.4) 55%, rgba(5,8,12,0) 100%)"}} />
+          <div style={{position: "absolute", left: 48, top: 180, opacity: interpolate(f, [Math.max(c0 + 18, at(en("mapa", "ejemplo")) - 8), Math.max(c0 + 30, at(en("mapa", "ejemplo")) + 4)], [0, 1], clamp)}}>
+            <Mono size={20} color={C.glow} style={{letterSpacing: 4}}>EJEMPLO</Mono>
+            <Texto size={58} style={{fontFamily: F.display, fontWeight: 700}}>El Gran Buenos Aires, píxel por píxel</Texto>
             <div style={{display: "flex", gap: 10, marginTop: 14}}>
               {([["sin agua (JRC)", "agua"], ["sin rutas", "rutas"], ["sin cultivos", "cultivos"]] as const).map(([c, w]) => (
                 <Pill key={c} v={e(at(en("mapa", w)) - 3, 14)}>{c}</Pill>
@@ -349,11 +349,12 @@ const Casos: React.FC<{t0: number; dur: number}> = ({t0}) => {
   return (
     <AbsoluteFill style={{background: FONDO}}>
       {/* Luján */}
-      <Aparece v={e(panelL - 2)} style={{position: "absolute", left: xL, top: 140}}>
+      <Aparece v={e(panelL - 2)} style={{position: "absolute", left: xL, top: 140, width: lado, display: "flex", alignItems: "baseline", justifyContent: "space-between"}}>
         <Texto size={42} style={{fontFamily: F.display, fontWeight: 700, color: C.radar}}>Basural de Luján</Texto>
+        <Mono size={20} color={C.radar}>insomnio {Math.round(CASOS.sitios.lujan.insomnio * 100)} %</Mono>
       </Aparece>
       <div style={{position: "absolute", left: xL, top: y, width: lado, height: lado, opacity: e(panelL), transform: `scale(${0.94 + 0.06 * e(panelL)})`}}>
-        <PanelSitio id="lujan" f={f} desde={panelL} dibujo={interpolate(f, [panelL + 6, panelL + 36], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)})} color={C.radar} cada={16} />
+        <PanelSitio id="lujan" f={Math.min(f, dos)} desde={panelL} dibujo={interpolate(f, [panelL + 6, panelL + 36], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)})} color={C.radar} cada={10} />
       </div>
       <div style={{position: "absolute", left: xL, top: y + lado + 20, opacity: f >= lCells[0] - 6 ? 1 : 0}}>
         <Comparaciones f={f} desde={lCells[0]} hasta={lCells[1]} cambio={false} ancho={lado} />
@@ -368,17 +369,16 @@ const Casos: React.FC<{t0: number; dur: number}> = ({t0}) => {
         <Aparece v={e(lCells[0])} style={{marginTop: 40}}>
           <Mono size={20} color={C.radar} style={{letterSpacing: 3}}>RADAR NISAR · JULIO A OCTUBRE</Mono>
           <Texto size={50} style={{fontFamily: F.display, fontWeight: 700, marginTop: 4}}>Ninguna pasada lo encuentra cambiado</Texto>
-          <Texto size={26} color="rgba(231,235,241,0.75)" style={{marginTop: 8}}>Las dos cosas coinciden: está cerrado y el radar lo ve quieto.</Texto>
         </Aparece>
       </div>
       {/* González Catán */}
       <div style={{opacity: vC, transform: `translateX(${(1 - vC) * 80}px)`}}>
-        <div style={{position: "absolute", left: xC, top: 140, display: "flex", alignItems: "baseline", gap: 18}}>
+        <div style={{position: "absolute", left: xC, top: 140, width: lado, display: "flex", alignItems: "baseline", justifyContent: "space-between"}}>
           <Texto size={42} style={{fontFamily: F.display, fontWeight: 700, color: C.glow}}>González Catán</Texto>
-          <span style={{opacity: e(at(en("norte3", "norte")) - 4)}}><Pill color="rgba(255,165,61,0.7)" size={17}>Norte III · insomnio {Math.round(CASOS.sitios["norte-iii"].insomnio * 100)} %</Pill></span>
+          <Mono size={20} color={C.glow}>insomnio {Math.round(CASOS.sitios["gonzalez-catan"].insomnio * 100)} %</Mono>
         </div>
         <div style={{position: "absolute", left: xC, top: y, width: lado, height: lado}}>
-          <PanelSitio id="gonzalez-catan" f={f} desde={dos} dibujo={interpolate(f, [dos + 8, dos + 34], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)})} color={C.glow} cada={8} />
+          <PanelSitio id="gonzalez-catan" f={f} desde={dos} dibujo={interpolate(f, [dos + 8, dos + 34], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)})} color={C.glow} cada={10} />
         </div>
         <div style={{position: "absolute", left: xC, top: y + lado + 20, opacity: f >= cCells[0] - 6 ? 1 : 0}}>
           <Comparaciones f={f} desde={cCells[0]} hasta={cCells[1]} cambio ancho={lado} />
@@ -408,7 +408,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
   const partA = interpolate(f, [a0 - 4, a0 + 6, b0 - 8, b0 + 2], [0, 1, 1, 0], clamp);
   const partB = interpolate(f, [b0, b0 + 10], [0, 1], clamp);
   const cuenta = Math.round(entreno.total_catalogo * interpolate(f, [at(en("catalogo", "catalogo")), at(en("catalogo", "mundo")) + 10], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)}));
-  const ch = 92, cols = 7, gap = 8;
+  const ch = 112, cols = 7, gap = 8, yG = 222;
   const gridW = cols * ch + (cols - 1) * gap;
   const x0 = (ANCHO - (gridW + 90 + 640)) / 2;
   const xR = x0 + gridW + 90;
@@ -418,10 +418,10 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
     <AbsoluteFill style={{background: FONDO}}>
       {/* A · a point that changes: what is it? */}
       <AbsoluteFill style={{opacity: partA}}>
-        <div style={{position: "absolute", left: 470, top: 200, width: 500, height: 500}}>
+        <div style={{position: "absolute", left: 430, top: 215, width: 560, height: 560}}>
           <PanelSitio id="gonzalez-catan" f={f} desde={a0} dibujo={interpolate(f, [a0, a0 + 24], [0, 1], clamp)} color={C.glow} cada={10} />
         </div>
-        <div style={{position: "absolute", left: 1050, top: 300, display: "grid", gap: 40}}>
+        <div style={{position: "absolute", left: 1070, top: 340, display: "grid", gap: 40}}>
           <Aparece v={e(at(en("catalogo", "cambia")) - 6)} dx={-24} dy={0}>
             <Texto size={30} color="rgba(231,235,241,0.7)">¿Cambia en el tiempo?</Texto>
             <Texto size={54} style={{fontFamily: F.display, fontWeight: 700, color: C.radar}}>Sí · lo dice el radar</Texto>
@@ -434,7 +434,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
       </AbsoluteFill>
       {/* B · the catalog */}
       <AbsoluteFill style={{opacity: partB}}>
-        <div style={{position: "absolute", left: x0, top: 200, display: "grid", gridTemplateColumns: `repeat(${cols}, ${ch}px)`, gap}}>
+        <div style={{position: "absolute", left: x0, top: yG, display: "grid", gridTemplateColumns: `repeat(${cols}, ${ch}px)`, gap}}>
           {entreno.muestras.slice(0, 28).map((m, k) => {
             const v = e(b0 + 4 + (k % 7) * 1.5 + Math.floor(k / 7) * 2, 14);
             return (
@@ -445,7 +445,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
             );
           })}
         </div>
-        <div style={{position: "absolute", left: x0, top: 200 + 4 * ch + 3 * gap + 36, opacity: e(sumamos)}}>
+        <div style={{position: "absolute", left: x0, top: yG + 4 * ch + 3 * gap + 30, opacity: e(sumamos)}}>
           <Texto size={28}>Y lugares que <b style={{color: C.radar}}>también cambian seguido</b>:</Texto>
           <div style={{display: "flex", gap: 18, marginTop: 12}}>
             {parecidos.map((p) => {
@@ -460,7 +460,7 @@ const Datos: React.FC<{t0: number; dur: number}> = ({t0}) => {
             })}
           </div>
         </div>
-        <div style={{position: "absolute", left: xR, top: 196, width: 640}}>
+        <div style={{position: "absolute", left: xR, top: yG + 20, width: 640}}>
           <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 130, lineHeight: 0.9, color: C.glow, textShadow: "0 0 36px rgba(255,165,61,0.45)"}}>{cuenta.toLocaleString("es-AR")}</div>
           <Texto size={34}>basurales mapeados en todo el mundo</Texto>
           <div style={{display: "grid", gap: 14, marginTop: 34}}>
@@ -596,14 +596,15 @@ const Resultados: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const vComp = e(comp);
   const reg = at(en("argentina", "ningun")) - 4;
   const dx = -330; // Argentina on the left
-  const yScan = 60 + barrido * 960;
+  const Y0 = 170, yScan = Y0 + barrido * (1010 - Y0);
   return (
     <AbsoluteFill style={{background: C.bg}}>
       <div style={{position: "absolute", inset: 0, transform: `translateX(${dx}px) scale(${interpolate(f, [0, n], [1.02, 1.08], clamp)})`, transformOrigin: `${A.amba[0]}px ${A.amba[1]}px`}}>
         <Img src={staticFile("casos/argentina.jpg")} style={{width: ANCHO, height: ALTO, filter: "brightness(0.72) saturate(0.85)"}} />
         {/* the model sweeps the country: a north-to-south pass */}
-        <div style={{position: "absolute", left: 0, right: 0, top: 0, height: yScan, background: "linear-gradient(to bottom, rgba(255,165,61,0.0) 0%, rgba(255,165,61,0.10) 85%, rgba(255,165,61,0.22) 100%)", opacity: barrido < 1 ? 1 : interpolate(f, [at(en("argentina", "modelo")) + 6, at(en("argentina", "modelo")) + 30], [1, 0.45], clamp)}} />
-        {barrido > 0 && barrido < 1 && <div style={{position: "absolute", left: 0, right: 0, top: yScan - 2, height: 4, background: C.glow, boxShadow: `0 0 24px 6px ${C.glow}`}} />}
+        <div style={{position: "absolute", left: 500, width: 620, top: Y0, height: yScan - Y0, WebkitMaskImage: "linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%)", background: "linear-gradient(to bottom, rgba(255,165,61,0.0) 0%, rgba(255,165,61,0.10) 85%, rgba(255,165,61,0.22) 100%)", opacity: barrido < 1 ? 1 : interpolate(f, [at(en("argentina", "modelo")) + 6, at(en("argentina", "modelo")) + 30], [1, 0.45], clamp)}} />
+        {barrido > 0 && barrido < 1 && <div style={{position: "absolute", left: 500, width: 620, top: yScan - 2, height: 3, opacity: interpolate(barrido, [0, 0.04, 0.95, 1], [0, 1, 1, 0]),
+          background: `linear-gradient(90deg, transparent 0%, ${C.glow} 15%, ${C.glow} 85%, transparent 100%)`, boxShadow: `0 0 18px 3px rgba(255,165,61,0.55)`}} />}
       </div>
       <AbsoluteFill style={{background: "linear-gradient(270deg, rgba(5,8,12,0.95) 0%, rgba(5,8,12,0.8) 40%, rgba(5,8,12,0) 62%)"}} />
       <div style={{position: "absolute", left: 1000, top: 190, width: 820}}>
@@ -639,7 +640,8 @@ const Resultados: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
 };
 
 /* 9 · The web, in a normal browser window, without crops */
-const W_NAV = 1360, ESC = W_NAV / 1920, H_NAV = 1080 * ESC, X_NAV = (ANCHO - W_NAV) / 2, Y_NAV = 64, BARRA = 40;
+const W_NAV = 1260, ESC = W_NAV / 1920, H_NAV = 1080 * ESC, X_NAV = (ANCHO - W_NAV) / 2, Y_NAV = 100, BARRA = 40;
+const FONDO_WEB = "radial-gradient(ellipse at 50% 45%, #2a4258 0%, #142332 55%, #080e15 100%)";
 const Resalte: React.FC<{r: Rect; v: number; pad?: number}> = ({r, v, pad = 8}) => (
   <div style={{position: "absolute", left: X_NAV + r[0] * ESC - pad, top: Y_NAV + BARRA + r[1] * ESC - pad, width: r[2] * ESC + 2 * pad, height: r[3] * ESC + 2 * pad,
     borderRadius: 12, border: `3px solid ${C.glow}`, boxShadow: `0 0 0 4000px rgba(5,8,12,${0.35 * v}), 0 0 30px ${C.glow}aa`, opacity: v, transform: `scale(${1.04 - 0.04 * v})`}} />
@@ -680,12 +682,12 @@ const Web: React.FC<{t0: number; dur: number}> = ({t0}) => {
   const cx = X_NAV + interpolate(mov, [0, 1], [1300, lx]) * ESC, cy = Y_NAV + BARRA + interpolate(mov, [0, 1], [300, ly]) * ESC;
   const onda = interpolate(f, [clic - 4, clic + 10], [0, 1], clamp);
   return (
-    <AbsoluteFill style={{background: FONDO}}>
+    <AbsoluteFill style={{background: FONDO_WEB}}>
       <div style={{position: "absolute", left: X_NAV, top: Y_NAV, width: W_NAV, height: H_NAV + BARRA, borderRadius: 14, overflow: "hidden",
-        boxShadow: "0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.14)", opacity: vNav, transform: `translateY(${(1 - vNav) * 60}px)`}}>
+        boxShadow: "0 30px 90px rgba(0,0,0,0.55), 0 0 0 1.5px rgba(255,255,255,0.35)", opacity: vNav, transform: `translateY(${(1 - vNav) * 60}px)`}}>
         <div style={{height: BARRA, background: "#1a222e", display: "flex", alignItems: "center", gap: 9, padding: "0 16px"}}>
           {["#ff5f57", "#febc2e", "#28c840"].map((c) => <span key={c} style={{width: 13, height: 13, borderRadius: 7, background: c}} />)}
-          <span style={{marginLeft: 18, width: 520, height: 26, borderRadius: 13, background: "#0e141d", color: "#aab4c2", fontFamily: F.mono, fontSize: 15, display: "flex", alignItems: "center", paddingLeft: 14}}>{RESULTADOS.url}</span>
+          <span style={{marginLeft: 18, width: 480, height: 26, borderRadius: 13, background: "#0e141d", color: "#aab4c2", fontFamily: F.mono, fontSize: 15, display: "flex", alignItems: "center", paddingLeft: 14}}>{RESULTADOS.url}</span>
         </div>
         <div style={{position: "relative", width: W_NAV, height: H_NAV}}>
           {k > 0 && <Img src={staticFile(pasos[k - 1].img)} style={{position: "absolute", inset: 0, width: W_NAV, height: H_NAV}} />}
@@ -787,9 +789,9 @@ const Lema: React.FC<{t0: number}> = ({t0}) => {
         })}
       </div>
       <div style={{position: "absolute", left: 0, right: 0, top: 520, textAlign: "center"}}>
-        <Aparece v={e(linea1)}><Texto size={46}>Un basural se puede cerrar en los papeles.</Texto></Aparece>
+        <Aparece v={e(linea1)}><Texto size={46}>Un basural se puede cerrar en los papeles,</Texto></Aparece>
         <Aparece v={e(linea2)} style={{marginTop: 10}}>
-          <Texto size={46}>Desde el espacio se ve si sigue <span style={{color: C.glow, textShadow: `0 0 ${30 * brillo}px rgba(255,165,61,${0.9 * brillo})`}}>despierto</span>.</Texto>
+          <Texto size={46}>pero desde el espacio se ve si verdaderamente sigue <span style={{color: C.glow, textShadow: `0 0 ${30 * brillo}px rgba(255,165,61,${0.9 * brillo})`}}>despierto</span>.</Texto>
         </Aparece>
       </div>
       <div style={{position: "absolute", left: 0, right: 0, top: 700, textAlign: "center", fontFamily: F.mono, fontSize: 26, color: C.radar, opacity: e(despierto + 6)}}>{RESULTADOS.url}</div>
@@ -797,43 +799,60 @@ const Lema: React.FC<{t0: number}> = ({t0}) => {
   );
 };
 
-/* 12 · Somos Spaceship, muchas gracias */
+/* 12 · We are Spaceship, thank you: the team photo as a Polaroid and the <=> logo (open = close) */
 const Gracias: React.FC<{t0: number; dur: number}> = ({t0, dur}) => {
   const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const e = useEntra();
   const at = (abs: number) => s(abs - t0);
   const n = s(dur);
+  const somos = at(en("equipo", "somos")) - 6;
   const gracias = at(en("equipo", "muchas")) - 4;
-  const fw = 800, fh = 533, x0 = (ANCHO - (fw + 90 + 640)) / 2;
+  // Polaroid: 4:3 photo with a white frame and a wide strip at the bottom, falls while rotating a little
+  const fw = 640, fh = 480, borde = 22, pie = 92;
+  const pw = fw + 2 * borde, ph = fh + borde + pie;
+  const cae = spring({frame: f - 2, fps, config: {damping: 13, mass: 0.9}});
+  const revela = interpolate(f, [10, 40], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)}); // the photo "develops"
+  const xP = 250, yP = 130;
+  // logo: "<" and ">" come in from the sides and meet "=" in the middle
+  const logo = spring({frame: f - somos, fps, config: {damping: 14}});
+  const igual = spring({frame: f - somos - 8, fps, config: {damping: 10}});
+  const xR = xP + pw + 130;
   return (
     <AbsoluteFill style={{background: FONDO, opacity: interpolate(f, [0, 8, n - 12, n], [0, 1, 1, 0], clamp)}}>
-      <Aparece v={e(2, 16)} style={{position: "absolute", left: x0, top: 170, width: fw, height: fh}}>
-        {FOTO_EQUIPO ? (
-          <Img src={staticFile(FOTO_EQUIPO)} style={{width: fw, height: fh, objectFit: "cover", borderRadius: 18, boxShadow: "0 30px 90px rgba(0,0,0,0.7)"}} />
-        ) : (
-          <div style={{width: fw, height: fh, borderRadius: 18, border: "3px dashed rgba(231,235,241,0.35)", background: "rgba(10,18,26,0.7)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14}}>
-            <svg width={120} height={90} viewBox="0 0 24 18" fill="none" stroke="rgba(231,235,241,0.5)" strokeWidth={1.2}>
-              <rect x={1} y={3} width={22} height={14} rx={2} /><circle cx={12} cy={10} r={4} /><path d="M8 3 L9.5 1 H14.5 L16 3" />
-            </svg>
-            <Texto size={30} color="rgba(231,235,241,0.7)">Foto del equipo</Texto>
-            <Mono size={18}>public/equipo.jpg · 3:2</Mono>
-          </div>
-        )}
-      </Aparece>
-      <div style={{position: "absolute", left: x0 + fw + 90, top: 180, width: 640}}>
-        <Aparece v={e(at(en("equipo", "somos")) - 6)}>
-          <Texto size={40} color="rgba(231,235,241,0.8)">Somos</Texto>
-          <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 150, lineHeight: 0.9, color: C.glow, textShadow: "0 0 40px rgba(255,165,61,0.45)"}}>Spaceship</div>
-          <Mono size={22} style={{marginTop: 6}}>{NOMBRE_EQUIPO}</Mono>
-        </Aparece>
-        <div style={{display: "grid", gap: 4, marginTop: 24}}>
-          {EQUIPO.map((nombre, k) => <Aparece key={nombre} v={e(at(en("equipo", "spaceship")) + k * 3, 16)} dx={-16} dy={0}><Texto size={26}>{nombre}</Texto></Aparece>)}
+      <div style={{position: "absolute", left: xP, top: yP, width: pw, height: ph, background: "#f6f3ec", borderRadius: 4,
+        boxShadow: "0 30px 80px rgba(0,0,0,0.65), 0 2px 0 rgba(255,255,255,0.4) inset",
+        opacity: Math.min(1, cae * 1.5), transform: `translateY(${(1 - cae) * -140}px) rotate(${-3 - (1 - cae) * 8}deg)`}}>
+        <div style={{position: "absolute", left: borde, top: borde, width: fw, height: fh, overflow: "hidden", background: "#1d2228"}}>
+          {FOTO_EQUIPO ? (
+            <Img src={staticFile(FOTO_EQUIPO)} style={{width: fw, height: fh, objectFit: "cover",
+              filter: `brightness(${0.35 + 0.65 * revela}) saturate(${0.3 + 0.7 * revela}) sepia(${0.4 * (1 - revela)})`}} />
+          ) : (
+            <div style={{width: fw, height: fh, display: "flex", alignItems: "center", justifyContent: "center"}}><Mono size={20}>public/equipo.jpg</Mono></div>
+          )}
         </div>
-        <Aparece v={e(gracias, 12)} style={{marginTop: 26}}>
-          <Texto size={64} style={{fontFamily: F.display, fontWeight: 700}}>¡Muchas gracias!</Texto>
+        <div style={{position: "absolute", left: 0, right: 0, bottom: 0, height: pie, display: "flex", alignItems: "center", justifyContent: "center",
+          fontFamily: F.display, fontWeight: 600, fontSize: 38, letterSpacing: 1, color: "#2b2f36", opacity: revela}}>
+          Space Apps · Buenos Aires 2026
+        </div>
+      </div>
+      <div style={{position: "absolute", left: xR, top: 130, width: 1920 - xR - 80}}>
+        <div style={{display: "flex", alignItems: "center", fontFamily: F.mono, fontWeight: 500, fontSize: 100, lineHeight: 1, color: C.glow, textShadow: "0 0 40px rgba(255,165,61,0.5)", height: 110}}>
+          <span style={{display: "inline-block", opacity: logo, transform: `translateX(${(1 - logo) * -160}px)`}}>&lt;</span>
+          <span style={{display: "inline-block", opacity: igual, transform: `scale(${igual})`}}>=</span>
+          <span style={{display: "inline-block", opacity: logo, transform: `translateX(${(1 - logo) * 160}px)`}}>&gt;</span>
+        </div>
+        <Aparece v={e(somos + 10)} style={{marginTop: 8}}>
+          <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 110, lineHeight: 1.15, color: "#fff"}}>Spaceship</div>
+        </Aparece>
+        <div style={{display: "grid", gap: 2, marginTop: 14}}>
+          {EQUIPO.map((nombre, k) => <Aparece key={nombre} v={e(somos + 18 + k * 3, 16)} dx={-16} dy={0}><Texto size={27} color="rgba(231,235,241,0.9)">{nombre}</Texto></Aparece>)}
+        </div>
+        <Aparece v={e(gracias, 12)} style={{marginTop: 22}}>
+          <Texto size={68} style={{fontFamily: F.display, fontWeight: 700, color: C.glow}}>¡Muchas gracias!</Texto>
         </Aparece>
       </div>
-      <div style={{position: "absolute", left: 0, right: 0, top: 760, textAlign: "center", fontFamily: F.mono, fontSize: 18, letterSpacing: 2, color: "rgba(231,235,241,0.6)", opacity: e(gracias + 10)}}>
+      <div style={{position: "absolute", left: 0, right: 0, top: 815, textAlign: "center", fontFamily: F.mono, fontSize: 18, letterSpacing: 2, color: "rgba(231,235,241,0.6)", opacity: e(gracias + 10)}}>
         NASA SPACE APPS 2026 · DANCING WITH THE SARS · BUENOS AIRES
       </div>
     </AbsoluteFill>
@@ -877,7 +896,7 @@ export const DumpsiteLocal: React.FC = () => {
       {S("cierre", (a, d) => <Cierre t0={a} dur={d} />)}
       {S("lema", (a) => <Lema t0={a} />)}
       {S("gracias", (a, d) => <Gracias t0={a} dur={d} />)}
-      <Html5Audio src={staticFile(VOZ_ES.pista)} />
+      <Html5Audio src={staticFile(VOZ_ES.pista)} volume={(fr_) => interpolate(fr_, [s(DURACION_LOCAL) - 45, s(DURACION_LOCAL) - 2], [1, 0], clamp)} />
       <Subtitulos frases={VOZ_ES.frases} max={105} />
     </AbsoluteFill>
   );

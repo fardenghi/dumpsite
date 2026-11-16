@@ -2,7 +2,7 @@ import React from "react";
 import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {ANCHO, ALTO, DATOS, EJEMPLOS_CNN, Par, RESULTADOS, fechaCorta} from "../data";
 import {C, F} from "../theme";
-import {AvisoIA, Creditos, Equipo, PinUbicacion, Placeholder, TituloSeccion} from "../components/Overlays";
+import {AvisoIA, Creditos, PinUbicacion, Placeholder, TituloSeccion} from "../components/Overlays";
 import {MapaAmba, caminoPoligono, cajaNorte3EnAmba} from "../components/Mapa";
 
 export const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
@@ -50,7 +50,6 @@ export const EscenaIA: React.FC<{durTotal: number}> = ({durTotal}) => {
       <OffthreadVideo src={staticFile("clip1-ai.mp4")} playbackRate={4.733 / durTotal} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
       <AbsoluteFill style={{background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)"}} />
       <div style={{opacity: aviso}}><AvisoIA /></div>
-      <Equipo dur={durTotal} />
     </AbsoluteFill>
   );
 };
@@ -101,7 +100,8 @@ export const EscenaNisar: React.FC<{dur: number}> = ({dur}) => {
       <div style={{opacity: Math.min(1 - radar, interpolate(f, [30, 40], [0, 1], clamp))}}>
         <PinUbicacion x={ANCHO * cxS2} y={OFFSET_Y + ANCHO * cyS2 - 30} texto={RESULTADOS.region} delay={30} />
       </div>
-      <div style={{position: "absolute", left: 0, top: 0, width: 1250, height: 320, background: "radial-gradient(ellipse at 0% 0%, rgba(5,8,12,0.9) 0%, rgba(5,8,12,0.5) 50%, rgba(5,8,12,0) 78%)", opacity: radar}} />
+      {/* shading behind the text: the gradient ends inside the box, with no visible edge */}
+      <div style={{position: "absolute", left: 0, top: 0, width: 1500, height: 640, background: "radial-gradient(1400px 600px at 0% 0%, rgba(5,8,12,0.9) 0%, rgba(5,8,12,0.5) 50%, rgba(5,8,12,0) 100%)", opacity: radar}} />
       <div style={{position: "absolute", left: 48, top: 178, opacity: radar, fontFamily: F.sans, color: "#fff", textShadow: "0 2px 8px rgba(0,0,0,0.95)"}}>
         <div style={{fontFamily: F.mono, fontSize: 20, letterSpacing: 4, color: C.glow}}>NASA–ISRO NISAR · L-BAND RADAR · EVERY 12 DAYS</div>
         <div style={{fontFamily: F.display, fontWeight: 700, fontSize: 62, lineHeight: 1, marginTop: 6}}>What the radar sees over the dump</div>

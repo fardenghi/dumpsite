@@ -1,13 +1,13 @@
 {
  "voz": "grabada",
- "duracion_video": 170.6,
+ "duracion_video": 168.1,
  "frases": [
   {
    "id": "problema",
    "archivo": "voz-es/frase-1.wav",
    "inicio": 0.3,
-   "duracion": 14.92,
-   "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede identificarlos. En Argentina hay unos cinco mil basurales a cielo abierto, según el Ministerio de Ambiente, pero esa cifra no sale de un relevamiento formal, y no existe un inventario oficial abierto que diga dónde están ni cuáles siguen activos.",
+   "duracion": 12.04,
+   "texto": "Los basurales aparecen y crecen más rápido de lo que cualquiera puede identificarlos. En Argentina hay cientos de basurales a cielo abierto, pero no existe un relevamiento formal ni un inventario oficial que diga dónde están ni cuáles siguen activos.",
    "palabras": [
     [
      "Los",
@@ -19,7 +19,7 @@
     ],
     [
      "aparecen",
-     0.94
+     0.95
     ],
     [
      "y",
@@ -27,7 +27,7 @@
     ],
     [
      "crecen",
-     1.45
+     1.43
     ],
     [
      "más",
@@ -39,2285 +39,2245 @@
     ],
     [
      "de",
-     2.31
+     2.3
     ],
     [
      "lo",
-     2.35
+     2.4
     ],
     [
      "que",
-     2.46
+     2.52
     ],
     [
      "cualquiera",
-     2.64
+     2.69
     ],
     [
      "puede",
-     3.18
+     3.23
     ],
     [
      "identificarlos.",
-     3.44
+     3.49
     ],
     [
      "En",
-     4.8
+     4.5
     ],
     [
      "Argentina",
-     4.821
+     4.61
     ],
     [
      "hay",
-     4.89
+     5.12
     ],
     [
-     "unos",
-     4.97
+     "cientos",
+     5.29
     ],
     [
-     "cinco",
-     5.273
-    ],
-    [
-     "mil",
-     5.637
+     "de",
+     5.68
     ],
     [
      "basurales",
-     5.88
+     5.79
     ],
     [
      "a",
-     6.297
+     6.35
     ],
     [
      "cielo",
-     6.38
+     6.42
     ],
     [
      "abierto,",
      6.63
     ],
     [
-     "según",
-     7.14
-    ],
-    [
-     "el",
-     7.29
-    ],
-    [
-     "Ministerio",
-     7.38
-    ],
-    [
-     "de",
-     7.91
-    ],
-    [
-     "Ambiente,",
-     7.95
-    ],
-    [
      "pero",
-     9.177
-    ],
-    [
-     "esa",
-     9.251
-    ],
-    [
-     "cifra",
-     9.311
+     7.17
     ],
     [
      "no",
-     9.4
-    ],
-    [
-     "sale",
-     9.52
-    ],
-    [
-     "de",
-     9.76
-    ],
-    [
-     "un",
-     9.88
-    ],
-    [
-     "relevamiento",
-     9.99
-    ],
-    [
-     "formal,",
-     10.72
-    ],
-    [
-     "y",
-     11.385
-    ],
-    [
-     "no",
-     11.416
+     7.32
     ],
     [
      "existe",
-     11.462
+     7.41
     ],
     [
      "un",
-     11.57
+     7.67
     ],
     [
-     "inventario",
-     11.67
+     "relevamiento",
+     7.913
     ],
     [
-     "oficial",
-     12.25
-    ],
-    [
-     "abierto",
-     12.56
-    ],
-    [
-     "que",
-     13.0
-    ],
-    [
-     "diga",
-     13.22
-    ],
-    [
-     "dónde",
-     13.64
-    ],
-    [
-     "están",
-     13.68
+     "formal",
+     8.965
     ],
     [
      "ni",
-     13.94
+     9.024
+    ],
+    [
+     "un",
+     9.05
+    ],
+    [
+     "inventario",
+     9.16
+    ],
+    [
+     "oficial",
+     9.73
+    ],
+    [
+     "que",
+     10.13
+    ],
+    [
+     "diga",
+     10.3
+    ],
+    [
+     "dónde",
+     10.53
+    ],
+    [
+     "están",
+     10.8
+    ],
+    [
+     "ni",
+     11.14
     ],
     [
      "cuáles",
-     14.04
+     11.25
     ],
     [
      "siguen",
-     14.34
+     11.61
     ],
     [
      "activos.",
-     14.66
+     11.92
     ]
    ]
   },
   {
    "id": "dumpsite",
    "archivo": "voz-es/frase-2.wav",
-   "inicio": 15.92,
+   "inicio": 13.04,
    "duracion": 10.92,
    "texto": "Por eso construimos Dumpsite, una plataforma que sigue basurales desde el espacio con el radar NISAR. Este radar vuelve a pasar por cada punto de la Tierra cada doce días, y ve de día, de noche y a través de las nubes.",
    "palabras": [
     [
      "Por",
-     16.01
+     13.13
     ],
     [
      "eso",
-     16.11
+     13.23
     ],
     [
      "construimos",
-     16.3
+     13.42
     ],
     [
      "Dumpsite,",
-     17.01
+     14.13
     ],
     [
      "una",
-     17.75
+     14.87
     ],
     [
      "plataforma",
-     17.82
+     14.94
     ],
     [
      "que",
-     18.29
+     15.41
     ],
     [
      "sigue",
-     18.49
+     15.61
     ],
     [
      "basurales",
-     18.66
+     15.78
     ],
     [
      "desde",
-     19.08
+     16.2
     ],
     [
      "el",
-     19.33
+     16.45
     ],
     [
      "espacio",
-     19.4
+     16.52
     ],
     [
      "con",
-     19.79
+     16.91
     ],
     [
      "el",
-     19.87
+     16.99
     ],
     [
      "radar",
-     20.02
+     17.14
     ],
     [
      "NISAR.",
-     20.26
+     17.38
     ],
     [
      "Este",
-     21.161
+     18.281
     ],
     [
      "radar",
-     21.197
+     18.317
     ],
     [
      "vuelve",
-     21.24
+     18.36
     ],
     [
      "a",
-     21.61
+     18.73
     ],
     [
      "pasar",
-     21.67
+     18.79
     ],
     [
      "por",
-     21.96
+     19.08
     ],
     [
      "cada",
-     22.18
+     19.3
     ],
     [
      "punto",
-     22.51
+     19.63
     ],
     [
      "de",
-     22.73
+     19.85
     ],
     [
      "la",
-     22.88
+     20.0
     ],
     [
      "Tierra",
-     22.97
+     20.09
     ],
     [
      "cada",
-     23.34
+     20.46
     ],
     [
      "doce",
-     23.943
+     21.062
     ],
     [
      "días,",
-     24.545
+     21.665
     ],
     [
      "y",
-     24.632
+     21.752
     ],
     [
      "ve",
-     24.666
+     21.786
     ],
     [
      "de",
-     24.718
+     21.838
     ],
     [
      "día,",
-     24.77
+     21.89
     ],
     [
      "de",
-     25.28
+     22.4
     ],
     [
      "noche",
-     25.41
+     22.53
     ],
     [
      "y",
-     25.95
+     23.07
     ],
     [
      "a",
-     26.02
+     23.14
     ],
     [
      "través",
-     26.09
+     23.21
     ],
     [
      "de",
-     26.32
+     23.44
     ],
     [
      "las",
-     26.42
+     23.54
     ],
     [
      "nubes.",
-     26.57
+     23.69
     ]
    ]
   },
   {
    "id": "cambia",
    "archivo": "voz-es/frase-3.wav",
-   "inicio": 27.55,
+   "inicio": 24.67,
    "duracion": 6.27,
    "texto": "Un basural activo nunca se ve igual dos veces: llegan camiones, se mueve tierra, se tapa y se vuelve a abrir.",
    "palabras": [
     [
      "Un",
-     27.64
+     24.76
     ],
     [
      "basural",
-     27.806
+     24.926
     ],
     [
      "activo",
-     28.25
+     25.37
     ],
     [
      "nunca",
-     28.68
+     25.8
     ],
     [
      "se",
-     29.04
+     26.16
     ],
     [
      "ve",
-     29.18
+     26.3
     ],
     [
      "igual",
-     29.32
+     26.44
     ],
     [
      "dos",
-     29.68
+     26.8
     ],
     [
      "veces:",
-     29.89
+     27.01
     ],
     [
      "llegan",
-     30.51
+     27.63
     ],
     [
      "camiones,",
-     30.82
+     27.94
     ],
     [
      "se",
-     31.45
+     28.57
     ],
     [
      "mueve",
-     31.54
+     28.66
     ],
     [
      "tierra,",
-     31.81
+     28.93
     ],
     [
      "se",
-     32.35
+     29.47
     ],
     [
      "tapa",
-     32.67
+     29.79
     ],
     [
      "y",
-     33.01
+     30.13
     ],
     [
      "se",
-     33.17
+     30.29
     ],
     [
      "vuelve",
-     33.23
+     30.35
     ],
     [
      "a",
-     33.52
+     30.64
     ],
     [
      "abrir.",
-     33.57
+     30.69
     ]
    ]
   },
   {
    "id": "coherencia",
    "archivo": "voz-es/frase-4.wav",
-   "inicio": 34.27,
+   "inicio": 31.39,
    "duracion": 4.8,
    "texto": "El radar mide eso con la coherencia, que dice cuánto se parece un lugar entre dos pasadas.",
    "palabras": [
     [
      "El",
-     34.4
+     31.52
     ],
     [
      "radar",
-     34.507
+     31.627
     ],
     [
      "mide",
-     34.72
+     31.84
     ],
     [
      "eso",
-     34.97
+     32.09
     ],
     [
      "con",
-     35.16
+     32.28
     ],
     [
      "la",
-     35.35
+     32.47
     ],
     [
      "coherencia,",
-     35.55
+     32.67
     ],
     [
      "que",
-     36.36
+     33.48
     ],
     [
      "dice",
-     36.46
+     33.58
     ],
     [
      "cuánto",
-     36.71
+     33.83
     ],
     [
      "se",
-     37.06
+     34.18
     ],
     [
      "parece",
-     37.18
+     34.3
     ],
     [
      "un",
-     37.61
+     34.73
     ],
     [
      "lugar",
-     37.7
+     34.82
     ],
     [
      "entre",
-     38.02
+     35.14
     ],
     [
      "dos",
-     38.34
+     35.46
     ],
     [
      "pasadas.",
-     38.52
+     35.64
     ]
    ]
   },
   {
    "id": "insomnio",
    "archivo": "voz-es/frase-5.wav",
-   "inicio": 39.52,
+   "inicio": 36.64,
    "duracion": 7.3,
    "texto": "Cada vez que el radar vuelve a pasar, nos fijamos si un lugar cambió más de lo que tiene alrededor. El índice de insomnio es cuántas veces pasó eso.",
    "palabras": [
     [
      "Cada",
-     39.61
+     36.73
     ],
     [
      "vez",
-     39.72
+     36.84
     ],
     [
      "que",
-     39.91
+     37.03
     ],
     [
      "el",
-     40.02
+     37.14
     ],
     [
      "radar",
-     40.12
+     37.24
     ],
     [
      "vuelve",
-     40.37
+     37.49
     ],
     [
      "a",
-     40.67
+     37.79
     ],
     [
      "pasar,",
-     40.72
+     37.84
     ],
     [
      "nos",
-     41.11
+     38.23
     ],
     [
      "fijamos",
-     41.18
+     38.3
     ],
     [
      "si",
-     41.56
+     38.68
     ],
     [
      "un",
-     41.65
+     38.77
     ],
     [
      "lugar",
-     41.75
+     38.87
     ],
     [
      "cambió",
-     42.02
+     39.14
     ],
     [
      "más",
-     42.34
+     39.46
     ],
     [
      "de",
-     42.6
+     39.72
     ],
     [
      "lo",
-     42.65
+     39.77
     ],
     [
      "que",
-     42.7
+     39.82
     ],
     [
      "tiene",
-     42.92
+     40.04
     ],
     [
      "alrededor.",
-     43.1
+     40.22
     ],
     [
      "El",
-     44.05
+     41.17
     ],
     [
      "índice",
-     44.179
+     41.299
     ],
     [
      "de",
-     44.48
+     41.6
     ],
     [
      "insomnio",
-     44.63
+     41.75
     ],
     [
      "es",
-     45.22
+     42.34
     ],
     [
      "cuántas",
-     45.44
+     42.56
     ],
     [
      "veces",
-     45.87
+     42.99
     ],
     [
      "pasó",
-     46.25
+     43.37
     ],
     [
      "eso.",
-     46.53
+     43.65
     ]
    ]
   },
   {
    "id": "mapa",
    "archivo": "voz-es/frase-6.wav",
-   "inicio": 47.27,
-   "duracion": 5.79,
-   "texto": "Lo calculamos en todo el Gran Buenos Aires, dejando afuera el agua, las rutas y los cultivos, que cambian por otros motivos.",
+   "inicio": 44.39,
+   "duracion": 8.39,
+   "texto": "Esto lo calculamos en distintas regiones. Acá, como ejemplo, se ve todo el Gran Buenos Aires, dejando fuera el agua, las rutas y los cultivos, que cambian por otros motivos.",
    "palabras": [
     [
-     "Lo",
-     47.38
+     "Esto",
+     44.48
+    ],
+    [
+     "lo",
+     44.6
     ],
     [
      "calculamos",
-     47.5
+     44.69
     ],
     [
      "en",
-     47.94
+     45.19
+    ],
+    [
+     "distintas",
+     45.29
+    ],
+    [
+     "regiones.",
+     45.76
+    ],
+    [
+     "Acá,",
+     46.28
+    ],
+    [
+     "como",
+     46.48
+    ],
+    [
+     "ejemplo,",
+     46.75
+    ],
+    [
+     "se",
+     47.2
+    ],
+    [
+     "ve",
+     47.33
     ],
     [
      "todo",
-     48.1
+     47.62
     ],
     [
      "el",
-     48.27
+     47.72
     ],
     [
      "Gran",
-     48.38
+     47.87
     ],
     [
      "Buenos",
-     48.6
+     48.11
     ],
     [
      "Aires,",
-     49.338
+     48.51
     ],
     [
      "dejando",
-     49.544
+     49.08
     ],
     [
-     "afuera",
-     49.78
+     "fuera",
+     49.35
     ],
     [
      "el",
-     49.96
+     49.59
     ],
     [
      "agua,",
-     50.05
+     49.7
     ],
     [
      "las",
-     50.39
+     50.03
     ],
     [
      "rutas",
-     50.61
+     50.21
     ],
     [
      "y",
-     50.97
+     50.55
     ],
     [
      "los",
-     51.08
+     50.617
     ],
     [
      "cultivos,",
-     51.3
+     50.75
     ],
     [
      "que",
-     51.88
+     51.23
     ],
     [
      "cambian",
-     51.99
+     51.5
     ],
     [
      "por",
-     52.27
+     51.83
     ],
     [
      "otros",
-     52.4
+     52.01
     ],
     [
      "motivos.",
-     52.6
+     52.31
     ]
    ]
   },
   {
    "id": "lujan",
    "archivo": "voz-es/frase-7.wav",
-   "inicio": 53.66,
+   "inicio": 53.38,
    "duracion": 6.43,
    "texto": "Por ejemplo, acá vemos el basural de Luján, que cerró el primero de julio, y el radar lo ve quieto en las quince comparaciones.",
    "palabras": [
     [
      "Por",
-     54.125
+     53.845
     ],
     [
      "ejemplo,",
-     54.222
+     53.942
     ],
     [
      "acá",
-     54.44
+     54.16
     ],
     [
      "vemos",
-     54.63
+     54.35
     ],
     [
      "el",
-     54.97
+     54.69
     ],
     [
      "basural",
-     55.109
+     54.829
     ],
     [
      "de",
-     55.48
+     55.2
     ],
     [
      "Luján,",
-     55.61
+     55.33
     ],
     [
      "que",
-     56.528
+     56.248
     ],
     [
      "cerró",
-     56.609
+     56.329
     ],
     [
      "el",
-     56.73
+     56.45
     ],
     [
      "primero",
-     56.834
+     56.554
     ],
     [
      "de",
-     57.11
+     56.83
     ],
     [
      "julio,",
-     57.26
+     56.98
     ],
     [
      "y",
-     57.66
+     57.38
     ],
     [
      "el",
-     57.81
+     57.53
     ],
     [
      "radar",
-     57.92
+     57.64
     ],
     [
      "lo",
-     58.14
+     57.86
     ],
     [
      "ve",
-     58.26
+     57.98
     ],
     [
      "quieto",
-     58.4
+     58.12
     ],
     [
      "en",
-     58.93
+     58.65
     ],
     [
      "las",
-     58.98
+     58.7
     ],
     [
      "quince",
-     59.151
+     58.871
     ],
     [
      "comparaciones.",
-     59.45
+     59.17
     ]
    ]
   },
   {
    "id": "norte3",
    "archivo": "voz-es/frase-8.wav",
-   "inicio": 60.54,
+   "inicio": 60.26,
    "duracion": 3.55,
    "texto": "En cambio, Norte Tres y González Catán cambian en casi todas.",
    "palabras": [
     [
      "En",
-     60.68
+     60.4
     ],
     [
      "cambio,",
-     60.846
+     60.566
     ],
     [
      "Norte",
-     61.29
+     61.01
     ],
     [
      "Tres",
-     61.56
+     61.28
     ],
     [
      "y",
-     61.82
+     61.54
     ],
     [
      "González",
-     61.89
+     61.61
     ],
     [
      "Catán",
-     62.44
+     62.16
     ],
     [
      "cambian",
-     63.085
+     62.805
     ],
     [
      "en",
-     63.21
+     62.93
     ],
     [
      "casi",
-     63.35
+     63.07
     ],
     [
      "todas.",
-     63.61
+     63.33
     ]
    ]
   },
   {
    "id": "catalogo",
    "archivo": "voz-es/frase-9.wav",
-   "inicio": 64.99,
-   "duracion": 19.06,
+   "inicio": 64.71,
+   "duracion": 19.04,
    "texto": "Pero el radar nos dice si un punto en el mapa cambia en el tiempo, no qué es. Para eso armamos un catálogo de casi sesenta y siete mil basurales en todo el mundo, cruzando OpenStreetMap, Climate TRACE, la agencia ambiental de Estados Unidos y las plumas de metano que detecta EMIT. Y le sumamos lugares que también cambian seguido, como canteras y aeródromos.",
    "palabras": [
     [
      "Pero",
-     65.08
+     64.8
     ],
     [
      "el",
-     65.26
+     64.98
     ],
     [
      "radar",
-     65.39
+     65.11
     ],
     [
      "nos",
-     65.72
+     65.44
     ],
     [
      "dice",
-     65.97
+     65.69
     ],
     [
      "si",
-     66.2
+     65.92
     ],
     [
      "un",
-     66.33
+     66.05
     ],
     [
      "punto",
-     66.45
+     66.17
     ],
     [
      "en",
-     66.8
+     66.52
     ],
     [
      "el",
-     66.93
+     66.65
     ],
     [
      "mapa",
-     67.05
+     66.77
     ],
     [
      "cambia",
-     67.562
+     67.282
     ],
     [
      "en",
-     67.73
+     67.45
     ],
     [
      "el",
-     67.94
+     67.66
     ],
     [
      "tiempo,",
-     67.99
+     67.71
     ],
     [
      "no",
-     68.53
+     68.25
     ],
     [
      "qué",
-     68.66
+     68.38
     ],
     [
      "es.",
-     68.86
+     68.58
     ],
     [
      "Para",
-     69.87
+     69.49
     ],
     [
      "eso",
-     69.915
+     69.535
     ],
     [
      "armamos",
-     69.96
+     69.58
     ],
     [
      "un",
-     70.22
+     69.93
     ],
     [
      "catálogo",
-     70.35
+     70.05
     ],
     [
      "de",
-     70.77
+     70.49
     ],
     [
      "casi",
-     70.88
+     70.6
     ],
     [
      "sesenta",
-     71.128
+     70.844
     ],
     [
      "y",
-     71.525
+     71.234
     ],
     [
      "siete",
-     71.624
+     71.332
     ],
     [
      "mil",
-     71.922
+     71.625
     ],
     [
      "basurales",
-     72.12
+     71.82
     ],
     [
      "en",
-     72.62
+     72.34
     ],
     [
      "todo",
-     72.73
+     72.45
     ],
     [
      "el",
-     72.95
+     72.66
     ],
     [
      "mundo,",
-     73.1
+     73.0
     ],
     [
      "cruzando",
-     73.715
+     73.687
     ],
     [
      "OpenStreetMap,",
-     74.15
+     73.93
     ],
     [
      "Climate",
-     75.27
+     75.03
     ],
     [
      "TRACE,",
-     75.89
+     75.61
     ],
     [
      "la",
-     76.38
+     76.11
     ],
     [
      "agencia",
-     76.49
+     76.2
     ],
     [
      "ambiental",
-     76.86
+     76.53
     ],
     [
      "de",
-     77.29
+     76.95
     ],
     [
      "Estados",
-     77.39
+     77.04
     ],
     [
      "Unidos",
-     77.73
+     77.41
     ],
     [
      "y",
-     78.05
+     77.75
     ],
     [
      "las",
-     78.11
+     77.79
     ],
     [
      "plumas",
-     78.29
+     77.96
     ],
     [
      "de",
-     78.62
+     78.42
     ],
     [
      "metano",
-     78.87
+     78.49
     ],
     [
      "que",
-     79.11
+     78.76
     ],
     [
      "detecta",
-     79.29
+     78.93
     ],
     [
      "EMIT.",
-     79.91
+     79.53
     ],
     [
      "Y",
-     80.65
+     80.37
     ],
     [
      "le",
-     80.672
+     80.387
     ],
     [
      "sumamos",
-     80.704
+     80.412
     ],
     [
      "lugares",
-     80.79
+     80.48
     ],
     [
      "que",
-     81.17
+     80.86
     ],
     [
      "también",
-     81.35
+     81.02
     ],
     [
      "cambian",
-     81.71
+     81.4
     ],
     [
      "seguido,",
-     82.08
+     81.78
     ],
     [
      "como",
-     82.55
+     82.26
     ],
     [
      "canteras",
-     82.76
+     82.48
     ],
     [
      "y",
-     83.23
+     82.95
     ],
     [
      "aeródromos.",
-     83.3
+     83.02
     ]
    ]
   },
   {
    "id": "modelo",
    "archivo": "voz-es/frase-10.wav",
-   "inicio": 84.65,
+   "inicio": 84.35,
    "duracion": 17.73,
    "texto": "Con eso entrenamos el modelo LightGBM: son cientos de árboles de decisión, cada uno corrigiendo al anterior. De cada mancha se toman veintinueve variables del radar y de las imágenes de Sentinel-2, como vegetación, suelo desnudo, agua y forma, y la clasifica como un basural o como otra cosa.",
    "palabras": [
     [
      "Con",
-     84.79
+     84.49
     ],
     [
      "eso",
-     84.85
+     84.55
     ],
     [
      "entrenamos",
-     85.05
+     84.75
     ],
     [
      "el",
-     85.71
+     85.41
     ],
     [
      "modelo",
-     85.84
+     85.54
     ],
     [
      "LightGBM:",
-     86.23
+     85.93
     ],
     [
      "son",
-     87.18
+     86.88
     ],
     [
      "cientos",
-     87.343
+     87.043
     ],
     [
      "de",
-     87.67
+     87.37
     ],
     [
      "árboles",
-     87.76
+     87.46
     ],
     [
      "de",
-     88.21
+     87.91
     ],
     [
      "decisión,",
-     88.34
+     88.04
     ],
     [
      "cada",
-     89.21
+     88.91
     ],
     [
      "uno",
-     89.37
+     89.07
     ],
     [
      "corrigiendo",
-     89.65
+     89.35
     ],
     [
      "al",
-     90.066
+     89.766
     ],
     [
      "anterior.",
-     90.17
+     89.87
     ],
     [
      "De",
-     91.13
+     90.83
     ],
     [
      "cada",
-     91.156
+     90.856
     ],
     [
      "mancha",
-     91.2
+     90.9
     ],
     [
      "se",
-     91.42
+     91.12
     ],
     [
      "toman",
-     91.57
+     91.27
     ],
     [
      "veintinueve",
-     91.84
+     91.54
     ],
     [
      "variables",
-     92.38
+     92.08
     ],
     [
      "del",
-     93.05
+     92.75
     ],
     [
      "radar",
-     93.64
+     93.34
     ],
     [
      "y",
-     93.69
+     93.39
     ],
     [
      "de",
-     93.794
+     93.494
     ],
     [
      "las",
-     93.95
+     93.65
     ],
     [
      "imágenes",
-     94.08
+     93.78
     ],
     [
      "de",
-     94.67
+     94.37
     ],
     [
      "Sentinel-2,",
-     94.82
+     94.52
     ],
     [
      "como",
-     96.319
+     96.019
     ],
     [
      "vegetación,",
-     96.626
+     96.326
     ],
     [
      "suelo",
-     97.364
+     97.064
     ],
     [
      "desnudo,",
-     97.66
+     97.36
     ],
     [
      "agua",
-     98.43
+     98.13
     ],
     [
      "y",
-     99.171
+     98.871
     ],
     [
      "forma,",
-     99.336
+     99.036
     ],
     [
      "y",
-     99.914
+     99.614
     ],
     [
      "la",
-     99.975
+     99.675
     ],
     [
      "clasifica",
-     100.066
+     99.766
     ],
     [
      "como",
-     100.37
+     100.07
     ],
     [
      "un",
-     100.75
+     100.45
     ],
     [
      "basural",
-     100.94
+     100.64
     ],
     [
      "o",
-     101.19
+     100.89
     ],
     [
      "como",
-     101.29
+     100.99
     ],
     [
      "otra",
-     101.53
+     101.23
     ],
     [
      "cosa.",
-     101.74
+     101.44
     ]
    ]
   },
   {
    "id": "argentina",
    "archivo": "voz-es/frase-11.wav",
-   "inicio": 103.28,
+   "inicio": 102.98,
    "duracion": 10.22,
    "texto": "Después lo corrimos por toda la Argentina. El modelo encontró unos siete mil lugares que clasifica como basural, dos mil más de lo que estima el Ministerio de Ambiente, y que hoy no figuran en ningún registro.",
    "palabras": [
     [
      "Después",
-     103.43
+     103.13
     ],
     [
      "lo",
-     103.63
+     103.33
     ],
     [
      "corrimos",
-     103.69
+     103.39
     ],
     [
      "por",
-     104.04
+     103.74
     ],
     [
      "toda",
-     104.22
+     103.92
     ],
     [
      "la",
-     104.39
+     104.09
     ],
     [
      "Argentina.",
-     104.44
+     104.14
     ],
     [
      "El",
-     105.591
+     105.291
     ],
     [
      "modelo",
-     105.643
+     105.343
     ],
     [
      "encontró",
-     105.764
+     105.464
     ],
     [
      "unos",
-     105.92
+     105.62
     ],
     [
      "siete",
-     106.28
+     105.98
     ],
     [
      "mil",
-     106.712
+     106.412
     ],
     [
      "lugares",
-     107.0
+     106.7
     ],
     [
      "que",
-     107.4
+     107.1
     ],
     [
      "clasifica",
-     107.61
+     107.31
     ],
     [
      "como",
-     107.94
+     107.64
     ],
     [
      "basural,",
-     108.11
+     107.81
     ],
     [
      "dos",
-     108.766
+     108.466
     ],
     [
      "mil",
-     109.058
+     108.758
     ],
     [
      "más",
-     109.35
+     109.05
     ],
     [
      "de",
-     109.51
+     109.21
     ],
     [
      "lo",
-     109.68
+     109.38
     ],
     [
      "que",
-     109.74
+     109.44
     ],
     [
      "estima",
-     109.91
+     109.61
     ],
     [
      "el",
-     110.24
+     109.94
     ],
     [
      "Ministerio",
-     110.36
+     110.06
     ],
     [
      "de",
-     110.91
+     110.61
     ],
     [
      "Ambiente,",
-     111.03
+     110.73
     ],
     [
      "y",
-     111.53
+     111.23
     ],
     [
      "que",
-     111.59
+     111.29
     ],
     [
      "hoy",
-     111.71
+     111.41
     ],
     [
      "no",
-     111.87
+     111.57
     ],
     [
      "figuran",
-     111.97
+     111.67
     ],
     [
      "en",
-     112.37
+     112.07
     ],
     [
      "ningún",
-     112.48
+     112.18
     ],
     [
      "registro.",
-     112.82
+     112.52
     ]
    ]
   },
   {
    "id": "web",
    "archivo": "voz-es/frase-12.wav",
-   "inicio": 114.4,
+   "inicio": 114.1,
    "duracion": 8.07,
    "texto": "Todo esto se puede ver en nuestra web. Cuando entrás, te encontrás con un mapa del mundo, donde están marcados los basurales en los que el radar detecta movimiento.",
    "palabras": [
     [
      "Todo",
-     114.5
+     114.2
     ],
     [
      "esto",
-     114.66
+     114.36
     ],
     [
      "se",
-     114.96
+     114.66
     ],
     [
      "puede",
-     115.07
+     114.77
     ],
     [
      "ver",
-     115.38
+     115.08
     ],
     [
      "en",
-     115.58
+     115.28
     ],
     [
      "nuestra",
-     115.71
+     115.41
     ],
     [
      "web.",
-     116.36
+     116.06
     ],
     [
      "Cuando",
-     116.53
+     116.23
     ],
     [
      "entrás,",
-     116.79
+     116.49
     ],
     [
      "te",
-     117.21
+     116.91
     ],
     [
      "encontrás",
-     117.298
+     116.998
     ],
     [
      "con",
-     117.59
+     117.29
     ],
     [
      "un",
-     117.68
+     117.38
     ],
     [
      "mapa",
-     117.75
+     117.45
     ],
     [
      "del",
-     117.94
+     117.64
     ],
     [
      "mundo,",
-     118.11
+     117.81
     ],
     [
      "donde",
-     118.74
+     118.44
     ],
     [
      "están",
-     118.86
+     118.56
     ],
     [
      "marcados",
-     119.17
+     118.87
     ],
     [
      "los",
-     119.74
+     119.44
     ],
     [
      "basurales",
-     119.86
+     119.56
     ],
     [
      "en",
-     120.52
+     120.22
     ],
     [
      "los",
-     120.614
+     120.314
     ],
     [
      "que",
-     120.74
+     120.44
     ],
     [
      "el",
-     120.92
+     120.62
     ],
     [
      "radar",
-     121.03
+     120.73
     ],
     [
      "detecta",
-     121.36
+     121.06
     ],
     [
      "movimiento.",
-     121.79
+     121.49
     ]
    ]
   },
   {
    "id": "ficha",
    "archivo": "voz-es/frase-13.wav",
-   "inicio": 123.08,
-   "duracion": 9.16,
-   "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar, lo que dice el registro oficial y lo que fue viendo el radar cada vez que pasó por ahí.",
+   "inicio": 122.77,
+   "duracion": 7.01,
+   "texto": "Si hacés clic en cualquiera de ellos, por ejemplo en el de Luján, te muestra la imagen satelital del lugar y lo que fue viendo el radar cada vez que pasó por ahí.",
    "palabras": [
     [
      "Si",
-     123.18
+     122.87
     ],
     [
      "hacés",
-     123.23
+     122.97
     ],
     [
      "clic",
-     123.52
+     123.17
     ],
     [
      "en",
-     123.64
+     123.32
     ],
     [
      "cualquiera",
-     123.74
+     123.42
     ],
     [
      "de",
-     124.26
+     123.92
     ],
     [
      "ellos,",
-     124.36
+     124.03
     ],
     [
      "por",
-     124.72
+     124.37
     ],
     [
      "ejemplo",
-     124.87
+     124.52
     ],
     [
      "en",
-     125.23
+     124.87
     ],
     [
      "el",
-     125.33
+     124.97
     ],
     [
      "de",
-     125.43
+     125.07
     ],
     [
      "Luján,",
-     125.54
+     125.18
     ],
     [
      "te",
-     126.184
+     125.722
     ],
     [
      "muestra",
-     126.259
+     125.795
     ],
     [
      "la",
-     126.46
+     125.99
     ],
     [
      "imagen",
-     126.55
+     126.08
     ],
     [
      "satelital",
-     126.92
+     126.41
     ],
     [
      "del",
-     127.4
+     126.87
     ],
     [
-     "lugar,",
-     127.58
-    ],
-    [
-     "lo",
-     128.2
-    ],
-    [
-     "que",
-     128.29
-    ],
-    [
-     "dice",
-     128.414
-    ],
-    [
-     "el",
-     128.57
-    ],
-    [
-     "registro",
-     128.65
-    ],
-    [
-     "oficial",
-     129.11
+     "lugar",
+     127.03
     ],
     [
      "y",
-     129.61
+     127.41
     ],
     [
      "lo",
-     129.69
+     127.466
     ],
     [
      "que",
-     129.81
+     127.55
     ],
     [
      "fue",
-     129.89
+     127.8
     ],
     [
      "viendo",
-     130.06
+     127.89
     ],
     [
      "el",
-     130.41
+     128.22
     ],
     [
      "radar",
-     130.52
+     128.33
     ],
     [
      "cada",
-     130.81
+     128.64
     ],
     [
      "vez",
-     131.15
+     128.83
     ],
     [
      "que",
-     131.21
+     129.06
     ],
     [
      "pasó",
-     131.38
+     129.17
     ],
     [
      "por",
-     131.61
+     129.39
     ],
     [
      "ahí.",
-     131.81
+     129.751
     ]
    ]
   },
   {
    "id": "lujan_web",
    "archivo": "voz-es/frase-14.wav",
-   "inicio": 132.69,
+   "inicio": 130.24,
    "duracion": 5.1,
    "texto": "En Luján las dos cosas coinciden, porque figura cerrado desde julio y el radar lo ve quieto.",
    "palabras": [
     [
      "En",
-     132.82
+     130.37
     ],
     [
      "Luján",
-     132.94
+     130.49
     ],
     [
      "las",
-     133.18
+     130.73
     ],
     [
      "dos",
-     133.54
+     131.09
     ],
     [
      "cosas",
-     133.62
+     131.17
     ],
     [
      "coinciden,",
-     133.99
+     131.54
     ],
     [
      "porque",
-     134.94
+     132.49
     ],
     [
      "figura",
-     135.21
+     132.76
     ],
     [
      "cerrado",
-     135.59
+     133.14
     ],
     [
      "desde",
-     136.16
+     133.71
     ],
     [
      "julio",
-     136.7
+     134.25
     ],
     [
      "y",
-     136.85
+     134.4
     ],
     [
      "el",
-     136.92
+     134.47
     ],
     [
      "radar",
-     137.07
+     134.62
     ],
     [
      "lo",
-     137.44
+     134.99
     ],
     [
      "ve",
-     137.62
+     135.17
     ],
     [
      "quieto.",
-     137.78
+     135.33
     ]
    ]
   },
   {
    "id": "norte3_web",
    "archivo": "voz-es/frase-15.wav",
-   "inicio": 138.23,
+   "inicio": 135.78,
    "duracion": 4.13,
    "texto": "Con Norte Tres pasa lo contrario, porque el radar lo encuentra distinto en casi todas las pasadas.",
    "palabras": [
     [
      "Con",
-     138.33
+     135.88
     ],
     [
      "Norte",
-     138.4
+     135.95
     ],
     [
      "Tres",
-     138.68
+     136.23
     ],
     [
      "pasa",
-     138.92
+     136.47
     ],
     [
      "lo",
-     139.13
+     136.68
     ],
     [
      "contrario,",
-     139.24
+     136.79
     ],
     [
      "porque",
-     139.92
+     137.47
     ],
     [
      "el",
-     140.16
+     137.71
     ],
     [
      "radar",
-     140.24
+     137.79
     ],
     [
      "lo",
-     140.45
+     138.0
     ],
     [
      "encuentra",
-     140.53
+     138.08
     ],
     [
      "distinto",
-     140.9
+     138.45
     ],
     [
      "en",
-     141.22
+     138.77
     ],
     [
      "casi",
-     141.29
+     138.84
     ],
     [
      "todas",
-     141.46
+     139.01
     ],
     [
      "las",
-     141.73
+     139.28
     ],
     [
      "pasadas.",
-     141.81
+     139.36
     ]
    ]
   },
   {
    "id": "lista",
    "archivo": "voz-es/frase-16.wav",
-   "inicio": 142.96,
+   "inicio": 140.51,
    "duracion": 5.81,
    "texto": "Además, armamos una lista con todos los sitios, que se puede descargar para comparar lo que dicen los registros con lo que ve el radar.",
    "palabras": [
     [
      "Además,",
-     143.1
+     140.65
     ],
     [
      "armamos",
-     143.665
+     141.215
     ],
     [
      "una",
-     143.86
+     141.41
     ],
     [
      "lista",
-     144.04
+     141.59
     ],
     [
      "con",
-     144.35
+     141.9
     ],
     [
      "todos",
-     144.56
+     142.11
     ],
     [
      "los",
-     144.9
+     142.45
     ],
     [
      "sitios,",
-     145.0
+     142.55
     ],
     [
      "que",
-     145.57
+     143.12
     ],
     [
      "se",
-     145.627
+     143.177
     ],
     [
      "puede",
-     145.67
+     143.22
     ],
     [
      "descargar",
-     145.91
+     143.46
     ],
     [
      "para",
-     146.31
+     143.86
     ],
     [
      "comparar",
-     146.54
+     144.09
     ],
     [
      "lo",
-     146.86
+     144.41
     ],
     [
      "que",
-     146.94
+     144.49
     ],
     [
      "dicen",
-     147.06
+     144.61
     ],
     [
      "los",
-     147.26
+     144.81
     ],
     [
      "registros",
-     147.38
+     144.93
     ],
     [
      "con",
-     147.74
+     145.29
     ],
     [
      "lo",
-     147.94
+     145.49
     ],
     [
      "que",
-     147.991
+     145.541
     ],
     [
      "ve",
-     148.088
+     145.638
     ],
     [
      "el",
-     148.16
+     145.71
     ],
     [
      "radar.",
-     148.22
+     145.77
     ]
    ]
   },
   {
    "id": "cierre",
    "archivo": "voz-es/frase-17.wav",
-   "inicio": 149.67,
+   "inicio": 147.22,
    "duracion": 4.87,
    "texto": "Usamos solo datos abiertos, y el código, el modelo y los datos están en los links en pantalla.",
    "palabras": [
     [
      "Usamos",
-     149.78
+     147.33
     ],
     [
      "solo",
-     150.01
+     147.56
     ],
     [
      "datos",
-     150.24
+     147.79
     ],
     [
      "abiertos,",
-     150.53
+     148.08
     ],
     [
      "y",
-     150.97
+     148.52
     ],
     [
      "el",
-     151.03
+     148.58
     ],
     [
      "código,",
-     151.22
+     148.77
     ],
     [
      "el",
-     151.6
+     149.15
     ],
     [
      "modelo",
-     151.71
+     149.26
     ],
     [
      "y",
-     152.06
+     149.61
     ],
     [
      "los",
-     152.11
+     149.66
     ],
     [
      "datos",
-     152.28
+     149.83
     ],
     [
      "están",
-     152.57
+     150.12
     ],
     [
      "en",
-     152.86
+     150.41
     ],
     [
      "los",
-     153.14
+     150.69
     ],
     [
      "links",
-     153.25
+     150.8
     ],
     [
      "en",
-     153.43
+     150.98
     ],
     [
      "pantalla.",
-     153.54
+     151.09
     ]
    ]
   },
   {
    "id": "lema",
    "archivo": "voz-es/frase-18.wav",
-   "inicio": 155.44,
-   "duracion": 6.14,
+   "inicio": 152.99,
+   "duracion": 6.11,
    "texto": "Dumpsite. Un basural se puede cerrar en los papeles, pero desde el espacio se ve si verdaderamente sigue despierto.",
    "palabras": [
     [
      "Dumpsite.",
-     155.53
+     153.08
     ],
     [
      "Un",
-     156.44
+     154.16
     ],
     [
      "basural",
-     156.53
+     154.21
     ],
     [
      "se",
-     156.95
+     154.52
     ],
     [
      "puede",
-     157.03
+     154.64
     ],
     [
      "cerrar",
-     157.19
+     154.83
     ],
     [
      "en",
-     157.47
+     155.09
     ],
     [
      "los",
-     157.55
+     155.23
     ],
     [
      "papeles,",
-     157.7
+     155.36
     ],
     [
      "pero",
-     158.34
+     155.89
     ],
     [
      "desde",
-     158.43
+     156.01
     ],
     [
      "el",
-     158.71
+     156.38
     ],
     [
      "espacio",
-     158.83
+     156.47
     ],
     [
      "se",
-     159.432
+     157.08
     ],
     [
      "ve",
-     159.481
+     157.155
     ],
     [
      "si",
-     159.53
+     157.23
     ],
     [
      "verdaderamente",
-     159.57
+     157.39
     ],
     [
      "sigue",
-     160.38
+     158.27
     ],
     [
      "despierto.",
-     160.67
+     158.48
     ]
    ]
   },
   {
    "id": "equipo",
    "archivo": "voz-es/frase-19.wav",
-   "inicio": 162.37,
+   "inicio": 159.9,
    "duracion": 2.21,
    "texto": "Nosotros somos Spaceship. Muchas gracias.",
    "palabras": [
     [
      "Nosotros",
-     162.46
+     159.99
     ],
     [
      "somos",
-     162.74
+     160.27
     ],
     [
      "Spaceship.",
-     162.98
+     160.51
     ],
     [
      "Muchas",
-     163.913
+     161.443
     ],
     [
      "gracias.",
-     164.543
+     162.073
     ]
    ]
   }
