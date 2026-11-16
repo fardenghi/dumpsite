@@ -83,4 +83,4 @@ Notes:
 - The final index sites are in `sitios_registro.json`. `coherencia_gunw.py`, `manchas.py` and `predios.py` are the first-hour tests, with the coordinates as constants.
 
 ## License and AI use
-Code: Apache 2.0. The final index (`insomnio.py`, `geo.py`, `fuentes_fijas.py`, `pipeline_insomnio.py`, `manchas.py` and the tests) was written with AI assistance (Claude); it has to be declared in the "Use of AI" field of the submission.
+Code: Apache 2.0 (see [`../LICENSE`](../LICENSE)); third-party libraries and data are listed with their licenses in [`../docs/credits.md`](../docs/credits.md). The final index (`insomnio.py`, `geo.py`, `fuentes_fijas.py`, `pipeline_insomnio.py`, `manchas.py` and the tests) was written with AI assistance (Claude); it has to be declared in the "Use of AI" field of the submission.
