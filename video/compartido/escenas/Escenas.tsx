@@ -49,7 +49,7 @@ export const EscenaIA: React.FC<{durTotal: number}> = ({durTotal}) => {
       {/* Higgsfield clip already edited (satellite 1 s, clouds 1 s, dump site 2.7 s = 4.73 s), fitted to the segment. */}
       <OffthreadVideo src={staticFile("clip1-ai.mp4")} playbackRate={4.733 / durTotal} muted style={{width: ANCHO, height: ALTO, objectFit: "cover"}} />
       <AbsoluteFill style={{background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)"}} />
-      <div style={{opacity: aviso}}><AvisoIA /></div>
+      <div style={{opacity: aviso}}><AvisoIA texto="AI-generated imagery · AI voice" /></div>
     </AbsoluteFill>
   );
 };

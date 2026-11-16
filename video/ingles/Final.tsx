@@ -158,6 +158,7 @@ export const EscenaEquipo: React.FC<{dur: number}> = ({dur}) => {
       </div>
       <div style={{position: "absolute", left: 0, right: 0, top: 860, textAlign: "center", fontFamily: F.mono, fontSize: 18, letterSpacing: 2, color: "rgba(231,235,241,0.6)", opacity: e(14)}}>
         NASA SPACE APPS 2026 · DANCING WITH THE SARS · BUENOS AIRES
+        <div style={{marginTop: 10, letterSpacing: 1, fontSize: 16}}>AI-generated voice (Microsoft Azure TTS) and opening clip (Higgsfield)</div>
       </div>
     </AbsoluteFill>
   );
